@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{/admin/index.html :: dynamic(~{::body})}">
+<head>
+<meta charset="UTF-8">
+<title>Davitickets</title>
+</head>
+<body id="page-top">
+
+	<!-- Page Heading -->
+	<div class="container-fluid">
+		<h1 class="h3 mb-4 text-light">Quản lý ghế</h1>
+		<form th:object="${formseat}" method="post" action="#">
+			<div class="shadow-lg card border-0 border-left-danger">
+				<div class="row">
+
+					<div class="col-lg-12">
+						<div class=" mb-4">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Ghế Vip</p>
+									</div>
+									<div class="col-sm-9">
+										<select class="text-muted mb-0" th:field="*{vip}">
+											<option th:value="'true'" th:text="Vip"></option>
+											<option th:value="'false'" th:text="'Bình thường'"></option>
+										</select>
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Hàng Ghế</p>
+									</div>
+									<div class="col-sm-9">
+										<input class="text-muted mb-0" th:field="*{row_symbol}"
+											th:name="row_symbol" readonly> <input type="text"
+											id="alert" class="text-muted mb-0" th:value="${alert}"
+											style="display: none">
+
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Vị Trí Ghế Theo Hàng</p>
+									</div>
+									<div class="col-sm-9">
+										<input class="text-muted mb-0" type="text"
+											th:field="*{seat_num}" name="seat_num" readonly>
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Trạng Thái Ghế</p>
+									</div>
+									<div class="col-sm-9">
+										<input type="text" class="text-muted mb-0"
+											th:value="*{available} ? 'Bình Thường' : 'Hỏng'" readonly>
+									</div>
+								</div>
+								<hr>
+								<div class="btn-updateprofile">
+									<button th:formaction="@{|/admin/updateSeat/${seat_id}|}"
+										type="submit" class="btn btn-primary">
+										<i class="fas fa-fw fa-edit"></i> Cập nhật
+									</button>
+									<button th:formaction="@{|/admin/disableSeat/${seat_id}|}"
+										type="submit" class="btn btn-danger" th:if="*{available}">
+										<i class="fas fa-fw fa-ban"></i> Vô hiệu hóa
+									</button>
+									<button th:formaction="@{|/admin/activeSeat/${seat_id}|}"
+										type="submit" class="btn btn-success" th:if="*{!available}">
+										<i class="fas fa-solid fa-check"></i> Kích hoạt
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<!-- End of Main Content -->
+
+
+
+	<!-- Scroll to Top Button-->
+	<a class="scroll-to-top rounded" href="#page-top"> <i
+		class="fas fa-angle-up"></i>
+	</a>
+
+	<!-- Logout Modal-->
+	<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Đăng xuất</h5>
+						<button class="close" type="button" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+					</div>
+					<div class="modal-body">Bạn có muốn đăng xuất ?</div>
+					<div class="modal-footer">
+						<button class="btn btn-secondary" type="button"
+							data-dismiss="modal">Hủy</button>
+						<a class="btn btn-primary" th:href="@{/admin/logout}">Đăng xuất</a>
+					</div>
+				</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		var alert = document.getElementById("alert");
+		if (alert.value == "updateSuccess") {
+			toast({
+				title : "Thành công!",
+				message : "Cập nhật thành công!",
+				type : "success",
+				duration : 5000
+			});
+		}
+		if (alert.value == "updateFail") {
+			toast({
+				title : "Thất bại!",
+				message : "Cập nhật thất bại!",
+				type : "error",
+				duration : 5000
+			});
+		}
+		if (alert.value == "disableSuccess") {
+			toast({
+				title : "Thành công!",
+				message : "Vô hiệu hóa ghế thành công!",
+				type : "success",
+				duration : 5000
+			});
+		}
+		if (alert.value == "disableFail") {
+			toast({
+				title : "Thất bại!",
+				message : "Vô hiệu hóa ghế thất bại!",
+				type : "error",
+				duration : 5000
+			});
+		}
+		if (alert.value == "activeSuccess") {
+			toast({
+				title : "Thành công!",
+				message : "Kích hoạt ghế thành công!",
+				type : "success",
+				duration : 5000
+			});
+		}
+		if (alert.value == "activeFail") {
+			toast({
+				title : "Thất bại!",
+				message : "Kích hoạt ghế thất bại!",
+				type : "error",
+				duration : 5000
+			});
+		}
+	</script>
+
+
+</body>
+</html>

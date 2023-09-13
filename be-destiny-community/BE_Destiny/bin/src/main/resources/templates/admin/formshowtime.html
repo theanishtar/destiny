@@ -1,0 +1,316 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{/admin/index.html :: dynamic(~{::body})}">
+<head>
+<meta charset="UTF-8">
+<title>Davitickets</title>
+</head>
+<body id="page-top">
+	<!-- Begin Page Content -->
+	<!-- Page Heading -->
+	<div class="container-fluid">
+		<h1 class="h3 mb-4 text-light">Quản lý lịch chiếu</h1>
+		<form th:object="${forms}" method="post" action="#">
+			<div
+				class="shadow-lg card border-0 border-left-light border-bottom-light">
+				<div class="row">
+					<div class="col-lg-4">
+						<div class="">
+							<div class="mt-3">
+								<div class="card-body text-center">
+									<label> <img th:src="*{movie.poster}" alt="" id="imgId"
+										class="img-fluid" style="width: 70%;">
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-8">
+						<div class="mb-0 mt-2">
+							<div class="card-body text-light">
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Phim</p>
+									</div>
+									<div class="col-sm-9">
+										<select class="text-muted mb-0"
+											th:onchange="loadImg(this.value)" id="movie.movie_id"
+											name="movie.movie_id" th:field="*{movie.movie_id}" required>
+											<option th:each="listMovie : ${listMovie}"
+												th:value="${listMovie.movie_id}"
+												th:text="${listMovie.title_movie}"
+												th:selected="${listMovie.movie_id==forms.movie.movie_id}">
+											</option>
+										</select>
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Phòng</p>
+									</div>
+									<div class="col-sm-9">
+										<select class="text-muted mb-0" id="room.room_id"
+											name="room.room_id" th:field="*{room.room_id}"
+											required="true">
+											<option th:each="listRoom : ${listRoom}"
+												th:value="${listRoom.room_id}"
+												th:text="${listRoom.room_name}"
+												th:selected="${listRoom.room_id==forms.room.room_id}">
+											</option>
+										</select>
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Ngày chiếu</p>
+									</div>
+									<div class="col-sm-9">
+										<input type="date" class="text-muted mb-0"
+											th:value="*{showdate}" th:name="showdate" id="showdate"
+											required> <input type="text" id="alert"
+											class="text-muted mb-0" th:value="${alert}"
+											style="display: none">
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Giờ chiếu</p>
+									</div>
+									<div class="col-sm-9">
+										<input type="time" class="text-muted mb-0"
+											th:value="*{startTime}" th:name="start_time" id="starttime"
+											required>
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Giờ kết thúc</p>
+									</div>
+									<div class="col-sm-9">
+										<input type="time" class="text-muted mb-0"
+											th:value="*{endTime}" th:name="end_time" id="endtime"
+											required>
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Giá tiền</p>
+									</div>
+									<div class="col-sm-9">
+										<input type="text" class="text-muted mb-0" th:value="*{price}"
+											th:name="price" id="price" pattern="^[0-9]{4,}$" required>
+									</div>
+								</div>
+								<hr>
+								<div class="btn-updateprofile">
+									<button type="submit" class="btn btn-primary"
+										th:formaction="@{/admin/createShowtime}"
+										th:if="${editORcreate} == create">
+										<i class="fas fa-fw fa-video"></i> Thêm
+									</button>
+									<button th:each="showtime:${listShowtimeNotUse}"
+										th:object="${showtime}"
+										th:formaction="@{|/admin/updateShowtime/${forms.showtime_id}|}"
+										type="submit" class="btn btn-primary"
+										th:if="*{showtime_id} == ${showtime.showtime_id}">
+										<i class="fas fa-fw fa-edit"></i> Cập nhật
+									</button>
+									<button th:each="showtime:${listShowtimeNotUse}"
+										th:object="${showtime}"
+										th:formaction="@{|/admin/deleteShowtime/${forms.showtime_id}|}"
+										type="submit" class="btn btn-danger"
+										th:if="*{showtime_id} == ${showtime.showtime_id}">
+										<i class="fas fa-fw fa-video-slash"></i> Xóa
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+		<br>
+		<!-- End of Main Content -->
+
+
+		<!-- Scroll to Top Button-->
+		<a class="scroll-to-top rounded" href="#page-top"> <i
+			class="fas fa-angle-up"></i>
+		</a>
+
+		<!-- Logout Modal-->
+		<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Đăng xuất</h5>
+						<button class="close" type="button" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+					</div>
+					<div class="modal-body">Bạn có muốn đăng xuất ?</div>
+					<div class="modal-footer">
+						<button class="btn btn-secondary" type="button"
+							data-dismiss="modal">Hủy</button>
+						<a class="btn btn-primary" th:href="@{/admin/logout}">Đăng
+							xuất</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			var inputPrice = document.getElementById('price');
+			inputPrice.oninvalid = function(e) {
+				e.target.setCustomValidity("");
+				if (!e.target.validity.valid) {
+					e.target.setCustomValidity("Giá tiền phải là số và lớn hơn 0!");
+				}
+			};
+			inputPrice.oninput = function(e) {
+				e.target.setCustomValidity("");
+			};
+
+			var inputHour = document.getElementById("starttime")
+			inputHour.onchange = function(e) {
+				var hourChose = this.value.split(':')[0];
+				console.log(hourChose);
+				const today = new Date();
+				const currentHour = today.getHours();
+
+				const formattedCurrentHour = currentHour < 10 ? '0'
+						+ currentHour : currentHour;
+				console.log(formattedCurrentHour);
+				if (hourChose >= formattedCurrentHour) {
+					console.log('success hour');
+				} else {
+					console.log('fail');
+					e.target.setCustomValidity("Giờ chiếu phải lớn hơn hoặc bằng giờ hiện tại!");
+				}
+			}
+
+			inputHour.oninput = function(e) {
+				e.target.setCustomValidity("");
+			};
+
+			var inputHourEnd = document.getElementById("endtime")
+			inputHourEnd.onchange = function(e) {
+				var hourChose = this.value.split(':')[0];
+				console.log(hourChose);
+				const today = new Date();
+				const currentHour = today.getHours();
+
+				const formattedCurrentHour = currentHour < 10 ? '0'
+						+ currentHour : currentHour;
+				console.log(formattedCurrentHour);
+				if (hourChose >= formattedCurrentHour) {
+					console.log('success hour');
+				} else {
+					console.log('fail');
+					e.target
+							.setCustomValidity("Giờ chiếu phải lớn hơn hoặc bằng giờ hiện tại!");
+				}
+			}
+
+			inputHourEnd.oninput = function(e) {
+				e.target.setCustomValidity("");
+			};
+
+			var inputDay = document.getElementById("showdate")
+			inputDay.onchange = function(e) {
+				var daychose = this.value;
+				const today = new Date();
+				const yyyy = today.getFullYear();
+				let mm = today.getMonth() + 1; // Months start at 0!
+				let dd = today.getDate();
+
+				if (dd < 10)
+					dd = '0' + dd;
+				if (mm < 10)
+					mm = '0' + mm;
+
+				const formattedToday = yyyy + '-' + mm + '-' + dd; //today
+
+				//Generate an array where the first element is the year, second is month and third is day
+				var splitFrom = formattedToday.split('/');
+				var splitTo = daychose.split('/');
+
+				//Create a date object from the arrays
+				var fromDate = Date.parse(splitFrom[0], splitFrom[1] - 1,
+						splitFrom[2]);
+				var toDate = Date.parse(splitTo[0], splitTo[1] - 1, splitTo[2]);
+
+				//Return the result of the comparison
+				if (toDate >= fromDate) {
+					console.log('success date');
+				} else {
+					console.log('fail date');
+					e.target
+							.setCustomValidity("Ngày chiếu phải lớn hơn hoặc bằng ngày hiện tại!");
+
+				}
+			}
+			inputDay.oninput = function(e) {
+				e.target.setCustomValidity("");
+			};
+		</script>
+
+		<script type="text/javascript">
+			function loadImg(param) {
+				var cbtId = param;
+				$.ajax({
+					url : "/loadImg",
+					type : "get",
+					data : {
+						cbt : cbtId
+					},
+					success : function(data) {
+						document.getElementById("imgId").src = data;
+					},
+					error : function(xhr) {
+						alert("error")
+					}
+
+				});
+			}
+		</script>
+
+		<script type="text/javascript">
+			var alert = document.getElementById("alert");
+			if (alert.value == "updateSuccess") {
+				toast({
+					title : "Thành công!",
+					message : "Cập nhật thành công!",
+					type : "success",
+					duration : 10000
+				});
+			}
+			if (alert.value == "updateFail") {
+				toast({
+					title : "Thất bại!",
+					message : "Cập nhật thất bại vui lòng kiểm tra lại các trường dữ liệu!",
+					type : "error",
+					duration : 10000
+				});
+			}
+			if (alert.value == "createSameDayAndHour") {
+				toast({
+					title : "Thất bại!",
+					message : "Bạn đã tạo 1 lịch chiếu cùng ngày cùng giờ cùng phòng, Vui lòng kiểm tra lại!!!",
+					type : "error",
+					duration : 10000
+				});
+			}
+		</script>
+
+		<script th:src="@{/js/calltoast.js}"></script>
+</body>
+</html>

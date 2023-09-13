@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{/admin/index.html :: dynamic(~{::body})}">
+<head>
+<meta charset="UTF-8">
+<title>Davitickets</title>
+</head>
+<body id="page-top">
+
+	<!-- Begin Page Content -->
+	<!-- Page Heading -->
+	<div class="container-fluid">
+		<h1 class="h3 mb-4 text-light">Quản lý người dùng</h1>
+		<form th:object="${formuser}" method="post" action="#">
+			<div class="shadow-lg card border-0 border-left-danger">
+				<div class="row">
+					<div class="col-lg-4">
+						<div class="">
+							<div class="mb-4">
+								<div class="card-body text-center">
+									<label> <img th:src="*{profile_picture}"
+										alt="avatar" class="rounded-circle img-fluid"
+										style="width: 80%;">
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-8">
+						<div class=" mb-4">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Họ và tên</p>
+									</div>
+									<div class="col-sm-9">
+										<input class="text-muted mb-0" th:field="*{full_name}"
+											th:name="fullname" readonly> <input type="text"
+											id="alert" class="text-muted mb-0"
+											th:value="${alert}" style="display: none">
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Giới tính</p>
+									</div>
+									<div class="col-sm-9">
+										<input class="text-muted mb-0" th:field="*{gender}"
+											th:name="gender" readonly>
+
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Email</p>
+									</div>
+									<div class="col-sm-9">
+										<input class="text-muted mb-0" type="email"
+											th:field="*{email}" name="email" readonly>
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Số điện thoại</p>
+									</div>
+									<div class="col-sm-9">
+										<input type="tel" class="text-muted mb-0" th:field="*{phone}"
+											th:name="phone" pattern="^(0\d{9})$" readonly>
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Ngày sinh</p>
+									</div>
+									<div class="col-sm-9">
+										<input class="text-muted mb-0" type="date"
+											th:field="*{user_birtday}" th:name="birtday" readonly>
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Ngày gia nhập</p>
+									</div>
+									<div class="col-sm-9">
+										<input class="text-muted mb-0" type="date"
+											th:field="*{user_dayjoin}" th:name="dayjoin" readonly>
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Xác thực</p>
+									</div>
+									<div class="col-sm-9">
+										<input type="text" class="text-muted mb-0"
+											th:value="*{processed_by} ? 'Đã xác thực' : 'Chưa xác thực'"
+											readonly>
+									</div>
+								</div>
+								<hr>
+								<div class="btn-updateprofile">
+									<button th:formaction="@{|/admin/disableUsers/${userid}|}"
+										type="submit" class="btn btn-danger" th:if="${formuser.account_status} and ${userRole != '1'}">
+										<i class="fas fa-fw fa-user-slash"></i> Vô hiệu hóa
+									</button>
+									<button th:formaction="@{|/admin/activeUsers/${userid}|}"
+										type="submit" class="btn btn-success" th:if="${!formuser.account_status}">
+										<i class="fas fa-fw fa-user-check"></i> Kích hoạt
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<!-- End of Main Content -->
+
+
+
+	<!-- Scroll to Top Button-->
+	<a class="scroll-to-top rounded" href="#page-top"> <i
+		class="fas fa-angle-up"></i>
+	</a>
+
+	<!-- Logout Modal-->
+	<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Đăng xuất</h5>
+						<button class="close" type="button" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+					</div>
+					<div class="modal-body">Bạn có muốn đăng xuất ?</div>
+					<div class="modal-footer">
+						<button class="btn btn-secondary" type="button"
+							data-dismiss="modal">Hủy</button>
+						<a class="btn btn-primary" th:href="@{/admin/logout}">Đăng xuất</a>
+					</div>
+				</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		var alert = document.getElementById("alert");
+		if (alert.value == "updateSuccess") {
+			toast({
+				title : "Thành công!",
+				message : "Cập nhật thành công!",
+				type : "success",
+				duration : 5000
+			});
+		}
+		if (alert.value == "updateFail") {
+			toast({
+				title : "Thất bại!",
+				message : "Cập nhật thất bại!",
+				type : "error",
+				duration : 5000
+			});
+		}
+		if (alert.value == "disableSuccess") {
+			toast({
+				title : "Thành công!",
+				message : "Vô hiệu hóa tài khoản thành công!",
+				type : "success",
+				duration : 5000
+			});
+		}
+		if (alert.value == "disableFail") {
+			toast({
+				title : "Thất bại!",
+				message : "Vô hiệu hóa tài khoản thất bại!",
+				type : "error",
+				duration : 5000
+			});
+		}
+		if (alert.value == "activeSuccess") {
+			toast({
+				title : "Thành công!",
+				message : "Kích hoạt tài khoản thành công!",
+				type : "success",
+				duration : 5000
+			});
+		}
+		if (alert.value == "activeFail") {
+			toast({
+				title : "Thất bại!",
+				message : "Kích hoạt tài khoản thất bại!",
+				type : "error",
+				duration : 5000
+			});
+		}
+	</script>
+</body>
+</html>

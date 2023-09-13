@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{/admin/index.html :: dynamic(~{::body})}">
+
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<title>Davitickets</title>
+<link th:href="@{/css/admin.css}" rel="stylesheet">
+<link th:href="@{/vendor/fontawesome-free/css/all.min.css}"
+	rel="stylesheet" type="text/css">
+
+<link
+	href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+	rel="stylesheet">
+<script th:src="@"></script>
+
+</head>
+
+<body id="page-top">
+
+	<!-- Begin Page Content -->
+	<!-- Page Heading -->
+	<div class="container-fluid">
+		<h1 class="h3 mb-4 text-light">Quản lý phim</h1>
+
+		<form method="post" enctype="multipart/form-data">
+			<div class="shadow-lg card border-0 border-left-warning">
+				<div class="row">
+					<div class="col-lg-4">
+						<div class="">
+							<div class="mt-3">
+								<div class="card-body text-center">
+									<input type="file" th:name="file" class="inputFile">
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-lg-8">
+
+						<div class="mb-0 mt-2">
+							<div class="card-body text-light">
+								<div class="btn-updateprofile">
+									<button th:formaction="@{/export}" type="submit"
+										class="btn btn-primary">
+										<i class="fas fa-fw fa-film"></i> Thêm
+									</button>
+
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+		</form>
+	</div>
+	<!-- End of Main Content -->
+
+	<script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script>
+	<script
+		src="https://www.gstatic.com/firebasejs/6.0.2/firebase-storage.js"></script>
+
+	<!-- Bootstrap core JavaScript-->
+	<script src="/vendor/jquery/jquery.min.js"></script>
+	<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Core plugin JavaScript-->
+	<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+	<!-- Custom scripts for all pages-->
+	<script src="/js/sb-admin-2.min.js"></script>
+</body>
+
+</html>

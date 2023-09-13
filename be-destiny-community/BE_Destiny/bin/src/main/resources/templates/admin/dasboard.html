@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org"
+	th:replace="~{/admin/index.html :: dynamic(~{::body})}">
+<head>
+<meta charset="UTF-8">
+
+</head>
+
+<body>
+	<div id="toast"></div>
+	<div class="container-fluid">
+
+		<!-- Page Heading -->
+		<div class="d-sm-flex align-items-center justify-content-between mb-4">
+			<h1 class="h3 mb-0 text-white">Thống kê</h1>
+			<!-- <a href="#"
+				class="d-none d-sm-inline-block btn btn-sm btn-dark shadow-sm"><i
+				class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
+		</div>
+
+		<!-- Content Row -->
+		<div class="row">
+
+			<!-- Earnings (Monthly) Card Example -->
+			<div class="col-xl-3 col-md-6 mb-4">
+				<div class="card border-left-primary shadow h-100 py-2">
+					<div class="card-body">
+						<div class="row no-gutters align-items-center">
+							<div class="col mr-2">
+								<div
+									class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+									Doanh thu (Hôm nay)</div>
+								<div class="h5 mb-0 font-weight-bold text-white"
+									th:text="${revenueDay}"></div>
+							</div>
+							<div class="col-auto">
+								<i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Earnings (Monthly) Card Example -->
+			<div class="col-xl-3 col-md-6 mb-4">
+				<div class="card border-left-success shadow h-100 py-2">
+					<div class="card-body">
+						<div class="row no-gutters align-items-center">
+							<div class="col mr-2">
+								<div
+									class="text-xs font-weight-bold text-success text-uppercase mb-1">
+									Doanh thu (Tháng này)</div>
+								<div class="h5 mb-0 font-weight-bold text-white"
+									th:text="${revenueMonth}"></div>
+							</div>
+							<div class="col-auto">
+								<i class="fas fa-calendar fa-2x text-gray-300"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Earnings (Monthly) Card Example -->
+			<div class="col-xl-3 col-md-6 mb-4">
+				<div class="card border-left-info shadow h-100 py-2">
+					<div class="card-body">
+						<div class="row no-gutters align-items-center">
+							<div class="col mr-2">
+								<div
+									class="text-xs font-weight-bold text-info text-uppercase mb-1">Doanh
+									thu hôm nay so với chỉ tiêu</div>
+								<div class="row no-gutters align-items-center">
+									<div class="col-auto">
+										<div class="h5 mb-0 mr-3 font-weight-bold text-white"
+											th:text="${percent}+'%'"></div>
+									</div>
+									<div class="col">
+										<div class="progress progress-sm mr-2">
+											<div class="progress-bar bg-info" role="progressbar"
+												th:styleappend="|width: ${percent} %|" aria-valuenow="50"
+												aria-valuemin="0" aria-valuemax="100"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-auto">
+								<i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Pending Requests Card Example -->
+			<div class="col-xl-3 col-md-6 mb-4">
+				<div class="card border-left-warning shadow h-100 py-2">
+					<div class="card-body">
+						<div class="row no-gutters align-items-center">
+							<div class="col mr-2">
+								<div
+									class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+									Tổng số người dùng mới</div>
+								<div class="h5 mb-0 font-weight-bold text-white"
+									th:text="${userStatisticsMonth}"></div>
+							</div>
+							<div class="col-auto">
+								<i class="fas fa-users fa-2x text-gray-300"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Content Row -->
+
+		<div class="row">
+
+			<!-- Area Chart -->
+			<div class="col-xl-8 col-lg-7">
+				<div class="card shadow mb-4 border">
+					<!-- Card Header - Dropdown -->
+					<div
+						class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+						<h6 class="m-0 font-weight-bold text-warning">Biểu đồ tổng
+							doanh thu</h6>
+						<div class="dropdown no-arrow">
+							<a class="dropdown-toggle" href="#" role="button"
+								id="dropdownMenuLink" data-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="false"> <i
+								class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+							</a>
+							<div
+								class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+								aria-labelledby="dropdownMenuLink">
+								<div class="dropdown-header">Dropdown Header:</div>
+								<a class="dropdown-item" href="#">Action</a> <a
+									class="dropdown-item" href="#">Another action</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="#">Something else here</a>
+							</div>
+						</div>
+					</div>
+					<!-- Card Body -->
+					<div class="card-body">
+						<div class="chart-area">
+							<canvas id="myAreaChart"></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Pie Chart -->
+			<div class="col-xl-4 col-lg-5">
+				<div class="card shadow mb-4 border">
+					<!-- Card Header - Dropdown -->
+					<div
+						class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+						<h6 class="m-0 font-weight-bold text-warning">Top 3 Khung giờ
+							được xem phim nhiều nhất</h6>
+						<div class="dropdown no-arrow">
+							<a class="dropdown-toggle" href="#" role="button"
+								id="dropdownMenuLink" data-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="false"> <i
+								class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+							</a>
+							<div
+								class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+								aria-labelledby="dropdownMenuLink">
+								<div class="dropdown-header">Dropdown Header:</div>
+								<a class="dropdown-item" href="#">Action</a> <a
+									class="dropdown-item" href="#">Another action</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="#">Something else here</a>
+							</div>
+						</div>
+					</div>
+					<!-- Card Body -->
+					<div class="card-body">
+						<div class="chart-pie pt-4 pb-2">
+							<canvas id="myPieChart"></canvas>
+						</div>
+						<div class="mt-4 text-center small">
+							<span class="mr-2"> <i class="fas fa-circle text-primary"></i>
+								<span th:text="${top1}"></span> Giờ
+							</span> <span class="mr-2"> <i class="fas fa-circle text-success"></i>
+								<span th:text="${top2}"></span> Giờ
+							</span> <span class="mr-2"> <i class="fas fa-circle text-info"></i>
+								<span th:text="${top3}"></span> Giờ
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<input type="text" id="alert" class="text-muted mb-0"
+		th:value="${alert}" style="display: none">
+
+	<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Đăng xuất</h5>
+					<button class="close" type="button" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">Bạn có muốn đăng xuất ?</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" type="button"
+						data-dismiss="modal">Hủy</button>
+					<a class="btn btn-primary" th:href="@{/admin/logout}">Đăng xuất</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		var alert = document.getElementById("alert");
+		if (alert.value == "updateSuccess") {
+			toast({
+				title : "Thành công!",
+				message : "Đổi mật khẩu thành công!",
+				type : "success",
+				duration : 10000
+			});
+		}
+		if (alert.value == "passwordFail") {
+			toast({
+				title : "Thất bại!",
+				message : "Mật khẩu cũ không đúng",
+				type : "success",
+				duration : 10000
+			});
+		}
+		if (alert.value == "updateFail") {
+			toast({
+				title : "Thất bại!",
+				message : "Mật khẩu mới và mật khẩu xác nhận không trùng khớp!",
+				type : "error",
+				duration : 10000
+			});
+		}
+	</script>
+</body>
+</html>

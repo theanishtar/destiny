@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{/admin/index.html :: dynamic(~{::body})}">
+<head>
+<meta charset="UTF-8">
+<title>Davitickets</title>
+<link th:href="@{/css/admin.css}" rel="stylesheet">
+<link th:href="@{/vendor/fontawesome-free/css/all.min.css}"
+	rel="stylesheet" type="text/css">
+<link
+	href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+	rel="stylesheet">
+
+</head>
+<body id="page-top">
+
+	<!-- Begin Page Content -->
+	<!-- Page Heading -->
+	<div class="container-fluid">
+	<h1>Thông tin tài khoản</h1>
+		<form method="post" th:object="${user}" action="#" enctype="multipart/form-data">
+			<div class="shadow-lg card border-0 border-left-danger">
+				<div class="row">
+					<div class="col-lg-4">
+						<div class="">
+							<div class="mb-4">
+								<div class="card-body text-center">
+									<label> <img th:src="*{profile_picture}"
+										alt="avatar" class="rounded-circle img-fluid"
+										style="width: 70%;"><input
+										type="file" th:name="file" class="inputFile" id="fileInp"
+										onchange="getFile(event)" style="display: none;">
+										<input type="text" style="display: none;" th:name="avarta">
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-8">
+						<div class=" mb-4">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Họ và tên</p>
+									</div>
+									<div class="col-sm-9">
+										<input class="text-muted mb-0" th:field="*{full_name}"
+											th:name="full_name" > <input type="text"
+											id="alert" class="text-muted mb-0"
+											th:value="${alert}" style="display: none">
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Giới tính</p>
+									</div>
+									<div class="col-sm-9">
+										<input class="text-muted mb-0" th:field="*{gender}"
+											th:name="gender" >
+
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Email</p>
+									</div>
+									<div class="col-sm-9">
+										<input class="text-muted mb-0" type="email"
+											th:field="*{email}" th:name="email" >
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Số điện thoại</p>
+									</div>
+									<div class="col-sm-9">
+										<input type="tel" class="text-muted mb-0" th:field="*{phone}"
+											th:name="phone" pattern="^(0\d{9})$" >
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Ngày sinh</p>
+									</div>
+									<div class="col-sm-9">
+										<input class="text-muted mb-0" type="date"
+											th:field="*{user_birtday}" th:name="user_birtday" >
+									</div>
+								</div>
+								<hr>
+
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Mật khẩu</p>
+									</div>
+									<div class="col-sm-9">
+										<input type="text" class="text-muted mb-0"
+											th:field="*{user_password}" th:name="user_password"
+											>
+									</div>
+								</div>
+								<hr>
+								<div class="btn-updateprofile">
+									<button th:formaction="@{/updateadmin}"
+										type="submit" class="btn btn-primary">
+										<i class="fas fa-fw fa-edit"></i> Cập nhật
+									</button>
+									<button th:formaction="@{/huy}"
+										type="submit" class="btn btn-success">
+										<i class="fas fa-fw fa-user-check"></i> Hủy
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<!-- End of Main Content -->
+
+
+
+	<!-- Scroll to Top Button-->
+	<a class="scroll-to-top rounded" href="#page-top"> <i
+		class="fas fa-angle-up"></i>
+	</a>
+
+	<!-- Logout Modal-->
+	<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+			<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Đăng xuất</h5>
+						<button class="close" type="button" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+					</div>
+					<div class="modal-body">Bạn có muốn đăng xuất ?</div>
+					<div class="modal-footer">
+						<button class="btn btn-secondary" type="button"
+							data-dismiss="modal">Hủy</button>
+						<a class="btn btn-primary" th:href="@{/admin/logout}">Đăng xuất</a>
+					</div>
+				</div>
+		</div>
+	</div>
+
+	<!-- Bootstrap core JavaScript-->
+	<script src="/vendor/jquery/jquery.min.js"></script>
+	<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Core plugin JavaScript-->
+	<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+	<!-- Custom scripts for all pages-->
+	<script src="/js/sb-admin-2.min.js"></script>
+	<script type="text/javascript">
+	const firebaseConfig = {
+			  apiKey: "AIzaSyD3uIU83G4Bokv11U5YIY8-mNpIBe3y60g",
+			  authDomain: "davitickets-2e627.firebaseapp.com",
+			  projectId: "davitickets-2e627",
+			  storageBucket: "davitickets-2e627.appspot.com",
+			  messagingSenderId: "468176503693",
+			  appId: "1:468176503693:web:c4d5996f707cac507833c4",
+			  measurementId: "G-0ZK86JRDMG"
+			};
+        firebase.initializeApp(firebaseConfig);
+        var uploadPercentage = document.querySelector(".uploadPercentage");
+        var progress = document.querySelector(".progress");
+        var percenVal;
+        var fileName;
+        var fileItem;
+        function getFile(e) {
+            fileItem = e.target.files[0];
+            fileName = fileItem.name;
+            if (e.target.files.length > 0) {
+                let src = URL.createObjectURL(fileItem);
+                let preview = document.getElementById("file-ip");
+                preview.src = src;
+                preview.style.display = "block";
+            }
+            this.uploadImage();  
+        }
+      
+        function uploadImage() {
+            let storageRef = firebase.storage().ref(fileName);
+            let uploadTast = storageRef.put(fileItem);
+
+            uploadTast.on("state_changed", (snapshot) => {
+             
+            }, (error) => {
+                console.log("err ", error);
+            },() => {
+                uploadTast.snapshot.ref.getDownloadURL()
+                    .then((url) => {
+                    	alert(url);
+                    	var x = url;
+                        console.log("URL", x);
+                        document.getElementById('avatar').value = x;
+                    })
+            }
+            )
+        }
+	</script>
+	<script type="text/javascript">
+		var alert = document.getElementById("alert");
+		if (alert.value == "updateSuccess") {
+			toast({
+				title : "Thành công!",
+				message : "Cập nhật thành công!",
+				type : "success",
+				duration : 5000
+			});
+		}
+		if (alert.value == "updateFail") {
+			toast({
+				title : "Thất bại!",
+				message : "Cập nhật thất bại!",
+				type : "error",
+				duration : 5000
+			});
+		}
+		if (alert.value == "disableSuccess") {
+			toast({
+				title : "Thành công!",
+				message : "Vô hiệu hóa tài khoản thành công!",
+				type : "success",
+				duration : 5000
+			});
+		}
+		if (alert.value == "disableFail") {
+			toast({
+				title : "Thất bại!",
+				message : "Vô hiệu hóa tài khoản thất bại!",
+				type : "error",
+				duration : 5000
+			});
+		}
+		if (alert.value == "activeSuccess") {
+			toast({
+				title : "Thành công!",
+				message : "Kích hoạt tài khoản thành công!",
+				type : "success",
+				duration : 5000
+			});
+		}
+		if (alert.value == "activeFail") {
+			toast({
+				title : "Thất bại!",
+				message : "Kích hoạt tài khoản thất bại!",
+				type : "error",
+				duration : 5000
+			});
+		}
+	</script>
+
+</body>
+</html>

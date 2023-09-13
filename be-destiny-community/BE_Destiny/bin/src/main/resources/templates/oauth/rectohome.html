@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>Welcome to Thymeleaf</h1>
+	<!-- <input th:value="${user}"> -->
+	<!-- <ul>
+<li th:text="${email}"></li>
+<li th:utext="${name}"></li>
+</ul> -->
+	<!-- <ul th:object="${sessionScope.user}">
+
+<li>${user.email}</li>
+<li>${user.full_name}</li>
+</ul> -->
+
+
+	<div th:if="${user != null}">
+		<p>
+			Email: <span th:text="${user.email}"></span>
+		</p>
+		<p>
+			Email: <span th:text="${user.full_name}"></span>
+		</p>
+	</div> 
+</body>
+</html>

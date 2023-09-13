@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{/admin/index.html :: dynamic(~{::body})}">
+
+<head>
+<meta charset="UTF-8">
+<title>Davitickets</title>
+</head>
+
+<body id="page-top">
+
+	<!-- Begin Page Content -->
+	<!-- Page Heading -->
+	<div class="container-fluid">
+		<h1 class="h3 mb-4 text-light">Quản lý phim</h1>
+		<form th:object="${formmv}" method="post"
+			enctype="multipart/form-data">
+			<div class="shadow-lg card border-0 border-left-warning">
+				<div class="row">
+					<div class="col-lg-4">
+						<div class="">
+							<div class="mt-3">
+								<div class="card-body text-center">
+									<label> <img th:src="*{poster}" id="file-ip"
+										class="img-fluid" style="width: 100%;"> <input
+										type="file" th:name="file" class="inputFile"
+										onchange="getFile(event)" style="display: none;"> <input
+										th:name="avatar" id="avatar" type="text"
+										style="display: none;">
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-lg-8">
+
+						<div class="mb-0 mt-2">
+							<div class="card-body text-light">
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Tựa đề</p>
+									</div>
+									<div class="col-sm-9">
+										<input class="text-muted mb-0" th:field="*{title_movie}"
+											th:name="title_movie" required> <input type="text"
+											id="alert" class="text-muted mb-0" th:value="${alert}"
+											style="display: none">
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Thời lượng</p>
+									</div>
+									<div class="col-sm-9 row">
+										<input class="text-muted mb-0 col-sm-2" th:field="*{duration}"
+											th:name="duration" id="duration" pattern="^\d{2,3}$" required
+											style="padding-right: 10px"> <span
+											class="text-muted mb-0 col-sm-10">Phút</span>
+											
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Ngày ra mắt</p>
+									</div>
+									<div class="col-sm-9">
+										<input type="date" class="text-muted mb-0"
+											th:field="*{release_date}" th:name="release_date" required>
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Thể loại</p>
+									</div>
+									<div class="col-sm-9">
+										<input type="text" class="text-muted mb-0" th:field="*{genre}"
+											th:name="genre" required>
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Đánh giá</p>
+									</div>
+									<div class="col-sm-9 row">
+										<input type="text" class="text-muted mb-0 col-sm-2"
+											th:field="*{rating}" id="rating" pattern="([0-4]*[.])?[0-9]"
+											th:name="rating" required>
+											 <span
+											class="text-muted mb-0 col-sm-7">/ 5</span>
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Đạo diễn</p>
+									</div>
+									<div class="col-sm-9">
+										<input type="text" class="text-muted mb-0"
+											th:field="*{film_director}" th:name="film_director" required>
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Mô tả</p>
+									</div>
+									<div class="col-sm-9">
+										<textarea class="text-muted mb-0" id="Description" rows="3"
+											style="resize: none;" th:name="description_movie"
+											th:field="*{description_movie}" required></textarea>
+									</div>
+								</div>
+								<hr>
+								<div class="btn-updateprofile">
+									<button th:formaction="@{/admin/createMovie}" type="submit"
+										th:if="${editORcreate} == create" class="btn btn-primary">
+										<i class="fas fa-fw fa-film"></i> Thêm
+									</button>
+									<button th:formaction="@{|/admin/updateMovie/${formmv.movie_id}|}"
+										th:if="${editORcreate} == edit" type="submit"
+										class="btn btn-primary">
+										<i class="fas fa-fw fa-edit"></i> Cập nhật
+									</button>
+									<button th:formaction="@{/admin/clearMovie}" type="submit"
+										th:if="${editORcreate} == create" class="btn btn-light">
+										<i class="fas fa-fw fa-undo"></i> Làm mới
+									</button>
+									<button th:each="movie:${listMvNotUse}" th:object="${movie}"
+										th:formaction="@{|/admin/deleteMovie/${formmv.movie_id}|}"
+										type="submit" class="btn btn-danger"
+										th:if="*{movie_id} == ${movie.movie_id}">
+										<i class="fas fa-fw fa-video-slash"></i> Xóa
+									</button>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+		</form>
+	</div>
+	<!-- End of Main Content -->
+
+
+
+	<!-- Scroll to Top Button-->
+	<a class="scroll-to-top rounded" href="#page-top"> <i
+		class="fas fa-angle-up"></i>
+	</a>
+
+	<!-- Logout Modal-->
+	<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Đăng xuất</h5>
+						<button class="close" type="button" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+					</div>
+					<div class="modal-body">Bạn có muốn đăng xuất ?</div>
+					<div class="modal-footer">
+						<button class="btn btn-secondary" type="button"
+							data-dismiss="modal">Hủy</button>
+						<a class="btn btn-primary" th:href="@{/admin/logout}">Đăng xuất</a>
+					</div>
+				</div>
+		</div>
+	</div>
+	<script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script>
+	<script
+		src="https://www.gstatic.com/firebasejs/6.0.2/firebase-storage.js"></script>
+	<script type="text/javascript">
+	const firebaseConfig = {
+			  apiKey: "AIzaSyD3uIU83G4Bokv11U5YIY8-mNpIBe3y60g",
+			  authDomain: "davitickets-2e627.firebaseapp.com",
+			  projectId: "davitickets-2e627",
+			  storageBucket: "davitickets-2e627.appspot.com",
+			  messagingSenderId: "468176503693",
+			  appId: "1:468176503693:web:c4d5996f707cac507833c4",
+			  measurementId: "G-0ZK86JRDMG"
+			};
+        firebase.initializeApp(firebaseConfig);
+        var uploadPercentage = document.querySelector(".uploadPercentage");
+        var progress = document.querySelector(".progress");
+        var percenVal;
+        var fileName;
+        var fileItem;
+        function getFile(e) {
+            fileItem = e.target.files[0];
+            fileName = fileItem.name;
+            if (e.target.files.length > 0) {
+                let src = URL.createObjectURL(fileItem);
+                let preview = document.getElementById("file-ip");
+                preview.src = src;
+                preview.style.display = "block";
+            }
+            this.uploadImage();  
+        }
+      
+        function uploadImage() {
+            let storageRef = firebase.storage().ref(fileName);
+            let uploadTast = storageRef.put(fileItem);
+
+            uploadTast.on("state_changed", (snapshot) => {
+             
+            }, (error) => {
+                console.log("err ", error);
+            },() => {
+                uploadTast.snapshot.ref.getDownloadURL()
+                    .then((url) => {
+                    	var x = url;
+                        console.log("URL", x);
+                        document.getElementById('avatar').value = x;
+                    })
+            }
+            )
+        }
+	</script>
+
+	<script type="text/javascript">
+	    var inputDuration = document.getElementById('duration');
+	    inputDuration.oninvalid = function(e) {
+            e.target.setCustomValidity("");
+            if (!e.target.validity.valid) {
+                e.target.setCustomValidity("Thời lượng phải là số và không được nhiều hơn 3 số!");
+            }
+        };
+        inputDuration.oninput = function(e) {
+            e.target.setCustomValidity("");
+        };
+        var inputRating = document.getElementById('rating');
+        inputRating.oninvalid = function(e) {
+            e.target.setCustomValidity("");
+            if (!e.target.validity.valid) {
+                e.target.setCustomValidity("Đánh giá phải là số và không được lớn hơn 5!");
+            }
+        };
+        inputRating.oninput = function(e) {
+            e.target.setCustomValidity("");
+        };  
+	</script>
+
+	<script type="text/javascript">
+		var alert = document.getElementById("alert");
+		if (alert.value == "updateSuccess") {
+			toast({
+				title: "Thành công!",
+				message: "Cập nhật thành công!",
+				type: "success",
+				duration: 10000
+			});
+		}
+		if (alert.value == "updateFail") {
+			toast({
+				title: "Thất bại!",
+				message: "Cập nhật thất bại!",
+				type: "error",
+				duration: 10000
+			});
+		}
+	</script>
+</body>
+</html>
