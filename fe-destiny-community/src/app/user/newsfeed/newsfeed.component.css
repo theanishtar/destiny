@@ -1,0 +1,163 @@
+img.quest-preview-image {
+    width: 14%;
+}
+p.quest-preview-title{
+    font-size: 0.875rem;
+    font-weight: 700;
+    line-height: 20px;
+}
+p.quest-preview-text{
+    margin-top: 4px;
+    color: #3e3f5e;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.3333333333em;
+    width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}
+a.user-status-text.small {
+    line-height: 2rem;
+    color: #5753E4 !important;
+    cursor: pointer;
+}
+p.user-status-text.small.post-time {
+    line-height: 2;
+}
+.content-grid{
+    padding-bottom: 0;
+}
+.grid.grid-3-6-3>.grid-column{
+    height: 650px;
+  overflow: auto;
+  overflow: -moz-scrollbars-none;
+  -ms-overflow-style: none;
+}
+.grid.grid-3-6-3>.grid-column::-webkit-scrollbar {
+    width: 0 !important;
+    display: none;
+}
+
+/* .quick-post-body{
+    height: 160px;
+  overflow: auto;
+  overflow: -moz-scrollbars-none;
+  -ms-overflow-style: none;
+}
+.quick-post-body::-webkit-scrollbar {
+    width: 0 !important;
+    display: none;
+}
+.form-row{
+    margin-top: 0 !important;
+}
+.form-item-input {
+    width: 46.5%;
+    margin: 0 10px 20px;
+}
+select#viewer,
+select#city,
+select#district,
+select#ward {
+    height: 55px;
+    padding-left: 20px;
+    color: #adafca;
+}
+option .label-option{
+    color: #adafca;
+}
+.form-item-hashtag {
+    width: 100%;
+    margin: 0 10px 20px;
+} */
+/* check address */
+.address {
+    display: flex;
+    padding: 0px 20px;
+}
+.cbx {
+    position: relative;
+    margin-left: 0.5rem;
+    top: 1px;
+    width: 18px;
+    height: 18px;
+    border: 1px solid #c8ccd4;
+    border-radius: 3px;
+    vertical-align: middle;
+    transition: background 0.1s ease;
+    cursor: pointer;
+    display: block;
+   }
+   
+   .cbx:after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 6px;
+    width: 5px;
+    height: 10px;
+    opacity: 0;
+    transform: rotate(45deg) scale(0);
+    border-right: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    transition: all 0.3s ease;
+    transition-delay: 0.15s;
+   }
+   
+   .lbl {
+    margin-left: 5px;
+    vertical-align: middle;
+    cursor: pointer;
+   }
+   
+   #cbx:checked ~ .cbx {
+    border-color: transparent;
+    background: #6871f1;
+    animation: jelly 0.6s ease;
+   }
+   
+   #cbx:checked ~ .cbx:after {
+    opacity: 1;
+    transform: rotate(45deg) scale(1);
+   }
+   
+   .cntr {
+    position: relative;
+   }
+   
+   @keyframes jelly {
+    from {
+     transform: scale(1, 1);
+    }
+   
+    30% {
+     transform: scale(1.25, 0.75);
+    }
+   
+    40% {
+     transform: scale(0.75, 1.25);
+    }
+   
+    50% {
+     transform: scale(1.15, 0.85);
+    }
+   
+    65% {
+     transform: scale(0.95, 1.05);
+    }
+   
+    75% {
+     transform: scale(1.05, 0.95);
+    }
+   
+    to {
+     transform: scale(1, 1);
+    }
+   }
+   
+   .hidden-xs-up {
+    display: none!important;
+   }

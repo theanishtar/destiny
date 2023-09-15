@@ -1,0 +1,292 @@
+<body>
+    <!-- LANDING -->
+    <div class="landing">
+      <!-- LANDING DECORATION -->
+      <div class="landing-decoration"></div>
+      <!-- /LANDING DECORATION -->
+  
+      <!-- LANDING INFO -->
+      <div class="landing-info">
+        <!-- LOGO -->
+        <div class="logo">
+          <!-- ICON LOGO VIKINGER -->
+          <svg class="icon-logo-vikinger">
+            <use xlink:href="#svg-logo-vikinger"></use>
+          </svg>
+          <!-- /ICON LOGO VIKINGER -->
+        </div>
+        <!-- /LOGO -->
+  
+        <!-- LANDING INFO PRETITLE -->
+        <h2 class="landing-info-pretitle">Chào mừng đến với</h2>
+        <!-- /LANDING INFO PRETITLE -->
+  
+        <!-- LANDING INFO TITLE -->
+        <h1 class="landing-info-title">Destiny</h1>
+        <!-- /LANDING INFO TITLE -->
+  
+        <!-- LANDING INFO TEXT -->
+        <p class="landing-info-text">Diễn đàn là một cộng đồng
+            trực tuyến nơi mọi người có thể tặng
+            và nhận đồ từ nhau một cách miễn
+            phí. Diễn đàn này tạo ra
+            một không gian trao đổi đồ hoàn toàn phi
+            thương mại và không có sự đòi hỏi trả
+            lại.</p>
+        <!-- /LANDING INFO TEXT -->
+  
+        <!-- TAB SWITCH -->
+        <div class="tab-switch">
+          <!-- TAB SWITCH BUTTON -->
+          <p class="tab-switch-button login-register-form-trigger">Đăng nhập</p>
+          <!-- /TAB SWITCH BUTTON -->
+  
+          <!-- TAB SWITCH BUTTON -->
+          <p class="tab-switch-button login-register-form-trigger">Đăng ký</p>
+          <!-- /TAB SWITCH BUTTON -->
+        </div>
+        <!-- /TAB SWITCH -->
+      </div>
+      <!-- /LANDING INFO -->
+  
+      <!-- LANDING FORM -->
+      <div class="landing-form">
+        <!-- FORM BOX -->
+        <div class="form-box login-register-form-element">
+          <!-- FORM BOX DECORATION -->
+          <img class="form-box-decoration overflowing" src="../../assets/images/landing/rocket.png" alt="rocket">
+          <!-- /FORM BOX DECORATION -->
+  
+          <!-- FORM BOX TITLE -->
+          <h2 class="form-box-title">Đăng nhập</h2>
+          <!-- /FORM BOX TITLE -->
+      
+          <!-- FORM -->
+          <form class="form" [formGroup]="loginForm" (ngSubmit)="loginWithEmailAndPassword()" novalidate>
+            <!-- FORM ROW -->
+            <div class="form-row">
+              <!-- FORM ITEM -->
+              <div class="form-item">
+                <!-- FORM INPUT -->
+                <div class="form-input">
+                  <label for="login-email">Email</label>
+                  <input type="text" id="login-email" formControlName="email" id="email" required>
+                </div>
+                <!-- /FORM INPUT -->
+              </div>
+              <!-- /FORM ITEM -->
+            </div>
+            <!-- /FORM ROW -->
+      
+            <!-- FORM ROW -->
+            <div class="form-row">
+              <!-- FORM ITEM -->
+              <div class="form-item">
+                <!-- FORM INPUT -->
+                <div class="form-input">
+                  <label for="login-password">Mật khẩu</label>
+                  <input type="password" formControlName="password" name="password" id="passwordForm" required>
+                </div>
+                <!-- /FORM INPUT -->
+              </div>
+              <!-- /FORM ITEM -->
+            </div>
+            <!-- /FORM ROW -->
+      
+            <!-- FORM ROW -->
+            <div class="form-row space-between">
+              <!-- FORM ITEM -->
+              <div class="form-item">
+                <!-- CHECKBOX WRAP -->
+                <div class="checkbox-wrap">
+                  <input type="checkbox" id="login-remember" name="login_remember" checked>
+                  <!-- CHECKBOX BOX -->
+                  <div class="checkbox-box">
+                    <!-- ICON CROSS -->
+                    <svg class="icon-cross">
+                      <use xlink:href="#svg-cross"></use>
+                    </svg>
+                    <!-- /ICON CROSS -->
+                  </div>
+                  <!-- /CHECKBOX BOX -->
+                  <label for="login-remember">Duy trì đăng nhập</label>
+                </div>
+                <!-- /CHECKBOX WRAP -->
+              </div>
+              <!-- /FORM ITEM -->
+      
+              <!-- FORM ITEM -->
+              <div class="form-item">
+                <!-- FORM LINK -->
+                <a class="form-link" href="#">Quên mật khẩu?</a>
+                <!-- /FORM LINK -->
+              </div>
+              <!-- /FORM ITEM -->
+            </div>
+            <!-- /FORM ROW -->
+      
+            <!-- FORM ROW -->
+            <div class="form-row">
+              <!-- FORM ITEM -->
+              <div class="form-item">
+                <!-- BUTTON -->
+                <button type="submit" class="button medium secondary">Đăng nhập!</button>
+                <!-- /BUTTON -->
+              </div>
+              <!-- /FORM ITEM -->
+            </div>
+            <!-- /FORM ROW -->
+          </form>
+          <!-- /FORM -->
+      
+          <!-- LINED TEXT -->
+          <p class="lined-text">Đăng nhập với tùy chọn khác</p>
+          <!-- /LINED TEXT -->
+      
+          <!-- SOCIAL LINKS -->
+          <div class="social-links">
+            <!-- SOCIAL LINK -->
+            <a class="social-link facebook" href="#">
+              <!-- ICON FACEBOOK -->
+              <svg class="icon-facebook">
+                <use xlink:href="#svg-facebook"></use>
+              </svg>
+              <!-- /ICON FACEBOOK -->
+            </a>
+            <!-- /SOCIAL LINK -->
+      
+            <!-- SOCIAL LINK -->
+            <a class="social-link twitter" href="#">
+              <!-- ICON TWITTER -->
+              <svg class="icon-twitter">
+                <use xlink:href="#svg-twitter"></use>
+              </svg>
+              <!-- /ICON TWITTER -->
+            </a>
+            <!-- /SOCIAL LINK -->
+      
+            <!-- SOCIAL LINK -->
+            <a class="social-link twitch" href="#">
+              <!-- ICON TWITCH -->
+              <svg class="icon-twitch">
+                <use xlink:href="#svg-twitch"></use>
+              </svg>
+              <!-- /ICON TWITCH -->
+            </a>
+            <!-- /SOCIAL LINK -->
+      
+            <!-- SOCIAL LINK -->
+            <a class="social-link youtube" href="#">
+              <!-- ICON YOUTUBE -->
+              <svg class="icon-youtube">
+                <use xlink:href="#svg-youtube"></use>
+              </svg>
+              <!-- /ICON YOUTUBE -->
+            </a>
+            <!-- /SOCIAL LINK -->
+          </div>
+          <!-- /SOCIAL LINKS -->
+        </div>
+        <!-- /FORM BOX -->
+      
+        <!-- FORM BOX -->
+        <div class="form-box login-register-form-element">
+          <!-- FORM BOX DECORATION -->
+          <img class="form-box-decoration" src="../../assets/images/landing/rocket.png" alt="rocket">
+          <!-- /FORM BOX DECORATION -->
+  
+          <!-- FORM BOX TITLE -->
+          <h2 class="form-box-title">Tạo tài khoản!</h2>
+          <!-- /FORM BOX TITLE -->
+      
+          <!-- FORM -->
+          <form class="form">
+            <!-- FORM ROW -->
+            <div class="form-row">
+              <!-- FORM ITEM -->
+              <div class="form-item">
+                <!-- FORM INPUT -->
+                <div class="form-input">
+                  <label for="register-email">Email</label>
+                  <input type="text" id="register-email" name="register_email">
+                </div>
+                <!-- /FORM INPUT -->
+              </div>
+              <!-- /FORM ITEM -->
+            </div>
+            <!-- /FORM ROW -->
+      
+            <!-- FORM ROW -->
+            <div class="form-row">
+              <!-- FORM ITEM -->
+              <div class="form-item">
+                <!-- FORM INPUT -->
+                <div class="form-input">
+                  <label for="register-username">Họ tên</label>
+                  <input type="text" id="register-username" name="register_username">
+                </div>
+                <!-- /FORM INPUT -->
+              </div>
+              <!-- /FORM ITEM -->
+            </div>
+            <!-- /FORM ROW -->
+      
+            <!-- FORM ROW -->
+            <div class="form-row">
+              <!-- FORM ITEM -->
+              <div class="form-item">
+                <!-- FORM INPUT -->
+                <div class="form-input">
+                  <label for="register-password">Mật khẩu</label>
+                  <input type="password" id="register-password" name="register_password">
+                </div>
+                <!-- /FORM INPUT -->
+              </div>
+              <!-- /FORM ITEM -->
+            </div>
+            <!-- /FORM ROW -->
+      
+            <!-- FORM ROW -->
+            <div class="form-row">
+              <!-- FORM ITEM -->
+              <div class="form-item otp">
+                <!-- FORM INPUT -->
+                <div class="form-input">
+                  <label for="register-password-repeat">Xác nhận mật khẩu</label>
+                  <input type="password" id="register-password-repeat" name="register_password_repeat">
+                </div>
+                <!-- /FORM INPUT -->
+              </div>
+              <!-- /FORM ITEM -->
+              <div class="btn-otp">
+                <button class="send-otp">Gửi mã</button>
+              </div>
+            </div>
+            <!-- /FORM ROW -->
+      
+            
+      
+            <!-- FORM ROW -->
+            <div class="form-row">
+              <!-- FORM ITEM -->
+              <div class="form-item">
+                <!-- BUTTON -->
+                <button class="button medium primary">Đăng ký!</button>
+                <!-- /BUTTON -->
+              </div>
+              <!-- /FORM ITEM -->
+            </div>
+            <!-- /FORM ROW -->
+          </form>
+          <!-- /FORM -->
+      
+          <!-- FORM TEXT -->
+          <p class="form-text">Sau khi nhập thông tin cần thiết hãy bấm vào <b>"Gửi mã"</b> để nhận mã xác nhận và hoàn thành việc đăng ký.</p>
+          <!-- /FORM TEXT -->
+        </div>
+        <!-- /FORM BOX -->
+      </div>
+      <!-- /LANDING FORM -->
+    </div>
+    <!-- /LANDING -->
+  </body>

@@ -1,0 +1,25 @@
+.form-item.otp {
+    width: 75%;
+}
+.btn-otp {
+    width: 25%;
+}
+
+button.send-otp {
+    padding: 15px;
+    background: none;
+    color: #5753E4;
+}
+
+h2.landing-info-pretitle{
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+p.form-text {
+    text-align: center;
+}
+@media screen and (max-width: 1290px) {
+    .landing{
+        height: auto;
+    }
+}
+

@@ -1,0 +1,44 @@
+.menu-item-link-icon {
+
+    font-size: 18px;
+}
+
+li.menu-item.active i.fa-solid {
+    color: #fff;
+}
+
+li.menu-item:not(.active) a.menu-item-link.text-tooltip-tfr:hover i.fa-solid {
+    color: #23d2e2;
+}
+
+i.fa-solid {
+    color: #adafca;
+}
+
+a.menu-main-item-link {
+    font-size: 15px !important;
+}
+
+.logo,
+h1.header-brand-text {
+    margin-left: 0 !important;
+}
+
+h1.header-brand-text {
+    font-size: 25px !important;
+}
+
+.icon-logo-vikinger.small {
+    width: 100px;
+    height: 75px;
+}
+p.fullname-logged{
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 80px;
+    cursor: pointer;
+}
+.action-item.dark.header-settings-dropdown-trigger {
+    width: 250px;
+}
