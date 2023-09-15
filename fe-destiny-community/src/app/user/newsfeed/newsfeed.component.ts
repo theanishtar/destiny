@@ -48,4 +48,11 @@ export class NewsfeedComponent implements OnInit{
   closeModal() {
     this.modalService.closeModal();
   }
+
+  openModal1() {
+    this.modalService.openModal1();
+  }
+  closeModal1() {
+    this.modalService.closeModal1();
+  }
 }

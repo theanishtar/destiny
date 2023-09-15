@@ -248,7 +248,8 @@
                           >
                             <span
                               class="flex h-10 w-10 items-center justify-center rounded-full border border-stroke bg-white dark:border-strokedark dark:bg-boxdark"
-                              ><svg
+                              >
+                              <svg
                                 width="16"
                                 height="16"
                                 viewBox="0 0 16 16"
@@ -272,7 +273,8 @@
                                   clip-rule="evenodd"
                                   d="M7.99967 1.33337C8.36786 1.33337 8.66634 1.63185 8.66634 2.00004V10C8.66634 10.3682 8.36786 10.6667 7.99967 10.6667C7.63148 10.6667 7.33301 10.3682 7.33301 10V2.00004C7.33301 1.63185 7.63148 1.33337 7.99967 1.33337Z"
                                   fill="#3C50E0"
-                                ></path></svg></span>
+                                ></path></svg>
+                              </span>
                             <p>
                               <span class="text-primary">Click to upload</span> or
                               drag and drop
@@ -319,3 +321,70 @@
   </div> 
 </main>
 
+
+<main class="overlay" *ngIf="modalService.isOpen1$ | async">
+<div id="favDialog_updatePost" class="modal fade favDialog_updatePost">
+   <div class="modal-header">
+    <a id="close2" type="button" href="/profile/${ user.ID }"></a>
+    <p class="title-update">
+      Cập nhật
+    </p>
+    <button id="updatePosst" type="button">
+      Cập nhật
+    </button>
+  </div>
+  <div class="post-container-update">
+    <div class="post">
+      <div class="left-post">
+        <div class="post-feed">
+          <div class="post-img-container-update">
+            <img src="/views/images/posts/post1.jpg" alt="">
+          </div>
+        </div>
+      </div>
+      <div class="post-detail">
+        <div class="info-update">
+          <div class="post-header">
+            <img src="views/images/user/user.jpg" class="user-icon" alt="">
+            <p class="username">@dannk</p>
+          </div>
+        </div>
+        <textarea class="post-des-update" name="" id="" cols="45" rows="10">${updatepost.post}
+                        </textarea>
+        <div class="name-product">
+          <input class="input" value="${updatepost.product}"
+            placeholder=""required=""
+            type="text"> <span class="input-border"></span>
+        </div>
+        <div class="hashtag">
+          <input class="input" value="${updatepost.hashTag}"
+            placeholder="Hashtag" required="" type="text"> <span
+            class="input-border"></span>
+        </div>
+        <div class="address">
+          <!-- <input class="input" placeholder="Vị trí" required=""
+                  type="text"> <span class="input-border"></span> -->
+
+          <select class="input" name="address" id="address">
+            <option value=""></option>
+
+          </select>
+        </div>
+        <div class="btn-sendStatus">
+          Đã nhận
+          <button>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+              aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"></path>
+            </svg>
+            Chưa
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+</main>
