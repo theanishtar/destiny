@@ -6,8 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "purgecss": "purgecss --config purgecss.config.js -o ./src/app/user/modal/modal.css"
+    "test": "ng test"
   },
   "private": true,
   "dependencies": {
@@ -20,6 +19,12 @@
     "@angular/platform-browser-dynamic": "^16.1.0",
     "@angular/router": "^16.1.0",
     "@types/angular": "^1.8.5",
+    "@types/chart.js": "^2.9.38",
+    "chart.js": "^4.4.0",
+    "datatables.net": "^1.13.6",
+    "jquery": "^3.7.1",
+    "ng2-charts": "^5.0.3",
+    "ngx-chartjs": "^0.0.1",
     "ngx-cookie-service": "^16.0.1",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.7.28",
@@ -31,13 +36,13 @@
     "@angular/cli": "~16.1.1",
     "@angular/compiler-cli": "^16.1.0",
     "@types/jasmine": "~4.3.0",
+    "@types/jquery": "^3.5.18",
     "jasmine-core": "~4.6.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "purgecss": "^5.0.0",
     "typescript": "~5.1.3"
   }
 }

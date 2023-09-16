@@ -2,8 +2,17 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "allowJs": true,
+    // "allowJs": true,
     "baseUrl": "./",
+    // mới thêm
+    "strictPropertyInitialization": false,
+    "paths": {
+      "@app/*": ["src/app/*"],
+      "@assets/*": ["src/assets/*"]
+    },
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": false ,
+    // end
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,

@@ -28,6 +28,7 @@
               "src/styles.css"
             ],
             "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
               "src/assets/js/utils/app.js",
               "src/assets/toast/main.js"
             ]
@@ -38,12 +39,12 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "5mb"
+                  "maximumError": "1mb"
                 },
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "2kb",
-                  "maximumError": "500kb"
+                  "maximumError": "4kb"
                 }
               ],
               "outputHashing": "all"

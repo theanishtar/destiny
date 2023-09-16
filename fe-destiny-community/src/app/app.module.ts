@@ -23,6 +23,18 @@ import { ContactComponent } from './user/contact/contact.component';
 import { HistoryComponent } from './user/history/history.component';
 import { NotificationsComponent } from './user/notifications/notifications.component';
 
+//admin
+import { SidebarAdminComponent } from './admin/sidebar-admin/sidebar-admin.component';
+import { NavbarAdminComponent } from './admin/navbar-admin/navbar-admin.component';
+import { IndexAdminComponent } from './admin/index-admin/index-admin.component';
+import { PostDetailComponent } from './admin/post-detail/post-detail.component';
+import { PostManamentComponent } from './admin/post-manament/post-manament.component';
+import { PostReportdetailComponent } from './admin/post-reportdetail/post-reportdetail.component';
+import { ProfileAdminComponent } from './admin/profile-admin/profile-admin.component';
+import { UserDetailComponent } from './admin/user-detail/user-detail.component';
+import { UserManamentComponent } from './admin/user-manament/user-manament.component';
+import { UserReportdetailComponent } from './admin/user-reportdetail/user-reportdetail.component';
+
 
 
 @NgModule({
@@ -45,6 +57,16 @@ import { NotificationsComponent } from './user/notifications/notifications.compo
     ContactComponent,
     HistoryComponent,
     NotificationsComponent,
+    SidebarAdminComponent,
+    NavbarAdminComponent,
+    IndexAdminComponent,
+    PostDetailComponent,
+    PostManamentComponent,
+    PostReportdetailComponent,
+    ProfileAdminComponent,
+    UserDetailComponent,
+    UserManamentComponent,
+    UserReportdetailComponent,
   ],
   imports: [
     BrowserModule,

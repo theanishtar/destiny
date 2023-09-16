@@ -1,0 +1,250 @@
+<div class="body-admin">
+
+  <app-sidebar-admin></app-sidebar-admin>
+  <div class="content">
+    <!-- Navbar -->
+    <app-navbar-admin></app-navbar-admin>
+
+    <!-- End of Navbar -->
+
+    <main>
+      <div class="pb-5">
+        <div class="page-header min-height-300 border-radius-xl mt-1"
+          style="background-image: url('../assets/images/img/curved-images/curved0.jpg')">
+          <span class="mask bg-gradient-endless opacity-6"></span>
+        </div>
+        <div class="card card-body blur shadow-blur shadow mx-4 mt-n5" style="
+          width: 90%;
+          margin-left: 5% !important;
+          margin-right: 5% !important;
+        ">
+          <div class="row">
+            <div class="col-lg-1 col-md-6 col-sm-3">
+              <div class="avatar">
+                <img src="../assets/images/users/dang.jpg" alt="profile_image" class="border-radius-lg shadow-sm" />
+              </div>
+            </div>
+            <div class="col-lg-10 col-md-5 col-sm-8">
+              <div class="">
+                <h5 class="mb-0">Trần Hữu Đang</h5>
+                <p class="mb-0 font-weight-bold text-sm">Admin / Co-Founder</p>
+              </div>
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-1 mt-3 profile-dropdown">
+              <div class="dropdown no-arrow">
+                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+                  <i class="fas fa-ellipsis-v fa-sm fa-fw text-pie"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                  aria-labelledby="dropdownMenuLink">
+                  <div class="dropdown-header text-black-50">
+                    CÀI ĐẶT CÁ NHÂN:
+                  </div>
+                  <div role="button" class="dropdown-item" (click)="openProfile()">
+                    Chỉnh sửa
+                  </div>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#changePassModal">Đổi mật khẩu</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row profile-zindex">
+          <div class="col-lg-12 profile-logo-heart">
+            <img src="../assets/images/logo-euphoria.png" alt="" />
+          </div>
+          <div class="col-lg-12 profile-title mt-3">
+            <div class="logo" style="height: 0 !important">
+              <h2 class="logo-name"><span>DES</span>TINY</h2>
+            </div>
+          </div>
+          <div class="row col-lg-12 mt-1 pr-0">
+            <div class="col-lg-5 mt-2 mb-3 pr-0">
+              <div class="card h-100 shadow pb-3">
+                <div class="card-body p-2">
+                  <div class="row pb-3 p-3">
+                    <div class="col-md-8 d-flex align-items-center text-pink">
+                      <h5 class="mb-0 font-weight-bold">Thông tin cá nhân</h5>
+                    </div>
+                    <div class="col-md-4 text-right">
+                      <i class="fas fa-user-edit text-pink text-md" (click)="openProfile()" role="button"></i>
+                    </div>
+                  </div>
+                  <div class="text-sm pl-4 pr-4">
+                    <p>
+                      Người đồng sáng lập và sáng tạo nên diễn đàng Destiny, Một
+                      nơi giúp mọi người có thể trao và nhận đồ từ nhau một cách
+                      miễn phí.
+                    </p>
+                  </div>
+                  <ul class="list-group pl-1 pr-1">
+                    <li class="list-group-item border-0 text-sm">
+                      <strong class="text-pink"> Họ và tên: </strong>
+                      &nbsp; Trần Hữu Đang
+                    </li>
+                    <li class="list-group-item border-0 text-sm">
+                      <strong class="text-pink">Giới tính:</strong> &nbsp; Nam
+                    </li>
+                    <li class="list-group-item border-0 text-sm">
+                      <strong class="text-pink">SĐT:</strong> &nbsp; (+84)
+                      12345689
+                    </li>
+                    <li class="list-group-item border-0 text-sm">
+                      <strong class="text-pink">Email:</strong> &nbsp;
+                      davisy@mail.com
+                    </li>
+                    <li class="list-group-item border-0 text-sm">
+                      <strong class="text-pink">Địa chỉ:</strong> &nbsp; Cần Thơ
+                    </li>
+                    <li class="list-group-item border-0 pb-0">
+                      <strong class="text-pink text-sm">Mạng xã hội khác:</strong>
+                      &nbsp;
+                      <a class="btn btn-facebookk btn-simple mb-0" href="#">
+                        <i class="fa fa-facebook fa-lg text-pie"></i>
+                      </a>
+                      <a class="btn btn-twitter btn-simple mb-0" href="#">
+                        <i class="fa fa-twitter fa-lg text-pie"></i>
+                      </a>
+                      <a class="btn btn-instagram btn-simple mb-0" href="#">
+                        <i class="fa fa-instagram fa-lg text-pie"></i>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-7 mt-2 hidden form-profile pr-0" id="tab-profile">
+              <form class="form row col-lg-12 text-pie">
+                <div class="col-lg-6 col-sm-12 pr-0">
+                  <label for="username">Tên đăng nhập</label>
+                  <div class="mb-3">
+                    <input type="text" class="form-controlP" value="dangth" id="username" />
+                  </div>
+                </div>
+                <div class="col-lg-6 col-sm-12 pr-0">
+                  <label for="fullname">Họ và tên</label>
+                  <div class="mb-3">
+                    <input type="text" class="form-controlP" value="Trần Hữu Đang" id="fullname" />
+                  </div>
+                </div>
+                <div class="col-lg-6 col-sm-12 pr-0">
+                  <label for="email">Email</label>
+                  <div class="mb-3">
+                    <input type="email" class="form-controlP" value="dangth@fpt.edu.vn" id="email" />
+                  </div>
+                </div>
+                <div class="col-lg-6 col-sm-12 pr-0">
+                  <label for="phone">Số điện thoại</label>
+                  <div class="mb-3">
+                    <input type="text" class="form-controlP" value="0123456789" id="phone" />
+                  </div>
+                </div>
+                <div class="col-lg-6 col-sm-12 pr-0">
+                  <label for="birthday">Ngày sinh</label>
+                  <div class="mb-3">
+                    <input type="date" class="form-controlP" value="2003-01-01" id="birthday" />
+                  </div>
+                </div>
+
+                <div class="col-lg-6 col-sm-12 pr-0">
+                  <label for="combo2">Địa chỉ</label>
+                  <div class="combo js-combobox mb-3">
+                    <input aria-activedescendant="" aria-autocomplete="none" aria-controls="listbox2"
+                      aria-expanded="false" aria-haspopup="listbox" id="combo2" class="combo-input form-controlP"
+                      role="combobox" type="text" />
+                    <div class="combo-menu" role="listbox" id="listbox2"></div>
+                  </div>
+                </div>
+                <div class="col-lg-6 pr-0">
+                  <label for="combo3">Giới tính</label>
+                  <div class="combo js-comboboxG mb-3">
+                    <input aria-activedescendant="" aria-autocomplete="none" aria-controls="listbox3"
+                      aria-expanded="false" aria-haspopup="listboxG" id="combo3" class="combo-input form-controlP"
+                      role="comboboxG" type="text" />
+                    <div class="combo-menu" role="listboxG" id="listbox3"></div>
+                  </div>
+                </div>
+                <div class="text-center col-lg-6 offset-lg-3 col-md-6 offset-md-3 col-sm-6 offset-sm-3">
+                  <button class="btn text-white form-controlP bg-gradient-endless w-100 mt-4 mb-0">
+                    Cập nhật
+                  </button>
+                </div>
+              </form>
+            </div>
+            <div class="col-lg-7 img-about mt-1 pr-0 mb-3" id="img-thumb-profile">
+              <div class="thumb">
+                <img class="shadow" src="../assets/images/Destiny.png" alt="" />
+              </div>
+            </div>
+          </div>
+          <!-- forgot dialog -->
+          <div class="modal fade" id="changePassModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="row" style="pointer-events: auto">
+                <div
+                  class="col-xl-5 offset-xl-1 col-lg-5 offset-lg-1 col-md-5 offset-md-1 col-sm-5 offset-sm-1 img-about pr-0 pl-0">
+                  <div class="thumb">
+                    <img class="shadow border-form-forgotpass-right"
+                      src="https://odindesignthemes.com/vikinger-theme/wp-content/themes/vikinger/img/login/background.jpg"
+                      alt="" />
+                  </div>
+                </div>
+                <div
+                  class="col-xl-5 col-lg-5 col-md-5 col-sm-5 card bg-gradient-dark text-white border-form-forgotpass-left">
+                  <button class="close text-white text-right pt-2 pr-1" type="button" data-dismiss="modal"
+                    aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                  <form action="#">
+                    <h2 class="text-center text-white text-uppercase font-weight-bold" style="margin-top: 70px">
+                      Đổi mật khẩu
+                    </h2>
+                    <!-- Progress bar -->
+                    <div class="progressbar">
+                      <div class="progressF" id="progress"></div>
+                      <div class="progress-step progress-step-active" data-title=""></div>
+                      <div class="progress-step" data-title=""></div>
+                    </div>
+
+                    <div class="form-step form-step-active col-lg-10 offset-lg-1 mb-4">
+                      <label for="oldpassword">Mật khẩu cũ</label>
+                      <div class="input-group mt-2 mb-5">
+                        <input class="form-controlP" type="text" id="oldpassword" />
+                      </div>
+                      <div class="text-center col-lg-6 offset-lg-3 col-md-6 offset-md-3 col-sm-6 offset-sm-3 mt-5">
+                        <a class="btn btn-next text-white form-controlP bg-gradient-endless">Xác
+                          nhận
+                        </a>
+                      </div>
+                    </div>
+                    <div class="form-step col-lg-10 offset-lg-1 mb-4">
+                      <label for="newpassword">Mật khẩu mới</label>
+                      <div class="input-group mt-2 mb-4">
+                        <input class="form-controlP" type="text" name="newpassword" id="newpassword" />
+                      </div>
+                      <label for="renewpassword">Xác nhận mật khẩu mới</label>
+                      <div class="input-group mt-2 mb-4">
+                        <input class="form-controlP" type="text" name="renewpassword" id="renewpassword" />
+                      </div>
+
+                      <div class="text-center col-lg-6 offset-lg-3 col-md-6 offset-md-3 col-sm-6 offset-sm-3 mt-5">
+                        <a class="btn btn-next text-white form-controlP bg-gradient-endless">Xác
+                          nhận
+                        </a>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- forgot dialog -->
+      </div>
+    </main>
+  </div>
+
+</div>

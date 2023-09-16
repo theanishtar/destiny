@@ -1,715 +1,595 @@
-<body>
-  <app-navigation></app-navigation>
+<app-navigation></app-navigation>
 
-  <!-- CONTENT GRID -->
-  <div class="content-grid">
-    <!-- SECTION BANNER -->
-    <div class="section-banner">
-      <!-- SECTION BANNER ICON -->
-      <img
-        class="section-banner-icon"
-        src="../../assets/images/banner/accounthub-icon.png"
-        alt="accounthub-icon"
-      />
-      <!-- /SECTION BANNER ICON -->
+<!-- CONTENT GRID -->
+<div class="content-grid">
+  <!-- SECTION BANNER -->
+  <div class="section-banner">
+    <!-- SECTION BANNER ICON -->
+    <img class="section-banner-icon" src="../../assets/images/banner/accounthub-icon.png" alt="accounthub-icon" />
+    <!-- /SECTION BANNER ICON -->
 
-      <!-- SECTION BANNER TITLE -->
-      <p class="section-banner-title">Account Hub</p>
-      <!-- /SECTION BANNER TITLE -->
+    <!-- SECTION BANNER TITLE -->
+    <p class="section-banner-title">Account Hub</p>
+    <!-- /SECTION BANNER TITLE -->
 
-      <!-- SECTION BANNER TEXT -->
-      <p class="section-banner-text">
-        Profile info, messages, settings and much more!
-      </p>
-      <!-- /SECTION BANNER TEXT -->
-    </div>
-    <!-- /SECTION BANNER -->
-
-    <!-- GRID -->
-    <div class="grid grid-3-9 medium-space">
-      <!-- GRID COLUMN -->
-      <div class="account-hub-sidebar">
-        <!-- SIDEBAR BOX -->
-        <div class="sidebar-box no-padding">
-          <!-- USER SHORT DESCRIPTION AVATAR -->
-          <div class="change-avatar">
-            <a class="user-short-description-avatar user-avatar big">
-              <!-- USER AVATAR BORDER -->
-              <div class="user-avatar-border">
-                <!-- HEXAGON -->
-                <div class="hexagon-148-164"></div>
-                <!-- /HEXAGON -->
-              </div>
-              <!-- /USER AVATAR BORDER -->
-
-              <!-- USER AVATAR CONTENT -->
-              <label class="user-avatar-content">
-                <input type="file" class="file" style="display: none" />
-                <!-- HEXAGON -->
-                <div
-                  class="hexagon-image-100-110"
-                  data-src="../../assets/images/avatar/01.jpg"
-                ></div>
-                <!-- /HEXAGON -->
-                <input
-                  type="text"
-                  formControlName="pic"
-                  id="avatar"
-                  style="display: none"
-                />
-              </label>
-              <!-- /USER AVATAR CONTENT -->
-
-              <!-- USER AVATAR PROGRESS -->
-              <div class="user-avatar-progress">
-                <!-- HEXAGON -->
-                <div class="hexagon-progress-124-136"></div>
-                <!-- /HEXAGON -->
-              </div>
-              <!-- /USER AVATAR PROGRESS -->
-
-              <!-- USER AVATAR PROGRESS BORDER -->
-              <div class="user-avatar-progress-border">
-                <!-- HEXAGON -->
-                <div class="hexagon-border-124-136"></div>
-                <!-- /HEXAGON -->
-              </div>
-              <!-- /USER AVATAR PROGRESS BORDER -->
-            </a>
-          </div>
-          <!-- /USER SHORT DESCRIPTION AVATAR -->
-
-          <!-- FORM ITEM -->
-          <div class="form-item-bio">
-            <!-- FORM INPUT -->
-            <div class="form-input small">
-              <textarea
-                [(ngModel)]="textAreaContent"
-                  (input)="checkCharacterLimit()"
-                  [readonly]="readonlyCondition"
-                  (keydown)="onKeyDown($event)"
-                  name="textAreaContent"
-                  class="bio"
-                  id="bio"
-                  rows="7"
-                placeholder="Viết đôi lời giới thiệu về bạn..."
-              ></textarea>
-              <span class="count-characters"><span id="charCount">0</span><b>/180</b></span>
-            </div>
-            <!-- /FORM INPUT -->
-          </div>
-          <!-- /FORM ITEM -->
-
-          <!-- SIDEBAR BOX FOOTER -->
-          <div class="sidebar-box-footer">
-            <!-- BUTTON -->
-            <p class="button primary">Lưu thay đổi</p>
-            <!-- /BUTTON -->
-
-            <!-- BUTTON -->
-            <p class="button white small-space">Khóa tài khoản</p>
-            <!-- /BUTTON -->
-          </div>
-          <!-- /SIDEBAR BOX FOOTER -->
-        </div>
-        <!-- /SIDEBAR BOX -->
-      </div>
-      <!-- /GRID COLUMN -->
-
-      <!-- GRID COLUMN -->
-      <div class="account-hub-content">
-        <!-- SECTION HEADER -->
-        <div class="section-header">
-          <!-- SECTION HEADER INFO -->
-          <div class="section-header-info">
-            <!-- SECTION PRETITLE -->
-            <p class="section-pretitle">Thông tin</p>
-            <!-- /SECTION PRETITLE -->
-
-            <!-- SECTION TITLE -->
-            <h2 class="section-title">Tài khoản</h2>
-            <!-- /SECTION TITLE -->
-          </div>
-          <!-- /SECTION HEADER INFO -->
-        </div>
-        <!-- /SECTION HEADER -->
-
-        <!-- GRID COLUMN -->
-        <div class="grid-column">
-          <!-- WIDGET BOX -->
-          <div class="widget-box">
-            <!-- WIDGET BOX TITLE -->
-            <p class="widget-box-title">About Your Profile</p>
-            <!-- /WIDGET BOX TITLE -->
-
-            <!-- WIDGET BOX CONTENT -->
-            <div class="widget-box-content">
-              <!-- FORM -->
-              <form class="form">
-                <!-- FORM ROW -->
-                <div class="form-row split">
-                  <!-- FORM ITEM -->
-                  <div class="form-item">
-                    <!-- FORM INPUT -->
-                    <div class="form-input small">
-                      <label for="profile-name">Họ tên</label>
-                      <input
-                        type="text"
-                        id="profile-name"
-                        name="profile_name"
-                      />
-                    </div>
-                    <!-- /FORM INPUT -->
-                  </div>
-                  <!-- /FORM ITEM -->
-
-                  <!-- FORM ITEM -->
-                  <div class="form-item">
-                    <!-- FORM INPUT -->
-                    <div class="form-input small">
-                      <label for="profile-tagline">Số điện thoại</label>
-                      <input
-                        type="text"
-                        id="profile-tagline"
-                        name="profile_tagline"
-                      />
-                    </div>
-                    <!-- /FORM INPUT -->
-                  </div>
-                  <!-- /FORM ITEM -->
-                </div>
-                <!-- /FORM ROW -->
-
-                <!-- FORM ROW -->
-                <div class="form-row split">
-                    <!-- FORM ITEM -->
-                    <div class="form-item">
-                      <!-- FORM INPUT -->
-                      <div class="form-input small">
-                        <label for="profile-name">Email</label>
-                        <input
-                          type="text"
-                          id="profile-name"
-                          name="profile_name"
-                        />
-                      </div>
-                      <!-- /FORM INPUT -->
-                    </div>
-                    <!-- /FORM ITEM -->
-  
-                    <!-- FORM ITEM -->
-                    <div class="form-item">
-                      <!-- FORM INPUT -->
-                      <div class="form-input small">
-                        <label for="profile-tagline">Mật khẩu</label>
-                        <input
-                          type="text"
-                          id="profile-tagline"
-                          name="profile_tagline"
-                        />
-                      </div>
-                      <!-- /FORM INPUT -->
-                    </div>
-                    <!-- /FORM ITEM -->
-                  </div>
-                  <!-- /FORM ROW -->
-
-                  
-                <!-- FORM ROW -->
-                <div class="form-row split">
-                    <!-- FORM ITEM -->
-                    <div class="form-item">
-                      <!-- FORM INPUT DECORATED -->
-                      <div class="form-input-decorated">
-                        <!-- FORM INPUT -->
-                        <div class="form-input small">
-                          <label for="profile-birthday">Ngày sinh</label>
-                          <input
-                            type="text"
-                            id="profile-birthday"
-                            name="profile_birthday"
-                          />
-                        </div>
-                        <!-- /FORM INPUT -->
-  
-                        <!-- FORM INPUT ICON -->
-                        <svg class="form-input-icon icon-events">
-                          <use xlink:href="#svg-events"></use>
-                        </svg>
-                        <!-- /FORM INPUT ICON -->
-                      </div>
-                      <!-- /FORM INPUT DECORATED -->
-                    </div>
-                    <!-- /FORM ITEM -->
-  
-                    <!-- FORM ITEM -->
-                    <div class="form-item">
-                      <!-- FORM INPUT -->
-                      <div class="form-input-gender">
-                        <label for="profile-occupation">Giới tính</label>
-                        <div class="radio-button-container">
-                            <div class="radio-button">
-                              <input
-                                type="radio"
-                                class="radio-button__input"
-                                id="radio1"
-                                name="radio-group"
-                              />
-                              <label class="radio-button__label" for="radio1">
-                                <span class="radio-button__custom"></span>
-                                Nam
-                              </label>
-                            </div>
-                            <div class="radio-button">
-                              <input
-                                type="radio"
-                                class="radio-button__input"
-                                id="radio2"
-                                name="radio-group"
-                              />
-                              <label class="radio-button__label" for="radio2">
-                                <span class="radio-button__custom"></span>
-                                Nữ
-                              </label>
-                            </div>
-                            <div class="radio-button">
-                              <input
-                                type="radio"
-                                class="radio-button__input"
-                                id="radio3"
-                                name="radio-group"
-                              />
-                              <label class="radio-button__label" for="radio3">
-                                <span class="radio-button__custom"></span>
-                                Khác
-                              </label>
-                            </div>
-                        </div>
-                      </div>
-                      <!-- /FORM INPUT -->
-                    </div>
-                    <!-- /FORM ITEM -->
-                  </div>
-                  <!-- /FORM ROW -->
-                <!-- FORM ROW -->
-                <div class="form-row split">
-                  <!-- FORM ITEM -->
-                  <div class="form-item">
-                    <!-- FORM SELECT -->
-                    <div class="form-select">
-                      <label for="profile-country">Tỉnh/Thành phố</label>
-                      <select id="profile-country" name="profile_country">
-                        <option value="0">Select your Country</option>
-                        <option value="1" selected>United States</option>
-                      </select>
-                      <!-- FORM SELECT ICON -->
-                      <svg class="form-select-icon icon-small-arrow">
-                        <use xlink:href="#svg-small-arrow"></use>
-                      </svg>
-                      <!-- /FORM SELECT ICON -->
-                    </div>
-                    <!-- /FORM SELECT -->
-                  </div>
-                  <!-- /FORM ITEM -->
-
-                  <!-- FORM ITEM -->
-                  <div class="form-item">
-                    <!-- FORM SELECT -->
-                    <div class="form-select">
-                      <label for="profile-city">Quận/Huyện</label>
-                      <select id="profile-city" name="profile_city">
-                        <option value="0">Select your City</option>
-                        <option value="1" selected>New York</option>
-                      </select>
-                      <!-- FORM SELECT ICON -->
-                      <svg class="form-select-icon icon-small-arrow">
-                        <use xlink:href="#svg-small-arrow"></use>
-                      </svg>
-                      <!-- /FORM SELECT ICON -->
-                    </div>
-                    <!-- /FORM SELECT -->
-                  </div>
-                  <!-- /FORM ITEM -->
-                </div>
-                <!-- /FORM ROW -->
-
-                <!-- FORM ROW -->
-                <div class="form-row split">
-                  <!-- FORM ITEM -->
-                  <div class="form-item">
-                    <!-- FORM SELECT -->
-                    <div class="form-select">
-                      <label for="profile-status">Phường/Xã</label>
-                      <select id="profile-status" name="profile_status">
-                        <option value="0">Select your Status</option>
-                        <option value="1" selected>In a Relationship</option>
-                      </select>
-                      <!-- FORM SELECT ICON -->
-                      <svg class="form-select-icon icon-small-arrow">
-                        <use xlink:href="#svg-small-arrow"></use>
-                      </svg>
-                      <!-- /FORM SELECT ICON -->
-                    </div>
-                    <!-- /FORM SELECT -->
-                  </div>
-                  <!-- /FORM ITEM -->
-
-                  <!-- FORM ITEM -->
-                  <div class="form-item">
-                    <!-- FORM INPUT -->
-                    <div class="form-input small active">
-                        <label for="profile-birthplace">Ngày gia nhập</label>
-                        <input type="text" id="profile-birthplace" name="profile_birthplace" value="12/12/2023" [readOnly]="true">
-                    </div>
-                    <!-- /FORM INPUT -->
-                  </div>
-                  <!-- /FORM ITEM -->
-                </div>
-                <!-- /FORM ROW -->
-              </form>
-              <!-- /FORM -->
-            </div>
-            <!-- WIDGET BOX CONTENT -->
-          </div>
-          <!-- /WIDGET BOX -->
-
-
-          <!-- WIDGET BOX -->
-          <div class="widget-box">
-            <!-- WIDGET BOX TITLE -->
-            <p class="widget-box-title">Interests</p>
-            <!-- /WIDGET BOX TITLE -->
-
-            <!-- WIDGET BOX CONTENT -->
-            <div class="widget-box-content">
-              <!-- FORM -->
-              <div class="form">
-                <!-- FORM ROW -->
-                <div class="form-row split">
-                  <!-- FORM ITEM -->
-                  <div class="form-item">
-                    <!-- FORM INPUT -->
-                    <div class="form-input small mid-textarea active">
-                      <label for="profile-favourite-shows"
-                        >Favourite TV Shows</label
-                      >
-                      <textarea
-                        id="profile-favourite-shows"
-                        name="profile_favourite_shows"
-                      >
-Breaking Good, RedDevil, People of Interest, The Running Dead, Found,  American Guy, The Last Windbender, Game of Wars.</textarea
-                      >
-                    </div>
-                    <!-- /FORM INPUT -->
-                  </div>
-                  <!-- /FORM ITEM -->
-
-                  <!-- FORM ITEM -->
-                  <div class="form-item">
-                    <!-- FORM INPUT -->
-                    <div class="form-input small mid-textarea active">
-                      <label for="profile-favourite-music"
-                        >Favourite Music Bands / Artists</label
-                      >
-                      <textarea
-                        id="profile-favourite-music"
-                        name="profile_favourite_music"
-                      >
-Iron Maid, DC/AC, Megablow, Kung Fighters, System of a Revenge, Rammstown.</textarea
-                      >
-                    </div>
-                    <!-- /FORM INPUT -->
-                  </div>
-                  <!-- /FORM ITEM -->
-                </div>
-                <!-- /FORM ROW -->
-
-                <!-- FORM ROW -->
-                <div class="form-row split">
-                  <!-- FORM ITEM -->
-                  <div class="form-item">
-                    <!-- FORM INPUT -->
-                    <div class="form-input small mid-textarea active">
-                      <label for="profile-favourite-movies"
-                        >Favourite Movies</label
-                      >
-                      <textarea
-                        id="profile-favourite-movies"
-                        name="profile_favourite_movies"
-                      >
-The Revengers Saga, The Scarred Wizard and the Fire Crown, Crime Squad, Metal Man, The Dark Rider, Watchers, The Impossible Heist.</textarea
-                      >
-                    </div>
-                    <!-- /FORM INPUT -->
-                  </div>
-                  <!-- /FORM ITEM -->
-
-                  <!-- FORM ITEM -->
-                  <div class="form-item">
-                    <!-- FORM INPUT -->
-                    <div class="form-input small mid-textarea active">
-                      <label for="profile-favourite-books"
-                        >Favourite Books</label
-                      >
-                      <textarea
-                        id="profile-favourite-books"
-                        name="profile_favourite_books"
-                      >
-The Crime of the Century, Egiptian Mythology 101, The Scarred Wizard, Lord of the Wings, Amongst Gods, The Oracle, A Tale of Air and Water</textarea
-                      >
-                    </div>
-                    <!-- /FORM INPUT -->
-                  </div>
-                  <!-- /FORM ITEM -->
-                </div>
-                <!-- /FORM ROW -->
-
-                <!-- FORM ROW -->
-                <div class="form-row split">
-                  <!-- FORM ITEM -->
-                  <div class="form-item">
-                    <!-- FORM INPUT -->
-                    <div class="form-input small mid-textarea active">
-                      <label for="profile-favourite-games"
-                        >Favourite Games</label
-                      >
-                      <textarea
-                        id="profile-favourite-games"
-                        name="profile_favourite_games"
-                      >
-The First of Us, Assassin's Squad, Dark Assylum, NMAK16, Last Cause 4, Grand Snatch Auto</textarea
-                      >
-                    </div>
-                    <!-- /FORM INPUT -->
-                  </div>
-                  <!-- /FORM ITEM -->
-
-                  <!-- FORM ITEM -->
-                  <div class="form-item">
-                    <!-- FORM INPUT -->
-                    <div class="form-input small mid-textarea">
-                      <label for="profile-hobbies">My Hobbies</label>
-                      <textarea
-                        id="profile-hobbies"
-                        name="profile_hobbies"
-                      ></textarea>
-                    </div>
-                    <!-- /FORM INPUT -->
-                  </div>
-                  <!-- /FORM ITEM -->
-                </div>
-                <!-- /FORM ROW -->
-              </div>
-              <!-- /FORM -->
-            </div>
-            <!-- WIDGET BOX CONTENT -->
-          </div>
-          <!-- /WIDGET BOX -->
-
-          <!-- WIDGET BOX -->
-          <div class="widget-box">
-            <!-- WIDGET BOX TITLE -->
-            <p class="widget-box-title">Jobs &amp; Education</p>
-            <!-- /WIDGET BOX TITLE -->
-
-            <!-- WIDGET BOX CONTENT -->
-            <div class="widget-box-content">
-              <!-- FORM -->
-              <form class="form">
-                <!-- FORM ROW -->
-                <div class="form-row split">
-                  <!-- FORM ITEM -->
-                  <div class="form-item">
-                    <!-- FORM INPUT -->
-                    <div class="form-input small active">
-                      <label for="profile-job-1-title">Title or Place</label>
-                      <input
-                        type="text"
-                        id="profile-job-1-title"
-                        name="profile_job_1_title"
-                        value="Lead Costume Designer"
-                      />
-                    </div>
-                    <!-- /FORM INPUT -->
-                  </div>
-                  <!-- /FORM ITEM -->
-
-                  <!-- FORM ROW -->
-                  <div class="form-row split">
-                    <!-- FORM ITEM -->
-                    <div class="form-item">
-                      <!-- FORM SELECT -->
-                      <div class="form-select">
-                        <label for="profile-job-1-year-started"
-                          >Year Started</label
-                        >
-                        <select
-                          id="profile-job-1-year-started"
-                          name="profile_job_1_year_started"
-                        >
-                          <option value="0">Select Year</option>
-                          <option value="1" selected>2015</option>
-                        </select>
-                        <!-- FORM SELECT ICON -->
-                        <svg class="form-select-icon icon-small-arrow">
-                          <use xlink:href="#svg-small-arrow"></use>
-                        </svg>
-                        <!-- /FORM SELECT ICON -->
-                      </div>
-                      <!-- /FORM SELECT -->
-                    </div>
-                    <!-- /FORM ITEM -->
-
-                    <!-- FORM ITEM -->
-                    <div class="form-item">
-                      <!-- FORM SELECT -->
-                      <div class="form-select">
-                        <label for="profile-job-1-year-ended">Year Ended</label>
-                        <select
-                          id="profile-job-1-year-ended"
-                          name="profile_job_1_year_ended"
-                        >
-                          <option value="0">Select Year</option>
-                          <option value="1" selected>Now</option>
-                        </select>
-                        <!-- FORM SELECT ICON -->
-                        <svg class="form-select-icon icon-small-arrow">
-                          <use xlink:href="#svg-small-arrow"></use>
-                        </svg>
-                        <!-- /FORM SELECT ICON -->
-                      </div>
-                      <!-- /FORM SELECT -->
-                    </div>
-                    <!-- /FORM ITEM -->
-                  </div>
-                  <!-- /FORM ROW -->
-                </div>
-                <!-- /FORM ROW -->
-
-                <!-- FORM ROW -->
-                <div class="form-row">
-                  <!-- FORM ITEM -->
-                  <div class="form-item">
-                    <!-- FORM INPUT -->
-                    <div class="form-input small mid-textarea active">
-                      <label for="profile-job-1-description">Description</label>
-                      <textarea
-                        id="profile-job-1-description"
-                        name="profile_job_1_description"
-                      >
-Lead Costume Designer for the "Amazzo Costumes" agency. I’m in charge of a ten person group, overseeing all the proyects and talking to potential clients. I also handle some face to face interviews for new candidates.</textarea
-                      >
-                    </div>
-                    <!-- /FORM INPUT -->
-                  </div>
-                  <!-- /FORM ITEM -->
-                </div>
-                <!-- /FORM ROW -->
-
-                <!-- FORM ROW -->
-                <div class="form-row split">
-                  <!-- FORM ITEM -->
-                  <div class="form-item">
-                    <!-- FORM INPUT -->
-                    <div class="form-input small">
-                      <label for="profile-job-2-title">Title or Place</label>
-                      <input
-                        type="text"
-                        id="profile-job-2-title"
-                        name="profile_job_2_title"
-                      />
-                    </div>
-                    <!-- /FORM INPUT -->
-                  </div>
-                  <!-- /FORM ITEM -->
-
-                  <!-- FORM ROW -->
-                  <div class="form-row split">
-                    <!-- FORM ITEM -->
-                    <div class="form-item">
-                      <!-- FORM SELECT -->
-                      <div class="form-select">
-                        <label for="profile-job-2-year-started"
-                          >Year Started</label
-                        >
-                        <select
-                          id="profile-job-2-year-started"
-                          name="profile_job_2_year_started"
-                        >
-                          <option value="0">Select Year</option>
-                          <option value="1" selected>2019</option>
-                        </select>
-                        <!-- FORM SELECT ICON -->
-                        <svg class="form-select-icon icon-small-arrow">
-                          <use xlink:href="#svg-small-arrow"></use>
-                        </svg>
-                        <!-- /FORM SELECT ICON -->
-                      </div>
-                      <!-- /FORM SELECT -->
-                    </div>
-                    <!-- /FORM ITEM -->
-
-                    <!-- FORM ITEM -->
-                    <div class="form-item">
-                      <!-- FORM SELECT -->
-                      <div class="form-select">
-                        <label for="profile-job-2-year-ended">Year Ended</label>
-                        <select
-                          id="profile-job-2-year-ended"
-                          name="profile_job_2_year_ended"
-                        >
-                          <option value="0">Select Year</option>
-                          <option value="1" selected>2019</option>
-                        </select>
-                        <!-- FORM SELECT ICON -->
-                        <svg class="form-select-icon icon-small-arrow">
-                          <use xlink:href="#svg-small-arrow"></use>
-                        </svg>
-                        <!-- /FORM SELECT ICON -->
-                      </div>
-                      <!-- /FORM SELECT -->
-                    </div>
-                    <!-- /FORM ITEM -->
-                  </div>
-                  <!-- /FORM ROW -->
-                </div>
-                <!-- /FORM ROW -->
-
-                <!-- FORM ROW -->
-                <div class="form-row">
-                  <!-- FORM ITEM -->
-                  <div class="form-item">
-                    <!-- FORM INPUT -->
-                    <div class="form-input small mid-textarea">
-                      <label for="profile-job-2-description">Description</label>
-                      <textarea
-                        id="profile-job-2-description"
-                        name="profile_job_2_description"
-                      ></textarea>
-                    </div>
-                    <!-- /FORM INPUT -->
-                  </div>
-                  <!-- /FORM ITEM -->
-                </div>
-                <!-- /FORM ROW -->
-              </form>
-              <!-- /FORM -->
-
-              <!-- BUTTON -->
-              <p class="button small white add-field-button">+ Add New Field</p>
-              <!-- /BUTTON -->
-            </div>
-            <!-- WIDGET BOX CONTENT -->
-          </div>
-          <!-- /WIDGET BOX -->
-        </div>
-        <!-- /GRID COLUMN -->
-      </div>
-      <!-- /GRID COLUMN -->
-    </div>
-    <!-- /GRID -->
+    <!-- SECTION BANNER TEXT -->
+    <p class="section-banner-text">
+      Profile info, messages, settings and much more!
+    </p>
+    <!-- /SECTION BANNER TEXT -->
   </div>
-  <!-- /CONTENT GRID -->
+  <!-- /SECTION BANNER -->
 
-  <app-modal></app-modal>
-</body>
+  <!-- GRID -->
+  <div class="grid grid-3-9 medium-space">
+    <!-- GRID COLUMN -->
+    <div class="account-hub-sidebar">
+      <!-- SIDEBAR BOX -->
+      <div class="sidebar-box no-padding">
+        <!-- USER SHORT DESCRIPTION AVATAR -->
+        <div class="change-avatar">
+          <a class="user-short-description-avatar user-avatar big">
+            <!-- USER AVATAR BORDER -->
+            <div class="user-avatar-border">
+              <!-- HEXAGON -->
+              <div class="hexagon-148-164"></div>
+              <!-- /HEXAGON -->
+            </div>
+            <!-- /USER AVATAR BORDER -->
+
+            <!-- USER AVATAR CONTENT -->
+            <label class="user-avatar-content">
+              <input type="file" class="file" style="display: none" />
+              <!-- HEXAGON -->
+              <div class="hexagon-image-100-110" data-src="../../assets/images/avatar/01.jpg"></div>
+              <!-- /HEXAGON -->
+              <input type="text" formControlName="pic" id="avatar" style="display: none" />
+            </label>
+            <!-- /USER AVATAR CONTENT -->
+
+            <!-- USER AVATAR PROGRESS -->
+            <div class="user-avatar-progress">
+              <!-- HEXAGON -->
+              <div class="hexagon-progress-124-136"></div>
+              <!-- /HEXAGON -->
+            </div>
+            <!-- /USER AVATAR PROGRESS -->
+
+            <!-- USER AVATAR PROGRESS BORDER -->
+            <div class="user-avatar-progress-border">
+              <!-- HEXAGON -->
+              <div class="hexagon-border-124-136"></div>
+              <!-- /HEXAGON -->
+            </div>
+            <!-- /USER AVATAR PROGRESS BORDER -->
+          </a>
+        </div>
+        <!-- /USER SHORT DESCRIPTION AVATAR -->
+
+        <!-- FORM ITEM -->
+        <div class="form-item-bio">
+          <!-- FORM INPUT -->
+          <div class="form-input small">
+            <textarea [(ngModel)]="textAreaContent" (input)="checkCharacterLimit()" [readonly]="readonlyCondition"
+              (keydown)="onKeyDown($event)" name="textAreaContent" class="bio" id="bio" rows="7"
+              placeholder="Viết đôi lời giới thiệu về bạn..."></textarea>
+            <span class="count-characters"><span id="charCount">0</span><b>/180</b></span>
+          </div>
+          <!-- /FORM INPUT -->
+        </div>
+        <!-- /FORM ITEM -->
+
+        <!-- SIDEBAR BOX FOOTER -->
+        <div class="sidebar-box-footer">
+          <!-- BUTTON -->
+          <p class="button primary">Lưu thay đổi</p>
+          <!-- /BUTTON -->
+
+          <!-- BUTTON -->
+          <p class="button white small-space">Khóa tài khoản</p>
+          <!-- /BUTTON -->
+        </div>
+        <!-- /SIDEBAR BOX FOOTER -->
+      </div>
+      <!-- /SIDEBAR BOX -->
+    </div>
+    <!-- /GRID COLUMN -->
+
+    <!-- GRID COLUMN -->
+    <div class="account-hub-content">
+      <!-- SECTION HEADER -->
+      <div class="section-header">
+        <!-- SECTION HEADER INFO -->
+        <div class="section-header-info">
+          <!-- SECTION PRETITLE -->
+          <p class="section-pretitle">Thông tin</p>
+          <!-- /SECTION PRETITLE -->
+
+          <!-- SECTION TITLE -->
+          <h2 class="section-title">Tài khoản</h2>
+          <!-- /SECTION TITLE -->
+        </div>
+        <!-- /SECTION HEADER INFO -->
+      </div>
+      <!-- /SECTION HEADER -->
+
+      <!-- GRID COLUMN -->
+      <div class="grid-column">
+        <!-- WIDGET BOX -->
+        <div class="widget-box">
+          <!-- WIDGET BOX TITLE -->
+          <p class="widget-box-title">About Your Profile</p>
+          <!-- /WIDGET BOX TITLE -->
+
+          <!-- WIDGET BOX CONTENT -->
+          <div class="widget-box-content">
+            <!-- FORM -->
+            <form class="form">
+              <!-- FORM ROW -->
+              <div class="form-row split">
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM INPUT -->
+                  <div class="form-input small">
+                    <label for="profile-name">Họ tên</label>
+                    <input type="text" id="profile-name" name="profile_name" />
+                  </div>
+                  <!-- /FORM INPUT -->
+                </div>
+                <!-- /FORM ITEM -->
+
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM INPUT -->
+                  <div class="form-input small">
+                    <label for="profile-tagline">Số điện thoại</label>
+                    <input type="text" id="profile-tagline" name="profile_tagline" />
+                  </div>
+                  <!-- /FORM INPUT -->
+                </div>
+                <!-- /FORM ITEM -->
+              </div>
+              <!-- /FORM ROW -->
+
+              <!-- FORM ROW -->
+              <div class="form-row split">
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM INPUT -->
+                  <div class="form-input small">
+                    <label for="profile-name">Email</label>
+                    <input type="text" id="profile-name" name="profile_name" />
+                  </div>
+                  <!-- /FORM INPUT -->
+                </div>
+                <!-- /FORM ITEM -->
+
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM INPUT -->
+                  <div class="form-input small">
+                    <label for="profile-tagline">Mật khẩu</label>
+                    <input type="text" id="profile-tagline" name="profile_tagline" />
+                  </div>
+                  <!-- /FORM INPUT -->
+                </div>
+                <!-- /FORM ITEM -->
+              </div>
+              <!-- /FORM ROW -->
+
+
+              <!-- FORM ROW -->
+              <div class="form-row split">
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM INPUT DECORATED -->
+                  <div class="form-input-decorated">
+                    <!-- FORM INPUT -->
+                    <div class="form-input small">
+                      <label for="profile-birthday">Ngày sinh</label>
+                      <input type="text" id="profile-birthday" name="profile_birthday" />
+                    </div>
+                    <!-- /FORM INPUT -->
+
+                    <!-- FORM INPUT ICON -->
+                    <svg class="form-input-icon icon-events">
+                      <use xlink:href="#svg-events"></use>
+                    </svg>
+                    <!-- /FORM INPUT ICON -->
+                  </div>
+                  <!-- /FORM INPUT DECORATED -->
+                </div>
+                <!-- /FORM ITEM -->
+
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM INPUT -->
+                  <div class="form-input-gender">
+                    <label for="profile-occupation">Giới tính</label>
+                    <div class="radio-button-container">
+                      <div class="radio-button">
+                        <input type="radio" class="radio-button__input" id="radio1" name="radio-group" />
+                        <label class="radio-button__label" for="radio1">
+                          <span class="radio-button__custom"></span>
+                          Nam
+                        </label>
+                      </div>
+                      <div class="radio-button">
+                        <input type="radio" class="radio-button__input" id="radio2" name="radio-group" />
+                        <label class="radio-button__label" for="radio2">
+                          <span class="radio-button__custom"></span>
+                          Nữ
+                        </label>
+                      </div>
+                      <div class="radio-button">
+                        <input type="radio" class="radio-button__input" id="radio3" name="radio-group" />
+                        <label class="radio-button__label" for="radio3">
+                          <span class="radio-button__custom"></span>
+                          Khác
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- /FORM INPUT -->
+                </div>
+                <!-- /FORM ITEM -->
+              </div>
+              <!-- /FORM ROW -->
+              <!-- FORM ROW -->
+              <div class="form-row split">
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM SELECT -->
+                  <div class="form-select">
+                    <label for="profile-country">Tỉnh/Thành phố</label>
+                    <select id="profile-country" name="profile_country">
+                      <option value="0">Select your Country</option>
+                      <option value="1" selected>United States</option>
+                    </select>
+                    <!-- FORM SELECT ICON -->
+                    <svg class="form-select-icon icon-small-arrow">
+                      <use xlink:href="#svg-small-arrow"></use>
+                    </svg>
+                    <!-- /FORM SELECT ICON -->
+                  </div>
+                  <!-- /FORM SELECT -->
+                </div>
+                <!-- /FORM ITEM -->
+
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM SELECT -->
+                  <div class="form-select">
+                    <label for="profile-city">Quận/Huyện</label>
+                    <select id="profile-city" name="profile_city">
+                      <option value="0">Select your City</option>
+                      <option value="1" selected>New York</option>
+                    </select>
+                    <!-- FORM SELECT ICON -->
+                    <svg class="form-select-icon icon-small-arrow">
+                      <use xlink:href="#svg-small-arrow"></use>
+                    </svg>
+                    <!-- /FORM SELECT ICON -->
+                  </div>
+                  <!-- /FORM SELECT -->
+                </div>
+                <!-- /FORM ITEM -->
+              </div>
+              <!-- /FORM ROW -->
+
+              <!-- FORM ROW -->
+              <div class="form-row split">
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM SELECT -->
+                  <div class="form-select">
+                    <label for="profile-status">Phường/Xã</label>
+                    <select id="profile-status" name="profile_status">
+                      <option value="0">Select your Status</option>
+                      <option value="1" selected>In a Relationship</option>
+                    </select>
+                    <!-- FORM SELECT ICON -->
+                    <svg class="form-select-icon icon-small-arrow">
+                      <use xlink:href="#svg-small-arrow"></use>
+                    </svg>
+                    <!-- /FORM SELECT ICON -->
+                  </div>
+                  <!-- /FORM SELECT -->
+                </div>
+                <!-- /FORM ITEM -->
+
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM INPUT -->
+                  <div class="form-input small active">
+                    <label for="profile-birthplace">Ngày gia nhập</label>
+                    <input type="text" id="profile-birthplace" name="profile_birthplace" value="12/12/2023"
+                      [readOnly]="true">
+                  </div>
+                  <!-- /FORM INPUT -->
+                </div>
+                <!-- /FORM ITEM -->
+              </div>
+              <!-- /FORM ROW -->
+            </form>
+            <!-- /FORM -->
+          </div>
+          <!-- WIDGET BOX CONTENT -->
+        </div>
+        <!-- /WIDGET BOX -->
+
+
+        <!-- WIDGET BOX -->
+        <div class="widget-box">
+          <!-- WIDGET BOX TITLE -->
+          <p class="widget-box-title">Interests</p>
+          <!-- /WIDGET BOX TITLE -->
+
+          <!-- WIDGET BOX CONTENT -->
+          <div class="widget-box-content">
+            <!-- FORM -->
+            <div class="form">
+              <!-- FORM ROW -->
+              <div class="form-row split">
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM INPUT -->
+                  <div class="form-input small mid-textarea active">
+                    <label for="profile-favourite-shows">Favourite TV Shows</label>
+                    <textarea id="profile-favourite-shows" name="profile_favourite_shows">
+Breaking Good, RedDevil, People of Interest, The Running Dead, Found,  American Guy, The Last Windbender, Game of Wars.</textarea>
+                  </div>
+                  <!-- /FORM INPUT -->
+                </div>
+                <!-- /FORM ITEM -->
+
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM INPUT -->
+                  <div class="form-input small mid-textarea active">
+                    <label for="profile-favourite-music">Favourite Music Bands / Artists</label>
+                    <textarea id="profile-favourite-music" name="profile_favourite_music">
+Iron Maid, DC/AC, Megablow, Kung Fighters, System of a Revenge, Rammstown.</textarea>
+                  </div>
+                  <!-- /FORM INPUT -->
+                </div>
+                <!-- /FORM ITEM -->
+              </div>
+              <!-- /FORM ROW -->
+
+              <!-- FORM ROW -->
+              <div class="form-row split">
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM INPUT -->
+                  <div class="form-input small mid-textarea active">
+                    <label for="profile-favourite-movies">Favourite Movies</label>
+                    <textarea id="profile-favourite-movies" name="profile_favourite_movies">
+The Revengers Saga, The Scarred Wizard and the Fire Crown, Crime Squad, Metal Man, The Dark Rider, Watchers, The Impossible Heist.</textarea>
+                  </div>
+                  <!-- /FORM INPUT -->
+                </div>
+                <!-- /FORM ITEM -->
+
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM INPUT -->
+                  <div class="form-input small mid-textarea active">
+                    <label for="profile-favourite-books">Favourite Books</label>
+                    <textarea id="profile-favourite-books" name="profile_favourite_books">
+The Crime of the Century, Egiptian Mythology 101, The Scarred Wizard, Lord of the Wings, Amongst Gods, The Oracle, A Tale of Air and Water</textarea>
+                  </div>
+                  <!-- /FORM INPUT -->
+                </div>
+                <!-- /FORM ITEM -->
+              </div>
+              <!-- /FORM ROW -->
+
+              <!-- FORM ROW -->
+              <div class="form-row split">
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM INPUT -->
+                  <div class="form-input small mid-textarea active">
+                    <label for="profile-favourite-games">Favourite Games</label>
+                    <textarea id="profile-favourite-games" name="profile_favourite_games">
+The First of Us, Assassin's Squad, Dark Assylum, NMAK16, Last Cause 4, Grand Snatch Auto</textarea>
+                  </div>
+                  <!-- /FORM INPUT -->
+                </div>
+                <!-- /FORM ITEM -->
+
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM INPUT -->
+                  <div class="form-input small mid-textarea">
+                    <label for="profile-hobbies">My Hobbies</label>
+                    <textarea id="profile-hobbies" name="profile_hobbies"></textarea>
+                  </div>
+                  <!-- /FORM INPUT -->
+                </div>
+                <!-- /FORM ITEM -->
+              </div>
+              <!-- /FORM ROW -->
+            </div>
+            <!-- /FORM -->
+          </div>
+          <!-- WIDGET BOX CONTENT -->
+        </div>
+        <!-- /WIDGET BOX -->
+
+        <!-- WIDGET BOX -->
+        <div class="widget-box">
+          <!-- WIDGET BOX TITLE -->
+          <p class="widget-box-title">Jobs &amp; Education</p>
+          <!-- /WIDGET BOX TITLE -->
+
+          <!-- WIDGET BOX CONTENT -->
+          <div class="widget-box-content">
+            <!-- FORM -->
+            <form class="form">
+              <!-- FORM ROW -->
+              <div class="form-row split">
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM INPUT -->
+                  <div class="form-input small active">
+                    <label for="profile-job-1-title">Title or Place</label>
+                    <input type="text" id="profile-job-1-title" name="profile_job_1_title"
+                      value="Lead Costume Designer" />
+                  </div>
+                  <!-- /FORM INPUT -->
+                </div>
+                <!-- /FORM ITEM -->
+
+                <!-- FORM ROW -->
+                <div class="form-row split">
+                  <!-- FORM ITEM -->
+                  <div class="form-item">
+                    <!-- FORM SELECT -->
+                    <div class="form-select">
+                      <label for="profile-job-1-year-started">Year Started</label>
+                      <select id="profile-job-1-year-started" name="profile_job_1_year_started">
+                        <option value="0">Select Year</option>
+                        <option value="1" selected>2015</option>
+                      </select>
+                      <!-- FORM SELECT ICON -->
+                      <svg class="form-select-icon icon-small-arrow">
+                        <use xlink:href="#svg-small-arrow"></use>
+                      </svg>
+                      <!-- /FORM SELECT ICON -->
+                    </div>
+                    <!-- /FORM SELECT -->
+                  </div>
+                  <!-- /FORM ITEM -->
+
+                  <!-- FORM ITEM -->
+                  <div class="form-item">
+                    <!-- FORM SELECT -->
+                    <div class="form-select">
+                      <label for="profile-job-1-year-ended">Year Ended</label>
+                      <select id="profile-job-1-year-ended" name="profile_job_1_year_ended">
+                        <option value="0">Select Year</option>
+                        <option value="1" selected>Now</option>
+                      </select>
+                      <!-- FORM SELECT ICON -->
+                      <svg class="form-select-icon icon-small-arrow">
+                        <use xlink:href="#svg-small-arrow"></use>
+                      </svg>
+                      <!-- /FORM SELECT ICON -->
+                    </div>
+                    <!-- /FORM SELECT -->
+                  </div>
+                  <!-- /FORM ITEM -->
+                </div>
+                <!-- /FORM ROW -->
+              </div>
+              <!-- /FORM ROW -->
+
+              <!-- FORM ROW -->
+              <div class="form-row">
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM INPUT -->
+                  <div class="form-input small mid-textarea active">
+                    <label for="profile-job-1-description">Description</label>
+                    <textarea id="profile-job-1-description" name="profile_job_1_description">
+Lead Costume Designer for the "Amazzo Costumes" agency. I’m in charge of a ten person group, overseeing all the proyects and talking to potential clients. I also handle some face to face interviews for new candidates.</textarea>
+                  </div>
+                  <!-- /FORM INPUT -->
+                </div>
+                <!-- /FORM ITEM -->
+              </div>
+              <!-- /FORM ROW -->
+
+              <!-- FORM ROW -->
+              <div class="form-row split">
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM INPUT -->
+                  <div class="form-input small">
+                    <label for="profile-job-2-title">Title or Place</label>
+                    <input type="text" id="profile-job-2-title" name="profile_job_2_title" />
+                  </div>
+                  <!-- /FORM INPUT -->
+                </div>
+                <!-- /FORM ITEM -->
+
+                <!-- FORM ROW -->
+                <div class="form-row split">
+                  <!-- FORM ITEM -->
+                  <div class="form-item">
+                    <!-- FORM SELECT -->
+                    <div class="form-select">
+                      <label for="profile-job-2-year-started">Year Started</label>
+                      <select id="profile-job-2-year-started" name="profile_job_2_year_started">
+                        <option value="0">Select Year</option>
+                        <option value="1" selected>2019</option>
+                      </select>
+                      <!-- FORM SELECT ICON -->
+                      <svg class="form-select-icon icon-small-arrow">
+                        <use xlink:href="#svg-small-arrow"></use>
+                      </svg>
+                      <!-- /FORM SELECT ICON -->
+                    </div>
+                    <!-- /FORM SELECT -->
+                  </div>
+                  <!-- /FORM ITEM -->
+
+                  <!-- FORM ITEM -->
+                  <div class="form-item">
+                    <!-- FORM SELECT -->
+                    <div class="form-select">
+                      <label for="profile-job-2-year-ended">Year Ended</label>
+                      <select id="profile-job-2-year-ended" name="profile_job_2_year_ended">
+                        <option value="0">Select Year</option>
+                        <option value="1" selected>2019</option>
+                      </select>
+                      <!-- FORM SELECT ICON -->
+                      <svg class="form-select-icon icon-small-arrow">
+                        <use xlink:href="#svg-small-arrow"></use>
+                      </svg>
+                      <!-- /FORM SELECT ICON -->
+                    </div>
+                    <!-- /FORM SELECT -->
+                  </div>
+                  <!-- /FORM ITEM -->
+                </div>
+                <!-- /FORM ROW -->
+              </div>
+              <!-- /FORM ROW -->
+
+              <!-- FORM ROW -->
+              <div class="form-row">
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM INPUT -->
+                  <div class="form-input small mid-textarea">
+                    <label for="profile-job-2-description">Description</label>
+                    <textarea id="profile-job-2-description" name="profile_job_2_description"></textarea>
+                  </div>
+                  <!-- /FORM INPUT -->
+                </div>
+                <!-- /FORM ITEM -->
+              </div>
+              <!-- /FORM ROW -->
+            </form>
+            <!-- /FORM -->
+
+            <!-- BUTTON -->
+            <p class="button small white add-field-button">+ Add New Field</p>
+            <!-- /BUTTON -->
+          </div>
+          <!-- WIDGET BOX CONTENT -->
+        </div>
+        <!-- /WIDGET BOX -->
+      </div>
+      <!-- /GRID COLUMN -->
+    </div>
+    <!-- /GRID COLUMN -->
+  </div>
+  <!-- /GRID -->
+</div>
+<!-- /CONTENT GRID -->
+
+<app-modal></app-modal>

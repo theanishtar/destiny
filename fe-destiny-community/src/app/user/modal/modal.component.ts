@@ -6,10 +6,7 @@ import { ModalService } from '../service/modal.service';
 @Component({
   selector: 'app-modal',
   templateUrl: './modal.component.html',
-  styleUrls: [
-    './modal.component.css',
-    `./modal.css`
-  ]
+  styleUrls: ['./modal.component.css']
 })
 export class ModalComponent {
 
@@ -23,12 +20,5 @@ export class ModalComponent {
   }
   closeModal() {
     this.modalService.closeModal();
-  }
-
-  openModal1() {
-    this.modalService.openModal1();
-  }
-  closeModal1() {
-    this.modalService.closeModal1();
   }
 }
