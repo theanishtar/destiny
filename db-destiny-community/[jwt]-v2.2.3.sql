@@ -14940,7 +14940,7 @@ CREATE TABLE `gender`(
 	`gender_name` NVARCHAR(50) NOT NULL
 );
 
-CREATE TABLE `user` (
+CREATE TABLE `users` (
 	`user_id` INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
 	`username` NVARCHAR(50) NOT NULL,
 	`password` VARCHAR(100) NOT NULL,
@@ -14970,7 +14970,7 @@ CREATE TABLE `user_role`(
 	`id` INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
 	`user_id` INT NOT NULL ,
 	`role_id` INT NOT NULL,
-	FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`), -- id người dùng
+	FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`), -- id người dùng
     FOREIGN KEY (`role_id`) REFERENCES `roles`(`role_id`) -- Vai trò người dùng
 );
 
@@ -14987,7 +14987,7 @@ CREATE TABLE `post` (
     `post_status` BIT NOT NULL, -- Trạng thái bài đang do người dùng tự khóa
     `product` NVARCHAR(100) NOT NULL,
     `ban` BIT NULL, -- Bài viết bị cấm,
-    FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`), -- id người dùng
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`), -- id người dùng
     FOREIGN KEY (`post_provinces_id`) REFERENCES `provinces`(`code`),
     FOREIGN KEY (`post_districts_id`) REFERENCES `districts`(`code`),
     FOREIGN KEY (`post_wards_id`) REFERENCES `wards`(`code`)
@@ -15004,7 +15004,7 @@ CREATE TABLE `interested` (
     `interested_id` INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     `user_id` INT NOT NULL,
     `post_id` INT NOT NULL,
-    FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`), -- id người dùng
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`), -- id người dùng
     FOREIGN KEY (`post_id`) REFERENCES `post`(`post_id`) -- id người dùng
 );
 
@@ -15016,7 +15016,7 @@ CREATE TABLE `comment` (
     `date_comment` DATE NOT NULL,
     `content` NVARCHAR(500) NOT NULL,
     `comment_status` BIT,
-    FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`),
     FOREIGN KEY (`post_id`) REFERENCES `post`(`post_id`),
 	FOREIGN KEY (`parent_comment_id`) REFERENCES `comment`(`comment_id`)
 );
@@ -15026,7 +15026,7 @@ CREATE TABLE `share` (
     `user_id` INT NOT NULL,
     `post_id` INT NOT NULL,
     `date_share` DATE NOT NULL,
-    FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`),
     FOREIGN KEY (`post_id`) REFERENCES `post`(`post_id`)
 );
 
@@ -15034,7 +15034,7 @@ CREATE TABLE `follower` (
     `follower_id` INT NOT NULL,
     `user_id` INT NOT NULL,
     PRIMARY KEY (`follower_id`, `user_id`),
-	FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`)
+	FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`)
 );
 
 
@@ -15050,7 +15050,7 @@ INSERT INTO `gender` (`gender_name`) VALUES
     ('Khác');
     
 
-INSERT INTO `user` (`username`, `password`, `fullname`, `email`, `intro`, `birthday`, `day_create`, `gender_id`, `user_provinces_id`, `user_districts_id`, `user_wards_id`, `avatar`, `thumb`, `online_last_date`, `mark`, `user_status`, `ban`, `sub`)
+INSERT INTO `users` (`username`, `password`, `fullname`, `email`, `intro`, `birthday`, `day_create`, `gender_id`, `user_provinces_id`, `user_districts_id`, `user_wards_id`, `avatar`, `thumb`, `online_last_date`, `mark`, `user_status`, `ban`, `sub`)
 VALUES
 	('nhuomtv', '$2a$10$zfsw1PTh473LaxsZPkgqiO0IwR5f41.WKpuEita0ee7/OCrX63Tlm', 'Trần Văn Nhuộm', 'nhuomtv@fpt.edu.vn', 'CEO Diễn đàn Destiny, Một nơi giúp mọi người có thể trao và nhận đồ từ nhau một cách miễn phí.', '2003-9-7', '2023-2-12', 1, '93', '932', '31342', 'Ảnh avatar', 'Ảnh bìa', '2023-5-18', 1, 1, 0, 'Chưa có'),
 	('dangth', '$2a$10$AR78OxmWNlFMnmFlv.XWFe2TECixCdfV.2K9G4yrmQ1irWXvxcL72', 'Trần Hữu Đang', 'dangthpc04349@fpt.edu.vn', 'Người đồng sáng lập và sáng tạo nên diễn đàng Destiny, Một nơi giúp mọi người có thể trao và nhận đồ từ nhau một cách miễn phí.', '2003-9-7', '2023-2-12', 1, '93', '932', '31342', 'Ảnh avatar', 'Ảnh bìa', '2023-5-18', 1, 1, 0, 'Chưa có'),  -- Người dùng có 1 điểm, trạng thái: công khai (1)
@@ -15075,23 +15075,14 @@ INSERT INTO `post` (`user_id`, `content`, `date_Post`, `hash_Tag`, `post_provinc
 VALUES
 	(3, 'Xin chào mọi người tôi có cây bút lâu ngày kh sài nên tôi muốn tặng lại cho ai muốn xin vui lòng liên hệ zalo: 0123456789 nhaa',
 		'2023-6-04', 'Bút', '92', '926', '31299', 1, 1, 'Bút bi', 0),
-	-- Bài đăng về cây bút có trạng thái gửi là: Đã gửi (1), Trạng thái bài đăng là công khai (1), Bài đăng kh bị cấm (0)
-    
 	(2, 'Xin chào mọi người tôi có cuốn sách lâu ngày kh sài nên tôi muốn tặng lại cho ai muốn xin vui lòng liên hệ zalo: 0123456789 nhaa',
 		'2023-6-18', 'Sách', '92', '926', '31299', 0, 1, 'Sách', 0),
-	-- Bài đăng về sách có trạng thái gửi là: Chưa gửi (0), Trạng thái bài đăng là công khai (1), Bài đăng kh bị cấm (0)
-    
 	(3, 'Xin chào mọi người tôi có một ít quần áo lâu ngày kh sài nên tôi muốn tặng lại cho ai muốn xin vui lòng liên hệ zalo: 0123456789 nhaa',
 		'2023-6-18', 'Quần áo', '92', '926', '31299', 0, 1, 'Quần áo', 0),
-	-- Bài đăng về quần áo có trạng thái gửi là: Chưa gửi (0), Trạng thái bài đăng là công khai (1), Bài đăng kh bị cấm (0)
-        
 	(4, 'Xin chào mọi người tôi có đôi giày lâu ngày kh sài nên tôi muốn tặng lại cho ai muốn xin vui lòng liên hệ zalo: 0123456789 nhaa',
 		'2023-6-18', 'Giày', '89', '883', '30280', 0, 0, 'Giày', 0),
-    -- Bài đăng về giày có trạng thái gửi là: Chưa gửi (0), Trạng thái bài đăng là riêng tư (0), Bài đăng kh bị cấm (0)
-        
 	(5, 'Xin chào mọi người tôi có cây lau nhà lâu ngày kh sài nên tôi muốn tặng lại cho ai muốn xin vui lòng liên hệ zalo: 0123456789 nhaa',
 		'2023-6-20', 'Cây lau nhà', '96', '964', '31999', 0, 1, 'Chổi lau nhà', 0);
-    -- Bài đăng về cây lau nhà có trạng thái gửi là: Chưa gửi (0), Trạng thái bài đăng là công khai (1), Bài đăng kh bị cấm (0)
     
     
 INSERT INTO `post_images` (`post_id`, `link_image`) VALUES
