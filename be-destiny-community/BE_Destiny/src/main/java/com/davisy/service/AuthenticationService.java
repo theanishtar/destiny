@@ -42,7 +42,7 @@ public class AuthenticationService {
 	private final RoleCustomRepo roleCustomRepo;
 	private final JwtService jwtService;
 	@Autowired
-	UserServiceImpl impl;
+	UserService userService;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -75,7 +75,7 @@ public class AuthenticationService {
 
 	public AuthenticationResponse authenticationResponse(AuthenticationRequest authenticationRequest) {
 		try {
-			User user = impl.getUser(authenticationRequest.getEmail());
+			User user = userService.findByEmail(authenticationRequest.getEmail());
 //			System.out.println(user.getFullname());
 			if(user == null) {
 				return null;

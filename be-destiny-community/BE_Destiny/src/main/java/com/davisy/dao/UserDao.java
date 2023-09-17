@@ -7,8 +7,8 @@ import com.davisy.entity.User;
 
 public interface UserDao extends JpaRepository<User, String>  {
 	@Query(value = "SELECT *FROM users WHERE email:=email AND password:=password",nativeQuery = true)
-	public User userLogin(String email,String password);
+	public User findByEmailAndPassword(String email,String password);
 	
 	@Query(value = "SELECT * FROM users WHERE email=:email ", nativeQuery = true)
-	public User findEmailUser(String email);
+	public User findByEmail(String email);
 }

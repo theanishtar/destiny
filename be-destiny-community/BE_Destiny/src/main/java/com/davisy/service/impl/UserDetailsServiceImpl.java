@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.davisy.reponsitory.UsersReponsitory;
+import com.davisy.service.UserService;
 import com.davisy.dao.UserDao;
 import com.davisy.entity.*;
 
@@ -28,7 +29,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private PasswordEncoder passwordEncoder;
     
     @Autowired
-    private UserServiceImpl uImpl;
+    private UserService userService;
     
     @Autowired
     private UserDao dao;
@@ -37,7 +38,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        this.user = dao.findEmailUser(email);
+        this.user = userService.findByEmail(email);
 //    	Users user =usersReponsitory.findByEmail(email).orElseThrow();
         if (user == null) {
         	System.out.println("User not found with username: " + email);

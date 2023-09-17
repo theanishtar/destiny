@@ -8,18 +8,45 @@ import com.davisy.entity.User;
 import com.davisy.service.UserService;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserDao userDAO;
 
-	
 	@Override
-	public User userLogin(String email, String password) {
-		return userDAO.userLogin(email, password);
+	public User findByEmailAndPassword(String email, String password) {
+		User user = userDAO.findByEmailAndPassword(email, password);
+		if (user != null) {
+			return user;
+		} else {
+			return null;
+		}
 	}
-	
-	public User getUser(String email) {
-		return userDAO.findEmailUser(email);
+
+	@Override
+	public User findByEmail(String email) {
+		User user = userDAO.findByEmail(email);
+		if (user != null) {
+			return user;
+		} else {
+			return null;
+		}
+
+	}
+
+	@Override
+	public void create(User user) {
+		userDAO.save(user);
+	}
+
+
+	@Override
+	public void update(User user) {
+		userDAO.saveAndFlush(user);
+	}
+
+	@Override
+	public void delete(User user) {
+		userDAO.delete(user);		
 	}
 
 }
