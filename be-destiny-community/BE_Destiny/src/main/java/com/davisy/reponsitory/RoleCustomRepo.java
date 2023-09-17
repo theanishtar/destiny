@@ -22,7 +22,7 @@ public class RoleCustomRepo {
 	public List<Roles> getRole(User user) {
 		StringBuilder sql = new StringBuilder()
 				.append("SELECT r.name\n"
-						+ "FROM user u\n"
+						+ "FROM users u\n"
 						+ "INNER JOIN user_role ur ON u.user_id = ur.user_id\n"
 						+ "INNER JOIN roles r ON ur.role_id = r.role_id\n");
 		sql.append("WHERE 1=1 ");

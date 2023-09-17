@@ -76,21 +76,21 @@ public class AuthenticationService {
 	public AuthenticationResponse authenticationResponse(AuthenticationRequest authenticationRequest) {
 		try {
 			User user = impl.getUser(authenticationRequest.getEmail());
-			System.out.println(user.getFullname());
+//			System.out.println(user.getFullname());
 			if(user == null) {
 				return null;
 			}
 			System.out.println(user.getFullname());
 			if(user.isBan()) return null;
-			
-			System.out.println(passwordEncoder.matches(authenticationRequest.getPassword(), user.getPassword()));
-			
-			System.out.println(user.getFullname());
+//			
+//			System.out.println(passwordEncoder.matches(authenticationRequest.getPassword(), user.getPassword()));
+//			
+//			System.out.println(user.getFullname());
 			
 			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
 					authenticationRequest.getEmail(), authenticationRequest.getPassword());
 
-			System.out.println(user.getFullname());
+//			System.out.println(user.getFullname());
 			List<Roles> role = null;
 			if (user != null) {
 				role = roleCustomRepo.getRole(user);
@@ -118,7 +118,7 @@ public class AuthenticationService {
 			return AuthenticationResponse.builder().token(jwtToken).refreshToken(jwtRefreshToken)
 					.name(user.getFullname()).roles(authorities).build();
 		} catch (Exception e) {
-			System.out.println(e);
+			System.out.println("error: "+e);
 		}
 		return null;
 	}

@@ -28,6 +28,7 @@ import com.davisy.entity.User;
 import com.davisy.reponsitory.UsersReponsitory;
 import com.davisy.service.AuthenticationService;
 import com.davisy.service.JwtService;
+import com.davisy.service.UserService;
 import com.davisy.reponsitory.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,7 +40,7 @@ public class Login {
 	UsersReponsitory usersReponsitory;
 
     @Autowired
-    private UserDao dao;
+    private UserService userService;
 
 	@Autowired
 	private AuthenticationService authenticationService;
@@ -95,9 +96,5 @@ public class Login {
 	
 	}
 	
-	@GetMapping("/user")
-	public ResponseEntity<List<User>> authLog() {
-		return ResponseEntity.ok(dao.findAll());
 	
-	}
 }
