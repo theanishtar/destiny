@@ -31,3 +31,30 @@ Data response from `http://localhost:8080/oauth/login` (JWT valid for 5 hours):
 }
 ```
 </details>
+
+
+<details>
+<summary>
+DangTH (18/09/2023): Using Redis reduce amount Request period</summary>
+<br>
+
+## Cài đặt 
+
+[Redis Windows](https://github.com/dangth12/redis) 
+
+## chạy
+
+```redis
+redis-cli 
+127.0.0.1:6379> ping
+PONG
+```
+
+## Tắt Server
+
+`Ctrl + C` hoặc chạy lệnh sau
+
+```redis
+redis-cli shutdown
+```
+</details>
