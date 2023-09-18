@@ -24,7 +24,8 @@ import com.davisy.auth.OAuthenticationRequest;
 import com.davisy.dao.UserDao;
 import com.davisy.entity.Roles;
 import com.davisy.entity.User;
-import com.davisy.model.ResponseLogin;
+import com.davisy.model.LoginResponse;
+import com.davisy.model.RegisterResponse;
 import com.davisy.reponsitory.RoleCustomRepo;
 import com.davisy.reponsitory.UsersReponsitory;
 import com.davisy.service.impl.UserServiceImpl;
@@ -124,7 +125,7 @@ public class AuthenticationService {
 		return null;
 	}
 	
-	public ResponseLogin loginResponseService(AuthenticationRequest authenticationRequest) {
+	public LoginResponse loginResponseService(AuthenticationRequest authenticationRequest) {
 		/*
 		 * Status code: 
 		 * 		200: Đăng nhập thành công
@@ -134,12 +135,11 @@ public class AuthenticationService {
 		 */
 		try {
 			User user = userService.findByEmail(authenticationRequest.getEmail());
-//			System.out.println(user.getFullname());
 			if(user == null) {
-				return new ResponseLogin(404, null, "Dont find your account");
+				return new LoginResponse(404, null, "Dont find your account");
 			}
 			System.out.println(user.getFullname());
-			if(user.isBan()) return new ResponseLogin(403, null, "Your account is blocked");
+			if(user.isBan()) return new LoginResponse(403, null, "Your account is blocked");
 
 			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
 					authenticationRequest.getEmail(), authenticationRequest.getPassword());
@@ -163,12 +163,13 @@ public class AuthenticationService {
 
 			AuthenticationResponse authRes =  AuthenticationResponse.builder().token(jwtToken).refreshToken(jwtRefreshToken)
 					.name(user.getFullname()).roles(authorities).build();
-			return new ResponseLogin(200, authRes, "Login successfully!");
+			return new LoginResponse(200, authRes, "Login successfully!");
 		} catch (Exception e) {
 			System.out.println("error: "+e);
 		}
-		return new ResponseLogin(401, null, null);
+		return new LoginResponse(401, null, null);
 	}
+	
 
 	/*
 	 * public AuthenticationResponse authenticationResponse(OAuthenticationRequest
