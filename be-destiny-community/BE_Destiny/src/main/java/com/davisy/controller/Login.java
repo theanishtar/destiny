@@ -25,6 +25,7 @@ import com.davisy.auth.AuthenticationResponse;
 import com.davisy.dao.UserDao;
 import com.davisy.encrypt.AES;
 import com.davisy.entity.User;
+import com.davisy.model.ResponseLogin;
 import com.davisy.reponsitory.UsersReponsitory;
 import com.davisy.service.AuthenticationService;
 import com.davisy.service.JwtService;
@@ -88,12 +89,17 @@ public class Login {
 		return ipAddress;
 	}
 
-	@PostMapping("/oauth/login")
+	@PostMapping("/v1/oauth/login")
 	public ResponseEntity<AuthenticationResponse> authLog(@RequestBody AuthenticationRequest authenticationRequest) {
-		
-		System.out.println(passwordEncoder.matches("dangth","$2a$10$AR78OxmWNlFMnmFlv.XWFe2TECixCdfV.2K9G4yrmQ1irWXvxcL72"));
-		return ResponseEntity.ok(authenticationService.authenticationResponse(authenticationRequest));
-	
+		ResponseLogin resLog = authenticationService.loginResponseService(authenticationRequest);
+		return ResponseEntity.status(resLog.getStatusResponse()).body(resLog.getData());
+		/*
+		 * Status code: 
+		 * 		200: Đăng nhập thành công
+		 * 		404: Không thể tìm thấy tài khoản trong DB
+		 * 		403: Tài khoản bị khóa, liên hệ admin để được mở
+		 * 		401: Đăng nhập thất bại hoặc lỗi server
+		 */
 	}
 	
 	

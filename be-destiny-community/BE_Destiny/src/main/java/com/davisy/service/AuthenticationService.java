@@ -24,6 +24,7 @@ import com.davisy.auth.OAuthenticationRequest;
 import com.davisy.dao.UserDao;
 import com.davisy.entity.Roles;
 import com.davisy.entity.User;
+import com.davisy.model.ResponseLogin;
 import com.davisy.reponsitory.RoleCustomRepo;
 import com.davisy.reponsitory.UsersReponsitory;
 import com.davisy.service.impl.UserServiceImpl;
@@ -121,6 +122,52 @@ public class AuthenticationService {
 			System.out.println("error: "+e);
 		}
 		return null;
+	}
+	
+	public ResponseLogin loginResponseService(AuthenticationRequest authenticationRequest) {
+		/*
+		 * Status code: 
+		 * 		200: Đăng nhập thành công
+		 * 		404: Không thể tìm thấy tài khoản trong DB
+		 * 		403: Tài khoản bị khóa, liên hệ admin để được mở
+		 * 		401: Đăng nhập thất bại hoặc lỗi server
+		 */
+		try {
+			User user = userService.findByEmail(authenticationRequest.getEmail());
+//			System.out.println(user.getFullname());
+			if(user == null) {
+				return new ResponseLogin(404, null, "Dont find your account");
+			}
+			System.out.println(user.getFullname());
+			if(user.isBan()) return new ResponseLogin(403, null, "Your account is blocked");
+
+			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+					authenticationRequest.getEmail(), authenticationRequest.getPassword());
+
+			List<Roles> role = roleCustomRepo.getRole(user);
+			
+			Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
+			Set<Roles> set = new HashSet<>();
+			role.stream().forEach(c -> set.add(new Roles(c.getName())));
+			user.setRoles(set);
+
+			set.stream().forEach(i -> authorities.add(new SimpleGrantedAuthority(i.getName())));
+
+
+			authenticationManager.authenticate(token);
+
+
+			var jwtToken = jwtService.generateToken(user, authorities);
+			var jwtRefreshToken = jwtService.generateRefreshToken(user, authorities);
+
+			AuthenticationResponse authRes =  AuthenticationResponse.builder().token(jwtToken).refreshToken(jwtRefreshToken)
+					.name(user.getFullname()).roles(authorities).build();
+			return new ResponseLogin(200, authRes, "Login successfully!");
+		} catch (Exception e) {
+			System.out.println("error: "+e);
+		}
+		return new ResponseLogin(401, null, null);
 	}
 
 	/*
