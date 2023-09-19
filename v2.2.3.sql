@@ -15004,6 +15004,7 @@ CREATE TABLE `interested` (
     `interested_id` INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     `user_id` INT NOT NULL,
     `post_id` INT NOT NULL,
+	`date_interested` DATE NOT null,
     FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`), -- id người dùng
     FOREIGN KEY (`post_id`) REFERENCES `post`(`post_id`) -- id người dùng
 );
@@ -15099,25 +15100,25 @@ INSERT INTO `post_images` (`post_id`, `link_image`) VALUES
     (5, 'Ảnh thứ 1 của bài đăng 5'); -- Bài viết của người dùng Bích Vi (5)
 
 
-INSERT INTO `interested` (`user_id`, `post_id`) VALUES -- Bài đăng (4) của người dùng Sỹ (4) chỉ có 2 lượt yêu thích từ Sỹ (4) và Vi (5)
-    (2, 1),
-	(2 ,2),
-	(2 ,3),
-	(2 ,5), 
-    (3, 1),
-	(3 ,2),
-	(3 ,3),
-	(3 ,5),
-    (4, 1),
-	(4 ,2),
-	(4 ,3),
-	(4 ,4),
-    (4 ,5),
-    (5, 1),
-	(5 ,2),
-	(5 ,3),
-	(5 ,4),
-    (5 ,5);
+INSERT INTO `interested` (`user_id`, `post_id`,`date_interested`) VALUES -- Bài đăng (4) của người dùng Sỹ (4) chỉ có 2 lượt yêu thích từ Sỹ (4) và Vi (5)
+    (2, 1,'2023-06-04'),
+	(2 ,2,'2023-06-04'),
+	(2 ,3,'2023-06-04'),
+	(2 ,5,'2023-06-04'), 
+    (3, 1,'2023-06-04'),
+	(3 ,2,'2023-06-04'),
+	(3 ,3,'2023-06-04'),
+	(3 ,5,'2023-06-04'),
+    (4, 1,'2023-06-04'),
+	(4 ,2,'2023-06-04'),
+	(4 ,3,'2023-06-04'),
+	(4 ,4,'2023-06-04'),
+    (4 ,5,'2023-06-04'),
+    (5, 1,'2023-06-04'),
+	(5 ,2,'2023-06-04'),
+	(5 ,3,'2023-06-04'),
+	(5 ,4,'2023-06-04'),
+    (5 ,5,'2023-06-04');
 
 
 INSERT INTO `comment` (`user_id`, `parent_comment_id`, `post_id`, `date_comment`, `content`, `comment_status`) VALUES
