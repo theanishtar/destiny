@@ -59,6 +59,8 @@ redis-cli shutdown
 ```
 </details>
 
+<details>
 <summary>
 VinhPQ (19/09/2023): Add a row in entity Interested</summary>
 <br>
+</details>
