@@ -17,9 +17,10 @@ public class Application {
 		
 		SpringApplication.run(Application.class, args);
 	}
-//	@Bean
-//	public ErrorControllerHandle errorControllerHandle() {
-//		return new ErrorControllerHandle();
-//	}
+	
+	@Bean
+	public ErrorControllerHandle errorControllerHandle() {
+		return new ErrorControllerHandle();
+	}
 
 }
