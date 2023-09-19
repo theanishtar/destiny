@@ -63,4 +63,10 @@ redis-cli shutdown
 <summary>
 VinhPQ (19/09/2023): Add a row in entity Interested</summary>
 <br>
+
+## Interested entity
+ ```redis
+@Temporal(TemporalType.DATE)
+Date date_interested = new Date();
+ ```
 </details>
