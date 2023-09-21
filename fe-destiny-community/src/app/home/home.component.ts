@@ -1,8 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-// Import tệp JS của giao diện
-import 'src/assets/js/utils/svg-loader.js';
-import { form } from '../../assets/js/form/form.utils.js';
-import { tabs } from '../../assets/js/landing/landing.tabs.js';
 
 import { FormsModule } from '@angular/forms';
 import {
@@ -31,37 +27,42 @@ import { LoginService } from '../service/login.service';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: [
-    `../css/vendor/bootstrap.min.css`,
-    `../css/styles.min.css`,
-    './home.component.css'
+    './home.component.css',
+    `../css/item/vikinger-fonts-css.css`,
+    `../css/item/element.css`,
+
   ]
 })
 export class HomeComponent implements OnInit{
-  public loginForm!: FormGroup;
-
-  constructor(
-		private formbuilder: FormBuilder,
-	) {
-	}
-
+  slideIndex: number = 1;
+  slidesLength: string;
   ngOnInit() {
 
-    // Giao diện
-    tabs.tabs();
-    form.formInput();
+  }
+  // Next/previous controls
+  plusSlides(n: number) {
+    this.showSlides(this.slideIndex += n);
   }
 
-  createFormLogin() {
-		this.loginForm = this.formbuilder.group({
-			email: [''],
-			password: [''],
-		});
-	}
+  showSlides(n: number) {
+    let i: number;
+    let slides: HTMLCollectionOf<Element> = document.getElementsByClassName("swiper-slide");
+    this.slidesLength = slides.length.toString();
+    // Kiểm tra nếu slideIndex vượt quá giới hạn
+    if (n > slides.length) {
+      this.slideIndex = 1;
+    }
+    if (n < 1) {
+      this.slideIndex = slides.length;
+    }
 
-	get loginFormControl() {
-		return this.loginForm.controls;
-	}
-
-  loginWithEmailAndPassword() {
+    // Ẩn tất cả các slides
+    for (i = 0; i < slides.length; i++) {
+      (slides[i] as HTMLElement).style.display = "none";
+    }
+    // Kiểm tra slideIndex có hợp lệ trước khi hiển thị slide và dot tương ứng
+    if (this.slideIndex >= 1 && this.slideIndex <= slides.length) {
+      (slides[this.slideIndex - 1] as HTMLElement).style.display = "block";
+    }
   }
 }

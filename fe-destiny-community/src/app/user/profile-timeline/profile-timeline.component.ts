@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 
 import { liquid } from "../../../assets/js/utils/liquidify.js";
 // import { tns } from '../../../assets/js/vendor/ti';
@@ -13,6 +13,7 @@ import 'src/assets/js/utils/svg-loader.js';
 
 // 
 import { ModalService } from '../service/modal.service';
+import { InteractPostsService } from '../service/interact-posts.service';
 @Component({
   selector: 'app-profile-timeline',
   templateUrl: './profile-timeline.component.html',
@@ -25,8 +26,10 @@ import { ModalService } from '../service/modal.service';
   ]
 })
 export class ProfileTimelineComponent implements OnInit {
-  ngOnInit() {
+  postId = '123'; // Mã số của bài viết (có thể là mã số duy nhất của mỗi bài viết)
 
+  ngOnInit() {
+    this.checkSrcoll();
     liquid.liquid();
     avatarHexagons.avatarHexagons();
     tooltips.tooltips();
@@ -40,12 +43,46 @@ export class ProfileTimelineComponent implements OnInit {
 
   constructor(
     public modalService: ModalService,
+    public interactPostsService: InteractPostsService,
   ) { }
 
-  openModal() {
-    this.modalService.openModal();
+  @ViewChild('elementToScroll', { static: false }) elementToScroll: ElementRef;
+
+  scrollToTop() {
+    console.log(this.elementToScroll); // In ra để kiểm tra ElementRef
+    if (this.elementToScroll && this.elementToScroll.nativeElement) {
+      this.elementToScroll.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
-  closeModal() {
-    this.modalService.closeModal();
+  checkSrcoll() {
+    const scrollableDiv = document.getElementById('scrollableDiv')!;
+    const scrollButton = document.getElementById('scrollButton')!;
+
+    // Thêm sự kiện lắng nghe lướt cho thẻ div
+    scrollableDiv.addEventListener('scroll', () => {
+      // Kiểm tra vị trí cuộn
+      if (scrollableDiv.scrollTop > 100) {
+        // Hiển thị nút scroll khi cuộn đến vị trí cụ thể (ở đây là 100)
+        scrollButton.style.display = 'block';
+      } else {
+        // Ẩn nút scroll nếu không đủ cuộn
+        scrollButton.style.display = 'none';
+      }
+    });
+  }
+
+  toggleLike() {
+    this.interactPostsService.toggleLike(this.postId);
+  }
+
+  isLiked(postId: string) {
+    return this.interactPostsService.isLiked(postId);
+  }
+
+  openModalComment() {
+    this.modalService.openModalComment();
+  }
+  closeModalComment() {
+    this.modalService.closeModalComment();
   }
 }

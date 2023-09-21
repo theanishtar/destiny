@@ -6,7 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "purgecss": "purgecss --config purgecss.config.js -o ./src/app/css/item/element.css"
+
   },
   "private": true,
   "dependencies": {

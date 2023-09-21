@@ -1,5 +1,11 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 
+import { CookieService } from 'ngx-cookie-service';
+import { Router } from '@angular/router';
+import { GetStartedComponent } from '@app/get-started/get-started.component';
+import { LoginService } from '@app/service/login.service';
+import '../../../assets/toast/main.js';
+declare var toast: any;
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
@@ -13,11 +19,25 @@ import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 })
 
 export class NavigationComponent implements OnInit {
-
+  userDisplayName = '';
   ngOnInit() {
+    this.userDisplayName = this.cookieService.get('full_name');  
     this.activeMenuItem();
   }
   
+  constructor(
+    private cookieService: CookieService,
+    private loginService: LoginService,
+    private router: Router,
+  ) { }
+
+  isLogin(){
+    return this.loginService.isLogin();
+  }
+
+  logout(){
+    return this.loginService.logout();
+  }
 
   activeMenuItem() {
     // Lấy tất cả các menu item

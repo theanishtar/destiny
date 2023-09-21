@@ -28,11 +28,11 @@ export class NavbarAdminComponent {
         if (this.themeToggle?.nativeElement.checked) {
           this.setBodyClass('dark');
           localStorage.setItem("darktheme", "true");
-          console.log("yo");
+          // console.log("yo");
         } else {
           this.setBodyClass(''); // Remove the 'dark' class
           localStorage.setItem("darktheme", "false");
-          console.log("yo2");
+          // console.log("yo2");
         }
       });
     }
@@ -40,15 +40,15 @@ export class NavbarAdminComponent {
     // get sidebar from local
     const sideBar = document.querySelector('.sidebarD');
     const contentClose = document.querySelector('.content');
-    const sideBarSmall = localStorage.getItem("sidebarSmall");
+    // const sideBarSmall = localStorage.getItem("sidebarSmall");
 
-    if(sideBarSmall?.match("true")){
-      this.renderer.addClass(sideBar, 'closeD');
-      this.renderer.addClass(contentClose, 'contentCloseD');
-    }else if(sideBarSmall?.match("false")) {
-      this.renderer.removeClass(sideBar, 'closeD');
-      this.renderer.removeClass(contentClose, 'contentCloseD');
-    }
+    // if(sideBarSmall?.match("true")){
+    //   this.renderer.addClass(sideBar, 'closeD');
+    //   this.renderer.addClass(contentClose, 'contentCloseD');
+    // }else if(sideBarSmall?.match("false")) {
+    //   this.renderer.removeClass(sideBar, 'closeD');
+    //   this.renderer.removeClass(contentClose, 'contentCloseD');
+    // }
 
   }
 

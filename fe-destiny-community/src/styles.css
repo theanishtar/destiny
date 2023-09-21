@@ -162,13 +162,32 @@ h5.site-footer-title.mb-3,
 a.nav-link.click-scroll.site-footer-link {
   font-size: 18px;
 }
+/* swal */
+  .swal2-popup.swal2-modal.swal2-icon-warning.swal2-show {
+    width: auto;
+    height: auto;
+}
+  .swal2-icon-content {
+    font-size: 26px !important;
+  }
+  .swal2-icon.swal2-warning.swal2-icon-show {
+    width: 50px;
+    height: 50px;
+  }
+  h2#swal2-title {
+    font-size: 28px;
+  }
+  button.swal2-confirm.swal2-styled.swal2-default-outline, button.swal2-cancel.swal2-styled.swal2-default-outline {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+  .swal2-actions {
+    margin: 0;
+  }
 
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap");
 
 /* @import url("app/admin/css/home.css"); */
 
 /* table */
-
-
-
 @import url("app/admin/css/datatables/dataTables.bootstrap4.min.css");

@@ -1,7 +1,7 @@
-<main class="overlay" *ngIf="modalService.isOpen$ | async">
+<main class="overlay" *ngIf="modalService.isOpenCreatePost$ | async">
 
   <div class="modal-create-post">
-    <button (click)="closeModal()" class="btnClose-create-post">
+    <button (click)="closeModalCreatePost()" class="btnClose-create-post">
         <i class="fa-solid fa-xmark"></i>
     </button>
     <div class="modal-body">
@@ -318,4 +318,121 @@
       </div> -->
   </div> 
 </main>
+
+
+<main class="overlay" *ngIf="modalService.isOpenComment$ | async">
+  <div id="favDialog_updatePost" class="modal fade favDialog_updatePost">
+      <button (click)="closeModalComment()" class="btnClose-create-post">
+        <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="post-container-update">
+      <div class="post">
+        <!-- Slideshow container -->
+        <div class="img-product">
+          <div class="slideshow-container">
+  
+            <!-- Full-width images with number and caption text -->
+            <div class="mySlides fade">
+              <img src="../assets/images/posts/mop.png" style="width:100%">
+            </div>
+      
+            <div class="mySlides fade">
+              <!-- <div class="numbertext">2 / 3</div> -->
+              <img src="../assets/images/posts/pant.png" style="width:100%">
+            </div>
+      
+            <div class="mySlides fade">
+              <!-- <div class="numbertext">3 / 3</div> -->
+              <img src="../assets/images/posts/shirt.png" style="width:100%">
+            </div>
+            <div class="mySlides fade">
+              <img src="../assets/images/posts/chair.png" style="width:100%">
+            </div>
+      
+            <!-- Next and previous buttons -->
+           <div class="btn-slide-show">
+            <a class="prev" (click)="plusSlides(-1)">&#10094;</a>
+            <a class="next" (click)="plusSlides(1)">&#10095;</a>
+           </div>
+            </div>
+            
+          <div class="numbertext"><span id="numbertext">1 </span>/ <b>{{slidesLength}}</b></div>
+        </div>
+        <!-- ../../assets/images/cover/03.jpg -->
+  <div class="post-detail">
+    <div class="full-boxer">
+      <div class="comment__container opened" id="first-comment">
+          <div class="comment__card">
+              <div class="box-top">
+                  <div class="Profile">
+                      <div class="profile-image">
+                          <img src="../../assets/images/cover/03.jpg">
+                      </div>
+                      <div class="Name">
+                          <strong>Nguyễn Khánh Đan</strong>
+                          <span>@dannk</span>
+                      </div>
+                  </div>
+              </div>
+              <p>
+                  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatum
+                  eaque itaque sit tempora officiis, quisquam atque? Impedit
+                  dignissimos error laudantium!
+              </p>
+              <div class="comment__card-footer">
+                <div class="replies">Trả lời</div>
+                  <div class="show-replies" (click)="opentReplies()">Xem thêm</div>
+              </div>
+          </div>
+          <div class="comment__container" dataset="first-comment" id="first-reply">
+              <div class="comment__card">
+                  <div class="box-top">
+                      <div class="Profile">
+                          <div class="profile-image">
+                              <img src="../../assets/images/cover/03.jpg">
+                          </div>
+                          <div class="Name">
+                              <strong>Nguyễn Khánh Đan</strong>
+                              <span>@dannk</span>
+                          </div>
+                      </div>
+                  </div>
+                  <p>
+                      Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                      Voluptatum eaque itaque sit tempora officiis, quisquam atque?
+                      Impedit dignissimos error laudantium!
+                  </p>
+              </div></div>
+          <div class="comment__container" dataset="first-comment">
+              <div class="comment__card">
+                  <div class="box-top">
+                      <div class="Profile">
+                          <div class="profile-image">
+                              <img src="../../assets/images/cover/03.jpg">
+                          </div>
+                          <div class="Name">
+                              <strong>Nguyễn Khánh Đan</strong>
+                              <span>@dannk</span>
+                          </div>
+                      </div>
+                  </div>
+                  <p>
+                      Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                      Voluptatum eaque itaque sit tempora officiis, quisquam atque?
+                      Impedit dignissimos error laudantium!
+                  </p>
+              </div>
+          </div>
+      </div>
+  </div>
+    <div class="comment-box">
+        <input type="text" id="comment-input" placeholder="Bình luận">
+        <button class="add-comment-btn"> <i class="fa-regular fa-comment"></i></button>
+    </div>
+  </div>
+      </div>
+    </div>
+  </div>
+   
+  </main>
 

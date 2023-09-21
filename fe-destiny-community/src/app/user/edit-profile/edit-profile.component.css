@@ -11,10 +11,14 @@ textarea#bio {
 }
 span.count-characters {
     position: absolute;
-    bottom: 5;
-    right: 10;
+    margin-top: 85%;
+    margin-left: -20%;
 }
-
+@media screen and (max-width: 1440px) {
+  span.count-characters {
+    display: none;
+  }
+}
 /* ========= */
 .radio-button-container {
     display: flex;
@@ -77,7 +81,7 @@ span.count-characters {
   }
 
   select {
-    height: 54px;
+    height: 55px;
     padding: 0 18px;
 }
 label {
@@ -86,4 +90,15 @@ label {
 }
 .form-input-gender {
     padding: 0 15px;
+}
+.form{
+  border: none;
+  padding: 0px;
+  box-shadow: none;
+}
+.form-input.small input, .form-select select{
+  height: 55px;
+}
+.form-row + .form-row {
+  margin-top: 31px;
 }

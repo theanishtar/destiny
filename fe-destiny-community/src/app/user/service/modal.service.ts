@@ -5,15 +5,25 @@ import { BehaviorSubject } from 'rxjs'; //Theo dõi trạng thái của modal
   providedIn: 'root'
 })
 export class ModalService {
-  private isOpen = new BehaviorSubject<boolean>(false);
-  isOpen$ = this.isOpen.asObservable();
+  private isOpenCreatePost = new BehaviorSubject<boolean>(false);
+  isOpenCreatePost$ = this.isOpenCreatePost.asObservable();
 
-  openModal() {
-    this.isOpen.next(true);
+  private isOpenComment = new BehaviorSubject<boolean>(false);
+  isOpenComment$ = this.isOpenComment.asObservable();
+
+  openModalCreatePost() {
+    this.isOpenCreatePost.next(true);
   }
 
-  closeModal() {
-    this.isOpen.next(false);
+  closeModalCreatePost() {
+    this.isOpenCreatePost.next(false);
+  }
+  openModalComment() {
+    this.isOpenComment.next(true);
+  }
+
+  closeModalComment() {
+    this.isOpenComment.next(false);
   }
   
   constructor() { }

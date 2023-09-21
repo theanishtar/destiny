@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -34,6 +35,7 @@ import { ProfileAdminComponent } from './admin/profile-admin/profile-admin.compo
 import { UserDetailComponent } from './admin/user-detail/user-detail.component';
 import { UserManamentComponent } from './admin/user-manament/user-manament.component';
 import { UserReportdetailComponent } from './admin/user-reportdetail/user-reportdetail.component';
+import { GetStartedComponent } from './get-started/get-started.component';
 
 
 
@@ -67,14 +69,17 @@ import { UserReportdetailComponent } from './admin/user-reportdetail/user-report
     UserDetailComponent,
     UserManamentComponent,
     UserReportdetailComponent,
+    GetStartedComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
   ],
-  providers: [],
+  providers: [
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -346,9 +346,9 @@
     <!-- /GRID COLUMN -->
 
     <!-- GRID COLUMN -->
-    <div class="grid-column">
+    <div class="grid-column" id="scrollableDiv">
       <!-- QUICK POST -->
-      <div class="quick-post">
+      <div class="quick-post" #elementToScroll>
         <!-- QUICK POST HEADER -->
         <div class="quick-post-header">
           <!-- OPTION ITEMS -->
@@ -381,8 +381,8 @@
               <div class="form-item">
                 <!-- FORM TEXTAREA -->
                 <div class="form-textarea">
-                  <textarea id="quick-post-text" name="quick-post-text" placeholder="Hi Marina! Share your post here..."
-                    (click)="openModal()"></textarea>
+                  <textarea id="quick-post-text" name="quick-post-text" placeholder="Xin chào! Cùng chia sẻ bài viết của bạn tại đây..."
+                    (click)="openModalCreatePost()"></textarea>
                   <!-- FORM TEXTAREA LIMIT TEXT -->
                   <!-- <p class="form-textarea-limit-text">998/1000</p> -->
                   <!-- /FORM TEXTAREA LIMIT TEXT -->
@@ -421,7 +421,7 @@
             <!-- /BUTTON -->
 
             <!-- BUTTON -->
-            <p class="button small secondary" (click)="openModal()">Tạo bài</p>
+            <p class="button small secondary" (click)="openModalCreatePost()">Tạo bài</p>
             <!-- /BUTTON -->
           </div>
           <!-- /QUICK POST FOOTER ACTIONS -->
@@ -476,11 +476,11 @@
             <!-- SIMPLE DROPDOWN -->
             <div class="simple-dropdown widget-box-post-settings-dropdown">
               <!-- SIMPLE DROPDOWN LINK -->
-              <p class="simple-dropdown-link">Report Post</p>
+              <p class="simple-dropdown-link">Báo cáo bài viết</p>
               <!-- /SIMPLE DROPDOWN LINK -->
 
               <!-- SIMPLE DROPDOWN LINK -->
-              <p class="simple-dropdown-link">Report Author</p>
+              <p class="simple-dropdown-link">Báo cáo tài khoản</p>
               <!-- /SIMPLE DROPDOWN LINK -->
             </div>
             <!-- /SIMPLE DROPDOWN -->
@@ -496,7 +496,7 @@
             <!-- USER STATUS -->
             <div class="user-status">
               <!-- USER STATUS AVATAR -->
-              <a class="user-status-avatar" href="profile-timeline.html">
+              <a class="user-status-avatar" href="profile">
                 <!-- USER AVATAR -->
                 <div class="user-avatar small no-outline">
                   <!-- USER AVATAR CONTENT -->
@@ -553,7 +553,7 @@
 
               <!-- USER STATUS TITLE -->
               <p class="user-status-title medium">
-                <a class="bold" href="profile-timeline.html">Nguyễn Khánh Đan</a>
+                <a class="bold" href="profile">Nguyễn Khánh Đan</a>
               </p>
               <!-- /USER STATUS TITLE -->
 
@@ -734,7 +734,7 @@
           <!-- POST OPTION WRAP -->
           <div class="post-option-wrap">
             <!-- POST OPTION -->
-            <div class="post-option reaction-options-dropdown-trigger">
+            <div class="post-option reaction-options-dropdown-trigger" (click)="toggleLike()" [class.active]="isLiked(postId)">
               <!-- POST OPTION ICON -->
               <svg class="post-option-icon icon-thumbs-up">
                 <use xlink:href="#svg-thumbs-up"></use>
@@ -751,7 +751,7 @@
           <!-- /POST OPTION WRAP -->
 
           <!-- POST OPTION -->
-          <div class="post-option">
+          <div class="post-option" (click)="openModalComment()">
             <!-- POST OPTION ICON -->
             <svg class="post-option-icon icon-comment">
               <use xlink:href="#svg-comment"></use>
@@ -801,11 +801,11 @@
             <!-- SIMPLE DROPDOWN -->
             <div class="simple-dropdown widget-box-post-settings-dropdown">
               <!-- SIMPLE DROPDOWN LINK -->
-              <p class="simple-dropdown-link">Report Post</p>
+              <p class="simple-dropdown-link">Báo cáo bài viết</p>
               <!-- /SIMPLE DROPDOWN LINK -->
 
               <!-- SIMPLE DROPDOWN LINK -->
-              <p class="simple-dropdown-link">Report Author</p>
+              <p class="simple-dropdown-link">Báo cáo tài khoản</p>
               <!-- /SIMPLE DROPDOWN LINK -->
             </div>
             <!-- /SIMPLE DROPDOWN -->
@@ -818,7 +818,7 @@
             <!-- USER STATUS -->
             <div class="user-status">
               <!-- USER STATUS AVATAR -->
-              <a class="user-status-avatar" href="profile-timeline.html">
+              <a class="user-status-avatar" href="profile">
                 <!-- USER AVATAR -->
                 <div class="user-avatar small no-outline">
                   <!-- USER AVATAR CONTENT -->
@@ -892,7 +892,7 @@
                   <!-- USER STATUS -->
                   <div class="user-status">
                     <!-- USER STATUS AVATAR -->
-                    <a class="user-status-avatar" href="profile-timeline.html">
+                    <a class="user-status-avatar" href="profile">
                       <!-- USER AVATAR -->
                       <div class="user-avatar small no-outline">
                         <!-- USER AVATAR CONTENT -->
@@ -1173,11 +1173,11 @@
             <!-- SIMPLE DROPDOWN -->
             <div class="simple-dropdown widget-box-post-settings-dropdown">
               <!-- SIMPLE DROPDOWN LINK -->
-              <p class="simple-dropdown-link">Report Post</p>
+              <p class="simple-dropdown-link">Báo cáo bài viết</p>
               <!-- /SIMPLE DROPDOWN LINK -->
 
               <!-- SIMPLE DROPDOWN LINK -->
-              <p class="simple-dropdown-link">Report Author</p>
+              <p class="simple-dropdown-link">Báo cáo tài khoản</p>
               <!-- /SIMPLE DROPDOWN LINK -->
             </div>
             <!-- /SIMPLE DROPDOWN -->
@@ -1193,7 +1193,7 @@
             <!-- USER STATUS -->
             <div class="user-status">
               <!-- USER STATUS AVATAR -->
-              <a class="user-status-avatar" href="profile-timeline.html">
+              <a class="user-status-avatar" href="profile">
                 <!-- USER AVATAR -->
                 <div class="user-avatar small no-outline">
                   <!-- USER AVATAR CONTENT -->
@@ -1250,7 +1250,7 @@
 
               <!-- USER STATUS TITLE -->
               <p class="user-status-title medium">
-                <a class="bold" href="profile-timeline.html">Nguyễn Khánh Đan</a>
+                <a class="bold" href="profile">Nguyễn Khánh Đan</a>
               </p>
               <!-- /USER STATUS TITLE -->
 
@@ -1498,31 +1498,6 @@
     <div class="grid-column">
       <!-- WIDGET BOX -->
       <div class="widget-box">
-        <!-- WIDGET BOX SETTINGS -->
-        <div class="widget-box-settings">
-          <!-- POST SETTINGS WRAP -->
-          <div class="post-settings-wrap">
-            <!-- POST SETTINGS -->
-            <div class="post-settings widget-box-post-settings-dropdown-trigger">
-              <!-- POST SETTINGS ICON -->
-              <svg class="post-settings-icon icon-more-dots">
-                <use xlink:href="#svg-more-dots"></use>
-              </svg>
-              <!-- /POST SETTINGS ICON -->
-            </div>
-            <!-- /POST SETTINGS -->
-
-            <!-- SIMPLE DROPDOWN -->
-            <div class="simple-dropdown widget-box-post-settings-dropdown">
-              <!-- SIMPLE DROPDOWN LINK -->
-              <p class="simple-dropdown-link">Widget Settings</p>
-              <!-- /SIMPLE DROPDOWN LINK -->
-            </div>
-            <!-- /SIMPLE DROPDOWN -->
-          </div>
-          <!-- /POST SETTINGS WRAP -->
-        </div>
-        <!-- /WIDGET BOX SETTINGS -->
 
         <!-- WIDGET BOX TITLE -->
         <p class="widget-box-title">Bài viết được quan tâm</p>
@@ -1663,7 +1638,7 @@
         <!-- WIDGET BOX CONTENT -->
 
         <!-- WIDGET BOX BUTTON -->
-        <a class="widget-box-button button small white" href="quests.html">See all Quests!</a>
+        <a class="widget-box-button button small white" href="">Xem tất cả</a>
         <!-- /WIDGET BOX BUTTON -->
       </div>
       <!-- /WIDGET BOX -->
@@ -1673,5 +1648,7 @@
   <!-- /GRID -->
 </div>
 <!-- /CONTENT GRID -->
-
+<a class="scroll-to-top" (click)="scrollToTop()" id="scrollButton" style="display: none;">
+  <i class="fas fa-angle-up"></i>
+</a>
 <app-modal></app-modal>

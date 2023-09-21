@@ -42,13 +42,6 @@ export class ChangePasswordComponent implements OnInit{
     public modalService: ModalService,
   ) { }
 
-  openModal() {
-    this.modalService.openModal();
-  }
-  closeModal() {
-    this.modalService.closeModal();
-  }
-
   showHideOldPass() {
 		let input1 = document.getElementById('oldPass') as HTMLInputElement;
 		// console.log(input!);

@@ -19,3 +19,45 @@ p.user-status-text.small.post-time {
     width: 0 !important;
     display: none;
 }
+
+.picture-collage-row.medium .photo-preview-wrap {
+    height: 240px;
+}
+.picture-collage-row .photo-preview-wrap {
+    height: 160px;
+}
+
+@media screen and (max-width: 1440px) {
+    .grid.grid-3-6-3 > .grid-column:nth-child(3) {
+        display: none;
+    }
+}
+
+.scroll-to-top {
+    position: fixed;
+    right: 100px;
+    bottom: 10px;
+    display: none;
+    width: 2.75rem;
+    height: 2.75rem;
+    text-align: center;
+    color: #fff;
+    background: rgba(90, 92, 105, .5);
+    line-height: 46px;
+    border-radius: 50%;
+  }
+  
+  .scroll-to-top:focus,
+  .scroll-to-top:hover {
+    color: #fff
+  }
+  
+  .scroll-to-top:hover {
+    background: #5a5c69;
+    cursor: pointer;
+    
+  }
+  
+  .scroll-to-top i {
+    font-weight: 800
+  }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-header-profile',
@@ -11,6 +11,40 @@ import { Component } from '@angular/core';
     './header-profile.component.css'
   ]
 })
-export class HeaderProfileComponent {
+export class HeaderProfileComponent implements OnInit{
+  ngOnInit() {
+    this.activeMenuItem();
+  }
 
+
+  activeMenuItem() {
+    // Lấy tất cả các menu item
+    const menuItems = document.querySelectorAll('.section-menu-item');
+
+    // Lặp qua từng menu item và thêm sự kiện click vào chúng
+    menuItems.forEach(item => {
+      item.addEventListener('click', () => {
+        // Loại bỏ class "active" từ tất cả các menu item
+        menuItems.forEach(menuItem => {
+          menuItem.classList.remove('active');
+        });
+
+        // Thêm class "active" vào menu item được click
+        item.classList.add('active');
+
+        // Lưu trạng thái "active" vào Local Storage
+        localStorage.setItem('activeMenuItem', item.textContent!);
+      });
+    });
+
+    // Khôi phục trạng thái "active" từ Local Storage khi trang tải lại
+    const activeMenuItem = localStorage.getItem('activeMenuItem');
+    if (activeMenuItem !== null) {
+      menuItems.forEach(item => {
+        if (item.textContent === activeMenuItem) {
+          item.classList.add('active');
+        }
+      });
+    }
+  }
 }

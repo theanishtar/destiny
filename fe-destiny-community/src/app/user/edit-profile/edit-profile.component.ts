@@ -27,35 +27,28 @@ declare var toast: any;
   ]
 })
 
-export class EditProfileComponent implements OnInit{
+export class EditProfileComponent implements OnInit {
   textAreaContent: string = ''; // Nội dung của textarea
   readonlyCondition: boolean = false; // Ban đầu không bị giới hạn
 
-    ngOnInit() {
-  
-      liquid.liquid();
-      avatarHexagons.avatarHexagons();
-      tooltips.tooltips();
-      popups.popup();
-      popups.picturePopup();
-      headers.headers();
-      sidebars.sidebars();
-      content.contentTab();
-      form.formInput();
-    }
-  
-    constructor(
-      public modalService: ModalService,
-    ) { }
-  
-    openModal() {
-      this.modalService.openModal();
-    }
-    closeModal() {
-      this.modalService.closeModal();
-    }
+  ngOnInit() {
 
-    // Giới hạn ký tự của bio
+    liquid.liquid();
+    avatarHexagons.avatarHexagons();
+    tooltips.tooltips();
+    popups.popup();
+    popups.picturePopup();
+    headers.headers();
+    sidebars.sidebars();
+    content.contentTab();
+    form.formInput();
+  }
+
+  constructor(
+    public modalService: ModalService,
+  ) { }
+
+  // Giới hạn ký tự của bio
   @HostListener('window:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
     if (event.key === 'Backspace') {
@@ -77,7 +70,7 @@ export class EditProfileComponent implements OnInit{
         duration: 2000,
       });
       this.readonlyCondition = true;
-       // Nếu vượt quá giới hạn, cắt nội dung để chỉ hiển thị 180 ký tự
+      // Nếu vượt quá giới hạn, cắt nội dung để chỉ hiển thị 180 ký tự
       this.textAreaContent = this.textAreaContent.slice(0, maxCharacters);
     }
   }

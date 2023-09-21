@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { authGuard } from './auth.guard';
+
 import { HomeComponent } from './home/home.component';
+import { GetStartedComponent } from './get-started/get-started.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { Error404Component } from './error404/error404.component';
 
@@ -18,7 +21,6 @@ import { HistoryComponent } from './user/history/history.component';
 import { NotificationsComponent } from './user/notifications/notifications.component';
 
 // Admin
-
 import { IndexAdminComponent } from './admin/index-admin/index-admin.component';
 import { PostDetailComponent } from './admin/post-detail/post-detail.component';
 import { PostManamentComponent } from './admin/post-manament/post-manament.component';
@@ -31,10 +33,12 @@ import { UserReportdetailComponent } from './admin/user-reportdetail/user-report
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
+  { path: 'get-started', component: GetStartedComponent },
   { path: 'forgotpassword', component: ForgotPasswordComponent },
 
   // user
-  { path: 'newsfeed', component: NewsfeedComponent },
+  // { path: 'newsfeed', component: NewsfeedComponent, canActivate: [authGuard]},
+  { path: 'newsfeed', component: NewsfeedComponent},
   { path: 'profile', component: ProfileTimelineComponent },
   { path: 'photos', component: PhotosComponent },
   { path: 'follow', component: FollowsComponent },
@@ -46,7 +50,7 @@ const routes: Routes = [
   { path: 'history', component: HistoryComponent },
   { path: 'notifications', component: NotificationsComponent },
 
-  { path: 'admin/index', component: IndexAdminComponent },
+  { path: 'admin', component: IndexAdminComponent },
   { path: 'admin/postdetail', component: PostDetailComponent },
   { path: 'admin/postmanament', component: PostManamentComponent },
   { path: 'admin/postreportdetail', component: PostReportdetailComponent },
@@ -54,6 +58,7 @@ const routes: Routes = [
   { path: 'admin/userdetail', component: UserDetailComponent },
   { path: 'admin/usermanament', component: UserManamentComponent },
   { path: 'admin/userreportdetail', component: UserReportdetailComponent },
+
   { path: '**', component: Error404Component },
 ];
 

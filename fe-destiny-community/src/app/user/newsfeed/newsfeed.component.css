@@ -1,3 +1,9 @@
+.form{
+    border: none;
+    padding: 0px;
+    box-shadow: none;
+}
+
 img.quest-preview-image {
     width: 14%;
 }
@@ -41,39 +47,6 @@ p.user-status-text.small.post-time {
     display: none;
 }
 
-/* .quick-post-body{
-    height: 160px;
-  overflow: auto;
-  overflow: -moz-scrollbars-none;
-  -ms-overflow-style: none;
-}
-.quick-post-body::-webkit-scrollbar {
-    width: 0 !important;
-    display: none;
-}
-.form-row{
-    margin-top: 0 !important;
-}
-.form-item-input {
-    width: 46.5%;
-    margin: 0 10px 20px;
-}
-select#viewer,
-select#city,
-select#district,
-select#ward {
-    height: 55px;
-    padding-left: 20px;
-    color: #adafca;
-}
-option .label-option{
-    color: #adafca;
-}
-.form-item-hashtag {
-    width: 100%;
-    margin: 0 10px 20px;
-} */
-/* check address */
 .address {
     display: flex;
     padding: 0px 20px;
@@ -161,3 +134,47 @@ option .label-option{
    .hidden-xs-up {
     display: none!important;
    }
+
+   @media screen and (max-width: 1440px) {
+    .grid.grid-3-6-3 > .grid-column:nth-child(3) {
+        display: none;
+    }
+}
+
+.picture-collage-row.medium .photo-preview-wrap {
+    height: 240px;
+}
+.picture-collage-row .photo-preview-wrap {
+    height: 160px;
+}
+.action-request.accept:hover{
+    cursor: no-drop;
+}
+.scroll-to-top {
+    position: fixed;
+    right: 100px;
+    bottom: 10px;
+    display: none;
+    width: 2.75rem;
+    height: 2.75rem;
+    text-align: center;
+    color: #fff;
+    background: rgba(90, 92, 105, .5);
+    line-height: 46px;
+    border-radius: 50%;
+  }
+  
+  .scroll-to-top:focus,
+  .scroll-to-top:hover {
+    color: #fff
+  }
+  
+  .scroll-to-top:hover {
+    background: #5a5c69;
+    cursor: pointer;
+    
+  }
+  
+  .scroll-to-top i {
+    font-weight: 800
+  }

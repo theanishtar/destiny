@@ -378,7 +378,7 @@ data-simplebar
   <!-- /NAVIGATION WIDGET INFO -->
 
   <!-- NAVIGATION WIDGET BUTTON -->
-  <p class="navigation-widget-info-button button small secondary">Đăng xuất</p>
+  <p class="navigation-widget-info-button button small secondary" (click)="logout()">Đăng xuất</p>
   <!-- /NAVIGATION WIDGET BUTTON -->
 </div>
 <!-- /NAVIGATION WIDGET INFO WRAP -->
@@ -467,7 +467,7 @@ data-simplebar
   <!-- /MENU -->
 
 <!-- NAVIGATION WIDGET SECTION TITLE -->
-<p class="navigation-widget-section-title">Tài khoản</p>
+<p class="navigation-widget-section-title">{{userDisplayName}}</p>
 <!-- /NAVIGATION WIDGET SECTION TITLE -->
 
 <!-- NAVIGATION WIDGET SECTION LINK -->
@@ -502,7 +502,7 @@ data-simplebar
 >
 <!-- /NAVIGATION WIDGET SECTION LINK -->
 <!-- NAVIGATION WIDGET SECTION TITLE -->
-<p class="navigation-widget-section-title">Về chúng tôi</p>
+<!-- <p class="navigation-widget-section-title">Về chúng tôi</p> -->
 <!-- /NAVIGATION WIDGET SECTION TITLE -->
 
 <!-- NAVIGATION WIDGET SECTION LINK -->
@@ -963,7 +963,7 @@ class="chat-widget chat-widget-overlay hidden sidebar right"
       <!-- MENU MAIN ITEM -->
       <li class="menu-main-item">
         <!-- MENU MAIN ITEM LINK -->
-        <a class="menu-main-item-link" href="">Về chúng tôi</a>
+        <!-- <a class="menu-main-item-link" href="">Về chúng tôi</a> -->
         <!-- /MENU MAIN ITEM LINK -->
       </li>
       <!-- /MENU MAIN ITEM -->
@@ -971,7 +971,7 @@ class="chat-widget chat-widget-overlay hidden sidebar right"
       <!-- MENU MAIN ITEM -->
       <li class="menu-main-item">
         <!-- MENU MAIN ITEM LINK -->
-        <a class="menu-main-item-link" href="">Liên hệ</a>
+        <a class="menu-main-item-link" href="contact">Liên hệ</a>
         <!-- /MENU MAIN ITEM LINK -->
       </li>
       <!-- /MENU MAIN ITEM -->
@@ -990,7 +990,7 @@ class="chat-widget chat-widget-overlay hidden sidebar right"
       type="text"
       id="search-main"
       name="search_main"
-      placeholder="Search here for people or groups"
+      placeholder="Tìm kiếm"
     />
     <!-- INTERACTIVE INPUT ICON WRAP -->
     <div class="interactive-input-icon-wrap">
@@ -1316,7 +1316,7 @@ class="chat-widget chat-widget-overlay hidden sidebar right"
         <!-- DROPDOWN BOX HEADER -->
         <div class="dropdown-box-header">
           <!-- DROPDOWN BOX HEADER TITLE -->
-          <p class="dropdown-box-header-title">Notifications</p>
+          <p class="dropdown-box-header-title">Thông báo</p>
           <!-- /DROPDOWN BOX HEADER TITLE -->
 
           <!-- DROPDOWN BOX HEADER ACTIONS -->
@@ -1812,7 +1812,7 @@ class="chat-widget chat-widget-overlay hidden sidebar right"
         <a
           class="dropdown-box-button secondary"
           href="notifications"
-          >View all Notifications</a
+          >Xem tất cả</a
         >
         <!-- /DROPDOWN BOX BUTTON -->
       </div>
@@ -1893,7 +1893,7 @@ class="chat-widget chat-widget-overlay hidden sidebar right"
       <!-- /DROPDOWN NAVIGATION HEADER -->
 
       <!-- DROPDOWN NAVIGATION CATEGORY -->
-      <p class="dropdown-navigation-category">Tài khoản</p>
+      <p class="dropdown-navigation-category">{{userDisplayName}}</p>
       <!-- /DROPDOWN NAVIGATION CATEGORY -->
 
       <!-- DROPDOWN NAVIGATION LINK -->
@@ -1917,8 +1917,8 @@ class="chat-widget chat-widget-overlay hidden sidebar right"
       <!-- /DROPDOWN NAVIGATION LINK -->
 
       <!-- DROPDOWN NAVIGATION BUTTON -->
-      <p class="dropdown-navigation-button button small secondary">
-        Logout
+      <p class="dropdown-navigation-button button small secondary" (click)="logout()">
+        Đăng xuất
       </p>
       <!-- /DROPDOWN NAVIGATION BUTTON -->
     </div>

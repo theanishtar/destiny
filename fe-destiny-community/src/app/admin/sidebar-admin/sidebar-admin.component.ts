@@ -82,10 +82,10 @@ export class SidebarAdminComponent {
     this.open = 0;
   }
 
-  // @HostListener('window:load', ['$event'])
-  // onWindowLoad(event: Event): void {
-  //   this.toggleSidebar();
-  // }
+  @HostListener('window:load', ['$event'])
+  onWindowLoad(event: Event): void {
+    this.toggleSidebar();
+  }
 
   @HostListener('window:resize', ['$event'])
   onWindowResize(event: Event): void {
@@ -94,7 +94,7 @@ export class SidebarAdminComponent {
 
   private toggleSidebar(): void {
       // get sidebar from local
-    const sideBarSmall = localStorage.getItem("sidebarSmall");
+    // const sideBarSmall = localStorage.getItem("sidebarSmall");
     const sideBar = document.querySelector('.sidebarD');
     const contentClose = document.querySelector('.content');
     if (sideBar) {
@@ -102,14 +102,14 @@ export class SidebarAdminComponent {
           this.renderer.addClass(sideBar, 'closeD');
           this.renderer.addClass(contentClose, 'contentCloseD');
       } else {
-          if(sideBarSmall?.match("true")){
-            this.renderer.addClass(sideBar, 'closeD');
-            this.renderer.addClass(contentClose, 'contentCloseD');
-          }
-          else{
+          // if(sideBarSmall?.match("true")){
+          //   this.renderer.addClass(sideBar, 'closeD');
+          //   this.renderer.addClass(contentClose, 'contentCloseD');
+          // }
+          // else{
             this.renderer.removeClass(sideBar, 'closeD');
             this.renderer.removeClass(contentClose, 'contentCloseD');
-          }
+          // }
       }
     }
   }

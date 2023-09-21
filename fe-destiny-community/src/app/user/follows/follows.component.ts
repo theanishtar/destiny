@@ -42,11 +42,4 @@ export class FollowsComponent implements OnInit {
   constructor(
     public modalService: ModalService,
   ) { }
-
-  openModal() {
-    this.modalService.openModal();
-  }
-  closeModal() {
-    this.modalService.closeModal();
-  }
 }

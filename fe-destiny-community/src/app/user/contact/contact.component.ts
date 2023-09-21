@@ -42,10 +42,4 @@ export class ContactComponent implements OnInit{
     public modalService: ModalService,
   ) { }
 
-  openModal() {
-    this.modalService.openModal();
-  }
-  closeModal() {
-    this.modalService.closeModal();
-  }
 }

@@ -58,12 +58,13 @@ i.fa-solid.fa-xmark {
 
 .btn-create-post {
     position: absolute;
-    right: 40;
+    right: 5%;
     bottom: 1.5rem;
 }
 /* check address */
 .address {
     display: flex;
+    margin-bottom: 1rem;
 }
 .cbx {
     position: relative;
@@ -162,6 +163,11 @@ i.fa-solid.fa-xmark {
     .main-form::-webkit-scrollbar  {
         width: 0;
         display: none;
+    }
+}
+@media screen and (max-width: 900px) {
+    button.btnClose-create-post {
+        right: 40px;
     }
 }
 /* ========================================================== */
