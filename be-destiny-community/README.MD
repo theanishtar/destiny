@@ -5,7 +5,7 @@
 
 <details>
 <summary>
-DangTH (14/09/2023): Using JWT to project with account from DB and password encoded</summary>
+DangTH (14/09/2023): Using Redis to develop function Register</summary>
 <br>
 
 Data request to `http://localhost:8080/oauth/login` : 
@@ -56,5 +56,51 @@ PONG
 
 ```redis
 redis-cli shutdown
+```
+</details>
+
+
+
+<details>
+<summary>
+DangTH (23/09/2023): Using Redis to develop function Register </summary>
+<br>
+
+Data request to `http://localhost:8080/v1/oauth/register` : 
+
+``` js
+{
+    "email": "user-testgmail.com",
+    "name": "NV Test",
+    "password": "ytuibj"
+}
+```
+
+Data response from `http://localhost:8080/v1/oauth/register/authen/{}` (JWT valid for 5 hours): 
+```js
+{
+    "user_id": 0,
+    "username": "abuigiueveyu",
+    "password": "$2a$10$66aoySQ7FgT8ajDC.uJdde2l8ZJpgLuFRx/5VmBlkuJadMOPBVxS2",
+    "fullname": null,
+    "email": "user-testgmail.com",
+    "intro": null,
+    "birthday": null,
+    "day_create": "2023-09-22T20:49:29.404+00:00",
+    "gender": null,
+    "avatar": null,
+    "thumb": null,
+    "online_last_date": null,
+    "mark": 0,
+    "user_status": false,
+    "ban": false,
+    "sub": null,
+    "authorities": [
+        {
+            "authority": "ROLE_USER"
+        }
+    ],
+    "location": null
+}
 ```
 </details>
