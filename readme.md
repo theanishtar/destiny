@@ -1,1 +1,2 @@
-# Mô tả các tahy đổi của DB
+# Mô tả các thay đổi của DB
+
