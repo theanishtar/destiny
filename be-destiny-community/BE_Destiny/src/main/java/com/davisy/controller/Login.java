@@ -3,7 +3,7 @@ package com.davisy.controller;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -89,7 +89,7 @@ public class Login {
 		 * Status code: 200: Đăng nhập thành công 404: Không thể tìm thấy tài khoản
 		 * trong DB 403: Tài khoản bị khóa, liên hệ admin để được mở 401: Đăng nhập thất
 		 * bại hoặc lỗi server
-		 */	
+		 */
 	}
 
 }

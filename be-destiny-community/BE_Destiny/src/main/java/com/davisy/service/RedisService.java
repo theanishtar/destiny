@@ -2,13 +2,12 @@ package com.davisy.service;
 
 import java.util.concurrent.TimeUnit;
 
-import javax.annotation.security.RolesAllowed;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import com.davisy.entity.User;
 import com.davisy.model.redis.BlockSpam;
 
 @Service
@@ -44,22 +43,38 @@ public class RedisService {
 		// ngượpc lại
 		System.out.println("Bi chan trong "+ (currentTime - b.getCurrenTime()));
 		return false;
-		
-//		if (currentTime != null && previousRequestTime != null)
-//			System.out.println("Request dau: " + (currentTime - previousRequestTime));
-//		if (previousRequestTime != null && currentTime - previousRequestTime < timeIntervalInSeconds) {
-//			// String valuex = (String) redisTemplate.opsForValue().get(key);
-//			Long requestCount = redisTemplate.opsForValue().increment(1, 1);
-//			if (requestCount > maxRequests) {
-//				return false;
-//			}
-//		} else {
-//			redisTemplate.opsForValue().set(key, currentTime, timeIntervalInSeconds, TimeUnit.SECONDS);
-//		}
-//		return true;
 	}
 	
     public void redisCheckMethod() {
         // Logic của phương thức
     }
+    
+    public void addCodeRegister(User u, String code) {
+    	if(redisTemplate.opsForValue().get(code) == null) {
+    		redisTemplate.opsForValue().set(code, u, 5, TimeUnit.MINUTES); //tồn tại mã xác nhận trong vòng 5 phút
+    	}
+    	
+    }
+    
+    public User authenRegister(String code) {
+    	if(redisTemplate.opsForValue().get(code) == null) {
+    		return null;
+    	}
+    	return (User) redisTemplate.opsForValue().get(code);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

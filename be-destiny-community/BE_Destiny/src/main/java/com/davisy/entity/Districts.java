@@ -6,12 +6,12 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,16 +24,22 @@ import lombok.NoArgsConstructor;
 public class Districts implements Serializable{
 	@Id
 	String code;
+	@JsonIgnore
 	String name;
+	@JsonIgnore
 	String name_en;
 	String full_name;
+	@JsonIgnore
 	String full_name_en;
+	@JsonIgnore
 	String code_name;
-	
+
+
 	@ManyToOne
 	@JoinColumn(name = "province_code")
 	Provinces provinces;
-	
+
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "administrative_unit_id")
 	Administrative_unit administrative_unit;
