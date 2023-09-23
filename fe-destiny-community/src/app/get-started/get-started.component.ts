@@ -27,39 +27,47 @@ import { ActivatedRoute } from '@angular/router';
 declare var toast: any;
 
 import { LoginService } from '../service/login.service';
+import { RegisterService } from '@app/service/register.service';
 @Component({
-  selector: 'app-get-started',
-  templateUrl: './get-started.component.html',
-  styleUrls: [
-    `../css/vendor/bootstrap.min.css`,
-    `../css/styles.min.css`,
-    './get-started.component.css'
-  ]
+	selector: 'app-get-started',
+	templateUrl: './get-started.component.html',
+	styleUrls: [
+		`../css/vendor/bootstrap.min.css`,
+		`../css/styles.min.css`,
+		'./get-started.component.css'
+	]
 })
-export class GetStartedComponent implements OnInit{
-  public loginForm!: FormGroup;
-  submitted: boolean = false;
-  checkedRemember: boolean = false;
-  private loginAdmin = '';
+export class GetStartedComponent implements OnInit {
+	public loginForm!: FormGroup;
+	public registerForm!: FormGroup;
+	submitted: boolean = false;
+	checkedRemember: boolean = false;
+	private loginAdmin = '';
+	registerFullname: string = '';
+	registerEmail: string = '';
+	registerPassword: string = '';
 
-  constructor(
+	constructor(
 		private formbuilder: FormBuilder,
-    public loginService: LoginService,
-    private cookieService: CookieService,
-    private http: HttpClient,
+		public loginService: LoginService,
+		private cookieService: CookieService,
+		private http: HttpClient,
 		private router: Router,
+		private route: ActivatedRoute,
+		public registerService: RegisterService,
 	) {
-    this.createFormLogin();
+		this.createFormLogin();
+		this.createFormRegister();
 	}
 
-  ngOnInit() {
+	ngOnInit() {
 
-    // Giao diện
-    tabs.tabs();
-    form.formInput();
-  }
-
-  createFormLogin() {
+		// Giao diện
+		tabs.tabs();
+		form.formInput();
+	}
+	/*===========Login with email and password===============*/
+	createFormLogin() {
 		this.loginForm = this.formbuilder.group({
 			email: [''],
 			password: [''],
@@ -70,11 +78,10 @@ export class GetStartedComponent implements OnInit{
 		return this.loginForm.controls;
 	}
 
-  loginWithEmailAndPassword() {
+	loginWithEmailAndPassword() {
 		this.submitted = true;
 		// if (this.loginForm.valid) {
 		this.loginService.loginUser(this.loginForm.value).subscribe((response) => {
-
 			function delay(ms: number) {
 				return new Promise(function (resolve) {
 					setTimeout(resolve, ms);
@@ -105,7 +112,7 @@ export class GetStartedComponent implements OnInit{
 					// 	userAdmin.email +
 					// 	'/' +
 					// 	userAdmin.password;
-          			window.location.href = 'http://localhost:4200/admin/index';
+					window.location.href = 'http://localhost:4200/admin';
 					this.loginForm.reset();
 				} else {
 					this.cookieService.set('full_name', response.name);
@@ -133,13 +140,13 @@ export class GetStartedComponent implements OnInit{
 		// }
 	}
 
-  setCookie(cname, cvalue, exdays) {
+	setCookie(cname, cvalue, exdays) {
 		const d = new Date();
 		d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
 		let expires = 'expires=' + d.toUTCString();
 		document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/';
 	}
-  logAdmin(data: any) {
+	logAdmin(data: any) {
 		// return this.http.post(this.userURL, data);
 		this.http.post<any>(this.loginAdmin, data).pipe(
 			// tap(() => console.log("Lấy dữ liệu thành công")),
@@ -159,6 +166,70 @@ export class GetStartedComponent implements OnInit{
 	isLogin() {
 		return this.loginService.isLogin();
 	}
+	/*===========Register===============*/
+	createFormRegister() {
+		this.registerForm = this.formbuilder.group({
+			fullname: ['', Validators.required],
+			email: ['', [Validators.required, Validators.email]],
+			password: ['', Validators.required],
+			rePassword: ['', Validators.required],
+		});
+	}
+
+	get registerFormControl() {
+		return this.registerForm.controls;
+	}
+	register() {
+		if (this.registerForm.get("password")!.value == this.registerForm.get("rePassword")!.value) {
+			var data = {
+				fullname: this.registerForm.get("fullname")!.value,
+				email: this.registerForm.get("email")!.value,
+				password: this.registerForm.get("password")!.value,
+			};
+			localStorage.setItem(
+				'registerEmail', data.email
+			);
+			this.registerService.registerUser(data).subscribe((response) =>{
+				if(response == ''){
+					new toast({
+						title: 'Thất bại!',
+						message: 'Tài khoản đã tồn tại!',
+						type: 'error',
+						duration: 3000,
+					});
+				}else{
+					localStorage.setItem(
+						'registerEmail', data.email
+					);
+				}
+			});
+		}else{
+			new toast({
+				title: 'Thất bại!',
+				message: 'Vui lòng kiểm tra lại xác nhận mật khẩu!',
+				type: 'error',
+				duration: 2000,
+			});
+		}
+	}
+	
+	autoLogin() {
+		const action = this.route.snapshot.queryParams['action'];
+		if (action === 'auto') {
+			this.router.navigate(
+				['/login'],
+				{ queryParams: { 
+					  action: 'no-auto', 
+					  email: this.loginForm.get('email'), 
+					  password: this.loginForm.get('password') 
+				  } 
+				 }
+			  );
+		}else{
+			alert("Action không phải auto má ơi")
+		}
+	}
+	/*============Template==============*/
 	showHidePassLogin() {
 		let input = document.getElementById('passwordForm') as HTMLInputElement;
 		// console.log(input!);
@@ -171,8 +242,8 @@ export class GetStartedComponent implements OnInit{
 		}
 	}
 	showHidePassRegister() {
-		let input2 = document.getElementById('register-password') as HTMLInputElement;
-		let input3 = document.getElementById('register-rePassword') as HTMLInputElement;
+		let input2 = document.getElementById('password') as HTMLInputElement;
+		let input3 = document.getElementById('rePassword') as HTMLInputElement;
 		if (input2.type === 'password' || input2.type === 'password') {
 			input2.type = 'text';
 			input3.type = 'text';

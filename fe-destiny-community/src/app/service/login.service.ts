@@ -35,13 +35,13 @@ export class LoginService {
 					if (error.status === 200) {
 						// Handle successful response
 						return [];
-					} else if (error.status === 401 || error.status === 404) {
+					} else if (error.status === 404) {
 						// Handle redirect
 						// You might want to navigate to the new location
 						return throwError(
 							new toast({
 								title: 'Thất bại!',
-								message: 'Vui lòng kiểm tra lại thông tin',
+								message: 'Tài khoản không tồn tại',
 								type: 'error',
 								duration: 1500,
 							})

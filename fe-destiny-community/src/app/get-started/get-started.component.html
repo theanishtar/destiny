@@ -9,9 +9,7 @@
       <!-- LOGO -->
       <div class="logo">
         <!-- ICON LOGO VIKINGER -->
-        <svg class="icon-logo-vikinger">
-          <use xlink:href="#svg-logo-vikinger"></use>
-        </svg>
+        <img src="../assets/images/logo-euphoria.png" alt="" class="icon-logo-vikinger">
         <!-- /ICON LOGO VIKINGER -->
       </div>
       <!-- /LOGO -->
@@ -202,22 +200,7 @@
         <!-- /FORM BOX TITLE -->
   
         <!-- FORM -->
-        <form class="form">
-          <!-- FORM ROW -->
-          <div class="form-row">
-            <!-- FORM ITEM -->
-            <div class="form-item">
-              <!-- FORM INPUT -->
-              <div class="form-input">
-                <label for="register-email">Email</label>
-                <input type="text" id="register-email" name="register_email">
-              </div>
-              <!-- /FORM INPUT -->
-            </div>
-            <!-- /FORM ITEM -->
-          </div>
-          <!-- /FORM ROW -->
-  
+        <form class="form" id="registerForm" [formGroup]="registerForm" (ngSubmit)="register()" action="" novalidate>   
           <!-- FORM ROW -->
           <div class="form-row">
             <!-- FORM ITEM -->
@@ -225,14 +208,37 @@
               <!-- FORM INPUT -->
               <div class="form-input">
                 <label for="register-username">Họ tên</label>
-                <input type="text" id="register-username" name="register_username">
+                <input type="text" formControlName="fullname" id="fullname" required>
               </div>
               <!-- /FORM INPUT -->
             </div>
             <!-- /FORM ITEM -->
+            <span *ngIf="registerForm.get('fullname')?.invalid && registerForm.get('fullname')?.touched">
+              <div style="color: red;">
+                Vui lòng nhập họ tên!
+              </div>
+            </span>
           </div>
           <!-- /FORM ROW -->
-  
+          <!-- FORM ROW -->
+          <div class="form-row">
+            <!-- FORM ITEM -->
+            <div class="form-item">
+              <!-- FORM INPUT -->
+              <div class="form-input">
+                <label for="register-email">Email</label>
+                <input type="text" formControlName="email" id="email" required>
+              </div>
+              <!-- /FORM INPUT -->
+              <span *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+                <div style="color: red;">
+                  Vui lòng kiểm tra email!
+                </div>
+              </span>
+            </div>
+            <!-- /FORM ITEM -->
+          </div>
+          <!-- /FORM ROW -->
           <!-- FORM ROW -->
           <div class="form-row">
             <!-- FORM ITEM -->
@@ -240,7 +246,7 @@
               <!-- FORM INPUT -->
               <div class="form-input">
                 <label for="register-password">Mật khẩu</label>
-                <input type="password" id="register-password" name="register_password">
+                <input type="password" formControlName="password" id="password" required>
                 <span class="form-item-icon-eye hide-show-pass">
                   <i
                     (click)="showHidePassRegister()"
@@ -250,6 +256,11 @@
                 </span>
               </div>
               <!-- /FORM INPUT -->
+              <span *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+                <div style="color: red;">
+                  Vui lòng nhập mật khẩu!
+                </div>
+              </span>
             </div>
             <!-- /FORM ITEM -->
           </div>
@@ -262,7 +273,7 @@
       <!-- FORM INPUT -->
       <div class="form-input">
         <label for="register-rePassword">Xác nhận mật khẩu</label>
-        <input type="password" id="register-rePassword" name="register_rePassword">
+        <input type="password" formControlName="rePassword" id="rePassword" required>
         <span class="form-item-icon-eye hide-show-pass">
           <i
             (click)="showHidePassRegister()"
@@ -271,6 +282,11 @@
           ></i>
         </span>
       </div>
+      <span *ngIf="registerForm.get('rePassword')?.invalid && registerForm.get('rePassword')?.touched">
+        <div style="color: red;">
+          Vui lòng nhập xác nhận mật khẩu!
+        </div>
+      </span>
       <!-- /FORM INPUT -->
     </div>
     <!-- /FORM ITEM -->
@@ -283,7 +299,7 @@
             <!-- FORM ITEM -->
             <div class="form-item">
               <!-- BUTTON -->
-              <button class="button medium primary">Đăng ký!</button>
+              <button class="button medium primary" type="submit">Đăng ký!</button>
               <!-- /BUTTON -->
             </div>
             <!-- /FORM ITEM -->

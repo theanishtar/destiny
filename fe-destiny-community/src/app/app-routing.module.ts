@@ -19,6 +19,7 @@ import { SettingComponent } from './user/setting/setting.component';
 import { ContactComponent } from './user/contact/contact.component';
 import { HistoryComponent } from './user/history/history.component';
 import { NotificationsComponent } from './user/notifications/notifications.component';
+import { WaitForConfirmationComponent } from './get-started/wait-for-confirmation/wait-for-confirmation.component';
 
 // Admin
 import { IndexAdminComponent } from './admin/index-admin/index-admin.component';
@@ -35,6 +36,8 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'get-started', component: GetStartedComponent },
   { path: 'forgotpassword', component: ForgotPasswordComponent },
+  { path: 'wait-confirm/:authregis', component: WaitForConfirmationComponent },
+
 
   // user
   // { path: 'newsfeed', component: NewsfeedComponent, canActivate: [authGuard]},

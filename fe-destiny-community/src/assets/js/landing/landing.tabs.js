@@ -9,7 +9,6 @@ export const tabs = {
         type: "slide-in-right",
       },
       onTabChange: function (activeTab) {
-        console.log("tabs nè");
         const firstInput = activeTab.querySelector("input");
 
         firstInput.focus();

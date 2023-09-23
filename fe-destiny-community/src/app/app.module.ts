@@ -36,6 +36,7 @@ import { UserDetailComponent } from './admin/user-detail/user-detail.component';
 import { UserManamentComponent } from './admin/user-manament/user-manament.component';
 import { UserReportdetailComponent } from './admin/user-reportdetail/user-reportdetail.component';
 import { GetStartedComponent } from './get-started/get-started.component';
+import { WaitForConfirmationComponent } from './get-started/wait-for-confirmation/wait-for-confirmation.component';
 
 
 
@@ -70,6 +71,7 @@ import { GetStartedComponent } from './get-started/get-started.component';
     UserManamentComponent,
     UserReportdetailComponent,
     GetStartedComponent,
+    WaitForConfirmationComponent,
   ],
   imports: [
     BrowserModule,

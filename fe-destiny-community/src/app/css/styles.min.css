@@ -735,10 +735,16 @@ textarea::placeholder {
 
 .icon-logo-vikinger {
   fill: #fff;
-  width: 42px;
-  height: 60px;
+    width: 120px;
+    height: 100px;
+    position: absolute;
+    top: -15%;
 }
-
+@media screen and (max-width: 1290px) {
+  .icon-logo-vikinger {
+      top: 3%;
+  }
+}
 .icon-logo-vikinger.small {
   width: 28px;
   height: 40px;
