@@ -111,9 +111,9 @@ public class User implements UserDetails, Serializable {
 	@OneToMany(mappedBy = "user")
 	List<Share> shares;
 
-	@JsonIgnore
-	@OneToMany(mappedBy = "user")
-	List<Follower> followers;
+//	@JsonIgnore
+//	@OneToMany(mappedBy = "user")
+//	List<Follower> followers;
 
 	@JsonIgnore
 	public String[] getAuth() {
