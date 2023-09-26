@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-
-import { liquid } from "../../../assets/js/utils/liquidify.js";
+import { TranslateService } from '@ngx-translate/core';
+import { liquid } from '../../../assets/js/utils/liquidify.js';
 // import { tns } from '../../../assets/js/vendor/ti';
 import { avatarHexagons } from '../../../assets/js/global/global.hexagons.js';
 import { tooltips } from '../../../assets/js/global/global.tooltips.js';
@@ -11,7 +11,7 @@ import { content } from '../../../assets/js/content/content.js';
 import { form } from '../../../assets/js/form/form.utils.js';
 import 'src/assets/js/utils/svg-loader.js';
 
-// 
+//
 import { ModalService } from '../service/modal.service';
 @Component({
   selector: 'app-setting',
@@ -20,13 +20,11 @@ import { ModalService } from '../service/modal.service';
     `../../css/vendor/bootstrap.min.css`,
     `../../css/styles.min.css`,
     `../../css/vendor/simplebar.css`,
-    './setting.component.css'
-  ]
+    './setting.component.css',
+  ],
 })
-
-export class SettingComponent implements OnInit{
+export class SettingComponent implements OnInit {
   ngOnInit() {
-
     liquid.liquid();
     avatarHexagons.avatarHexagons();
     tooltips.tooltips();
@@ -40,5 +38,9 @@ export class SettingComponent implements OnInit{
 
   constructor(
     public modalService: ModalService,
-  ) { }
+    private translateService: TranslateService
+  ) {}
+  public selectLg(event: any) {
+    this.translateService.use(event.target.value);
+  }
 }

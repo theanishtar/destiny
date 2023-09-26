@@ -1,44 +1,66 @@
 .menu-item-link-icon {
-
     font-size: 18px;
-}
-
-li.menu-item.active i.fa-solid {
+  }
+  
+  li.menu-item.active i.fa-solid {
     color: #fff;
-}
-
-li.menu-item:not(.active) a.menu-item-link.text-tooltip-tfr:hover i.fa-solid {
+  }
+  
+  li.menu-item:not(.active) a.menu-item-link.text-tooltip-tfr:hover i.fa-solid {
     color: #23d2e2;
-}
-
-i.fa-solid {
+  }
+  
+  i.fa-solid {
     color: #adafca;
-}
-
-a.menu-main-item-link {
+  }
+  
+  a.menu-main-item-link {
     font-size: 15px !important;
-}
-
-.logo,
-h1.header-brand-text {
+  }
+  
+  .logo,
+  h1.header-brand-text {
     margin-left: 0 !important;
-}
-
-h1.header-brand-text {
+  }
+  
+  h1.header-brand-text {
     font-size: 25px !important;
-}
-
-.icon-logo-vikinger.small {
+  }
+  
+  .icon-logo-vikinger.small {
     width: 100px;
     height: 75px;
-}
-p.fullname-logged{
+  }
+  p.fullname-logged {
     color: #fff;
     font-size: 15px;
     font-weight: 700;
     line-height: 80px;
     cursor: pointer;
-}
-.action-item.dark.header-settings-dropdown-trigger {
+  }
+  .action-item.dark.header-settings-dropdown-trigger {
     width: 250px;
-}
+  }
+  .icon-logo-vikinger{
+    position: relative;
+  }
+  /* ========================= */
+  a .menu-item-link {
+    position: relative;
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 10px;
+  }
+  
+  a[data-title]:hover::after {
+    content: attr(data-title);
+    position: absolute;
+    margin-top: 2px;
+    margin-left: 42px;
+    z-index: 100;
+    width: 250px;
+    font-size: 15px;
+    transform: translate(10px, 0px);
+    transition: all 0.3s ease-in-out 0s;
+  }
+  

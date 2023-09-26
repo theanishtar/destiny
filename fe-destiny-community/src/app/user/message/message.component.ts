@@ -26,7 +26,7 @@ import { ModalService } from '../service/modal.service';
 })
 export class MessageComponent implements OnInit{
   ngOnInit() {
-
+    this.openMessage();
     liquid.liquid();
     avatarHexagons.avatarHexagons();
     tooltips.tooltips();
@@ -41,4 +41,31 @@ export class MessageComponent implements OnInit{
   constructor(
     public modalService: ModalService,
   ) { }
+
+  openMessage() {
+    let isOriginal = true;
+    // Lấy tất cả các menu item
+    const menuItems = document.querySelectorAll('.chat-widget-message');
+    const chat_widget_form = document.querySelector(".chat-widget-chat") as HTMLButtonElement;
+    const chat_origin = document.querySelector(".chat-widget-chat-orgin") as HTMLButtonElement;
+    
+    // Lặp qua từng menu item và thêm sự kiện click vào chúng
+    menuItems.forEach(item => {
+      item.addEventListener('click', () => {
+        // Loại bỏ class "active" từ tất cả các menu item
+        menuItems.forEach(menuItem => {
+          menuItem.classList.remove('active');
+          chat_widget_form.style.display = "none";
+          chat_origin.style.display = "block";
+          isOriginal = false;
+        });
+
+        // Thêm class "active" vào menu item được click
+        item.classList.add('active');
+        isOriginal = true;
+        chat_widget_form.style.display = "block";
+        chat_origin.style.display = "none";
+      });
+    });
+  }
 }

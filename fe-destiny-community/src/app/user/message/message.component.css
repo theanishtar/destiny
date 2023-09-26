@@ -1,11 +1,156 @@
-.section-header-info[_ngcontent-ng-c3016853776]
-  .section-title[_ngcontent-ng-c3016853776] {
+.section-header-info
+  .section-title{
   margin-top: 20px;
   font-size: 1.625rem;
   font-weight: 700;
 }
-.button[_ngcontent-ng-c3016853776] .button-icon[_ngcontent-ng-c3016853776] {
+.button .button-icon {
   fill: #fff;
   margin-top: 14px;
   transition: fill 0.2s ease-in-out;
+}
+.translation {
+  position: relative;
+  margin-top: 20px;
+}
+
+.translated-content {
+  display: none;
+}
+
+.translated-content.active {
+  display: block;
+}
+
+/* tab */
+.wrapper {
+  max-width: 50rem;
+  width: 100%;
+  margin: 0 auto;
+}
+.tabs {
+  position: relative;
+  margin: 1rem 0 3rem 0;
+  background: #fff;
+  height: 14.75rem;
+}
+.tabs::before,
+.tabs::after {
+  content: "";
+  display: table;
+}
+.tabs::after {
+  clear: both;
+}
+.tab {
+  float: left;
+}
+label.tab-label.main-message {
+  position: absolute;
+  left: 36%;
+}
+label.tab-label.wait-message {
+  position: absolute;
+  right: 0;
+  color: #727392;
+}
+
+.tab-switch {
+  display: none;
+}
+.tab-label {
+  position: relative;
+  display: block;
+  line-height: 2.75em;
+  height: 3em;
+  padding: 0 1.618em;
+  background: #fff;
+  /* border-right: 0.125rem solid #fff; */
+  color: #3e3f5e;
+  font-weight: 700;
+  cursor: pointer;
+  top: 0;
+  transition: all 0.25s;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+.tab-label:hover {
+  top: -0.25rem;
+  transition: top 0.25s;
+}
+.tab-content {
+  height: 12rem;
+  position: absolute;
+  z-index: 1;
+  top: 2.75em;
+  left: 0;
+  /* padding: 1.618rem; */
+  background: #fff;
+  color: #2c3e50;
+  border-top: 1px solid #2c3e50;
+  width: 100%;
+  opacity: 0;
+  transition: all 0.35s;
+}
+.tab-switch:checked + .tab-label {
+  background: #fff;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  border-bottom: 0;
+  border-bottom: 0.125rem solid #5779EB;
+  transition: all 0.35s;
+  z-index: 1;
+  top: -0.0625rem;
+  color: #5779EB;
+}
+.tab-switch:checked + label + .tab-content {
+  z-index: 2;
+  opacity: 1;
+  transition: all 0.35s;
+}
+/*  */
+
+.chat-widget-chat, .chat-widget-chat-orgin.active {
+  display: none;
+}
+
+.chat-widget-chat.active,  .chat-widget-chat-orgin{
+  display: block;
+  width: auto;
+}
+.chat-widget-chat{
+  width: auto;
+}
+.content-text {
+  padding: 0 1rem;
+}
+
+.content-text h3{
+  font-size: 30px;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+.content-text p {
+  font-size: 16px;
+}
+.conten-wellcome {
+  position: absolute;
+  margin: 5% 0%;
+  text-align: center;
+}
+.img-chat img {
+  width: 70%;
+}
+
+@media screen and (max-width: 1440px) {
+  .img-chat img {
+    width: 50%;
+  }
+  .content-text h3{
+    font-size: 25px;
+  }
+  .content-text p {
+    font-size: 14px;
+  }
+  .conten-wellcome {
+    margin: 15% 10% 15% 0;
+  }
 }

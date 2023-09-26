@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {
-	FormGroup,
-	FormBuilder,
-	Validators,
-	FormControl,
+  FormGroup,
+  FormBuilder,
+  Validators,
+  FormControl,
 } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -28,35 +28,73 @@ import { RegisterService } from '@app/service/register.service';
   styleUrls: ['./wait-for-confirmation.component.css']
 })
 export class WaitForConfirmationComponent {
-  
-  ngOnInit() {
-    
-	}
-  
-  constructor(
-		private formbuilder: FormBuilder,
-		private cookieService: CookieService,
-		private http: HttpClient,
-		private router: Router,
-		private route: ActivatedRoute,
-		public registerService: RegisterService,
-	) {
-	}
 
-  verification(){
+  ngOnInit() {
+    this.startCountdown();
+  }
+
+  constructor(
+    private formbuilder: FormBuilder,
+    private cookieService: CookieService,
+    private http: HttpClient,
+    private router: Router,
+    private route: ActivatedRoute,
+    public registerService: RegisterService,
+  ) {
+  }
+
+  startCountdown() {
+    const countdownElement = document.getElementById('countdown') as HTMLDivElement;
+
+    let countdownInterval: number;
+    let timeLeft = 300; // 5 phút
+
+    function formatTime(seconds: number): string {
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = seconds % 60;
+      return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+    }
+
+    function updateCountdown() {
+      countdownElement.innerText = formatTime(timeLeft);
+
+      if (timeLeft <= 0) {
+        clearInterval(countdownInterval);
+        // countdownElement.innerText = 'Hết giờ!';
+        new toast({
+          title: 'Xác thực thất bại!',
+          message: 'Sẽ chuyển trang sau 3 giây',
+          type: 'error',
+          duration: 3000,
+        });
+        // Chuyển đến trang khác sau khi hết giờ
+        setTimeout(() => {
+          window.location.href = 'home';
+        }, 3000);
+      }
+
+      timeLeft--;
+    }
+
+    updateCountdown();
+    countdownInterval = window.setInterval(updateCountdown, 1000);
+  }
+
+
+  verification() {
     this.checkCodeMail();
   }
 
-  checkCodeMail(){
+  checkCodeMail() {
     this.registerService.checkCodeMail().subscribe((res) => {
-      if(res == ''){
+      if (res == '') {
         new toast({
           title: 'Thất bại!',
           message: 'Xác thực thất bạn!',
           type: 'error',
           duration: 5000,
         });
-      }else{
+      } else {
         new toast({
           title: 'Thành công!',
           message: 'Đăng ký thành công',

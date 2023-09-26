@@ -14,12 +14,13 @@
       <!-- /SECTION BANNER ICON -->
 
       <!-- SECTION BANNER TITLE -->
-      <p class="section-banner-title">Cài đặt</p>
+      <p class="section-banner-title">{{ "sidebar_setting" | translate }}</p>
       <!-- /SECTION BANNER TITLE -->
 
       <!-- SECTION BANNER TEXT -->
       <p class="section-banner-text">
-        Giao diện, ngôn ngữ,...!
+        {{ "setting_giaodien" | translate }},
+        {{ "setting_ngonngu" | translate }},...!
       </p>
       <!-- /SECTION BANNER TEXT -->
     </div>
@@ -37,7 +38,7 @@
           <!-- /SECTION PRETITLE -->
 
           <!-- SECTION TITLE -->
-          <h2 class="section-title">Cài đặt</h2>
+          <h2 class="section-title">{{ "sidebar_setting" | translate }}</h2>
           <!-- /SECTION TITLE -->
         </div>
         <!-- /SECTION HEADER INFO -->
@@ -49,7 +50,7 @@
         <!-- WIDGET BOX -->
         <div class="widget-box">
           <!-- WIDGET BOX TITLE -->
-          <p class="widget-box-title">Giao diện</p>
+          <p class="widget-box-title">{{ "setting_giaodien" | translate }}</p>
           <!-- /WIDGET BOX TITLE -->
 
           <!-- WIDGET BOX CONTENT -->
@@ -59,12 +60,14 @@
               <!-- SWITCH OPTION -->
               <div class="switch-option">
                 <!-- SWITCH OPTION TITLE -->
-                <p class="switch-option-title">Chế độ tối</p>
+                <p class="switch-option-title">
+                  {{ "user_chedotoi" | translate }}
+                </p>
                 <!-- /SWITCH OPTION TITLE -->
 
                 <!-- SWITCH OPTION TEXT -->
                 <p class="switch-option-text">
-                  Là tính năng giúp người dùng trải nghiệm giao diện nền tối, giảm ánh sáng màn hình và tạo môi trường thoải mái cho đôi mắt trong điều kiện ánh sáng yếu hoặc ban đêm.
+                  {{ "user_description_chedotoi" | translate }}
                 </p>
                 <!-- /SWITCH OPTION TEXT -->
 
@@ -87,7 +90,7 @@
         <!-- WIDGET BOX -->
         <div class="widget-box">
           <!-- WIDGET BOX TITLE -->
-          <p class="widget-box-title">Ngôn ngữ</p>
+          <p class="widget-box-title">{{ "setting_ngonngu" | translate }}</p>
           <!-- /WIDGET BOX TITLE -->
 
           <!-- WIDGET BOX CONTENT -->
@@ -98,9 +101,9 @@
               <div class="form-row split">
                 <!-- FORM ITEM -->
                 <div class="form-item centered">
-                  <label class="form-title" for="profile-privacy-visibility"
-                    >Chọn ngôn ngữ</label
-                  >
+                  <label class="form-title" for="profile-privacy-visibility">{{
+                    "setting_chonngonngu" | translate
+                  }}</label>
                 </div>
                 <!-- /FORM ITEM -->
 
@@ -109,11 +112,16 @@
                   <!-- FORM SELECT -->
                   <div class="form-select">
                     <select
+                      (change)="selectLg($event)"
                       id="profile-privacy-visibility"
                       name="profile_privacy_visibility"
                     >
-                      <option value="1" selected>Tiếng Anh</option>
-                      <option value="2">Tiếng Việt</option>
+                      <option value="en-US">
+                        {{ "setting_english" | translate }}
+                      </option>
+                      <option value="vi_VN" selected>
+                        {{ "setting_vietnam" | translate }}
+                      </option>
                     </select>
                     <!-- FORM SELECT ICON -->
                     <svg class="form-select-icon icon-small-arrow">

@@ -39,6 +39,7 @@ export class NewsfeedComponent implements OnInit {
   ngOnInit() {
     this.userDisplayName = this.cookieService.get('full_name');  
     this.checkSrcoll();
+    this.translate();
     liquid.liquid();
     avatarHexagons.avatarHexagons();
     tooltips.tooltips();
@@ -57,6 +58,25 @@ export class NewsfeedComponent implements OnInit {
     private loginService: LoginService,
     private router: Router,
   ) { }
+
+  translate() {
+    document.addEventListener("DOMContentLoaded", function () {
+      const translateButton = document.querySelector(".translate-button") as HTMLButtonElement;
+      const backButton = document.querySelector(".back-button") as HTMLButtonElement;
+      const originalContent = document.querySelector(".original-content") as HTMLElement;
+      const translatedContent = document.querySelector(".translated-content") as HTMLElement;
+    
+      translateButton.addEventListener("click", function () {
+        originalContent.style.display = "none";
+        translatedContent.classList.add("active");
+      });
+    
+      backButton.addEventListener("click", function () {
+        originalContent.style.display = "block";
+        translatedContent.classList.remove("active");
+      });
+    });
+  }
 
   @ViewChild('elementToScroll', { static: false }) elementToScroll: ElementRef;
 

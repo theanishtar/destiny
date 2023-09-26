@@ -36,8 +36,8 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'get-started', component: GetStartedComponent },
   { path: 'forgotpassword', component: ForgotPasswordComponent },
-  { path: 'wait-confirm/:authregis', component: WaitForConfirmationComponent },
-
+  // { path: 'wait-confirm/:authregis', component: WaitForConfirmationComponent },
+  { path: 'wait-confirm', component: WaitForConfirmationComponent },
 
   // user
   // { path: 'newsfeed', component: NewsfeedComponent, canActivate: [authGuard]},

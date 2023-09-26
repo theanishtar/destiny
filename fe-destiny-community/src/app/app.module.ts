@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -37,8 +38,12 @@ import { UserManamentComponent } from './admin/user-manament/user-manament.compo
 import { UserReportdetailComponent } from './admin/user-reportdetail/user-reportdetail.component';
 import { GetStartedComponent } from './get-started/get-started.component';
 import { WaitForConfirmationComponent } from './get-started/wait-for-confirmation/wait-for-confirmation.component';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
-
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 @NgModule({
   declarations: [
@@ -79,9 +84,16 @@ import { WaitForConfirmationComponent } from './get-started/wait-for-confirmatio
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    TranslateModule.forRoot({
+      defaultLanguage: 'vi_VN',
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      },
+    }),
   ],
-  providers: [
-  ],
-  bootstrap: [AppComponent]
+  providers: [],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

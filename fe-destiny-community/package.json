@@ -8,7 +8,6 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "purgecss": "purgecss --config purgecss.config.js -o ./src/app/css/item/element.css"
-
   },
   "private": true,
   "dependencies": {
@@ -20,6 +19,8 @@
     "@angular/platform-browser": "^16.1.0",
     "@angular/platform-browser-dynamic": "^16.1.0",
     "@angular/router": "^16.1.0",
+    "@ngx-translate/core": "^15.0.0",
+    "@ngx-translate/http-loader": "^8.0.0",
     "@types/angular": "^1.8.5",
     "@types/chart.js": "^2.9.38",
     "chart.js": "^4.4.0",

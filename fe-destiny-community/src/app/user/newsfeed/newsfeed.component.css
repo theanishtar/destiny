@@ -178,3 +178,23 @@ p.user-status-text.small.post-time {
   .scroll-to-top i {
     font-weight: 800
   }
+
+  p.translate-button,
+  p.back-button {
+    color: #5779EB;
+    font-size: 13px;
+    margin-top: 1rem;
+    cursor: pointer;
+}
+.translation {
+    position: relative;
+    margin-top: 20px;
+  }
+  
+  .translated-content {
+    display: none;
+  }
+  
+  .translated-content.active {
+    display: block;
+  }
