@@ -1,4 +1,4 @@
-package com.davisy.model.redis;
+package com.davisy.model.cache;
 
 import java.io.Serializable;
 

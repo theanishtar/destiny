@@ -104,3 +104,49 @@ Data response from `http://localhost:8080/v1/oauth/register/authen/{}` (JWT vali
 }
 ```
 </details>
+
+
+
+<details>
+<summary>
+DangTH (18/09/2023): Using Redis reduce amount Request period</summary>
+<br>
+
+## Cài đặt 
+
+[Redis Windows](https://github.com/dangth12/redis) 
+
+## chạy
+
+```redis
+redis-cli 
+127.0.0.1:6379> ping
+PONG
+```
+
+## Tắt Server
+
+`Ctrl + C` hoặc chạy lệnh sau
+
+```redis
+redis-cli shutdown
+```
+</details>
+
+
+
+<details>
+<summary>
+DangTH (27/09/2023): Using Redis and Jedis (fix Login func) </summary>
+<br>
+
+```js
+/*
+* Status code: 
+* 200: Đăng nhập thành công 
+* 404: Không thể tìm thấy tài khoản trong DB 
+* 403: Tài khoản bị khóa, liên hệ admin để được mở  
+* 401: Đăng nhập thất bại hoặc lỗi server
+*/
+```
+</details>

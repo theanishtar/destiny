@@ -135,15 +135,19 @@ public class AuthenticationService {
 
 	public LoginResponse loginResponseService(AuthenticationRequest authenticationRequest) {
 		/*
-		 * Status code: 200: Đăng nhập thành công 404: Không thể tìm thấy tài khoản
-		 * trong DB 403: Tài khoản bị khóa, liên hệ admin để được mở 401: Đăng nhập thất
-		 * bại hoặc lỗi server
+		 * Status code: 
+		 * 200: Đăng nhập thành công 
+		 * 404: Không thể tìm thấy tài khoản trong DB 
+		 * 403: Tài khoản bị khóa, liên hệ admin để được mở 
+		 * 401: Đăng nhập thất bại hoặc lỗi server
 		 */
 		try {
 			User user = userService.findByEmail(authenticationRequest.getEmail());
-			if (user == null) {
+			if (user == null) 
 				return new LoginResponse(404, null, "Dont find your account");
-			}
+			
+			if(!passwordEncoder.matches(authenticationRequest.getPassword(), user.getPassword()))
+				return new LoginResponse(401, null, "Username or password dont match from Database!");
 			System.out.println(user.getFullname());
 			if (user.isBan())
 				return new LoginResponse(403, null, "Your account is blocked");

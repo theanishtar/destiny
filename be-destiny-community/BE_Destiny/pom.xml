@@ -9,7 +9,7 @@
 		<version>3.1.2</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.poly</groupId>
+	<groupId>com.davisy</groupId>
 	<artifactId>demo</artifactId>
 	<version>1.0</version>
 	<packaging>jar</packaging>

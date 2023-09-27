@@ -86,9 +86,11 @@ public class Login {
 		LoginResponse resLog = authenticationService.loginResponseService(authenticationRequest);
 		return ResponseEntity.status(resLog.getStatusResponse()).body(resLog.getData());
 		/*
-		 * Status code: 200: Đăng nhập thành công 404: Không thể tìm thấy tài khoản
-		 * trong DB 403: Tài khoản bị khóa, liên hệ admin để được mở 401: Đăng nhập thất
-		 * bại hoặc lỗi server
+		 * Status code: 
+		 * 200: Đăng nhập thành công 
+		 * 404: Không thể tìm thấy tài khoản trong DB 
+		 * 403: Tài khoản bị khóa, liên hệ admin để được mở  
+		 * 401: Đăng nhập thất bại hoặc lỗi server
 		 */
 	}
 
