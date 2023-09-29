@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.davisy.entity.User;
 
-public interface UserDao extends JpaRepository<User, String>  {
+public interface UserDao extends JpaRepository<User, Integer>  {
 	@Query(value = "SELECT *FROM users WHERE email:=email AND password:=password",nativeQuery = true)
 	public User findByEmailAndPassword(String email,String password);
 	

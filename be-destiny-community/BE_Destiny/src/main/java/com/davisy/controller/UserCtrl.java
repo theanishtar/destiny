@@ -1,5 +1,7 @@
 package com.davisy.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -11,6 +13,7 @@ import com.davisy.entity.Roles;
 import com.davisy.entity.User;
 import com.davisy.reponsitory.RolesReponsitory;
 import com.davisy.service.UserService;
+import com.davisy.service.impl.UserServiceImpl;
 
 @RestController
 @CrossOrigin("*")
@@ -18,7 +21,7 @@ public class UserCtrl {
 	
 
 	@Autowired
-	private UserService userService;
+	private UserServiceImpl userService;
 	
 	@Autowired
 	RolesReponsitory reponsitory;
@@ -26,6 +29,11 @@ public class UserCtrl {
 	@GetMapping("/v1/oauth/user/{email}")
 	public ResponseEntity<User> getU(@PathVariable String email){
 		return ResponseEntity.status(200).body(userService.findByEmail(email));
+	}
+	
+	@GetMapping("v1/oauth/alluser")
+	public List<User> getAll(){
+		return userService.findAll();
 	}
 	
 	@GetMapping("/v1/oauth/user/role/{role}")

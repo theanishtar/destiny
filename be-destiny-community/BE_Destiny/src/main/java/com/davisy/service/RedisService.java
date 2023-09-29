@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.davisy.constant.Cache;
 import com.davisy.entity.User;
+import com.davisy.model.RegisterUser;
 import com.davisy.model.cache.BlockSpam;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -68,21 +69,25 @@ public class RedisService {
         // Logic của phương thức
     }
     
-    public void addCodeRegister(User u, String code) {
-    	if(cacheService.getByKey(code).equals("") || cacheService.getByKey(code) == null)
-    		cacheService.writeCacheAtTime(code, u, 5, Cache.TimeUnit_SECONDS);//tồn tại mã xác nhận trong vòng 5 phút
-    	
+    public void addCodeRegister(RegisterUser u, String code) {
+    	if(cacheService.getByKey(code) == null)
+    		cacheService.writeCacheAtTime(code, u, 5, Cache.TimeUnit_MINUTE);//tồn tại mã xác nhận trong vòng 5 phút
     }
     
-    public User authenRegister(String code) {
-    	
-    	if(cacheService.getByKey(code).equals("") || cacheService.getByKey(code) == null)
+    public RegisterUser authenRegister(String code) {
+    	RegisterUser u = null;
+    	System.out.println("FIND Redis: "+cacheService.getByKey(code)+":");
+    	System.out.println(cacheService.getByKey(code)==null);
+    	if(cacheService.getByKey(code) == null)
     		return null;
     	try {
-    		return objectMapper.readValue(cacheService.getByKey(code), User.class);
+    		u =  objectMapper.readValue(cacheService.getByKey(code), RegisterUser.class);
+    		System.out.println(u.getUsername());
 		} catch (Exception e) {
+			System.out.println(e);
 			return null;
 		}
+    	return u;
     }
     
     

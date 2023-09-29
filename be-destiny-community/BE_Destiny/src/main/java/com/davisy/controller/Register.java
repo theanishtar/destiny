@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.davisy.entity.User;
 import com.davisy.model.RegisterResponse;
+import com.davisy.model.RegisterUser;
 import com.davisy.service.RegisterService;
 import com.davisy.service.impl.UserServiceImpl;
 
@@ -26,12 +27,12 @@ public class Register {
 
 	// api: v1/oauth/register/authen/codeMail
 	@GetMapping("v1/oauth/register/authen/{codeMail}")
-	public ResponseEntity<User> authenRegister(@PathVariable String codeMail) {
-		User u = registerService.authenRegisterCode();
+	public ResponseEntity<RegisterUser> authenRegister(@PathVariable String codeMail) {
+		RegisterUser u = registerService.authenRegisterCode();
 		if (u == null) {
 			return ResponseEntity.status(202).body(null);
 		}
-		return ResponseEntity.status(202).body(u);
+		return ResponseEntity.status(200).body(u);
 	}
 
 	@PostMapping("v1/oauth/register")
