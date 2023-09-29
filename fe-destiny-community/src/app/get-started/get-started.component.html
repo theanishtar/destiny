@@ -207,25 +207,6 @@
             <div class="form-item">
               <!-- FORM INPUT -->
               <div class="form-input">
-                <label for="register-username">Họ tên</label>
-                <input type="text" formControlName="fullname" id="fullname" required>
-              </div>
-              <!-- /FORM INPUT -->
-            </div>
-            <!-- /FORM ITEM -->
-            <span *ngIf="registerForm.get('fullname')?.invalid && registerForm.get('fullname')?.touched">
-              <div style="color: red;">
-                Vui lòng nhập họ tên!
-              </div>
-            </span>
-          </div>
-          <!-- /FORM ROW -->
-          <!-- FORM ROW -->
-          <div class="form-row">
-            <!-- FORM ITEM -->
-            <div class="form-item">
-              <!-- FORM INPUT -->
-              <div class="form-input">
                 <label for="register-email">Email</label>
                 <input type="text" formControlName="email" id="email" required>
               </div>
@@ -239,6 +220,25 @@
             <!-- /FORM ITEM -->
           </div>
           <!-- /FORM ROW -->
+                    <!-- FORM ROW -->
+                    <div class="form-row">
+                      <!-- FORM ITEM -->
+                      <div class="form-item">
+                        <!-- FORM INPUT -->
+                        <div class="form-input">
+                          <label for="register-username">Họ tên</label>
+                          <input type="text" formControlName="name" id="name" required>
+                        </div>
+                        <!-- /FORM INPUT -->
+                      </div>
+                      <!-- /FORM ITEM -->
+                      <span *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
+                        <div style="color: red;">
+                          Vui lòng nhập họ tên!
+                        </div>
+                      </span>
+                    </div>
+                    <!-- /FORM ROW -->
           <!-- FORM ROW -->
           <div class="form-row">
             <!-- FORM ITEM -->

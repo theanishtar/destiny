@@ -6,6 +6,8 @@ import { HomeComponent } from './home/home.component';
 import { GetStartedComponent } from './get-started/get-started.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { Error404Component } from './error404/error404.component';
+import { WaitForConfirmationComponent } from './get-started/wait-for-confirmation/wait-for-confirmation.component';
+import { ConfirmSuccessComponent } from './get-started/confirm-success/confirm-success.component';
 
 // User
 import { NewsfeedComponent } from './user/newsfeed/newsfeed.component';
@@ -19,7 +21,6 @@ import { SettingComponent } from './user/setting/setting.component';
 import { ContactComponent } from './user/contact/contact.component';
 import { HistoryComponent } from './user/history/history.component';
 import { NotificationsComponent } from './user/notifications/notifications.component';
-import { WaitForConfirmationComponent } from './get-started/wait-for-confirmation/wait-for-confirmation.component';
 
 // Admin
 import { IndexAdminComponent } from './admin/index-admin/index-admin.component';
@@ -36,8 +37,8 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'get-started', component: GetStartedComponent },
   { path: 'forgotpassword', component: ForgotPasswordComponent },
-  // { path: 'wait-confirm/:authregis', component: WaitForConfirmationComponent },
   { path: 'wait-confirm', component: WaitForConfirmationComponent },
+  { path: 'regisauth', component: ConfirmSuccessComponent }, //url register
 
   // user
   // { path: 'newsfeed', component: NewsfeedComponent, canActivate: [authGuard]},

@@ -33,11 +33,8 @@ export class LoginService {
 				catchError((error: HttpErrorResponse) => {
 					console.log("error.status: " + error.status)
 					if (error.status === 200) {
-						// Handle successful response
 						return [];
 					} else if (error.status === 404) {
-						// Handle redirect
-						// You might want to navigate to the new location
 						return throwError(
 							new toast({
 								title: 'Thất bại!',
@@ -46,9 +43,7 @@ export class LoginService {
 								duration: 1500,
 							})
 						);
-					}else if (error.status === 403) {
-						// Handle redirect
-						// You might want to navigate to the new location
+					} else if (error.status === 403) {
 						return throwError(
 							new toast({
 								title: 'Tài khoản của bạn đã bị khóa!',
@@ -58,8 +53,6 @@ export class LoginService {
 							})
 						);
 					} else if (error.status === 429) {
-						// Handle see other
-						// You might want to follow the redirect
 						return throwError(
 							new toast({
 								title: 'Vui lòng quay lại sau 1 phút nữa!',
@@ -68,7 +61,17 @@ export class LoginService {
 								duration: 1500,
 							})
 						);
-					} else {
+					} else if (error.status === 401) {
+						return throwError(
+							new toast({
+								title: 'Thất bại!',
+								message: 'Vui lòng kiểm tra lại thông tin đăng nhập',
+								type: 'error',
+								duration: 1500,
+							})
+						);
+					}
+					else {
 						// Handle other errors
 						return throwError(
 							new toast({
@@ -93,7 +96,7 @@ export class LoginService {
 	) { }
 
 	isLogin(): boolean {
-		if (this.cookieService.get('currentUser') == '') {
+		if (this.cookieService.get('full_name') == '') {
 			return false;
 		}
 		return true;

@@ -40,6 +40,7 @@ import { GetStartedComponent } from './get-started/get-started.component';
 import { WaitForConfirmationComponent } from './get-started/wait-for-confirmation/wait-for-confirmation.component';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { ConfirmSuccessComponent } from './get-started/confirm-success/confirm-success.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -77,6 +78,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     UserReportdetailComponent,
     GetStartedComponent,
     WaitForConfirmationComponent,
+    ConfirmSuccessComponent,
   ],
   imports: [
     BrowserModule,

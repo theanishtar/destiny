@@ -3,16 +3,19 @@ import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Observable, of, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import '../../assets/toast/main.js';
 declare var toast: any;
+import Swal from 'sweetalert2';
 @Injectable({
   providedIn: 'root'
 })
 export class RegisterService {
   private userURL = 'http://localhost:8080/v1/oauth/register';
-  private userCheckCodeMail = `http://localhost:8080/v1/oauth/register/authen/${localStorage.getItem('registerEmail')!}`;
+  private userCheckCodeMail = 'http://localhost:8080/v1/oauth/register/authen/codeMail';
 
+  authCode: string;
+  
   registerUser(data: any) {
     return this.http.post<any>(this.userURL, data).pipe(
       tap((response) => {
@@ -21,8 +24,7 @@ export class RegisterService {
       catchError((error: HttpErrorResponse) => {
         console.log("error.status 2: " + JSON.stringify(error.error.text))
         if (error.status === 200) {
-          // console.log("này bên service: " + localStorage.getItem('registerEmail')!);
-          this.navigateToWaitConfirm(localStorage.getItem('registerEmail')!);
+          this.router.navigate(['wait-confirm']);
           return throwError(
             new toast({
               title: 'Thông báo!',
@@ -34,7 +36,6 @@ export class RegisterService {
           // return [];
         } else if (error.status === 202) {
           return throwError(
-            localStorage.removeItem('registerEmail'),
             new toast({
               title: 'Thất bại!',
               message: error.error.text,
@@ -60,13 +61,13 @@ export class RegisterService {
 
   checkCodeMail() {
     return this.http.get<any>(this.userCheckCodeMail).pipe(
-      tap((res) => {
-        // receivedUser => console.log(`receivedUser = ${JSON.stringify(receivedUser)}`)
-        console.log('Đăng ký xong');
-    }),
+      tap((response) => {
+        console.log(`đăng ký = ${JSON.stringify(response)}`);
+      }),
       catchError((error: HttpErrorResponse) => {
         console.log("error.status 2: " + JSON.stringify(error.error.text))
         if (error.status === 202) {
+          this.router.navigate(['get-started']);
           return throwError( 
             new toast({
               title: 'Thông báo!',
@@ -91,8 +92,8 @@ export class RegisterService {
 		);
   }
 
-  navigateToWaitConfirm(authregis: string) {
-    this.router.navigate(['wait-confirm', authregis]);
+  redirectToAuthRegistration(authCode: string) {
+    this.router.navigate(['/regisauth'], { queryParams: { authcode: authCode } });
   }
 
   constructor(
@@ -100,9 +101,6 @@ export class RegisterService {
     private router: Router,
     private route: ActivatedRoute,
   ) {
-    this.route.paramMap.subscribe(params => {
-      const authregis = params.get('authregis');
-      console.log(authregis); // In ra giá trị của authregis từ đường dẫn
-    });
+
   }
 }

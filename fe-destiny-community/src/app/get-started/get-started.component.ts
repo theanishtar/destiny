@@ -80,7 +80,6 @@ export class GetStartedComponent implements OnInit {
 
 	loginWithEmailAndPassword() {
 		this.submitted = true;
-		// if (this.loginForm.valid) {
 		this.loginService.loginUser(this.loginForm.value).subscribe((response) => {
 			function delay(ms: number) {
 				return new Promise(function (resolve) {
@@ -116,9 +115,6 @@ export class GetStartedComponent implements OnInit {
 					this.loginForm.reset();
 				} else {
 					this.cookieService.set('full_name', response.name);
-					this.cookieService.set('userEmail', this.loginForm.get('email')!.value);
-					this.cookieService.set('isUserLoggedIn', JSON.stringify(response.sesionId)
-					);
 					delay(500).then((res) => {
 						this.loginForm.reset();
 						this.router.navigate(['newsfeed']);
@@ -128,16 +124,10 @@ export class GetStartedComponent implements OnInit {
 							type: 'success',
 							duration: 1500,
 						});
-						// delay(1500).then((_) => {
-						// 	location.reload();
-						// });
 					});
 				}
 			}
 		});
-		// } else {
-		//   return;
-		// }
 	}
 
 	setCookie(cname, cvalue, exdays) {
@@ -147,9 +137,7 @@ export class GetStartedComponent implements OnInit {
 		document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/';
 	}
 	logAdmin(data: any) {
-		// return this.http.post(this.userURL, data);
 		this.http.post<any>(this.loginAdmin, data).pipe(
-			// tap(() => console.log("Lấy dữ liệu thành công")),
 			tap((receivedUser) =>
 				console.log(`receivedUser = ${JSON.stringify(receivedUser)}`)
 			),
@@ -169,8 +157,8 @@ export class GetStartedComponent implements OnInit {
 	/*===========Register===============*/
 	createFormRegister() {
 		this.registerForm = this.formbuilder.group({
-			fullname: ['', Validators.required],
 			email: ['', [Validators.required, Validators.email]],
+			name: ['', Validators.required],
 			password: ['', Validators.required],
 			rePassword: ['', Validators.required],
 		});
@@ -182,12 +170,15 @@ export class GetStartedComponent implements OnInit {
 	register() {
 		if (this.registerForm.get("password")!.value == this.registerForm.get("rePassword")!.value) {
 			var data = {
-				fullname: this.registerForm.get("fullname")!.value,
 				email: this.registerForm.get("email")!.value,
+				name: this.registerForm.get("name")!.value,
 				password: this.registerForm.get("password")!.value,
 			};
 			localStorage.setItem(
 				'registerEmail', data.email
+			);
+			localStorage.setItem(
+				'registerPass', data.password
 			);
 			this.registerService.registerUser(data).subscribe((response) =>{
 				if(response == ''){
@@ -211,6 +202,23 @@ export class GetStartedComponent implements OnInit {
 				duration: 2000,
 			});
 		}
+		let timerInterval;
+		Swal.fire({
+		  title: 'Thông báo!',
+		  html: 'Quá trình sẽ diễn ra trong vài giây!',
+		  timer: 16000,
+		  timerProgressBar: true,
+		  didOpen: () => {
+			Swal.showLoading();
+		  },
+		  willClose: () => {
+			clearInterval(timerInterval);
+		  },
+		}).then((result) => {
+		  if (result.dismiss === Swal.DismissReason.timer) {
+			console.log('I was closed by the timer');
+		  }
+		});
 	}
 	
 	autoLogin() {

@@ -7,3 +7,20 @@ svg.icon-magnifying-glass {
     position: relative;
     top: 10%;
 }
+.hidden{
+    display: none;
+}
+
+.grid.grid-4-4-4.centered{
+    height: 650px;
+  overflow: auto;
+  overflow: -moz-scrollbars-none;
+  -ms-overflow-style: none;
+}
+.grid.grid-4-4-4.centered::-webkit-scrollbar {
+    width: 0 !important;
+    display: none;
+}
+.content-grid{
+    padding-bottom: 0;
+}

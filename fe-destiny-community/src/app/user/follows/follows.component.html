@@ -63,25 +63,25 @@
         <!-- FILTER TABS -->
         <div class="filter-tabs">
           <!-- FILTER TAB -->
-          <div class="filter-tab active">
+          <div class="filter-tab active" (click)="openTabFollow('following')" [ngClass]="{'active': activeContent === 'following'}">
             <!-- FILTER TAB TEXT -->
-            <p class="filter-tab-text">Recently Active</p>
+            <p class="filter-tab-text">Đang theo dõi</p>
             <!-- /FILTER TAB TEXT -->
           </div>
           <!-- /FILTER TAB -->
 
           <!-- FILTER TAB -->
-          <div class="filter-tab">
+          <div class="filter-tab" (click)="openTabFollow('follower')" [ngClass]="{'active': activeContent === 'follower'}">
             <!-- FILTER TAB TEXT -->
-            <p class="filter-tab-text">Newest Friends</p>
+            <p class="filter-tab-text">Người theo dõi</p>
             <!-- /FILTER TAB TEXT -->
           </div>
           <!-- /FILTER TAB -->
 
           <!-- FILTER TAB -->
-          <div class="filter-tab">
+          <div class="filter-tab" (click)="openTabFollow('friends')" [ngClass]="{'active': activeContent === 'friends'}">
             <!-- FILTER TAB TEXT -->
-            <p class="filter-tab-text">Alphabetical</p>
+            <p class="filter-tab-text">Bạn bè</p>
             <!-- /FILTER TAB TEXT -->
           </div>
           <!-- /FILTER TAB -->
@@ -93,7 +93,7 @@
     <!-- /SECTION FILTERS BAR -->
 
     <!-- GRID -->
-    <div class="grid grid-4-4-4 centered">
+    <div class="grid grid-4-4-4 centered following" [ngClass]="{'hidden': activeContent !== 'following'}">
       <!-- USER PREVIEW -->
       <div class="user-preview">
         <!-- USER PREVIEW COVER -->
@@ -212,50 +212,6 @@
             <!-- /SLIDER ROSTER ITEM -->
           </div>
           <!-- /USER PREVIEW STATS ROSTER -->
-
-          <!-- SOCIAL LINKS -->
-          <div class="social-links small">
-            <!-- SOCIAL LINK -->
-            <a class="social-link small twitter" href="#">
-              <!-- SOCIAL LINK ICON -->
-              <svg class="social-link-icon icon-twitter">
-                <use xlink:href="#svg-twitter"></use>
-              </svg>
-              <!-- /SOCIAL LINK ICON -->
-            </a>
-            <!-- /SOCIAL LINK -->
-
-            <!-- SOCIAL LINK -->
-            <a class="social-link small instagram" href="#">
-              <!-- SOCIAL LINK ICON -->
-              <svg class="social-link-icon icon-instagram">
-                <use xlink:href="#svg-instagram"></use>
-              </svg>
-              <!-- /SOCIAL LINK ICON -->
-            </a>
-            <!-- /SOCIAL LINK -->
-
-            <!-- SOCIAL LINK -->
-            <a class="social-link small twitch" href="#">
-              <!-- SOCIAL LINK ICON -->
-              <svg class="social-link-icon icon-twitch">
-                <use xlink:href="#svg-twitch"></use>
-              </svg>
-              <!-- /SOCIAL LINK ICON -->
-            </a>
-            <!-- /SOCIAL LINK -->
-
-            <!-- SOCIAL LINK -->
-            <a class="social-link small discord" href="#">
-              <!-- SOCIAL LINK ICON -->
-              <svg class="social-link-icon icon-discord">
-                <use xlink:href="#svg-discord"></use>
-              </svg>
-              <!-- /SOCIAL LINK ICON -->
-            </a>
-            <!-- /SOCIAL LINK -->
-          </div>
-          <!-- /SOCIAL LINKS -->
 
           <!-- USER PREVIEW ACTIONS -->
           <div class="user-preview-actions">
@@ -392,49 +348,140 @@
           </div>
           <!-- /USER PREVIEW STATS ROSTER -->
 
-          <!-- SOCIAL LINKS -->
-          <div class="social-links small">
-            <!-- SOCIAL LINK -->
-            <a class="social-link small twitter" href="#">
-              <!-- SOCIAL LINK ICON -->
-              <svg class="social-link-icon icon-twitter">
-                <use xlink:href="#svg-twitter"></use>
-              </svg>
-              <!-- /SOCIAL LINK ICON -->
-            </a>
-            <!-- /SOCIAL LINK -->
+          <!-- USER PREVIEW ACTIONS -->
+          <div class="user-preview-actions">
+            <!-- BUTTON -->
+            <p class="button secondary">Hủy</p>
+            <!-- /BUTTON -->
 
-            <!-- SOCIAL LINK -->
-            <a class="social-link small instagram" href="#">
-              <!-- SOCIAL LINK ICON -->
-              <svg class="social-link-icon icon-instagram">
-                <use xlink:href="#svg-instagram"></use>
-              </svg>
-              <!-- /SOCIAL LINK ICON -->
-            </a>
-            <!-- /SOCIAL LINK -->
-
-            <!-- SOCIAL LINK -->
-            <a class="social-link small twitch" href="#">
-              <!-- SOCIAL LINK ICON -->
-              <svg class="social-link-icon icon-twitch">
-                <use xlink:href="#svg-twitch"></use>
-              </svg>
-              <!-- /SOCIAL LINK ICON -->
-            </a>
-            <!-- /SOCIAL LINK -->
-
-            <!-- SOCIAL LINK -->
-            <a class="social-link small discord" href="#">
-              <!-- SOCIAL LINK ICON -->
-              <svg class="social-link-icon icon-discord">
-                <use xlink:href="#svg-discord"></use>
-              </svg>
-              <!-- /SOCIAL LINK ICON -->
-            </a>
-            <!-- /SOCIAL LINK -->
+            <!-- BUTTON -->
+            <p class="button primary">Nhắn tin</p>
+            <!-- /BUTTON -->
           </div>
-          <!-- /SOCIAL LINKS -->
+          <!-- /USER PREVIEW ACTIONS -->
+        </div>
+        <!-- /USER PREVIEW INFO -->
+      </div>
+      <!-- /USER PREVIEW -->
+
+      <!-- USER PREVIEW -->
+      <div class="user-preview">
+        <!-- USER PREVIEW COVER -->
+        <figure class="user-preview-cover liquid">
+          <img src="../../assets/images/cover/04.jpg" alt="cover-04">
+        </figure>
+        <!-- /USER PREVIEW COVER -->
+
+        <!-- USER PREVIEW INFO -->
+        <div class="user-preview-info">
+          <!-- USER SHORT DESCRIPTION -->
+          <div class="user-short-description">
+            <!-- USER SHORT DESCRIPTION AVATAR -->
+            <a class="user-short-description-avatar user-avatar medium" href="profile-timeline.html">
+              <!-- USER AVATAR BORDER -->
+              <div class="user-avatar-border">
+                <!-- HEXAGON -->
+                <div class="hexagon-120-132"></div>
+                <!-- /HEXAGON -->
+              </div>
+              <!-- /USER AVATAR BORDER -->
+
+              <!-- USER AVATAR CONTENT -->
+              <div class="user-avatar-content">
+                <!-- HEXAGON -->
+                <div class="hexagon-image-82-90" data-src="../../assets/images/avatar/05.jpg"></div>
+                <!-- /HEXAGON -->
+              </div>
+              <!-- /USER AVATAR CONTENT -->
+
+              <!-- USER AVATAR PROGRESS -->
+              <div class="user-avatar-progress">
+                <!-- HEXAGON -->
+                <div class="hexagon-progress-100-110"></div>
+                <!-- /HEXAGON -->
+              </div>
+              <!-- /USER AVATAR PROGRESS -->
+
+              <!-- USER AVATAR PROGRESS BORDER -->
+              <div class="user-avatar-progress-border">
+                <!-- HEXAGON -->
+                <div class="hexagon-border-100-110"></div>
+                <!-- /HEXAGON -->
+              </div>
+              <!-- /USER AVATAR PROGRESS BORDER -->
+
+            </a>
+            <!-- /USER SHORT DESCRIPTION AVATAR -->
+
+            <!-- USER SHORT DESCRIPTION TITLE -->
+            <p class="user-short-description-title"><a href="profile-timeline.html">NekoBebop</a></p>
+            <!-- /USER SHORT DESCRIPTION TITLE -->
+
+            <!-- USER SHORT DESCRIPTION TEXT -->
+            <p class="user-short-description-text"><a href="#">www.store.com/nekoprints</a></p>
+            <!-- /USER SHORT DESCRIPTION TEXT -->
+          </div>
+          <!-- /USER SHORT DESCRIPTION -->
+
+          <!-- USER PREVIEW STATS SLIDES -->
+          <div id="user-preview-stats-slides-01" class="user-preview-stats-slides">
+            <!-- USER PREVIEW STATS SLIDE -->
+            <div class="user-preview-stats-slide">
+              <!-- USER STATS -->
+              <div class="user-stats">
+                <!-- USER STAT -->
+                <div class="user-stat">
+                  <!-- USER STAT TITLE -->
+                  <p class="user-stat-title">874</p>
+                  <!-- /USER STAT TITLE -->
+
+                  <!-- USER STAT TEXT -->
+                  <p class="user-stat-text">bài đăng</p>
+                  <!-- /USER STAT TEXT -->
+                </div>
+                <!-- /USER STAT -->
+
+                <!-- USER STAT -->
+                <div class="user-stat">
+                  <!-- USER STAT TITLE -->
+                  <p class="user-stat-title">60</p>
+                  <!-- /USER STAT TITLE -->
+
+                  <!-- USER STAT TEXT -->
+                  <p class="user-stat-text">theo dõi</p>
+                  <!-- /USER STAT TEXT -->
+                </div>
+                <!-- /USER STAT -->
+
+                <!-- USER STAT -->
+                <div class="user-stat">
+                  <!-- USER STAT TITLE -->
+                  <p class="user-stat-title">3.9k</p>
+                  <!-- /USER STAT TITLE -->
+
+                  <!-- USER STAT TEXT -->
+                  <p class="user-stat-text">ảnh</p>
+                  <!-- /USER STAT TEXT -->
+                </div>
+                <!-- /USER STAT -->
+              </div>
+              <!-- /USER STATS -->
+            </div>
+            <!-- /USER PREVIEW STATS SLIDE -->
+          </div>
+          <!-- /USER PREVIEW STATS SLIDES -->
+
+          <!-- USER PREVIEW STATS ROSTER -->
+          <div id="user-preview-stats-roster-01" class="user-preview-stats-roster slider-roster">
+            <!-- SLIDER ROSTER ITEM -->
+            <div class="slider-roster-item"></div>
+            <!-- /SLIDER ROSTER ITEM -->
+
+            <!-- SLIDER ROSTER ITEM -->
+            <div class="slider-roster-item"></div>
+            <!-- /SLIDER ROSTER ITEM -->
+          </div>
+          <!-- /USER PREVIEW STATS ROSTER -->
 
           <!-- USER PREVIEW ACTIONS -->
           <div class="user-preview-actions">
@@ -571,50 +618,6 @@
           </div>
           <!-- /USER PREVIEW STATS ROSTER -->
 
-          <!-- SOCIAL LINKS -->
-          <div class="social-links small">
-            <!-- SOCIAL LINK -->
-            <a class="social-link small twitter" href="#">
-              <!-- SOCIAL LINK ICON -->
-              <svg class="social-link-icon icon-twitter">
-                <use xlink:href="#svg-twitter"></use>
-              </svg>
-              <!-- /SOCIAL LINK ICON -->
-            </a>
-            <!-- /SOCIAL LINK -->
-
-            <!-- SOCIAL LINK -->
-            <a class="social-link small instagram" href="#">
-              <!-- SOCIAL LINK ICON -->
-              <svg class="social-link-icon icon-instagram">
-                <use xlink:href="#svg-instagram"></use>
-              </svg>
-              <!-- /SOCIAL LINK ICON -->
-            </a>
-            <!-- /SOCIAL LINK -->
-
-            <!-- SOCIAL LINK -->
-            <a class="social-link small twitch" href="#">
-              <!-- SOCIAL LINK ICON -->
-              <svg class="social-link-icon icon-twitch">
-                <use xlink:href="#svg-twitch"></use>
-              </svg>
-              <!-- /SOCIAL LINK ICON -->
-            </a>
-            <!-- /SOCIAL LINK -->
-
-            <!-- SOCIAL LINK -->
-            <a class="social-link small discord" href="#">
-              <!-- SOCIAL LINK ICON -->
-              <svg class="social-link-icon icon-discord">
-                <use xlink:href="#svg-discord"></use>
-              </svg>
-              <!-- /SOCIAL LINK ICON -->
-            </a>
-            <!-- /SOCIAL LINK -->
-          </div>
-          <!-- /SOCIAL LINKS -->
-
           <!-- USER PREVIEW ACTIONS -->
           <div class="user-preview-actions">
             <!-- BUTTON -->
@@ -750,50 +753,6 @@
           </div>
           <!-- /USER PREVIEW STATS ROSTER -->
 
-          <!-- SOCIAL LINKS -->
-          <div class="social-links small">
-            <!-- SOCIAL LINK -->
-            <a class="social-link small twitter" href="#">
-              <!-- SOCIAL LINK ICON -->
-              <svg class="social-link-icon icon-twitter">
-                <use xlink:href="#svg-twitter"></use>
-              </svg>
-              <!-- /SOCIAL LINK ICON -->
-            </a>
-            <!-- /SOCIAL LINK -->
-
-            <!-- SOCIAL LINK -->
-            <a class="social-link small instagram" href="#">
-              <!-- SOCIAL LINK ICON -->
-              <svg class="social-link-icon icon-instagram">
-                <use xlink:href="#svg-instagram"></use>
-              </svg>
-              <!-- /SOCIAL LINK ICON -->
-            </a>
-            <!-- /SOCIAL LINK -->
-
-            <!-- SOCIAL LINK -->
-            <a class="social-link small twitch" href="#">
-              <!-- SOCIAL LINK ICON -->
-              <svg class="social-link-icon icon-twitch">
-                <use xlink:href="#svg-twitch"></use>
-              </svg>
-              <!-- /SOCIAL LINK ICON -->
-            </a>
-            <!-- /SOCIAL LINK -->
-
-            <!-- SOCIAL LINK -->
-            <a class="social-link small discord" href="#">
-              <!-- SOCIAL LINK ICON -->
-              <svg class="social-link-icon icon-discord">
-                <use xlink:href="#svg-discord"></use>
-              </svg>
-              <!-- /SOCIAL LINK ICON -->
-            </a>
-            <!-- /SOCIAL LINK -->
-          </div>
-          <!-- /SOCIAL LINKS -->
-
           <!-- USER PREVIEW ACTIONS -->
           <div class="user-preview-actions">
             <!-- BUTTON -->
@@ -928,229 +887,6 @@
             <!-- /SLIDER ROSTER ITEM -->
           </div>
           <!-- /USER PREVIEW STATS ROSTER -->
-
-          <!-- SOCIAL LINKS -->
-          <div class="social-links small">
-            <!-- SOCIAL LINK -->
-            <a class="social-link small twitter" href="#">
-              <!-- SOCIAL LINK ICON -->
-              <svg class="social-link-icon icon-twitter">
-                <use xlink:href="#svg-twitter"></use>
-              </svg>
-              <!-- /SOCIAL LINK ICON -->
-            </a>
-            <!-- /SOCIAL LINK -->
-
-            <!-- SOCIAL LINK -->
-            <a class="social-link small instagram" href="#">
-              <!-- SOCIAL LINK ICON -->
-              <svg class="social-link-icon icon-instagram">
-                <use xlink:href="#svg-instagram"></use>
-              </svg>
-              <!-- /SOCIAL LINK ICON -->
-            </a>
-            <!-- /SOCIAL LINK -->
-
-            <!-- SOCIAL LINK -->
-            <a class="social-link small twitch" href="#">
-              <!-- SOCIAL LINK ICON -->
-              <svg class="social-link-icon icon-twitch">
-                <use xlink:href="#svg-twitch"></use>
-              </svg>
-              <!-- /SOCIAL LINK ICON -->
-            </a>
-            <!-- /SOCIAL LINK -->
-
-            <!-- SOCIAL LINK -->
-            <a class="social-link small discord" href="#">
-              <!-- SOCIAL LINK ICON -->
-              <svg class="social-link-icon icon-discord">
-                <use xlink:href="#svg-discord"></use>
-              </svg>
-              <!-- /SOCIAL LINK ICON -->
-            </a>
-            <!-- /SOCIAL LINK -->
-          </div>
-          <!-- /SOCIAL LINKS -->
-
-          <!-- USER PREVIEW ACTIONS -->
-          <div class="user-preview-actions">
-            <!-- BUTTON -->
-            <p class="button secondary">Hủy</p>
-            <!-- /BUTTON -->
-
-            <!-- BUTTON -->
-            <p class="button primary">Nhắn tin</p>
-            <!-- /BUTTON -->
-          </div>
-          <!-- /USER PREVIEW ACTIONS -->
-        </div>
-        <!-- /USER PREVIEW INFO -->
-      </div>
-      <!-- /USER PREVIEW -->
-
-      <!-- USER PREVIEW -->
-      <div class="user-preview">
-        <!-- USER PREVIEW COVER -->
-        <figure class="user-preview-cover liquid">
-          <img src="../../assets/images/cover/04.jpg" alt="cover-04">
-        </figure>
-        <!-- /USER PREVIEW COVER -->
-
-        <!-- USER PREVIEW INFO -->
-        <div class="user-preview-info">
-          <!-- USER SHORT DESCRIPTION -->
-          <div class="user-short-description">
-            <!-- USER SHORT DESCRIPTION AVATAR -->
-            <a class="user-short-description-avatar user-avatar medium" href="profile-timeline.html">
-              <!-- USER AVATAR BORDER -->
-              <div class="user-avatar-border">
-                <!-- HEXAGON -->
-                <div class="hexagon-120-132"></div>
-                <!-- /HEXAGON -->
-              </div>
-              <!-- /USER AVATAR BORDER -->
-
-              <!-- USER AVATAR CONTENT -->
-              <div class="user-avatar-content">
-                <!-- HEXAGON -->
-                <div class="hexagon-image-82-90" data-src="../../assets/images/avatar/05.jpg"></div>
-                <!-- /HEXAGON -->
-              </div>
-              <!-- /USER AVATAR CONTENT -->
-
-              <!-- USER AVATAR PROGRESS -->
-              <div class="user-avatar-progress">
-                <!-- HEXAGON -->
-                <div class="hexagon-progress-100-110"></div>
-                <!-- /HEXAGON -->
-              </div>
-              <!-- /USER AVATAR PROGRESS -->
-
-              <!-- USER AVATAR PROGRESS BORDER -->
-              <div class="user-avatar-progress-border">
-                <!-- HEXAGON -->
-                <div class="hexagon-border-100-110"></div>
-                <!-- /HEXAGON -->
-              </div>
-              <!-- /USER AVATAR PROGRESS BORDER -->
-
-            </a>
-            <!-- /USER SHORT DESCRIPTION AVATAR -->
-
-            <!-- USER SHORT DESCRIPTION TITLE -->
-            <p class="user-short-description-title"><a href="profile-timeline.html">NekoBebop</a></p>
-            <!-- /USER SHORT DESCRIPTION TITLE -->
-
-            <!-- USER SHORT DESCRIPTION TEXT -->
-            <p class="user-short-description-text"><a href="#">www.store.com/nekoprints</a></p>
-            <!-- /USER SHORT DESCRIPTION TEXT -->
-          </div>
-          <!-- /USER SHORT DESCRIPTION -->
-
-          <!-- USER PREVIEW STATS SLIDES -->
-          <div id="user-preview-stats-slides-01" class="user-preview-stats-slides">
-            <!-- USER PREVIEW STATS SLIDE -->
-            <div class="user-preview-stats-slide">
-              <!-- USER STATS -->
-              <div class="user-stats">
-                <!-- USER STAT -->
-                <div class="user-stat">
-                  <!-- USER STAT TITLE -->
-                  <p class="user-stat-title">874</p>
-                  <!-- /USER STAT TITLE -->
-
-                  <!-- USER STAT TEXT -->
-                  <p class="user-stat-text">bài đăng</p>
-                  <!-- /USER STAT TEXT -->
-                </div>
-                <!-- /USER STAT -->
-
-                <!-- USER STAT -->
-                <div class="user-stat">
-                  <!-- USER STAT TITLE -->
-                  <p class="user-stat-title">60</p>
-                  <!-- /USER STAT TITLE -->
-
-                  <!-- USER STAT TEXT -->
-                  <p class="user-stat-text">theo dõi</p>
-                  <!-- /USER STAT TEXT -->
-                </div>
-                <!-- /USER STAT -->
-
-                <!-- USER STAT -->
-                <div class="user-stat">
-                  <!-- USER STAT TITLE -->
-                  <p class="user-stat-title">3.9k</p>
-                  <!-- /USER STAT TITLE -->
-
-                  <!-- USER STAT TEXT -->
-                  <p class="user-stat-text">ảnh</p>
-                  <!-- /USER STAT TEXT -->
-                </div>
-                <!-- /USER STAT -->
-              </div>
-              <!-- /USER STATS -->
-            </div>
-            <!-- /USER PREVIEW STATS SLIDE -->
-          </div>
-          <!-- /USER PREVIEW STATS SLIDES -->
-
-          <!-- USER PREVIEW STATS ROSTER -->
-          <div id="user-preview-stats-roster-01" class="user-preview-stats-roster slider-roster">
-            <!-- SLIDER ROSTER ITEM -->
-            <div class="slider-roster-item"></div>
-            <!-- /SLIDER ROSTER ITEM -->
-
-            <!-- SLIDER ROSTER ITEM -->
-            <div class="slider-roster-item"></div>
-            <!-- /SLIDER ROSTER ITEM -->
-          </div>
-          <!-- /USER PREVIEW STATS ROSTER -->
-
-          <!-- SOCIAL LINKS -->
-          <div class="social-links small">
-            <!-- SOCIAL LINK -->
-            <a class="social-link small twitter" href="#">
-              <!-- SOCIAL LINK ICON -->
-              <svg class="social-link-icon icon-twitter">
-                <use xlink:href="#svg-twitter"></use>
-              </svg>
-              <!-- /SOCIAL LINK ICON -->
-            </a>
-            <!-- /SOCIAL LINK -->
-
-            <!-- SOCIAL LINK -->
-            <a class="social-link small instagram" href="#">
-              <!-- SOCIAL LINK ICON -->
-              <svg class="social-link-icon icon-instagram">
-                <use xlink:href="#svg-instagram"></use>
-              </svg>
-              <!-- /SOCIAL LINK ICON -->
-            </a>
-            <!-- /SOCIAL LINK -->
-
-            <!-- SOCIAL LINK -->
-            <a class="social-link small twitch" href="#">
-              <!-- SOCIAL LINK ICON -->
-              <svg class="social-link-icon icon-twitch">
-                <use xlink:href="#svg-twitch"></use>
-              </svg>
-              <!-- /SOCIAL LINK ICON -->
-            </a>
-            <!-- /SOCIAL LINK -->
-
-            <!-- SOCIAL LINK -->
-            <a class="social-link small discord" href="#">
-              <!-- SOCIAL LINK ICON -->
-              <svg class="social-link-icon icon-discord">
-                <use xlink:href="#svg-discord"></use>
-              </svg>
-              <!-- /SOCIAL LINK ICON -->
-            </a>
-            <!-- /SOCIAL LINK -->
-          </div>
-          <!-- /SOCIAL LINKS -->
 
           <!-- USER PREVIEW ACTIONS -->
           <div class="user-preview-actions">
@@ -1172,85 +908,420 @@
     </div>
     <!-- /GRID -->
 
-    <!-- SECTION PAGER BAR -->
-    <div class="section-pager-bar">
-      <!-- SECTION PAGER -->
-      <div class="section-pager">
-        <!-- SECTION PAGER ITEM -->
-        <div class="section-pager-item active">
-          <!-- SECTION PAGER ITEM TEXT -->
-          <p class="section-pager-item-text">01</p>
-          <!-- /SECTION PAGER ITEM TEXT -->
-        </div>
-        <!-- /SECTION PAGER ITEM -->
+    <!-- GRID -->
+    <div class="grid grid-4-4-4 centered follower" [ngClass]="{'hidden': activeContent !== 'follower'}">
+      <!-- USER PREVIEW -->
+      <div class="user-preview">
+        <!-- USER PREVIEW COVER -->
+        <figure class="user-preview-cover liquid">
+          <img src="../../assets/images/cover/04.jpg" alt="cover-04">
+        </figure>
+        <!-- /USER PREVIEW COVER -->
 
-        <!-- SECTION PAGER ITEM -->
-        <div class="section-pager-item">
-          <!-- SECTION PAGER ITEM TEXT -->
-          <p class="section-pager-item-text">02</p>
-          <!-- /SECTION PAGER ITEM TEXT -->
-        </div>
-        <!-- /SECTION PAGER ITEM -->
+        <!-- USER PREVIEW INFO -->
+        <div class="user-preview-info">
+          <!-- USER SHORT DESCRIPTION -->
+          <div class="user-short-description">
+            <!-- USER SHORT DESCRIPTION AVATAR -->
+            <a class="user-short-description-avatar user-avatar medium" href="profile-timeline.html">
+              <!-- USER AVATAR BORDER -->
+              <div class="user-avatar-border">
+                <!-- HEXAGON -->
+                <div class="hexagon-120-132"></div>
+                <!-- /HEXAGON -->
+              </div>
+              <!-- /USER AVATAR BORDER -->
 
-        <!-- SECTION PAGER ITEM -->
-        <div class="section-pager-item">
-          <!-- SECTION PAGER ITEM TEXT -->
-          <p class="section-pager-item-text">03</p>
-          <!-- /SECTION PAGER ITEM TEXT -->
-        </div>
-        <!-- /SECTION PAGER ITEM -->
+              <!-- USER AVATAR CONTENT -->
+              <div class="user-avatar-content">
+                <!-- HEXAGON -->
+                <div class="hexagon-image-82-90" data-src="../../assets/images/avatar/05.jpg"></div>
+                <!-- /HEXAGON -->
+              </div>
+              <!-- /USER AVATAR CONTENT -->
 
-        <!-- SECTION PAGER ITEM -->
-        <div class="section-pager-item">
-          <!-- SECTION PAGER ITEM TEXT -->
-          <p class="section-pager-item-text">04</p>
-          <!-- /SECTION PAGER ITEM TEXT -->
-        </div>
-        <!-- /SECTION PAGER ITEM -->
+              <!-- USER AVATAR PROGRESS -->
+              <div class="user-avatar-progress">
+                <!-- HEXAGON -->
+                <div class="hexagon-progress-100-110"></div>
+                <!-- /HEXAGON -->
+              </div>
+              <!-- /USER AVATAR PROGRESS -->
 
-        <!-- SECTION PAGER ITEM -->
-        <div class="section-pager-item">
-          <!-- SECTION PAGER ITEM TEXT -->
-          <p class="section-pager-item-text">05</p>
-          <!-- /SECTION PAGER ITEM TEXT -->
-        </div>
-        <!-- /SECTION PAGER ITEM -->
+              <!-- USER AVATAR PROGRESS BORDER -->
+              <div class="user-avatar-progress-border">
+                <!-- HEXAGON -->
+                <div class="hexagon-border-100-110"></div>
+                <!-- /HEXAGON -->
+              </div>
+              <!-- /USER AVATAR PROGRESS BORDER -->
 
-        <!-- SECTION PAGER ITEM -->
-        <div class="section-pager-item">
-          <!-- SECTION PAGER ITEM TEXT -->
-          <p class="section-pager-item-text">06</p>
-          <!-- /SECTION PAGER ITEM TEXT -->
+            </a>
+            <!-- /USER SHORT DESCRIPTION AVATAR -->
+
+            <!-- USER SHORT DESCRIPTION TITLE -->
+            <p class="user-short-description-title"><a href="profile-timeline.html">NekoBebop</a></p>
+            <!-- /USER SHORT DESCRIPTION TITLE -->
+
+            <!-- USER SHORT DESCRIPTION TEXT -->
+            <p class="user-short-description-text"><a href="#">www.store.com/nekoprints</a></p>
+            <!-- /USER SHORT DESCRIPTION TEXT -->
+          </div>
+          <!-- /USER SHORT DESCRIPTION -->
+
+          <!-- USER PREVIEW STATS SLIDES -->
+          <div id="user-preview-stats-slides-01" class="user-preview-stats-slides">
+            <!-- USER PREVIEW STATS SLIDE -->
+            <div class="user-preview-stats-slide">
+              <!-- USER STATS -->
+              <div class="user-stats">
+                <!-- USER STAT -->
+                <div class="user-stat">
+                  <!-- USER STAT TITLE -->
+                  <p class="user-stat-title">874</p>
+                  <!-- /USER STAT TITLE -->
+
+                  <!-- USER STAT TEXT -->
+                  <p class="user-stat-text">bài đăng</p>
+                  <!-- /USER STAT TEXT -->
+                </div>
+                <!-- /USER STAT -->
+
+                <!-- USER STAT -->
+                <div class="user-stat">
+                  <!-- USER STAT TITLE -->
+                  <p class="user-stat-title">60</p>
+                  <!-- /USER STAT TITLE -->
+
+                  <!-- USER STAT TEXT -->
+                  <p class="user-stat-text">theo dõi</p>
+                  <!-- /USER STAT TEXT -->
+                </div>
+                <!-- /USER STAT -->
+
+                <!-- USER STAT -->
+                <div class="user-stat">
+                  <!-- USER STAT TITLE -->
+                  <p class="user-stat-title">3.9k</p>
+                  <!-- /USER STAT TITLE -->
+
+                  <!-- USER STAT TEXT -->
+                  <p class="user-stat-text">ảnh</p>
+                  <!-- /USER STAT TEXT -->
+                </div>
+                <!-- /USER STAT -->
+              </div>
+              <!-- /USER STATS -->
+            </div>
+            <!-- /USER PREVIEW STATS SLIDE -->
+          </div>
+          <!-- /USER PREVIEW STATS SLIDES -->
+
+          <!-- USER PREVIEW STATS ROSTER -->
+          <div id="user-preview-stats-roster-01" class="user-preview-stats-roster slider-roster">
+            <!-- SLIDER ROSTER ITEM -->
+            <div class="slider-roster-item"></div>
+            <!-- /SLIDER ROSTER ITEM -->
+
+            <!-- SLIDER ROSTER ITEM -->
+            <div class="slider-roster-item"></div>
+            <!-- /SLIDER ROSTER ITEM -->
+          </div>
+          <!-- /USER PREVIEW STATS ROSTER -->
+
+
+          <!-- USER PREVIEW ACTIONS -->
+          <div class="user-preview-actions">
+            <!-- BUTTON -->
+            <p class="button secondary">Hủy</p>
+            <!-- /BUTTON -->
+
+            <!-- BUTTON -->
+            <p class="button primary">Nhắn tin</p>
+            <!-- /BUTTON -->
+          </div>
+          <!-- /USER PREVIEW ACTIONS -->
         </div>
-        <!-- /SECTION PAGER ITEM -->
+        <!-- /USER PREVIEW INFO -->
       </div>
-      <!-- /SECTION PAGER -->
+      <!-- /USER PREVIEW -->
 
-      <!-- SECTION PAGER CONTROLS -->
-      <div class="section-pager-controls">
-        <!-- SLIDER CONTROL -->
-        <div class="slider-control left disabled">
-          <!-- SLIDER CONTROL ICON -->
-          <svg class="slider-control-icon icon-small-arrow">
-            <use xlink:href="#svg-small-arrow"></use>
-          </svg>
-          <!-- /SLIDER CONTROL ICON -->
-        </div>
-        <!-- /SLIDER CONTROL -->
+      <!-- USER PREVIEW -->
+      <div class="user-preview">
+        <!-- USER PREVIEW COVER -->
+        <figure class="user-preview-cover liquid">
+          <img src="../../assets/images/cover/04.jpg" alt="cover-04">
+        </figure>
+        <!-- /USER PREVIEW COVER -->
 
-        <!-- SLIDER CONTROL -->
-        <div class="slider-control right">
-          <!-- SLIDER CONTROL ICON -->
-          <svg class="slider-control-icon icon-small-arrow">
-            <use xlink:href="#svg-small-arrow"></use>
-          </svg>
-          <!-- /SLIDER CONTROL ICON -->
+        <!-- USER PREVIEW INFO -->
+        <div class="user-preview-info">
+          <!-- USER SHORT DESCRIPTION -->
+          <div class="user-short-description">
+            <!-- USER SHORT DESCRIPTION AVATAR -->
+            <a class="user-short-description-avatar user-avatar medium" href="profile-timeline.html">
+              <!-- USER AVATAR BORDER -->
+              <div class="user-avatar-border">
+                <!-- HEXAGON -->
+                <div class="hexagon-120-132"></div>
+                <!-- /HEXAGON -->
+              </div>
+              <!-- /USER AVATAR BORDER -->
+
+              <!-- USER AVATAR CONTENT -->
+              <div class="user-avatar-content">
+                <!-- HEXAGON -->
+                <div class="hexagon-image-82-90" data-src="../../assets/images/avatar/05.jpg"></div>
+                <!-- /HEXAGON -->
+              </div>
+              <!-- /USER AVATAR CONTENT -->
+
+              <!-- USER AVATAR PROGRESS -->
+              <div class="user-avatar-progress">
+                <!-- HEXAGON -->
+                <div class="hexagon-progress-100-110"></div>
+                <!-- /HEXAGON -->
+              </div>
+              <!-- /USER AVATAR PROGRESS -->
+
+              <!-- USER AVATAR PROGRESS BORDER -->
+              <div class="user-avatar-progress-border">
+                <!-- HEXAGON -->
+                <div class="hexagon-border-100-110"></div>
+                <!-- /HEXAGON -->
+              </div>
+              <!-- /USER AVATAR PROGRESS BORDER -->
+
+            </a>
+            <!-- /USER SHORT DESCRIPTION AVATAR -->
+
+            <!-- USER SHORT DESCRIPTION TITLE -->
+            <p class="user-short-description-title"><a href="profile-timeline.html">NekoBebop</a></p>
+            <!-- /USER SHORT DESCRIPTION TITLE -->
+
+            <!-- USER SHORT DESCRIPTION TEXT -->
+            <p class="user-short-description-text"><a href="#">www.store.com/nekoprints</a></p>
+            <!-- /USER SHORT DESCRIPTION TEXT -->
+          </div>
+          <!-- /USER SHORT DESCRIPTION -->
+
+          <!-- USER PREVIEW STATS SLIDES -->
+          <div id="user-preview-stats-slides-01" class="user-preview-stats-slides">
+            <!-- USER PREVIEW STATS SLIDE -->
+            <div class="user-preview-stats-slide">
+              <!-- USER STATS -->
+              <div class="user-stats">
+                <!-- USER STAT -->
+                <div class="user-stat">
+                  <!-- USER STAT TITLE -->
+                  <p class="user-stat-title">874</p>
+                  <!-- /USER STAT TITLE -->
+
+                  <!-- USER STAT TEXT -->
+                  <p class="user-stat-text">bài đăng</p>
+                  <!-- /USER STAT TEXT -->
+                </div>
+                <!-- /USER STAT -->
+
+                <!-- USER STAT -->
+                <div class="user-stat">
+                  <!-- USER STAT TITLE -->
+                  <p class="user-stat-title">60</p>
+                  <!-- /USER STAT TITLE -->
+
+                  <!-- USER STAT TEXT -->
+                  <p class="user-stat-text">theo dõi</p>
+                  <!-- /USER STAT TEXT -->
+                </div>
+                <!-- /USER STAT -->
+
+                <!-- USER STAT -->
+                <div class="user-stat">
+                  <!-- USER STAT TITLE -->
+                  <p class="user-stat-title">3.9k</p>
+                  <!-- /USER STAT TITLE -->
+
+                  <!-- USER STAT TEXT -->
+                  <p class="user-stat-text">ảnh</p>
+                  <!-- /USER STAT TEXT -->
+                </div>
+                <!-- /USER STAT -->
+              </div>
+              <!-- /USER STATS -->
+            </div>
+            <!-- /USER PREVIEW STATS SLIDE -->
+          </div>
+          <!-- /USER PREVIEW STATS SLIDES -->
+
+          <!-- USER PREVIEW STATS ROSTER -->
+          <div id="user-preview-stats-roster-01" class="user-preview-stats-roster slider-roster">
+            <!-- SLIDER ROSTER ITEM -->
+            <div class="slider-roster-item"></div>
+            <!-- /SLIDER ROSTER ITEM -->
+
+            <!-- SLIDER ROSTER ITEM -->
+            <div class="slider-roster-item"></div>
+            <!-- /SLIDER ROSTER ITEM -->
+          </div>
+          <!-- /USER PREVIEW STATS ROSTER -->
+
+          <!-- USER PREVIEW ACTIONS -->
+          <div class="user-preview-actions">
+            <!-- BUTTON -->
+            <p class="button secondary">Hủy</p>
+            <!-- /BUTTON -->
+
+            <!-- BUTTON -->
+            <p class="button primary">Nhắn tin</p>
+            <!-- /BUTTON -->
+          </div>
+          <!-- /USER PREVIEW ACTIONS -->
         </div>
-        <!-- /SLIDER CONTROL -->
+        <!-- /USER PREVIEW INFO -->
       </div>
-      <!-- /SECTION PAGER CONTROLS -->
     </div>
-    <!-- /SECTION PAGER BAR -->
+    <!-- /GRID -->
+
+     <!-- GRID -->
+     <div class="grid grid-4-4-4 centered friends" [ngClass]="{'hidden': activeContent !== 'friends'}">
+      <!-- USER PREVIEW -->
+      <div class="user-preview">
+        <!-- USER PREVIEW COVER -->
+        <figure class="user-preview-cover liquid">
+          <img src="../../assets/images/cover/04.jpg" alt="cover-04">
+        </figure>
+        <!-- /USER PREVIEW COVER -->
+
+        <!-- USER PREVIEW INFO -->
+        <div class="user-preview-info">
+          <!-- USER SHORT DESCRIPTION -->
+          <div class="user-short-description">
+            <!-- USER SHORT DESCRIPTION AVATAR -->
+            <a class="user-short-description-avatar user-avatar medium" href="profile-timeline.html">
+              <!-- USER AVATAR BORDER -->
+              <div class="user-avatar-border">
+                <!-- HEXAGON -->
+                <div class="hexagon-120-132"></div>
+                <!-- /HEXAGON -->
+              </div>
+              <!-- /USER AVATAR BORDER -->
+
+              <!-- USER AVATAR CONTENT -->
+              <div class="user-avatar-content">
+                <!-- HEXAGON -->
+                <div class="hexagon-image-82-90" data-src="../../assets/images/avatar/05.jpg"></div>
+                <!-- /HEXAGON -->
+              </div>
+              <!-- /USER AVATAR CONTENT -->
+
+              <!-- USER AVATAR PROGRESS -->
+              <div class="user-avatar-progress">
+                <!-- HEXAGON -->
+                <div class="hexagon-progress-100-110"></div>
+                <!-- /HEXAGON -->
+              </div>
+              <!-- /USER AVATAR PROGRESS -->
+
+              <!-- USER AVATAR PROGRESS BORDER -->
+              <div class="user-avatar-progress-border">
+                <!-- HEXAGON -->
+                <div class="hexagon-border-100-110"></div>
+                <!-- /HEXAGON -->
+              </div>
+              <!-- /USER AVATAR PROGRESS BORDER -->
+
+            </a>
+            <!-- /USER SHORT DESCRIPTION AVATAR -->
+
+            <!-- USER SHORT DESCRIPTION TITLE -->
+            <p class="user-short-description-title"><a href="profile-timeline.html">NekoBebop</a></p>
+            <!-- /USER SHORT DESCRIPTION TITLE -->
+
+            <!-- USER SHORT DESCRIPTION TEXT -->
+            <p class="user-short-description-text"><a href="#">www.store.com/nekoprints</a></p>
+            <!-- /USER SHORT DESCRIPTION TEXT -->
+          </div>
+          <!-- /USER SHORT DESCRIPTION -->
+
+          <!-- USER PREVIEW STATS SLIDES -->
+          <div id="user-preview-stats-slides-01" class="user-preview-stats-slides">
+            <!-- USER PREVIEW STATS SLIDE -->
+            <div class="user-preview-stats-slide">
+              <!-- USER STATS -->
+              <div class="user-stats">
+                <!-- USER STAT -->
+                <div class="user-stat">
+                  <!-- USER STAT TITLE -->
+                  <p class="user-stat-title">874</p>
+                  <!-- /USER STAT TITLE -->
+
+                  <!-- USER STAT TEXT -->
+                  <p class="user-stat-text">bài đăng</p>
+                  <!-- /USER STAT TEXT -->
+                </div>
+                <!-- /USER STAT -->
+
+                <!-- USER STAT -->
+                <div class="user-stat">
+                  <!-- USER STAT TITLE -->
+                  <p class="user-stat-title">60</p>
+                  <!-- /USER STAT TITLE -->
+
+                  <!-- USER STAT TEXT -->
+                  <p class="user-stat-text">theo dõi</p>
+                  <!-- /USER STAT TEXT -->
+                </div>
+                <!-- /USER STAT -->
+
+                <!-- USER STAT -->
+                <div class="user-stat">
+                  <!-- USER STAT TITLE -->
+                  <p class="user-stat-title">3.9k</p>
+                  <!-- /USER STAT TITLE -->
+
+                  <!-- USER STAT TEXT -->
+                  <p class="user-stat-text">ảnh</p>
+                  <!-- /USER STAT TEXT -->
+                </div>
+                <!-- /USER STAT -->
+              </div>
+              <!-- /USER STATS -->
+            </div>
+            <!-- /USER PREVIEW STATS SLIDE -->
+          </div>
+          <!-- /USER PREVIEW STATS SLIDES -->
+
+          <!-- USER PREVIEW STATS ROSTER -->
+          <div id="user-preview-stats-roster-01" class="user-preview-stats-roster slider-roster">
+            <!-- SLIDER ROSTER ITEM -->
+            <div class="slider-roster-item"></div>
+            <!-- /SLIDER ROSTER ITEM -->
+
+            <!-- SLIDER ROSTER ITEM -->
+            <div class="slider-roster-item"></div>
+            <!-- /SLIDER ROSTER ITEM -->
+          </div>
+          <!-- /USER PREVIEW STATS ROSTER -->
+
+          <!-- USER PREVIEW ACTIONS -->
+          <div class="user-preview-actions">
+            <!-- BUTTON -->
+            <p class="button secondary">Hủy</p>
+            <!-- /BUTTON -->
+
+            <!-- BUTTON -->
+            <p class="button primary">Nhắn tin</p>
+            <!-- /BUTTON -->
+          </div>
+          <!-- /USER PREVIEW ACTIONS -->
+        </div>
+        <!-- /USER PREVIEW INFO -->
+      </div>
+      <!-- /USER PREVIEW -->
+    </div>
+    <!-- /GRID -->
+
+    
   </section>
   <!-- /SECTION -->
 </div>

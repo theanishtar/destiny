@@ -17,7 +17,7 @@ import { of } from 'rxjs';
 import Swal from 'sweetalert2';
 import '../../../assets/toast/main.js';
 // import { SocialAuthService } from '@abacritt/angularx-social-login';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 declare var toast: any;
 
 import { RegisterService } from '@app/service/register.service';
@@ -30,6 +30,7 @@ import { RegisterService } from '@app/service/register.service';
 export class WaitForConfirmationComponent {
 
   ngOnInit() {
+    // this.checkCodeMail();
     this.startCountdown();
   }
 
@@ -78,32 +79,5 @@ export class WaitForConfirmationComponent {
 
     updateCountdown();
     countdownInterval = window.setInterval(updateCountdown, 1000);
-  }
-
-
-  verification() {
-    this.checkCodeMail();
-  }
-
-  checkCodeMail() {
-    this.registerService.checkCodeMail().subscribe((res) => {
-      if (res == '') {
-        new toast({
-          title: 'Thất bại!',
-          message: 'Xác thực thất bạn!',
-          type: 'error',
-          duration: 5000,
-        });
-      } else {
-        new toast({
-          title: 'Thành công!',
-          message: 'Đăng ký thành công',
-          type: 'success',
-          duration: 3000,
-        });
-        localStorage.removeItem('registerEmail');
-        this.router.navigate(['get-started']);
-      }
-    })
   }
 }

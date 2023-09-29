@@ -38,12 +38,12 @@
   <div>
     <ul class="menu small">
       <!-- MENU ITEM -->
-      <li class="menu-item">
+      <li [class.menu-item]="true" [class.active]="activeMenuItem === 'newsfeed'">
         <!-- MENU ITEM LINK -->
         <a
           [attr.data-title]="'navbar_home' | translate"
           class="menu-item-link"
-          href="/newsfeed"
+          routerLink="/newsfeed"
         >
           <!-- MENU ITEM LINK ICON -->
           <div class="menu-item-link-icon icon-newsfeed">
@@ -56,12 +56,12 @@
       <!-- /MENU ITEM -->
 
       <!-- MENU ITEM -->
-      <li class="menu-item">
+      <li [class.menu-item]="true" [class.active]="activeMenuItem === 'follow'">
         <!-- MENU ITEM LINK -->
         <a
           [attr.data-title]="'sidebar_follow' | translate"
           class="menu-item-link"
-          href="/follow"
+          routerLink="/follow"
         >
           <!-- MENU ITEM LINK ICON -->
           <div class="menu-item-link-icon icon-overview">
@@ -74,12 +74,12 @@
       <!-- /MENU ITEM -->
 
       <!-- MENU ITEM -->
-      <li class="menu-item">
+      <li [class.menu-item]="true" [class.active]="activeMenuItem === 'history'">
         <!-- MENU ITEM LINK -->
         <a
           [attr.data-title]="'sidebar_history' | translate"
           class="menu-item-link"
-          href="history"
+          routerLink="/history"
         >
           <!-- MENU ITEM LINK ICON -->
           <div class="menu-item-link-icon icon-group">
@@ -92,12 +92,12 @@
       <!-- /MENU ITEM -->
 
       <!-- MENU ITEM -->
-      <li class="menu-item">
+      <li [class.menu-item]="true" [class.active]="activeMenuItem === 'contact'">
         <!-- MENU ITEM LINK -->
         <a
           [attr.data-title]="'navbar_contact' | translate"
           class="menu-item-link"
-          href="contact"
+          routerLink="/contact"
         >
           <!-- MENU ITEM LINK ICON -->
           <div class="menu-item-link-icon icon-members">
@@ -110,12 +110,12 @@
       <!-- /MENU ITEM -->
 
       <!-- MENU ITEM -->
-      <li class="menu-item">
+      <li [class.menu-item]="true" [class.active]="activeMenuItem === 'setting'">
         <!-- MENU ITEM LINK -->
         <a
           [attr.data-title]="'sidebar_setting' | translate"
           class="menu-item-link"
-          href="setting"
+          routerLink="/setting"
         >
           <!-- MENU ITEM LINK ICON -->
           <div class="menu-item-link-icon icon-badges">
@@ -236,9 +236,9 @@
   <!-- MENU -->
   <ul class="menu">
     <!-- MENU ITEM -->
-    <li class="menu-item">
+    <li [class.menu-item]="true" [class.active]="activeMenuItem === 'newsfeed'">
       <!-- MENU ITEM LINK -->
-      <a class="menu-item-link" href="newsfeed">
+      <a class="menu-item-link" routerLink="/newsfeed">
         <!-- MENU ITEM LINK ICON -->
         <div class="menu-item-link-icon icon-newsfeed">
           <i class="fa-solid fa-house"></i>
@@ -251,9 +251,9 @@
     <!-- /MENU ITEM -->
 
     <!-- MENU ITEM -->
-    <li class="menu-item">
+    <li [class.menu-item]="true" [class.active]="activeMenuItem === 'follow'">
       <!-- MENU ITEM LINK -->
-      <a class="menu-item-link" href="follow">
+      <a class="menu-item-link" routerLink="/follow">
         <!-- MENU ITEM LINK ICON -->
         <div class="menu-item-link-icon icon-overview">
           <i class="fa-solid fa-heart"></i>
@@ -266,9 +266,9 @@
     <!-- /MENU ITEM -->
 
     <!-- MENU ITEM -->
-    <li class="menu-item">
+    <li [class.menu-item]="true" [class.active]="activeMenuItem === 'history'">
       <!-- MENU ITEM LINK -->
-      <a class="menu-item-link" href="history">
+      <a class="menu-item-link" routerLink="/history">
         <!-- MENU ITEM LINK ICON -->
         <div class="menu-item-link-icon icon-group">
           <i class="fa-solid fa-clock-rotate-left"></i>
@@ -281,9 +281,9 @@
     <!-- /MENU ITEM -->
 
     <!-- MENU ITEM -->
-    <li class="menu-item">
+    <li [class.menu-item]="true" [class.active]="activeMenuItem === 'contact'">
       <!-- MENU ITEM LINK -->
-      <a class="menu-item-link" href="contact">
+      <a class="menu-item-link" routerLink="/contact">
         <!-- MENU ITEM LINK ICON -->
         <div class="menu-item-link-icon icon-members">
           <i class="fa-solid fa-envelope"></i>
@@ -296,9 +296,9 @@
     <!-- /MENU ITEM -->
 
     <!-- MENU ITEM -->
-    <li class="menu-item">
+    <li [class.menu-item]="true" [class.active]="activeMenuItem === 'setting'">
       <!-- MENU ITEM LINK -->
-      <a class="menu-item-link" href="setting">
+      <a class="menu-item-link" routerLink="setting">
         <!-- MENU ITEM LINK ICON -->
         <div class="menu-item-link-icon icon-badges">
           <i class="fa-solid fa-gear"></i>
@@ -391,9 +391,9 @@
   <!-- MENU -->
   <ul class="menu">
     <!-- MENU ITEM -->
-    <li class="menu-item">
+    <li [class.menu-item]="true" [class.active]="activeMenuItem === 'newsfeed'">
       <!-- MENU ITEM LINK -->
-      <a class="menu-item-link" href="newsfeed">
+      <a class="menu-item-link" routerLink="/newsfeed">
         <!-- MENU ITEM LINK ICON -->
         <div class="menu-item-link-icon icon-newsfeed">
           <i class="fa-solid fa-house"></i>
@@ -406,9 +406,9 @@
     <!-- /MENU ITEM -->
 
     <!-- MENU ITEM -->
-    <li class="menu-item">
+    <li [class.menu-item]="true" [class.active]="activeMenuItem === 'follow'">
       <!-- MENU ITEM LINK -->
-      <a class="menu-item-link" href="follow">
+      <a class="menu-item-link" routerLink="/follow">
         <!-- MENU ITEM LINK ICON -->
         <div class="menu-item-link-icon icon-overview">
           <i class="fa-solid fa-heart"></i>
@@ -421,9 +421,9 @@
     <!-- /MENU ITEM -->
 
     <!-- MENU ITEM -->
-    <li class="menu-item">
+    <li [class.menu-item]="true" [class.active]="activeMenuItem === 'history'">
       <!-- MENU ITEM LINK -->
-      <a class="menu-item-link" href="history">
+      <a class="menu-item-link" routerLink="/history">
         <!-- MENU ITEM LINK ICON -->
         <div class="menu-item-link-icon icon-group">
           <i class="fa-solid fa-clock-rotate-left"></i>
@@ -436,9 +436,9 @@
     <!-- /MENU ITEM -->
 
     <!-- MENU ITEM -->
-    <li class="menu-item">
+    <li [class.menu-item]="true" [class.active]="activeMenuItem === 'contact'">
       <!-- MENU ITEM LINK -->
-      <a class="menu-item-link" href="contact">
+      <a class="menu-item-link" routerLink="/contact">
         <!-- MENU ITEM LINK ICON -->
         <div class="menu-item-link-icon icon-members">
           <i class="fa-solid fa-envelope"></i>
@@ -451,9 +451,9 @@
     <!-- /MENU ITEM -->
 
     <!-- MENU ITEM -->
-    <li class="menu-item">
+    <li [class.menu-item]="true" [class.active]="activeMenuItem === 'setting'">
       <!-- MENU ITEM LINK -->
-      <a class="menu-item-link" href="setting">
+      <a class="menu-item-link" routerLink="/setting">
         <!-- MENU ITEM LINK ICON -->
         <div class="menu-item-link-icon icon-badges">
           <i class="fa-solid fa-gear"></i>
@@ -1826,7 +1826,7 @@
         <!-- <svg class="action-item-icon icon-settings">
         <use xlink:href="#svg-settings"></use>
       </svg> -->
-        <p class="fullname-logged">Nguyễn Khánh Đan</p>
+        <p class="fullname-logged">{{userDisplayName}}</p>
         <!-- /ACTION ITEM ICON -->
       </div>
       <!-- /ACTION ITEM -->

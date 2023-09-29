@@ -42,4 +42,15 @@ export class FollowsComponent implements OnInit {
   constructor(
     public modalService: ModalService,
   ) { }
+
+  // filterFollow(){
+
+  // }
+  activeContent: string | null = 'following';
+
+  openTabFollow(content: string) {
+    if (this.activeContent !== content) {
+      this.activeContent = content;
+    }
+  }
 }
