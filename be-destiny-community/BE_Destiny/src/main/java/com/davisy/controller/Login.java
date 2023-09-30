@@ -3,12 +3,12 @@ package com.davisy.controller;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import jakarta.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +23,8 @@ import com.davisy.reponsitory.UsersReponsitory;
 import com.davisy.service.AuthenticationService;
 import com.davisy.service.JwtService;
 import com.davisy.service.UserService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @CrossOrigin("*")
@@ -92,6 +94,12 @@ public class Login {
 		 * 403: Tài khoản bị khóa, liên hệ admin để được mở  
 		 * 401: Đăng nhập thất bại hoặc lỗi server
 		 */
+	}
+	
+	@GetMapping("/v1/oauth/login/authcode/{code}/{email}")
+	public ResponseEntity<AuthenticationResponse> authLogRegisCode(@PathVariable String code, @PathVariable String email) {
+		LoginResponse resLog = authenticationService.loginWithEmailAndCodeauthregis(code, email);
+		return ResponseEntity.status(resLog.getStatusResponse()).body(resLog.getData());
 	}
 
 }

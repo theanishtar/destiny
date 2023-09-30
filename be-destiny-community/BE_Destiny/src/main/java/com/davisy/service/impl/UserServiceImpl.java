@@ -36,10 +36,17 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public User findById(int id) {
+		User user = userDAO.findById(id).get();
+		if (user == null)
+			return null;
+		return user;
+	}
+
+	@Override
 	public void create(User user) {
 		userDAO.save(user);
 	}
-
 
 	@Override
 	public void update(User user) {
@@ -48,7 +55,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void delete(User user) {
-		userDAO.delete(user);		
+		userDAO.delete(user);
 	}
 
 	@Override

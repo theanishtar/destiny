@@ -7,10 +7,10 @@ import com.davisy.entity.User;
 
 public interface UserService {
 	User findByEmailAndPassword(String email, String password);
-
 	User findByEmail(String email);
-	
 	List<User>findAll();
+	User findById(int id);
+	
 
 	public void create(User user);
 	public void update(User user);

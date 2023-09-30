@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,20 +14,17 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.davisy.auth.AuthenticationRequest;
 import com.davisy.auth.AuthenticationResponse;
-import com.davisy.auth.OAuthenticationRequest;
-import com.davisy.dao.UserDao;
 import com.davisy.entity.Roles;
 import com.davisy.entity.User;
 import com.davisy.model.LoginResponse;
+import com.davisy.model.RegisterUser;
 import com.davisy.reponsitory.RoleCustomRepo;
 import com.davisy.reponsitory.UsersReponsitory;
-import com.davisy.service.impl.UserServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 
@@ -55,6 +51,9 @@ public class AuthenticationService {
 	UserService userService;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	RedisService redisService;
 
 	// Bean PasswordEncoder trả về bởi BCryptPasswordEncoder
 //	@Bean
@@ -154,6 +153,54 @@ public class AuthenticationService {
 
 			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
 					authenticationRequest.getEmail(), authenticationRequest.getPassword());
+
+			List<Roles> role = roleCustomRepo.getRole(user);
+
+			Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
+			Set<Roles> set = new HashSet<>();
+			role.stream().forEach(c -> set.add(new Roles(c.getName())));
+			user.setRoles(set);
+
+			set.stream().forEach(i -> authorities.add(new SimpleGrantedAuthority(i.getName())));
+
+			authenticationManager.authenticate(token);
+
+			var jwtToken = jwtService.generateToken(user, authorities);
+			var jwtRefreshToken = jwtService.generateRefreshToken(user, authorities);
+
+			AuthenticationResponse authRes = AuthenticationResponse.builder().token(jwtToken)
+					.refreshToken(jwtRefreshToken).name(user.getFullname()).roles(authorities).build();
+			return new LoginResponse(200, authRes, "Login successfully!");
+		} catch (Exception e) {
+			System.out.println("error: " + e);
+		}
+		return new LoginResponse(401, null, null);
+	}
+	
+	public LoginResponse loginWithEmailAndCodeauthregis(String code, String email) {
+		/*
+		 * Status code: 
+		 * 200: Đăng nhập thành công 
+		 * 404: Không thể tìm thấy tài khoản trong DB 
+		 * 403: Tài khoản bị khóa, liên hệ admin để được mở 
+		 * 401: Đăng nhập thất bại hoặc lỗi server
+		 */
+		try {
+			User user = userService.findByEmail(email);
+			if (user == null) 
+				return new LoginResponse(404, null, "Dont find your account");
+			
+			RegisterUser regisU = redisService.authenRegister(code);
+//			User userFromRedis = redisService.authenRegister(code);
+			
+			if(regisU == null ) {
+				// đã quá 5p -> Token đã hết hạn, vui lòng đăng nhập thủ công!
+				return new LoginResponse(401, null, "Token đã hết hạn, vui lòng đăng nhập thủ công!");
+			}
+
+			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+					user.getEmail(), user.getPassword());
 
 			List<Roles> role = roleCustomRepo.getRole(user);
 
