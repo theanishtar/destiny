@@ -24,6 +24,7 @@ declare var toast: any;
 
 import { LoginService } from '../service/login.service';
 import { RegisterService } from '@app/service/register.service';
+import { FollowsService } from '@app/user/service/follows.service';
 @Component({
 	selector: 'app-get-started',
 	templateUrl: './get-started.component.html',
@@ -51,6 +52,7 @@ export class GetStartedComponent implements OnInit {
 		private router: Router,
 		private route: ActivatedRoute,
 		public registerService: RegisterService,
+		public followsService: FollowsService
 	) {
 		this.createFormLogin();
 		this.createFormRegister();

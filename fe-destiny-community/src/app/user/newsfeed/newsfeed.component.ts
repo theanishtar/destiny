@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 
-import { liquid } from "../../../assets/js/utils/liquidify.js";
+import { liquid } from '../../../assets/js/utils/liquidify.js';
 // import { tns } from '../../../assets/js/vendor/ti';
 import { avatarHexagons } from '../../../assets/js/global/global.hexagons.js';
 import { tooltips } from '../../../assets/js/global/global.tooltips.js';
@@ -11,7 +11,7 @@ import { content } from '../../../assets/js/content/content.js';
 import { form } from '../../../assets/js/form/form.utils.js';
 import 'src/assets/js/utils/svg-loader.js';
 
-// 
+//
 import { ModalService } from '../service/modal.service';
 import { InteractPostsService } from '../service/interact-posts.service';
 
@@ -19,6 +19,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { GetStartedComponent } from '@app/get-started/get-started.component';
 import { LoginService } from '@app/service/login.service';
+import { FollowsService } from '../service/follows.service';
 import '../../../assets/toast/main.js';
 declare var toast: any;
 @Component({
@@ -29,15 +30,17 @@ declare var toast: any;
     `../../css/styles.min.css`,
     `../../css/vendor/simplebar.css`,
     `../../css/vendor/tiny-slider.css`,
-    './newsfeed.component.css'
-  ]
+    './newsfeed.component.css',
+  ],
 })
 export class NewsfeedComponent implements OnInit {
   userDisplayName = '';
   postId = '123'; // Mã số của bài viết (có thể là mã số duy nhất của mỗi bài viết)
 
   ngOnInit() {
-    this.userDisplayName = this.cookieService.get('full_name');  
+    this.userDisplayName = this.cookieService.get('full_name');
+    // this.loadDataFling() ;
+
     this.checkSrcoll();
     this.translate();
     liquid.liquid();
@@ -57,23 +60,37 @@ export class NewsfeedComponent implements OnInit {
     private cookieService: CookieService,
     private loginService: LoginService,
     private router: Router,
-  ) { }
-
+    public followsService: FollowsService
+  ) {}
+  loadDataFling() {
+    this.followsService.loadDataFollowing().subscribe((res) => {
+      this.followsService.setDataFling(JSON.parse(JSON.stringify(res)));
+      console.warn(this.followsService.getDataFling());
+    });
+  }
   translate() {
-    document.addEventListener("DOMContentLoaded", function () {
-      const translateButton = document.querySelector(".translate-button") as HTMLButtonElement;
-      const backButton = document.querySelector(".back-button") as HTMLButtonElement;
-      const originalContent = document.querySelector(".original-content") as HTMLElement;
-      const translatedContent = document.querySelector(".translated-content") as HTMLElement;
-    
-      translateButton.addEventListener("click", function () {
-        originalContent.style.display = "none";
-        translatedContent.classList.add("active");
+    document.addEventListener('DOMContentLoaded', function () {
+      const translateButton = document.querySelector(
+        '.translate-button'
+      ) as HTMLButtonElement;
+      const backButton = document.querySelector(
+        '.back-button'
+      ) as HTMLButtonElement;
+      const originalContent = document.querySelector(
+        '.original-content'
+      ) as HTMLElement;
+      const translatedContent = document.querySelector(
+        '.translated-content'
+      ) as HTMLElement;
+
+      translateButton.addEventListener('click', function () {
+        originalContent.style.display = 'none';
+        translatedContent.classList.add('active');
       });
-    
-      backButton.addEventListener("click", function () {
-        originalContent.style.display = "block";
-        translatedContent.classList.remove("active");
+
+      backButton.addEventListener('click', function () {
+        originalContent.style.display = 'block';
+        translatedContent.classList.remove('active');
       });
     });
   }
@@ -83,7 +100,10 @@ export class NewsfeedComponent implements OnInit {
   scrollToTop() {
     console.log(this.elementToScroll); // In ra để kiểm tra ElementRef
     if (this.elementToScroll && this.elementToScroll.nativeElement) {
-      this.elementToScroll.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      this.elementToScroll.nativeElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
     }
   }
   checkSrcoll() {
@@ -110,11 +130,11 @@ export class NewsfeedComponent implements OnInit {
     return this.interactPostsService.isLiked(postId);
   }
 
-  isLogin(){
+  isLogin() {
     return this.loginService.isLogin();
   }
 
-  logout(){
+  logout() {
     return this.loginService.logout();
   }
 
