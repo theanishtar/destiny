@@ -4,7 +4,6 @@ import 'src/assets/js/utils/svg-loader.js';
 import { form } from '../../assets/js/form/form.utils.js';
 import { tabs } from '../../assets/js/landing/landing.tabs.js';
 
-import { FormsModule } from '@angular/forms';
 import {
 	FormGroup,
 	FormBuilder,
@@ -13,16 +12,13 @@ import {
 } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Location } from '@angular/common';
-import { delay, catchError, tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
 
 //Xử lí bất đồng bộ
-import { Observable } from 'rxjs';
 import { of } from 'rxjs';
 import Swal from 'sweetalert2';
 import '../../assets/toast/main.js';
-// import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { ActivatedRoute } from '@angular/router';
 declare var toast: any;
 
@@ -156,11 +152,23 @@ export class GetStartedComponent implements OnInit {
 	}
 	/*===========Register===============*/
 	createFormRegister() {
+		const PASSWORD_PATTERN = /^(?=.*[!@#$%^&*]+)[a-z0-9!@#$%^&*]{4,20}$/;
+		const NAME_PATTERN = /^[\p{L}\s]+$/u;
 		this.registerForm = this.formbuilder.group({
 			email: ['', [Validators.required, Validators.email]],
-			name: ['', Validators.required],
-			password: ['', Validators.required],
-			rePassword: ['', Validators.required],
+			name: ['',
+				[
+					Validators.required,
+					Validators.pattern(NAME_PATTERN),
+				]],
+			password: ['',
+				[
+					Validators.required,
+					Validators.pattern(PASSWORD_PATTERN),
+				]],
+			rePassword: ['', [
+				Validators.required,
+			]],
 		});
 	}
 
@@ -174,27 +182,19 @@ export class GetStartedComponent implements OnInit {
 				name: this.registerForm.get("name")!.value,
 				password: this.registerForm.get("password")!.value,
 			};
-			localStorage.setItem(
-				'registerEmail', data.email
-			);
-			localStorage.setItem(
-				'registerPass', data.password
-			);
-			this.registerService.registerUser(data).subscribe((response) =>{
-				if(response == ''){
+			this.registerService.registerUser(data).subscribe((response) => {
+				if (response == '') {
 					new toast({
 						title: 'Thất bại!',
 						message: 'Tài khoản đã tồn tại!',
 						type: 'error',
 						duration: 3000,
 					});
-				}else{
-					localStorage.setItem(
-						'registerEmail', data.email
-					);
+				} else {
+					console.log("Check")
 				}
 			});
-		}else{
+		} else {
 			new toast({
 				title: 'Thất bại!',
 				message: 'Vui lòng kiểm tra lại xác nhận mật khẩu!',
@@ -204,36 +204,37 @@ export class GetStartedComponent implements OnInit {
 		}
 		let timerInterval;
 		Swal.fire({
-		  title: 'Thông báo!',
-		  html: 'Quá trình sẽ diễn ra trong vài giây!',
-		  timer: 16000,
-		  timerProgressBar: true,
-		  didOpen: () => {
-			Swal.showLoading();
-		  },
-		  willClose: () => {
-			clearInterval(timerInterval);
-		  },
+			title: 'Thông báo!',
+			html: 'Quá trình sẽ diễn ra trong vài giây!',
+			timer: 16000,
+			timerProgressBar: true,
+			didOpen: () => {
+				Swal.showLoading();
+			},
+			willClose: () => {
+				clearInterval(timerInterval);
+			},
 		}).then((result) => {
-		  if (result.dismiss === Swal.DismissReason.timer) {
-			console.log('I was closed by the timer');
-		  }
+			if (result.dismiss === Swal.DismissReason.timer) {
+				console.log('I was closed by the timer');
+			}
 		});
 	}
-	
+
 	autoLogin() {
 		const action = this.route.snapshot.queryParams['action'];
 		if (action === 'auto') {
 			this.router.navigate(
 				['/login'],
-				{ queryParams: { 
-					  action: 'no-auto', 
-					  email: this.loginForm.get('email'), 
-					  password: this.loginForm.get('password') 
-				  } 
-				 }
-			  );
-		}else{
+				{
+					queryParams: {
+						action: 'no-auto',
+						email: this.loginForm.get('email'),
+						password: this.loginForm.get('password')
+					}
+				}
+			);
+		} else {
 			alert("Action không phải auto má ơi")
 		}
 	}

@@ -38,7 +38,7 @@ const routes: Routes = [
   { path: 'get-started', component: GetStartedComponent },
   { path: 'forgotpassword', component: ForgotPasswordComponent },
   { path: 'wait-confirm', component: WaitForConfirmationComponent },
-  { path: 'regisauth', component: ConfirmSuccessComponent }, //url register
+  { path: 'regisauth', component: ConfirmSuccessComponent }, 
 
   // user
   // { path: 'newsfeed', component: NewsfeedComponent, canActivate: [authGuard]},

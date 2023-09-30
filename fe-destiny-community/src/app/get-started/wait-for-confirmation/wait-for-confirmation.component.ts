@@ -1,20 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  FormGroup,
   FormBuilder,
-  Validators,
-  FormControl,
 } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Location } from '@angular/common';
-import { delay, catchError, tap } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
 
 //Xử lí bất đồng bộ
-import { Observable } from 'rxjs';
-import { of } from 'rxjs';
-import Swal from 'sweetalert2';
 import '../../../assets/toast/main.js';
 // import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { ActivatedRoute, Params } from '@angular/router';

@@ -1,23 +1,24 @@
 import { Injectable } from '@angular/core';
 //Xử lí bất đồng bộ
 import { Observable, throwError } from 'rxjs';
-import { of } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { catchError, map, tap } from 'rxjs/operators';
-import { Router } from '@angular/router';
 
+import { ActivatedRoute } from '@angular/router';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { catchError, tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { environment } from '../../environments/environment'
 import { CookieService } from 'ngx-cookie-service';
 import Swal from 'sweetalert2';
 import '../../assets/toast/main.js';
 declare var toast: any;
+
 @Injectable({
 	providedIn: 'root'
 })
 export class LoginService {
-	private userURL = 'http://localhost:8080/v1/oauth/login';
+	private userURL = environment.baseUrl + 'v1/oauth/login';
 	private userLogined: any[] = [];
-
+	
 	loginUser(data: any): Observable<any> {
 		return this.http.post<any>(this.userURL, data)
 			.pipe(

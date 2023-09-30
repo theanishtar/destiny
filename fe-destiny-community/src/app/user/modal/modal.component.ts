@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ModalService } from '../service/modal.service';
-// import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
 @Component({
   selector: 'app-modal',
   templateUrl: './modal.component.html',
@@ -16,7 +15,6 @@ export class ModalComponent implements OnInit {
   
   constructor(
     public modalService: ModalService,
-    // public modalRef: MdbModalRef<ModalComponent>
   ) { }
 
   ngOnInit() {
