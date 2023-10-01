@@ -28,18 +28,27 @@ public class FollowServiceImpl implements FollowService {
 	}
 
 	@Override
-	public void delete(int id1,int id2) {
+	public void delete(int id1, int id2) {
 		followDAO.delete(followDAO.unFollow(id1, id2));
 	}
 
 	@Override
 	public void create(Follower follower) {
-		followDAO.save(follower);	
+		followDAO.save(follower);
 	}
 
 	@Override
 	public List<Follower> findAll() {
 		return followDAO.findAll();
+	}
+
+	@Override
+	public boolean checkFriend(int id1, int id2) {
+		List<Follower> list = followDAO.findAllSuggest(id1, id2);
+		if (list.size()<2)
+			return false;
+		else
+			return true;
 	}
 
 }

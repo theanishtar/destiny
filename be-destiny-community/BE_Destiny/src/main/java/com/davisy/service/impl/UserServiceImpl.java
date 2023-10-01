@@ -59,7 +59,17 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public List<Integer> findAllUserProvinces(String idPr, String idDt, String idW) {
+		List<Integer> list = userDAO.findAllUserProvinces(idPr, idDt, idW);
+		if (list == null) {
+			return null;
+		}
+		return list;
+	}
+
+	@Override
 	public List<User> findAll() {
+		// TODO Auto-generated method stub
 		return userDAO.findAll();
 	}
 
