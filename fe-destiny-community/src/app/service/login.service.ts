@@ -25,7 +25,6 @@ export class LoginService {
 				tap((response) => {
 					this.userLogined = JSON.parse(JSON.stringify(response));
 					this.setUserLog(this.userLogined);
-					console.warn(this.userLogined);
 					localStorage.setItem(
 						'token',
 						JSON.parse(JSON.stringify(this.getUserLog())).token

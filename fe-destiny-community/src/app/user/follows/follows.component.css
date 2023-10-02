@@ -1,64 +1,157 @@
 .form {
-    border: none;
-    padding: 0px;
-    box-shadow: none;
-}
-svg.icon-magnifying-glass {
-    position: relative;
-    top: 10%;
-}
-.hidden{
-    display: none;
+  border: none;
+  padding: 0px;
+  box-shadow: none;
 }
 
-.grid.grid-4-4-4.centered{
-    height: 650px;
+svg.icon-magnifying-glass {
+  position: relative;
+  top: 10%;
+}
+
+.hidden {
+  display: none;
+}
+
+.grid.grid-4-4-4.centered {
+  height: 650px;
   overflow: auto;
   overflow: -moz-scrollbars-none;
   -ms-overflow-style: none;
 }
+
 .grid.grid-4-4-4.centered::-webkit-scrollbar {
-    width: 0 !important;
-    display: none;
+  width: 0 !important;
+  display: none;
 }
-.content-grid{
-    padding-bottom: 0;
+
+.content-grid {
+  padding-bottom: 0;
+}
+
+p.user-short-description-text {
+  width: 328px;
+  min-height: 48.6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 3;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  line-height: 1.3;
+}
+
+p.user-short-description-text a {
+  text-transform: none;
+  font-size: 13px;
+}
+
+figure.user-preview-cover.liquid img {
+  border-top-right-radius: 12px;
+  border-top-left-radius: 12px;
 }
 
 /* Loading */
 .lds-facebook {
-    display: inline-block;
-    position: relative;
-    width: 80px;
-    height: 80px;
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin-left: 50%;
+}
+
+.lds-facebook div {
+  display: inline-block;
+  position: absolute;
+  left: 8px;
+  width: 16px;
+  background: #cef;
+  animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+}
+
+.lds-facebook div:nth-child(1) {
+  left: 8px;
+  animation-delay: -0.24s;
+}
+
+.lds-facebook div:nth-child(2) {
+  left: 32px;
+  animation-delay: -0.12s;
+}
+
+.lds-facebook div:nth-child(3) {
+  left: 56px;
+  animation-delay: 0;
+}
+
+@keyframes lds-facebook {
+  0% {
+    top: 8px;
+    height: 64px;
   }
-  .lds-facebook div {
-    display: inline-block;
-    position: absolute;
-    left: 8px;
-    width: 16px;
-    background: #cef;
-    animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+
+  50%,
+  100% {
+    top: 24px;
+    height: 32px;
   }
-  .lds-facebook div:nth-child(1) {
-    left: 8px;
-    animation-delay: -0.24s;
-  }
-  .lds-facebook div:nth-child(2) {
-    left: 32px;
-    animation-delay: -0.12s;
-  }
-  .lds-facebook div:nth-child(3) {
-    left: 56px;
-    animation-delay: 0;
-  }
-  @keyframes lds-facebook {
-    0% {
-      top: 8px;
-      height: 64px;
-    }
-    50%, 100% {
-      top: 24px;
-      height: 32px;
-    }
-  }
+}
+
+/*  */
+/* Div ngoài cùng có border lục giác */
+.hexagon-container {
+  width: 120px;
+  height: 130px;
+  background-color: transparent;
+  /* Đặt màu nền của hình lục giác */
+  position: relative;
+  margin: 0 auto;
+  /* Căn giữa theo chiều ngang */
+}
+
+.hexagon {
+  position: absolute;
+}
+
+/* Hình lục giác nằm trong div ngoài cùng */
+.user-avatar-content {
+  width: 100px;
+  /* Chiều rộng 100% để lấp đầy div ngoài cùng */
+  height: 110px;
+  overflow: hidden;
+  position: absolute;
+}
+
+.hexagon-image {
+  width: 82px;
+  height: 90px;
+  position: relative;
+  z-index: 3;
+  background-size: cover;
+  /* Cắt và lấp đầy hình ảnh */
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  /* Cắt hình lục giác */
+}
+
+.user-avatar-border:before {
+  width: 100px;
+height: 110px;
+z-index: 2;
+content: "";
+position: absolute;
+clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+/* background-color: white;  */
+left: 10px;
+top: 10px;
+/* border: 5px solid transparent; */
+border-image: linear-gradient(to right, #ff0000, #00ff00); /* Màu gradient cho viền */
+border-image-slice: 1;
+}
+
+.hexagon.user-avatar-progress-border {
+  position: relative; 
+  z-index: 1;
+  width: 100px;
+  height: 110px;
+  background: white;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}

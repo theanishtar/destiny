@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { DataSrcDirective } from './dataSrcDirective';
 // interceptor
 import { TokenInterceptor } from './interceptor';
 import { loadingInterceptor } from './loadingInterceptor';
@@ -82,6 +83,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     GetStartedComponent,
     WaitForConfirmationComponent,
     ConfirmSuccessComponent,
+    DataSrcDirective
   ],
   imports: [
     BrowserModule,

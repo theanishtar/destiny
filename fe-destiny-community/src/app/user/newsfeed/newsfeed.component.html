@@ -60,7 +60,7 @@
               <p _ngcontent-ng-c3005008795="" class="user-status-title">
                 <a _ngcontent-ng-c3005008795="" routerLink="/profile" class="bold">Nguyễn Khánh Đan</a>
               </p>
-              <a _ngcontent-ng-c3005008795="" routerLink="/" class="user-status-text small">Theo dõi</a>
+              <a _ngcontent-ng-c3005008795=""(click)="a()" class="user-status-text small">Theo dõi</a>
               <div class="action-request-list">
                 <!-- ACTION REQUEST -->
                 <div class="action-request accept">
@@ -102,7 +102,7 @@
               <p _ngcontent-ng-c3005008795="" class="user-status-title">
                 <a _ngcontent-ng-c3005008795="" routerLink="/profile" class="bold">Lê Bích Vi</a>
               </p>
-              <a _ngcontent-ng-c3005008795="" routerLink="/" class="user-status-text small">Theo dõi</a>
+              <a _ngcontent-ng-c3005008795=""(click)="a()" class="user-status-text small">Theo dõi</a>
               <div class="action-request-list">
                 <!-- ACTION REQUEST -->
                 <div class="action-request accept">
@@ -251,92 +251,30 @@
         <p class="widget-box-title">Đề xuất cho bạn</p>
 
         <div class="widget-box-content">
-          <div class="user-status-list">
+          <div class="user-status-list" *ngFor="let item of listSuggested">
             <div class="user-status">
               <a class="user-avatar small user-status-avatar no-border no-outline" routerLink="/profile">
                 <div class="user-avatar-content">
-                  <div class="hexagon-image-30-32" data-src="../assets/images/users/dan.jpg"></div>
+                  <div class="hexagon-image-30-32" [appDataSrc]="imageUrlSuggested" style="width: 30px; height: 32px; position: relative;">
+                    <canvas width="30" height="32" style="position: absolute; top: 0px; left: 0px;"></canvas>
+                  </div>
                 </div>
                 <div class="user-avatar-progress">
-                  <div class="hexagon-progress-40-44" data-scalestop="6" data-scaleend="6"></div>
+                  <div class="hexagon-progress-40-44" data-scalestop="6" data-scaleend="6" style="width: 40px; height: 44px; position: relative;">
+                    <canvas width="40" height="44" style="position: absolute; top: 0px; left: 0px;"></canvas>
+                  </div>
                 </div>
                 <div class="user-avatar-progress-border">
-                  <div class="hexagon-border-40-44"></div>
+                  <div class="hexagon-border-40-44" style="width: 40px; height: 44px; position: relative;">
+                    <canvas width="40" height="44" style="position: absolute; top: 0px; left: 0px;"></canvas>
+                  </div>
                 </div>
               </a>
               <div class="user-status-title">
-                <a class="bold" routerLink="/profile">Nguyễn Khánh Đan</a>
+                <a class="bold" routerLink="/profile">{{item.fullname}}</a>
                 <span class="bp-verified-badge"></span>
               </div>
-              <a class="user-status-text small" routerLink="/">Theo dõi</a>
-            </div>
-            <div class="user-status">
-              <a class="user-avatar small user-status-avatar no-border no-outline" routerLink="/profile">
-                <div class="user-avatar-content">
-                  <div class="hexagon-image-30-32" data-src="../assets/images/users/duyen.jpg"></div>
-                </div>
-                <div class="user-avatar-progress">
-                  <div class="hexagon-progress-40-44" data-scalestop="6" data-scaleend="6"></div>
-                </div>
-                <div class="user-avatar-progress-border">
-                  <div class="hexagon-border-40-44"></div>
-                </div>
-              </a>
-              <div class="user-status-title">
-                <a class="bold" routerLink="/profile">Trần Thị Mỹ Duyên</a>
-              </div>
-              <a class="user-status-text small" routerLink="/">Theo dõi</a>
-            </div>
-            <div class="user-status">
-              <a class="user-avatar small user-status-avatar no-border no-outline" routerLink="/profile">
-                <div class="user-avatar-content">
-                  <div class="hexagon-image-30-32" data-src="../assets/images/users/sy.jpg"></div>
-                </div>
-                <div class="user-avatar-progress">
-                  <div class="hexagon-progress-40-44" data-scalestop="6" data-scaleend="6"></div>
-                </div>
-                <div class="user-avatar-progress-border">
-                  <div class="hexagon-border-40-44"></div>
-                </div>
-              </a>
-              <div class="user-status-title">
-                <a class="bold" routerLink="/profile">Đoàn Hiệp Sỹ</a>
-              </div>
-              <a class="user-status-text small" routerLink="/">Theo dõi</a>
-            </div>
-            <div class="user-status">
-              <a class="user-avatar small user-status-avatar no-border no-outline" routerLink="/profile">
-                <div class="user-avatar-content">
-                  <div class="hexagon-image-30-32" data-src="../assets/images/users/vinh.jpg"></div>
-                </div>
-                <div class="user-avatar-progress">
-                  <div class="hexagon-progress-40-44" data-scalestop="6" data-scaleend="6"></div>
-                </div>
-                <div class="user-avatar-progress-border">
-                  <div class="hexagon-border-40-44"></div>
-                </div>
-              </a>
-              <div class="user-status-title">
-                <a class="bold" routerLink="/profile">Phùng Quốc Vinh</a>
-              </div>
-              <a class="user-status-text small" routerLink="/">Theo dõi</a>
-            </div>
-            <div class="user-status">
-              <a class="user-avatar small user-status-avatar no-border no-outline" routerLink="/profile">
-                <div class="user-avatar-content">
-                  <div class="hexagon-image-30-32" data-src="../assets/images/users/dang.jpg"></div>
-                </div>
-                <div class="user-avatar-progress">
-                  <div class="hexagon-progress-40-44" data-scalestop="6" data-scaleend="6"></div>
-                </div>
-                <div class="user-avatar-progress-border">
-                  <div class="hexagon-border-40-44"></div>
-                </div>
-              </a>
-              <div class="user-status-title">
-                <a class="bold" routerLink="/profile">Trần Hữu Đang</a>
-              </div>
-              <a class="user-status-text small" routerLink="/">Theo dõi</a>
+              <a class="user-status-text small" (click)="addFollow(item.user_id)">Theo dõi</a>
             </div>
           </div>
         </div>

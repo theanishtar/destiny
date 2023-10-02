@@ -114,38 +114,17 @@
           <div class="user-short-description">
             <!-- USER SHORT DESCRIPTION AVATAR -->
             <a class="user-short-description-avatar user-avatar medium" href="profile">
-              <!-- USER AVATAR BORDER -->
-              <div class="user-avatar-border">
-                <!-- HEXAGON -->
-                <div class="hexagon-120-132"></div>
-                <!-- /HEXAGON -->
+              <div class="hexagon-container">
+                <div class="hexagon user-avatar-content">
+                  <div class="hexagon-image" style="background-image: url('../../../assets/images/users/dan.jpg')"></div>
+                </div>
+                <div class="hexagon user-avatar-border">
+                  <div class="hexagon-border"></div>
+                </div>
+                <div class="hexagon user-avatar-progress-border">
+                  <div class="user-avatar-progress"></div>
+                </div>
               </div>
-              <!-- /USER AVATAR BORDER -->
-
-              <!-- USER AVATAR CONTENT -->
-              <div class="user-avatar-content">
-                <!-- HEXAGON -->
-                <div class="hexagon-image-82-90" data-src="../../assets/images/avatar/05.jpg"></div>
-                <!-- /HEXAGON -->
-              </div>
-              <!-- /USER AVATAR CONTENT -->
-
-              <!-- USER AVATAR PROGRESS -->
-              <div class="user-avatar-progress">
-                <!-- HEXAGON -->
-                <div class="hexagon-progress-100-110"></div>
-                <!-- /HEXAGON -->
-              </div>
-              <!-- /USER AVATAR PROGRESS -->
-
-              <!-- USER AVATAR PROGRESS BORDER -->
-              <div class="user-avatar-progress-border">
-                <!-- HEXAGON -->
-                <div class="hexagon-border-100-110"></div>
-                <!-- /HEXAGON -->
-              </div>
-              <!-- /USER AVATAR PROGRESS BORDER -->
-
             </a>
             <!-- /USER SHORT DESCRIPTION AVATAR -->
 
@@ -207,18 +186,6 @@
           </div>
           <!-- /USER PREVIEW STATS SLIDES -->
 
-          <!-- USER PREVIEW STATS ROSTER -->
-          <div id="user-preview-stats-roster-01" class="user-preview-stats-roster slider-roster">
-            <!-- SLIDER ROSTER ITEM -->
-            <div class="slider-roster-item"></div>
-            <!-- /SLIDER ROSTER ITEM -->
-
-            <!-- SLIDER ROSTER ITEM -->
-            <div class="slider-roster-item"></div>
-            <!-- /SLIDER ROSTER ITEM -->
-          </div>
-          <!-- /USER PREVIEW STATS ROSTER -->
-
           <!-- USER PREVIEW ACTIONS -->
           <div class="user-preview-actions">
             <!-- BUTTON -->
@@ -240,10 +207,10 @@
     <!-- GRID -->
     <div class="grid grid-4-4-4 centered follower" [ngClass]="{'hidden': activeContent !== 'follower'}">
       <!-- USER PREVIEW -->
-      <div class="user-preview">
+      <div class="user-preview" *ngFor="let fler of listFollower">
         <!-- USER PREVIEW COVER -->
         <figure class="user-preview-cover liquid">
-          <img src="../../assets/images/cover/04.jpg" alt="cover-04">
+          <img src="{{fler.thumb}}" alt="cover-04">
         </figure>
         <!-- /USER PREVIEW COVER -->
 
@@ -264,7 +231,7 @@
               <!-- USER AVATAR CONTENT -->
               <div class="user-avatar-content">
                 <!-- HEXAGON -->
-                <div class="hexagon-image-82-90" data-src="../../assets/images/avatar/05.jpg"></div>
+                <div class="hexagon-image-82-90" [appDataSrc]="imageUrlSuggested"></div>
                 <!-- /HEXAGON -->
               </div>
               <!-- /USER AVATAR CONTENT -->
@@ -289,11 +256,11 @@
             <!-- /USER SHORT DESCRIPTION AVATAR -->
 
             <!-- USER SHORT DESCRIPTION TITLE -->
-            <p class="user-short-description-title"><a href="profile">NekoBebop</a></p>
+            <p class="user-short-description-title"><a href="profile">{{fler.fullname}}</a></p>
             <!-- /USER SHORT DESCRIPTION TITLE -->
 
             <!-- USER SHORT DESCRIPTION TEXT -->
-            <p class="user-short-description-text"><a href="#">www.store.com/nekoprints</a></p>
+            <p class="user-short-description-text"><a>{{fler.intro}}</a></p>
             <!-- /USER SHORT DESCRIPTION TEXT -->
           </div>
           <!-- /USER SHORT DESCRIPTION -->
@@ -307,7 +274,7 @@
                 <!-- USER STAT -->
                 <div class="user-stat">
                   <!-- USER STAT TITLE -->
-                  <p class="user-stat-title">874</p>
+                  <p class="user-stat-title">{{fler.countPost}}</p>
                   <!-- /USER STAT TITLE -->
 
                   <!-- USER STAT TEXT -->
@@ -319,7 +286,7 @@
                 <!-- USER STAT -->
                 <div class="user-stat">
                   <!-- USER STAT TITLE -->
-                  <p class="user-stat-title">60</p>
+                  <p class="user-stat-title">{{fler.countFollower}}</p>
                   <!-- /USER STAT TITLE -->
 
                   <!-- USER STAT TEXT -->
@@ -331,7 +298,7 @@
                 <!-- USER STAT -->
                 <div class="user-stat">
                   <!-- USER STAT TITLE -->
-                  <p class="user-stat-title">3.9k</p>
+                  <p class="user-stat-title">{{fler.countImg}}</p>
                   <!-- /USER STAT TITLE -->
 
                   <!-- USER STAT TEXT -->
@@ -346,23 +313,10 @@
           </div>
           <!-- /USER PREVIEW STATS SLIDES -->
 
-          <!-- USER PREVIEW STATS ROSTER -->
-          <div id="user-preview-stats-roster-01" class="user-preview-stats-roster slider-roster">
-            <!-- SLIDER ROSTER ITEM -->
-            <div class="slider-roster-item"></div>
-            <!-- /SLIDER ROSTER ITEM -->
-
-            <!-- SLIDER ROSTER ITEM -->
-            <div class="slider-roster-item"></div>
-            <!-- /SLIDER ROSTER ITEM -->
-          </div>
-          <!-- /USER PREVIEW STATS ROSTER -->
-
-
           <!-- USER PREVIEW ACTIONS -->
           <div class="user-preview-actions">
             <!-- BUTTON -->
-            <p class="button secondary">Hủy</p>
+            <p class="button secondary" (click)="deleteFler(fler.user_id)">Hủy</p>
             <!-- /BUTTON -->
 
             <!-- BUTTON -->
@@ -374,279 +328,133 @@
         <!-- /USER PREVIEW INFO -->
       </div>
       <!-- /USER PREVIEW -->
-
-      <!-- USER PREVIEW -->
-      <div class="user-preview">
-        <!-- USER PREVIEW COVER -->
-        <figure class="user-preview-cover liquid">
-          <img src="../../assets/images/cover/04.jpg" alt="cover-04">
-        </figure>
-        <!-- /USER PREVIEW COVER -->
-
-        <!-- USER PREVIEW INFO -->
-        <div class="user-preview-info">
-          <!-- USER SHORT DESCRIPTION -->
-          <div class="user-short-description">
-            <!-- USER SHORT DESCRIPTION AVATAR -->
-            <a class="user-short-description-avatar user-avatar medium" href="profile">
-              <!-- USER AVATAR BORDER -->
-              <div class="user-avatar-border">
-                <!-- HEXAGON -->
-                <div class="hexagon-120-132"></div>
-                <!-- /HEXAGON -->
-              </div>
-              <!-- /USER AVATAR BORDER -->
-
-              <!-- USER AVATAR CONTENT -->
-              <div class="user-avatar-content">
-                <!-- HEXAGON -->
-                <div class="hexagon-image-82-90" data-src="../../assets/images/avatar/05.jpg"></div>
-                <!-- /HEXAGON -->
-              </div>
-              <!-- /USER AVATAR CONTENT -->
-
-              <!-- USER AVATAR PROGRESS -->
-              <div class="user-avatar-progress">
-                <!-- HEXAGON -->
-                <div class="hexagon-progress-100-110"></div>
-                <!-- /HEXAGON -->
-              </div>
-              <!-- /USER AVATAR PROGRESS -->
-
-              <!-- USER AVATAR PROGRESS BORDER -->
-              <div class="user-avatar-progress-border">
-                <!-- HEXAGON -->
-                <div class="hexagon-border-100-110"></div>
-                <!-- /HEXAGON -->
-              </div>
-              <!-- /USER AVATAR PROGRESS BORDER -->
-
-            </a>
-            <!-- /USER SHORT DESCRIPTION AVATAR -->
-
-            <!-- USER SHORT DESCRIPTION TITLE -->
-            <p class="user-short-description-title"><a href="profile">NekoBebop</a></p>
-            <!-- /USER SHORT DESCRIPTION TITLE -->
-
-            <!-- USER SHORT DESCRIPTION TEXT -->
-            <p class="user-short-description-text"><a href="#">www.store.com/nekoprints</a></p>
-            <!-- /USER SHORT DESCRIPTION TEXT -->
-          </div>
-          <!-- /USER SHORT DESCRIPTION -->
-
-          <!-- USER PREVIEW STATS SLIDES -->
-          <div id="user-preview-stats-slides-01" class="user-preview-stats-slides">
-            <!-- USER PREVIEW STATS SLIDE -->
-            <div class="user-preview-stats-slide">
-              <!-- USER STATS -->
-              <div class="user-stats">
-                <!-- USER STAT -->
-                <div class="user-stat">
-                  <!-- USER STAT TITLE -->
-                  <p class="user-stat-title">874</p>
-                  <!-- /USER STAT TITLE -->
-
-                  <!-- USER STAT TEXT -->
-                  <p class="user-stat-text">bài đăng</p>
-                  <!-- /USER STAT TEXT -->
-                </div>
-                <!-- /USER STAT -->
-
-                <!-- USER STAT -->
-                <div class="user-stat">
-                  <!-- USER STAT TITLE -->
-                  <p class="user-stat-title">60</p>
-                  <!-- /USER STAT TITLE -->
-
-                  <!-- USER STAT TEXT -->
-                  <p class="user-stat-text">theo dõi</p>
-                  <!-- /USER STAT TEXT -->
-                </div>
-                <!-- /USER STAT -->
-
-                <!-- USER STAT -->
-                <div class="user-stat">
-                  <!-- USER STAT TITLE -->
-                  <p class="user-stat-title">3.9k</p>
-                  <!-- /USER STAT TITLE -->
-
-                  <!-- USER STAT TEXT -->
-                  <p class="user-stat-text">ảnh</p>
-                  <!-- /USER STAT TEXT -->
-                </div>
-                <!-- /USER STAT -->
-              </div>
-              <!-- /USER STATS -->
-            </div>
-            <!-- /USER PREVIEW STATS SLIDE -->
-          </div>
-          <!-- /USER PREVIEW STATS SLIDES -->
-
-          <!-- USER PREVIEW STATS ROSTER -->
-          <div id="user-preview-stats-roster-01" class="user-preview-stats-roster slider-roster">
-            <!-- SLIDER ROSTER ITEM -->
-            <div class="slider-roster-item"></div>
-            <!-- /SLIDER ROSTER ITEM -->
-
-            <!-- SLIDER ROSTER ITEM -->
-            <div class="slider-roster-item"></div>
-            <!-- /SLIDER ROSTER ITEM -->
-          </div>
-          <!-- /USER PREVIEW STATS ROSTER -->
-
-          <!-- USER PREVIEW ACTIONS -->
-          <div class="user-preview-actions">
-            <!-- BUTTON -->
-            <p class="button secondary">Hủy</p>
-            <!-- /BUTTON -->
-
-            <!-- BUTTON -->
-            <p class="button primary">Nhắn tin</p>
-            <!-- /BUTTON -->
-          </div>
-          <!-- /USER PREVIEW ACTIONS -->
-        </div>
-        <!-- /USER PREVIEW INFO -->
-      </div>
     </div>
     <!-- /GRID -->
 
      <!-- GRID -->
      <div class="grid grid-4-4-4 centered friends" [ngClass]="{'hidden': activeContent !== 'friends'}">
-      <!-- USER PREVIEW -->
-      <div class="user-preview">
-        <!-- USER PREVIEW COVER -->
-        <figure class="user-preview-cover liquid">
-          <img src="../../assets/images/cover/04.jpg" alt="cover-04">
-        </figure>
-        <!-- /USER PREVIEW COVER -->
-
-        <!-- USER PREVIEW INFO -->
-        <div class="user-preview-info">
-          <!-- USER SHORT DESCRIPTION -->
-          <div class="user-short-description">
-            <!-- USER SHORT DESCRIPTION AVATAR -->
-            <a class="user-short-description-avatar user-avatar medium" href="profile">
-              <!-- USER AVATAR BORDER -->
-              <div class="user-avatar-border">
-                <!-- HEXAGON -->
-                <div class="hexagon-120-132"></div>
-                <!-- /HEXAGON -->
-              </div>
-              <!-- /USER AVATAR BORDER -->
-
-              <!-- USER AVATAR CONTENT -->
-              <div class="user-avatar-content">
-                <!-- HEXAGON -->
-                <div class="hexagon-image-82-90" data-src="../../assets/images/avatar/05.jpg"></div>
-                <!-- /HEXAGON -->
-              </div>
-              <!-- /USER AVATAR CONTENT -->
-
-              <!-- USER AVATAR PROGRESS -->
-              <div class="user-avatar-progress">
-                <!-- HEXAGON -->
-                <div class="hexagon-progress-100-110"></div>
-                <!-- /HEXAGON -->
-              </div>
-              <!-- /USER AVATAR PROGRESS -->
-
-              <!-- USER AVATAR PROGRESS BORDER -->
-              <div class="user-avatar-progress-border">
-                <!-- HEXAGON -->
-                <div class="hexagon-border-100-110"></div>
-                <!-- /HEXAGON -->
-              </div>
-              <!-- /USER AVATAR PROGRESS BORDER -->
-
-            </a>
-            <!-- /USER SHORT DESCRIPTION AVATAR -->
-
-            <!-- USER SHORT DESCRIPTION TITLE -->
-            <p class="user-short-description-title"><a href="profile">NekoBebop</a></p>
-            <!-- /USER SHORT DESCRIPTION TITLE -->
-
-            <!-- USER SHORT DESCRIPTION TEXT -->
-            <p class="user-short-description-text"><a href="#">www.store.com/nekoprints</a></p>
-            <!-- /USER SHORT DESCRIPTION TEXT -->
-          </div>
-          <!-- /USER SHORT DESCRIPTION -->
-
-          <!-- USER PREVIEW STATS SLIDES -->
-          <div id="user-preview-stats-slides-01" class="user-preview-stats-slides">
-            <!-- USER PREVIEW STATS SLIDE -->
-            <div class="user-preview-stats-slide">
-              <!-- USER STATS -->
-              <div class="user-stats">
-                <!-- USER STAT -->
-                <div class="user-stat">
-                  <!-- USER STAT TITLE -->
-                  <p class="user-stat-title">874</p>
-                  <!-- /USER STAT TITLE -->
-
-                  <!-- USER STAT TEXT -->
-                  <p class="user-stat-text">bài đăng</p>
-                  <!-- /USER STAT TEXT -->
+        <!-- USER PREVIEW -->
+        <div class="user-preview" *ngFor="let friend of listFriend">
+          <!-- USER PREVIEW COVER -->
+          <figure class="user-preview-cover liquid">
+            <img src="{{friend.thumb}}" alt="cover-04">
+            <!-- {{friend.thumb}} -->
+          </figure>
+          <!-- /USER PREVIEW COVER -->
+  
+          <!-- USER PREVIEW INFO -->
+          <div class="user-preview-info">
+            <!-- USER SHORT DESCRIPTION -->
+            <div class="user-short-description">
+              <!-- USER SHORT DESCRIPTION AVATAR -->
+              <a class="user-short-description-avatar user-avatar medium" href="profile">
+                <!-- USER AVATAR BORDER -->
+                <div class="user-avatar-border">
+                  <!-- HEXAGON -->
+                  <div class="hexagon-120-132"></div>
+                  <!-- /HEXAGON -->
                 </div>
-                <!-- /USER STAT -->
-
-                <!-- USER STAT -->
-                <div class="user-stat">
-                  <!-- USER STAT TITLE -->
-                  <p class="user-stat-title">60</p>
-                  <!-- /USER STAT TITLE -->
-
-                  <!-- USER STAT TEXT -->
-                  <p class="user-stat-text">theo dõi</p>
-                  <!-- /USER STAT TEXT -->
+                <!-- /USER AVATAR BORDER -->
+  
+                <!-- USER AVATAR CONTENT -->
+                <div class="user-avatar-content">
+                  <!-- HEXAGON -->
+                  <div class="hexagon-image-82-90" [appDataSrc]="imageUrlSuggested"></div>
+                  <!-- /HEXAGON -->
                 </div>
-                <!-- /USER STAT -->
-
-                <!-- USER STAT -->
-                <div class="user-stat">
-                  <!-- USER STAT TITLE -->
-                  <p class="user-stat-title">3.9k</p>
-                  <!-- /USER STAT TITLE -->
-
-                  <!-- USER STAT TEXT -->
-                  <p class="user-stat-text">ảnh</p>
-                  <!-- /USER STAT TEXT -->
+                <!-- /USER AVATAR CONTENT -->
+                <!-- USER AVATAR PROGRESS -->
+                <div class="user-avatar-progress">
+                  <!-- HEXAGON -->
+                  <div class="hexagon-progress-100-110"></div>
+                  <!-- /HEXAGON -->
                 </div>
-                <!-- /USER STAT -->
-              </div>
-              <!-- /USER STATS -->
+                <!-- /USER AVATAR PROGRESS -->
+  
+                <!-- USER AVATAR PROGRESS BORDER -->
+                <div class="user-avatar-progress-border">
+                  <!-- HEXAGON -->
+                  <div class="hexagon-border-100-110"></div>
+                  <!-- /HEXAGON -->
+                </div>
+                <!-- /USER AVATAR PROGRESS BORDER -->
+  
+              </a>
+              <!-- /USER SHORT DESCRIPTION AVATAR -->
+  
+              <!-- USER SHORT DESCRIPTION TITLE -->
+              <p class="user-short-description-title"><a href="profile">{{friend.fullname}}</a></p>
+              <!-- /USER SHORT DESCRIPTION TITLE -->
+  
+              <!-- USER SHORT DESCRIPTION TEXT -->
+              <p class="user-short-description-text"><a>{{friend.intro}}</a></p>
+              <!-- /USER SHORT DESCRIPTION TEXT -->
             </div>
-            <!-- /USER PREVIEW STATS SLIDE -->
+            <!-- /USER SHORT DESCRIPTION -->
+  
+            <!-- USER PREVIEW STATS SLIDES -->
+            <div id="user-preview-stats-slides-01" class="user-preview-stats-slides">
+              <!-- USER PREVIEW STATS SLIDE -->
+              <div class="user-preview-stats-slide">
+                <!-- USER STATS -->
+                <div class="user-stats">
+                  <!-- USER STAT -->
+                  <div class="user-stat">
+                    <!-- USER STAT TITLE -->
+                    <p class="user-stat-title">{{friend.countPost}}</p>
+                    <!-- /USER STAT TITLE -->
+  
+                    <!-- USER STAT TEXT -->
+                    <p class="user-stat-text">bài đăng</p>
+                    <!-- /USER STAT TEXT -->
+                  </div>
+                  <!-- /USER STAT -->
+  
+                  <!-- USER STAT -->
+                  <div class="user-stat">
+                    <!-- USER STAT TITLE -->
+                    <p class="user-stat-title">{{friend.countFollower}}</p>
+                    <!-- /USER STAT TITLE -->
+  
+                    <!-- USER STAT TEXT -->
+                    <p class="user-stat-text">theo dõi</p>
+                    <!-- /USER STAT TEXT -->
+                  </div>
+                  <!-- /USER STAT -->
+  
+                  <!-- USER STAT -->
+                  <div class="user-stat">
+                    <!-- USER STAT TITLE -->
+                    <p class="user-stat-title">{{friend.countImg}}</p>
+                    <!-- /USER STAT TITLE -->
+  
+                    <!-- USER STAT TEXT -->
+                    <p class="user-stat-text">ảnh</p>
+                    <!-- /USER STAT TEXT -->
+                  </div>
+                  <!-- /USER STAT -->
+                </div>
+                <!-- /USER STATS -->
+              </div>
+              <!-- /USER PREVIEW STATS SLIDE -->
+            </div>
+            <!-- /USER PREVIEW STATS SLIDES -->
+  
+            <!-- USER PREVIEW ACTIONS -->
+            <div class="user-preview-actions">
+              <!-- BUTTON -->
+              <p class="button secondary" (click)="deleteFling(friend.user_id)">Hủy</p>
+              <!-- /BUTTON -->
+  
+              <!-- BUTTON -->
+              <p class="button primary">Nhắn tin</p>
+              <!-- /BUTTON -->
+            </div>
+            <!-- /USER PREVIEW ACTIONS -->
           </div>
-          <!-- /USER PREVIEW STATS SLIDES -->
-
-          <!-- USER PREVIEW STATS ROSTER -->
-          <div id="user-preview-stats-roster-01" class="user-preview-stats-roster slider-roster">
-            <!-- SLIDER ROSTER ITEM -->
-            <div class="slider-roster-item"></div>
-            <!-- /SLIDER ROSTER ITEM -->
-
-            <!-- SLIDER ROSTER ITEM -->
-            <div class="slider-roster-item"></div>
-            <!-- /SLIDER ROSTER ITEM -->
-          </div>
-          <!-- /USER PREVIEW STATS ROSTER -->
-
-          <!-- USER PREVIEW ACTIONS -->
-          <div class="user-preview-actions">
-            <!-- BUTTON -->
-            <p class="button secondary">Hủy</p>
-            <!-- /BUTTON -->
-
-            <!-- BUTTON -->
-            <p class="button primary">Nhắn tin</p>
-            <!-- /BUTTON -->
-          </div>
-          <!-- /USER PREVIEW ACTIONS -->
+          <!-- /USER PREVIEW INFO -->
         </div>
-        <!-- /USER PREVIEW INFO -->
-      </div>
-      <!-- /USER PREVIEW -->
+        <!-- /USER PREVIEW -->
     </div>
     <!-- /GRID -->
 

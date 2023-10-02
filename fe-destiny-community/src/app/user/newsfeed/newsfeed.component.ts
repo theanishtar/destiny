@@ -20,7 +20,9 @@ import { Router } from '@angular/router';
 import { GetStartedComponent } from '@app/get-started/get-started.component';
 import { LoginService } from '@app/service/login.service';
 import { FollowsService } from '../service/follows.service';
+import { LoadingService } from '../service/loading.service';
 import '../../../assets/toast/main.js';
+import { forEach } from 'angular';
 declare var toast: any;
 @Component({
   selector: 'app-newsfeed',
@@ -36,10 +38,12 @@ declare var toast: any;
 export class NewsfeedComponent implements OnInit {
   userDisplayName = '';
   postId = '123'; // Mã số của bài viết (có thể là mã số duy nhất của mỗi bài viết)
+  listSuggested: any[];
+  imageUrlSuggested: string;
 
   ngOnInit() {
     this.userDisplayName = this.cookieService.get('full_name');
-    // this.loadDataFling() ;
+    this.loadDataSuggest();
 
     this.checkSrcoll();
     this.translate();
@@ -60,14 +64,70 @@ export class NewsfeedComponent implements OnInit {
     private cookieService: CookieService,
     private loginService: LoginService,
     private router: Router,
-    public followsService: FollowsService
-  ) {}
-  loadDataFling() {
-    this.followsService.loadDataFollowing().subscribe((res) => {
-      this.followsService.setDataFling(JSON.parse(JSON.stringify(res)));
-      console.warn(this.followsService.getDataFling());
+    public followsService: FollowsService,
+    public loadingService: LoadingService
+  ) { }
+
+
+  /* ============Suggested============= */
+  loadDataSuggest() {
+    this.followsService.loadDataSuggest().subscribe(() => {
+      this.listSuggested = this.followsService.getDataSuggested();
+      // console.log('this.listSuggested 1: ' + JSON.stringify(this.listSuggested[1].avatar));
+
+      this.listSuggested.forEach(e => {
+        this.imageUrlSuggested = e.avatar
+      });
     });
   }
+  a() {
+    const fl = document.querySelectorAll('.user-status-text');
+  
+    fl.forEach((item: Element) => {
+      // Lấy trạng thái từ Local Storage, mặc định là false nếu chưa lưu
+      const statuses = localStorage.getItem('statuses') === 'true';
+  
+      // Thêm sự kiện click cho các phần tử
+      item.addEventListener('click', () => {
+        // Đảo ngược trạng thái
+        const newStatus = !statuses;
+  
+        // Cập nhật trạng thái cho phần tử
+        item.innerHTML = newStatus ? 'Đang theo dõi' : 'Theo dõi';
+  
+        // Lưu trạng thái mới vào Local Storage
+        localStorage.setItem('statuses', newStatus.toString());
+      });
+    });
+  }
+
+  addFollow(id: number) {
+    this.followsService.addFollow(id).subscribe((res) => {
+      const fl = document.querySelectorAll(
+        '.user-status-text'
+      );
+      fl.forEach(item => {
+        item.addEventListener('click', () => {
+          item.innerHTML = 'Đang theo dõi'
+        });
+      });
+      new toast({
+        title: 'Thông báo!',
+        message: 'Đã theo dõi',
+        type: 'success',
+        duration: 3000,
+      })
+    });
+  }
+
+  /* ============template============= */
+  isFollowing: boolean = false;
+
+  toggleFollowStatus() {
+    // Khi click, đảo ngược giá trị của isFollowing
+    this.isFollowing = !this.isFollowing;
+  }
+
   translate() {
     document.addEventListener('DOMContentLoaded', function () {
       const translateButton = document.querySelector(
@@ -122,6 +182,7 @@ export class NewsfeedComponent implements OnInit {
       }
     });
   }
+
   toggleLike() {
     this.interactPostsService.toggleLike(this.postId);
   }
