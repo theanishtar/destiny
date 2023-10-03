@@ -107,6 +107,30 @@ CREATE TABLE users
     FOREIGN KEY (user_wards_id) REFERENCES wards(code)
 );
 
+CREATE TABLE chats (
+    id SERIAL PRIMARY KEY,
+    name_chats VARCHAR(255)
+);
+
+CREATE TABLE messages (
+    id SERIAL PRIMARY KEY,
+    content VARCHAR(500),
+    send_time TIMESTAMP,
+    sender_id INT,
+    chat_id INT,
+    send_status BOOLEAN,
+    FOREIGN KEY (sender_id) REFERENCES users (user_id),
+    FOREIGN KEY (chat_id) REFERENCES chats (id)
+);
+
+CREATE TABLE chat_participants (
+    chat_id INT NOT NULL,
+    user_id INT NOT NULL,
+    FOREIGN KEY (chat_id) REFERENCES chats (id),
+    FOREIGN KEY (user_id) REFERENCES users (user_id)
+);
+
+
 -- CREATE TABLE user_role
 CREATE TABLE user_role
 (
@@ -15011,104 +15035,106 @@ VALUES
 	('32248', N'Đất Mũi', N'Dat Mui', N'Xã Đất Mũi', N'Dat Mui Commune', N'dat_mui', N'973', 10);
 
 -- INSERT INTO roles
-INSERT INTO roles (role_id, name, role_des)
+INSERT INTO roles ( name, role_des)
 VALUES
-	(1, 'ROLE_OWNER', 'Người sở hữu web'),
-    (2, 'ROLE_ADMIN', 'Quản trị web'),
-    (3, 'ROLE_MODERATOR', 'Kiểm duyệt viên web'),
-    (4, 'ROLE_USER', 'Người dùng');
+	('ROLE_OWNER', 'Người sở hữu web'),
+    ('ROLE_ADMIN', 'Quản trị web'),
+    ('ROLE_MODERATOR', 'Kiểm duyệt viên web'),
+    ('ROLE_USER', 'Người dùng');
 
 -- INSERT INTO gender
-INSERT INTO gender (gender_id,gender_name)
+INSERT INTO gender (gender_name)
 VALUES
-    (1,'Nam'),
-    (2,'Nữ'),
-    (3,'Khác');
+    ('Nam'),
+    ('Nữ'),
+    ('Khác');
 
 -- INSERT INTO users
-INSERT INTO users (user_id,username, password, fullname, email, intro, birthday, day_create, gender_id, user_provinces_id, user_districts_id, user_wards_id, avatar, thumb, online_last_date, mark, user_status, ban, sub)
+INSERT INTO users (username, password, fullname, email, intro, birthday, day_create, gender_id, user_provinces_id, user_districts_id, user_wards_id, avatar, thumb, online_last_date, mark, user_status, ban, sub)
 VALUES
-    (1,'nhuomtv', '$2a$10$zfsw1PTh473LaxsZPkgqiO0IwR5f41.WKpuEita0ee7/OCrX63Tlm', 'Trần Văn Nhuộm', 'nhuomtv@fpt.edu.vn', 'CEO Diễn đàn Destiny, Một nơi giúp mọi người có thể trao và nhận đồ từ nhau một cách miễn phí.', '2003-09-07', '2023-02-12', 1, '93', '932', '31342', 'Ảnh avatar', 'Ảnh bìa', '2023-05-18', 1, true, false, 'Chưa có'),
-    (2,'dangth', '$2a$10$AR78OxmWNlFMnmFlv.XWFe2TECixCdfV.2K9G4yrmQ1irWXvxcL72', 'Trần Hữu Đang', 'dangthpc04349@fpt.edu.vn', 'Người đồng sáng lập và sáng tạo nên diễn đàng Destiny, Một nơi giúp mọi người có thể trao và nhận đồ từ nhau một cách miễn phí.', '2003-09-07', '2023-02-12', 1, '93', '932', '31342', 'Ảnh avatar', 'Ảnh bìa', '2023-05-18', 1, true, false, 'Chưa có'),
-    (3,'vinhpq', '$2a$10$aF6y9hGg06.We5mXYua13eM/N4o2wq0UZSD2JgC0PVja.1x1chXjS', 'Phùng Quốc Vinh', 'vinhpqpc04338@fpt.edu.vn', 'Người đồng sáng lập và sáng tạo nên diễn đàng Destiny', '2003-11-15', '2023-01-07', 1, '92', '926', '31299', 'Ảnh avatar', 'Ảnh bìa', '2023-05-18', 3, true, false, 'Chưa có'),
-    (4,'dannk', '$2a$10$CRFxFV1oJiYT0rTa3STe.ubKEz1V59HrdOSCl1OA6uVG2xYretjQ6', 'Nguyễn Khánh Đan', 'dannkpc04351@fpt.edu.vn', 'Người đồng sáng lập và sáng tạo nên diễn đàng Destiny', '2023-11-07', '2023-04-05', 2, '92', '926', '31299', 'Ảnh avatar', 'Ảnh bìa', '2023-05-18', 5, false, false, 'Chưa có'),
-    (5,'sydh', '$2a$10$DYKf7ahE.Feac9JEy8exP.hMYXtaI5aayfeYua0ZCGVV0RXvu5.Gy', 'Đoàn Hiệp Sỹ', 'sydhpc04388@fpt.edu.vn', 'Người đồng sáng lập và sáng tạo nên diễn đàng Destiny', '2003-04-07', '2023-05-10', 3, '89', '883', '30280', 'Ảnh avatar', 'Ảnh bìa', '2023-05-18', 2, true, false, 'Chưa có'),
-    (6,'vilb', '$2a$10$SvchmABRVVZjeLgOW4Dez.q7T1kcybCdiQF70DHKNs.nX30vmYLVi', 'Lê Bích Vi', 'vilbpc04354@fpt.edu.vn', 'Người đồng sáng lập và sáng tạo nên diễn đàng Destiny', '2003-06-02', '2023-03-14', 2, '96', '964', '31999', 'Ảnh avatar', 'Ảnh bìa', '2023-05-18', 4, true, true, 'Chưa có');
+    ('nhuomtv', '$2a$10$zfsw1PTh473LaxsZPkgqiO0IwR5f41.WKpuEita0ee7/OCrX63Tlm', 'Trần Văn Nhuộm', 'nhuomtv@fpt.edu.vn', 'CEO Diễn đàn Destiny, Một nơi giúp mọi người có thể trao và nhận đồ từ nhau một cách miễn phí.', '2003-09-07', '2023-02-12', 1, '93', '932', '31342', 'Ảnh avatar', 'Ảnh bìa', '2023-05-18', 1, true, false, 'Chưa có'),
+    ('dangth', '$2a$10$AR78OxmWNlFMnmFlv.XWFe2TECixCdfV.2K9G4yrmQ1irWXvxcL72', 'Trần Hữu Đang', 'dangthpc04349@fpt.edu.vn', 'Người đồng sáng lập và sáng tạo nên diễn đàng Destiny, Một nơi giúp mọi người có thể trao và nhận đồ từ nhau một cách miễn phí.', '2003-09-07', '2023-02-12', 1, '93', '932', '31342', 'Ảnh avatar', 'Ảnh bìa', '2023-05-18', 1, true, false, 'Chưa có'),
+    ('vinhpq', '$2a$10$aF6y9hGg06.We5mXYua13eM/N4o2wq0UZSD2JgC0PVja.1x1chXjS', 'Phùng Quốc Vinh', 'vinhpqpc04338@fpt.edu.vn', 'Người đồng sáng lập và sáng tạo nên diễn đàng Destiny', '2003-11-15', '2023-01-07', 1, '92', '926', '31299', 'Ảnh avatar', 'Ảnh bìa', '2023-05-18', 3, true, false, 'Chưa có'),
+    ('dannk', '$2a$10$CRFxFV1oJiYT0rTa3STe.ubKEz1V59HrdOSCl1OA6uVG2xYretjQ6', 'Nguyễn Khánh Đan', 'dannkpc04351@fpt.edu.vn', 'Người đồng sáng lập và sáng tạo nên diễn đàng Destiny', '2023-11-07', '2023-04-05', 2, '92', '926', '31299', 'Ảnh avatar', 'Ảnh bìa', '2023-05-18', 5, false, false, 'Chưa có'),
+    ('sydh', '$2a$10$DYKf7ahE.Feac9JEy8exP.hMYXtaI5aayfeYua0ZCGVV0RXvu5.Gy', 'Đoàn Hiệp Sỹ', 'sydhpc04388@fpt.edu.vn', 'Người đồng sáng lập và sáng tạo nên diễn đàng Destiny', '2003-04-07', '2023-05-10', 3, '89', '883', '30280', 'Ảnh avatar', 'Ảnh bìa', '2023-05-18', 2, true, false, 'Chưa có'),
+    ('vilb', '$2a$10$SvchmABRVVZjeLgOW4Dez.q7T1kcybCdiQF70DHKNs.nX30vmYLVi', 'Lê Bích Vi', 'vilbpc04354@fpt.edu.vn', 'Người đồng sáng lập và sáng tạo nên diễn đàng Destiny', '2003-06-02', '2023-03-14', 2, '96', '964', '31999', 'Ảnh avatar', 'Ảnh bìa', '2023-05-18', 4, true, true, 'Chưa có');
 
-INSERT INTO user_role (id, user_id, role_id)
+INSERT INTO user_role (user_id, role_id)
 VALUES
-    (1, 1, 1),
-    (2, 2, 2),
-    (3, 3, 2),
-    (4, 4, 3),
-    (5, 5, 3);
+    ( 1, 1),
+    ( 2, 2),
+    ( 3, 2),
+    ( 4, 3),
+    ( 5, 3);
    
-   INSERT INTO post (post_id, user_id, content, date_post, hash_tag, post_provinces_id, post_districts_id, post_wards_id, send_status, post_status, product, ban)
+   INSERT INTO post ( user_id, content, date_post, hash_tag, post_provinces_id, post_districts_id, post_wards_id, send_status, post_status, product, ban)
 VALUES
-    (1,3, 'Xin chào mọi người tôi có cây bút lâu ngày không sử dụng nên tôi muốn tặng lại cho ai muốn, xin vui lòng liên hệ Zalo: 0123456789 nhé.',
+    (3, 'Xin chào mọi người tôi có cây bút lâu ngày không sử dụng nên tôi muốn tặng lại cho ai muốn, xin vui lòng liên hệ Zalo: 0123456789 nhé.',
     '2023-06-04', 'Bút', '92', '926', '31299', TRUE, TRUE, 'Bút bi', FALSE),
     
-    (2,2, 'Xin chào mọi người tôi có cuốn sách lâu ngày không sử dụng nên tôi muốn tặng lại cho ai muốn, xin vui lòng liên hệ Zalo: 0123456789 nhé.',
+    (2, 'Xin chào mọi người tôi có cuốn sách lâu ngày không sử dụng nên tôi muốn tặng lại cho ai muốn, xin vui lòng liên hệ Zalo: 0123456789 nhé.',
     '2023-06-18', 'Sách', '92', '926', '31299', FALSE, TRUE, 'Sách', FALSE),
     
-    (3,3, 'Xin chào mọi người tôi có một ít quần áo lâu ngày không sử dụng nên tôi muốn tặng lại cho ai muốn, xin vui lòng liên hệ Zalo: 0123456789 nhé.',
+    (3, 'Xin chào mọi người tôi có một ít quần áo lâu ngày không sử dụng nên tôi muốn tặng lại cho ai muốn, xin vui lòng liên hệ Zalo: 0123456789 nhé.',
     '2023-06-18', 'Quần áo', '92', '926', '31299', FALSE, TRUE, 'Quần áo', FALSE),
     
-    (4,4, 'Xin chào mọi người tôi có đôi giày lâu ngày không sử dụng nên tôi muốn tặng lại cho ai muốn, xin vui lòng liên hệ Zalo: 0123456789 nhé.',
+    (4, 'Xin chào mọi người tôi có đôi giày lâu ngày không sử dụng nên tôi muốn tặng lại cho ai muốn, xin vui lòng liên hệ Zalo: 0123456789 nhé.',
     '2023-06-18', 'Giày', '89', '883', '30280', FALSE, FALSE, 'Giày', FALSE),
     
-    (5,5, 'Xin chào mọi người tôi có cây lau nhà lâu ngày không sử dụng nên tôi muốn tặng lại cho ai muốn, xin vui lòng liên hệ Zalo: 0123456789 nhé.',
+    (5, 'Xin chào mọi người tôi có cây lau nhà lâu ngày không sử dụng nên tôi muốn tặng lại cho ai muốn, xin vui lòng liên hệ Zalo: 0123456789 nhé.',
     '2023-06-20', 'Cây lau nhà', '96', '964', '31999', FALSE, TRUE, 'Chổi lau nhà', FALSE);
    
-   INSERT INTO post_images (post_images_id ,post_id, link_image) VALUES
-    (1,1, 'Ảnh thứ 1 của bài đăng 1'),
-    (2,1, 'Ảnh thứ 2 của bài đăng 1'),
-    (3,2, 'Ảnh thứ 1 của bài đăng 2'),
-    (4,3, 'Ảnh thứ 1 của bài đăng 3'),
-    (5,3, 'Ảnh thứ 2 của bài đăng 3'),
-    (6,3, 'Ảnh thứ 3 của bài đăng 3'),
-    (7,3, 'Ảnh thứ 4 của bài đăng 3'),
-    (8,4, 'Ảnh thứ 1 của bài đăng 4'),
-    (9,4, 'Ảnh thứ 2 của bài đăng 4'),
-    (10,4, 'Ảnh thứ 3 của bài đăng 4'),
-    (11,5, 'Ảnh thứ 1 của bài đăng 5');
+   INSERT INTO post_images (post_id, link_image) VALUES
+    (1, 'Ảnh thứ 1 của bài đăng 1'),
+    (1, 'Ảnh thứ 2 của bài đăng 1'),
+    (2, 'Ảnh thứ 1 của bài đăng 2'),
+    (3, 'Ảnh thứ 1 của bài đăng 3'),
+    (3, 'Ảnh thứ 2 của bài đăng 3'),
+    (3, 'Ảnh thứ 3 của bài đăng 3'),
+    (3, 'Ảnh thứ 4 của bài đăng 3'),
+    (4, 'Ảnh thứ 1 của bài đăng 4'),
+    (4, 'Ảnh thứ 2 của bài đăng 4'),
+    (4, 'Ảnh thứ 3 của bài đăng 4'),
+    (5, 'Ảnh thứ 1 của bài đăng 5');
 
    
-   INSERT INTO interested (interested_id ,user_id, post_id, date_interested) VALUES
-    (1,2, 1, '2023-06-04'),
-	(2,2, 2, '2023-06-04'),
-	(3,2, 3, '2023-06-04'),
-	(4,2, 5, '2023-06-04'), 
-    (5,3, 1, '2023-06-04'),
-	(6,3, 2, '2023-06-04'),
-	(7,3, 3, '2023-06-04'),
-	(8,3, 5, '2023-06-04'),
-    (9,4, 1, '2023-06-04'),
-	(10,4, 2, '2023-06-04'),
-	(11,4, 3, '2023-06-04'),
-	(12,4, 4, '2023-06-04'),
-    (13,4, 5, '2023-06-04'),
-    (14,5, 1, '2023-06-04'),
-	(15,5, 2, '2023-06-04'),
-	(16,5, 3, '2023-06-04'),
-	(17,5, 4, '2023-06-04'),
-    (18,5, 5, '2023-06-04');
+   INSERT INTO interested (user_id, post_id, date_interested) VALUES
+    (2, 1, '2023-06-04'),
+	(2, 2, '2023-06-04'),
+	(2, 3, '2023-06-04'),
+	(2, 5, '2023-06-04'), 
+    (3, 1, '2023-06-04'),
+	(3, 2, '2023-06-04'),
+	(3, 3, '2023-06-04'),
+	(3, 5, '2023-06-04'),
+    (4, 1, '2023-06-04'),
+	(4, 2, '2023-06-04'),
+	(4, 3, '2023-06-04'),
+	(4, 4, '2023-06-04'),
+    (4, 5, '2023-06-04'),
+    (5, 1, '2023-06-04'),
+	(5, 2, '2023-06-04'),
+	(5, 3, '2023-06-04'),
+	(5, 4, '2023-06-04'),
+    (5, 5, '2023-06-04');
 
-   INSERT INTO comment (comment_id ,user_id, parent_comment_id, post_id, date_comment, content, comment_status)
+
+   INSERT INTO comment (user_id, parent_comment_id, post_id, date_comment, content, comment_status)
 VALUES
-    (1,2, NULL, 1, '2023-06-04', 'tôi đã liên hệ bạn qua zalo rồi á', FALSE), -- Vinh (2) bình luận bài của Đan (1)
-    (2,2, NULL, 5, '2023-06-19', 'tôi đã liên hệ bạn qua zalo rồi á', FALSE), -- Vinh (2) bình luận bài của Vi (5)
-    (3,3, NULL, 4, '2023-06-19', 'tôi đã liên hệ bạn qua zalo rồi á', FALSE), -- Đan (3) bình luận bài của Sỹ (4)
-    (4,4, NULL, 3, '2023-06-19', 'tôi đã liên hệ bạn qua zalo rồi á', FALSE), -- Sỹ (4) bình luận bài của Đan (3)
-    (5,5, NULL, 2, '2023-06-19', 'tôi đã liên hệ bạn qua zalo rồi á', FALSE); -- Vi (5) bình luận bài của Vinh (2)
+    (2, NULL, 1, '2023-06-04', 'tôi đã liên hệ bạn qua zalo rồi á', FALSE), -- Vinh (2) bình luận bài của Đan (1)
+    (2, NULL, 5, '2023-06-19', 'tôi đã liên hệ bạn qua zalo rồi á', FALSE), -- Vinh (2) bình luận bài của Vi (5)
+    (3, NULL, 4, '2023-06-19', 'tôi đã liên hệ bạn qua zalo rồi á', FALSE), -- Đan (3) bình luận bài của Sỹ (4)
+    (4, NULL, 3, '2023-06-19', 'tôi đã liên hệ bạn qua zalo rồi á', FALSE), -- Sỹ (4) bình luận bài của Đan (3)
+    (5, NULL, 2, '2023-06-19', 'tôi đã liên hệ bạn qua zalo rồi á', FALSE); -- Vi (5) bình luận bài của Vinh (2)
 
-    INSERT INTO share (share_id ,user_id, post_id, date_share) VALUES
-    (1,5, 1, '2023-06-04'), -- Vi chia sẻ bài của Đan
-    (2,5, 3, '2023-06-19'), -- Vi chia sẻ bài của Đan
-    (3,2, 5, '2023-06-19'), -- Vinh chia sẻ bài của Vi
-    (4,2, 3, '2023-06-19'), -- Vinh chia sẻ bài của Đan
-    (5,3, 2, '2023-06-19'), -- Đan chia sẻ bài của Vinh
-    (6,3, 5, '2023-06-19'); -- Đan chia sẻ bài của Vi
+ 
+   INSERT INTO share (user_id, post_id, date_share) VALUES
+    (5, 1, '2023-06-04'), -- Vi chia sẻ bài của Đan
+    (5, 3, '2023-06-19'), -- Vi chia sẻ bài của Đan
+    (2, 5, '2023-06-19'), -- Vinh chia sẻ bài của Vi
+    (2, 3, '2023-06-19'), -- Vinh chia sẻ bài của Đan
+    (3, 2, '2023-06-19'), -- Đan chia sẻ bài của Vinh
+    (3, 5, '2023-06-19'); -- Đan chia sẻ bài của Vi
 
 INSERT INTO follower (follower_id, user_id)
 VALUES
@@ -15123,4 +15149,6 @@ VALUES
     (5, 3),   -- User with ID 3 is followed by User with ID 5
     (5, 4);   -- User with ID 4 is followed by User with ID 5
 
+
+   
 
