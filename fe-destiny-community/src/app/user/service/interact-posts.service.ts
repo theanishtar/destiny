@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
-
+//Tương tác với bài viết
 export class InteractPostsService {
   private likedPosts: Set<string> = new Set<string>();
 

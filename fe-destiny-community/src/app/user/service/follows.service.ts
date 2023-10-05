@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { Observable, throwError, of } from 'rxjs';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { ActivatedRoute, Params } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 import '../../../assets/toast/main.js';
 declare var toast: any;
 

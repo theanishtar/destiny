@@ -67,6 +67,9 @@ export class NavigationComponent implements OnInit {
     if (currentUrl.includes('/setting')) {
       this.activeMenuItem = 'setting';
     }
+    if (currentUrl.includes('/message')) {
+      this.activeMenuItem = 'message';
+    }
   }
 
   

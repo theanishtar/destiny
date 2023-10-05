@@ -49,7 +49,13 @@ figure.user-preview-cover.liquid img {
   border-top-right-radius: 12px;
   border-top-left-radius: 12px;
 }
-
+.emty-message {
+  text-align: center;
+  margin-top: 3rem;
+  font-size: 17px;
+    color: #3e3f5e;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
 /* Loading */
 .lds-facebook {
   display: inline-block;
@@ -96,26 +102,24 @@ figure.user-preview-cover.liquid img {
   }
 }
 
-/*  */
-/* Div ngoài cùng có border lục giác */
+/* avatar */
 .hexagon-container {
   width: 120px;
-  height: 130px;
+  height: 132px;
   background-color: transparent;
-  /* Đặt màu nền của hình lục giác */
   position: relative;
   margin: 0 auto;
-  /* Căn giữa theo chiều ngang */
+  background: white;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  border-radius: 15px;
 }
 
 .hexagon {
   position: absolute;
 }
 
-/* Hình lục giác nằm trong div ngoài cùng */
 .user-avatar-content {
   width: 100px;
-  /* Chiều rộng 100% để lấp đầy div ngoài cùng */
   height: 110px;
   overflow: hidden;
   position: absolute;
@@ -123,35 +127,35 @@ figure.user-preview-cover.liquid img {
 
 .hexagon-image {
   width: 82px;
-  height: 90px;
+  height: 87px;;
   position: relative;
   z-index: 3;
   background-size: cover;
-  /* Cắt và lấp đầy hình ảnh */
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-  /* Cắt hình lục giác */
+  border-radius: 15px;
 }
 
 .user-avatar-border:before {
-  width: 100px;
-height: 110px;
-z-index: 2;
-content: "";
-position: absolute;
-clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-/* background-color: white;  */
-left: 10px;
-top: 10px;
-/* border: 5px solid transparent; */
-border-image: linear-gradient(to right, #ff0000, #00ff00); /* Màu gradient cho viền */
-border-image-slice: 1;
+  width: 105px;
+  height: 113px;
+  z-index: 1;
+  content: "";
+  position: absolute;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  border-radius: 15px;
+  left: 8px;
+  top: 8px;
+  background-image: linear-gradient(to right, #41efff, #615dfa);
 }
 
 .hexagon.user-avatar-progress-border {
-  position: relative; 
-  z-index: 1;
-  width: 100px;
-  height: 110px;
+  position: absolute;
+  z-index: 2;
+  margin-left: 3.5%;
+  margin-top: 3.3%;
+  width: 92px;
+  height: 100px;
   background: white;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  border-radius: 15px;
 }

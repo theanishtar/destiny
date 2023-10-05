@@ -198,3 +198,111 @@ p.user-status-text.small.post-time {
   .translated-content.active {
     display: block;
   }
+  .emty-message {
+    text-align: center;
+    margin-top: 3rem;
+    font-size: 17px;
+      color: #3e3f5e;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+  .action-request-list:hover::after {
+    content: attr(data-title);
+    position: absolute;
+    margin-top: -1.5rem;
+    margin-left: -1.3rem;
+    z-index: 100;
+    width: 250px;
+    font-size: 14px;
+    transform: translate(10px, 0px);
+    transition: all 0.3s ease-in-out 0s;
+    color: #ADAFCD;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+  p.intro-top5 {
+    margin-top: 4px;
+    color: #3e3f5e;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.3333333333em;
+    width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+  }
+  /* avatar */
+.hexagon-container {
+    width: 45px;
+    height: 48px;
+    background-color: transparent;
+    position: relative;
+    margin: 0 auto;
+    background: white;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  }
+  
+  .hexagon {
+    position: absolute;
+  }
+  
+  .user-avatar-content {
+    width: 40px;
+    height: 44px;
+    overflow: hidden;
+    position: absolute;
+  }
+  
+  .hexagon-image {
+    width: 30px;
+    height: 33px;
+    position: relative;
+    z-index: 3;
+    background-size: cover;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    left: 4%;
+    top: 2%;
+  }
+  
+  .user-avatar-border:before {
+    width: 42px;
+    height: 46px;
+    z-index: 1;
+    content: "";
+    position: absolute;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    /* border-radius: 15px; */
+    left: 1px;
+    top: 0px;
+    background-image: linear-gradient(to right, #41efff, #615dfa);
+}
+  
+  .hexagon.user-avatar-progress-border {
+    position: absolute;
+    z-index: 2;
+    margin-left: 9.6%;
+    margin-top: 8.3%;
+    width: 35px;
+    height: 39px;
+    background: white;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+/*  */
+svg.post-settings-icon.icon-more-dots {
+  width: 30px;
+  height: 25px;
+}
+svg.post-option-icon.icon-thumbs-up {
+  top: 0 !important;
+  margin-right: 10px !important;
+}
+svg.post-option-icon.icon-share {
+  width: 23px;
+  height: 20px;
+  margin-right: 10px !important;
+}
+path svg.post-option-icon.icon-share{
+  width: 23px;
+  height: 20px;
+}

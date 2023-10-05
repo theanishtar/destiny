@@ -29,15 +29,19 @@ import { LoadingService } from '../service/loading.service';
 })
 export class FollowsComponent implements OnInit {
   activeContent: string | null = 'following';
-  checkData: boolean = false;
+  checkData1: boolean = false;
+  checkData2: boolean = false;
+  checkData3: boolean = false;
   listFollowing: any[];
   listFollower: any[];
   listFriend: any[];
-  imageUrlSuggested: string;
+  isLoading = false;
+
   ngOnInit() {
     this.loadDataFling();
     this.loadDataFler();
     this.loadDataFriend();
+    this.loadData();
 
     liquid.liquid();
     avatarHexagons.avatarHexagons();
@@ -58,145 +62,79 @@ export class FollowsComponent implements OnInit {
 
   /* ============following============= */
   loadDataFling() {
-    this.listFollowing = [];
-
-    if (this.listFollowing == null) {
-      this.loadingService.showLoading();
-    }
     this.followsService.loadDataFollowing().subscribe(() => {
       this.listFollowing = this.followsService.getDataFling();
-      this.checkDataFling();
-      // console.log('this.listFollowing: ' + JSON.stringify(this.listFollowing));
-      this.listFollowing.forEach(e => {
-        this.imageUrlSuggested = e.avatar
-        console.log(this.imageUrlSuggested);
-      });
+
+      if (Array.isArray(this.listFollowing) && this.listFollowing.length === 0) {
+        this.checkData1 = true;
+      }
     });
+
   }
 
   deleteFling(id: number) {
-    this.listFollowing = [];
-    if (this.listFollowing == null) {
-      this.loadingService.showLoading();
-    }
-    this.followsService.deleteFollowing(id).subscribe((res) => {
-      // this.listFollowing = this.followsService.getDataFling();
-      this.checkDataFling();
+    this.followsService.deleteFollowing(id).subscribe((res) => {; 
+      this.loadDataFling();
+      this.loadDataFriend();
+      new toast({
+        title: 'Thông báo!',
+        message: 'Hủy thành công',
+        type: 'success',
+        duration: 3000,
+      })
     });
-    new toast({
-      title: 'Thông báo!',
-      message: 'Hủy thành công',
-      type: 'success',
-      duration: 3000,
-    })
-  }
-  checkDataFling() {
-    function delay(ms: number) {
-      return new Promise(function (resolve) {
-        setTimeout(resolve, ms);
-      });
-    }
-
-    if (this.listFollowing != null) {
-      delay(9000).then((res) => {
-        this.loadingService.hideLoading();
-      });
-    }
-    if (this.listFollowing == null)
-      this.checkData = true;
   }
 
   /* ============follower============= */
   loadDataFler() {
-    this.listFollower = [];
-
-    if (this.listFollower == null) {
-      this.loadingService.showLoading();
-    }
     this.followsService.loadDataFollower().subscribe(() => {
       this.listFollower = this.followsService.getDataFler();
-      this.checkDataFler();
-      // console.log('this.listFollower: ' + JSON.stringify(this.listFollower));
-      this.listFollower.forEach(e => {
-        this.imageUrlSuggested = e.avatar
-        console.log(this.imageUrlSuggested);
-      });
+      if (Array.isArray(this.listFollower) && this.listFollower.length === 0) {
+        this.checkData2 = true;
+      }
     });
-  }
 
-  checkDataFler() {
-    function delay(ms: number) {
-      return new Promise(function (resolve) {
-        setTimeout(resolve, ms);
-      });
-    }
-
-    if (this.listFollower != null) {
-      delay(8000).then((res) => {
-        this.loadingService.hideLoading();
-      });
-    }
-    if (this.listFollower == null)
-      this.checkData = true;
   }
 
   deleteFler(id: number) {
-    this.listFollower = [];
-    if (this.listFollower == null) {
-      this.loadingService.showLoading();
-    }
     this.followsService.deleteFollower(id).subscribe((res) => {
-      this.listFollower = this.followsService.getDataFler();
-      this.checkDataFler();
+      this.loadDataFler();
+      this.loadDataFriend();
+      new toast({
+        title: 'Thông báo!',
+        message: 'Hủy thành công',
+        type: 'success',
+        duration: 3000,
+      })
     });
-    new toast({
-      title: 'Thông báo!',
-      message: 'Hủy thành công',
-      type: 'success',
-      duration: 3000,
-    })
   }
 
   /* ============friend============= */
   loadDataFriend() {
-    this.listFriend = [];
-
-    if (this.listFriend == null) {
-      this.loadingService.showLoading();
-    }
     this.followsService.loadDataFriends().subscribe(() => {
       this.listFriend = this.followsService.getDataFriend();
-      this.checkDataFriend();
-      // console.log('this.listFriend: ' + JSON.stringify(this.listFriend));
-      this.listFriend.forEach(e => {
-        this.imageUrlSuggested = e.avatar
-        console.log(this.imageUrlSuggested);
-      });
+
+      if (Array.isArray(this.listFriend) && this.listFriend.length === 0) {
+        this.checkData3 = true;
+      }
     });
+
   }
-
-  checkDataFriend() {
-    function delay(ms: number) {
-      return new Promise(function (resolve) {
-        setTimeout(resolve, ms);
-      });
-    }
-
-    if (this.listFriend != null) {
-      delay(8000).then((res) => {
-        this.loadingService.hideLoading();
-      });
-    }
-    if (this.listFriend == null)
-      this.checkData = true;
-  }
-
-
 
   /* ============template============= */
   openTabFollow(content: string) {
     if (this.activeContent !== content) {
       this.activeContent = content;
     }
+  }
+
+  loadData() {
+    this.isLoading = true;
+    const body_content = document.getElementById('body-follow')!;
+    body_content.style.display = 'none';
+    setTimeout(() => {
+      this.isLoading = false;
+      body_content.style.display = 'grid';
+    }, 6000);
   }
 }

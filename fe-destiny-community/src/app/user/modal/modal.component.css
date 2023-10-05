@@ -4,14 +4,15 @@ main.overlay {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); 
-    z-index: 10001; 
-  }
-  
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 10001;
+}
+
 .modal-body {
     padding-top: 0;
 }
-  main .modal-create-post {
+
+main .modal-create-post {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -24,19 +25,27 @@ main.overlay {
     height: 700px;
     border-radius: 10px;
 }
-h2, h3, select.w-full.rounded, label, input{
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+
+h2,
+h3,
+select.w-full.rounded,
+label,
+input {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+
 .p-7.form-create-info::-webkit-scrollbar {
     width: 0;
     display: none;
 }
-.p-7.form-create-info{
+
+.p-7.form-create-info {
     height: 500px;
     overflow: auto;
     overflow: -moz-scrollbars-none;
     -ms-overflow-style: none;
 }
+
 .main-form {
     display: flex;
     justify-content: space-around;
@@ -61,11 +70,13 @@ i.fa-solid.fa-xmark {
     right: 5%;
     bottom: 1.5rem;
 }
+
 /* check address */
 .address {
     display: flex;
     margin-bottom: 1rem;
 }
+
 .cbx {
     position: relative;
     margin-left: 0.5rem;
@@ -78,9 +89,9 @@ i.fa-solid.fa-xmark {
     transition: background 0.1s ease;
     cursor: pointer;
     display: block;
-   }
-   
-   .cbx:after {
+}
+
+.cbx:after {
     content: '';
     position: absolute;
     top: 2px;
@@ -93,66 +104,66 @@ i.fa-solid.fa-xmark {
     border-bottom: 2px solid #fff;
     transition: all 0.3s ease;
     transition-delay: 0.15s;
-   }
-   
-   .lbl {
+}
+
+.lbl {
     margin-left: 5px;
     vertical-align: middle;
     cursor: pointer;
-   }
-   
-   #cbx:checked ~ .cbx {
+}
+
+#cbx:checked~.cbx {
     border-color: transparent;
     background: #6871f1;
     animation: jelly 0.6s ease;
-   }
-   
-   #cbx:checked ~ .cbx:after {
+}
+
+#cbx:checked~.cbx:after {
     opacity: 1;
     transform: rotate(45deg) scale(1);
-   }
-   
-   .cntr {
-    position: relative;
-   }
-   
-   @keyframes jelly {
-    from {
-     transform: scale(1, 1);
-    }
-   
-    30% {
-     transform: scale(1.25, 0.75);
-    }
-   
-    40% {
-     transform: scale(0.75, 1.25);
-    }
-   
-    50% {
-     transform: scale(1.15, 0.85);
-    }
-   
-    65% {
-     transform: scale(0.95, 1.05);
-    }
-   
-    75% {
-     transform: scale(1.05, 0.95);
-    }
-   
-    to {
-     transform: scale(1, 1);
-    }
-   }
-   
-   .hidden-xs-up {
-    display: none!important;
-   }
+}
 
-   
+.cntr {
+    position: relative;
+}
+
+@keyframes jelly {
+    from {
+        transform: scale(1, 1);
+    }
+
+    30% {
+        transform: scale(1.25, 0.75);
+    }
+
+    40% {
+        transform: scale(0.75, 1.25);
+    }
+
+    50% {
+        transform: scale(1.15, 0.85);
+    }
+
+    65% {
+        transform: scale(0.95, 1.05);
+    }
+
+    75% {
+        transform: scale(1.05, 0.95);
+    }
+
+    to {
+        transform: scale(1, 1);
+    }
+}
+
+.hidden-xs-up {
+    display: none !important;
+}
+
+
 @media screen and (max-width: 1440px) {
-    .main-form  {
+    .main-form {
         display: block !important;
         height: 500px;
         overflow: auto;
@@ -160,16 +171,101 @@ i.fa-solid.fa-xmark {
         -ms-overflow-style: none;
     }
 
-    .main-form::-webkit-scrollbar  {
+    .main-form::-webkit-scrollbar {
         width: 0;
         display: none;
     }
 }
+
 @media screen and (max-width: 900px) {
     button.btnClose-create-post {
         right: 40px;
     }
 }
+@media screen and (max-width: 1200px) {
+    .mySlides.fade-produc {
+        max-height: 150px;
+        max-width: 230px;
+    }
+    .mySlides.fade-produc img {
+        max-height: 150px;
+        max-width: 230px;
+    }
+    .prev-img,
+    .next-img {
+        margin-top: -15%;
+
+    }
+    .prev-img {
+        margin-left: 2rem;
+    }
+    .slideshow-container-product {
+        margin: 0 4rem;
+    }
+}
+/* Slideshow container */
+.slideshow-container-product {
+    max-width: 1000px;
+    position: relative;
+    /* margin: auto; */
+    height: 100%;
+    max-height: 418.4px;
+}
+
+.mySlides.fade-produc {
+    max-height: 150px;
+    max-width: 230px;
+}
+
+.mySlides.fade-produc img {
+    max-height: 150px;
+    max-width: 230px;
+    width: 250px;
+}
+
+/* Hide the images by default */
+.mySlides {
+    display: none;
+}
+
+.mySlides:first-child {
+    display: block;
+}
+
+.btn-slide-show {
+    top: 50%;
+    left: 50%;
+}
+
+/* Next & previous buttons */
+.prev-img,
+.next-img {
+    cursor: pointer;
+    position: absolute;
+    width: auto;
+    margin-top: -22px;
+    padding: 16px;
+    color: gray;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next-img {
+    right: 4%;
+    border-radius: 3px 0 0 3px;
+}
+a.prev-img {
+    margin-left: 0.5rem;
+}
+.btn-slide-img {
+    position: relative;
+    z-index: 100;
+}
+
 /* ========================================================== */
 
 *,

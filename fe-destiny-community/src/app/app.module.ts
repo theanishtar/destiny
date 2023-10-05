@@ -45,6 +45,8 @@ import { WaitForConfirmationComponent } from './get-started/wait-for-confirmatio
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { ConfirmSuccessComponent } from './get-started/confirm-success/confirm-success.component';
+import { LoadingComponent } from './user/loading/loading.component';
+import { VideoCallComponent } from './user/video-call/video-call.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -83,7 +85,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     GetStartedComponent,
     WaitForConfirmationComponent,
     ConfirmSuccessComponent,
-    DataSrcDirective
+    DataSrcDirective,
+    LoadingComponent,
+    VideoCallComponent
   ],
   imports: [
     BrowserModule,

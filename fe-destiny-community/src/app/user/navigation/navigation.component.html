@@ -73,6 +73,24 @@
       </li>
       <!-- /MENU ITEM -->
 
+<!-- MENU ITEM -->
+<li [class.menu-item]="true" [class.active]="activeMenuItem === 'message'">
+  <!-- MENU ITEM LINK -->
+  <a
+    [attr.data-title]="'sidebar_setting' | translate"
+    class="menu-item-link"
+    routerLink="/message"
+  >
+    <!-- MENU ITEM LINK ICON -->
+    <div class="menu-item-link-icon icon-badges">
+      <i class="fa-solid fa-paper-plane"></i>
+    </div>
+    <!-- /MENU ITEM LINK ICON -->
+  </a>
+  <!-- /MENU ITEM LINK -->
+</li>
+<!-- /MENU ITEM -->
+
       <!-- MENU ITEM -->
       <li [class.menu-item]="true" [class.active]="activeMenuItem === 'history'">
         <!-- MENU ITEM LINK -->
@@ -251,6 +269,21 @@
     <!-- /MENU ITEM -->
 
     <!-- MENU ITEM -->
+<li [class.menu-item]="true" [class.active]="activeMenuItem === 'message'">
+  <!-- MENU ITEM LINK -->
+  <a class="menu-item-link" routerLink="/message">
+    <!-- MENU ITEM LINK ICON -->
+    <div class="menu-item-link-icon icon-newsfeed">
+      <i class="fa-solid fa-paper-plane"></i>
+    </div>
+    <!-- /MENU ITEM LINK ICON -->
+    {{ "navbar_home" | translate }}
+  </a>
+  <!-- /MENU ITEM LINK -->
+</li>
+<!-- /MENU ITEM -->
+
+    <!-- MENU ITEM -->
     <li [class.menu-item]="true" [class.active]="activeMenuItem === 'follow'">
       <!-- MENU ITEM LINK -->
       <a class="menu-item-link" routerLink="/follow">
@@ -404,7 +437,20 @@
       <!-- /MENU ITEM LINK -->
     </li>
     <!-- /MENU ITEM -->
-
+<!-- MENU ITEM -->
+<li [class.menu-item]="true" [class.active]="activeMenuItem === 'message'">
+  <!-- MENU ITEM LINK -->
+  <a class="menu-item-link" routerLink="/message">
+    <!-- MENU ITEM LINK ICON -->
+    <div class="menu-item-link-icon icon-newsfeed">
+      <i class="fa-solid fa-paper-plane"></i>
+    </div>
+    <!-- /MENU ITEM LINK ICON -->
+    {{ "navbar_home" | translate }}
+  </a>
+  <!-- /MENU ITEM LINK -->
+</li>
+<!-- /MENU ITEM -->
     <!-- MENU ITEM -->
     <li [class.menu-item]="true" [class.active]="activeMenuItem === 'follow'">
       <!-- MENU ITEM LINK -->

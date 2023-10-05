@@ -62,7 +62,7 @@ export const app = {
 
     if (el.length) {
       
-      console.log(el)
+      // console.log(el)
       callback(el);
     }
   },

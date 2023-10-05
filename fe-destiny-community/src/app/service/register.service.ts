@@ -24,7 +24,7 @@ export class RegisterService {
         console.log(`receivedUser = ${JSON.stringify(response)}`);
       }),
       catchError((error: HttpErrorResponse) => {
-        console.log("error.status 2: " + JSON.stringify(error.error.text))
+        console.log("error.status 2: " + JSON.stringify(error))
         if (error.status === 200) {
           this.router.navigate(['wait-confirm']);
           return throwError(

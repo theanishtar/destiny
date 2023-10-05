@@ -10,6 +10,8 @@
       "@app/*": ["src/app/*"],
       "@assets/*": ["src/assets/*"]
     },
+    // "module": "commonjs", 
+    // "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": false ,
     // end

@@ -13,7 +13,10 @@ import 'src/assets/js/utils/svg-loader.js';
 
 // 
 import { ModalService } from '../service/modal.service';
+import { render } from '../../../assets/js/chat/custom.js'
 
+import * as Stomp from 'stompjs';
+import * as SockJS from 'sockjs-client';
 @Component({
   selector: 'app-message',
   templateUrl: './message.component.html',
@@ -36,12 +39,16 @@ export class MessageComponent implements OnInit{
     sidebars.sidebars();
     content.contentTab();
     form.formInput();
+    
+    // render("1", "dannk", "");
   }
 
   constructor(
     public modalService: ModalService,
   ) { }
 
+
+  /* ============template============= */
   openMessage() {
     let isOriginal = true;
     // Lấy tất cả các menu item

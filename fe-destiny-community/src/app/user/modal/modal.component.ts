@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ModalService } from '../service/modal.service';
+import { PostService } from '../service/post.service';
 @Component({
   selector: 'app-modal',
   templateUrl: './modal.component.html',
@@ -12,14 +13,31 @@ import { ModalService } from '../service/modal.service';
 export class ModalComponent implements OnInit {
   slideIndex: number = 1;
   slidesLength: string;
-  
+  listTop5User: any[] = [];
+
   constructor(
     public modalService: ModalService,
+    public postService: PostService
   ) { }
 
   ngOnInit() {
     this.showSlides(1);
+    this.loadDataTop5User();
   }
+
+  listCupUser = [
+    "../../../assets/images/posts/book.png",
+    "../../../assets/images/posts/chair.png",
+    "../../../assets/images/posts/converse.png",
+  ];
+  
+  loadDataTop5User() {
+    this.postService.loadTop5User().subscribe(() => {
+      this.listTop5User = this.postService.getDataTop5User();
+    });
+  }
+
+  /* ============template============= */
   opentReplies() {
     const showContainers = document.querySelectorAll(".show-replies");
     showContainers.forEach((btn) =>

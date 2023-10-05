@@ -21,6 +21,7 @@ import { SettingComponent } from './user/setting/setting.component';
 import { ContactComponent } from './user/contact/contact.component';
 import { HistoryComponent } from './user/history/history.component';
 import { NotificationsComponent } from './user/notifications/notifications.component';
+import { VideoCallComponent } from './user/video-call/video-call.component';
 
 // Admin
 import { IndexAdminComponent } from './admin/index-admin/index-admin.component';
@@ -53,15 +54,21 @@ const routes: Routes = [
   { path: 'contact', component: ContactComponent },
   { path: 'history', component: HistoryComponent },
   { path: 'notifications', component: NotificationsComponent },
+  { path: 'video-call', component: VideoCallComponent },
 
-  { path: 'admin', component: IndexAdminComponent },
-  { path: 'admin/postdetail', component: PostDetailComponent },
-  { path: 'admin/postmanament', component: PostManamentComponent },
-  { path: 'admin/postreportdetail', component: PostReportdetailComponent },
-  { path: 'admin/profileadmin', component: ProfileAdminComponent },
-  { path: 'admin/userdetail', component: UserDetailComponent },
-  { path: 'admin/usermanament', component: UserManamentComponent },
-  { path: 'admin/userreportdetail', component: UserReportdetailComponent },
+  // {
+  //   path: 'admin',
+  //   loadChildren: () => import('./admin/index-admin/index-admin.component').then(m => m.IndexAdminComponent),
+  //   canActivate: [authGuard], 
+  // },
+  { path: 'admin', component: IndexAdminComponent, canActivate: [authGuard] },
+  { path: 'admin/postdetail', component: PostDetailComponent, canActivate: [authGuard] },
+  { path: 'admin/postmanament', component: PostManamentComponent, canActivate: [authGuard] },
+  { path: 'admin/postreportdetail', component: PostReportdetailComponent, canActivate: [authGuard] },
+  { path: 'admin/profileadmin', component: ProfileAdminComponent, canActivate: [authGuard] },
+  { path: 'admin/userdetail', component: UserDetailComponent, canActivate: [authGuard] },
+  { path: 'admin/usermanament', component: UserManamentComponent, canActivate: [authGuard] },
+  { path: 'admin/userreportdetail', component: UserReportdetailComponent, canActivate: [authGuard] },
 
   { path: '**', component: Error404Component },
 ];

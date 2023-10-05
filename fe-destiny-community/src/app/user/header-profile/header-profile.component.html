@@ -85,7 +85,7 @@
         <!-- /USER SHORT DESCRIPTION AVATAR -->
   
         <!-- USER SHORT DESCRIPTION TITLE -->
-        <p class="user-short-description-title"><a href="profile-timeline.html">Marina Valentine</a></p>
+        <p class="user-short-description-title"><a href="profile-timeline">Marina Valentine</a></p>
         <!-- /USER SHORT DESCRIPTION TITLE -->
   
         <!-- USER SHORT DESCRIPTION TEXT -->
@@ -271,7 +271,7 @@
     <!-- SECTION MENU -->
     <div id="section-navigation-slider" class="section-menu">
       <!-- SECTION MENU ITEM -->
-      <a class="section-menu-item" href="profile">
+      <a [class.section-menu-item]="true" [class.active]="activeMenuItem === 'profile'" routerLink="/profile">
         <!-- SECTION MENU ITEM ICON -->
         <svg class="section-menu-item-icon icon-timeline">
             <use xlink:href="#svg-timeline"></use>
@@ -285,7 +285,7 @@
       <!-- /SECTION MENU ITEM -->
 
       <!-- SECTION MENU ITEM -->
-      <a class="section-menu-item" href="edit-profile">
+      <a [class.section-menu-item]="true" [class.active]="activeMenuItem === 'edit-profile'" routerLink="/edit-profile">
         <!-- SECTION MENU ITEM ICON -->
         <svg class="section-menu-item-icon icon-profile">
             <use xlink:href="#svg-profile"></use>
@@ -299,7 +299,7 @@
       <!-- /SECTION MENU ITEM -->
 
       <!-- SECTION MENU ITEM -->
-      <a class="section-menu-item" href="follow">
+      <a [class.section-menu-item]="true" [class.active]="activeMenuItem === 'follow'" routerLink="/follow">
         <!-- SECTION MENU ITEM ICON -->
         <svg class="section-menu-item-icon icon-friend">
           <use xlink:href="#svg-friend"></use>
@@ -313,7 +313,7 @@
       <!-- /SECTION MENU ITEM -->
 
       <!-- SECTION MENU ITEM -->
-      <a class="section-menu-item" href="photos">
+      <a [class.section-menu-item]="true" [class.active]="activeMenuItem === 'photos'" routerLink="/photos">
         <!-- SECTION MENU ITEM ICON -->
         <svg class="section-menu-item-icon icon-photos">
             <use xlink:href="#svg-photos"></use>

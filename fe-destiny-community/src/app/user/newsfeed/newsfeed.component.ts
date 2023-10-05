@@ -21,6 +21,8 @@ import { GetStartedComponent } from '@app/get-started/get-started.component';
 import { LoginService } from '@app/service/login.service';
 import { FollowsService } from '../service/follows.service';
 import { LoadingService } from '../service/loading.service';
+import { PostService } from '../service/post.service';
+
 import '../../../assets/toast/main.js';
 import { forEach } from 'angular';
 declare var toast: any;
@@ -38,15 +40,24 @@ declare var toast: any;
 export class NewsfeedComponent implements OnInit {
   userDisplayName = '';
   postId = '123'; // Mã số của bài viết (có thể là mã số duy nhất của mỗi bài viết)
-  listSuggested: any[];
-  imageUrlSuggested: string;
+  listSuggested: any[] = [];
+  listTop5User: any[] = [];
+  listTop5Post: any[] = [];
+  isLoading = false;
+  isFollowing: boolean = false;
+  checkData1: boolean = false;
+  checkData2: boolean = false;
+  checkData3: boolean = false;
 
   ngOnInit() {
     this.userDisplayName = this.cookieService.get('full_name');
     this.loadDataSuggest();
-
+    this.loadDataTop5User();
+    this.loadDataTop5Post();
+    this.loadData();
     this.checkSrcoll();
     this.translate();
+    
     liquid.liquid();
     avatarHexagons.avatarHexagons();
     tooltips.tooltips();
@@ -65,67 +76,78 @@ export class NewsfeedComponent implements OnInit {
     private loginService: LoginService,
     private router: Router,
     public followsService: FollowsService,
-    public loadingService: LoadingService
+    public loadingService: LoadingService,
+    public postService: PostService
   ) { }
-
 
   /* ============Suggested============= */
   loadDataSuggest() {
     this.followsService.loadDataSuggest().subscribe(() => {
       this.listSuggested = this.followsService.getDataSuggested();
       // console.log('this.listSuggested 1: ' + JSON.stringify(this.listSuggested[1].avatar));
-
-      this.listSuggested.forEach(e => {
-        this.imageUrlSuggested = e.avatar
-      });
-    });
-  }
-  a() {
-    const fl = document.querySelectorAll('.user-status-text');
-  
-    fl.forEach((item: Element) => {
-      // Lấy trạng thái từ Local Storage, mặc định là false nếu chưa lưu
-      const statuses = localStorage.getItem('statuses') === 'true';
-  
-      // Thêm sự kiện click cho các phần tử
-      item.addEventListener('click', () => {
-        // Đảo ngược trạng thái
-        const newStatus = !statuses;
-  
-        // Cập nhật trạng thái cho phần tử
-        item.innerHTML = newStatus ? 'Đang theo dõi' : 'Theo dõi';
-  
-        // Lưu trạng thái mới vào Local Storage
-        localStorage.setItem('statuses', newStatus.toString());
-      });
+      if (Array.isArray(this.listSuggested) && this.listSuggested.length === 0) {
+        this.checkData1 = true;
+      }
     });
   }
 
   addFollow(id: number) {
     this.followsService.addFollow(id).subscribe((res) => {
-      const fl = document.querySelectorAll(
-        '.user-status-text'
-      );
-      fl.forEach(item => {
-        item.addEventListener('click', () => {
-          item.innerHTML = 'Đang theo dõi'
-        });
-      });
+      this.loadDataSuggest();
       new toast({
         title: 'Thông báo!',
         message: 'Đã theo dõi',
         type: 'success',
         duration: 3000,
       })
+      // location.reload();
+    });
+  }
+  /* ============Top 5============= */
+  listCupPost = [
+    "https://odindesignthemes.com/vikinger-theme/wp-content/uploads/2020/09/Credits-Tycoon.png",
+    "https://odindesignthemes.com/vikinger-theme/wp-content/uploads/2020/09/Platinum-User.png",
+    "https://odindesignthemes.com/vikinger-theme/wp-content/uploads/2020/09/Platinum-User.png",
+    "https://odindesignthemes.com/vikinger-theme/wp-content/uploads/2020/09/Silver-User.png",
+    "https://odindesignthemes.com/vikinger-theme/wp-content/uploads/2020/09/Bronze-User.png",
+  ];
+
+  listCupUser = [
+    "https://odindesignthemes.com/vikinger-theme/wp-content/uploads/2020/09/Ruler-of-Masses.png",
+    "https://odindesignthemes.com/vikinger-theme/wp-content/uploads/2020/09/Ruler-of-Masses.png",
+    "https://odindesignthemes.com/vikinger-theme/wp-content/uploads/2020/09/Platinum-Cup.png",
+    "https://odindesignthemes.com/vikinger-theme/wp-content/uploads/2020/09/Gold-Cup.png",
+    "https://odindesignthemes.com/vikinger-theme/wp-content/uploads/2020/09/Bronze-Cup.png",
+  ];
+  
+  loadDataTop5User() {
+    this.postService.loadTop5User().subscribe(() => {
+      this.listTop5User = this.postService.getDataTop5User();
+      if (Array.isArray(this.listTop5User) && this.listTop5User.length === 0) {
+        this.checkData2 = true;
+      }
+    });
+  }
+  
+  loadDataTop5Post() {
+    this.postService.loadTop5Post().subscribe(() => {
+      this.listTop5Post = this.postService.getDataTop5Post();
+      if (Array.isArray(this.listTop5Post) && this.listTop5Post.length === 0) {
+        this.checkData3 = true;
+      }
     });
   }
 
   /* ============template============= */
-  isFollowing: boolean = false;
 
-  toggleFollowStatus() {
-    // Khi click, đảo ngược giá trị của isFollowing
-    this.isFollowing = !this.isFollowing;
+  loadData() {
+    this.isLoading = true;
+    const body_news = document.getElementById('body-news')!;
+    body_news.style.display = 'none';
+    setTimeout(() => {
+      this.isLoading = false;
+      body_news.style.display = 'grid';
+    }, 6000);
   }
 
   translate() {

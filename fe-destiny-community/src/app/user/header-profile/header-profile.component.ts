@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 
+import { CookieService } from 'ngx-cookie-service';
+import { Router, NavigationEnd } from '@angular/router';
 @Component({
   selector: 'app-header-profile',
   templateUrl: './header-profile.component.html',
@@ -12,39 +14,37 @@ import { Component, OnInit } from '@angular/core';
   ]
 })
 export class HeaderProfileComponent implements OnInit{
+  activeMenuItem: string = '';
   ngOnInit() {
-    this.activeMenuItem();
   }
-
-
-  activeMenuItem() {
-    // Lấy tất cả các menu item
-    const menuItems = document.querySelectorAll('.section-menu-item');
-
-    // Lặp qua từng menu item và thêm sự kiện click vào chúng
-    menuItems.forEach(item => {
-      item.addEventListener('click', () => {
-        // Loại bỏ class "active" từ tất cả các menu item
-        menuItems.forEach(menuItem => {
-          menuItem.classList.remove('active');
-        });
-
-        // Thêm class "active" vào menu item được click
-        item.classList.add('active');
-
-        // Lưu trạng thái "active" vào Local Storage
-        localStorage.setItem('activeMenuItem', item.textContent!);
-      });
+  constructor(
+    private cookieService: CookieService,
+    private router: Router,
+  ) {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        // Đã chuyển đến trang mới, thực hiện cập nhật menu active
+        this.updateActiveMenuItem();
+      }
     });
+   }
 
-    // Khôi phục trạng thái "active" từ Local Storage khi trang tải lại
-    const activeMenuItem = localStorage.getItem('activeMenuItem');
-    if (activeMenuItem !== null) {
-      menuItems.forEach(item => {
-        if (item.textContent === activeMenuItem) {
-          item.classList.add('active');
-        }
-      });
+  updateActiveMenuItem() {
+    const currentUrl = this.router.url;
+    // Xác định menu item active dựa trên URL hiện tại
+    // Ví dụ: nếu có '/home' trong URL, đặt activeMenuItem thành 'home'
+    if (currentUrl.includes('/profile')) {
+      this.activeMenuItem = 'profile';
+    }
+    // Tương tự cho các menu item khác
+    if (currentUrl.includes('/edit-profile')) {
+      this.activeMenuItem = 'edit-profile';
+    }
+    if (currentUrl.includes('/follow')) {
+      this.activeMenuItem = 'follow';
+    }
+    if (currentUrl.includes('/photos')) {
+      this.activeMenuItem = 'photos';
     }
   }
 }

@@ -113,6 +113,7 @@ export class GetStartedComponent implements OnInit {
 					this.loginForm.reset();
 				} else {
 					this.cookieService.set('full_name', response.name);
+					this.cookieService.set('role', response.roles[0].authority);
 					delay(500).then((res) => {
 						this.loginForm.reset();
 						this.router.navigate(['newsfeed']);
