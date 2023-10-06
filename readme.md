@@ -3,3 +3,4 @@
   * 19-9-2023 add 1 column (date_interested) in table Interested
   * 24-9-2023 add 2 data ('ROLE_OWNER', 'Người sở hữu web') and ('ROLE_MODERATOR', 'Kiểm duyệt viên web') in table User_role
   * 3-10-2023 add table message, chats, chat_participants
+  * 6-10-2023 re-update data in db, change the sub column to gg_id and add column fb_id in the table users
