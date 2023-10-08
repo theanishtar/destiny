@@ -1,3 +1,4 @@
+
 const url = 'http://localhost:8080';
 let stompClient = null;
 let stompClientComment = null;
@@ -6,15 +7,18 @@ let newMessages = new Map();
 let image = null;
 let userNamSession = null;
 let toUserComment = null;
-function connectToChat(userName) {
+
+
+
+export function connectToChat(userName) {
 	/*	console.log("connecting to chat...")
 		console.log("Username: " + userName)*/
 	let socket = new SockJS(url + '/chat');
-	let socketComment = new SockJS(url + '/comment');
+	// let socketComment = new SockJS(url + '/comment');
 	stompClient = Stomp.over(socket);
-	stompClientComment = Stomp.over(socketComment);
+	// stompClientComment = Stomp.over(socketComment);
 	stompClient.connect({}, function(frame) {
-		/*console.log("connected to: " + frame);*/
+		console.log("connected to: " + frame);
 		stompClient.subscribe("/topic/messages/" + userName, function(response) {
 			let data = JSON.parse(response.body);
 			/*console.log("data_fromlogin1: " + data.img);*/
@@ -61,26 +65,26 @@ function connectToChat(userName) {
 		stompClient.send("/app/fetchAllUsers");
 
 	});
-	stompClientComment.connect({}, function(frame) {
-		stompClientComment.subscribe("/topic/loadComments", function(response) {
-			let count = 0;
-			/*let dropdownNotification = document.querySelector(".notificationCount");*/
-			for (let key of Object.keys(data)) {
-				let value = data[key];
-				if (value.userNameSession == userNamSession) {
-					if (value.cmt_Status === false) {
-						count++;
-					}
-				}
-			}
-			if (count > 0) {
-				$('#notifyMenu').append('<div class="notification"></div>');
-				$('#notificationCount').append('<span>' + count + '</span>');
-			}
-		});
-		stompClientComment.send("/app/loadNotification");
-	});
-	window.event.preventDefault();
+	// stompClientComment.connect({}, function(frame) {
+	// 	stompClientComment.subscribe("/topic/loadComments", function(response) {
+	// 		let count = 0;
+	// 		/*let dropdownNotification = document.querySelector(".notificationCount");*/
+	// 		for (let key of Object.keys(data)) {
+	// 			let value = data[key];
+	// 			if (value.userNameSession == userNamSession) {
+	// 				if (value.cmt_Status === false) {
+	// 					count++;
+	// 				}
+	// 			}
+	// 		}
+	// 		if (count > 0) {
+	// 			$('#notifyMenu').append('<div class="notification"></div>');
+	// 			$('#notificationCount').append('<span>' + count + '</span>');
+	// 		}
+	// 	});
+	// 	stompClientComment.send("/app/loadNotification");
+	// });
+	// window.event.preventDefault();
 }
 
 function sendMsg(from, text, img) {

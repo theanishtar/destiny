@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 //Xử lí bất đồng bộ
 import { Observable, throwError } from 'rxjs';
-
+import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
@@ -17,8 +17,10 @@ declare var toast: any;
 })
 export class LoginService {
 	private userURL = environment.baseUrl + 'v1/oauth/login';
+	private userLoginAuth = environment.baseUrl + 'oauth/login/authenticated';
+
 	private userLogined: any[] = [];
-	
+
 	loginUser(data: any): Observable<any> {
 		return this.http.post<any>(this.userURL, data)
 			.pipe(
@@ -86,6 +88,24 @@ export class LoginService {
 			);
 	}
 
+	status: string;
+	loginAuth(data: any) {
+		//alert("dataparsms:"+data);
+		var strData = { data: data };
+		// return this.http.post(this.userURL, data);
+		return this.http.post<any>(this.userLoginAuth, strData).pipe(
+			tap((res) => {
+				this.userLogined = JSON.parse(JSON.stringify(res));
+				this.setUserLog(this.userLogined);
+				console.warn(this.userLogined);
+				localStorage.setItem(
+					'token',
+					JSON.parse(JSON.stringify(this.getUserLog())).token
+				);
+			}),
+			catchError((error) => of([]))
+		);
+	}
 
 	constructor(
 		private http: HttpClient,

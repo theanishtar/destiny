@@ -107,14 +107,24 @@ label.tab-label.wait-message {
   transition: all 0.35s;
 }
 /*  */
+.chat-widget-chat {
+  display: none;
+}
 
-.chat-widget-chat, .chat-widget-chat-orgin.active {
+.chat-widget-chat.active {
+  display: block;
+}
+/* .chat-widget-chat, .chat-widget-chat-orgin.active {
   display: none;
 }
 
 .chat-widget-chat.active,  .chat-widget-chat-orgin{
   display: block;
   width: auto;
+} */
+.simple-dropdown {
+  position: absolute;
+  right: 10%;
 }
 .chat-widget-chat{
   width: auto;
@@ -153,4 +163,102 @@ label.tab-label.wait-message {
   .conten-wellcome {
     margin: 15% 10% 15% 0;
   }
+}
+
+ /* avatar */
+ .hexagon-container {
+  width: 45px;
+  height: 48px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  background: white;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.hexagon {
+  position: absolute;
+}
+
+.user-avatar-content {
+  width: 40px;
+  height: 44px;
+  overflow: hidden;
+  position: absolute;
+}
+
+.hexagon-image {
+  width: 30px;
+  height: 33px;
+  position: relative;
+  z-index: 3;
+  background-size: cover;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  left: 4%;
+  top: 2%;
+}
+
+.user-avatar-border:before {
+  width: 42px;
+  height: 46px;
+  z-index: 1;
+  content: "";
+  position: absolute;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  /* border-radius: 15px; */
+  left: 1px;
+  top: 0px;
+  background-image: linear-gradient(to right, #41efff, #615dfa);
+}
+
+.hexagon.user-avatar-progress-border {
+  position: absolute;
+  z-index: 2;
+  margin-left: 9.6%;
+  margin-top: 8.3%;
+  width: 35px;
+  height: 39px;
+  background: white;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+/*  */
+p.chat-widget-speaker-message {
+  width: fit-content;
+}
+a.user-avatar.small.user-status-avatar.no-border.no-outline.avatar-mess {
+  position: absolute;
+    left: -10px;
+    top: -8px;
+}
+.avatar-mess .hexagon-container {
+  width: 35px;
+  height: 38px;
+}
+.avatar-mess .hexagon-image {
+  width: 20px;
+  height: 23px;
+}
+.avatar-mess .user-avatar-border:before {
+  width: 32px;
+  height: 36px;
+}
+.avatar-mess .hexagon.user-avatar-progress-border {
+  margin-left: 11%;
+    margin-top: 10.3%;
+    width: 26px;
+    height: 29px;
+}
+
+/* =======dropdown======== */
+.widget-box-post-settings-dropdown {
+  display: none;
+}
+
+.post-settings-wrap:hover .widget-box-post-settings-dropdown {
+  display: block;
+}
+.user-status.user-status-tag{
+top: 0;
+font-size: 8px;
 }

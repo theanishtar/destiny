@@ -1,5 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { CookieService } from 'ngx-cookie-service';
+import { MessageService } from './user/service/message.service';
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -7,9 +11,27 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AppComponent {
   title = 'FE_Destiny';
-  constructor(private translateService: TranslateService) {}
+  sender: any ;
+
+  constructor(
+    private translateService: TranslateService,
+    public messageService: MessageService,
+    private cookieService: CookieService,
+  ) {
+    if(this.cookieService.get("full_name") != ''){
+          this.loadDataSender();
+    }
+  }
 
   public selectLg(event: any) {
     this.translateService.use(event.target.value);
   }
+
+  loadDataSender() {
+		this.messageService.loadDataSender().subscribe(() => {
+		  this.sender = JSON.parse(JSON.stringify(this.messageService.getSender()));
+      // console.log("this.sender: " + this.sender.user_id);
+		  this.messageService.connectToChat(this.sender.user_id);
+		});
+	}
 }

@@ -17,12 +17,16 @@ import { InteractPostsService } from '../service/interact-posts.service';
 
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
-import { GetStartedComponent } from '@app/get-started/get-started.component';
 import { LoginService } from '@app/service/login.service';
 import { FollowsService } from '../service/follows.service';
 import { LoadingService } from '../service/loading.service';
 import { PostService } from '../service/post.service';
+import { MessageService } from '@app/user/service/message.service';
 
+import { connectToChat } from '../../../assets/js/chat/chat.js'
+import * as Stomp from 'stompjs';
+import * as SockJS from 'sockjs-client';
+import { Observable,  of } from 'rxjs';
 import '../../../assets/toast/main.js';
 import { forEach } from 'angular';
 declare var toast: any;
@@ -48,6 +52,9 @@ export class NewsfeedComponent implements OnInit {
   checkData1: boolean = false;
   checkData2: boolean = false;
   checkData3: boolean = false;
+  // sender: any ;
+  // socket?: WebSocket;
+  // stompClient?: Stomp.Client;
 
   ngOnInit() {
     this.userDisplayName = this.cookieService.get('full_name');
@@ -57,7 +64,8 @@ export class NewsfeedComponent implements OnInit {
     this.loadData();
     this.checkSrcoll();
     this.translate();
-    
+    // this.loadDataSender();
+
     liquid.liquid();
     avatarHexagons.avatarHexagons();
     tooltips.tooltips();
@@ -77,8 +85,11 @@ export class NewsfeedComponent implements OnInit {
     private router: Router,
     public followsService: FollowsService,
     public loadingService: LoadingService,
-    public postService: PostService
-  ) { }
+    public postService: PostService,
+    public messageService: MessageService
+  ) { 
+    
+  }
 
   /* ============Suggested============= */
   loadDataSuggest() {
@@ -138,6 +149,15 @@ export class NewsfeedComponent implements OnInit {
     });
   }
 
+  /* ============Message============= */
+  // loadDataSender() {
+	// 	this.messageService.loadDataSender().subscribe(() => {
+	// 	  this.sender = JSON.parse(JSON.stringify(this.messageService.getSender()));
+  //     // this.sender = JSON.parse("[" + JSON.stringify(this.messageService.getSender()) + "]");
+	// 	  console.log("this.sender: " + this.sender.user_id);
+	// 	  this.messageService.connectToChat(this.sender.user_id);
+	// 	});
+	// }
   /* ============template============= */
 
   loadData() {

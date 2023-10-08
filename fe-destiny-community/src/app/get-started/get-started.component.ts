@@ -14,7 +14,6 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { catchError, tap } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
-
 //Xử lí bất đồng bộ
 import { of } from 'rxjs';
 import Swal from 'sweetalert2';
@@ -25,6 +24,9 @@ declare var toast: any;
 import { LoginService } from '../service/login.service';
 import { RegisterService } from '@app/service/register.service';
 import { FollowsService } from '@app/user/service/follows.service';
+import { MessageService } from '@app/user/service/message.service';
+
+import { connectToChat } from '../../assets/js/chat/chat.js'
 @Component({
 	selector: 'app-get-started',
 	templateUrl: './get-started.component.html',
@@ -37,12 +39,17 @@ import { FollowsService } from '@app/user/service/follows.service';
 export class GetStartedComponent implements OnInit {
 	public loginForm!: FormGroup;
 	public registerForm!: FormGroup;
+	private loginAdmin = '';
 	submitted: boolean = false;
 	checkedRemember: boolean = false;
-	private loginAdmin = '';
 	registerFullname: string = '';
 	registerEmail: string = '';
 	registerPassword: string = '';
+	sender: any[];
+	orderby: any;
+	userLogGG: any[] = [];
+	userGG: any;
+	loggedIn: any;
 
 	constructor(
 		private formbuilder: FormBuilder,
@@ -52,17 +59,88 @@ export class GetStartedComponent implements OnInit {
 		private router: Router,
 		private route: ActivatedRoute,
 		public registerService: RegisterService,
-		public followsService: FollowsService
+		public followsService: FollowsService,
+		public messageService: MessageService
 	) {
 		this.createFormLogin();
 		this.createFormRegister();
 	}
 
 	ngOnInit() {
-
+		this.loginWithGG();
 		// Giao diện
 		tabs.tabs();
 		form.formInput();
+	}
+	/*===========Login with google===============*/
+	loginWithGG(){
+		this.route.queryParams.subscribe((params) => {
+			this.orderby = params['subIdAuthentication'];
+
+			function delay(ms: number) {
+				return new Promise(function (resolve) {
+					setTimeout(resolve, ms);
+				});
+			}
+
+			if (this.orderby !== undefined) {
+				this.loginService.loginAuth(this.orderby).subscribe((res) => {
+					if (res !== undefined) {
+						if (res.roles[0].authority == 'ROLE_ADMIN') {
+							// let userAdmin = {
+							// 	email: res.email,
+							// 	password: res.password,
+							// };
+							// this.logAdmin(userAdmin);
+							// window.location.href =
+							// 	'http://localhost:8080/oauth/rec/' +
+							// 	userAdmin.email +
+							// 	'/' +
+							// 	userAdmin.password;
+							// this.loginForm.reset();
+							window.location.href = 'http://localhost:4200/admin';
+							this.loginForm.reset();
+						} else {
+							this.userLogGG = JSON.parse(JSON.stringify(res));
+							this.setUserLogGG(this.userLogGG);
+							localStorage.setItem(
+								'token',
+								JSON.parse(JSON.stringify(this.getUserLogGG())).token
+							);
+							this.cookieService.set('full_name', res.name);
+							this.cookieService.set('role', res.roles[0].authority);
+
+							this.router.navigate(['newsfeed']);
+							new toast({
+								title: 'Thành công!',
+								message: 'Đăng nhập thành công!',
+								type: 'success',
+								duration: 2000,
+							});
+
+							// delay(2000).then((res) => {
+							// 	location.reload();
+							// });
+						}
+					}
+				});
+			}
+		});
+	}
+
+	
+	// Getter
+	getUserLogGG(): any[] {
+		return this.userLogGG;
+	}
+
+	//   Setter
+	setUserLogGG(data: any[]): void {
+		this.userLogGG = data;
+	}
+
+	loginGGClick() {
+		window.location.href = 'https://accounts.google.com/gsi/select?client_id=829042615252-9cgbgmdc55famceanr15b20dq3kns76m&ux_mode=redirect&login_uri=http%3A%2F%2Flocalhost%3A8080%2Foauth%2FloginGG&ui_mode=card&as=tpphk8oJS9SGuKAiUmVKtg&g_csrf_token=2a42f6fd54be8af1&origin=http%3A%2F%2Flocalhost%3A4200';
 	}
 	/*===========Login with email and password===============*/
 	createFormLogin() {
@@ -114,7 +192,7 @@ export class GetStartedComponent implements OnInit {
 				} else {
 					this.cookieService.set('full_name', response.name);
 					this.cookieService.set('role', response.roles[0].authority);
-					delay(500).then((res) => {
+					
 						this.loginForm.reset();
 						this.router.navigate(['newsfeed']);
 						new toast({
@@ -123,6 +201,8 @@ export class GetStartedComponent implements OnInit {
 							type: 'success',
 							duration: 1500,
 						});
+					delay(100).then((res) => {
+						location.reload();
 					});
 				}
 			}
@@ -224,23 +304,17 @@ export class GetStartedComponent implements OnInit {
 		});
 	}
 
-	autoLogin() {
-		const action = this.route.snapshot.queryParams['action'];
-		if (action === 'auto') {
-			this.router.navigate(
-				['/login'],
-				{
-					queryParams: {
-						action: 'no-auto',
-						email: this.loginForm.get('email'),
-						password: this.loginForm.get('password')
-					}
-				}
-			);
-		} else {
-			alert("Action không phải auto má ơi")
-		}
-	}
+	
+	/*============Message==============*/
+	// loadDataSender() {
+	// 	this.messageService.loadDataListChat().subscribe(() => {
+	// 	  this.sender = JSON.parse(JSON.stringify(this.messageService.getDataChat()));
+	// 	  console.log("this.sender: " + this.sender);
+	// 	  connectToChat(this.sender);
+	// 	});
+	// }
+
+
 	/*============Template==============*/
 	showHidePassLogin() {
 		let input = document.getElementById('passwordForm') as HTMLInputElement;

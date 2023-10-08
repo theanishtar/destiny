@@ -38,7 +38,7 @@ export class VideoCallComponent {
   }
 
   videoCall() {
-    const LOCAL_IP_ADDRESS = "192.168.137.1"; // change it
+    const LOCAL_IP_ADDRESS = "localhost"; // change it
 
     const getElement = id => document.getElementById(id);
     const [btnConnect, btnToggleVideo, btnToggleAudio, divRoomConfig, roomDiv, roomNameInput] = ["btnConnect",
@@ -63,7 +63,7 @@ export class VideoCallComponent {
 
     const streamConstraints = { audio: true, video: true };
 
-    this.socket = io('http://192.168.137.1:8000');
+    this.socket = io('http://localhost:8000');
 
     btnToggleVideo!.addEventListener("click", () => toggleTrack("video"));
     btnToggleAudio!.addEventListener("click", () => toggleTrack("audio"));

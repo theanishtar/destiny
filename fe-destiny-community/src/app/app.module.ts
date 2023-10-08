@@ -5,12 +5,16 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { DataSrcDirective } from './dataSrcDirective';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
 // interceptor
 import { TokenInterceptor } from './interceptor';
 import { loadingInterceptor } from './loadingInterceptor';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+// login GG
+
+
+// user
 import { HomeComponent } from './home/home.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { NewsfeedComponent } from './user/newsfeed/newsfeed.component';

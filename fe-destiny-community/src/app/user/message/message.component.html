@@ -5,7 +5,11 @@
   <!-- SECTION BANNER -->
   <div class="section-banner">
     <!-- SECTION BANNER ICON -->
-    <img class="section-banner-icon" src="../../assets/images/banner/accounthub-icon.png" alt="accounthub-icon" />
+    <img
+      class="section-banner-icon"
+      src="../../assets/images/banner/accounthub-icon.png"
+      alt="accounthub-icon"
+    />
     <!-- /SECTION BANNER ICON -->
 
     <!-- SECTION BANNER TITLE -->
@@ -19,10 +23,10 @@
     <!-- /SECTION BANNER TEXT -->
   </div>
   <!-- /SECTION BANNER -->
-
+  <app-loading *ngIf="isLoading"></app-loading>
   <!-- GRID -->
   <!-- Message -->
-  <div class="account-hub-content">
+  <div class="account-hub-content" id="body-chat">
     <!-- SECTION HEADER -->
     <div class="section-header">
       <!-- SECTION HEADER INFO -->
@@ -56,256 +60,158 @@
       <!-- CHAT WIDGET -->
       <div class="chat-widget static">
         <!-- CHAT WIDGET MESSAGES -->
-        <div class="chat-widget-messages" data-simplebar>       
+        <div class="chat-widget-messages" data-simplebar>
           <div class="wrapper">
             <div class="tabs">
               <div class="tab">
-                <input type="radio" name="css-tabs" id="tab-1" checked class="tab-switch">
-                <label for="tab-1" class="tab-label main-message">Tin nhắn</label>
-                <div class="tab-content">
-                  <!-- CHAT WIDGET MESSAGE -->
-                  <div class="chat-widget-message">
-            <!-- USER STATUS -->
-            <div class="user-status">
-              <!-- USER STATUS AVATAR -->
-              <div class="user-status-avatar">
-                <!-- USER AVATAR -->
-                <div class="user-avatar small no-outline">
-                  <!-- USER AVATAR CONTENT -->
-                  <div class="user-avatar-content">
-                    <!-- HEXAGON -->
-                    <div class="hexagon-image-30-32" data-src="../../assets/images/avatar/04.jpg"></div>
-                    <!-- /HEXAGON -->
+                <input
+                  type="radio"
+                  name="css-tabs"
+                  id="tab-1"
+                  checked
+                  class="tab-switch"
+                />
+                <label for="tab-1" class="tab-label main-message"
+                  >Tin nhắn</label
+                >
+                <div
+                  class="tab-content"
+                  
+                  >
+                  <div 
+                  *ngFor="let key of mapUser |keyvalue">
+                    <!-- <div class="a">{{key.value.fullname}}</div> -->
+                    <ng-container>
+                      <!-- CHAT WIDGET MESSAGE -->
+                      <div
+                        class="chat-widget-message"
+                        id="chat-widget-message-{{key.value.user_id}}"
+                        (click)="selectedUser(key.value.user_id)"
+                      >
+                        <!-- USER STATUS -->
+                        <div class="user-status">
+                          <!-- USER STATUS AVATAR -->
+                          <div class="user-status-avatar">
+                            <!-- USER AVATAR -->
+                            <a
+                              class="user-avatar small user-status-avatar no-border no-outline"
+                              href="profile"
+                            >
+                              <div class="hexagon-container">
+                                <div class="hexagon user-avatar-content">
+                                  <div
+                                    class="hexagon-image"
+                                    style="background-image: url('{{key.value.avatar}}')"
+                                  ></div>
+                                </div>
+                                <div class="hexagon user-avatar-border">
+                                  <div class="hexagon-border"></div>
+                                </div>
+                                <div class="hexagon user-avatar-progress-border">
+                                  <div class="user-avatar-progress"></div>
+                                </div>
+                                <p class="user-avatar-badge-text">1</p>
+                              </div>
+                            </a>
+                            <!-- /USER AVATAR -->
+                          </div>
+                          <!-- /USER STATUS AVATAR -->
+  
+                          <!-- USER STATUS TITLE -->
+                          <p class="user-status-title">
+                            <span class="bold">{{ key.value.fullname }}</span>
+                          </p>
+                          <!-- /USER STATUS TITLE -->
+  
+                          <!-- USER STATUS TEXT -->
+                          <p class="user-status-text" id="last-message-{{key.value.user_id}}">
+                            <!-- Great! Then we'll meet with them at the party... -->
+                          </p>
+                          <!-- /USER STATUS TEXT -->
+  
+                          <!-- USER STATUS TIMESTAMP -->
+                          <p class="user-status-timestamp floaty">2 hours ago</p>
+                          <!-- /USER STATUS TIMESTAMP -->
+                        </div>
+                        <!-- /USER STATUS -->
+                      </div>
+                      <!-- /CHAT WIDGET MESSAGE -->
+                    </ng-container>
                   </div>
-                  <!-- /USER AVATAR CONTENT -->
-
-                  <!-- USER AVATAR PROGRESS -->
-                  <div class="user-avatar-progress">
-                    <!-- HEXAGON -->
-                    <div class="hexagon-progress-40-44"></div>
-                    <!-- /HEXAGON -->
-                  </div>
-                  <!-- /USER AVATAR PROGRESS -->
-
-                  <!-- USER AVATAR PROGRESS BORDER -->
-                  <div class="user-avatar-progress-border">
-                    <!-- HEXAGON -->
-                    <div class="hexagon-border-40-44"></div>
-                    <!-- /HEXAGON -->
-                  </div>
-                  <!-- /USER AVATAR PROGRESS BORDER -->
-
-                  <!-- USER AVATAR BADGE -->
-                  <div class="user-avatar-badge">
-                    <!-- USER AVATAR BADGE BORDER -->
-                    <div class="user-avatar-badge-border">
-                      <!-- HEXAGON -->
-                      <div class="hexagon-22-24"></div>
-                      <!-- /HEXAGON -->
-                    </div>
-                    <!-- /USER AVATAR BADGE BORDER -->
-
-                    <!-- USER AVATAR BADGE CONTENT -->
-                    <div class="user-avatar-badge-content">
-                      <!-- HEXAGON -->
-                      <div class="hexagon-dark-16-18"></div>
-                      <!-- /HEXAGON -->
-                    </div>
-                    <!-- /USER AVATAR BADGE CONTENT -->
-
-                    <!-- USER AVATAR BADGE TEXT -->
-                    <p class="user-avatar-badge-text">6</p>
-                    <!-- /USER AVATAR BADGE TEXT -->
-                  </div>
-                  <!-- /USER AVATAR BADGE -->
-                </div>
-                <!-- /USER AVATAR -->
-              </div>
-              <!-- /USER STATUS AVATAR -->
-
-              <!-- USER STATUS TITLE -->
-              <p class="user-status-title">
-                <span class="bold">Bearded Wonder</span>
-              </p>
-              <!-- /USER STATUS TITLE -->
-
-              <!-- USER STATUS TEXT -->
-              <p class="user-status-text">
-                Great! Then we'll meet with them at the party...
-              </p>
-              <!-- /USER STATUS TEXT -->
-
-              <!-- USER STATUS TIMESTAMP -->
-              <p class="user-status-timestamp floaty">2 hours ago</p>
-              <!-- /USER STATUS TIMESTAMP -->
-            </div>
-            <!-- /USER STATUS -->
-                  </div>
-                  <!-- /CHAT WIDGET MESSAGE -->
+                  
+                  
                 </div>
               </div>
               <div class="tab">
-                <input type="radio" name="css-tabs" id="tab-2" class="tab-switch">
-                <label for="tab-2" class="tab-label wait-message">Tin nhắn chờ</label>
-                <div class="tab-content">
-                     <!-- CHAT WIDGET MESSAGE -->
-                    <div class="chat-widget-message">
-            <!-- USER STATUS -->
-            <div class="user-status">
-              <!-- USER STATUS AVATAR -->
-              <div class="user-status-avatar">
-                <!-- USER AVATAR -->
-                <div class="user-avatar small no-outline">
-                  <!-- USER AVATAR CONTENT -->
-                  <div class="user-avatar-content">
-                    <!-- HEXAGON -->
-                    <div class="hexagon-image-30-32" data-src="../../assets/images/avatar/04.jpg"></div>
-                    <!-- /HEXAGON -->
-                  </div>
-                  <!-- /USER AVATAR CONTENT -->
-
-                  <!-- USER AVATAR PROGRESS -->
-                  <div class="user-avatar-progress">
-                    <!-- HEXAGON -->
-                    <div class="hexagon-progress-40-44"></div>
-                    <!-- /HEXAGON -->
-                  </div>
-                  <!-- /USER AVATAR PROGRESS -->
-
-                  <!-- USER AVATAR PROGRESS BORDER -->
-                  <div class="user-avatar-progress-border">
-                    <!-- HEXAGON -->
-                    <div class="hexagon-border-40-44"></div>
-                    <!-- /HEXAGON -->
-                  </div>
-                  <!-- /USER AVATAR PROGRESS BORDER -->
-
-                  <!-- USER AVATAR BADGE -->
-                  <div class="user-avatar-badge">
-                    <!-- USER AVATAR BADGE BORDER -->
-                    <div class="user-avatar-badge-border">
-                      <!-- HEXAGON -->
-                      <div class="hexagon-22-24"></div>
-                      <!-- /HEXAGON -->
-                    </div>
-                    <!-- /USER AVATAR BADGE BORDER -->
-
-                    <!-- USER AVATAR BADGE CONTENT -->
-                    <div class="user-avatar-badge-content">
-                      <!-- HEXAGON -->
-                      <div class="hexagon-dark-16-18"></div>
-                      <!-- /HEXAGON -->
-                    </div>
-                    <!-- /USER AVATAR BADGE CONTENT -->
-
-                    <!-- USER AVATAR BADGE TEXT -->
-                    <p class="user-avatar-badge-text">6</p>
-                    <!-- /USER AVATAR BADGE TEXT -->
-                  </div>
-                  <!-- /USER AVATAR BADGE -->
-                </div>
-                <!-- /USER AVATAR -->
-              </div>
-              <!-- /USER STATUS AVATAR -->
-
-              <!-- USER STATUS TITLE -->
-              <p class="user-status-title">
-                <span class="bold">Bearded Wonder</span>
-              </p>
-              <!-- /USER STATUS TITLE -->
-
-              <!-- USER STATUS TEXT -->
-              <p class="user-status-text">
-                Great! Then we'll meet with them at the party...
-              </p>
-              <!-- /USER STATUS TEXT -->
-
-              <!-- USER STATUS TIMESTAMP -->
-              <p class="user-status-timestamp floaty">2 hours ago</p>
-              <!-- /USER STATUS TIMESTAMP -->
-            </div>
-            <!-- /USER STATUS -->
-                    </div>
-                    <!-- /CHAT WIDGET MESSAGE -->
+                <input
+                  type="radio"
+                  name="css-tabs"
+                  id="tab-2"
+                  class="tab-switch"
+                />
+                <label for="tab-2" class="tab-label wait-message"
+                  >Tin nhắn chờ</label
+                >
+                <div
+                  class="tab-content"
+                  *ngFor="let users of mapUser | keyvalue"
+                >
+                  <ng-container *ngIf="!users.value.isFriend">
                     <!-- CHAT WIDGET MESSAGE -->
-                    <div class="chat-widget-message">
-            <!-- USER STATUS -->
-            <div class="user-status">
-              <!-- USER STATUS AVATAR -->
-              <div class="user-status-avatar">
-                <!-- USER AVATAR -->
-                <div class="user-avatar small no-outline">
-                  <!-- USER AVATAR CONTENT -->
-                  <div class="user-avatar-content">
-                    <!-- HEXAGON -->
-                    <div class="hexagon-image-30-32" data-src="../../assets/images/avatar/04.jpg"></div>
-                    <!-- /HEXAGON -->
-                  </div>
-                  <!-- /USER AVATAR CONTENT -->
+                    <div
+                      class="chat-widget-message"
+                      [ngClass]="{ active: !messageService.isOriginal }"
+                      (click)="selectedUser(users.value.user_id)"
+                    >
+                      <!-- USER STATUS -->
+                      <div class="user-status">
+                        <!-- USER STATUS AVATAR -->
+                        <div class="user-status-avatar">
+                          <!-- USER AVATAR -->
+                          <a
+                            class="user-avatar small user-status-avatar no-border no-outline"
+                            href="profile"
+                          >
+                            <div class="hexagon-container">
+                              <div class="hexagon user-avatar-content">
+                                <div
+                                  class="hexagon-image"
+                                  style="background-image: url('{{users.value.avatar}}')"
+                                ></div>
+                              </div>
+                              <div class="hexagon user-avatar-border">
+                                <div class="hexagon-border"></div>
+                              </div>
+                              <div class="hexagon user-avatar-progress-border">
+                                <div class="user-avatar-progress"></div>
+                              </div>
+                              <p class="user-avatar-badge-text">1</p>
+                            </div>
+                          </a>
+                          <!-- /USER AVATAR -->
+                        </div>
+                        <!-- /USER STATUS AVATAR -->
 
-                  <!-- USER AVATAR PROGRESS -->
-                  <div class="user-avatar-progress">
-                    <!-- HEXAGON -->
-                    <div class="hexagon-progress-40-44"></div>
-                    <!-- /HEXAGON -->
-                  </div>
-                  <!-- /USER AVATAR PROGRESS -->
+                        <!-- USER STATUS TITLE -->
+                        <p class="user-status-title">
+                          <span class="bold">{{ users.value.fullname }}</span>
+                        </p>
+                        <!-- /USER STATUS TITLE -->
 
-                  <!-- USER AVATAR PROGRESS BORDER -->
-                  <div class="user-avatar-progress-border">
-                    <!-- HEXAGON -->
-                    <div class="hexagon-border-40-44"></div>
-                    <!-- /HEXAGON -->
-                  </div>
-                  <!-- /USER AVATAR PROGRESS BORDER -->
+                        <!-- USER STATUS TEXT -->
+                        <p class="user-status-text">
+                          <!-- Great! Then we'll meet with them at the party... -->
+                        </p>
+                        <!-- /USER STATUS TEXT -->
 
-                  <!-- USER AVATAR BADGE -->
-                  <div class="user-avatar-badge">
-                    <!-- USER AVATAR BADGE BORDER -->
-                    <div class="user-avatar-badge-border">
-                      <!-- HEXAGON -->
-                      <div class="hexagon-22-24"></div>
-                      <!-- /HEXAGON -->
-                    </div>
-                    <!-- /USER AVATAR BADGE BORDER -->
-
-                    <!-- USER AVATAR BADGE CONTENT -->
-                    <div class="user-avatar-badge-content">
-                      <!-- HEXAGON -->
-                      <div class="hexagon-dark-16-18"></div>
-                      <!-- /HEXAGON -->
-                    </div>
-                    <!-- /USER AVATAR BADGE CONTENT -->
-
-                    <!-- USER AVATAR BADGE TEXT -->
-                    <p class="user-avatar-badge-text">6</p>
-                    <!-- /USER AVATAR BADGE TEXT -->
-                  </div>
-                  <!-- /USER AVATAR BADGE -->
-                </div>
-                <!-- /USER AVATAR -->
-              </div>
-              <!-- /USER STATUS AVATAR -->
-
-              <!-- USER STATUS TITLE -->
-              <p class="user-status-title">
-                <span class="bold">Bearded Wonder</span>
-              </p>
-              <!-- /USER STATUS TITLE -->
-
-              <!-- USER STATUS TEXT -->
-              <p class="user-status-text">
-                Great! Then we'll meet with them at the party...
-              </p>
-              <!-- /USER STATUS TEXT -->
-
-              <!-- USER STATUS TIMESTAMP -->
-              <p class="user-status-timestamp floaty">2 hours ago</p>
-              <!-- /USER STATUS TIMESTAMP -->
-            </div>
-            <!-- /USER STATUS -->
+                        <!-- USER STATUS TIMESTAMP -->
+                        <p class="user-status-timestamp floaty">2 hours ago</p>
+                        <!-- /USER STATUS TIMESTAMP -->
+                      </div>
+                      <!-- /USER STATUS -->
                     </div>
                     <!-- /CHAT WIDGET MESSAGE -->
+                  </ng-container>
                 </div>
               </div>
             </div>
@@ -317,7 +223,12 @@
         <form class="chat-widget-form">
           <!-- INTERACTIVE INPUT -->
           <div class="interactive-input small">
-            <input type="text" id="chat-widget-search-2" name="chat_widget_search_2" placeholder="Search Messages..." />
+            <input
+              type="text"
+              id="chat-widget-search-2"
+              name="chat_widget_search_2"
+              placeholder="Search Messages..."
+            />
             <!-- INTERACTIVE INPUT ICON WRAP -->
             <div class="interactive-input-icon-wrap">
               <!-- INTERACTIVE INPUT ICON -->
@@ -345,7 +256,11 @@
       <!-- /CHAT WIDGET -->
 
       <!-- CHAT WIDGET -->
-      <div class="chat-widget chat-widget-chat">
+      <div
+        class="chat-widget chat-widget-chat"
+        *ngIf="!messageService.isOriginal"
+        [ngClass]="{ active: !messageService.isOriginal }"
+      >
         <!-- CHAT WIDGET HEADER -->
         <div class="chat-widget-header">
           <!-- CHAT WIDGET SETTINGS -->
@@ -353,7 +268,9 @@
             <!-- POST SETTINGS WRAP -->
             <div class="post-settings-wrap">
               <!-- POST SETTINGS -->
-              <div class="post-settings widget-box-post-settings-dropdown-trigger">
+              <div
+                class="post-settings widget-box-post-settings-dropdown-trigger"
+              >
                 <!-- POST SETTINGS ICON -->
                 <svg class="post-settings-icon icon-more-dots">
                   <use xlink:href="#svg-more-dots"></use>
@@ -387,67 +304,37 @@
             <!-- USER STATUS AVATAR -->
             <div class="user-status-avatar">
               <!-- USER AVATAR -->
-              <div class="user-avatar small no-outline online">
-                <!-- USER AVATAR CONTENT -->
-                <div class="user-avatar-content">
-                  <!-- HEXAGON -->
-                  <div class="hexagon-image-30-32" data-src="../../assets/images/avatar/03.jpg"></div>
-                  <!-- /HEXAGON -->
-                </div>
-                <!-- /USER AVATAR CONTENT -->
-
-                <!-- USER AVATAR PROGRESS -->
-                <div class="user-avatar-progress">
-                  <!-- HEXAGON -->
-                  <div class="hexagon-progress-40-44"></div>
-                  <!-- /HEXAGON -->
-                </div>
-                <!-- /USER AVATAR PROGRESS -->
-
-                <!-- USER AVATAR PROGRESS BORDER -->
-                <div class="user-avatar-progress-border">
-                  <!-- HEXAGON -->
-                  <div class="hexagon-border-40-44"></div>
-                  <!-- /HEXAGON -->
-                </div>
-                <!-- /USER AVATAR PROGRESS BORDER -->
-
-                <!-- USER AVATAR BADGE -->
-                <div class="user-avatar-badge">
-                  <!-- USER AVATAR BADGE BORDER -->
-                  <div class="user-avatar-badge-border">
-                    <!-- HEXAGON -->
-                    <div class="hexagon-22-24"></div>
-                    <!-- /HEXAGON -->
+              <a
+                class="user-avatar small user-status-avatar no-border no-outline"
+                href="profile"
+              >
+                <div class="hexagon-container">
+                  <div class="hexagon user-avatar-content">
+                    <div
+                      class="hexagon-image"
+                      style="background-image: url('{{image}}')"
+                    ></div>
                   </div>
-                  <!-- /USER AVATAR BADGE BORDER -->
-
-                  <!-- USER AVATAR BADGE CONTENT -->
-                  <div class="user-avatar-badge-content">
-                    <!-- HEXAGON -->
-                    <div class="hexagon-dark-16-18"></div>
-                    <!-- /HEXAGON -->
+                  <div class="hexagon user-avatar-border">
+                    <div class="hexagon-border"></div>
                   </div>
-                  <!-- /USER AVATAR BADGE CONTENT -->
-
-                  <!-- USER AVATAR BADGE TEXT -->
-                  <p class="user-avatar-badge-text">16</p>
-                  <!-- /USER AVATAR BADGE TEXT -->
+                  <div class="hexagon user-avatar-progress-border">
+                    <div class="user-avatar-progress"></div>
+                  </div>
                 </div>
-                <!-- /USER AVATAR BADGE -->
-              </div>
+              </a>
               <!-- /USER AVATAR -->
             </div>
             <!-- /USER STATUS AVATAR -->
 
             <!-- USER STATUS TITLE -->
             <p class="user-status-title">
-              <span class="bold">Nick Grissom</span>
+              <span class="bold">{{fullname}}</span>
             </p>
             <!-- /USER STATUS TITLE -->
 
             <!-- USER STATUS TAG -->
-            <p class="user-status-tag online">Online</p>
+            <p class="user-status-tag" [ngClass]="checkIsOnline ? 'online' : 'offline'">{{isOnline}}</p>
             <!-- /USER STATUS TAG -->
           </div>
           <!-- /USER STATUS -->
@@ -456,92 +343,7 @@
 
         <!-- CHAT WIDGET CONVERSATION -->
         <div class="chat-widget-conversation" data-simplebar>
-          <!-- CHAT WIDGET SPEAKER -->
-          <div class="chat-widget-speaker left">
-            <!-- CHAT WIDGET SPEAKER AVATAR -->
-            <div class="chat-widget-speaker-avatar">
-              <!-- USER AVATAR -->
-              <div class="user-avatar tiny no-border">
-                <!-- USER AVATAR CONTENT -->
-                <div class="user-avatar-content">
-                  <!-- HEXAGON -->
-                  <div class="hexagon-image-24-26" data-src="../../assets/images/avatar/03.jpg"></div>
-                  <!-- /HEXAGON -->
-                </div>
-                <!-- /USER AVATAR CONTENT -->
-              </div>
-              <!-- /USER AVATAR -->
-            </div>
-            <!-- /CHAT WIDGET SPEAKER AVATAR -->
-
-            <!-- CHAT WIDGET SPEAKER MESSAGE -->
-            <p class="chat-widget-speaker-message">
-              Hi Marina! It's been a long time!
-            </p>
-            <!-- /CHAT WIDGET SPEAKER MESSAGE -->
-
-            <!-- CHAT WIDGET SPEAKER TIMESTAMP -->
-            <p class="chat-widget-speaker-timestamp">Yesterday at 8:36PM</p>
-            <!-- /CHAT WIDGET SPEAKER TIMESTAMP -->
-          </div>
-          <!-- /CHAT WIDGET SPEAKER -->
-
-          <!-- CHAT WIDGET SPEAKER -->
-          <div class="chat-widget-speaker right">
-            <!-- CHAT WIDGET SPEAKER MESSAGE -->
-            <p class="chat-widget-speaker-message">Hey Nick!</p>
-            <!-- /CHAT WIDGET SPEAKER MESSAGE -->
-
-            <!-- CHAT WIDGET SPEAKER MESSAGE -->
-            <p class="chat-widget-speaker-message">
-              You're right, it's been a really long time! I think the last
-              time we saw was at Neko's party
-            </p>
-            <!-- /CHAT WIDGET SPEAKER MESSAGE -->
-
-            <!-- CHAT WIDGET SPEAKER TIMESTAMP -->
-            <p class="chat-widget-speaker-timestamp">10:05AM</p>
-            <!-- /CHAT WIDGET SPEAKER TIMESTAMP -->
-          </div>
-          <!-- /CHAT WIDGET SPEAKER -->
-
-          <!-- CHAT WIDGET SPEAKER -->
-          <div class="chat-widget-speaker left">
-            <!-- CHAT WIDGET SPEAKER AVATAR -->
-            <div class="chat-widget-speaker-avatar">
-              <!-- USER AVATAR -->
-              <div class="user-avatar tiny no-border">
-                <!-- USER AVATAR CONTENT -->
-                <div class="user-avatar-content">
-                  <!-- HEXAGON -->
-                  <div class="hexagon-image-24-26" data-src="../../assets/images/avatar/03.jpg"></div>
-                  <!-- /HEXAGON -->
-                </div>
-                <!-- /USER AVATAR CONTENT -->
-              </div>
-              <!-- /USER AVATAR -->
-            </div>
-            <!-- /CHAT WIDGET SPEAKER AVATAR -->
-
-            <!-- CHAT WIDGET SPEAKER MESSAGE -->
-            <p class="chat-widget-speaker-message">
-              Yeah! I remember now! The stream launch party
-            </p>
-            <!-- /CHAT WIDGET SPEAKER MESSAGE -->
-
-            <!-- CHAT WIDGET SPEAKER MESSAGE -->
-            <p class="chat-widget-speaker-message">
-              That reminds me that I wanted to ask you something
-            </p>
-            <!-- /CHAT WIDGET SPEAKER MESSAGE -->
-
-            <!-- CHAT WIDGET SPEAKER MESSAGE -->
-            <p class="chat-widget-speaker-message">
-              Can you stream the new game?
-            </p>
-            <!-- /CHAT WIDGET SPEAKER MESSAGE -->
-          </div>
-          <!-- /CHAT WIDGET SPEAKER -->
+          <!-- Khung chat -->
         </div>
         <!-- /CHAT WIDGET CONVERSATION -->
 
@@ -553,12 +355,19 @@
             <div class="form-item">
               <!-- INTERACTIVE INPUT -->
               <div class="interactive-input small">
-                <input type="text" id="chat-widget-message-text-2" name="chat_widget_message_text_2"
-                  placeholder="Write a message..." />
+                <input
+                  type="text"
+                  id="chat-widget-message-text-2"
+                  name="chat_widget_message_text_2"
+                  placeholder="Nhập tin nhắn"
+                />
                 <!-- INTERACTIVE INPUT ICON WRAP -->
                 <div class="interactive-input-icon-wrap actionable">
                   <!-- TOOLTIP WRAP -->
-                  <div class="tooltip-wrap text-tooltip-tft" data-title="Send Photo">
+                  <div
+                    class="tooltip-wrap text-tooltip-tft"
+                    data-title="Send Photo"
+                  >
                     <!-- INTERACTIVE INPUT ICON -->
                     <svg class="interactive-input-icon icon-camera">
                       <use xlink:href="#svg-camera"></use>
@@ -584,7 +393,7 @@
             <!-- /FORM ITEM -->
 
             <!-- FORM ITEM -->
-            <div class="form-item auto-width">
+            <div class="form-item auto-width" id="sendBtn" (click)="addMessage()">
               <!-- BUTTON -->
               <p class="button primary padded">
                 <!-- BUTTON ICON -->
@@ -602,14 +411,17 @@
         <!-- /CHAT WIDGET FORM -->
       </div>
       <!-- /CHAT WIDGET -->
-      <div class="chat-widget chat-widget-chat-orgin">
+      <div class="chat-widget chat-widget-chat-orgin" *ngIf="messageService.isOriginal">
         <div class="conten-wellcome">
-         <div class="content-text">
-          <h3>Chào mừng đến với <br> khung trò chuyện của Destiny!</h3>
-          <p>Nơi bạn có thể kết bạn, trò chuyện, giao lưu với mọi người</p>
-         </div>
+          <div class="content-text">
+            <h3>
+              Chào mừng đến với <br />
+              khung trò chuyện của Destiny!
+            </h3>
+            <p>Nơi bạn có thể kết bạn, trò chuyện, giao lưu với mọi người</p>
+          </div>
           <div class="img-chat">
-            <img src="../../../assets/images//landing/chat-origin.jpg" alt="">
+            <img src="../../../assets/images//landing/chat-origin.jpg" alt="" />
           </div>
         </div>
       </div>
@@ -619,5 +431,7 @@
   <!-- /GRID -->
 </div>
 <!-- /CONTENT GRID -->
-
 <app-modal></app-modal>
+
+
+
