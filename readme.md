@@ -6,3 +6,4 @@
   * 6-10-2023 re-update data in db, change the sub column to gg_id and add column fb_id in the table users
       - add 49 post
       - add 26 user
+      - change all the image column to image in firebase
