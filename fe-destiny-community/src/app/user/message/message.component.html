@@ -23,10 +23,10 @@
     <!-- /SECTION BANNER TEXT -->
   </div>
   <!-- /SECTION BANNER -->
-  <app-loading *ngIf="isLoading"></app-loading>
+  <app-loading *ngIf="messageService.isLoading"></app-loading>
   <!-- GRID -->
   <!-- Message -->
-  <div class="account-hub-content" id="body-chat">
+  <div class="account-hub-content" id="body-chat" *ngIf="!messageService.isLoading">
     <!-- SECTION HEADER -->
     <div class="section-header">
       <!-- SECTION HEADER INFO -->
@@ -36,7 +36,7 @@
         <!-- /SECTION PRETITLE -->
 
         <!-- SECTION TITLE -->
-        <h2 class="section-title">Nhắn tin</h2>
+        <h2 class="section-title" >Nhắn tin</h2>
         <!-- /SECTION TITLE -->
       </div>
       <!-- /SECTION HEADER INFO -->
@@ -74,72 +74,80 @@
                 <label for="tab-1" class="tab-label main-message"
                   >Tin nhắn</label
                 >
-                <div
-                  class="tab-content"
-                  
-                  >
-                  <div 
-                  *ngFor="let key of mapUser |keyvalue">
+                <div class="tab-content" id="tab-message">
+                  <div *ngFor="let key of mapUser | keyvalue ">
                     <!-- <div class="a">{{key.value.fullname}}</div> -->
                     <ng-container>
                       <!-- CHAT WIDGET MESSAGE -->
                       <div
                         class="chat-widget-message"
-                        id="chat-widget-message-{{key.value.user_id}}"
+                        id="chat-widget-message-{{ key.value.user_id }}"
                         (click)="selectedUser(key.value.user_id)"
                       >
                         <!-- USER STATUS -->
                         <div class="user-status">
                           <!-- USER STATUS AVATAR -->
                           <div class="user-status-avatar">
+                            <div
+                              class="user-avatar small no-outline"
+                              [ngClass]="key.value.type == 'JOIN' ? 'online' : 'away'"
+                            >  
+                            </div>
                             <!-- USER AVATAR -->
                             <a
-                              class="user-avatar small user-status-avatar no-border no-outline"
-                              href="profile"
-                            >
-                              <div class="hexagon-container">
-                                <div class="hexagon user-avatar-content">
-                                  <div
-                                    class="hexagon-image"
-                                    style="background-image: url('{{key.value.avatar}}')"
-                                  ></div>
-                                </div>
-                                <div class="hexagon user-avatar-border">
-                                  <div class="hexagon-border"></div>
-                                </div>
-                                <div class="hexagon user-avatar-progress-border">
-                                  <div class="user-avatar-progress"></div>
-                                </div>
-                                <p class="user-avatar-badge-text">1</p>
+                            class="user-avatar small user-status-avatar no-border no-outline"
+                            href="profile"
+                          >
+                            <div class="hexagon-container">
+                              <div class="hexagon user-avatar-content">
+                                <div
+                                  class="hexagon-image"
+                                  style="background-image: url('{{key.value.avatar}}')"
+                                ></div>
                               </div>
-                            </a>
-                            <!-- /USER AVATAR -->
+                              <div class="hexagon user-avatar-border">
+                                <div class="hexagon-border"></div>
+                              </div>
+                              <div
+                                class="hexagon user-avatar-progress-border"
+                              >
+                                <div class="user-avatar-progress"></div>
+                              </div>
+                            </div>
+                          </a>
+                          <!-- /USER AVATAR -->
                           </div>
                           <!-- /USER STATUS AVATAR -->
-  
+
                           <!-- USER STATUS TITLE -->
                           <p class="user-status-title">
                             <span class="bold">{{ key.value.fullname }}</span>
                           </p>
                           <!-- /USER STATUS TITLE -->
-  
+
                           <!-- USER STATUS TEXT -->
-                          <p class="user-status-text" id="last-message-{{key.value.user_id}}">
+                          <p
+                            class="user-status-text"
+                            id="last-message-{{ key.value.user_id }}"
+                          >
                             <!-- Great! Then we'll meet with them at the party... -->
                           </p>
                           <!-- /USER STATUS TEXT -->
-  
+
                           <!-- USER STATUS TIMESTAMP -->
-                          <p class="user-status-timestamp floaty">2 hours ago</p>
+                          <p class="user-status-timestamp floaty">
+                            2 giờ trước
+                          </p>
                           <!-- /USER STATUS TIMESTAMP -->
+                          <p class="user-status-timestamp count-mess">
+                            <span>2</span>
+                          </p>
                         </div>
                         <!-- /USER STATUS -->
                       </div>
                       <!-- /CHAT WIDGET MESSAGE -->
                     </ng-container>
                   </div>
-                  
-                  
                 </div>
               </div>
               <div class="tab">
@@ -154,7 +162,7 @@
                 >
                 <div
                   class="tab-content"
-                  *ngFor="let users of mapUser | keyvalue"
+                  *ngFor="let users of messageService.mapUser | keyvalue"
                 >
                   <ng-container *ngIf="!users.value.isFriend">
                     <!-- CHAT WIDGET MESSAGE -->
@@ -167,28 +175,34 @@
                       <div class="user-status">
                         <!-- USER STATUS AVATAR -->
                         <div class="user-status-avatar">
-                          <!-- USER AVATAR -->
-                          <a
-                            class="user-avatar small user-status-avatar no-border no-outline"
-                            href="profile"
+                          <div
+                            class="user-avatar small no-outline online"
                           >
-                            <div class="hexagon-container">
-                              <div class="hexagon user-avatar-content">
+                            <!-- USER AVATAR -->
+                            <a
+                              class="user-avatar small user-status-avatar no-border no-outline"
+                              href="profile"
+                            >
+                              <div class="hexagon-container">
+                                <div class="hexagon user-avatar-content">
+                                  <div
+                                    class="hexagon-image"
+                                    style="background-image: url('{{users.value.avatar}}')"
+                                  ></div>
+                                </div>
+                                <div class="hexagon user-avatar-border">
+                                  <div class="hexagon-border"></div>
+                                </div>
                                 <div
-                                  class="hexagon-image"
-                                  style="background-image: url('{{users.value.avatar}}')"
-                                ></div>
+                                  class="hexagon user-avatar-progress-border"
+                                >
+                                  <div class="user-avatar-progress"></div>
+                                </div>
+                                <p class="user-avatar-badge-text">1</p>
                               </div>
-                              <div class="hexagon user-avatar-border">
-                                <div class="hexagon-border"></div>
-                              </div>
-                              <div class="hexagon user-avatar-progress-border">
-                                <div class="user-avatar-progress"></div>
-                              </div>
-                              <p class="user-avatar-badge-text">1</p>
-                            </div>
-                          </a>
-                          <!-- /USER AVATAR -->
+                            </a>
+                            <!-- /USER AVATAR -->
+                          </div>
                         </div>
                         <!-- /USER STATUS AVATAR -->
 
@@ -206,6 +220,9 @@
 
                         <!-- USER STATUS TIMESTAMP -->
                         <p class="user-status-timestamp floaty">2 hours ago</p>
+                        <!-- /USER STATUS TIMESTAMP -->
+                        <!-- USER STATUS TIMESTAMP -->
+                        <p class="user-status-timestamp count-mess">2</p>
                         <!-- /USER STATUS TIMESTAMP -->
                       </div>
                       <!-- /USER STATUS -->
@@ -282,15 +299,11 @@
               <!-- SIMPLE DROPDOWN -->
               <div class="simple-dropdown widget-box-post-settings-dropdown">
                 <!-- SIMPLE DROPDOWN LINK -->
-                <p class="simple-dropdown-link">Report</p>
+                <p class="simple-dropdown-link">Báo cáo</p>
                 <!-- /SIMPLE DROPDOWN LINK -->
 
                 <!-- SIMPLE DROPDOWN LINK -->
-                <p class="simple-dropdown-link">Block</p>
-                <!-- /SIMPLE DROPDOWN LINK -->
-
-                <!-- SIMPLE DROPDOWN LINK -->
-                <p class="simple-dropdown-link">Mute</p>
+                <p class="simple-dropdown-link">Chặn</p>
                 <!-- /SIMPLE DROPDOWN LINK -->
               </div>
               <!-- /SIMPLE DROPDOWN -->
@@ -298,7 +311,11 @@
             <!-- /POST SETTINGS WRAP -->
           </div>
           <!-- CHAT WIDGET SETTINGS -->
-
+          <div class="chat-widget-call">
+            <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M2 12.5V11.5C2 8.21252 2 6.56878 2.90796 5.46243C3.07418 5.25989 3.25989 5.07418 3.46243 4.90796C4.56878 4 6.21252 4 9.5 4C12.7875 4 14.4312 4 15.5376 4.90796C15.7401 5.07418 15.9258 5.25989 16.092 5.46243C16.7936 6.3173 16.9531 7.49303 16.9893 9.50002L17.6584 9.17082C19.6042 8.19788 20.5772 7.7114 21.2886 8.15107C22 8.59075 22 9.67853 22 11.8541V12.1459C22 14.3215 22 15.4093 21.2886 15.8489C20.5772 16.2886 19.6042 15.8021 17.6584 14.8292L16.9893 14.5C16.9531 16.507 16.7936 17.6827 16.092 18.5376C15.9258 18.7401 15.7401 18.9258 15.5376 19.092C14.4312 20 12.7875 20 9.5 20C6.21252 20 4.56878 20 3.46243 19.092C3.25989 18.9258 3.07418 18.7401 2.90796 18.5376C2 17.4312 2 15.7875 2 12.5ZM13.5607 9.56066C14.1464 8.97487 14.1464 8.02513 13.5607 7.43934C12.9749 6.85355 12.0251 6.85355 11.4393 7.43934C10.8536 8.02513 10.8536 8.97487 11.4393 9.56066C12.0251 10.1464 12.9749 10.1464 13.5607 9.56066Z" fill="#1C274C"/>
+              </svg>
+          </div>
           <!-- USER STATUS -->
           <div class="user-status">
             <!-- USER STATUS AVATAR -->
@@ -312,7 +329,7 @@
                   <div class="hexagon user-avatar-content">
                     <div
                       class="hexagon-image"
-                      style="background-image: url('{{image}}')"
+                      style="background-image: url('{{ image }}')"
                     ></div>
                   </div>
                   <div class="hexagon user-avatar-border">
@@ -329,12 +346,18 @@
 
             <!-- USER STATUS TITLE -->
             <p class="user-status-title">
-              <span class="bold">{{fullname}}</span>
+              <span class="bold">{{ fullname }}</span>
             </p>
             <!-- /USER STATUS TITLE -->
 
             <!-- USER STATUS TAG -->
-            <p class="user-status-tag" [ngClass]="checkIsOnline ? 'online' : 'offline'">{{isOnline}}</p>
+            <p
+              class="user-status-tag"
+              style="top: 0; font-size: 8px;"
+              [ngClass]="checkIsOnline ? 'online' : 'offline'"
+            >
+              {{ isOnline }}
+            </p>
             <!-- /USER STATUS TAG -->
           </div>
           <!-- /USER STATUS -->
@@ -349,7 +372,6 @@
 
         <!-- CHAT WIDGET FORM -->
         <form class="chat-widget-form">
-          <!-- FORM ROW -->
           <div class="form-row split">
             <!-- FORM ITEM -->
             <div class="form-item">
@@ -393,7 +415,11 @@
             <!-- /FORM ITEM -->
 
             <!-- FORM ITEM -->
-            <div class="form-item auto-width" id="sendBtn" (click)="addMessage()">
+            <div
+              class="form-item auto-width"
+              id="sendBtn"
+              (click)="addMessage()"
+            >
               <!-- BUTTON -->
               <p class="button primary padded">
                 <!-- BUTTON ICON -->
@@ -406,12 +432,23 @@
             </div>
             <!-- /FORM ITEM -->
           </div>
-          <!-- /FORM ROW -->
+          <div class="form-row split block" style="display: none;">
+            <!-- FORM ITEM -->
+            <div class="form-item block">
+              <span><i class="fa-solid fa-circle-exclamation"></i></span>
+              Bỏ chặn để nhắn tin với người này
+              <span class="remove-block">Bỏ chặn</span>
+            </div>
+            <!-- /FORM ITEM -->
+          </div>
         </form>
         <!-- /CHAT WIDGET FORM -->
       </div>
       <!-- /CHAT WIDGET -->
-      <div class="chat-widget chat-widget-chat-orgin" *ngIf="messageService.isOriginal">
+      <div
+        class="chat-widget chat-widget-chat-orgin"
+        *ngIf="messageService.isOriginal"
+      >
         <div class="conten-wellcome">
           <div class="content-text">
             <h3>
@@ -432,6 +469,3 @@
 </div>
 <!-- /CONTENT GRID -->
 <app-modal></app-modal>
-
-
-

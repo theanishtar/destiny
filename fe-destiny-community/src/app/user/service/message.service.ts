@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-
+import { Subject, Observable } from 'rxjs';
 import '../../../assets/toast/main.js';
 declare var toast: any;
 import SockJS from "sockjs-client"
@@ -18,21 +18,25 @@ export class MessageService {
   private loadDataChat = environment.baseUrl + 'v1/user/registrationchat';
   private sender: any[] = []
   private listFriends: any[] = []
+  isLoading = false;
 
   socket?: WebSocket;
   stompClient?: Stomp.Client;
   selectedUser = null;
   $chatHistory: any;
-  // newMessages = new Map();
-  mapUser = new Map<string, UserModel[]>();
+  $tab_message: any;
+  $element: any;
+  usersTemplateHTML = "";
+  dataUpdated = new EventEmitter<void>();
+  mapUser = new Map<string, UserModel>();
+  newMapUser = new Map<string, UserModel>();
   newMessage = new Map<string, { message: string, avatar: string }>();
   checkConnected: boolean = false;
   isOriginal: boolean = true;
-  // users: UserModel[];
   constructor(
     private http: HttpClient,
     private router: Router,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) { }
 
   /* ============List chat============= */
@@ -44,7 +48,6 @@ export class MessageService {
       }),
     );
   }
-
 
   connectToChat(userId) {
     localStorage.setItem("chatUserId", userId);
@@ -64,17 +67,52 @@ export class MessageService {
 
       });
       this.stompClient!.subscribe("/topic/public", (response) => {
-        let data = JSON.parse(response.body);
 
-        this.listFriends = data;
+        let data = JSON.parse(response.body);
         this.setFriend(data);
-        let usersTemplateHTML = "";
+        // let usersTemplateHTML = "";
         let userId = localStorage.getItem("chatUserId");
 
+        for (let key of Object.keys(data)) {
+          let value = data[key];
+
+          if (key == localStorage.getItem("chatUserId")) {
+            for (let v of value) {
+              let user: UserModel = {
+                type: v.type,
+                user_id: v.user_id,
+                username: v.username,
+                fullname: v.fullname,
+                email: v.email,
+                avatar: v.avatar,
+                messageUnRead: v.messageUnRead,
+                lastMessage: v.lastMessage,
+                online: v.online,
+                isFriend: v.friend,
+                status: v.status,
+              };
+              // Thêm người dùng vào danh sách của key trong map
+              this.newMapUser.set(v.user_id, user);
+            }
+
+          }
+        }
+        this.isLoading = false;
+        setTimeout(() => {
+          this.mapUser = this.newMapUser;
+          this.updateData();
+        }, 1);
       });
       this.stompClient!.send("/app/fetchAllUsers");
     });
   }
+  // Hàm cập nhật dữ liệu
+  updateData() {
+    // Thực hiện cập nhật dữ liệu ở đây.
+    // Sau khi cập nhật xong, thông báo sự kiện.
+    this.dataUpdated.emit();
+  }
+
   sendMsg(from, text, img) {
     this.stompClient!.send("/app/chat/" + this.selectedUser, {}, JSON.stringify({
       fromLogin: from,

@@ -27,16 +27,15 @@ import { UserModel } from '../service/UserModel.js';
   ]
 })
 export class MessageComponent implements OnInit {
-  isLoading = false;
+  // isLoading = false;
   sender: any;
   checkListChat: boolean = false;
   listFriendss: any;
   mapUser = new Map<string, UserModel>();
-
+  isOnline: string | undefined;
   // isOriginal: boolean = true;
   image: string | undefined;
   fullname: string | undefined;
-  isOnline: string | undefined;
   id: string = '';
   $chatHistory: any;
   $button: any;
@@ -44,10 +43,15 @@ export class MessageComponent implements OnInit {
   $chatHistoryList: any;
   userFromLoginCustom: number = 0;
   userToLoginCustom: number = 0;
-
+  usersTemplateHTML: string;
 
   ngOnInit() {
-    this.loadData();
+    this.messageService.dataUpdated.subscribe(() => {
+      // Đây là nơi bạn đặt mã để xử lý khi dữ liệu đã được cập nhật.
+     this.mapUser = this.messageService.mapUser;
+      // Thực hiện các thao tác cần thiết sau khi dữ liệu đã được cập nhật.
+    });
+    this.messageService.isLoading = true;
     liquid.liquid();
     avatarHexagons.avatarHexagons();
     tooltips.tooltips();
@@ -64,45 +68,12 @@ export class MessageComponent implements OnInit {
     public messageService: MessageService,
     private el: ElementRef,
     private renderer: Renderer2
-  ) {
-
-  }
+  ) {}
 
   /* ============template============= */
-  loadData() {
-    this.isLoading = true;
-    const body_news = document.getElementById('body-chat')!;
-    body_news.style.display = 'none';
-    setTimeout(() => {
-      this.isLoading = false;
-      body_news.style.display = 'grid';
-      for (let key of Object.keys(this.messageService.getFriend())) {
-        let value = this.messageService.getFriend()[key];
 
-        if (key == localStorage.getItem("chatUserId")) {
-          for (let v of value) {
-            let user: UserModel = {
-              type: v.type,
-              user_id: v.user_id,
-              username: v.username,
-              fullname: v.fullname,
-              email: v.email,
-              avatar: v.avatar,
-              messageUnRead: v.messageUnRead,
-              lastMessage: v.lastMessage,
-              online: v.online,
-              isFriend: v.friend,
-              status: v.status,
-            };
-            // Thêm người dùng vào danh sách của key trong map
-            this.mapUser.set(v.user_id, user);
-          }
-
-        }
-      }
-    }, 9000);
-  }
   checkIsOnline: boolean = true
+
   selectedUser(userid) {
     if (this.id != '') {
       this.renderer.removeClass(this.el.nativeElement.querySelector('#chat-widget-message-' + this.id), 'active');

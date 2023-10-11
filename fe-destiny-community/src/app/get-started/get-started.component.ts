@@ -73,7 +73,7 @@ export class GetStartedComponent implements OnInit {
 		form.formInput();
 	}
 	/*===========Login with google===============*/
-	loginWithGG(){
+	loginWithGG() {
 		this.route.queryParams.subscribe((params) => {
 			this.orderby = params['subIdAuthentication'];
 
@@ -86,7 +86,7 @@ export class GetStartedComponent implements OnInit {
 			if (this.orderby !== undefined) {
 				this.loginService.loginAuth(this.orderby).subscribe((res) => {
 					if (res !== undefined) {
-						if (res.roles[0].authority == 'ROLE_ADMIN') {
+						if (res.roles[0].authority == 'ROLE_OWNER' || res.roles[0].authority == 'ROLE_ADMIN' || res.roles[0].authority == 'ROLE_MODERATOR') {
 							// let userAdmin = {
 							// 	email: res.email,
 							// 	password: res.password,
@@ -128,7 +128,7 @@ export class GetStartedComponent implements OnInit {
 		});
 	}
 
-	
+
 	// Getter
 	getUserLogGG(): any[] {
 		return this.userLogGG;
@@ -155,44 +155,45 @@ export class GetStartedComponent implements OnInit {
 	}
 
 	loginWithEmailAndPassword() {
-		this.submitted = true;
-		this.loginService.loginUser(this.loginForm.value).subscribe((response) => {
-			function delay(ms: number) {
-				return new Promise(function (resolve) {
-					setTimeout(resolve, ms);
-				});
-			}
-			if (response == '') {
-				new toast({
-					title: 'Thất bại!',
-					message: 'Email hoặc mật khẩu không đúng!',
-					type: 'error',
-					duration: 5000,
-				});
-			} else {
-				if (
-					this.checkedRemember == true &&
-					response.roles[0].authority == 'ROLE_USER'
-				) {
-					this.setCookie('sessionID', response.user.sesionId, 2);
+		setTimeout(() => {
+			this.submitted = true;
+			this.loginService.loginUser(this.loginForm.value).subscribe((response) => {
+				function delay(ms: number) {
+					return new Promise(function (resolve) {
+						setTimeout(resolve, ms);
+					});
 				}
-				if (response.roles[0].authority == 'ROLE_ADMIN') {
-					// let userAdmin = {
-					// 	email: this.loginForm.get('email')!.value,
-					// 	password: this.loginForm.get('password')!.value,
-					// };
-					// this.logAdmin(userAdmin);
-					// window.location.href =
-					// 	'http://localhost:8080/oauth/rec/' +
-					// 	userAdmin.email +
-					// 	'/' +
-					// 	userAdmin.password;
-					window.location.href = 'http://localhost:4200/admin';
-					this.loginForm.reset();
+				if (response == '') {
+					new toast({
+						title: 'Thất bại!',
+						message: 'Email hoặc mật khẩu không đúng!',
+						type: 'error',
+						duration: 5000,
+					});
 				} else {
-					this.cookieService.set('full_name', response.name);
-					this.cookieService.set('role', response.roles[0].authority);
-					
+					if (
+						this.checkedRemember == true &&
+						response.roles[0].authority == 'ROLE_USER'
+					) {
+						this.setCookie('sessionID', response.user.sesionId, 2);
+					}
+					if (response.roles[0].authority == 'ROLE_OWNER' || response.roles[0].authority == 'ROLE_ADMIN' || response.roles[0].authority == 'ROLE_MODERATOR') {
+						// let userAdmin = {
+						// 	email: this.loginForm.get('email')!.value,
+						// 	password: this.loginForm.get('password')!.value,
+						// };
+						// this.logAdmin(userAdmin);
+						// window.location.href =
+						// 	'http://localhost:8080/oauth/rec/' +
+						// 	userAdmin.email +
+						// 	'/' +
+						// 	userAdmin.password;
+						window.location.href = 'http://localhost:4200/admin';
+						this.loginForm.reset();
+					} else {
+						this.cookieService.set('full_name', response.name);
+						this.cookieService.set('role', response.roles[0].authority);
+
 						this.loginForm.reset();
 						this.router.navigate(['newsfeed']);
 						new toast({
@@ -201,12 +202,13 @@ export class GetStartedComponent implements OnInit {
 							type: 'success',
 							duration: 1500,
 						});
-					delay(100).then((res) => {
-						location.reload();
-					});
+						delay(100).then((res) => {
+							location.reload();
+						});
+					}
 				}
-			}
-		});
+			});
+		}, 1000);
 	}
 
 	setCookie(cname, cvalue, exdays) {
@@ -304,7 +306,7 @@ export class GetStartedComponent implements OnInit {
 		});
 	}
 
-	
+
 	/*============Message==============*/
 	// loadDataSender() {
 	// 	this.messageService.loadDataListChat().subscribe(() => {

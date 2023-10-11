@@ -18,6 +18,7 @@ declare var toast: any;
 export class LoginService {
 	private userURL = environment.baseUrl + 'v1/oauth/login';
 	private userLoginAuth = environment.baseUrl + 'oauth/login/authenticated';
+	private userLogout = environment.baseUrl + 'v1/oauth/logout';
 
 	private userLogined: any[] = [];
 
@@ -107,6 +108,14 @@ export class LoginService {
 		);
 	}
 
+	// GetLogout() {
+	// 	return this.http.get<any>(this.userLogout).pipe(
+	// 	  tap((response) => {
+
+	// 	  }),
+	// 	);
+	//   }
+
 	constructor(
 		private http: HttpClient,
 		private cookieService: CookieService,
@@ -139,17 +148,29 @@ export class LoginService {
 		}).then((result) => {
 			if (result.value) {
 				delay(1).then((res) => {
-					this.cookieService.deleteAll();
-					localStorage.removeItem('user');
-					localStorage.removeItem('token');
-					localStorage.removeItem('stoken');
-					this.router.navigate(['home']);
-					new toast({
-						title: 'Đã đăng xuất!',
-						message: 'Hẹn gặp lại',
-						type: 'warning',
-						duration: 2000,
+					this.http.get<any>(this.userLogout).subscribe((res) => {
+						if (res) {
+							this.cookieService.deleteAll();
+							localStorage.removeItem('user');
+							localStorage.removeItem('token');
+							localStorage.removeItem('stoken');
+							this.router.navigate(['home']);
+							new toast({
+								title: 'Đã đăng xuất!',
+								message: 'Hẹn gặp lại',
+								type: 'warning',
+								duration: 2000,
+							});
+						}else{
+							new toast({
+								title: 'Lỗi!',
+								message: 'Vui lòng chờ',
+								type: 'warning',
+								duration: 2000,
+							});
+						}
 					});
+
 				});
 			}
 		});

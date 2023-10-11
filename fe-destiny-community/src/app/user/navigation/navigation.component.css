@@ -63,4 +63,8 @@
     transform: translate(10px, 0px);
     transition: all 0.3s ease-in-out 0s;
   }
+
+  .user-avatar.small.no-outline.online.notif-mess:before {
+    background: red;
+}
   

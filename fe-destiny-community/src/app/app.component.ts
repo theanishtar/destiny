@@ -11,15 +11,17 @@ import { MessageService } from './user/service/message.service';
 })
 export class AppComponent {
   title = 'FE_Destiny';
-  sender: any ;
+  sender: any;
 
   constructor(
     private translateService: TranslateService,
     public messageService: MessageService,
     private cookieService: CookieService,
   ) {
-    if(this.cookieService.get("full_name") != ''){
-          this.loadDataSender();
+    if (this.cookieService.get("full_name") != '') {
+      setTimeout(() => {
+        this.loadDataSender();
+      }, 1000);
     }
   }
 
@@ -28,10 +30,10 @@ export class AppComponent {
   }
 
   loadDataSender() {
-		this.messageService.loadDataSender().subscribe(() => {
-		  this.sender = JSON.parse(JSON.stringify(this.messageService.getSender()));
-      // console.log("this.sender: " + this.sender.user_id);
-		  this.messageService.connectToChat(this.sender.user_id);
-		});
-	}
+    this.messageService.loadDataSender().subscribe(() => {
+      this.sender = JSON.parse(JSON.stringify(this.messageService.getSender()));
+      this.messageService.connectToChat(this.sender.user_id);
+
+    });
+  }
 }

@@ -114,14 +114,7 @@ label.tab-label.wait-message {
 .chat-widget-chat.active {
   display: block;
 }
-/* .chat-widget-chat, .chat-widget-chat-orgin.active {
-  display: none;
-}
 
-.chat-widget-chat.active,  .chat-widget-chat-orgin{
-  display: block;
-  width: auto;
-} */
 .simple-dropdown {
   position: absolute;
   right: 10%;
@@ -164,7 +157,49 @@ label.tab-label.wait-message {
     margin: 15% 10% 15% 0;
   }
 }
-
+p.user-status-text {
+  width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 1;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+p.user-status-timestamp.count-mess {
+  position: absolute;
+  top: 32%;
+  right: 5%;
+  padding: 3px 8px;
+  background: red;
+  border-radius: 50%;
+}
+p.user-status-timestamp.count-mess span{
+  color: white;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 9px;
+}
+.chat-widget-call {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 30px;
+  cursor: pointer;
+  position: absolute;
+  z-index: 1;
+  right: 11%;
+  top: 15%;
+}
+.chat-widget-call svg {
+  width: 23px;
+  height: 24px;
+  fill: #adafca;
+    opacity: 0.4;
+    transition: opacity 0.2s ease-in-out, fill 0.2s ease-in-out;
+}
+.chat-widget-call svg:hover{
+  opacity: 1;
+}
  /* avatar */
  .hexagon-container {
   width: 45px;
@@ -258,7 +293,34 @@ a.user-avatar.small.user-status-avatar.no-border.no-outline.avatar-mess {
 .post-settings-wrap:hover .widget-box-post-settings-dropdown {
   display: block;
 }
-.user-status.user-status-tag{
+p.user-status-tag.online, p.user-status-tag.ofline{
 top: 0;
 font-size: 8px;
+}
+
+/*  */
+.form-item.block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+.form-row.split.block {
+  margin-left: 1.5rem;
+}
+
+span.remove-block {
+  margin-left: 11px;
+  color: #5B76FB;
+  cursor: pointer;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+span.remove-block:hover{
+  text-decoration: underline;
+}
+i.fa-solid.fa-circle-exclamation {
+  position: absolute;
+  left: 53.5%;
+    top: 81%;
+  color: #5B76FB;
 }
