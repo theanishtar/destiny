@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.function.Function;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -31,6 +31,7 @@ public class JwtTokenUtil implements Serializable {
 	public String getEmailFromHeader(HttpServletRequest request) {
 		try {
 			String header = request.getHeader(headerAuth);
+			System.out.println("header:"+header);
 			String token = header.substring(7);
 			//String token = header;
 			System.out.println(token);

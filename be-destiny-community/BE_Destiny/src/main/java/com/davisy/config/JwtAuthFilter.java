@@ -1,15 +1,10 @@
 package com.davisy.config;
 
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -24,8 +20,11 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.davisy.constant.SessionAttribute;
 
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;;
 
 @Configuration
@@ -39,7 +38,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	 * 
 	 * }
 	 */
-
+	
 	@Value("${jwt.secret}")
 	private String secret;
 
@@ -49,7 +48,22 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
-
+		System.out.println(request.getUserPrincipal());
+		// Kiểm tra xem yêu cầu có chứa thông tin OAuth2 không
+	    OAuth2AuthenticationToken oauth2Token = OAuth2AuthenticationToken.class.cast(request.getUserPrincipal());
+	    if (oauth2Token != null) {
+	        // Xử lý thông tin từ OAuth2
+	        // Ví dụ: Lấy thông tin người dùng từ OAuth2
+	        String userName = oauth2Token.getName();
+	        
+	        System.out.println(oauth2Token);
+	        // Thực hiện xử lý khác tùy theo thông tin từ OAuth2
+//	        response.sendRedirect("/user-home");
+	        request.setAttribute("oauth2Token", oauth2Token);
+	        //return;
+	     // Tiếp tục chuỗi filter
+	    }
+	    
 		final String header = request.getHeader("Authorization");
 
 		System.out.println("=============START FILTER=========");

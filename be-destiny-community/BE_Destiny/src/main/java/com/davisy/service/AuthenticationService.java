@@ -7,28 +7,24 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.davisy.auth.AuthenticationRequest;
 import com.davisy.auth.AuthenticationResponse;
-import com.davisy.auth.OAuthenticationRequest;
-import com.davisy.dao.UserDao;
 import com.davisy.entity.Roles;
 import com.davisy.entity.User;
 import com.davisy.model.LoginResponse;
-import com.davisy.model.RegisterResponse;
+import com.davisy.model.RegisterUser;
 import com.davisy.reponsitory.RoleCustomRepo;
 import com.davisy.reponsitory.UsersReponsitory;
-import com.davisy.service.impl.UserServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 
@@ -37,16 +33,27 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @EnableWebSecurity
 public class AuthenticationService {
+
 	private final UsersReponsitory usersReponsitory;
 
-	@Autowired
-	private final AuthenticationManager authenticationManager;
+	private AuthenticationManager authenticationManager = new AuthenticationManager() {
+
+		@Override
+		public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+			// TODO Auto-generated method stub
+			return null;
+		}
+	};
+
 	private final RoleCustomRepo roleCustomRepo;
 	private final JwtService jwtService;
 	@Autowired
 	UserService userService;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	RedisService redisService;
 
 	// Bean PasswordEncoder trả về bởi BCryptPasswordEncoder
 //	@Bean
@@ -69,8 +76,7 @@ public class AuthenticationService {
 			// You can also get the authenticated principal using
 			// authenticationResult.getPrincipal()
 			return authenticationResult.isAuthenticated();
-		} catch (Exception e) {
-			// If authentication failed, the token is considered invalid
+		} catch (Exception e) {// If authentication failed, the token is considered invalid
 			return false;
 		}
 	}
@@ -79,16 +85,17 @@ public class AuthenticationService {
 		try {
 			User user = userService.findByEmail(authenticationRequest.getEmail());
 //			System.out.println(user.getFullname());
-			if(user == null) {
+			if (user == null) {
 				return null;
 			}
 			System.out.println(user.getFullname());
-			if(user.isBan()) return null;
+			if (user.isBan())
+				return null;
 //			
 //			System.out.println(passwordEncoder.matches(authenticationRequest.getPassword(), user.getPassword()));
 //			
 //			System.out.println(user.getFullname());
-			
+
 			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
 					authenticationRequest.getEmail(), authenticationRequest.getPassword());
 
@@ -120,32 +127,35 @@ public class AuthenticationService {
 			return AuthenticationResponse.builder().token(jwtToken).refreshToken(jwtRefreshToken)
 					.name(user.getFullname()).roles(authorities).build();
 		} catch (Exception e) {
-			System.out.println("error: "+e);
+			System.out.println("error: " + e);
 		}
 		return null;
 	}
-	
+
 	public LoginResponse loginResponseService(AuthenticationRequest authenticationRequest) {
 		/*
 		 * Status code: 
-		 * 		200: Đăng nhập thành công
-		 * 		404: Không thể tìm thấy tài khoản trong DB
-		 * 		403: Tài khoản bị khóa, liên hệ admin để được mở
-		 * 		401: Đăng nhập thất bại hoặc lỗi server
+		 * 200: Đăng nhập thành công 
+		 * 404: Không thể tìm thấy tài khoản trong DB 
+		 * 403: Tài khoản bị khóa, liên hệ admin để được mở 
+		 * 401: Đăng nhập thất bại hoặc lỗi server
 		 */
 		try {
 			User user = userService.findByEmail(authenticationRequest.getEmail());
-			if(user == null) {
+			if (user == null) 
 				return new LoginResponse(404, null, "Dont find your account");
-			}
+			
+			if(!passwordEncoder.matches(authenticationRequest.getPassword(), user.getPassword()))
+				return new LoginResponse(401, null, "Username or password dont match from Database!");
 			System.out.println(user.getFullname());
-			if(user.isBan()) return new LoginResponse(403, null, "Your account is blocked");
+			if (user.isBan())
+				return new LoginResponse(403, null, "Your account is blocked");
 
 			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
 					authenticationRequest.getEmail(), authenticationRequest.getPassword());
 
 			List<Roles> role = roleCustomRepo.getRole(user);
-			
+
 			Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
 			Set<Roles> set = new HashSet<>();
@@ -154,22 +164,67 @@ public class AuthenticationService {
 
 			set.stream().forEach(i -> authorities.add(new SimpleGrantedAuthority(i.getName())));
 
-
 			authenticationManager.authenticate(token);
-
 
 			var jwtToken = jwtService.generateToken(user, authorities);
 			var jwtRefreshToken = jwtService.generateRefreshToken(user, authorities);
 
-			AuthenticationResponse authRes =  AuthenticationResponse.builder().token(jwtToken).refreshToken(jwtRefreshToken)
-					.name(user.getFullname()).roles(authorities).build();
+			AuthenticationResponse authRes = AuthenticationResponse.builder().token(jwtToken)
+					.refreshToken(jwtRefreshToken).name(user.getFullname()).roles(authorities).build();
 			return new LoginResponse(200, authRes, "Login successfully!");
 		} catch (Exception e) {
-			System.out.println("error: "+e);
+			System.out.println("error: " + e);
 		}
 		return new LoginResponse(401, null, null);
 	}
 	
+	public LoginResponse loginWithEmailAndCodeauthregis(String code, String email) {
+		/*
+		 * Status code: 
+		 * 200: Đăng nhập thành công 
+		 * 404: Không thể tìm thấy tài khoản trong DB 
+		 * 403: Tài khoản bị khóa, liên hệ admin để được mở 
+		 * 401: Đăng nhập thất bại hoặc lỗi server
+		 */
+		try {
+			User user = userService.findByEmail(email);
+			if (user == null) 
+				return new LoginResponse(404, null, "Dont find your account");
+			
+			RegisterUser regisU = redisService.authenRegister(code);
+//			User userFromRedis = redisService.authenRegister(code);
+			
+			if(regisU == null ) {
+				// đã quá 5p -> Token đã hết hạn, vui lòng đăng nhập thủ công!
+				return new LoginResponse(401, null, "Token đã hết hạn, vui lòng đăng nhập thủ công!");
+			}
+
+			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+					user.getEmail(), user.getPassword());
+
+			List<Roles> role = roleCustomRepo.getRole(user);
+
+			Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
+			Set<Roles> set = new HashSet<>();
+			role.stream().forEach(c -> set.add(new Roles(c.getName())));
+			user.setRoles(set);
+
+			set.stream().forEach(i -> authorities.add(new SimpleGrantedAuthority(i.getName())));
+
+			authenticationManager.authenticate(token);
+
+			var jwtToken = jwtService.generateToken(user, authorities);
+			var jwtRefreshToken = jwtService.generateRefreshToken(user, authorities);
+
+			AuthenticationResponse authRes = AuthenticationResponse.builder().token(jwtToken)
+					.refreshToken(jwtRefreshToken).name(user.getFullname()).roles(authorities).build();
+			return new LoginResponse(200, authRes, "Login successfully!");
+		} catch (Exception e) {
+			System.out.println("error: " + e);
+		}
+		return new LoginResponse(401, null, null);
+	}
 
 	/*
 	 * public AuthenticationResponse authenticationResponse(OAuthenticationRequest
@@ -198,7 +253,7 @@ public class AuthenticationService {
 	 * authenticationManager.authenticate(token);
 	 * System.out.println("=============");
 	 * 
-	 * var jwtToken = jwtService.generateToken(user, authorities); var
+	 * var jwtToken = jwtService.generateToken(user, authorities); var*
 	 * jwtRefreshToken = jwtService.generateRefreshToken(user, authorities);
 	 * 
 	 * return AuthenticationResponse.builder().token(jwtToken).refreshToken(
