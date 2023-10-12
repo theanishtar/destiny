@@ -16,8 +16,8 @@ public interface UserService {
 
 	List<User> findAll();
 
-	List<Object[]> getTOP5User();
-
+	User findByFbId(String fb_id);
+	User findByGgId(String gg_id);
 	public void create(User user);
 
 	public void update(User user);
