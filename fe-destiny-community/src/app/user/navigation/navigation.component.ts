@@ -4,6 +4,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { Router, NavigationEnd } from '@angular/router';
 import { GetStartedComponent } from '@app/get-started/get-started.component';
 import { LoginService } from '@app/service/login.service';
+import { MessageService } from '../service/message.service';
 import '../../../assets/toast/main.js';
 declare var toast: any;
 @Component({
@@ -30,6 +31,7 @@ export class NavigationComponent implements OnInit {
     private cookieService: CookieService,
     private loginService: LoginService,
     private router: Router,
+    public messageService: MessageService
   ) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {

@@ -3,7 +3,7 @@ import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, of } from 'rxjs';
 import '../../../assets/toast/main.js';
 declare var toast: any;
 import SockJS from "sockjs-client"
@@ -16,8 +16,12 @@ import { environment } from '../../../environments/environment'
 })
 export class MessageService {
   private loadDataChat = environment.baseUrl + 'v1/user/registrationchat';
+  private loadDataMess = environment.baseUrl + 'v1/user/chat/load/messages';
+
   private sender: any[] = []
   private listFriends: any[] = []
+  private listMess: any[] = []
+
   isLoading = false;
 
   socket?: WebSocket;
@@ -33,6 +37,8 @@ export class MessageService {
   newMessage = new Map<string, { message: string, avatar: string }>();
   checkConnected: boolean = false;
   isOriginal: boolean = true;
+  public notif_mess: boolean = false;
+
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -49,6 +55,17 @@ export class MessageService {
     );
   }
 
+  loadMessage(data: string){
+    return this.http.post<string>(this.loadDataMess, data).pipe(
+      tap((res) => {
+        this.listMess = JSON.parse(JSON.stringify(res));
+        this.setListMess(this.listMess);
+        console.warn(this.listMess);
+      }),
+      catchError((err) => of([]))
+    )
+  }
+
   connectToChat(userId) {
     localStorage.setItem("chatUserId", userId);
     this.socket = new SockJS(environment.baseUrl + 'chat');
@@ -60,9 +77,12 @@ export class MessageService {
         if (this.selectedUser == data.fromLogin && this.isOriginal == false) {
           this.render(data.message, data.fromLogin, data.avatar);
         } else {
+          this.notif_mess = true;
           this.newMessage.set(data.fromLogin, { message: data.message, avatar: data.avatar });
           let textLastMess = document.getElementById('last-message-' + data.fromLogin);
-          textLastMess!.innerText = data.message;
+          if (textLastMess)
+            textLastMess!.innerText = data.message;
+
         }
 
       });
@@ -89,6 +109,7 @@ export class MessageService {
                 lastMessage: v.lastMessage,
                 online: v.online,
                 isFriend: v.friend,
+                hide: v.hide,
                 status: v.status,
               };
               // Thêm người dùng vào danh sách của key trong map
@@ -106,12 +127,96 @@ export class MessageService {
       this.stompClient!.send("/app/fetchAllUsers");
     });
   }
+
+  // async connectToChat(userId) : Promise<void>{
+  //   // Lưu trữ userId vào localStorage
+  //   localStorage.setItem("chatUserId", userId);
+
+  //   // Tạo một Promise để đợi kết nối WebSocket
+  //   return new Promise((resolve) => {
+  //     const socket = new SockJS(environment.baseUrl + 'chat');
+  //     const stompClient = Stomp.over(socket);
+      
+
+  //     stompClient.connect({}, (frame) => {
+  //       // Đã kết nối thành công
+  //       console.log('Connected to: ' + frame);
+
+  //       // Bắt đầu đăng ký các chủ đề và xử lý thông điệp
+  //       stompClient.subscribe("/topic/messages/" + userId, (response) => {
+  //         let data = JSON.parse(response.body);
+  //         if (this.selectedUser == data.fromLogin && this.isOriginal == false) {
+  //           this.render(data.message, data.fromLogin, data.avatar);
+  //         } else {
+  //           this.notif_mess = true;
+  //           this.newMessage.set(data.fromLogin, { message: data.message, avatar: data.avatar });
+  //           let textLastMess = document.getElementById('last-message-' + data.fromLogin);
+  //           if (textLastMess)
+  //             textLastMess!.innerText = data.message;
+  //         }
+  //       });
+
+  //       stompClient.subscribe("/topic/public", (response) => {
+  //         let data = JSON.parse(response.body);
+  //         this.setFriend(data);
+  //         let localUserId = localStorage.getItem("chatUserId");
+  //         for (let key of Object.keys(data)) {
+  //           let value = data[key];
+  //           if (key == localUserId) {
+  //             for (let v of value) {
+  //               let user = {
+  //                 type: v.type,
+  //                 user_id: v.user_id,
+  //                 username: v.username,
+  //                 fullname: v.fullname,
+  //                 email: v.email,
+  //                 avatar: v.avatar,
+  //                 messageUnRead: v.messageUnRead,
+  //                 lastMessage: v.lastMessage,
+  //                 online: v.online,
+  //                 isFriend: v.friend,
+  //                 hide: v.hide,
+  //                 status: v.status,
+  //               };
+  //               this.newMapUser.set(v.user_id, user);
+  //             }
+  //           }
+  //         }
+  //         this.isLoading = false;
+  //         setTimeout(() => {
+  //           this.mapUser = this.newMapUser;
+  //           this.updateData();
+  //           // Hoàn thành Promise sau khi xử lý xong
+  //         }, 1);
+  //       });
+  //       stompClient.send("/app/fetchAllUsers");
+  //     });
+  //     resolve();
+  //   });
+  // }
+
   // Hàm cập nhật dữ liệu
   updateData() {
     // Thực hiện cập nhật dữ liệu ở đây.
     // Sau khi cập nhật xong, thông báo sự kiện.
     this.dataUpdated.emit();
   }
+  // async sendMsg(from, text, img) : Promise<void> {
+  //   try {
+  //     await new Promise<void>((resolve) => {
+  //       this.stompClient!.send("/app/chat/" + this.selectedUser, {}, JSON.stringify({
+  //         fromLogin: from,
+  //         message: text,
+  //         avatar: img
+  //       }));
+  //       resolve();
+  //     });
+  //   } catch (error) {
+  //     console.error('Lỗi khi gửi tin nhắn:', error);
+  //   }
+  // }
+  
+
 
   sendMsg(from, text, img) {
     this.stompClient!.send("/app/chat/" + this.selectedUser, {}, JSON.stringify({
@@ -183,5 +288,12 @@ export class MessageService {
   }
   setCheckConnected(data: boolean): void {
     this.checkConnected = data;
+  }
+
+  getListMess(): any[] {
+    return this.listMess;
+  }
+  setListMess(data: any[]): void {
+    this.listMess = data;
   }
 }

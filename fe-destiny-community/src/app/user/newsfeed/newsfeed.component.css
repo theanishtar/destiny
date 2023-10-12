@@ -306,3 +306,11 @@ path svg.post-option-icon.icon-share{
   width: 23px;
   height: 20px;
 }
+.user-status .user-status-title .bold{
+  width: 131px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 1;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}

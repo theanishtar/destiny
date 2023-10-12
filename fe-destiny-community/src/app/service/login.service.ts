@@ -32,6 +32,7 @@ export class LoginService {
 						'token',
 						JSON.parse(JSON.stringify(this.getUserLog())).token
 					);
+					// this.cookieService.set('role', JSON.parse(JSON.stringify(this.getUserLog())).roles[0].authority);
 				}),
 				catchError((error: HttpErrorResponse) => {
 					console.log("error.status: " + error.status)

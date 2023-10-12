@@ -188,6 +188,8 @@ export class GetStartedComponent implements OnInit {
 						// 	userAdmin.email +
 						// 	'/' +
 						// 	userAdmin.password;
+						this.cookieService.set('full_name', response.name);
+						this.cookieService.set('role', response.roles[0].authority);
 						window.location.href = 'http://localhost:4200/admin';
 						this.loginForm.reset();
 					} else {

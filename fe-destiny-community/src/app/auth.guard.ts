@@ -43,16 +43,13 @@ export class authGuard implements CanActivate {
     if (userRole === 'ROLE_USER' && state.url.startsWith('/admin')) {
       // Người dùng là user và truy cập vào URL bắt đầu bằng '/admin'
       // Xử lý ở đây, có thể chuyển hướng hoặc hiển thị thông báo.
-      //  this.location.back();
       new toast({
         title: 'Thông báo!',
         message: 'Bạn không có quyền truy cập vào!',
         type: 'info',
         duration: 3000,
       });
-      delay(2000).then((res) => {
-        this.location.back();
-      });
+      this.location.back();
       return false;
     }
 

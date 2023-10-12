@@ -82,7 +82,7 @@
     routerLink="/message"
   >
     <!-- MENU ITEM LINK ICON -->
-    <div class="user-avatar small no-outline online notif-mess">
+    <div class="user-avatar small no-outline" [ngClass]="messageService.notif_mess ? 'online notif-mess' : ''">
       <div class="menu-item-link-icon icon-badges">
         <i class="fa-solid fa-paper-plane"></i>
       </div>
