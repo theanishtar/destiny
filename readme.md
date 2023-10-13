@@ -7,3 +7,4 @@
       - add 49 post
       - add 26 user
       - change all the image column to image in firebase
+  * 12-10-2023 3 column isFriend, hide, status in table chats and add data to table chats and chat_participants
