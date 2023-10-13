@@ -48,6 +48,7 @@ export class MessageComponent implements OnInit {
   count: number = 0;
 
   ngOnInit() {
+    this.messageService.isOriginal = true;
     this.messageService.isLoading = true;
     if (this.messageService.mapUser != null) {
       this.mapUser = this.messageService.mapUser;
@@ -56,8 +57,6 @@ export class MessageComponent implements OnInit {
     this.messageService.dataUpdated.subscribe(() => {
       // Đây là nơi bạn đặt mã để xử lý khi dữ liệu đã được cập nhật.
       this.mapUser = this.messageService.mapUser;
-
-      console.log("Dữ liệu đã cập nhật");
       // Thực hiện các thao tác cần thiết sau khi dữ liệu đã được cập nhật.
     });
 
@@ -88,12 +87,7 @@ export class MessageComponent implements OnInit {
     if (this.id != '') {
       this.renderer.removeClass(this.el.nativeElement.querySelector('#chat-widget-message-' + this.id), 'active');
     }
-    if (this.count > 0) {
-      document.querySelectorAll(".chat-widget-speaker, .time-date").forEach((e) => {
-        e.remove();
-      });
-      this.count = 0;
-    }
+
     this.messageService.selectedUser = userid;
     this.id = userid;
     this.messageService.isOriginal = false;
@@ -112,70 +106,82 @@ export class MessageComponent implements OnInit {
     if (element) {
       this.renderer.addClass(element, 'active'); // Thêm class "active" vào phần tử khi click
     }
-    if (this.messageService.newMessage.get(userid)?.message != undefined) {
-      let message = this.messageService.newMessage.get(userid)?.message;
-      let img = this.messageService.newMessage.get(userid)?.avatar;
-      this.messageService.render(message, userid, img);
-      this.messageService.newMessage.clear();
-    }
+
     let datetemp = "";
-      // function delay(ms: number) {
-      //   return new Promise(function (resolve) {
-      //     setTimeout(resolve, ms);
-      //   });
-      // }
+    // function delay(ms: number) {
+    //   return new Promise(function (resolve) {
+    //     setTimeout(resolve, ms);
+    //   });
+    // }
 
     this.messageService.loadMessage(this.id).subscribe((res) => {
-      if (res == null)
-        return;
+      if (this.count > 0) {
+        document.querySelectorAll(".chat-widget-speaker, .time-date").forEach((e) => {
+          e.remove();
+        });
+        this.count = 0;
+      }
+      this.count++;
+
       this.$chatHistory = $('.chat-widget-conversation');
       this.listMess = JSON.parse(JSON.stringify(res));
-      console.log("this.listMess: " + this.listMess);
-      for (let m of this.listMess) {
-        if (datetemp.substring(0,10).toString() !== m[2].substring(0,10).toString() || datetemp=='') {
-          this.$chatHistory.append(this.showDate(m[2]));
-          datetemp = m[2];
-        }
-        if (m[3] == this.id) {
-          this.$chatHistory.append(
-            '<div class="chat-widget-speaker left" style="padding: 0 26px 0 36px; display: flex; flex-flow: column; position: relative; margin-bottom: 1rem !important;">' +
-            '<a class="user-avatar small user-status-avatar no-border no-outline avatar-mess" href="profile" style="position: absolute;left: -10px;top: -8px; width: 40px;height: 44px; display: block;"> ' +
-            '<div class="hexagon-container" style="width: 35px; height: 38px; position: relative; margin: 0 auto;background: white;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); "> ' +
-            '<div class="hexagon user-avatar-content" style="top: 6px;left: 5px;position: absolute;z-index: 3;width: 40px;height: 44px;overflow: hidden;">  ' +
-            '<div class="hexagon-image" ' +
-            'style="background-image: url(' + m[4] + '); width: 20px; height: 23px;position: relative; z-index: 3;background-size: cover;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);left: 4%;top: 2%;"></div>' +
-            '</div>' +
-            '<div class="hexagon user-avatar-border" style="position: absolute;top: 0;left: 0;z-index: 1;">' +
-            '<div style="position: absolute; top: 0; left: 0; z-index: 1; content: \'\'; width: 32px; height: 36px; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); left: 1px; top: 0px; background-image: linear-gradient(to right, #41efff, #615dfa); display: block;"></div>' +
-            '<div class="hexagon-border"></div>' +
-            '</div>' +
-            '<div class="hexagon user-avatar-progress-border" style="margin-left: 11%;margin-top: 10.3%; width: 26px;height: 29px;top: 0;left: 0;z-index: 2;position: absolute;background: white;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">' +
-            '  <div class="user-avatar-progress" style="top: 0;left: 0;z-index: 3;position: absolute;"></div>' +
-            '</div>' +
-            '</div>' +
-            '</a>' +
-            '<p class="chat-widget-speaker-message" style="border-top-left-radius: 0; display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600; line-height: 1.1428571429em;width: fit-content;color: #3e3f5e;font-family: Helvetica, Arial, sans-serif;margin: 0;">' +
-            m[1] +
-            '</p>' +
-            '<p class="chat-widget-speaker-timestamp" style="margin-top: 12px !important;color: #adafca;font-size: 0.75rem;font-weight: 500;font-family: Helvetica, Arial, sans-serif;line-height: 1em;margin: 0;">'
-            + this.customTime(m[2]) + '</p>' +
-            '</div>	'
-          );
-        } else {
-          this.$chatHistory.append(
-            '<div class="chat-widget-speaker right" style="margin-top: 16px; padding-left: 64px; align-items: flex-end; display: flex; flex-flow: column; position: relative;">' +
-            ' <p class="chat-widget-speaker-message" style="border-top-right-radius: 0; background-color: #615dfa !important; font-family: Helvetica, Arial, sans-serif !important; margin-bottom: 0 !important; color: #fff;display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600;line-height: 1.1428571429em;width: fit-content;">'
-            + m[1] +
-            '</p>' +
-            '<p class="chat-widget-speaker-timestamp" style="margin-top: 12px; margin-bottom: 0 !important; color: #adafca;font-size: 0.75rem;font-weight: 500; font-family: Helvetica, Arial, sans-serif !important;line-height: 1em;">'
-            + this.customTime(m[2]) +
-            '</p>' +
-            '</div>'
-          );
+      if (res != null) {
+        for (let m of this.listMess) {
+          if (datetemp.substring(0, 10).toString() !== m[2].substring(0, 10).toString() || datetemp == '') {
+            this.$chatHistory.append(this.showDate(m[2]));
+            datetemp = m[2];
+          }
+          let countMessage = document.getElementById('count-mess-' + this.id);
+          if (countMessage) {
+            countMessage.parentNode?.removeChild(countMessage);
+          }
+          if (m[3] == this.id) {
+            this.$chatHistory.append(
+              '<div class="chat-widget-speaker left" style="padding: 0 26px 0 36px; display: flex; flex-flow: column; position: relative; margin-bottom: 1rem !important;">' +
+              '<a class="user-avatar small user-status-avatar no-border no-outline avatar-mess" href="profile" style="position: absolute;left: -10px;top: -8px; width: 40px;height: 44px; display: block;"> ' +
+              '<div class="hexagon-container" style="width: 35px; height: 38px; position: relative; margin: 0 auto;background: white;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); "> ' +
+              '<div class="hexagon user-avatar-content" style="top: 6px;left: 5px;position: absolute;z-index: 3;width: 40px;height: 44px;overflow: hidden;">  ' +
+              '<div class="hexagon-image" ' +
+              'style="background-image: url(' + m[4] + '); width: 20px; height: 23px;position: relative; z-index: 3;background-size: cover;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);left: 4%;top: 2%;"></div>' +
+              '</div>' +
+              '<div class="hexagon user-avatar-border" style="position: absolute;top: 0;left: 0;z-index: 1;">' +
+              '<div style="position: absolute; top: 0; left: 0; z-index: 1; content: \'\'; width: 32px; height: 36px; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); left: 1px; top: 0px; background-image: linear-gradient(to right, #41efff, #615dfa); display: block;"></div>' +
+              '<div class="hexagon-border"></div>' +
+              '</div>' +
+              '<div class="hexagon user-avatar-progress-border" style="margin-left: 11%;margin-top: 10.3%; width: 26px;height: 29px;top: 0;left: 0;z-index: 2;position: absolute;background: white;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">' +
+              '  <div class="user-avatar-progress" style="top: 0;left: 0;z-index: 3;position: absolute;"></div>' +
+              '</div>' +
+              '</div>' +
+              '</a>' +
+              '<p class="chat-widget-speaker-message" style="border-top-left-radius: 0; display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600; line-height: 1.1428571429em;width: fit-content;color: #3e3f5e;font-family: Helvetica, Arial, sans-serif;margin: 0;">' +
+              m[1] +
+              '</p>' +
+              '<p class="chat-widget-speaker-timestamp" style="margin-top: 12px !important;color: #adafca;font-size: 0.75rem;font-weight: 500;font-family: Helvetica, Arial, sans-serif;line-height: 1em;margin: 0;">'
+              + this.customTime(m[2]) + '</p>' +
+              '</div>	'
+            );
+          } else {
+            this.$chatHistory.append(
+              '<div class="chat-widget-speaker right" style="margin-top: 16px; padding-left: 64px; align-items: flex-end; display: flex; flex-flow: column; position: relative;">' +
+              ' <p class="chat-widget-speaker-message" style="border-top-right-radius: 0; background-color: #615dfa !important; font-family: Helvetica, Arial, sans-serif !important; margin-bottom: 0 !important; color: #fff;display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600;line-height: 1.1428571429em;width: fit-content;">'
+              + m[1] +
+              '</p>' +
+              '<p class="chat-widget-speaker-timestamp" style="margin-top: 12px; margin-bottom: 0 !important; color: #adafca;font-size: 0.75rem;font-weight: 500; font-family: Helvetica, Arial, sans-serif !important;line-height: 1em;">'
+              + this.customTime(m[2]) +
+              '</p>' +
+              '</div>'
+            );
+          }
         }
       }
+
+      if (this.messageService.newMessage.get(userid)?.message != undefined) {
+        let message = this.messageService.newMessage.get(userid)?.message;
+        let img = this.messageService.newMessage.get(userid)?.avatar;
+        this.messageService.render(message, userid, img);
+        this.messageService.newMessage.clear();
+      };
     });
-    this.count++;
   }
 
 
@@ -191,11 +197,13 @@ export class MessageComponent implements OnInit {
     }
   }
   sendMessage(message) {
+    
     let username = localStorage.getItem("chatUserId");
     this.sender = JSON.parse(JSON.stringify(this.messageService.getSender()));
     let avatar = this.sender.avatar;
     this.$chatHistory = $('.chat-widget-conversation');
     this.$textarea = $('#chat-widget-message-text-2');
+    
     if (message.trim() !== '') {
       this.messageService.sendMsg(username, message, avatar);
       this.scrollToBottom();
@@ -229,7 +237,6 @@ export class MessageComponent implements OnInit {
       let extractedTime = match[1]; // Extracted "15:43"
       return extractedTime;
     } else {
-      console.log("No time found in the string.");
       return null;
     }
   }
@@ -249,7 +256,6 @@ export class MessageComponent implements OnInit {
       return "Hôm qua";
     } else if (date1 > date2) {
       return null;
-      console.log('date1 is later than date2');
     } else {
       return "Hôm nay";
     }

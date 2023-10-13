@@ -61,17 +61,16 @@ public class MessageController {
 	@MessageMapping("/chat/{to}")
 	public void sendMessage(@DestinationVariable int to, MessageModel message) {
 		System.out.println("handling send message: " + message + " to: " + to);
+		User user = userServiceImpl.findById(message.getFromLogin());
+		Chats chats = chatsServiceImpl.findChatNames(String.valueOf(user.getUser_id()), String.valueOf(to));
+		Messages messages = new Messages();
+		messages.setContent(message.getMessage());
+		messages.setUser(user);
+		messages.setChats(chats);
+		messages.setSend_Status(false);
+		messagesServiceImpl.create(messages);
 		boolean isExists = UserChatStorage.getInstance().getUsers().containsKey(to);
 		if (isExists) {
-			User user = userServiceImpl.findById(message.getFromLogin());
-//				System.out.println("success");
-			Chats chats = chatsServiceImpl.findChatNames(String.valueOf(user.getUser_id()), String.valueOf(to));
-			Messages messages = new Messages();
-			messages.setContent(message.getMessage());
-			messages.setUser(user);
-			messages.setChats(chats);
-			messages.setSend_Status(false);
-			messagesServiceImpl.create(messages);
 			simpMessagingTemplate.convertAndSend("/topic/messages/" + to, message);
 
 		}
@@ -84,6 +83,9 @@ public class MessageController {
 			User user = userServiceImpl.findByEmail(email);
 			Chats chats = chatsServiceImpl.findChatNames(String.valueOf(user.getUser_id()), to);
 			if (chats != null) {
+//				if (messagesServiceImpl.findStatus(Integer.valueOf(to)).size() > 0) {
+					messagesServiceImpl.updateStatusMessages(true, Integer.valueOf(to), chats.getId());
+//				}
 				List<Object[]> list = messagesServiceImpl.findListMessage(chats.getName_chats());
 				return ResponseEntity.ok().body(list);
 			}
@@ -122,9 +124,35 @@ public class MessageController {
 			return null;
 		}
 	}
+	public String[] lastMeassage(String fromLogin, String toUser) {
+		try {
+			String []temp = new String[2];
+			String message = "";
+			String time = "";
+			Chats chats = chatsServiceImpl.findChatNames(fromLogin, toUser);
+			if (chats != null) {
+				List<Object[]> listMessage = messagesServiceImpl.findListMessage(chats.getName_chats());
+				if (listMessage.size() > 0) {
+					message = String.valueOf(listMessage.get(listMessage.size() - 1)[1]);
+					time =String.valueOf(listMessage.get(listMessage.size() - 1)[2]);
+		
+				}
+				if (listMessage.get(listMessage.size() - 1)[3]==Integer.valueOf(fromLogin)) {
+					message = "Bạn: " + message;
+				}
+			}
+			temp[0]=message;
+			temp[1]=time;
+			return temp;
+		} catch (Exception e) {
+			System.out.println("Error lastMeassage: " + e);
+			throw e;
+		}
+	}
 
 	public UserModel userModel(User us, int user_id, String type, boolean check, boolean hide, boolean status) {
 		UserModel userModel = new UserModel();
+		String [] temp = lastMeassage(String.valueOf(user_id), String.valueOf(us.getUser_id()));
 		if (type.equalsIgnoreCase("LEAVE")) {
 			userModel.setType(MessageType.LEAVE);
 		} else {
@@ -136,12 +164,12 @@ public class MessageController {
 		userModel.setEmail(us.getEmail());
 		userModel.setAvatar(us.getAvatar());
 		userModel.setMessageUnRead(messagesServiceImpl.countMessageUnread(us.getUser_id()));
-//		userModel.setLastMessage(lastMeassage(String.valueOf(user_id), String.valueOf(us.getUser_id())));
-		userModel.setLastMessage(null);
-		userModel.setOnline(us.getOnline_last_date());
+		userModel.setLastMessage(temp[0]);
+		userModel.setOnline(temp[1]);
 		userModel.setFriend(check);
 		userModel.setHide(hide);
 		userModel.setStatus(status);
 		return userModel;
 	}
+	
 }

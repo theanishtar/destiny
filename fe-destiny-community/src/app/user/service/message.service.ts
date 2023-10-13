@@ -30,6 +30,7 @@ export class MessageService {
   $chatHistory: any;
   $tab_message: any;
   $element: any;
+  $pCount: any;
   usersTemplateHTML = "";
   dataUpdated = new EventEmitter<void>();
   mapUser = new Map<string, UserModel>();
@@ -45,7 +46,7 @@ export class MessageService {
     private route: ActivatedRoute
   ) { }
 
-  /* ============List chat============= */
+  /* ============API============= */
   loadDataSender() {
     return this.http.get<any>(this.loadDataChat).pipe(
       tap((response) => {
@@ -55,17 +56,17 @@ export class MessageService {
     );
   }
 
-  loadMessage(data: string){
+  loadMessage(data: string) {
     return this.http.post<string>(this.loadDataMess, data).pipe(
       tap((res) => {
         this.listMess = JSON.parse(JSON.stringify(res));
         this.setListMess(this.listMess);
-        console.warn(this.listMess);
       }),
       catchError((err) => of([]))
     )
   }
 
+  /* ============Connect socket============= */
   connectToChat(userId) {
     localStorage.setItem("chatUserId", userId);
     this.socket = new SockJS(environment.baseUrl + 'chat');
@@ -74,14 +75,38 @@ export class MessageService {
       // console.log('connected to: ' + frame);
       this.stompClient!.subscribe("/topic/messages/" + userId, (response) => {
         let data = JSON.parse(response.body);
+        let time = document.getElementById('floaty-' + data.fromLogin);
+        if (time) {
+          time!.innerText = 'Vài giây';
+        }
         if (this.selectedUser == data.fromLogin && this.isOriginal == false) {
           this.render(data.message, data.fromLogin, data.avatar);
         } else {
           this.notif_mess = true;
           this.newMessage.set(data.fromLogin, { message: data.message, avatar: data.avatar });
           let textLastMess = document.getElementById('last-message-' + data.fromLogin);
+          let countMessage = document.getElementById('count-mess-' + data.fromLogin);
+          // let pCount = document.getElementById('p-count-mess-' + data.fromLogin);
+          this.$pCount = $('#p-count-mess-' + data.fromLogin);
           if (textLastMess)
             textLastMess!.innerText = data.message;
+          if (countMessage) {
+            let count: string | undefined;
+            count = '' + countMessage.textContent?.trim();
+            let num = parseInt(count) + 1;
+            countMessage.parentNode?.removeChild(countMessage);
+            this.$pCount.append('<p class="user-status-timestamp count-mess" id="count-mess-' + data.fromLogin + '"' +
+              'style="position: absolute;top: 32%;right: 5%;padding: 3px 8px;background: red;border-radius: 50%;margin-top: 10px;color: #8f91ac;font-size: 0.75rem;font-weight: 500;line-height: 1em;">' +
+              ' <span"' +
+              ' style="color: white;font-family: Helvetica,Arial,sans-serif;font-size: 9px;" >' + num + '</span>' +
+              '</p>');
+          } else {
+            this.$pCount.append('<p class="user-status-timestamp count-mess"  id="count-mess-' + data.fromLogin + '"' +
+              'style="position: absolute;top: 32%;right: 5%;padding: 3px 8px;background: red;border-radius: 50%;margin-top: 10px;color: #8f91ac;font-size: 0.75rem;font-weight: 500;line-height: 1em;">' +
+              ' <span' +
+              ' style="color: white;font-family: Helvetica,Arial,sans-serif;font-size: 9px;" >' + 1 + '</span>' +
+              '</p>');
+          }
 
         }
 
@@ -107,7 +132,7 @@ export class MessageService {
                 avatar: v.avatar,
                 messageUnRead: v.messageUnRead,
                 lastMessage: v.lastMessage,
-                online: v.online,
+                online: this.customTime(v.online),
                 isFriend: v.friend,
                 hide: v.hide,
                 status: v.status,
@@ -136,7 +161,7 @@ export class MessageService {
   //   return new Promise((resolve) => {
   //     const socket = new SockJS(environment.baseUrl + 'chat');
   //     const stompClient = Stomp.over(socket);
-      
+
 
   //     stompClient.connect({}, (frame) => {
   //       // Đã kết nối thành công
@@ -215,7 +240,7 @@ export class MessageService {
   //     console.error('Lỗi khi gửi tin nhắn:', error);
   //   }
   // }
-  
+
 
 
   sendMsg(from, text, img) {
@@ -224,6 +249,10 @@ export class MessageService {
       message: text,
       avatar: img
     }));
+    let time = document.getElementById('floaty-' + this.selectedUser);
+    if (time) {
+      time!.innerText = 'Vài giây';
+    }
   }
 
   render(message, userName, img) {
@@ -265,6 +294,88 @@ export class MessageService {
 
   getCurrentTime() {
     return new Date().toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3");
+  }
+
+  customTime(time: string) {
+    if (time == '')
+      return '';
+    let dateTime = '';
+    let date1 = new Date(time.substring(0, 10));
+    let date2 = new Date();
+    let day = date2.getDate(); // Lấy ngày trong tháng (1-31)
+    let month = date2.getMonth() + 1; // Lấy tháng (0-11), nên cộng thêm 1
+    let year = date2.getFullYear();
+    let date3 = new Date(year + '-' + month + '-' + day);
+    if (date1 < date3) {
+      dateTime = this.getDayOfWeek(time.substring(0, 10));
+      return dateTime;
+    } else if (date1 > date2) {
+      return '';
+    }
+    else {
+      let date = new Date();
+      let date1 = new Date(time);
+
+
+      // Lấy thời gian ở dạng milliseconds từ epoch (1/1/1970)
+      let time1 = date.getTime();
+      let time2 = date1.getTime();
+
+      // Tính toán khoảng thời gian (đơn vị milliseconds)
+      let timeDifference = Math.abs(time1 - time2); // Lấy giá trị tuyệt đối để đảm bảo giá trị luôn là dương
+
+      // Chuyển khoảng thời gian thành giờ, phút, giây, và mili giây (tùy ý)
+      let milliseconds = timeDifference % 1000;
+      // let seconds = Math.floor((timeDifference / 1000) % 60);
+      let minutes = Math.floor((timeDifference / (1000 * 60)) % 60);
+      let hours = Math.floor((timeDifference / (1000 * 60 * 60)));
+      if (hours == 0) {
+        return minutes + 'p trước';
+      } else {
+        return hours + 'h trước';
+      }
+      // let regex = /(\d{2}:\d{2})/;
+      // let match = time.match(regex);
+      // if (match) {
+      //   let extractedTime = match[1]; // Extracted "15:43"
+      //   return extractedTime;
+      // } else {
+      //   return null;
+      // }
+
+    }
+
+  }
+
+  getDayOfWeek(dateString: string) {
+    let dateTemp = new Date(dateString);
+    var currentDate = new Date();
+
+    // Tìm ngày đầu tiên trong tuần (ngày chủ nhật)
+    let firstDayOfWeek = new Date(currentDate);
+    firstDayOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
+
+    // Tìm ngày cuối cùng trong tuần (ngày thứ bảy)
+    let lastDayOfWeek = new Date(currentDate);
+    lastDayOfWeek.setDate(firstDayOfWeek.getDate() + 6);
+
+    // Định dạng ngày thành chuỗi
+    let startDate = firstDayOfWeek.toISOString().slice(0, 10);
+    let endDate = lastDayOfWeek.toISOString().slice(0, 10);
+    if (dateTemp > new Date(startDate) && dateTemp < new Date(endDate)) {
+      let daysOfWeek = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+      // Tạo đối tượng Date từ chuỗi ngày
+      let date = new Date(dateString);
+      // Lấy thứ của ngày (0 = Chủ Nhật, 1 = Thứ Hai, 2 = Thứ Ba, v.v.)
+      let dayOfWeek = date.getDay();
+      // Trả về tên thứ
+      return daysOfWeek[dayOfWeek];
+    } else {
+      return dateString.substring(0, 10).toString();
+    }
+
+
+
   }
 
 

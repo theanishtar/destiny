@@ -23,12 +23,4 @@ public interface UserDao extends JpaRepository<User, Integer> {
 			+ "GROUP BY users.avatar, users.fullname, users.user_id, users.mark \r\n"
 			+ "ORDER BY totalPost DESC LIMIT 5", nativeQuery = true)
 	public List<Object[]> getTOP5User();
-
-	
-	@Query(value = "SELECT * FROM users WHERE fb_id=:fb_id ", nativeQuery = true)
-	public User findByFbId(String fb_id);
-	
-	@Query(value = "SELECT * FROM users WHERE gg_id=:gg_id ", nativeQuery = true)
-	public User findByGgId(String gg_id);
-	
 }

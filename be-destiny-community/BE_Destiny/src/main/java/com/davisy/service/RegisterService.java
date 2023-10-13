@@ -3,7 +3,6 @@ package com.davisy.service;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -62,7 +61,7 @@ public class RegisterService {
 		return code;
 	}
 
-	public static String ranDomUsername() {
+	private String ranDomUsername() {
 		// Get the current time as an Instant
 		Instant currentTime = Instant.now();
 
@@ -116,7 +115,6 @@ public class RegisterService {
 		us.setEmail(u.getEmail());
 		us.setIntro("");
 		us.setBirthday(null);
-		us.setDay_create(GregorianCalendar.getInstance());
 		us.setGender(null);
 		us.setProvinces(null);
 		us.setDistricts(null);
@@ -127,8 +125,6 @@ public class RegisterService {
 		us.setMark(u.getMark());
 		us.setUser_status(true);
 		us.setBan(false);
-		us.setGg_id(null);
-		us.setFb_id(null);
 		Roles roles = rolesServiceImpl.findById(4);
 		roles.setName(roles.getName());
 		roles.setRole_des(roles.getRole_des());

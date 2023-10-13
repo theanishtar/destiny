@@ -23,10 +23,10 @@ public class UserController {
 	@Autowired
 	UserServiceImpl userServiceImpl;
 
-//	@GetMapping("/v1/user/getTop5User")
-//	public ResponseEntity<List<Object[]>> getTop5User() {
-//		List<Object[]> list = userServiceImpl.getTOP5User();
-//		return ResponseEntity.ok(list);
-//	}
+	@GetMapping("/v1/user/getTop5User")
+	public ResponseEntity<List<Object[]>> getTop5User() {
+		List<Object[]> list = userServiceImpl.getTOP5User();
+		return ResponseEntity.ok(list);
+	}
 
 }

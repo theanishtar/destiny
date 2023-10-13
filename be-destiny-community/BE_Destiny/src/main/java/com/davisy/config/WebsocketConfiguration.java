@@ -21,20 +21,27 @@ public class WebsocketConfiguration implements WebSocketMessageBrokerConfigurer 
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws-demo").setAllowedOrigins("http://127.0.0.1:5500/index.html").withSockJS();
+        registry.addEndpoint("/chat").setAllowedOrigins("http://localhost:4200").withSockJS();
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.setApplicationDestinationPrefixes("/call").enableSimpleBroker("/video");
+        registry.setApplicationDestinationPrefixes("/app").enableSimpleBroker("/topic");
     }
-
     @Bean
-    public SocketIOServer socketIOServer() throws Exception {
-    	com.corundumstudio.socketio.Configuration config =
-    	        new com.corundumstudio.socketio.Configuration();
-        config.setHostname(host);
-        config.setPort(port);
-        return new SocketIOServer(config);
+    public SocketIOServer socketIOServer(){
+    	try {
+    		com.corundumstudio.socketio.Configuration config =
+        	        new com.corundumstudio.socketio.Configuration();
+            config.setHostname(host);
+            config.setPort(port);
+            return new SocketIOServer(config);
+		} catch (Exception e) {
+			com.corundumstudio.socketio.Configuration config =
+        	        new com.corundumstudio.socketio.Configuration();
+            config.setHostname(host);
+            config.setPort(port++);
+			return new SocketIOServer(config);
+		}
     }
 }

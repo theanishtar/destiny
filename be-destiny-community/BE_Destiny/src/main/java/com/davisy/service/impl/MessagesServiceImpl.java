@@ -29,6 +29,11 @@ public class MessagesServiceImpl implements MessagesService {
 	}
 
 	@Override
+	public void updateStatusMessages(boolean st, int senden_id, int chat_id) {
+		messagesDAO.updateStatusMessages(st, senden_id, chat_id);
+	}
+
+	@Override
 	public void create(Messages messages) {
 		if (messages != null)
 			messagesDAO.save(messages);
@@ -44,6 +49,12 @@ public class MessagesServiceImpl implements MessagesService {
 	public void delete(Messages messages) {
 		if (messages != null)
 			messagesDAO.delete(messages);
+	}
+
+	@Override
+	public List<Messages> findStatus(int id) {
+		// TODO Auto-generated method stub
+		return messagesDAO.findStatus(id);
 	}
 
 }

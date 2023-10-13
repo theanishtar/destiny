@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.davisy.config.JwtTokenUtil;
 import com.davisy.entity.ChatParticipants;
+import com.davisy.entity.Chats;
 import com.davisy.entity.DataFollows;
 import com.davisy.entity.Follower;
 import com.davisy.entity.User;
@@ -131,6 +132,7 @@ public class UserChatController {
 
 	public UserModel userModel(User us, int user_id, String type, boolean check, boolean hide, boolean status) {
 		UserModel userModel = new UserModel();
+		String [] temp = lastMeassage(String.valueOf(user_id), String.valueOf(us.getUser_id()));
 		if (type.equalsIgnoreCase("LEAVE")) {
 			userModel.setType(MessageType.LEAVE);
 		} else {
@@ -142,36 +144,39 @@ public class UserChatController {
 		userModel.setEmail(us.getEmail());
 		userModel.setAvatar(us.getAvatar());
 		userModel.setMessageUnRead(messagesServiceImpl.countMessageUnread(us.getUser_id()));
-//		userModel.setLastMessage(lastMeassage(String.valueOf(user_id), String.valueOf(us.getUser_id())));
-		userModel.setLastMessage(null);
-		userModel.setOnline(us.getOnline_last_date());
+		userModel.setLastMessage(temp[0]);
+		userModel.setOnline(temp[1]);
 		userModel.setFriend(check);
 		userModel.setHide(hide);
 		userModel.setStatus(status);
 		return userModel;
 	}
 
-//	public String lastMeassage(String fromLogin, String toUser) {
-//		try {
-//			String message = "";
-//			String chatName = "";
-//			if (chatsServiceImpl.findChatNames(fromLogin + toUser) == null) {
-//				chatName = toUser + fromLogin;
-//			} else {
-//				chatName = fromLogin + toUser;
-//			}
-//			if (!"".equals(chatName) && chatsServiceImpl.findChatNames(chatName) != null) {
-//				List<Object[]> listMessage = messagesServiceImpl.findListMessage(chatName);
-//				if (listMessage.size() > 0) {
-//					message = String.valueOf(listMessage.get(listMessage.size() - 1)[1]);
-//				}
-//			}
-//			return message;
-//		} catch (Exception e) {
-//			System.out.println("error1: " + e);
-//			throw e;
-//		}
-//	}
+	public String[] lastMeassage(String fromLogin, String toUser) {
+		try {
+			String []temp = new String[2];
+			String message = "";
+			String time = "";
+			Chats chats = chatsServiceImpl.findChatNames(fromLogin, toUser);
+			if (chats != null) {
+				List<Object[]> listMessage = messagesServiceImpl.findListMessage(chats.getName_chats());
+				if (listMessage.size() > 0) {
+					message = String.valueOf(listMessage.get(listMessage.size() - 1)[1]);
+					time =String.valueOf(listMessage.get(listMessage.size() - 1)[2]);
+					System.out.println("time: " + time);
+				}
+				if (listMessage.get(listMessage.size() - 1)[3]==Integer.valueOf(fromLogin)) {
+					message = "Bạn: " + message;
+				}
+			}
+			temp[0]=message;
+			temp[1]=time;
+			return temp;
+		} catch (Exception e) {
+			System.out.println("Error lastMeassage: " + e);
+			throw e;
+		}
+	}
 
 	public List<DataFollows> reloadDataFriends(List<Follower> followers, User user) {
 		List<DataFollows> dataFollows = new ArrayList<>();

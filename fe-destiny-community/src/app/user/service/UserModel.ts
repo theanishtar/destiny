@@ -7,7 +7,7 @@ export interface UserModel {
   avatar: string;
   messageUnRead: number;
   lastMessage: string;
-  online: Date | null;
+  online: string;
   isFriend: boolean;
   hide: boolean;
   status: boolean;

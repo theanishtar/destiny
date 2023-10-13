@@ -20,7 +20,7 @@ public class UserModel {
 	private String avatar;
 	private int messageUnRead;
 	private String lastMessage;
-	private Calendar online;
+	private String online;
 	private boolean isFriend;
 	private boolean hide ;
 	private boolean status;

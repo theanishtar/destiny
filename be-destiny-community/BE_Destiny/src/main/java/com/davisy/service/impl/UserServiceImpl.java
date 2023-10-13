@@ -74,23 +74,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User findByFbId(String fb_id) {
-		User user = userDAO.findByFbId(fb_id);
-		if (user == null)
-			return null;
-		return user;
-	}
-	@Override
-	public User findByGgId(String gg_id) {
-		User user = userDAO.findByGgId(gg_id);
-		if (user == null)
-			return null;
-		return user;
+	public List<Object[]> getTOP5User() {
+		// TODO Auto-generated method stub
+		return userDAO.getTOP5User();
 	}
 
-//	@Override
-//	public List<Object[]> getTOP5User() {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
 }
