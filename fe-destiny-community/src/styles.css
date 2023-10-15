@@ -191,3 +191,52 @@ a.nav-link.click-scroll.site-footer-link {
 
 /* table */
 @import url("app/admin/css/datatables/dataTables.bootstrap4.min.css");
+
+/* coboboxsearch */
+@import "~@ng-select/ng-select/themes/material.theme.css";
+
+.body-admin .ng-select .ng-select-container {
+  color: unset !important;
+  min-height: unset !important;
+}
+
+.body-admin .ng-select.ng-select-single .ng-select-container .ng-clear-wrapper {
+  align-self: flex-end;
+  bottom: 0px !important;
+}
+
+.body-admin .ng-select.ng-select-single .ng-select-container .ng-arrow-wrapper {
+  align-self: flex-end;
+  bottom: 4px !important;
+}
+
+.body-admin .ng-dropdown-panel.ng-select-bottom {
+  top: calc(100% - 0.3em) !important;
+  border: 2px solid #fff;
+  border-bottom-left-radius: 0.9rem;
+  border-bottom-right-radius: 0.9rem;
+  padding-bottom: 10px;
+}
+
+.body-admin .ng-select .ng-select-container .ng-value-container {
+  padding: unset !important;
+  border-top: unset !important;
+}
+
+.body-admin .ng-select .ng-select-container:after {
+  border-bottom: unset;
+  position: unset;
+}
+
+.body-admin .ng-select .ng-select-container .ng-value-container .ng-input {
+  bottom: unset;
+}
+
+.body-admin .ng-select.ng-select-single .ng-select-container .ng-arrow-wrapper {
+  align-self: flex-end;
+  bottom: 9px;
+}
+
+.body-admin .ng-select .ng-select-container .ng-value-container .ng-input>input {
+  color: var(--primary-admin);
+}

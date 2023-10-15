@@ -13,7 +13,7 @@
           <ul class="breadcrumbD ml-2">
             <li>
               Bài đăng của
-              <a href="#" class="active font-weight-bold">Quốc Vinh</a>
+              <a href="#" class="active font-weight-bold"> {{postDetail.user_fullname}} </a>
             </li>
           </ul>
         </div>
@@ -29,7 +29,7 @@
                     <div class="photo-preview-wrap">
                       <div class="photo-preview">
                         <div class="photo-preview-image" style="
-                          background: url('../assets/images/product/home-decor-1.jpg')
+                          background: url('{{postDetail.listPostImages[0].link_image}}')
                             center center / cover no-repeat;
                         "></div>
                       </div>
@@ -39,7 +39,7 @@
                     <div class="photo-preview-wrap">
                       <div class="photo-preview">
                         <div class="photo-preview-image" style="
-                          background: url('../assets/images/product/home-decor-2.jpg')
+                          background: url('{{postDetail.listPostImages[1].link_image}}')
                             center center / cover no-repeat;
                         "></div>
                       </div>
@@ -51,7 +51,7 @@
                     <div class="photo-preview-wrap">
                       <div class="photo-preview">
                         <div class="photo-preview-image" style="
-                          background: url('../assets/images/product/home-decor-3.jpg')
+                          background: url('{{postDetail.listPostImages[2].link_image}}')
                             center center / cover no-repeat;
                         "></div>
                       </div>
@@ -62,7 +62,7 @@
                     <div class="photo-preview-wrap">
                       <div class="photo-preview">
                         <div class="photo-preview-image" style="
-                          background: url('../assets/images/product/home-decor-1.jpg')
+                          background: url('{{postDetail.listPostImages[3].link_image}}')
                             center center / cover no-repeat;
                         "></div>
                       </div>
@@ -79,51 +79,50 @@
             </div>
             <div class="col-lg-5">
               <div class="avatar-group d-flex text-pie pl-3 pt-4">
-                <a href="#" class="avatar rounded-circle">
-                  <img class="" alt="Image placeholder" src="../assets/images/users/vinh.jpg" />
+                <a (click)="selectUser(postDetail.user_email)" type="button" class="avatar rounded-circle">
+                  <img class="" alt="Image placeholder" src="{{postDetail.user_avartar}}" />
                 </a>
                 <div class="ml-3" style="padding-top: 0.1rem !important">
-                  <h5 style="font-weight: 600">Phùng Quốc Vinh</h5>
+                  <a (click)="selectUser(postDetail.user_email)" type="button">
+                    <h5 style="font-weight: 600">{{postDetail.user_fullname}}</h5>
+                  </a>
                   <div class="row ml-0">
-                    <div class="mt-n2">1 Ngày trước</div>
+                    <div class="mt-n2">{{postDetail.date_Post}}</div>
                     <i class="bx bx-world mt-n1 ml-3" style="font-size: 1rem"></i>
                   </div>
                 </div>
               </div>
               <div class="pl-3 pt-3 text-pie" style="min-height: 60px">
-                Tui có mấy món đồ không sài nữa muốn tặng cho bạn nào cần nè, Ai
-                quan tâm ib tui nha!!!
+                {{postDetail.content}}
               </div>
               <hr class="border-primaryx mt-3 mb-2 p-0" />
               <div class="pl-4 pr-4 text-pie" style="display: flex; justify-content: space-between">
                 <div class="row">
                   <i class="bx bxs-heart text-pink"></i>
-                  <h6 class="mt-1 ml-1">3</h6>
+                  <h6 class="mt-1 ml-1">{{postDetail.totalInterested}}</h6>
                 </div>
                 <div class="row">
-                  <h6 class="mt-1 mr-1">4</h6>
+                  <h6 class="mt-1 mr-1">{{postDetail.totalComment}}</h6>
                   <i class="bx bx-comment"></i>
-                  <h6 class="mt-1 ml-3 mr-1">3</h6>
+                  <h6 class="mt-1 ml-3 mr-1">{{postDetail.totalShare}}</h6>
                   <i class="bx bx-share"></i>
                 </div>
               </div>
               <hr class="border-primaryx mt-1 mb-3 p-0" />
               <div class="text-black comment-section pt-1 pb-3 pl-4 pr-1">
-                <div class="user-comment d-flex text-pie pl-0 pt-1 pb-2">
+                <div class="user-comment d-flex text-pie pl-0 pt-1 pb-2"
+                  *ngFor="let comment of postDetail.listComments">
                   <a href="#" class="avatar rounded-circle">
-                    <img class="" alt="" src="../assets/images/users/sy.jpg" />
+                    <img class="" alt="" src="{{comment.user_avartar}}" />
                   </a>
                   <div class="ml-2 content-comment">
-                    <h6>Đoàn Hiệp Sỹ</h6>
+                    <h6>{{comment.user_fullname}}</h6>
                     <div class="ml-0">
                       <div class="mt-n1">
-                        Tui liên hệ rồi á ní ơi, Check tn đi ạ !!
+                        {{comment.content}}
                       </div>
                     </div>
-                    <!-- <div class="font-weight-bold pt-1 reply-comment">
-                                        <a href="" class="text-pie">Phản hồi</a>
-                                    </div> -->
-                    <div class="user-comment d-flex text-pie pl-0 pt-1">
+                    <!-- <div class="user-comment d-flex text-pie pl-0 pt-1">
                       <a href="#" class="avatar rounded-circle">
                         <img class="" alt="" src="../assets/images/users/sy.jpg" />
                       </a>
@@ -132,116 +131,15 @@
                         <div class="ml-0">
                           <div class="mt-n1">Rep tui cái bạn ơi !!</div>
                         </div>
-                        <!-- <div class="font-weight-bold pt-1 reply-comment">
-                                                <a href="" class="text-pie">Phản hồi</a>
-                                            </div> -->
                       </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="user-comment d-flex text-pie pl-0 pt-1 pb-2">
-                  <a href="#" class="avatar rounded-circle">
-                    <img class="" alt="" src="../assets/images/users/dan.jpg" />
-                  </a>
-                  <div class="ml-2 content-comment">
-                    <h6>Nguyễn Khánh Đan</h6>
-                    <div class="ml-0">
-                      <div class="mt-n1">Còn không bác?</div>
-                    </div>
-                    <!-- <div class="font-weight-bold pt-1 reply-comment">
-                                        <a href="" class="text-pie">Phản hồi</a>
-                                    </div> -->
-                  </div>
-                </div>
-                <div class="user-comment d-flex text-pie pl-0 pt-1 pb-2">
-                  <a href="#" class="avatar rounded-circle">
-                    <img class="" alt="" src="../assets/images/users/vi.jpg" />
-                  </a>
-                  <div class="ml-2 content-comment">
-                    <h6>Lê Bích Vi</h6>
-                    <div class="ml-0">
-                      <div class="mt-n1">Có free ship hong bạn ơi</div>
-                    </div>
-                    <!-- <div class="font-weight-bold pt-1 reply-comment">
-                                        <a href="" class="text-pie">Phản hồi</a>
-                                    </div> -->
-                  </div>
-                </div>
-                <div class="user-comment d-flex text-pie pl-0 pt-1 pb-2">
-                  <a href="#" class="avatar rounded-circle">
-                    <img class="" alt="" src="../assets/images/users/vi.jpg" />
-                  </a>
-                  <div class="ml-2 content-comment">
-                    <h6>Lê Bích Vi</h6>
-                    <div class="ml-0">
-                      <div class="mt-n1">Có free ship hong bạn ơi</div>
-                    </div>
-                    <!-- <div class="font-weight-bold pt-1 reply-comment">
-                                        <a href="" class="text-pie">Phản hồi</a>
-                                    </div> -->
-                  </div>
-                </div>
-                <div class="user-comment d-flex text-pie pl-0 pt-1 pb-2">
-                  <a href="#" class="avatar rounded-circle">
-                    <img class="" alt="" src="../assets/images/users/vi.jpg" />
-                  </a>
-                  <div class="ml-2 content-comment">
-                    <h6>Lê Bích Vi</h6>
-                    <div class="ml-0">
-                      <div class="mt-n1">Có free ship hong bạn ơi</div>
-                    </div>
-                    <!-- <div class="font-weight-bold pt-1 reply-comment">
-                                        <a href="" class="text-pie">Phản hồi</a>
-                                    </div> -->
-                  </div>
-                </div>
-                <div class="user-comment d-flex text-pie pl-0 pt-1 pb-2">
-                  <a href="#" class="avatar rounded-circle">
-                    <img class="" alt="" src="../assets/images/users/vi.jpg" />
-                  </a>
-                  <div class="ml-2 content-comment">
-                    <h6>Lê Bích Vi</h6>
-                    <div class="ml-0">
-                      <div class="mt-n1">Có free ship hong bạn ơi</div>
-                    </div>
-                    <!-- <div class="font-weight-bold pt-1 reply-comment">
-                                        <a href="" class="text-pie">Phản hồi</a>
-                                    </div> -->
-                  </div>
-                </div>
-                <div class="user-comment d-flex text-pie pl-0 pt-1 pb-2">
-                  <a href="#" class="avatar rounded-circle">
-                    <img class="" alt="" src="../assets/images/users/vi.jpg" />
-                  </a>
-                  <div class="ml-2 content-comment">
-                    <h6>Lê Bích Vi</h6>
-                    <div class="ml-0">
-                      <div class="mt-n1">Có free ship hong bạn ơi</div>
-                    </div>
-                    <!-- <div class="font-weight-bold pt-1 reply-comment">
-                                        <a href="" class="text-pie">Phản hồi</a>
-                                    </div> -->
-                  </div>
-                </div>
-                <div class="user-comment d-flex text-pie pl-0 pt-1 pb-2">
-                  <a href="#" class="avatar rounded-circle">
-                    <img class="" alt="" src="../assets/images/users/vi.jpg" />
-                  </a>
-                  <div class="ml-2 content-comment">
-                    <h6>Lê Bích Vi</h6>
-                    <div class="ml-0">
-                      <div class="mt-n1">Có free ship hong bạn ơi</div>
-                    </div>
-                    <!-- <div class="font-weight-bold pt-1 reply-comment">
-                                        <a href="" class="text-pie">Phản hồi</a>
-                                    </div> -->
+                    </div> -->
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <hr class="border-primaryx mb-2 mt-0 p-0" />
-          <div class="col-lg-12 mt-2 pb-0 pb-4 text-pink">
+          <div class="col-lg-12 mt-4 pb-0 pb-4 text-pink">
             <div class="d-flex justify-content-between">
               <h3 class="font-weight-bold ml-3">Nội dung bị báo cáo (4)</h3>
               <div class="name-user-detail mr-3">
@@ -257,10 +155,12 @@
             <div class="modal fade" id="disableModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
               aria-hidden="true">
               <div class="modal-dialog" role="document">
-                <div class="modal-content card">
+                <div class="modal-content card-modal" style="
+                width: 80%;
+                margin: 0 10%;">
                   <div class="modal-header ml-3 mr-3">
-                    <h5 class="modal-title text-pink" id="exampleModalLabel">
-                      Vô hiệu hóa bài viết của người dùng này?
+                    <h5 class="modal-title text-pink font-weight-bold" id="exampleModalLabel">
+                      Vô hiệu hóa bài viết của người dùng {{postDetail.user_fullname}}?
                     </h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close"
                       style="padding-top: 1.2rem">
@@ -273,77 +173,19 @@
                         <div class="row ml-0 mr-0 col-lg-12 pb-0 pb-4" style="flex-direction: unset">
                           <div class="col-lg-12">
                             <div class="avatar-group row text-pie pl-3 pt-4">
-                              <a href="#" class="avatar rounded-circle">
-                                <img class="" alt="Image placeholder" src="../assets/images/users/vinh.jpg" />
+                              <a (click)="selectUser(postDetail.user_email)" class="avatar rounded-circle">
+                                <img class="" alt="Image placeholder" src="{{postDetail.user_avartar}}" />
                               </a>
                               <div class="ml-3" style="padding-top: 0.1rem !important">
-                                <h5 style="font-weight: 600">Phùng Quốc Vinh</h5>
+                                <h5 style="font-weight: 600">{{postDetail.user_fullname}}</h5>
                                 <div class="row ml-0">
-                                  <div class="mt-n2">1 Ngày trước</div>
+                                  <div class="mt-n2">{{postDetail.date_Post}}</div>
                                   <i class="bx bx-world mt-n1 ml-3" style="font-size: 1rem"></i>
                                 </div>
                               </div>
                             </div>
                             <div class="pl-3 pt-3 text-pie" style="min-height: 60px">
-                              Tui có mấy món đồ không sài nữa muốn tặng cho bạn
-                              nào cần nè, Ai quan tâm ib tui nha!!!
-                            </div>
-                            <div class="col-lg-12 pt-4 mb-4">
-                              <div class="picture-collage">
-                                <div class="picture-collage-row medium">
-                                  <div class="picture-collage-item">
-                                    <div class="photo-preview-wrap">
-                                      <div class="photo-preview">
-                                        <div class="photo-preview-image" style="
-                                          background: url('../assets/images/product/home-decor-1.jpg')
-                                            center center / cover no-repeat;
-                                        "></div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="picture-collage-item">
-                                    <div class="photo-preview-wrap">
-                                      <div class="photo-preview">
-                                        <div class="photo-preview-image" style="
-                                          background: url('../assets/images/product/home-decor-2.jpg')
-                                            center center / cover no-repeat;
-                                        "></div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="picture-collage-row">
-                                  <div class="picture-collage-item">
-                                    <div class="photo-preview-wrap">
-                                      <div class="photo-preview">
-                                        <div class="photo-preview-image" style="
-                                          background: url('../assets/images/product/home-decor-3.jpg')
-                                            center center / cover no-repeat;
-                                        "></div>
-                                      </div>
-                                      <div></div>
-                                    </div>
-                                  </div>
-                                  <div class="picture-collage-item">
-                                    <div class="photo-preview-wrap">
-                                      <div class="photo-preview">
-                                        <div class="photo-preview-image" style="
-                                          background: url('../assets/images/product/home-decor-1.jpg')
-                                            center center / cover no-repeat;
-                                        "></div>
-                                      </div>
-                                      <div></div>
-                                    </div>
-                                  </div>
-                                  <div class="picture-collage-item">
-                                    <a class="picture-collage-item-overlay" href="">
-                                      <p class="picture-collage-item-overlay-text mb-0">
-                                        +1
-                                      </p>
-                                    </a>
-                                  </div>
-                                </div>
-                              </div>
+                              {{postDetail.content}}
                             </div>
                             <hr class="border-primaryx mt-3 mb-2 p-0" />
                             <div class="pl-4 pr-4 text-pie" style="
@@ -352,12 +194,12 @@
                             ">
                               <div class="row">
                                 <i class="bx bxs-heart text-pink"></i>
-                                <h6 class="mt-1 ml-1">3</h6>
+                                <h6 class="mt-1 ml-1">{{postDetail.totalInterested}}</h6>
                               </div>
                               <div class="row">
-                                <h6 class="mt-1 mr-1">4</h6>
+                                <h6 class="mt-1 mr-1">{{postDetail.totalComment}}</h6>
                                 <i class="bx bx-comment"></i>
-                                <h6 class="mt-1 ml-3 mr-1">3</h6>
+                                <h6 class="mt-1 ml-3 mr-1">{{postDetail.totalShare}}</h6>
                                 <i class="bx bx-share"></i>
                               </div>
                             </div>

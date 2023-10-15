@@ -312,7 +312,7 @@ export class MessageService {
         '</div>' +
         '</div>' +
         '</a>' +
-        '<p class="chat-widget-speaker-message" style="border-top-left-radius: 0; display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600; line-height: 1.1428571429em;width: fit-content;color: #3e3f5e;font-family: Helvetica, Arial, sans-serif;margin: 0;">' +
+        '<p class="chat-widget-speaker-message" style="border-top-left-radius: 0; display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600; line-height: 1.1428571429em;width: fit-content; max-width: 250px; word-wrap: break-word; white-space: normal ;color: #3e3f5e;font-family: Helvetica, Arial, sans-serif;margin: 0;">' +
         message +
         '</p>' +
         '<p class="chat-widget-speaker-timestamp" style="margin-top: 12px !important;color: #adafca;font-size: 0.75rem;font-weight: 500;font-family: Helvetica, Arial, sans-serif;line-height: 1em;margin: 0;">'

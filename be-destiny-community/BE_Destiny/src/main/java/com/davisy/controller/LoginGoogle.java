@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.davisy.auth.AuthenticationResponse;
 import com.davisy.auth.OAuthenticationRequest;
 import com.davisy.entity.User;
-import com.davisy.dao.UserDao;
+import com.davisy.dao.UserDAO;
 import com.davisy.encrypt.AES;
 import com.davisy.reponsitory.UsersReponsitory;
 import com.davisy.service.AuthenticationService;

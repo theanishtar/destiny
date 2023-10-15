@@ -25,120 +25,48 @@
           <div class="card mb-4 shadow">
             <div class="card-body p-4">
               <div class="row">
-                <div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
+                <div class="col-xl-3 col-md-6 mb-xl-0 mb-4" *ngFor="let post of listTOP4Post">
                   <div class="card card-blog card-plain">
-                    <div class="position-relative border-radius-lg shadow-img">
-                      <a href="post_detail.html" class="d-block">
-                        <img src="../assets/images/product/home-decor-1.jpg" alt="img-blur-shadow"
-                          class="img-fluid shadow border-radius-lg" />
+                    <div class="position-relative border-radius-lg ">
+                      <a (click)="selectPost(post.post_id)">
+                        <div class="picture-collage">
+                          <div class="picture-collage-row medium">
+                            <div class="picture-collage-item" style="width: 100% !important;">
+                              <div class="photo-preview-wrap">
+                                <div class="photo-preview">
+                                  <div class="photo-preview-image" style="
+                                    background: url('{{post.listPostImages[0].link_image}}')
+                                      center center / cover no-repeat;
+                                  "></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </a>
                     </div>
                     <div class="card-body px-1 pb-0">
-                      <p class="text-gradient text-dark mb-2 text-sm">Ghế sofa</p>
-                      <a href="user_detail.html">
-                        <h5>Phùng Quốc Vinh</h5>
+                      <p class="text-gradient text-dark mb-2 text-sm">{{post.product}}</p>
+                      <a (click)="selectUser(post.user_email)" type="button" class="text-pink">
+                        <h5>{{post.user_fullname}}</h5>
                       </a>
-                      <p class="mb-4 text-sm">
-                        Tui có mấy món đồ không sài nữa muốn tặng cho bạn nào cần
-                        nè, Ai quan tâm ib tui nha!!!
+                      <p class="mb-4 text-sm" style="min-height: 110px;">
+                        {{post.content}}
                       </p>
                       <div class="d-flex align-items-center justify-content-between">
-                        <a href="post_detail.html" type="button" class="btn btn-outline-primary">Xem chi tiết</a>
+                        <a (click)="selectPost(post.post_id)" type="button" class="btn btn-outline-primary">Xem chi
+                          tiết</a>
                         <div class="avatar-group mt-2">
-                          <a href="user_detail.html" class="avatar avatar-xs rounded-circle">
-                            <img alt=" Image placeholder" src="../assets/images/users/vinh.jpg" />
+                          <a (click)="selectUser(post.user_email)" type="button"
+                            class="avatar avatar-xs rounded-circle">
+                            <img alt=" Image placeholder" src="{{post.user_avartar}}" />
                           </a>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
-                  <div class="card card-blog card-plain">
-                    <div class="position-relative border-radius-lg shadow-img">
-                      <a href="post_detail.html" class="d-block">
-                        <img src="../assets/images/product/home-decor-2.jpg" alt="img-blur-shadow"
-                          class="img-fluid shadow border-radius-lg" />
-                      </a>
-                    </div>
-                    <div class="card-body px-1 pb-0">
-                      <p class="text-gradient text-dark mb-2 text-sm">
-                        Bộ chăn gối
-                      </p>
-                      <a href="user_detail.html">
-                        <h5>Nguyễn Khánh Đan</h5>
-                      </a>
-                      <p class="mb-4 text-sm">
-                        Tui có mấy món đồ không sài nữa muốn tặng cho bạn nào cần
-                        nè, Ai quan tâm ib tui nha!!!
-                      </p>
-                      <div class="d-flex align-items-center justify-content-between">
-                        <a href="post_detail.html" type="button" class="btn btn-outline-primary">Xem chi tiết</a>
-                        <div class="avatar-group mt-2">
-                          <a href="user_detail.html" class="avatar avatar-xs rounded-circle">
-                            <img alt=" Image placeholder" src="../assets/images/users/dan.jpg" />
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
-                  <div class="card card-blog card-plain">
-                    <div class="position-relative border-radius-lg shadow-img">
-                      <a href="post_detail.html" class="d-block">
-                        <img src="../assets/images/product/home-decor-3.jpg" alt="img-blur-shadow"
-                          class="img-fluid shadow border-radius-lg" />
-                      </a>
-                    </div>
-                    <div class="card-body px-1 pb-0">
-                      <p class="text-gradient text-dark mb-2 text-sm">Ghế ngồi</p>
-                      <a href="user_detail.html">
-                        <h5>Đoàn Hiệp Sỹ</h5>
-                      </a>
-                      <p class="mb-4 text-sm">
-                        Tui có mấy món đồ không sài nữa muốn tặng cho bạn nào cần
-                        nè, Ai quan tâm ib tui nha!!!
-                      </p>
-                      <div class="d-flex align-items-center justify-content-between">
-                        <a href="post_detail.html" type="button" class="btn btn-outline-primary">Xem chi tiết</a>
-                        <div class="avatar-group mt-2">
-                          <a href="user_detail.html" class="avatar avatar-xs rounded-circle">
-                            <img alt=" Image placeholder" src="../assets/images/users/sy.jpg" />
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
-                  <div class="card card-blog card-plain">
-                    <div class="position-relative border-radius-lg shadow-img">
-                      <a href="post_detail.html" class="d-block">
-                        <img src="../assets/images/product/home-decor-1.jpg" alt="img-blur-shadow"
-                          class="img-fluid shadow border-radius-lg" />
-                      </a>
-                    </div>
-                    <div class="card-body px-1 pb-0">
-                      <p class="text-gradient text-dark mb-2 text-sm">Đèn ngủ</p>
-                      <a href="user_detail.html">
-                        <h5>Lê Bích Vi</h5>
-                      </a>
-                      <p class="mb-4 text-sm">
-                        Tui có mấy món đồ không sài nữa muốn tặng cho bạn nào cần
-                        nè, Ai quan tâm ib tui nha!!!
-                      </p>
-                      <div class="d-flex align-items-center justify-content-between">
-                        <a href="post_detail.html" type="button" class="btn btn-outline-primary">Xem chi tiết</a>
-                        <div class="avatar-group mt-2">
-                          <a href="user_detail.html" class="avatar avatar-xs rounded-circle">
-                            <img alt=" Image placeholder" src="../assets/images/users/vi.jpg" />
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+
               </div>
             </div>
           </div>
@@ -158,7 +86,6 @@
               </div>
               <div class="bg-gradient-dark border-radius-lg m-1">
                 <div class="chart-area p-1">
-                  <!-- <canvas id="myAreaChart"></canvas> -->
                   <canvas #myAreaChart></canvas>
                 </div>
               </div>
@@ -172,18 +99,17 @@
             <!-- Card Body -->
             <div class="">
               <div class="chart-pie">
-                <!-- <canvas id="myPieChart"></canvas> -->
                 <canvas #myPieChart></canvas>
               </div>
               <div class="mt-4 text-center small text-pie">
                 <span class="mr-2">
-                  <i class="fas fa-circle text-primary"></i> Giày
+                  <i class="fas fa-circle text-pink"></i> {{ listNameTOP3Product[0] }}
                 </span>
                 <span class="mr-2">
-                  <i class="fas fa-circle text-success"></i> Bút
+                  <i class="fas fa-circle text-primary"></i> {{ listNameTOP3Product[1] }}
                 </span>
                 <span class="mr-2">
-                  <i class="fas fa-circle text-info"></i> Quần Áo
+                  <i class="fas fa-circle text-success"></i> {{ listNameTOP3Product[2] }}
                 </span>
               </div>
             </div>

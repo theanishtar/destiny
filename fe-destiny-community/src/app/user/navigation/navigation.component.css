@@ -64,6 +64,10 @@
     transition: all 0.3s ease-in-out 0s;
   }
 
+  a[data-title='Nhắn tin']:hover::after {
+    margin-top: -45px;
+  } 
+
   .user-avatar.small.no-outline.online.notif-mess:before {
     background: red;
 }

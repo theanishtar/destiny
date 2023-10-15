@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.davisy.reponsitory.UsersReponsitory;
 import com.davisy.service.UserService;
-import com.davisy.dao.UserDao;
+import com.davisy.dao.UserDAO;
 import com.davisy.entity.*;
 
 
@@ -32,7 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private UserService userService;
     
     @Autowired
-    private UserDao dao;
+    private UserDAO dao;
     
     com.davisy.entity.User user;
 

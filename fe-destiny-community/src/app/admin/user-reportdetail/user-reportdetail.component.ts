@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 import 'datatables.net';
 import '../../../assets/js/admin/database/datatables/jquery.dataTables.min.js'
 import '../../../assets/js/admin/database/datatables/dataTables.bootstrap4.js'
-import * as $e from 'jquery';
+import $e from 'jquery';
 
 declare var $: any;
 
@@ -11,8 +11,7 @@ declare var $: any;
   templateUrl: './user-reportdetail.component.html',
   styleUrls: [
     `../css/sb-admin-2.min.css`,
-    `../css/home.css`,
-    // `../css/datatables/dataTables.bootstrap4.min.css`,
+    `../css/home.css`
   ],
 })
 export class UserReportdetailComponent {
@@ -24,24 +23,26 @@ export class UserReportdetailComponent {
 
   ngAfterViewInit() {
 
-    $("#myCarousel").on("slide.bs.carousel", function (e: { relatedTarget: any; direction: string; }) {
-      var $e = $(e.relatedTarget);
-      var idx = $e.index();
-      var itemsPerSlide = 3;
-      var totalItems = $(".carousel-item").length;
+    $(document).ready(function () {
+      $("#myCarousel").on("slide.bs.carousel", function (e) {
+        var $e = $(e.relatedTarget);
+        var idx = $e.index();
+        var itemsPerSlide = 3;
+        var totalItems = $(".carousel-item").length;
 
-      if (idx >= totalItems - (itemsPerSlide - 1)) {
-        var it = itemsPerSlide - (totalItems - idx);
-        for (var i = 0; i < it; i++) {
-          // append slides to end
-          if (e.direction == "left") {
-            $(".carousel-item").eq(i).appendTo(".carousel-inner");
-          } else {
-            var $myCarousel = $("#myCarousel");
-            $(".carousel-item").eq(0).appendTo($myCarousel.find(".carousel-inner"));
+        if (idx >= totalItems - (itemsPerSlide - 1)) {
+          var it = itemsPerSlide - (totalItems - idx);
+          for (var i = 0; i < it; i++) {
+            // append slides to end
+            if (e.direction == "left") {
+              $(".carousel-item").eq(i).appendTo(".carousel-inner");
+            } else {
+              let $myCarousel = $("#myCarousel");
+              $(".carousel-item").eq(0).appendTo($myCarousel.find(".carousel-inner"));
+            }
           }
         }
-      }
+      });
     });
 
     $e(document).ready(function () {

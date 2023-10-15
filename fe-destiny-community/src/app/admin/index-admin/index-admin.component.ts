@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-// import '../../../assets/js/admin/chart.js/chartjs.min.js';
 import {Chart} from '../../../assets/js/admin/chart.js/chartjs.min.js';
+import { AdminIndexService } from '../service/admin-index.service';
 
 
 @Component({
@@ -13,11 +13,107 @@ export class IndexAdminComponent{
   @ViewChild('chartLine') chartLine: ElementRef | undefined;
   @ViewChild('chartBars') chartBars: ElementRef | undefined;
 
+  totalPost: number;
+  totalUser: number;
+  percentPostIncrease: number;
+  percentUserIncrease: number;
 
-  constructor() { }
+  percentPost: number;
+  percentPostString: string;
+  listTotalPostEveryMonth: number[];
+  listTotalUserEveryMonth: number[];
+  listInteraction: number[];
+  percentUserInteractionIncrease: number;
+
+  constructor(
+    private adminIndexService: AdminIndexService
+  )
+  {}
 
   ngAfterViewInit() {
+    localStorage.setItem("sidebarActive", "1");
+    this.loadTotalPost();
+    this.loadTotalUser();
+    this.loadPercentPostIncrease();
+    this.loadPercentUserIncrease();
+    this.loadPercentPost();
+    this.loadListTotalPostEveryMonth();
+    this.loadListTotalUserEveryMonth();
+    this.loadInteraction();
+    this.loadPercentUserInteractionIncrease();
+  }
 
+
+
+  loadTotalPost(){
+    this.adminIndexService.loadTotalPost().subscribe(() =>{
+      this.totalPost = 0;
+      this.totalPost = this.adminIndexService.getTotalPost();
+    })
+  }
+
+  loadTotalUser(){
+    this.adminIndexService.loadTotalUser().subscribe(() =>{
+      this.totalUser = 0;
+      this.totalUser = this.adminIndexService.getTotalUser();
+    })
+  }
+
+  loadPercentPostIncrease(){
+    this.adminIndexService.loadPercentPostIncrease().subscribe(() =>{
+      this.percentPostIncrease = 0;
+      this.percentPostIncrease = this.adminIndexService.getPercentPostIncrease();
+    })
+  }
+
+  loadPercentUserIncrease(){
+    this.adminIndexService.loadPercentUserIncrease().subscribe(() =>{
+      this.percentUserIncrease = 0;
+      this.percentUserIncrease = this.adminIndexService.getPercentUserIncrease();
+    })
+  }
+
+  loadPercentPost(){
+    this.adminIndexService.loadPercent().subscribe(() =>{
+      this.percentPost = 0;
+      this.percentPost = this.adminIndexService.getPercentPost();
+      this.percentPostString = this.percentPost + "%";
+    })
+  }
+
+  loadListTotalPostEveryMonth(){
+    this.adminIndexService.loadTotalPostEveryMonth().subscribe(() =>{
+      this.listTotalPostEveryMonth = [];
+      this.listTotalPostEveryMonth = this.adminIndexService.getListTotalPostEveryMonth();
+    })
+  }
+
+  loadListTotalUserEveryMonth(){
+    this.adminIndexService.loadTotalUserEveryMonth().subscribe(() =>{
+      this.listTotalUserEveryMonth = [];
+      this.listTotalUserEveryMonth = this.adminIndexService.getListTotalUserEveryMonth();
+    })
+  }
+
+  loadInteraction(){
+    this.adminIndexService.loadInteraction().subscribe(() =>{
+      this.listInteraction = [];
+      this.listInteraction = this.adminIndexService.getInteraction();
+
+      this.createChartLine();
+      this.createChartBar();
+    })
+  }
+
+  loadPercentUserInteractionIncrease(){
+    this.adminIndexService.loadPercentUserInteractionIncrease().subscribe(() =>{
+      this.percentUserInteractionIncrease = 0;
+      this.percentUserInteractionIncrease = this.adminIndexService.getPercentUserInteraction();
+    })
+  }
+
+
+  createChartLine(){
     // chartline
     if (this.chartLine) {
       try {
@@ -52,28 +148,28 @@ export class IndexAdminComponent{
         const newChart = new Chart(ctx2, {
           type: 'line',
           data: {
-            labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            labels: ["Jan", "Feb", "Mar","Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
             datasets: [
               {
-                label: "Mobile apps",
+                label: "Bài đăng",
                 tension: 0.4,
                 pointRadius: 0,
                 borderColor: "#cb0c9f",
                 borderWidth: 3,
                 backgroundColor: gradientStroke1,
                 fill: true,
-                data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
+                data: this.listTotalPostEveryMonth,
 
               },
               {
-                label: "Websites",
+                label: "Người dùng",
                 tension: 0.4,
                 pointRadius: 0,
                 borderColor: "#3A416F",
                 borderWidth: 3,
                 backgroundColor: gradientStroke2,
                 fill: true,
-                data: [30, 90, 40, 140, 290, 290, 340, 230, 400],
+                data: this.listTotalUserEveryMonth,
               },
             ],
           },
@@ -126,25 +222,26 @@ export class IndexAdminComponent{
         console.error('Chart creation error:', error);
       }
     }
+  }
 
+  createChartBar(){
     // chart bar
-
     if (this.chartBars) {
       try {
         const ctx = this.chartBars.nativeElement.getContext('2d');
         const newChart = new Chart(ctx, {
           type: "bar",
           data: {
-            labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            labels: ["Jan", "Feb", "Mar","Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
             datasets: [
               {
-                label: "Sales",
+                label: "Hoạt động",
                 tension: 0.4,
                 borderWidth: 0,
                 borderRadius: 4,
                 borderSkipped: false,
                 backgroundColor: "#fff",
-                data: [450, 200, 100, 220, 500, 100, 400, 230, 500],
+                data: this.listInteraction,
                 maxBarThickness: 6,
               },
             ],

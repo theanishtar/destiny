@@ -162,7 +162,7 @@ p.user-status-text {
   overflow: hidden;
   text-overflow: ellipsis;
   -webkit-line-clamp: 1;
-  display: -webkit-box;
+  /* display: -webkit-box; */
   -webkit-box-orient: vertical;
 }
 p.user-status-timestamp.count-mess {
@@ -326,10 +326,9 @@ i.fa-solid.fa-circle-exclamation {
 }
 
 .scrollToBottomButton {
-  position: fixed;
-  right: 147px;
-  bottom: 308px;
-  /* display: none; */
+  position: absolute;
+    right: 3%;
+    bottom: 3%;
   width: 30px;
   height: 30px;
   text-align: center;

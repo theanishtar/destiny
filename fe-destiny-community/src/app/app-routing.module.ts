@@ -33,6 +33,14 @@ import { UserDetailComponent } from './admin/user-detail/user-detail.component';
 import { UserManamentComponent } from './admin/user-manament/user-manament.component';
 import { UserReportdetailComponent } from './admin/user-reportdetail/user-reportdetail.component';
 
+// moderator
+import { PostReportComponent } from './moderator/post-report/post-report.component';
+import { PostReportDetailModeratorComponent } from './moderator/post-report-detail/post-report-detail.component';
+import { ProfileComponent } from './moderator/profile/profile.component';
+import { UserReportComponent } from './moderator/user-report/user-report.component';
+import { UserReportModeratorDetailComponent } from './moderator/user-report-detail/user-report-detail.component';
+import { ForbiddenWordComponent } from './moderator/forbidden-word/forbidden-word.component';
+
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
@@ -56,11 +64,7 @@ const routes: Routes = [
   { path: 'notifications', component: NotificationsComponent },
   { path: 'video-call', component: VideoCallComponent },
 
-  // {
-  //   path: 'admin',
-  //   loadChildren: () => import('./admin/index-admin/index-admin.component').then(m => m.IndexAdminComponent),
-  //   canActivate: [authGuard], 
-  // },
+
   { path: 'admin', component: IndexAdminComponent, canActivate: [authGuard] },
   { path: 'admin/postdetail', component: PostDetailComponent, canActivate: [authGuard] },
   { path: 'admin/postmanament', component: PostManamentComponent, canActivate: [authGuard] },
@@ -69,6 +73,14 @@ const routes: Routes = [
   { path: 'admin/userdetail', component: UserDetailComponent, canActivate: [authGuard] },
   { path: 'admin/usermanament', component: UserManamentComponent, canActivate: [authGuard] },
   { path: 'admin/userreportdetail', component: UserReportdetailComponent, canActivate: [authGuard] },
+
+  { path: 'moderator/post-report', component: PostReportComponent},
+  { path: 'moderator/post-report-detail', component: PostReportDetailModeratorComponent},
+  { path: 'moderator/profile', component: ProfileComponent},
+  { path: 'moderator/user-report', component: UserReportComponent},
+  { path: 'moderator/user-report-detail', component: UserReportModeratorDetailComponent},
+  { path: 'moderator/forbidden-word', component: ForbiddenWordComponent},
+
 
   { path: '**', component: Error404Component },
 ];

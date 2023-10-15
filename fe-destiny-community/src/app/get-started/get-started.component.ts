@@ -20,13 +20,12 @@ import Swal from 'sweetalert2';
 import '../../assets/toast/main.js';
 import { ActivatedRoute } from '@angular/router';
 declare var toast: any;
-
+import { HttpParams } from '@angular/common/http';
 import { LoginService } from '../service/login.service';
 import { RegisterService } from '@app/service/register.service';
 import { FollowsService } from '@app/user/service/follows.service';
 import { MessageService } from '@app/user/service/message.service';
-
-import { connectToChat } from '../../assets/js/chat/chat.js'
+import { environment } from 'src/environments/environment';
 @Component({
 	selector: 'app-get-started',
 	templateUrl: './get-started.component.html',
@@ -46,8 +45,9 @@ export class GetStartedComponent implements OnInit {
 	registerEmail: string = '';
 	registerPassword: string = '';
 	sender: any[];
-	orderby: any;
-	userLogGG: any[] = [];
+	token: any;
+	type: any;
+	// userLogGG: any[] = [];
 	userGG: any;
 	loggedIn: any;
 
@@ -64,93 +64,55 @@ export class GetStartedComponent implements OnInit {
 	) {
 		this.createFormLogin();
 		this.createFormRegister();
+		this.token = this.route.snapshot.queryParamMap.get('token')!;
+		this.type = this.route.snapshot.queryParamMap.get('type')!;
+
 	}
 
 	ngOnInit() {
 		this.loginWithGG();
 		// Giao diện
+		// Lấy giá trị của tham số "token" từ URL
 		tabs.tabs();
 		form.formInput();
 	}
+
 	/*===========Login with google===============*/
 	loginWithGG() {
-		this.route.queryParams.subscribe((params) => {
-			// this.orderby = params['sid'];
-			const token = params['token'];
-      		const type = params['type'];
-			  console.log("token1: " + token);
-			  console.log("type1: " + type);
-			function delay(ms: number) {
-				return new Promise(function (resolve) {
-					setTimeout(resolve, ms);
+		if (this.token != null && this.type != null) {
+			// this.router.navigate(['newsfeed']);
+			this.loginService.loginWithGG(this.token, this.type).subscribe((res) => {
+				// if (res !== undefined) {
+				if (res.roles[0].authority == 'ROLE_OWNER' || res.roles[0].authority == 'ROLE_ADMIN') {
+					window.location.href = 'http://localhost:4200/admin';
+					this.loginForm.reset();
+				} else if (res.roles[0].authority == 'ROLE_MODERATOR') {
+					window.location.href = 'http://localhost:4200/moderator/forbidden-word';
+					this.loginForm.reset();
+				} else {
+					this.router.navigate(['newsfeed']);
+					new toast({
+						title: 'Thành công!',
+						message: 'Đăng nhập thành công!',
+						type: 'success',
+						duration: 2000,
+					});
+				}
+				// }
+			}, (error) => {
+				this.router.navigate(['login']);
+				new toast({
+					title: 'Thất bại!',
+					message: 'Đăng nhập thất bại!',
+					type: 'error',
+					duration: 2000,
 				});
-			}
-
-			if (token !== undefined && type !== undefined) {
-				var data = {
-					token: token,
-					type: type,
-				};
-				console.log("token: " + token);
-				console.log("type: " + type);
-				this.loginService.loginAuth(data).subscribe((res) => {
-					// console.log("res: " + res)
-					if (res !== undefined) {
-						if (res.roles[0].authority == 'ROLE_OWNER' || res.roles[0].authority == 'ROLE_ADMIN' || res.roles[0].authority == 'ROLE_MODERATOR') {
-							// let userAdmin = {
-							// 	email: res.email,
-							// 	password: res.password,
-							// };
-							// this.logAdmin(userAdmin);
-							// window.location.href =
-							// 	'http://localhost:8080/oauth/rec/' +
-							// 	userAdmin.email +
-							// 	'/' +
-							// 	userAdmin.password;
-							// this.loginForm.reset();
-							window.location.href = 'http://localhost:4200/admin';
-							this.loginForm.reset();
-						} else {
-							this.userLogGG = JSON.parse(JSON.stringify(res));
-							this.setUserLogGG(this.userLogGG);
-							localStorage.setItem(
-								'token',
-								JSON.parse(JSON.stringify(this.getUserLogGG())).token
-							);
-							this.cookieService.set('full_name', res.name);
-							this.cookieService.set('role', res.roles[0].authority);
-
-							this.router.navigate(['newsfeed']);
-							new toast({
-								title: 'Thành công!',
-								message: 'Đăng nhập thành công!',
-								type: 'success',
-								duration: 2000,
-							});
-
-							// delay(2000).then((res) => {
-							// 	location.reload();
-							// });
-						}
-					}
-				});
-			}
-		});
+			});
+		}
 	}
 
-
-	// Getter
-	getUserLogGG(): any[] {
-		return this.userLogGG;
-	}
-
-	//   Setter
-	setUserLogGG(data: any[]): void {
-		this.userLogGG = data;
-	}
-
-	loginGGClick() {
-		window.location.href = 'https://accounts.google.com/gsi/select?client_id=829042615252-9cgbgmdc55famceanr15b20dq3kns76m&ux_mode=redirect&login_uri=http%3A%2F%2Flocalhost%3A8080%2Foauth%2FloginGG&ui_mode=card&as=tpphk8oJS9SGuKAiUmVKtg&g_csrf_token=2a42f6fd54be8af1&origin=http%3A%2F%2Flocalhost%3A4200';
+	loginFBClick() {
+		window.location.href = environment.baseUrl + 'oauth2/authorization/facebook';
 	}
 	/*===========Login with email and password===============*/
 	createFormLogin() {
@@ -187,20 +149,15 @@ export class GetStartedComponent implements OnInit {
 					) {
 						this.setCookie('sessionID', response.user.sesionId, 2);
 					}
-					if (response.roles[0].authority == 'ROLE_OWNER' || response.roles[0].authority == 'ROLE_ADMIN' || response.roles[0].authority == 'ROLE_MODERATOR') {
-						// let userAdmin = {
-						// 	email: this.loginForm.get('email')!.value,
-						// 	password: this.loginForm.get('password')!.value,
-						// };
-						// this.logAdmin(userAdmin);
-						// window.location.href =
-						// 	'http://localhost:8080/oauth/rec/' +
-						// 	userAdmin.email +
-						// 	'/' +
-						// 	userAdmin.password;
+					if (response.roles[0].authority == 'ROLE_OWNER' || response.roles[0].authority == 'ROLE_ADMIN') {
 						this.cookieService.set('full_name', response.name);
 						this.cookieService.set('role', response.roles[0].authority);
 						window.location.href = 'http://localhost:4200/admin';
+						this.loginForm.reset();
+					} else if (response.roles[0].authority == 'ROLE_MODERATOR') {
+						this.cookieService.set('full_name', response.name);
+						this.cookieService.set('role', response.roles[0].authority);
+						window.location.href = 'http://localhost:4200/moderator/forbidden-word';
 						this.loginForm.reset();
 					} else {
 						this.cookieService.set('full_name', response.name);
@@ -317,17 +274,6 @@ export class GetStartedComponent implements OnInit {
 			}
 		});
 	}
-
-
-	/*============Message==============*/
-	// loadDataSender() {
-	// 	this.messageService.loadDataListChat().subscribe(() => {
-	// 	  this.sender = JSON.parse(JSON.stringify(this.messageService.getDataChat()));
-	// 	  console.log("this.sender: " + this.sender);
-	// 	  connectToChat(this.sender);
-	// 	});
-	// }
-
 
 	/*============Template==============*/
 	showHidePassLogin() {

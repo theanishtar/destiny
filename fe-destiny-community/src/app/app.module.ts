@@ -51,6 +51,17 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { ConfirmSuccessComponent } from './get-started/confirm-success/confirm-success.component';
 import { LoadingComponent } from './user/loading/loading.component';
 import { VideoCallComponent } from './user/video-call/video-call.component';
+//admin / comboboxsearch
+//npm install --save @ng-select/ng-select
+import { NgSelectModule } from '@ng-select/ng-select';
+import { SidebarModeratorComponent } from './moderator/sidebar-moderator/sidebar-moderator.component';
+import { NavbarModeratorComponent } from './moderator/navbar-moderator/navbar-moderator.component';
+import { PostReportComponent } from './moderator/post-report/post-report.component';
+import { PostReportDetailModeratorComponent } from './moderator/post-report-detail/post-report-detail.component';
+import { ProfileComponent } from './moderator/profile/profile.component';
+import { UserReportComponent } from './moderator/user-report/user-report.component';
+import { UserReportModeratorDetailComponent } from './moderator/user-report-detail/user-report-detail.component';
+import { ForbiddenWordComponent } from './moderator/forbidden-word/forbidden-word.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -91,7 +102,15 @@ export function HttpLoaderFactory(http: HttpClient) {
     ConfirmSuccessComponent,
     DataSrcDirective,
     LoadingComponent,
-    VideoCallComponent
+    VideoCallComponent,
+    SidebarModeratorComponent,
+    NavbarModeratorComponent,
+    PostReportComponent,
+    PostReportDetailModeratorComponent,
+    ProfileComponent,
+    UserReportComponent,
+    UserReportModeratorDetailComponent,
+    ForbiddenWordComponent
   ],
   imports: [
     BrowserModule,
@@ -107,6 +126,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient],
       },
     }),
+    NgSelectModule,
   ],
   providers: [
     {

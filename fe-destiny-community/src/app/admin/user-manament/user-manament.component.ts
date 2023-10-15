@@ -1,5 +1,9 @@
 import {  Component, ElementRef, OnInit, ViewChild  } from '@angular/core';
 import {Chart} from '../../../assets/js/admin/chart.js/chartjs.min.js';
+import { AdminUsermanagementService } from '../service/admin-usermanagement.service';
+import { AdminIndexService } from '../service/admin-index.service';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-user-manament',
@@ -9,9 +13,46 @@ import {Chart} from '../../../assets/js/admin/chart.js/chartjs.min.js';
 export class UserManamentComponent {
   @ViewChild('chartline') chartLine: ElementRef | undefined;
 
-  constructor() {}
+  listTOP4User: any[] = [{},{},{},{}];
+  listTotalUserEveryMonth: number[];
+
+
+  constructor(
+    private adminUsermanagementService: AdminUsermanagementService,
+    private adminIndexService: AdminIndexService,
+    private routers: Router,
+  )
+  {}
 
   ngAfterViewInit() {
+    this.loadTOP4User();
+    this.loadListTotalUserEveryMonth();
+
+
+  }
+
+  selectUser(email: string): void{
+    localStorage.setItem("userDetailEmail", email);
+    this.routers.navigate(['/admin/userdetail']);
+  }
+
+  loadTOP4User() {
+    this.adminUsermanagementService.loadTOP4User().subscribe(() => {
+      this.listTOP4User = [];
+      this.listTOP4User = this.adminUsermanagementService.getTOP4User();
+    });
+  }
+
+  loadListTotalUserEveryMonth(){
+    this.adminIndexService.loadTotalUserEveryMonth().subscribe(() =>{
+      this.listTotalUserEveryMonth = [];
+      this.listTotalUserEveryMonth = this.adminIndexService.getListTotalUserEveryMonth();
+
+      this.createChartLine();
+    })
+  }
+
+  createChartLine(){
     if(this.chartLine){
       var ctx1 = this.chartLine.nativeElement.getContext('2d');
 
@@ -23,7 +64,7 @@ export class UserManamentComponent {
       var userChart = new Chart(ctx1, {
         type: "line",
         data: {
-          labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+          labels: ["Jan", "Feb","Mar", "Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
           datasets: [
             {
               label: "Người dùng",
@@ -33,7 +74,7 @@ export class UserManamentComponent {
               backgroundColor: gradientStroke1,
               borderWidth: 3,
               fill: true,
-              data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
+              data: this.listTotalUserEveryMonth,
               maxBarThickness: 6,
             },
           ],
@@ -89,6 +130,6 @@ export class UserManamentComponent {
       });
 
     }
-
   }
+
 }

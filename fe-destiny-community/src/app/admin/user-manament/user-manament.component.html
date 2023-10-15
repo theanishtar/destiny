@@ -30,8 +30,8 @@
             <div class="row justify-content-center">
               <div class="col-6 col-lg-6 order-lg-2">
                 <div class="mt-n7 mt-lg-n6 mb-4 mb-lg-0">
-                  <a href="user_detail.html">
-                    <img src="../assets/images/users/dang.jpg"
+                  <a (click)="selectUser(listTOP4User[0].email)" type="button">
+                    <img src="{{ listTOP4User[0].avartar }}"
                       class="rounded-circle img-fluid border border-2 border-white" alt="" />
                   </a>
                 </div>
@@ -42,15 +42,15 @@
                 <div class="col">
                   <div class="d-flex justify-content-center">
                     <div class="d-grid text-center">
-                      <span class="text-lg font-weight-bolder text-pink">22</span>
-                      <span class="text-sm opacity-8">Bạn bè</span>
+                      <span class="text-lg font-weight-bolder text-pink"> {{ listTOP4User[0].totalFollower }}</span>
+                      <span class="text-sm opacity-8">Người theo dõi</span>
                     </div>
                     <div class="d-grid text-center mx-4">
-                      <span class="text-lg font-weight-bolder text-pink">30</span>
+                      <span class="text-lg font-weight-bolder text-pink"> {{ listTOP4User[0].totalPost }} </span>
                       <span class="text-sm opacity-8">Bài đăng</span>
                     </div>
                     <div class="d-grid text-center">
-                      <span class="text-lg font-weight-bolder text-pink">89</span>
+                      <span class="text-lg font-weight-bolder text-pink"> {{ listTOP4User[0].totalComment }} </span>
                       <span class="text-sm opacity-8">Bình luận</span>
                     </div>
                   </div>
@@ -58,10 +58,11 @@
               </div>
               <div class="text-center mt-4">
                 <h5 class="font-weight-bold">
-                  Trần Hữu Đang<span class="font-weight-light">, 20 tuổi</span>
+                  <a (click)="selectUser(listTOP4User[0].user_email)" type="button">{{ listTOP4User[0].fullname }}</a>
+                  <span class="font-weight-light">, {{ listTOP4User[0].age }} tuổi</span>
                 </h5>
                 <div class="h6 font-weight-bold">
-                  <i class="ni location_pin mr-2"></i>Hậu giang, Việt Nam
+                  <i class="ni location_pin mr-2"></i> {{ listTOP4User[0].location }}
                 </div>
               </div>
             </div>
@@ -77,20 +78,22 @@
                   </h2>
                   <div class="card card-blog card-plain mt-4">
                     <div class="position-relative">
-                      <a href="user_detail.html" class="d-block user">
-                        <img src="../assets/images/users/vi.jpg" alt="img-blur-shadow"
+                      <a (click)="selectUser(listTOP4User[1].email)" type="button" class="d-block user">
+                        <img src="{{ listTOP4User[1].avartar }}" alt="img-blur-shadow"
                           class="img-fluid border-radius-lg shadow-img border" />
                       </a>
                     </div>
                     <div class="text-center mt-4 text-pie">
-                      <h5 class="font-weight-bold">Lê Bích Vi</h5>
-                      <h5 class="font-weight-light">20 tuổi</h5>
+                      <a (click)="selectUser(listTOP4User[1].email)" type="button">
+                        <h5 class="font-weight-bold"> {{ listTOP4User[1].fullname }} </h5>
+                      </a>
+                      <h5 class="font-weight-light"> {{ listTOP4User[1].age }} tuổi</h5>
                     </div>
                     <div class="row mt-2 mb-4">
                       <div class="col">
                         <div class="d-flex justify-content-center">
                           <div class="d-grid text-center mx-4">
-                            <span class="text-lg font-weight-bolder text-pink">28</span>
+                            <span class="text-lg font-weight-bolder text-pink">{{ listTOP4User[1].totalPost }}</span>
                             <span class="text-sm opacity-8 text-pie">Bài đăng</span>
                           </div>
                         </div>
@@ -104,20 +107,22 @@
                   </h2>
                   <div class="card card-blog card-plain mt-4">
                     <div class="position-relative">
-                      <a href="user_detail.html" class="d-block user">
-                        <img src="../assets/images/users/vinh.jpg" alt="img-blur-shadow"
+                      <a (click)="selectUser(listTOP4User[2].email)" type="button" class="d-block user">
+                        <img src="{{ listTOP4User[2].avartar }}" alt="img-blur-shadow"
                           class="img-fluid border-radius-lg shadow-img border" />
                       </a>
                     </div>
                     <div class="text-center mt-4 text-pie">
-                      <h5 class="font-weight-bold">Quốc Vinh</h5>
-                      <h5 class="font-weight-light">20 tuổi</h5>
+                      <a (click)="selectUser(listTOP4User[2].email)" type="button">
+                        <h5 class="font-weight-bold"> {{ listTOP4User[2].fullname }} </h5>
+                      </a>
+                      <h5 class="font-weight-light"> {{ listTOP4User[2].age }} tuổi</h5>
                     </div>
                     <div class="row mt-2 mb-4">
                       <div class="col">
                         <div class="d-flex justify-content-center">
                           <div class="d-grid text-center mx-4">
-                            <span class="text-lg font-weight-bolder text-pink">26</span>
+                            <span class="text-lg font-weight-bolder text-pink"> {{ listTOP4User[2].totalPost }} </span>
                             <span class="text-sm opacity-8 text-pie">Bài đăng</span>
                           </div>
                         </div>
@@ -131,20 +136,22 @@
                   </h2>
                   <div class="card card-blog card-plain mt-4">
                     <div class="position-relative">
-                      <a href="user_detail.html" class="d-block user">
-                        <img src="../assets/images/users/sy.jpg" alt="img-blur-shadow"
+                      <a (click)="selectUser(listTOP4User[3].email)" type="button" class="d-block user">
+                        <img src="{{ listTOP4User[3].avartar }}" alt="img-blur-shadow"
                           class="img-fluid border-radius-lg shadow-img border" />
                       </a>
                     </div>
                     <div class="text-center mt-4 text-pie">
-                      <h5 class="font-weight-bold">Đoàn Hiệp Sỹ</h5>
-                      <h5 class="font-weight-light">20 tuổi</h5>
+                      <a (click)="selectUser(listTOP4User[3].email)" type="button">
+                        <h5 class="font-weight-bold"> {{ listTOP4User[3].fullname }} </h5>
+                      </a>
+                      <h5 class="font-weight-light"> {{ listTOP4User[3].age }} tuổi</h5>
                     </div>
                     <div class="row mt-2 mb-4">
                       <div class="col">
                         <div class="d-flex justify-content-center">
                           <div class="d-grid text-center mx-4">
-                            <span class="text-lg font-weight-bolder text-pink">23</span>
+                            <span class="text-lg font-weight-bolder text-pink"> {{ listTOP4User[3].totalPost }} </span>
                             <span class="text-sm opacity-8 text-pie">Bài đăng</span>
                           </div>
                         </div>

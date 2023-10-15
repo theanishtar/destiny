@@ -1,5 +1,4 @@
 import { Component, HostListener, Renderer2, ElementRef, QueryList, ViewChildren } from '@angular/core';
-import { LocalService } from '@app/local.service';
 
 @Component({
   selector: 'app-sidebar-admin',
@@ -12,9 +11,15 @@ export class SidebarAdminComponent {
   @ViewChildren('mainColorLink')
   mainColorLinks!: QueryList<ElementRef>;
 
-
-  j = 0;
   ngAfterViewInit(): void {
+    const bodyElement = document.querySelector('.body-admin');
+    const sidebarElement = document.querySelector('.sidebarD');
+    const colortheme = localStorage.getItem("colortheme");
+    if (bodyElement) {
+      this.renderer.addClass(bodyElement, String(colortheme));
+      this.renderer.addClass(sidebarElement, String(colortheme));
+    }
+
     const sideLinks: NodeListOf<HTMLElement> = document.querySelectorAll(
       ".sidebarD .side-menu li a:not(.logout):not(.clickSetting)"
     );
@@ -53,16 +58,20 @@ export class SidebarAdminComponent {
 
   setMainColor(value: string) {
     const bodyElement = document.querySelector('.body-admin'); // Select the div with class 'body'
-    const classname = bodyElement?.className.toString;
+    const sidebarElement = document.querySelector('.sidebarD');
     this.mainColor.forEach((item: string) => {
       if (!item.match(value)) {
         if (bodyElement) {
           this.renderer.removeClass(bodyElement, item);
+          this.renderer.removeClass(sidebarElement, item);
+          localStorage.removeItem("colortheme");
         }
       }
     });
     if (bodyElement) {
       this.renderer.addClass(bodyElement, value);
+      this.renderer.addClass(sidebarElement, value);
+      localStorage.setItem("colortheme", value);
     }
   }
 
@@ -93,8 +102,6 @@ export class SidebarAdminComponent {
   }
 
   private toggleSidebar(): void {
-      // get sidebar from local
-    // const sideBarSmall = localStorage.getItem("sidebarSmall");
     const sideBar = document.querySelector('.sidebarD');
     const contentClose = document.querySelector('.content');
     if (sideBar) {
@@ -102,14 +109,8 @@ export class SidebarAdminComponent {
           this.renderer.addClass(sideBar, 'closeD');
           this.renderer.addClass(contentClose, 'contentCloseD');
       } else {
-          // if(sideBarSmall?.match("true")){
-          //   this.renderer.addClass(sideBar, 'closeD');
-          //   this.renderer.addClass(contentClose, 'contentCloseD');
-          // }
-          // else{
-            this.renderer.removeClass(sideBar, 'closeD');
-            this.renderer.removeClass(contentClose, 'contentCloseD');
-          // }
+          this.renderer.removeClass(sideBar, 'closeD');
+          this.renderer.removeClass(contentClose, 'contentCloseD');
       }
     }
   }

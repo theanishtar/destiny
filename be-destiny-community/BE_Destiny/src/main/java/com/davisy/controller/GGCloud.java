@@ -18,6 +18,7 @@ import com.davisy.entity.User;
 import com.davisy.service.RolesService;
 import com.davisy.service.UserService;
 import com.davisy.service.impl.RolesServiceImpl;
+import com.davisy.service.impl.UserServiceImpl;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -30,7 +31,7 @@ public class GGCloud {
     private String uri;
 	
 	@Autowired
-	private UserService userService;
+	private UserServiceImpl userService;
 
 	@Autowired
 	HttpServletRequest httpServletRequest;
@@ -77,9 +78,9 @@ public class GGCloud {
 
 			User checkUser = userService.findByEmail(usgc.get("email").asText());
 			if (checkUser != null) {
-				String emailEnc = aes.EncryptAESfinal(checkUser.getEmail());
-				System.err.println(emailEnc);
-				m.addAttribute("dataEnc", emailEnc);
+				m.addAttribute("token", checkUser.getGg_id());
+				m.addAttribute("type", "google");
+				m.addAttribute("uri", uri);
 			} else {
 				User user = new User();
 				String uname = usgc.get("email").asText();
@@ -113,9 +114,6 @@ public class GGCloud {
 					userService.create(user);
 				}
 
-				String emailEnc = aes.EncryptAESfinal(user.getEmail());
-
-				System.err.println(emailEnc);
 				m.addAttribute("token", user.getGg_id());
 				m.addAttribute("type", "google");
 				m.addAttribute("uri", uri);

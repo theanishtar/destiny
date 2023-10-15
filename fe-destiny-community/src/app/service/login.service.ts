@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment'
@@ -22,6 +22,7 @@ export class LoginService {
 	private userLogout = environment.baseUrl + 'v1/user/logoutchat';
 
 	private userLogined: any[] = [];
+	userLogGG: any[] = [];
 
 	loginUser(data: any): Observable<any> {
 		return this.http.post<any>(this.userURL, data)
@@ -91,32 +92,21 @@ export class LoginService {
 			);
 	}
 
-	status: string;
-	loginAuth(data: any) {
-		//alert("dataparsms:"+data);
-		// var strData = { data: data };
-		// return this.http.post(this.userURL, data);
-		return this.http.post<any>(this.userLoginAuth, data).pipe(
+	loginWithGG(token: string, type: string): Observable<any> {
+		const params = new HttpParams({ fromObject: { token: token, type: type } });
+		return this.http.get<any>(this.userLoginAuth, { params: params }).pipe(
 			tap((res) => {
-				this.userLogined = JSON.parse(JSON.stringify(res));
-				this.setUserLog(this.userLogined);
-				console.warn(this.userLogined);
+				this.setUserLogGG(JSON.parse(JSON.stringify(res)));
 				localStorage.setItem(
 					'token',
-					JSON.parse(JSON.stringify(this.getUserLog())).token
+					JSON.parse(JSON.stringify(this.getUserLogGG())).token
 				);
-			}),
-			catchError((error) => of([]))
+				this.cookieService.set('full_name', res.name);
+				this.cookieService.set('role', res.roles[0].authority);
+
+			})
 		);
 	}
-
-	// GetLogout() {
-	// 	return this.http.get<any>(this.userLogout).pipe(
-	// 	  tap((response) => {
-
-	// 	  }),
-	// 	);
-	//   }
 
 	constructor(
 		private http: HttpClient,
@@ -189,5 +179,16 @@ export class LoginService {
 	//   Setter
 	setUserLog(data: any[]): void {
 		this.userLogined = data;
+	}
+
+	
+	// Getter
+	getUserLogGG(): any[] {
+		return this.userLogGG;
+	}
+
+	//   Setter
+	setUserLogGG(data: any[]): void {
+		this.userLogGG = data;
 	}
 }

@@ -24,6 +24,10 @@ export class TokenInterceptor implements HttpInterceptor {
 			return next.handle(request);
 		}
 
+		if (request.url.includes('/v1/oauth/login/oauh2')) {
+			return next.handle(request);
+		}
+
 		// Lấy token từ AuthService
 		const token = localStorage.getItem('token') || null;
 

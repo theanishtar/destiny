@@ -1,5 +1,5 @@
 import { Component,  ElementRef, Renderer2, ViewChild } from '@angular/core';
-import { LocalService } from '@app/local.service';
+import { AdminProfileService } from '../service/admin-profile.service';
 
 @Component({
   selector: 'app-navbar-admin',
@@ -9,10 +9,29 @@ import { LocalService } from '@app/local.service';
 export class NavbarAdminComponent {
   @ViewChild('themeToggle') themeToggle: ElementRef | undefined;
 
-  constructor(private renderer: Renderer2, private localStore: LocalService) {}
+  adminAvartar: any = {};
+
+  constructor(
+    private renderer: Renderer2,
+    private adminProfileService: AdminProfileService
+
+  ) {}
 
   ngAfterViewInit() {
 
+    this.loadAdminAvartar();
+    this.setDark();
+  }
+
+  loadAdminAvartar(){
+    const getAvartar = "getAvartar";
+    this.adminProfileService.loadAdminData(getAvartar).subscribe(() =>{
+      this.adminAvartar = {};
+      this.adminAvartar = this.adminProfileService.getAdmin();
+    })
+  }
+
+  setDark(){
     // get dark theme from local
     const darktheme = localStorage.getItem("darktheme");
     if(darktheme?.match("true")){
@@ -28,28 +47,12 @@ export class NavbarAdminComponent {
         if (this.themeToggle?.nativeElement.checked) {
           this.setBodyClass('dark');
           localStorage.setItem("darktheme", "true");
-          // console.log("yo");
         } else {
           this.setBodyClass(''); // Remove the 'dark' class
           localStorage.setItem("darktheme", "false");
-          // console.log("yo2");
         }
       });
     }
-
-    // get sidebar from local
-    const sideBar = document.querySelector('.sidebarD');
-    const contentClose = document.querySelector('.content');
-    // const sideBarSmall = localStorage.getItem("sidebarSmall");
-
-    // if(sideBarSmall?.match("true")){
-    //   this.renderer.addClass(sideBar, 'closeD');
-    //   this.renderer.addClass(contentClose, 'contentCloseD');
-    // }else if(sideBarSmall?.match("false")) {
-    //   this.renderer.removeClass(sideBar, 'closeD');
-    //   this.renderer.removeClass(contentClose, 'contentCloseD');
-    // }
-
   }
 
   setBodyClass(className: string) {
@@ -79,12 +82,10 @@ export class NavbarAdminComponent {
         this.temp = true;
         this.renderer.addClass(sideBar, 'closeD');
         this.renderer.addClass(contentClose, 'contentCloseD');
-        localStorage.setItem("sidebarSmall", "true");
     } else {
       this.temp = false;
       this.renderer.removeClass(sideBar, 'closeD');
       this.renderer.removeClass(contentClose, 'contentCloseD');
-      localStorage.setItem("sidebarSmall", "false");
     }
   }
 

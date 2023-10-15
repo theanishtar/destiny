@@ -90,6 +90,27 @@ li {
   --light-admin-blur: #181a1ecc;
 }
 
+.sidebarD.pink {
+  --primary-admin: #da277b;
+}
+
+.sidebarD.blue {
+  --primary-admin: #1976d2;
+}
+
+.sidebarD.green {
+  --primary-admin: #02ae02;
+  --success-admin: var(--danger-admin);
+}
+
+.sidebarD.orange {
+  --primary-admin: #f67f43;
+}
+
+.sidebarD.cyan {
+  --primary-admin: #02a2ae;
+}
+
 .sidebarD {
   position: fixed;
   top: 0;
@@ -471,6 +492,16 @@ li {
   background-color: var(--light-admin);
   border-radius: 1.4rem;
   border: none;
+}
+
+.card-modal {
+  background-color: var(--dark-admin);
+  border-radius: 1.4rem;
+  border: none;
+}
+
+.card-modal .text-modal {
+  color: var(--light-admin);
 }
 
 .h5 div {
@@ -875,53 +906,6 @@ table tr td .status.pending {
   box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
 }
 
-/* .autocomplete-input {
-    color: var(--primary-admin);
-    border: 1px solid var(--dark-admin);
-    width: 100%;
-    padding: 8px;
-    font-size: 16px;
-    line-height: 1.5;
-    flex: 1;
-}
-
-.autocomplete-results {
-    position: absolute;
-    margin-top: -1px;
-    padding: 0.5rem 0.75rem;
-    font-weight: 400;
-    line-height: 1.4rem;
-    color: var(--primary-admin);
-    background-color: var(--grey-admin) !important;
-    background-clip: padding-box;
-    border: 1px solid var(--dark-admin);
-    appearance: none;
-    border-radius: 0.5rem;
-    z-index: 1;
-    list-style: none;
-    transition: none;
-}
-
-.autocomplete-result {
-    cursor: default;
-    padding: 4px 8px;
-}
-
-.autocomplete-result:hover {
-    background: rgba(0, 0, 0, 0.12);
-}
-
-.autocomplete-result.selected {
-    background: rgba(0, 0, 0, 0.12);
-}
-
- */
-
-/* .hidden {
-    display: none;
-    opacity: 0;
-} */
-
 .form-profile {
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
@@ -965,7 +949,8 @@ table tr td .status.pending {
   margin-bottom: 0.25em;
 }
 
-.combo-menu {
+
+.ng-dropdown-panel {
   color: var(--primary-admin);
   background-color: #fff !important;
   background-clip: padding-box;
@@ -1460,10 +1445,6 @@ ul {
 }
 
 
-.modal-backdrop {
-  z-index: 999 !important;
-}
-
 .dialog-logout {
   width: 50% !important;
   margin: 0 25% !important;
@@ -1494,3 +1475,4 @@ ul {
 .fas {
   font-family: "Font Awesome 6 Free";
 }
+

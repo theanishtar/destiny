@@ -182,7 +182,7 @@ export class MessageComponent implements OnInit {
               '</div>' +
               '</div>' +
               '</a>' +
-              '<p class="chat-widget-speaker-message" style="border-top-left-radius: 0; display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600; line-height: 1.1428571429em;width: fit-content;color: #3e3f5e;font-family: Helvetica, Arial, sans-serif;margin: 0;">' +
+              '<p class="chat-widget-speaker-message" style="border-top-left-radius: 0; display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600; line-height: 1.1428571429em;width: fit-content; max-width: 250px; word-wrap: break-word; white-space: normal; color: #3e3f5e;font-family: Helvetica, Arial, sans-serif;margin: 0;">' +
               m[1] +
               '</p>' +
               '<p class="chat-widget-speaker-timestamp" style="margin-top: 12px !important;color: #adafca;font-size: 0.75rem;font-weight: 500;font-family: Helvetica, Arial, sans-serif;line-height: 1em;margin: 0;">'
@@ -191,8 +191,8 @@ export class MessageComponent implements OnInit {
             );
           } else {
             this.$chatHistory.append(
-              '<div class="chat-widget-speaker right" style="margin-top: 16px; padding-left: 64px; align-items: flex-end; display: flex; flex-flow: column; position: relative;">' +
-              ' <p class="chat-widget-speaker-message" style="border-top-right-radius: 0; background-color: #615dfa !important; font-family: Helvetica, Arial, sans-serif !important; margin-bottom: 0 !important; color: #fff;display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600;line-height: 1.1428571429em;width: fit-content;">'
+              '<div class="chat-widget-speaker right" style=" padding-left: 64px; align-items: flex-end; display: flex; flex-flow: column; position: relative;">' +
+              ' <p class="chat-widget-speaker-message" style="border-top-right-radius: 0; background-color: #615dfa !important; font-family: Helvetica, Arial, sans-serif !important; margin-bottom: 0 !important; color: #fff;display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600;line-height: 1.1428571429em;width: auto; max-width: 250px; word-wrap: break-word; white-space: normal;">'
               + m[1] +
               '</p>' +
               '<p class="chat-widget-speaker-timestamp" style="margin-top: 12px; margin-bottom: 0 !important; color: #adafca;font-size: 0.75rem;font-weight: 500; font-family: Helvetica, Arial, sans-serif !important;line-height: 1em;">'
@@ -240,8 +240,8 @@ export class MessageComponent implements OnInit {
       this.scrollToBottom();
 
       this.$chatHistory.append(
-        '<div class="chat-widget-speaker right" style="margin-top: 16px; padding-left: 64px; align-items: flex-end; display: flex; flex-flow: column; position: relative;">' +
-        ' <p class="chat-widget-speaker-message" style="border-top-right-radius: 0; background-color: #615dfa !important; font-family: Helvetica, Arial, sans-serif !important; margin-bottom: 0 !important; color: #fff;display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600;line-height: 1.1428571429em;width: fit-content;">'
+        '<div class="chat-widget-speaker right" style=" padding-left: 64px; align-items: flex-end; display: flex; flex-flow: column; position: relative;">' +
+        ' <p class="chat-widget-speaker-message" style="border-top-right-radius: 0; background-color: #615dfa !important; font-family: Helvetica, Arial, sans-serif !important; margin-bottom: 0 !important; color: #fff;display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600;line-height: 1.1428571429em;width: auto; max-width: 250px; word-wrap: break-word; white-space: normal;">'
         + message +
         '</p>' +
         '<p class="chat-widget-speaker-timestamp" style="margin-top: 12px; margin-bottom: 0 !important; color: #adafca;font-size: 0.75rem;font-weight: 500; font-family: Helvetica, Arial, sans-serif !important;line-height: 1em;">'
@@ -276,7 +276,7 @@ export class MessageComponent implements OnInit {
       '<div class="date-send" style="text-align: center;font-size: 12px;">' +
       this.checkDate(date) +
       '</div>' +
-      '</div>';
+      '</div> <br>';
     return d;
   }
   checkDate(date: string) {

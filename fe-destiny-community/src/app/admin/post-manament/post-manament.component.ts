@@ -1,5 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild  } from '@angular/core';
 import { Chart } from '../../../assets/js/admin/chart.js/chart.min.js';
+import { AdminPostmanagementService } from '../service/admin-postmanagement.service';
+import { AdminIndexService } from '../service/admin-index.service';
+import { forEach } from 'angular';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-post-manament',
@@ -11,8 +16,73 @@ export class PostManamentComponent  {
   @ViewChild('myAreaChart') chartLine: ElementRef | undefined;
   @ViewChild('myPieChart') chartPie: ElementRef | undefined;
 
-  ngAfterViewInit() {
+  listTOP4Post: any[] = [];
+  listTotalPostEveryMonth: number[];
+  listTOP3Product: any[];
+  listNameTOP3Product: string[] = [];
+  listDataTOP3Product: number[];
+  product1: string;
+  product2: string;
+  product3: string;
+  postDetail: any;
 
+  constructor(
+    private adminPostmanagementService: AdminPostmanagementService,
+    private adminIndexService: AdminIndexService,
+    private routers: Router,
+  )
+  {}
+
+  ngAfterViewInit() {
+    this.loadTOP4Post();
+    this.loadListTotalPostEveryMonth();
+    this.loadTOP3Product();
+  }
+
+  selectPost(id: string): void{
+    localStorage.setItem("postDetailId", id);
+    this.routers.navigate(['/admin/postdetail']);
+  }
+
+  selectUser(email: string): void{
+    localStorage.setItem("userDetailEmail", email);
+    this.routers.navigate(['/admin/userdetail']);
+  }
+
+  loadTOP4Post() {
+    this.adminPostmanagementService.loadTOP4Post().subscribe(() => {
+      this.listTOP4Post = [];
+      this.listTOP4Post = this.adminPostmanagementService.getTOP4Post();
+    });
+  }
+
+  loadListTotalPostEveryMonth(){
+    this.adminIndexService.loadTotalPostEveryMonth().subscribe(() =>{
+      this.listTotalPostEveryMonth = [];
+      this.listTotalPostEveryMonth = this.adminIndexService.getListTotalPostEveryMonth();
+
+      this.createChartLine();
+    })
+  }
+
+  loadTOP3Product(){
+    this.adminPostmanagementService.loadTOP3Product().subscribe(() => {
+      this.listTOP3Product = [];
+      this.listNameTOP3Product = [];
+      this.listDataTOP3Product = [];
+      this.listTOP3Product = this.adminPostmanagementService.getTOP3Product();
+      const i = 0;
+      this.listTOP3Product.forEach(element => {
+        this.listNameTOP3Product.push(element[0]);
+        this.listDataTOP3Product.push(element[1]);
+      });
+
+      this.createChartPie();
+    });
+  }
+
+
+  createChartLine(){
     function number_format(number, decimals, dec_point, thousands_sep): string {
       number = (number + "").replace(",", "").replace(" ", "");
       const n = !isFinite(+number) ? 0 : +number;
@@ -38,12 +108,13 @@ export class PostManamentComponent  {
     if (this.chartLine) {
       // Area Chart Example
       var ctx = this.chartLine.nativeElement.getContext('2d');
+      Chart.defaults.global.defaultFontColor = "#8fff";
 
       var gradientStroke1 = ctx.createLinearGradient(0, 230, 0, 50);
 
       // Add white and transparent color stops to the gradient
-      gradientStroke1.addColorStop(1, "rgba(255, 255, 255, 1)"); // White
-      gradientStroke1.addColorStop(0.8, "rgba(255, 255, 255, 0.5)"); // Semi-transparent white
+      gradientStroke1.addColorStop(1, "rgba(255, 255, 255, 0.6)"); // White
+      gradientStroke1.addColorStop(0.8, "rgba(255, 255, 255, 0.4)"); // Semi-transparent white
       gradientStroke1.addColorStop(0, "rgba(255, 255, 255, 0)"); // Fully transparent
 
       // Apply the gradient stroke to a shape's strokeStyle
@@ -59,7 +130,7 @@ export class PostManamentComponent  {
       var myLineChart = new Chart(ctx, {
         type: "line",
         data: {
-          labels: ["Jan", "Feb","Mar", "Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",],
+          labels: ["Jan", "Feb","Mar", "Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
           datasets: [
             {
               label: "Tổng ",
@@ -74,7 +145,7 @@ export class PostManamentComponent  {
               pointHoverBorderColor: "white",
               pointHitRadius: 10,
               pointBorderWidth: 2,
-              data: [0, 10, 5, 15, 10, 20, 15, 25, 20, 30, 25, 100],
+              data: this.listTotalPostEveryMonth,
             },
           ],
         },
@@ -152,17 +223,19 @@ export class PostManamentComponent  {
         },
       });
     }
+  }
 
+  createChartPie(){
     //pie chart
     if(this.chartPie){
       var ctx = this.chartPie.nativeElement.getContext('2d');
       var myPieChart = new Chart(ctx, {
         type: "doughnut",
         data: {
-          labels: ["Direct", "Referral", "Social"],
+          labels: this.listNameTOP3Product,
           datasets: [
             {
-              data: [55, 30, 15],
+              data: this.listDataTOP3Product,
               backgroundColor: ["#da277b", "#4e73df", "#1cc88a"],
               hoverBackgroundColor: ["#b42769", "#2e59d9", "#17a673"],
               borderColor: "black",
@@ -189,9 +262,9 @@ export class PostManamentComponent  {
         },
       });
     }
-
-
   }
+
+
 }
 
 

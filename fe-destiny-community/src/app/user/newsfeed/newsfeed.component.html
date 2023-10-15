@@ -63,7 +63,7 @@
               </a>
 
               <p class="user-status-title">
-                <a routerLink="/profile" class="bold">{{ item[1] }}</a>
+                <a routerLink="/profile" class="bold top-user">{{ item[1] }}</a>
               </p>
               <p class="intro-top5" (click)="addFollow(item[3])">
                 {{ item[2] }}
@@ -118,7 +118,7 @@
                 </div>
               </a>
               <div class="user-status-title">
-                <a class="bold" routerLink="/profile">{{ item.fullname }}</a>
+                <a class="bold top-user" routerLink="/profile">{{ item.fullname }}</a>
                 <span class="bp-verified-badge"></span>
               </div>
               <!-- <a class="user-status-text small" (click)="addFollow(item.user_id)">Theo dõi</a> -->

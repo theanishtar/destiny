@@ -40,15 +40,16 @@ export class authGuard implements CanActivate {
     const userRole = this.getUserRole();
 
     // Kiểm tra xem người dùng có quyền truy cập trang quản trị không.
-    if (userRole === 'ROLE_USER' && state.url.startsWith('/admin')) {
+    if (userRole === 'ROLE_USER' && state.url.startsWith('/admin') && state.url.startsWith('/moderator')) {
       // Người dùng là user và truy cập vào URL bắt đầu bằng '/admin'
       // Xử lý ở đây, có thể chuyển hướng hoặc hiển thị thông báo.
-      new toast({
-        title: 'Thông báo!',
-        message: 'Bạn không có quyền truy cập vào!',
-        type: 'info',
-        duration: 3000,
-      });
+      this.location.back();
+      return false;
+    }
+
+    if (userRole === 'ROLE_MODERATOR' && state.url.startsWith('/admin')) {
+      // Người dùng là user và truy cập vào URL bắt đầu bằng '/admin'
+      // Xử lý ở đây, có thể chuyển hướng hoặc hiển thị thông báo.
       this.location.back();
       return false;
     }
