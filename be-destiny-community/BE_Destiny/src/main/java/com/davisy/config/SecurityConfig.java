@@ -3,28 +3,23 @@ package com.davisy.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-/*import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;*/
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.davisy.service.impl.UserDetailsServiceImpl;
-
-import lombok.RequiredArgsConstructor;
-
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 
 @Configuration
 @EnableWebSecurity
@@ -38,7 +33,7 @@ public class SecurityConfig {
 
 	@Autowired
 	JwtAuthEntryPoint authEntryPoint;
-	
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -62,16 +57,17 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecure) throws Exception {// Disable csrf
-		httpSecure.cors().and().csrf().disable()
-				.authorizeHttpRequests((requests) -> requests
-						.requestMatchers(new AntPathRequestMatcher("/api/v1/admin/*")).hasAuthority("ADMIN")
-						.requestMatchers(new AntPathRequestMatcher("/api/v1/user/*")).hasAnyAuthority("USER", "ADMIN")
-						.requestMatchers((new AntPathRequestMatcher(("/api/v1/auth/**")))).permitAll().anyRequest()
-						.permitAll())
-				.exceptionHandling().authenticationEntryPoint(authEntryPoint).and().sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				.authenticationProvider(authenticationProvider())
-				.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
+		httpSecure.csrf().disable().cors().disable()
+				.oauth2Login(oauth2Login -> oauth2Login.loginPage("/oauth2/authorization/facebook")
+						.defaultSuccessUrl("/user-home") // URL mặc định sau đăng nhập
+															// thành công
+				
+				)
+//				.exceptionHandling().authenticationEntryPoint(authEntryPoint).and().sessionManagement()
+//				.sessionCreationPolicy(SessionCreationPolicy.ALWAYS).and()
+//				.authenticationProvider(authenticationProvider())
+//				.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
+				;
 
 		return httpSecure.build();
 	}
@@ -84,19 +80,11 @@ public class SecurityConfig {
 		return authProvider;
 	}
 
-//public SecurityConfig(UserDetailsServiceImpl userDetailsService, PasswordEncoder passwordEncoder) {
-//this.userDetailsService = userDetailsService;
-//this.passwordEncoder = passwordEncoder;
-//}
-//
+	@Bean
+	public CsrfTokenRepository csrfTokenRepository() {
+		CookieCsrfTokenRepository repository = CookieCsrfTokenRepository.withHttpOnlyFalse();
+		repository.setCookieName("XSRF-TOKEN");
+		return repository;
+	}
 
-// Bean UserDetailsService trả về bởi JdbcDaoImpl
-//@Bean
-//public UserDetailsService userDetailsService(DataSource dataSource) {
-//JdbcDaoImpl jdbcDao = new JdbcDaoImpl();
-//jdbcDao.setDataSource(dataSource);
-//jdbcDao.setUsersByUsernameQuery("SELECT username, password, enabled FROM users WHERE username = ?");
-//jdbcDao.setAuthoritiesByUsernameQuery("SELECT username, authority FROM authorities WHERE username = ?");
-//return jdbcDao;
-//}
 }

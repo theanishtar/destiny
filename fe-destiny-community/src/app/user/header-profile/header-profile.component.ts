@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-
-import { CookieService } from 'ngx-cookie-service';
 import { Router, NavigationEnd } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
+import { ProfileService } from '../service/profile.service';
 @Component({
   selector: 'app-header-profile',
   templateUrl: './header-profile.component.html',
@@ -13,13 +13,17 @@ import { Router, NavigationEnd } from '@angular/router';
     './header-profile.component.css'
   ]
 })
-export class HeaderProfileComponent implements OnInit{
+export class HeaderProfileComponent implements OnInit {
   activeMenuItem: string = '';
+  dataHeader: any;
+
   ngOnInit() {
+    this.loadDataHeader(26);
   }
   constructor(
     private cookieService: CookieService,
     private router: Router,
+    private profileService: ProfileService
   ) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -27,8 +31,14 @@ export class HeaderProfileComponent implements OnInit{
         this.updateActiveMenuItem();
       }
     });
-   }
+  }
+  loadDataHeader(id) {
+    this.profileService.loadDataHeader(id).subscribe(res => {
+      this.dataHeader = this.profileService.getDataHeader();
+    })
+  }
 
+  /* ============template============= */
   updateActiveMenuItem() {
     const currentUrl = this.router.url;
     // Xác định menu item active dựa trên URL hiện tại

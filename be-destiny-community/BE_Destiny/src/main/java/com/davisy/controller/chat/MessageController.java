@@ -83,9 +83,7 @@ public class MessageController {
 			User user = userServiceImpl.findByEmail(email);
 			Chats chats = chatsServiceImpl.findChatNames(String.valueOf(user.getUser_id()), to);
 			if (chats != null) {
-//				if (messagesServiceImpl.findStatus(Integer.valueOf(to)).size() > 0) {
-					messagesServiceImpl.updateStatusMessages(true, Integer.valueOf(to), chats.getId());
-//				}
+				messagesServiceImpl.updateStatusMessages(true, Integer.valueOf(to), chats.getId());
 				List<Object[]> list = messagesServiceImpl.findListMessage(chats.getName_chats());
 				return ResponseEntity.ok().body(list);
 			}
@@ -96,80 +94,4 @@ public class MessageController {
 		}
 	}
 
-	@GetMapping("/v1/oauth/logout")
-	@SendTo("/topic/public")
-	public HashMap<Integer, List<UserModel>> logout(HttpServletRequest request) {
-		try {
-			String email = jwtTokenUtil.getEmailFromHeader(request);
-			User user = userServiceImpl.findByEmail(email);
-			user.setOnline_last_date(GregorianCalendar.getInstance());
-			userServiceImpl.update(user);
-			List<UserModel> lisModel = new ArrayList<>();
-			String type = "";
-			for (User us : userServiceImpl.findAll()) {
-//				UserModel userModel=new UserModel();
-				if (followServiceImpl.checkFriend(user.getUser_id(), us.getUser_id())) {
-					type = "LEAVE";
-					if (us.getOnline_last_date() == null) {
-						type = "JOIN";
-					}
-					lisModel.add(userModel(us, user.getUser_id(), type, true, false, true));
-				}
-			}
-			UserChatStorage.getInstance().setUser(user.getUser_id(), lisModel);
-//			simpMessagingTemplate.convertAndSend("/topic/public" + UserChatStorage.getInstance().getUsers());
-			return UserChatStorage.getInstance().getUsers();
-		} catch (Exception e) {
-			System.out.println("Error logout: " + e);
-			return null;
-		}
-	}
-	public String[] lastMeassage(String fromLogin, String toUser) {
-		try {
-			String []temp = new String[2];
-			String message = "";
-			String time = "";
-			Chats chats = chatsServiceImpl.findChatNames(fromLogin, toUser);
-			if (chats != null) {
-				List<Object[]> listMessage = messagesServiceImpl.findListMessage(chats.getName_chats());
-				if (listMessage.size() > 0) {
-					message = String.valueOf(listMessage.get(listMessage.size() - 1)[1]);
-					time =String.valueOf(listMessage.get(listMessage.size() - 1)[2]);
-		
-				}
-				if (listMessage.get(listMessage.size() - 1)[3]==Integer.valueOf(fromLogin)) {
-					message = "Bạn: " + message;
-				}
-			}
-			temp[0]=message;
-			temp[1]=time;
-			return temp;
-		} catch (Exception e) {
-			System.out.println("Error lastMeassage: " + e);
-			throw e;
-		}
-	}
-
-	public UserModel userModel(User us, int user_id, String type, boolean check, boolean hide, boolean status) {
-		UserModel userModel = new UserModel();
-		String [] temp = lastMeassage(String.valueOf(user_id), String.valueOf(us.getUser_id()));
-		if (type.equalsIgnoreCase("LEAVE")) {
-			userModel.setType(MessageType.LEAVE);
-		} else {
-			userModel.setType(MessageType.JOIN);
-		}
-		userModel.setUser_id(us.getUser_id());
-		userModel.setUsername(us.getUsername());
-		userModel.setFullname(us.getFullname());
-		userModel.setEmail(us.getEmail());
-		userModel.setAvatar(us.getAvatar());
-		userModel.setMessageUnRead(messagesServiceImpl.countMessageUnread(us.getUser_id()));
-		userModel.setLastMessage(temp[0]);
-		userModel.setOnline(temp[1]);
-		userModel.setFriend(check);
-		userModel.setHide(hide);
-		userModel.setStatus(status);
-		return userModel;
-	}
-	
 }

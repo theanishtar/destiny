@@ -70,7 +70,7 @@
               </p>
               <div
                 class="action-request-list"
-                [attr.data-title]="item[4] + ' bài đăng'"
+                [attr.data-title]="item[5] + ' bài đăng'"
               >
                 <!-- ACTION REQUEST -->
                 <div class="action-request accept">
@@ -93,9 +93,10 @@
       <div class="widget-box">
         <p class="widget-box-title">Đề xuất cho bạn</p>
         <div *ngIf="checkData1" class="emty-message">Không có đề xuất</div>
+        <div class="lds-dual-ring" *ngIf="check"></div>
         <!-- [appDataSrc]="imageUrlSuggested" -->
-        <div class="widget-box-content">
-          <div class="user-status-list" *ngFor="let item of listSuggested">
+        <div class="widget-box-content" *ngFor="let item of listSuggested">
+          <div class="user-status-list">
             <div class="user-status">
               <a
                 class="user-avatar small user-status-avatar no-border no-outline"

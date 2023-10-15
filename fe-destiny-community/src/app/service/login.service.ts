@@ -8,6 +8,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment'
 import { CookieService } from 'ngx-cookie-service';
+import { MessageService } from '@app/user/service/message.service';
 import Swal from 'sweetalert2';
 import '../../assets/toast/main.js';
 declare var toast: any;
@@ -17,8 +18,8 @@ declare var toast: any;
 })
 export class LoginService {
 	private userURL = environment.baseUrl + 'v1/oauth/login';
-	private userLoginAuth = environment.baseUrl + 'oauth/login/authenticated';
-	private userLogout = environment.baseUrl + 'v1/oauth/logout';
+	private userLoginAuth = environment.baseUrl + 'v1/oauth/login/oauh2';
+	private userLogout = environment.baseUrl + 'v1/user/logoutchat';
 
 	private userLogined: any[] = [];
 
@@ -93,9 +94,9 @@ export class LoginService {
 	status: string;
 	loginAuth(data: any) {
 		//alert("dataparsms:"+data);
-		var strData = { data: data };
+		// var strData = { data: data };
 		// return this.http.post(this.userURL, data);
-		return this.http.post<any>(this.userLoginAuth, strData).pipe(
+		return this.http.post<any>(this.userLoginAuth, data).pipe(
 			tap((res) => {
 				this.userLogined = JSON.parse(JSON.stringify(res));
 				this.setUserLog(this.userLogined);
@@ -122,7 +123,8 @@ export class LoginService {
 		private cookieService: CookieService,
 		private router: Router,
 		private route: ActivatedRoute,
-		private httpClient: HttpClient
+		private httpClient: HttpClient,
+		private messageService: MessageService
 	) { }
 
 	isLogin(): boolean {
@@ -131,7 +133,7 @@ export class LoginService {
 		}
 		return true;
 	}
-
+	sender: any;
 	logout(): void {
 		function delay(ms: number) {
 			return new Promise(function (resolve) {
@@ -148,32 +150,34 @@ export class LoginService {
 			cancelButtonText: 'No',
 		}).then((result) => {
 			if (result.value) {
-				delay(1).then((res) => {
-					this.http.get<any>(this.userLogout).subscribe((res) => {
-						if (res) {
-							this.cookieService.deleteAll();
-							localStorage.removeItem('user');
-							localStorage.removeItem('token');
-							localStorage.removeItem('stoken');
-							this.router.navigate(['home']);
-							new toast({
-								title: 'Đã đăng xuất!',
-								message: 'Hẹn gặp lại',
-								type: 'warning',
-								duration: 2000,
-							});
-						}else{
-							new toast({
-								title: 'Lỗi!',
-								message: 'Vui lòng chờ',
-								type: 'warning',
-								duration: 2000,
-							});
-						}
+				// delay(1).then((res) => {
+				// this.messageService.loadDataSender().subscribe(() => {
+				// 	this.sender = JSON.parse(JSON.stringify(this.messageService.getSender()));
+				// 	this.messageService.connectToChat(this.sender.user_id);
+				// });
+				// if (res) {
+				this.http.get<any>(this.userLogout).subscribe(() => {
+					this.cookieService.deleteAll();
+					localStorage.clear();
+					this.messageService.logout();
+					this.router.navigate(['home']);
+					new toast({
+						title: 'Đã đăng xuất!',
+						message: 'Hẹn gặp lại',
+						type: 'warning',
+						duration: 2000,
 					});
-
+				})
+			} else {
+				new toast({
+					title: 'Lỗi!',
+					message: 'Vui lòng chờ',
+					type: 'warning',
+					duration: 2000,
 				});
 			}
+
+			// });
 		});
 	}
 

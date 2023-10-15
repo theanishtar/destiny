@@ -82,7 +82,7 @@
     routerLink="/message"
   >
     <!-- MENU ITEM LINK ICON -->
-    <div class="user-avatar small no-outline" [ngClass]="messageService.notif_mess ? 'online notif-mess' : ''">
+    <div class="user-avatar small no-outline" [ngClass]="messageService.notif_mess ? 'online notif-mess' : ''" style="margin-right: 1rem;">
       <div class="menu-item-link-icon icon-badges">
         <i class="fa-solid fa-paper-plane"></i>
       </div>
@@ -1083,24 +1083,24 @@
                 <!-- USER STATUS TITLE -->
                 <p class="user-status-title">
                   <a class="bold" href="profile">Nick Grissom</a>
-                  posted a comment on your
-                  <a class="highlighted" href="profile">status update</a>
+                  đã theo dõi bạn
+                  <!-- <a class="highlighted" href="profile">status update</a> -->
                 </p>
                 <!-- /USER STATUS TITLE -->
 
                 <!-- USER STATUS TIMESTAMP -->
                 <p class="user-status-timestamp">2 minutes ago</p>
                 <!-- /USER STATUS TIMESTAMP -->
-
-                <!-- USER STATUS ICON -->
-                <div class="user-status-icon">
-                  <!-- ICON COMMENT -->
-                  <svg class="icon-comment">
-                    <use xlink:href="#svg-comment"></use>
-                  </svg>
-                  <!-- /ICON COMMENT -->
+                <div class="user-preview-actions nofti">
+                  <!-- BUTTON -->
+                  <p class="button re-fl">Theo dõi</p>
+                  <!-- /BUTTON -->
+      
+                  <!-- BUTTON -->
+                  <p class="button delete-fl">Xóa</p>
+                  <!-- /BUTTON -->
                 </div>
-                <!-- /USER STATUS ICON -->
+                
               </div>
               <!-- /USER STATUS -->
             </div>

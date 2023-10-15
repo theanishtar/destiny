@@ -14,6 +14,7 @@ import 'src/assets/js/utils/svg-loader.js';
 // 
 import { ModalService } from '../service/modal.service';
 import { InteractPostsService } from '../service/interact-posts.service';
+import { ProfileService } from '../service/profile.service';
 @Component({
   selector: 'app-profile-timeline',
   templateUrl: './profile-timeline.component.html',
@@ -44,6 +45,7 @@ export class ProfileTimelineComponent implements OnInit {
   constructor(
     public modalService: ModalService,
     public interactPostsService: InteractPostsService,
+    private profileService: ProfileService
   ) { }
 
   @ViewChild('elementToScroll', { static: false }) elementToScroll: ElementRef;

@@ -28,7 +28,6 @@
   <!-- Message -->
   <div
     class="account-hub-content"
-    id="body-chat"
     *ngIf="!messageService.isLoading"
   >
     <!-- SECTION HEADER -->
@@ -177,72 +176,77 @@
                   <ng-container *ngIf="!key.value.isFriend && key.value.hide">
                     <!-- CHAT WIDGET MESSAGE -->
                     <div
-                    class="chat-widget-message"
-                    id="chat-widget-message-{{ key.value.user_id }}"
-                    (click)="selectedUser(key.value.user_id)"
-                  >
-                    <!-- USER STATUS -->
-                    <div class="user-status">
-                      <!-- USER STATUS AVATAR -->
-                      <div class="user-status-avatar">
-                        <div
-                          class="user-avatar small no-outline"
-                          [ngClass]="
-                            key.value.type == 'JOIN' ? 'online' : 'away'
-                          "
-                        ></div>
-                        <!-- USER AVATAR -->
-                        <a
-                          class="user-avatar small user-status-avatar no-border no-outline"
-                          href="profile"
-                        >
-                          <div class="hexagon-container">
-                            <div class="hexagon user-avatar-content">
-                              <div
-                                class="hexagon-image"
-                                style="background-image: url('{{key.value.avatar}}')"
-                              ></div>
-                            </div>
-                            <div class="hexagon user-avatar-border">
-                              <div class="hexagon-border"></div>
-                            </div>
-                            <div
-                              class="hexagon user-avatar-progress-border"
-                            >
-                              <div class="user-avatar-progress"></div>
-                            </div>
-                          </div>
-                        </a>
-                        <!-- /USER AVATAR -->
-                      </div>
-                      <!-- /USER STATUS AVATAR -->
-
-                      <!-- USER STATUS TITLE -->
-                      <p class="user-status-title">
-                        <span class="bold">{{ key.value.fullname }}</span>
-                      </p>
-                      <!-- /USER STATUS TITLE -->
-
-                      <!-- USER STATUS TEXT -->
-                      <p
-                        class="user-status-text"
-                        id="last-message-{{ key.value.user_id }}"
+                        class="chat-widget-message"
+                        id="chat-widget-message-{{ key.value.user_id }}"
+                        (click)="selectedUser(key.value.user_id)"
                       >
-                        <!-- Great! Then we'll meet with them at the party...{{key.value.lastMessage}} -->
-                      </p>
-                      <!-- /USER STATUS TEXT -->
+                        <!-- USER STATUS -->
+                        <div class="user-status" id="p-count-mess-{{key.value.user_id}}">
+                          <!-- USER STATUS AVATAR -->
+                          <div class="user-status-avatar">
+                            <div
+                              class="user-avatar small no-outline"
+                              [ngClass]="
+                                key.value.type == 'JOIN' ? 'online' : 'away'
+                              "
+                            ></div>
+                            <!-- USER AVATAR -->
+                            <a
+                              class="user-avatar small user-status-avatar no-border no-outline"
+                              href="profile"
+                            >
+                              <div class="hexagon-container">
+                                <div class="hexagon user-avatar-content">
+                                  <div
+                                    class="hexagon-image"
+                                    style="background-image: url('{{key.value.avatar}}')"
+                                  ></div>
+                                </div>
+                                <div class="hexagon user-avatar-border">
+                                  <div class="hexagon-border"></div>
+                                </div>
+                                <div
+                                  class="hexagon user-avatar-progress-border"
+                                >
+                                  <div class="user-avatar-progress"></div>
+                                </div>
+                              </div>
+                            </a>
+                            <!-- /USER AVATAR -->
+                          </div>
+                          <!-- /USER STATUS AVATAR -->
 
-                      <!-- USER STATUS TIMESTAMP -->
-                      <p class="user-status-timestamp floaty">
-                        2 giờ trước
-                      </p>
-                      <!-- /USER STATUS TIMESTAMP -->
-                      <p class="user-status-timestamp count-mess">
-                        <span>2</span>
-                      </p>
-                    </div>
-                    <!-- /USER STATUS -->
-                  </div>
+                          <!-- USER STATUS TITLE -->
+                          <p class="user-status-title">
+                            <span class="bold">{{ key.value.fullname }}</span>
+                          </p>
+                          <!-- /USER STATUS TITLE -->
+
+                          <!-- USER STATUS TEXT -->
+                          <p
+                            class="user-status-text"
+                            id="last-message-{{ key.value.user_id }}"
+                          >
+                          {{key.value.lastMessage}}
+                          </p>
+                          <!-- /USER STATUS TEXT -->
+
+                          <!-- USER STATUS TIMESTAMP -->
+                          <p class="user-status-timestamp floaty" id="floaty-{{key.value.user_id}}">
+                            {{ key.value.online }}
+                          </p>
+                          <!-- /USER STATUS TIMESTAMP -->
+                          <p class="user-status-timestamp count-mess"  id="count-mess-{{key.value.user_id}}" *ngIf="key.value.messageUnRead > 0">
+                            <span>{{key.value.messageUnRead}}</span>
+                          </p>
+                          <!-- <p class="user-status-timestamp count-mess" id="p-count-mess-{{key.value.user_id}}"
+                          style="position: absolute;top: 32%;right: 5%;padding: 3px 8px;background: red;border-radius: 50%;margin-top: 10px;color: #8f91ac;font-size: 0.75rem;font-weight: 500;line-height: 1em;">
+                            <span id="count-mess-{{key.value.user_id}}" *ngIf="key.value.messageUnRead > 0"
+                              style="color: white;font-family: Helvetica,Arial,sans-serif;font-size: 9px;" >{{key.value.messageUnRead}}</span>
+                          </p> -->
+                        </div>
+                        <!-- /USER STATUS -->
+                      </div>
                     <!-- /CHAT WIDGET MESSAGE -->
                   </ng-container>
                 </div>
@@ -392,13 +396,16 @@
         <!-- /CHAT WIDGET HEADER -->
 
         <!-- CHAT WIDGET CONVERSATION -->
-        <div class="chat-widget-conversation" data-simplebar>
+        <div class="chat-widget-conversation" id="chatContainer" (scroll)="checkScrollPosition()" data-simplebar>
           <!-- Khung chat -->
           <!-- <div class="time-date" style="background: #c1c2c4;color: white;width: fit-content;padding: 4px 5px;border-radius: 8px;position: absolute;z-index: 1;right: 40%;top: 2%;">
             <div class="date-send" style="text-align: center;font-size: 12px;">
               02/08/2003
             </div>
           </div> -->
+          <div class="scrollToBottomButton" id="scrollToBottomButton" (click)="scrollToBottomMessage()" style="display: none;">
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
         </div>
         <!-- /CHAT WIDGET CONVERSATION -->
 
@@ -414,6 +421,8 @@
                   id="chat-widget-message-text-2"
                   name="chat_widget_message_text_2"
                   placeholder="Nhập tin nhắn"
+                  [(ngModel)]="message"
+                  (keyup)="checkEnter($event)"
                 />
                 <!-- INTERACTIVE INPUT ICON WRAP -->
                 <div class="interactive-input-icon-wrap actionable">

@@ -67,4 +67,27 @@
   .user-avatar.small.no-outline.online.notif-mess:before {
     background: red;
 }
+.user-avatar.small.no-outline.online.notif-mess {
+  width: auto;
+  height: 0px;
+}
+
+p.button.re-fl, p.delete-fl {
+  font-size: 12px;
+  height: 30px;
+  line-height: 28px;
+  margin-right: 0.5rem;
+  padding: 0 9px;
+  box-shadow: none;
+  background: #4E4BCD;
+}
+p.button.re-fl:hover{
+  background: #3d3bbd;
+}
+p.delete-fl {
+  background:#848484
+}
+.user-preview-actions.nofti {
+  margin-top: 0.6rem;
+}
   

@@ -26,6 +26,7 @@
     "@types/chart.js": "^2.9.38",
     "chart.js": "^4.4.0",
     "datatables.net": "^1.13.6",
+    "firebase": "^10.5.0",
     "handlebars": "^4.7.8",
     "jquery": "^3.7.1",
     "net": "^1.0.2",

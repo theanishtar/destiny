@@ -1,6 +1,7 @@
 package com.davisy.controller.chat;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import com.davisy.entity.User;
 import com.davisy.model.chat.UserModel;
 import com.davisy.model.chat.UserModel.MessageType;
 import com.davisy.service.ChatParticipantsService;
+import com.davisy.service.impl.ChatParticipantsServiceImpl;
 import com.davisy.service.impl.ChatsServiceImpl;
 import com.davisy.service.impl.FollowServiceImpl;
 import com.davisy.service.impl.MessagesServiceImpl;
@@ -51,10 +53,9 @@ public class UserChatController {
 	@Autowired
 	ChatsServiceImpl chatsServiceImpl;
 	@Autowired
-	ChatParticipantsService chatParticipantsService;
+	ChatParticipantsServiceImpl chatParticipantsServiceImpl;
 	@Autowired
 	MessagesServiceImpl messagesServiceImpl;
-	public static User staticUser = new User();
 
 	long millis = System.currentTimeMillis();
 	java.sql.Date day = new java.sql.Date(millis);
@@ -64,8 +65,7 @@ public class UserChatController {
 		try {
 			String email = jwtTokenUtil.getEmailFromHeader(request);
 			User user = userServiceImpl.findByEmail(email);
-			this.staticUser = user;
-			async(user);
+			async(user, true);
 			return ResponseEntity.ok().body(user);
 		} catch (Exception e) {
 			System.out.println("Error register in userchatcontroller: " + e);
@@ -74,48 +74,90 @@ public class UserChatController {
 
 	}
 
-	@Async
-	public void async(User user) {
+	@GetMapping("/v1/user/logoutchat")
+	public ResponseEntity<Void> logout(HttpServletRequest request) {
 		try {
-			List<User> listUser = userServiceImpl.findAll();
-			List<UserModel> lisModel = new ArrayList<>();
+			String email = jwtTokenUtil.getEmailFromHeader(request);
+			User user = userServiceImpl.findByEmail(email);
+			async(user, false);
+			return ResponseEntity.ok().build();
+		} catch (Exception e) {
+			System.out.println("Error logout in userchatcontroller: " + e);
+			return ResponseEntity.badRequest().build();
+		}
 
-			List<Follower> followers = followServiceImpl.findAll();
-			List<ChatParticipants> listChatParticipants = chatParticipantsService.findAllId(user.getUser_id());
-			List<DataFollows> dataFollows = new ArrayList<>();
-			List<Integer> checkContains = new ArrayList<>();
-			dataFollows.addAll(reloadDataFriends(followers, user));
-			user.setOnline_last_date(null);
+	}
+
+	@Async
+	public void async(User user, boolean checkRequest) {
+		try {
+			List<UserModel> lisModel = new ArrayList<>();
+			if (checkRequest == true) {
+				user.setOnline_last_date(null);
+
+			} else {
+				user.setOnline_last_date(GregorianCalendar.getInstance());
+			}
 			userServiceImpl.update(user);
 			String type = "";
+			if (checkRequest == true) {
+				synchronized (this) {
+					List<Follower> listFollow = followServiceImpl.findALlFriend(user.getUser_id(), user.getUser_id());
+					List<Chats> listChats = chatsServiceImpl.findAllChatsUser(String.valueOf(user.getUser_id()));
+					List<Integer> checkContains = new ArrayList<>();
 
-			for (User us : listUser) {
-//				UserModel userModel=new UserModel();
-				if (followServiceImpl.checkFriend(user.getUser_id(), us.getUser_id())) {
-					type = "LEAVE";
-					if (us.getOnline_last_date() == null) {
-						type = "JOIN";
-					}
-					lisModel.add(userModel(us, user.getUser_id(), type, true, false, true));
-				}
-			}
-//			if(UserChatStorage.getInstance().getUsers().size()==0) {
-			UserChatStorage.getInstance().setUser(user.getUser_id(), lisModel);
-//			}else {
-			List<UserModel> userModels = new ArrayList<>();
-			int i = 0;
-			for (Integer key : UserChatStorage.getInstance().getUsers().keySet()) {
-				System.out.println("key: " + key);
-				if (key != user.getUser_id()) {
-					for (UserModel v : UserChatStorage.getInstance().getUsers().get(key)) {
-						if (v.getUser_id() == user.getUser_id()) {
-							v.setType(MessageType.JOIN);
-							userModels.add(v);
+					for (Follower fl : listFollow) {
+						Follower.Pk pk = fl.getPk();
+						if (followServiceImpl.checkFriend(user.getUser_id(), pk.getUser_id())) {
+							User us = userServiceImpl.findById(pk.getUser_id());
+							if (us.getOnline_last_date() == null) {
+								type = "JOIN";
+							} else {
+								type = "LEAVE";
+							}
+							checkContains.add(us.getUser_id());
+							lisModel.add(userModel(us, user.getUser_id(), type, true, false, true));
 						}
 					}
-					UserChatStorage.getInstance().setUser(key, userModels);
-				}
+					for (Chats chats : listChats) {
+						List<ChatParticipants> listChatParticipants = chatParticipantsServiceImpl
+								.findAllId(chats.getId());
+						for (ChatParticipants participants : listChatParticipants) {
+							ChatParticipants.Primary primary = participants.getPrimary();
+							if (primary.getUser_id() != user.getUser_id()
+									&& !checkContains.contains(primary.getUser_id())) {
+								User us = userServiceImpl.findById(primary.getUser_id());
+								if (us.getOnline_last_date() == null) {
+									type = "JOIN";
+								} else {
+									type = "LEAVE";
+								}
+								lisModel.add(userModel(us, user.getUser_id(), type, chats.isIsfriend(), chats.isHide(),
+										chats.isStatus()));
+							}
+						}
+					}
 
+					UserChatStorage.getInstance().setUser(user.getUser_id(), lisModel);
+				}
+			}
+			synchronized (this) {
+				List<UserModel> userModels = new ArrayList<>();
+				for (Integer key : UserChatStorage.getInstance().getUsers().keySet()) {
+					if (key != user.getUser_id()) {
+						for (UserModel v : UserChatStorage.getInstance().getUsers().get(key)) {
+							if (v.getUser_id() == user.getUser_id()) {
+								if (checkRequest == true)
+									v.setType(MessageType.JOIN);
+								else
+									v.setType(MessageType.LEAVE);
+								userModels.add(v);
+							}
+						}
+						UserChatStorage.getInstance().setUser(key, userModels);
+					}
+
+				}
 			}
 
 		} catch (Exception e) {
@@ -126,13 +168,12 @@ public class UserChatController {
 	@MessageMapping("/fetchAllUsers")
 	@SendTo("/topic/public")
 	public HashMap<Integer, List<UserModel>> fetchAll() {
-		System.out.println("userstorage: " + UserChatStorage.getInstance().getUsers());
 		return UserChatStorage.getInstance().getUsers();
 	}
 
 	public UserModel userModel(User us, int user_id, String type, boolean check, boolean hide, boolean status) {
 		UserModel userModel = new UserModel();
-		String [] temp = lastMeassage(String.valueOf(user_id), String.valueOf(us.getUser_id()));
+		String[] temp = lastMeassage(String.valueOf(user_id), String.valueOf(us.getUser_id()));
 		if (type.equalsIgnoreCase("LEAVE")) {
 			userModel.setType(MessageType.LEAVE);
 		} else {
@@ -154,7 +195,7 @@ public class UserChatController {
 
 	public String[] lastMeassage(String fromLogin, String toUser) {
 		try {
-			String []temp = new String[2];
+			String[] temp = new String[2];
 			String message = "";
 			String time = "";
 			Chats chats = chatsServiceImpl.findChatNames(fromLogin, toUser);
@@ -162,15 +203,14 @@ public class UserChatController {
 				List<Object[]> listMessage = messagesServiceImpl.findListMessage(chats.getName_chats());
 				if (listMessage.size() > 0) {
 					message = String.valueOf(listMessage.get(listMessage.size() - 1)[1]);
-					time =String.valueOf(listMessage.get(listMessage.size() - 1)[2]);
-					System.out.println("time: " + time);
-				}
-				if (listMessage.get(listMessage.size() - 1)[3]==Integer.valueOf(fromLogin)) {
-					message = "Bạn: " + message;
+					time = String.valueOf(listMessage.get(listMessage.size() - 1)[2]);
+					if (listMessage.get(listMessage.size() - 1)[3] == Integer.valueOf(fromLogin)) {
+						message = "Bạn: " + message;
+					}
 				}
 			}
-			temp[0]=message;
-			temp[1]=time;
+			temp[0] = message;
+			temp[1] = time;
 			return temp;
 		} catch (Exception e) {
 			System.out.println("Error lastMeassage: " + e);

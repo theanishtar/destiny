@@ -61,7 +61,7 @@ public class RegisterService {
 		return code;
 	}
 
-	private String ranDomUsername() {
+	public static String ranDomUsername() {
 		// Get the current time as an Instant
 		Instant currentTime = Instant.now();
 

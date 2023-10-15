@@ -325,19 +325,52 @@ i.fa-solid.fa-circle-exclamation {
   color: #5B76FB;
 }
 
-/* .time-date {
-  background: #c1c2c4;
-  color: white;
-  width: fit-content;
-  padding: 4px 5px;
-  border-radius: 8px;
-  position: absolute;
-  z-index: 1;
-  right: 40%;
-  top: 2%;
+.scrollToBottomButton {
+  position: fixed;
+  right: 147px;
+  bottom: 308px;
+  /* display: none; */
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  color: #fff;
+  background: rgba(90, 92, 105, .5);
+  line-height: 29px;
+  border-radius: 50%;
+  z-index: 2;
 }
 
-.date-send {
-  text-align: center;
-  font-size: 12px;
-} */
+.scrollToBottomButton:focus,
+.scrollToBottomButton:hover {
+  color: #fff
+}
+
+.scrollToBottomButton:hover {
+  background: #5a5c69;
+  cursor: pointer;
+  
+}
+
+.scrollToBottomButton i {
+  font-weight: 800
+}
+
+.chat-widget-conversation::-webkit-scrollbar {
+  width: 10px !important;
+  /* display: none; */
+}
+
+/* Track */
+.chat-widget-conversation::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+.chat-widget-conversation::-webkit-scrollbar-thumb {
+  background: #D6D6D6; 
+}
+
+/* Handle on hover */
+.chat-widget-conversation::-webkit-scrollbar-thumb:hover {
+  background: #888; 
+}

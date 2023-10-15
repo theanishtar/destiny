@@ -11,6 +11,7 @@ import Stomp from "stompjs"
 import * as Handlebars from 'handlebars';
 import { UserModel } from './UserModel.js';
 import { environment } from '../../../environments/environment'
+
 @Injectable({
   providedIn: 'root'
 })
@@ -22,7 +23,7 @@ export class MessageService {
   private listFriends: any[] = []
   private listMess: any[] = []
 
-  isLoading = false;
+  isLoading = true;
 
   socket?: WebSocket;
   stompClient?: Stomp.Client;
@@ -31,10 +32,12 @@ export class MessageService {
   $tab_message: any;
   $element: any;
   $pCount: any;
+  messageTo: string;
   usersTemplateHTML = "";
   dataUpdated = new EventEmitter<void>();
   mapUser = new Map<string, UserModel>();
   newMapUser = new Map<string, UserModel>();
+  mapTime = new Map<string, string>();
   newMessage = new Map<string, { message: string, avatar: string }>();
   checkConnected: boolean = false;
   isOriginal: boolean = true;
@@ -79,17 +82,26 @@ export class MessageService {
         if (time) {
           time!.innerText = 'Vài giây';
         }
+        if (this.mapTime.has(data.fromLogin)) {
+          // this.mapTime.delete(data.fromLogin);
+          this.mapTime.set(data.fromLogin, new Date().toISOString() + '');
+        }
+        let textLastMess = document.getElementById('last-message-' + data.fromLogin);
+        if (textLastMess)
+          textLastMess!.innerText = data.message;
         if (this.selectedUser == data.fromLogin && this.isOriginal == false) {
           this.render(data.message, data.fromLogin, data.avatar);
         } else {
+          let audio = new Audio();
+          audio.src="../../../assets/js/sound/notify.mp3";
+          audio.play();
           this.notif_mess = true;
           this.newMessage.set(data.fromLogin, { message: data.message, avatar: data.avatar });
-          let textLastMess = document.getElementById('last-message-' + data.fromLogin);
+
           let countMessage = document.getElementById('count-mess-' + data.fromLogin);
           // let pCount = document.getElementById('p-count-mess-' + data.fromLogin);
           this.$pCount = $('#p-count-mess-' + data.fromLogin);
-          if (textLastMess)
-            textLastMess!.innerText = data.message;
+
           if (countMessage) {
             let count: string | undefined;
             count = '' + countMessage.textContent?.trim();
@@ -139,18 +151,37 @@ export class MessageService {
               };
               // Thêm người dùng vào danh sách của key trong map
               this.newMapUser.set(v.user_id, user);
+              this.mapTime.set(v.user_id, v.online);
             }
 
           }
         }
-        this.isLoading = false;
+        // this.isLoading = false;
         setTimeout(() => {
           this.mapUser = this.newMapUser;
           this.updateData();
+          //  let mapTemp = new Map<string,string>();
+          //  mapTemp=this.mapTime;
+          setInterval(() => {
+            if (this.mapTime != null) {
+              for (let [key, value] of this.mapTime) {
+                let time = document.getElementById('floaty-' + key);
+                if (time) {
+                  time.innerText = this.customTime(value);
+                }
+              }
+            }
+          }, 60000);
         }, 1);
       });
       this.stompClient!.send("/app/fetchAllUsers");
     });
+    
+    this.isLoading = false;
+  }
+
+  logout(){
+    this.stompClient!.send("/app/fetchAllUsers");
   }
 
   // async connectToChat(userId) : Promise<void>{
@@ -249,10 +280,15 @@ export class MessageService {
       message: text,
       avatar: img
     }));
+    let textLastMess = document.getElementById('last-message-' + this.selectedUser);
+    if (textLastMess)
+      textLastMess!.innerText = text;
     let time = document.getElementById('floaty-' + this.selectedUser);
     if (time) {
       time!.innerText = 'Vài giây';
     }
+    this.mapTime.set(this.selectedUser + '', new Date().toISOString() + '');
+    // }
   }
 
   render(message, userName, img) {
@@ -342,9 +378,7 @@ export class MessageService {
       // } else {
       //   return null;
       // }
-
     }
-
   }
 
   getDayOfWeek(dateString: string) {
@@ -373,9 +407,6 @@ export class MessageService {
     } else {
       return dateString.substring(0, 10).toString();
     }
-
-
-
   }
 
 

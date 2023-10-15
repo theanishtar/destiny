@@ -26,7 +26,7 @@ import { MessageService } from '@app/user/service/message.service';
 import { connectToChat } from '../../../assets/js/chat/chat.js'
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
-import { Observable,  of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import '../../../assets/toast/main.js';
 import { forEach } from 'angular';
 declare var toast: any;
@@ -87,20 +87,46 @@ export class NewsfeedComponent implements OnInit {
     public loadingService: LoadingService,
     public postService: PostService,
     public messageService: MessageService
-  ) { 
-    
+  ) {
+
   }
 
   /* ============Suggested============= */
+  check: boolean = true
+  
   loadDataSuggest() {
     this.followsService.loadDataSuggest().subscribe(() => {
       this.listSuggested = this.followsService.getDataSuggested();
       // console.log('this.listSuggested 1: ' + JSON.stringify(this.listSuggested[1].avatar));
+      if(this.listSuggested){
+        this.check = false
+      }
       if (Array.isArray(this.listSuggested) && this.listSuggested.length === 0) {
         this.checkData1 = true;
+        this.check = false;
       }
     });
   }
+  // loadDataSuggest() {
+  //   if (this.listSuggested) {
+  //     this.check = false;
+  //     this.followsService.loadDataSuggest().subscribe(() => {
+  //       this.listSuggested = this.followsService.getDataSuggested();
+  //       // console.log('this.listSuggested 1: ' + JSON.stringify(this.listSuggested[1].avatar));
+  //       if (Array.isArray(this.listSuggested) && this.listSuggested.length === 0) {
+  //         this.checkData1 = true;
+  //         // this.check = false;
+  //       }
+  //     });
+  //   } else {
+  //     this.listSuggested = this.followsService.getDataSuggested();
+  //     // this.check = false
+  //     if (Array.isArray(this.listSuggested) && this.listSuggested.length === 0) {
+  //       this.checkData1 = true;
+  //       this.check = false;
+  //     }
+  //   }
+  // }
 
   addFollow(id: number) {
     this.followsService.addFollow(id).subscribe((res) => {
@@ -130,7 +156,7 @@ export class NewsfeedComponent implements OnInit {
     "https://odindesignthemes.com/vikinger-theme/wp-content/uploads/2020/09/Gold-Cup.png",
     "https://odindesignthemes.com/vikinger-theme/wp-content/uploads/2020/09/Bronze-Cup.png",
   ];
-  
+
   loadDataTop5User() {
     this.postService.loadTop5User().subscribe(() => {
       this.listTop5User = this.postService.getDataTop5User();
@@ -139,7 +165,7 @@ export class NewsfeedComponent implements OnInit {
       }
     });
   }
-  
+
   loadDataTop5Post() {
     this.postService.loadTop5Post().subscribe(() => {
       this.listTop5Post = this.postService.getDataTop5Post();
@@ -149,15 +175,6 @@ export class NewsfeedComponent implements OnInit {
     });
   }
 
-  /* ============Message============= */
-  // loadDataSender() {
-	// 	this.messageService.loadDataSender().subscribe(() => {
-	// 	  this.sender = JSON.parse(JSON.stringify(this.messageService.getSender()));
-  //     // this.sender = JSON.parse("[" + JSON.stringify(this.messageService.getSender()) + "]");
-	// 	  console.log("this.sender: " + this.sender.user_id);
-	// 	  this.messageService.connectToChat(this.sender.user_id);
-	// 	});
-	// }
   /* ============template============= */
 
   loadData() {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, Renderer2 } from '@angular/core';
+import { Component, OnInit, ElementRef, Renderer2, ViewChild } from '@angular/core';
 
 import { liquid } from "../../../assets/js/utils/liquidify.js";
 import { avatarHexagons } from '../../../assets/js/global/global.hexagons.js';
@@ -27,14 +27,14 @@ import { UserModel } from '../service/UserModel.js';
   ]
 })
 export class MessageComponent implements OnInit {
-  // isLoading = false;
+  message: string = ''; // Biến để lưu trữ nội dung nhập
+  checkIsOnline: boolean = true
   sender: any;
   checkListChat: boolean = false;
   listFriendss: any;
   listMess: any;
   mapUser = new Map<string, UserModel>();
   isOnline: string | undefined;
-  // isOriginal: boolean = true;
   image: string | undefined;
   fullname: string | undefined;
   id: string = '';
@@ -46,20 +46,21 @@ export class MessageComponent implements OnInit {
   userToLoginCustom: number = 0;
   usersTemplateHTML: string;
   count: number = 0;
-
+  isLoading = true;
+  
   ngOnInit() {
     this.messageService.isOriginal = true;
-    this.messageService.isLoading = true;
+    this.isLoading = this.messageService.isLoading;
+
     if (this.messageService.mapUser != null) {
       this.mapUser = this.messageService.mapUser;
-      this.messageService.isLoading = false;
+      // this.messageService.isLoading = false;
     }
     this.messageService.dataUpdated.subscribe(() => {
       // Đây là nơi bạn đặt mã để xử lý khi dữ liệu đã được cập nhật.
       this.mapUser = this.messageService.mapUser;
       // Thực hiện các thao tác cần thiết sau khi dữ liệu đã được cập nhật.
     });
-
 
     liquid.liquid();
     avatarHexagons.avatarHexagons();
@@ -80,8 +81,36 @@ export class MessageComponent implements OnInit {
   ) { }
 
   /* ============template============= */
+  scrollToBottomMessage() {
+    const chatContainer = document.getElementById("chatContainer");
+    if (chatContainer) {
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+      // Sử dụng hiệu ứng mượt
+      // chatContainer.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+  }
 
-  checkIsOnline: boolean = true
+  checkScrollPosition() {
+    const scrollableDiv = document.getElementById('chatContainer')!;
+    const scrollButton = document.getElementById('scrollToBottomButton')!;
+    // Thêm sự kiện lắng nghe lướt cho thẻ div
+    scrollableDiv.addEventListener('scroll', () => {
+      // Kiểm tra vị trí cuộn
+      if (Math.round(scrollableDiv.scrollTop) < scrollableDiv.scrollHeight - scrollableDiv.clientHeight) {
+        // Hiển thị nút scroll khi cuộn đến vị trí cuối cùng (điều kiện kiểm tra lúc này có thể khác)
+        scrollButton.style.display = 'block';
+      } else{
+        // Ẩn nút scroll nếu không cuộn xuống
+        scrollButton.style.display = 'none';
+      }
+    }); 
+  }
+
+  checkEnter(event: KeyboardEvent): void {
+    if (event.key === "Enter") {
+      this.addMessage();
+    }
+  }
 
   selectedUser(userid) {
     if (this.id != '') {
@@ -181,6 +210,8 @@ export class MessageComponent implements OnInit {
         this.messageService.render(message, userid, img);
         this.messageService.newMessage.clear();
       };
+      
+    this.scrollToBottomMessage();
     });
   }
 
@@ -197,13 +228,13 @@ export class MessageComponent implements OnInit {
     }
   }
   sendMessage(message) {
-    
+
     let username = localStorage.getItem("chatUserId");
     this.sender = JSON.parse(JSON.stringify(this.messageService.getSender()));
     let avatar = this.sender.avatar;
     this.$chatHistory = $('.chat-widget-conversation');
     this.$textarea = $('#chat-widget-message-text-2');
-    
+
     if (message.trim() !== '') {
       this.messageService.sendMsg(username, message, avatar);
       this.scrollToBottom();

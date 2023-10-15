@@ -314,3 +314,30 @@ path svg.post-option-icon.icon-share{
   display: -webkit-box;
   -webkit-box-orient: vertical;
 }
+
+/* loading suggest */
+.lds-dual-ring {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  margin: 5% 45%;
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 32px;
+  height: 32px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #fff;
+  border-color: #D6D6D6 transparent #D6D6D6 transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

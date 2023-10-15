@@ -75,16 +75,26 @@ export class GetStartedComponent implements OnInit {
 	/*===========Login with google===============*/
 	loginWithGG() {
 		this.route.queryParams.subscribe((params) => {
-			this.orderby = params['subIdAuthentication'];
-
+			// this.orderby = params['sid'];
+			const token = params['token'];
+      		const type = params['type'];
+			  console.log("token1: " + token);
+			  console.log("type1: " + type);
 			function delay(ms: number) {
 				return new Promise(function (resolve) {
 					setTimeout(resolve, ms);
 				});
 			}
 
-			if (this.orderby !== undefined) {
-				this.loginService.loginAuth(this.orderby).subscribe((res) => {
+			if (token !== undefined && type !== undefined) {
+				var data = {
+					token: token,
+					type: type,
+				};
+				console.log("token: " + token);
+				console.log("type: " + type);
+				this.loginService.loginAuth(data).subscribe((res) => {
+					// console.log("res: " + res)
 					if (res !== undefined) {
 						if (res.roles[0].authority == 'ROLE_OWNER' || res.roles[0].authority == 'ROLE_ADMIN' || res.roles[0].authority == 'ROLE_MODERATOR') {
 							// let userAdmin = {

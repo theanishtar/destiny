@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.davisy.RedisCheck;
@@ -102,6 +103,13 @@ public class Login {
 			@PathVariable String email) {
 		LoginResponse resLog = authenticationService.loginWithEmailAndCodeauthregis(code, email);
 		return ResponseEntity.status(resLog.getStatusResponse()).body(resLog.getData());
+	}
+	
+	// call api by: host:port/v1/oauth/login/oauth2?token=val&type=value
+	@GetMapping("/v1/oauth/login/oauh2")
+	public ResponseEntity<AuthenticationResponse> auth2(@RequestParam String token, @RequestParam String type){
+		LoginResponse res = authenticationService.loginByOuath2(token,type);
+		return ResponseEntity.status(res.getStatusResponse()).body(res.getData());
 	}
 
 }

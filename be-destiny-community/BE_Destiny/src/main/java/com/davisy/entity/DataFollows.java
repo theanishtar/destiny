@@ -1,5 +1,8 @@
 package com.davisy.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,5 +20,8 @@ public class DataFollows {
 	int countPost;
 	int countFollower;
 	int countImg;
+	String username;
+//	List<Integer>listFollowing=new ArrayList<>();
+	boolean checkFollow=false;
 
 }

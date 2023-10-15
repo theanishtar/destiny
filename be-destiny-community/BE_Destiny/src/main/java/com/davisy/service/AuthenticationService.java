@@ -25,6 +25,7 @@ import com.davisy.model.LoginResponse;
 import com.davisy.model.RegisterUser;
 import com.davisy.reponsitory.RoleCustomRepo;
 import com.davisy.reponsitory.UsersReponsitory;
+import com.davisy.service.impl.UserServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 
@@ -48,7 +49,7 @@ public class AuthenticationService {
 	private final RoleCustomRepo roleCustomRepo;
 	private final JwtService jwtService;
 	@Autowired
-	UserService userService;
+	UserServiceImpl userService;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
@@ -125,7 +126,7 @@ public class AuthenticationService {
 			var jwtRefreshToken = jwtService.generateRefreshToken(user, authorities);
 
 			return AuthenticationResponse.builder().token(jwtToken).refreshToken(jwtRefreshToken)
-					.name(user.getFullname()).roles(authorities).build();
+					.name(user.getFullname()).roles(authorities).avatar(user.getAvatar()).build();
 		} catch (Exception e) {
 			System.out.println("error: " + e);
 		}
@@ -170,7 +171,7 @@ public class AuthenticationService {
 			var jwtRefreshToken = jwtService.generateRefreshToken(user, authorities);
 
 			AuthenticationResponse authRes = AuthenticationResponse.builder().token(jwtToken)
-					.refreshToken(jwtRefreshToken).name(user.getFullname()).roles(authorities).build();
+					.refreshToken(jwtRefreshToken).name(user.getFullname()).roles(authorities).avatar(user.getAvatar()).build();
 			return new LoginResponse(200, authRes, "Login successfully!");
 		} catch (Exception e) {
 			System.out.println("error: " + e);
@@ -218,7 +219,42 @@ public class AuthenticationService {
 			var jwtRefreshToken = jwtService.generateRefreshToken(user, authorities);
 
 			AuthenticationResponse authRes = AuthenticationResponse.builder().token(jwtToken)
-					.refreshToken(jwtRefreshToken).name(user.getFullname()).roles(authorities).build();
+					.refreshToken(jwtRefreshToken).name(user.getFullname()).roles(authorities).avatar(user.getAvatar()).build();
+			return new LoginResponse(200, authRes, "Login successfully!");
+		} catch (Exception e) {
+			System.out.println("error: " + e);
+		}
+		return new LoginResponse(401, null, null);
+	}
+
+	public LoginResponse loginByOuath2(String token, String type) {
+		try {
+			User user = new User();
+			if(type.equalsIgnoreCase("facebook"))
+				user = userService.findByFbId(token);
+			else if(type.equalsIgnoreCase("google"))
+				user = userService.findByGgId(token);
+			
+			UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+					user.getEmail(), user.getPassword());
+
+			List<Roles> role = roleCustomRepo.getRole(user);
+
+			Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
+			Set<Roles> set = new HashSet<>();
+			role.stream().forEach(c -> set.add(new Roles(c.getName())));
+			user.setRoles(set);
+
+			set.stream().forEach(i -> authorities.add(new SimpleGrantedAuthority(i.getName())));
+
+			authenticationManager.authenticate(authToken);
+
+			var jwtToken = jwtService.generateToken(user, authorities);
+			var jwtRefreshToken = jwtService.generateRefreshToken(user, authorities);
+
+			AuthenticationResponse authRes = AuthenticationResponse.builder().token(jwtToken)
+					.refreshToken(jwtRefreshToken).name(user.getFullname()).roles(authorities).avatar(user.getAvatar()).build();
 			return new LoginResponse(200, authRes, "Login successfully!");
 		} catch (Exception e) {
 			System.out.println("error: " + e);

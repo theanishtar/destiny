@@ -36,7 +36,7 @@ import { UserReportdetailComponent } from './admin/user-reportdetail/user-report
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
-  { path: 'get-started', component: GetStartedComponent },
+  { path: 'login', component: GetStartedComponent },
   { path: 'forgotpassword', component: ForgotPasswordComponent },
   { path: 'wait-confirm', component: WaitForConfirmationComponent },
   { path: 'regisauth', component: ConfirmSuccessComponent }, 

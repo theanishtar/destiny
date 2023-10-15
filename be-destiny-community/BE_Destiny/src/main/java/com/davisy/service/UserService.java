@@ -13,6 +13,9 @@ public interface UserService {
 	List<Integer> findAllUserProvinces(String idPr, String idDt, String idW);
 
 	User findById(int id);
+	
+	User findByFbId(String fb_id);
+	User findByGgId(String gg_id);
 
 	List<User> findAll();
 
