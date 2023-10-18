@@ -18,7 +18,7 @@ p.quest-preview-text{
     font-size: 0.75rem;
     font-weight: 500;
     line-height: 1.3333333333em;
-    width: 180px;
+    width: 130px;
     overflow: hidden;
     text-overflow: ellipsis;
     -webkit-line-clamp: 2;

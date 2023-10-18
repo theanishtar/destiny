@@ -47,7 +47,9 @@ ul {
 
 button,
 input[type="password"],
+input[type="date"],
 input[type="text"],
+ng-select,
 label,
 select,
 textarea {
@@ -63,7 +65,9 @@ label {
 
 button,
 input[type="password"],
+input[type="date"],
 input[type="text"],
+ng-select,
 select,
 textarea {
   width: 100%;
@@ -73,7 +77,9 @@ textarea {
 }
 
 input[type="password"],
+input[type="date"],
 input[type="text"],
+ng-select,
 select,
 textarea {
   background-color: #fff;
@@ -83,48 +89,62 @@ textarea {
 }
 
 input[type="password"]:focus,
+input[type="date"]:focus,
 input[type="text"]:focus,
+ng-select:focus,
 select:focus,
 textarea:focus {
   border-color: #615dfa;
 }
 
 input[type="password"],
-input[type="text"] {
+input[type="date"],
+input[type="text"],
+ng-select {
   height: 54px;
   padding: 0 18px;
 }
 
 input[type="password"]::-webkit-input-placeholder,
-input[type="text"]::-webkit-input-placeholder {
+input[type="date"]::-webkit-input-placeholder,
+input[type="text"]::-webkit-input-placeholder,
+ng-select::-webkit-input-placeholder{
   color: #adafca;
   font-size: 0.875rem;
   font-weight: 500;
 }
 
 input[type="password"]::-moz-placeholder,
-input[type="text"]::-moz-placeholder {
+input[type="date"]::-moz-placeholder,
+input[type="text"]::-moz-placeholder,
+ng-select::-moz-placeholder {
   color: #adafca;
   font-size: 0.875rem;
   font-weight: 500;
 }
 
 input[type="password"]:-ms-input-placeholder,
-input[type="text"]:-ms-input-placeholder {
+input[type="date"]:-ms-input-placeholder,
+input[type="text"]:-ms-input-placeholder,
+ng-select:-ms-input-placeholder {
   color: #adafca;
   font-size: 0.875rem;
   font-weight: 500;
 }
 
 input[type="password"]::-ms-input-placeholder,
-input[type="text"]::-ms-input-placeholder {
+input[type="date"]::-ms-input-placeholder,
+input[type="text"]::-ms-input-placeholder,
+ng-select::-ms-input-placeholder {
   color: #adafca;
   font-size: 0.875rem;
   font-weight: 500;
 }
 
 input[type="password"]::placeholder,
-input[type="text"]::placeholder {
+input[type="date"]::placeholder
+input[type="text"]::placeholder,
+ng-select::placeholder {
   color: #adafca;
   font-size: 0.875rem;
   font-weight: 500;
@@ -3354,10 +3374,6 @@ figure>img {
   height: 164px;
 }
 
-.user-avatar.big .user-avatar-content {
-  top: 27px;
-  left: 24px;
-}
 
 .user-avatar.big .user-avatar-progress,
 .user-avatar.big .user-avatar-progress-border {
@@ -3520,8 +3536,8 @@ figure>img {
 
 .user-avatar .user-avatar-content {
   position: absolute;
-  top: 18px;
-  left: 16px;
+  top: 21px;
+    left: 19px;
   z-index: 3;
 }
 

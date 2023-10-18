@@ -94,39 +94,34 @@ export class NewsfeedComponent implements OnInit {
   /* ============Suggested============= */
   check: boolean = true
   
-  loadDataSuggest() {
-    this.followsService.loadDataSuggest().subscribe(() => {
-      this.listSuggested = this.followsService.getDataSuggested();
-      // console.log('this.listSuggested 1: ' + JSON.stringify(this.listSuggested[1].avatar));
-      if(this.listSuggested){
-        this.check = false
-      }
-      if (Array.isArray(this.listSuggested) && this.listSuggested.length === 0) {
-        this.checkData1 = true;
-        this.check = false;
-      }
-    });
-  }
   // loadDataSuggest() {
-  //   if (this.listSuggested) {
-  //     this.check = false;
-  //     this.followsService.loadDataSuggest().subscribe(() => {
-  //       this.listSuggested = this.followsService.getDataSuggested();
-  //       // console.log('this.listSuggested 1: ' + JSON.stringify(this.listSuggested[1].avatar));
-  //       if (Array.isArray(this.listSuggested) && this.listSuggested.length === 0) {
-  //         this.checkData1 = true;
-  //         // this.check = false;
-  //       }
-  //     });
-  //   } else {
+  //   this.followsService.loadDataSuggest().subscribe(() => {
   //     this.listSuggested = this.followsService.getDataSuggested();
-  //     // this.check = false
+  //     // console.log('this.listSuggested 1: ' + JSON.stringify(this.listSuggested[1].avatar));
+  //     if(this.listSuggested){
+  //       this.check = false
+  //     }
   //     if (Array.isArray(this.listSuggested) && this.listSuggested.length === 0) {
   //       this.checkData1 = true;
   //       this.check = false;
   //     }
-  //   }
+  //   });
   // }
+  loadDataSuggest() {
+    if (Array.isArray(this.followsService.getDataSuggested() ) && this.followsService.getDataSuggested().length === 0) {
+      this.followsService.loadDataSuggest().subscribe(() => {
+        this.listSuggested = this.followsService.getDataSuggested();
+          this.check = false;
+      });
+    } else {
+      this.listSuggested = this.followsService.getDataSuggested();
+      this.check = false
+      if (Array.isArray(this.listSuggested) && this.listSuggested.length === 0) {
+        this.checkData1 = true;
+        this.check = false;
+      }
+    }
+  }
 
   addFollow(id: number) {
     this.followsService.addFollow(id).subscribe((res) => {

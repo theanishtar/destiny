@@ -11,9 +11,6 @@ import { AppComponent } from './app.component';
 import { TokenInterceptor } from './interceptor';
 import { loadingInterceptor } from './loadingInterceptor';
 
-// login GG
-
-
 // user
 import { HomeComponent } from './home/home.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
@@ -62,6 +59,29 @@ import { ProfileComponent } from './moderator/profile/profile.component';
 import { UserReportComponent } from './moderator/user-report/user-report.component';
 import { UserReportModeratorDetailComponent } from './moderator/user-report-detail/user-report-detail.component';
 import { ForbiddenWordComponent } from './moderator/forbidden-word/forbidden-word.component';
+
+import { DatePipe } from '@angular/common';
+import { APP_INITIALIZER } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
+import { MessageService } from './user/service/message.service';
+
+
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { provideStorage, getStorage } from '@angular/fire/storage';
+import { environment } from 'src/environments/environment';
+export function appInitializer(cookieService: CookieService, messageService: MessageService, sender: any) {
+  return () => {
+    if (cookieService.get("full_name") != '') {
+
+      messageService.loadDataSender().subscribe(() => {
+        sender = JSON.parse(JSON.stringify(messageService.getSender()));
+        messageService.connectToChat(sender.user_id);
+
+      });
+    }
+  };
+}
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -118,6 +138,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     TranslateModule.forRoot({
       defaultLanguage: 'vi_VN',
       loader: {
@@ -133,9 +154,16 @@ export function HttpLoaderFactory(http: HttpClient) {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true,
-  },
-  { provide: HTTP_INTERCEPTORS, useClass: loadingInterceptor, multi: true },
+    },
+    { provide: HTTP_INTERCEPTORS, useClass: loadingInterceptor, multi: true },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: appInitializer,
+      deps: [CookieService, MessageService],
+      multi: true,
+    },
+    DatePipe
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

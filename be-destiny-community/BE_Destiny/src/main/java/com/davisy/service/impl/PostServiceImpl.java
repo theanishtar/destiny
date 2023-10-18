@@ -95,4 +95,12 @@ public class PostServiceImpl implements PostService {
 		postDao.saveAndFlush(post);
 	}
 
+	@Override
+	public List<Object[]> getTop5postProfile(int id) {
+		List<Object[]> list = postDao.getTop5postProfile(id);
+		if (list == null)
+			return null;
+		return list;
+	}
+
 }

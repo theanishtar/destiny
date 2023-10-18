@@ -6,26 +6,26 @@
     <div class="logo-name"><span>DES</span>TINY</div>
   </a>
   <ul class="side-menu" id="accordionSidebar">
-    <li class="active">
-      <a href="admin" class="1"><i class="bx bxs-dashboard"></i>Tổng Quan</a>
+    <li [class.active]="activeMenuItem === 'admin'">
+      <a routerLink="/admin" class="1"><i class="bx bxs-dashboard"></i>Tổng Quan</a>
     </li>
     <li>
       <div class="analys"><i class="bx bx-window-alt"></i>Bài đăng</div>
     </li>
-    <li class="ml-4 2">
-      <a href="admin/postmanament" class="2"><i class="bx bx-analyse"></i>Thống kê</a>
+    <li class="ml-4 2" [class.active]="activeMenuItem === 'postmanament'">
+      <a routerLink="/admin/postmanament" class="2"><i class="bx bx-analyse"></i>Thống kê</a>
     </li>
-    <li class="ml-4 3">
-      <a href="admin/postreportdetail" class="3"><i class="bx bx-comment-error"></i>Báo cáo</a>
+    <li class="ml-4 3" [class.active]="activeMenuItem === 'postreportdetail'">
+      <a routerLink="/admin/postreportdetail" class="3"><i class="bx bx-comment-error"></i>Báo cáo</a>
     </li>
     <li>
       <div class="analys"><i class="bx bx-group"></i>Người dùng</div>
     </li>
-    <li class="ml-4 4">
-      <a href="admin/usermanament" class="4"><i class="bx bx-analyse"></i>Thống kê</a>
+    <li class="ml-4 4"  [class.active]="activeMenuItem === 'usermanament'">
+      <a routerLink="/admin/usermanament" class="4"><i class="bx bx-analyse"></i>Thống kê</a>
     </li>
-    <li class="ml-4 5">
-      <a href="admin/userreportdetail" class="5"><i class="bx bx-comment-error"></i>Báo cáo</a>
+    <li class="ml-4 5"  [class.active]="activeMenuItem === 'userreportdetail'">
+      <a routerLink="/admin/userreportdetail" class="5"><i class="bx bx-comment-error"></i>Báo cáo</a>
     </li>
     <li (click)="openNav()">
       <a class="clickSetting"><i class="bx bx-cog"></i>Cài đặt</a>
@@ -33,7 +33,7 @@
   </ul>
   <ul class="side-menu">
     <li>
-      <a href="#" class="logout" data-toggle="modal" data-target="#logoutModal">
+      <a (click)="logout()" class="logout">
         <i class="bx bx-log-out-circle"></i>
         Đăng xuất
       </a>

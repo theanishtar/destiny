@@ -9,19 +9,22 @@ import com.davisy.entity.Wards;
 
 public interface WardDAO extends JpaRepository<Wards, Integer> {
 
-	//22-9-2023 -tìm xã/phường theo id
+	// 22-9-2023 -tìm xã/phường theo id
 	@Query(value = "SELECT * FROM wards WHERE code=:code", nativeQuery = true)
 	public Wards findWardByID(String code);
-	
-	//11-10-2023 -lấy tất cả tên xã/phường
+
+	// 11-10-2023 -lấy tất cả tên xã/phường
 	@Query(value = "SELECT full_name FROM wards WHERE district_code=:code", nativeQuery = true)
 	public List<Object[]> getAllWardName(String code);
-	
-	//11-10-2023 -lấy tất cả tên xã/phường
+
+	// 11-10-2023 -lấy tất cả tên xã/phường
 	@Query(value = "SELECT full_name FROM wards", nativeQuery = true)
 	public List<Object[]> getAllWard();
-	
-	//11-10-2023 -tìm mã xã/phường theo tên
+
+	// 11-10-2023 -tìm mã xã/phường theo tên
 	@Query(value = "SELECT code FROM wards WHERE full_name =:wardName AND district_code=:districtCode", nativeQuery = true)
 	public String wardCode(String wardName, String districtCode);
+
+	@Query(value = "SELECT * FROM wards WHERE district_code=:id", nativeQuery = true)
+	public List<Wards> findByIdDistrict(String id);
 }

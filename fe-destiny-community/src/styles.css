@@ -240,3 +240,6 @@ a.nav-link.click-scroll.site-footer-link {
 .body-admin .ng-select .ng-select-container .ng-value-container .ng-input>input {
   color: var(--primary-admin);
 }
+.ng-select .ng-select-container:after {
+  border-bottom: none;
+}

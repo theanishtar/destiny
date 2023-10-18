@@ -25,4 +25,11 @@ public class PostImagesServiceImpl implements PostImagesService {
 	public List<PostImages> getListPostImagesByPostID(int id) {
 		return postImagesDAO.getListPostImagesByPostID(id);
 	}
+
+	// 16-10-2023 - lấy tất cả hình ảnh của user đã đăng
+	@Override
+	public List<String> findAllImagesUser(int id) {
+		List<String> list = postImagesDAO.findAllImagesUser(id);
+		return list;
+	}
 }

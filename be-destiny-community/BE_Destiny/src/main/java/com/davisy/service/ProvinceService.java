@@ -15,4 +15,6 @@ public interface ProvinceService {
 	
 	//11-10-2023 -tìm mã tỉnh theo tên
 	public String provinceCode(String provinceName);
+	
+	public List<Provinces>findAll();
 }

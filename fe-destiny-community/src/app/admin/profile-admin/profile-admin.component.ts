@@ -194,6 +194,17 @@ export class ProfileAdminComponent implements OnInit{
     event.target.setCustomValidity('');
   }
 
+  onInputCheckPassWorkValid(event: any) {
+    const passwordPattern = /^(?=.*[!@#$%^&*]+)[a-z0-9!@#$%^&*]{4,20}$/;
+    const inputValue = event.target.value;
+
+    if (!passwordPattern.test(inputValue)) {
+      event.target.setCustomValidity('Mật khẩu phải có độ dài từ 4-20 ký tự và có ít nhất một ký tự đặc biệt!');
+    } else {
+      event.target.setCustomValidity('');
+    }
+  }
+
   forgotPasswordDialog(){
     const prevBtns = document.querySelectorAll<HTMLElement>(".btn-prev");
     const nextBtns = document.querySelectorAll<HTMLElement>(".btn-next");

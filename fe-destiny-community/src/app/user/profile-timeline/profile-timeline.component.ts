@@ -10,11 +10,14 @@ import { sidebars } from '../../../assets/js/sidebar/sidebar.js';
 import { content } from '../../../assets/js/content/content.js';
 import { form } from '../../../assets/js/form/form.utils.js';
 import 'src/assets/js/utils/svg-loader.js';
-
+import { DatePipe } from '@angular/common';
+declare var toast: any;
 // 
 import { ModalService } from '../service/modal.service';
 import { InteractPostsService } from '../service/interact-posts.service';
 import { ProfileService } from '../service/profile.service';
+import { FollowsService } from '../service/follows.service';
+
 @Component({
   selector: 'app-profile-timeline',
   templateUrl: './profile-timeline.component.html',
@@ -28,8 +31,16 @@ import { ProfileService } from '../service/profile.service';
 })
 export class ProfileTimelineComponent implements OnInit {
   postId = '123'; // Mã số của bài viết (có thể là mã số duy nhất của mỗi bài viết)
+  dataProfileTimeline: any;
+  listSuggested: any[] = [];
+  checkData1: boolean = false;
+  check: boolean = true
+  dateJoin: string | null
+  isLoading = true;
 
   ngOnInit() {
+    // this.loadDataHeader(0);
+    
     this.checkSrcoll();
     liquid.liquid();
     avatarHexagons.avatarHexagons();
@@ -41,12 +52,44 @@ export class ProfileTimelineComponent implements OnInit {
     content.contentTab();
     form.formInput();
   }
-
+  dataFollows: any
   constructor(
     public modalService: ModalService,
     public interactPostsService: InteractPostsService,
-    private profileService: ProfileService
-  ) { }
+    private profileService: ProfileService,
+    private datePipe: DatePipe, //Định dạng ngày
+    public followsService: FollowsService,
+  ) {
+    let idLocal = parseInt((localStorage.getItem("idSelected") + '')?.trim());
+    this.profileService.loadDataHeader(idLocal).subscribe(res => {
+      this.dataProfileTimeline = this.profileService.getDataHeader();
+      console.log("this.dataProfileTimeline: " + this.dataProfileTimeline.images[1])
+      this.dateJoin = this.datePipe.transform(this.dataProfileTimeline.dateJoin, 'dd/MM/yyyy');
+      this.isLoading = false
+    })
+   
+    this.listSuggested = this.followsService.getDataSuggested();
+
+    // if (!this.listSuggested) {
+    //   this.check = false
+    // }
+    
+  }
+
+  addFollow(id: number) {
+    this.followsService.addFollow(id).subscribe((res) => {
+      // this.loadDataSuggest();
+      new toast({
+        title: 'Thông báo!',
+        message: 'Đã theo dõi',
+        type: 'success',
+        duration: 3000,
+      })
+      // location.reload();
+    });
+  }
+
+/* ============template============= */
 
   @ViewChild('elementToScroll', { static: false }) elementToScroll: ElementRef;
 

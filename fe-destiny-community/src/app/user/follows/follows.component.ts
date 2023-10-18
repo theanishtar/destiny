@@ -35,13 +35,13 @@ export class FollowsComponent implements OnInit {
   listFollowing: any[];
   listFollower: any[];
   listFriend: any[];
-  isLoading = false;
+  isLoading = true;
 
   ngOnInit() {
     this.loadDataFling();
     this.loadDataFler();
     this.loadDataFriend();
-    this.loadData();
+    // this.loadData();
 
     liquid.liquid();
     avatarHexagons.avatarHexagons();
@@ -64,7 +64,7 @@ export class FollowsComponent implements OnInit {
   loadDataFling() {
     this.followsService.loadDataFollowing().subscribe(() => {
       this.listFollowing = this.followsService.getDataFling();
-
+      this.isLoading = false;
       if (Array.isArray(this.listFollowing) && this.listFollowing.length === 0) {
         this.checkData1 = true;
       }

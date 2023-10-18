@@ -33,14 +33,13 @@ public interface PostDAO extends JpaRepository<Post, Long> {
 	public double getPercentPostSendSuccess();
 
 	// 22-9-2023 -Top 4 bài đăng có lượt yêu thích nhiều nhất
-	@Query(value = "SELECT p.post_id, COUNT(i.post_id) \r\n" + "FROM post p \r\n"
-			+ "INNER JOIN interested i \r\n" + "ON p.post_id = i.post_id\r\n" + "GROUP BY p.post_id\r\n"
-			+ "ORDER BY COUNT(i.post_id) DESC\r\n" + "LIMIT 4;", nativeQuery = true)
+	@Query(value = "SELECT p.post_id, COUNT(i.post_id) \r\n" + "FROM post p \r\n" + "INNER JOIN interested i \r\n"
+			+ "ON p.post_id = i.post_id\r\n" + "GROUP BY p.post_id\r\n" + "ORDER BY COUNT(i.post_id) DESC\r\n"
+			+ "LIMIT 4;", nativeQuery = true)
 	public List<Object[]> getTOP4Post();
 
 	// 22-9-2023 -Tổng số bài đăng theo từng tháng
-	@Query(value = "SELECT EXTRACT(MONTH FROM date_post) AS MONTH, COUNT(*) \r\n"
-			+ "FROM post \r\n"
+	@Query(value = "SELECT EXTRACT(MONTH FROM date_post) AS MONTH, COUNT(*) \r\n" + "FROM post \r\n"
 			+ "GROUP BY EXTRACT(MONTH FROM date_post) \r\n"
 			+ "ORDER BY EXTRACT(MONTH FROM date_post) ASC;", nativeQuery = true)
 	public List<Object[]> getTotalPostEveryMonth();
@@ -56,5 +55,13 @@ public interface PostDAO extends JpaRepository<Post, Long> {
 	// 23-9-2023 -Danh sách tất cả bài đăng của người dùng theo id
 	@Query(value = "SELECT * FROM post WHERE user_id=:id", nativeQuery = true)
 	public List<Post> getListPostByUserID(int id);
+
+	// Top 5 bài viết có nhiều lượt quan tâm của trang profile
+	@Query(value = "SELECT u.user_id, u.avatar,p.post_id, p.content, COUNT(i.interested_id) AS interest_count\n"
+			+ "FROM post p\n" + "LEFT JOIN interested i ON p.post_id = i.post_id\n"
+			+ "LEFT JOIN users u ON p.user_id = u.user_id where u.user_id =:id\n"
+			+ "GROUP BY p.post_id, p.content, u.user_id, u.avatar\n" + "ORDER BY interest_count DESC\n" + "LIMIT 5;\n"
+			+ "", nativeQuery = true)
+	public List<Object[]> getTop5postProfile(int id);
 
 }

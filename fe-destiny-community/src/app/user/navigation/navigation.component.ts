@@ -5,6 +5,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { GetStartedComponent } from '@app/get-started/get-started.component';
 import { LoginService } from '@app/service/login.service';
 import { MessageService } from '../service/message.service';
+import { ProfileService } from '../service/profile.service';
 import '../../../assets/toast/main.js';
 declare var toast: any;
 @Component({
@@ -21,17 +22,20 @@ declare var toast: any;
 
 export class NavigationComponent implements OnInit {
   userDisplayName = '';
+  avatar = '';
   activeMenuItem: string = '';
 
   ngOnInit() {
     this.userDisplayName = this.cookieService.get('full_name');  
+    this.avatar = this.cookieService.get("avatar");
   }
   
   constructor(
     private cookieService: CookieService,
     private loginService: LoginService,
     private router: Router,
-    public messageService: MessageService
+    public messageService: MessageService,
+    public profileService: ProfileService
   ) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {

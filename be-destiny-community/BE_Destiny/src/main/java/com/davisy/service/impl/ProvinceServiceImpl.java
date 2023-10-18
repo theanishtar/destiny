@@ -31,4 +31,9 @@ public class ProvinceServiceImpl implements ProvinceService{
 	public String provinceCode(String provinceName) {
 		return provinceDao.provinceCode(provinceName);
 	}
+
+	@Override
+	public List<Provinces> findAll() {
+		return provinceDao.findAll();
+	}
 }

@@ -63,17 +63,17 @@ public class User implements UserDetails {
 	@JoinColumn(name = "gender_id")
 	Gender gender;
 
-	@JsonIgnore
+//	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "user_provinces_id")
 	Provinces provinces;
 
-	@JsonIgnore
+//	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "user_districts_id")
 	Districts districts;
 
-	@JsonIgnore
+//	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "user_wards_id")
 	Wards wards;
@@ -137,6 +137,24 @@ public class User implements UserDetails {
 		if (wards == null || districts == null || provinces == null)
 			return null;
 		return wards.full_name + ". " + districts.full_name + ". " + provinces.full_name;
+	}
+	
+	public String getIdProvince() {
+		if(provinces==null)
+			return null;
+		return provinces.getCode();
+	}
+	
+	public String getIdDistrict() {
+		if(districts==null)
+			return null;
+		return districts.getCode();
+	}
+	
+	public String getIdWard() {
+		if(wards==null)
+			return null;
+		return wards.getCode();
 	}
 
 	@Override

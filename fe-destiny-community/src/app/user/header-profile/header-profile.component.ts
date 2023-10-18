@@ -15,15 +15,17 @@ import { ProfileService } from '../service/profile.service';
 })
 export class HeaderProfileComponent implements OnInit {
   activeMenuItem: string = '';
-  dataHeader: any;
-
+  dataProfileTimeline: any;
+  isLoading = true;
+  idLocal: any
   ngOnInit() {
-    this.loadDataHeader(26);
+    
   }
+
   constructor(
     private cookieService: CookieService,
     private router: Router,
-    private profileService: ProfileService
+    public profileService: ProfileService
   ) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -31,11 +33,13 @@ export class HeaderProfileComponent implements OnInit {
         this.updateActiveMenuItem();
       }
     });
-  }
-  loadDataHeader(id) {
-    this.profileService.loadDataHeader(id).subscribe(res => {
-      this.dataHeader = this.profileService.getDataHeader();
+
+    this.idLocal = parseInt((localStorage.getItem("idSelected") + '')?.trim());
+    this.profileService.loadDataHeader(this.idLocal).subscribe(res => {
+      this.dataProfileTimeline = this.profileService.getDataHeader();
+      this.isLoading = false
     })
+
   }
 
   /* ============template============= */

@@ -32,9 +32,20 @@ public class DistrictServiceImpl implements DistrictService {
 		return districtDao.getAllDistrict();
 	}
 
-	//11-10-2023 -tìm mã quận/huyện theo tên
+	// 11-10-2023 -tìm mã quận/huyện theo tên
 	@Override
 	public String districtCode(String districtName, String provinceCode) {
 		return districtDao.districtCode(districtName, provinceCode);
+	}
+
+	@Override
+	public List<Districts> findByIdProvince(String id) {
+		List<Districts> list = districtDao.findByIdProvince(id);
+		return list;
+	}
+
+	@Override
+	public List<Districts> findAll() {
+		return districtDao.findAll();
 	}
 }

@@ -20,22 +20,34 @@ public class WardServiceImpl implements WardService {
 		return wardDao.findWardByID(code);
 	}
 
-	//11-10-2023 -lấy tất cả tên xã/phường
+	// 11-10-2023 -lấy tất cả tên xã/phường
 	@Override
 	public List<Object[]> getAllWardName(String code) {
 		return wardDao.getAllWardName(code);
 	}
 
-	//11-10-2023 -lấy tất cả tên xã/phường
+	// 11-10-2023 -lấy tất cả tên xã/phường
 	@Override
 	public List<Object[]> getAllWard() {
 		return wardDao.getAllWard();
 	}
 
-	//11-10-2023 -tìm mã xã/phường theo tên
+	// 11-10-2023 -tìm mã xã/phường theo tên
 	@Override
 	public String wardCode(String wardName, String districtCode) {
 		return wardDao.wardCode(wardName, districtCode);
-		
+
 	}
+
+	@Override
+	public List<Wards> findByIdDistrict(String id) {
+		List<Wards> list = wardDao.findByIdDistrict(id);
+		return list;
+	}
+
+	@Override
+	public List<Wards> findAllL() {
+		return wardDao.findAll();
+	}
+
 }

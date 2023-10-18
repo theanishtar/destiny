@@ -4,33 +4,25 @@
   class="navigation-widget navigation-widget-desktop closed sidebar left delayed"
 >
   <!-- USER AVATAR -->
-  <a class="user-avatar small no-outline online" href="profile">
-    <!-- USER AVATAR CONTENT -->
-    <div class="user-avatar-content">
-      <!-- HEXAGON -->
-      <div
-        class="hexagon-image-30-32"
-        data-src="../../../assets/images/avatar/01.jpg"
-      ></div>
-      <!-- /HEXAGON -->
+  <a
+    class="user-avatar small user-status-avatar no-border no-outline"
+    (click)="this.profileService.loadDataProfileTimeline(0)"
+  >
+    <div class="hexagon-container">
+      <div class="hexagon user-avatar-content">
+        <div
+          class="hexagon-image"
+          style="background-image: url('{{ avatar }}')"
+        ></div>
+      </div>
+      <div class="hexagon user-avatar-border">
+        <div class="hexagon-border"></div>
+      </div>
+      <div class="hexagon user-avatar-progress-border">
+        <div class="user-avatar-progress"></div>
+      </div>
+      <p class="user-avatar-badge-text">1</p>
     </div>
-    <!-- /USER AVATAR CONTENT -->
-
-    <!-- USER AVATAR PROGRESS -->
-    <div class="user-avatar-progress">
-      <!-- HEXAGON -->
-      <div class="hexagon-progress-40-44"></div>
-      <!-- /HEXAGON -->
-    </div>
-    <!-- /USER AVATAR PROGRESS -->
-
-    <!-- USER AVATAR PROGRESS BORDER -->
-    <div class="user-avatar-progress-border">
-      <!-- HEXAGON -->
-      <div class="hexagon-border-40-44"></div>
-      <!-- /HEXAGON -->
-    </div>
-    <!-- /USER AVATAR PROGRESS BORDER -->
   </a>
   <!-- /USER AVATAR -->
 
@@ -38,7 +30,10 @@
   <div>
     <ul class="menu small">
       <!-- MENU ITEM -->
-      <li [class.menu-item]="true" [class.active]="activeMenuItem === 'newsfeed'">
+      <li
+        [class.menu-item]="true"
+        [class.active]="activeMenuItem === 'newsfeed'"
+      >
         <!-- MENU ITEM LINK -->
         <a
           [attr.data-title]="'navbar_home' | translate"
@@ -73,29 +68,39 @@
       </li>
       <!-- /MENU ITEM -->
 
-<!-- MENU ITEM -->
-<li [class.menu-item]="true" [class.active]="activeMenuItem === 'message'">
-  <!-- MENU ITEM LINK -->
-  <a
-    [attr.data-title]="'sidebar_setting' | translate"
-    class="menu-item-link"
-    routerLink="/message"
-  >
-    <!-- MENU ITEM LINK ICON -->
-    <div class="user-avatar small no-outline" [ngClass]="messageService.notif_mess ? 'online notif-mess' : ''" style="margin-right: 1rem;">
-      <div class="menu-item-link-icon icon-badges">
-        <i class="fa-solid fa-paper-plane"></i>
-      </div>
-    </div>
-    
-    <!-- /MENU ITEM LINK ICON -->
-  </a>
-  <!-- /MENU ITEM LINK -->
-</li>
-<!-- /MENU ITEM -->
+      <!-- MENU ITEM -->
+      <li
+        [class.menu-item]="true"
+        [class.active]="activeMenuItem === 'message'"
+      >
+        <!-- MENU ITEM LINK -->
+        <a
+          [attr.data-title]="'sidebar_setting' | translate"
+          class="menu-item-link"
+          routerLink="/message"
+        >
+          <!-- MENU ITEM LINK ICON -->
+          <div
+            class="user-avatar small no-outline"
+            [ngClass]="messageService.notif_mess ? 'online notif-mess' : ''"
+            style="margin-right: 1rem"
+          >
+            <div class="menu-item-link-icon icon-badges">
+              <i class="fa-solid fa-paper-plane"></i>
+            </div>
+          </div>
+
+          <!-- /MENU ITEM LINK ICON -->
+        </a>
+        <!-- /MENU ITEM LINK -->
+      </li>
+      <!-- /MENU ITEM -->
 
       <!-- MENU ITEM -->
-      <li [class.menu-item]="true" [class.active]="activeMenuItem === 'history'">
+      <li
+        [class.menu-item]="true"
+        [class.active]="activeMenuItem === 'history'"
+      >
         <!-- MENU ITEM LINK -->
         <a
           [attr.data-title]="'sidebar_history' | translate"
@@ -113,7 +118,10 @@
       <!-- /MENU ITEM -->
 
       <!-- MENU ITEM -->
-      <li [class.menu-item]="true" [class.active]="activeMenuItem === 'contact'">
+      <li
+        [class.menu-item]="true"
+        [class.active]="activeMenuItem === 'contact'"
+      >
         <!-- MENU ITEM LINK -->
         <a
           [attr.data-title]="'navbar_contact' | translate"
@@ -131,7 +139,10 @@
       <!-- /MENU ITEM -->
 
       <!-- MENU ITEM -->
-      <li [class.menu-item]="true" [class.active]="activeMenuItem === 'setting'">
+      <li
+        [class.menu-item]="true"
+        [class.active]="activeMenuItem === 'setting'"
+      >
         <!-- MENU ITEM LINK -->
         <a
           [attr.data-title]="'sidebar_setting' | translate"
@@ -272,19 +283,19 @@
     <!-- /MENU ITEM -->
 
     <!-- MENU ITEM -->
-<li [class.menu-item]="true" [class.active]="activeMenuItem === 'message'">
-  <!-- MENU ITEM LINK -->
-  <a class="menu-item-link" routerLink="/message">
-    <!-- MENU ITEM LINK ICON -->
-    <div class="menu-item-link-icon icon-newsfeed">
-      <i class="fa-solid fa-paper-plane"></i>
-    </div>
-    <!-- /MENU ITEM LINK ICON -->
-    {{ "navbar_home" | translate }}
-  </a>
-  <!-- /MENU ITEM LINK -->
-</li>
-<!-- /MENU ITEM -->
+    <li [class.menu-item]="true" [class.active]="activeMenuItem === 'message'">
+      <!-- MENU ITEM LINK -->
+      <a class="menu-item-link" routerLink="/message">
+        <!-- MENU ITEM LINK ICON -->
+        <div class="menu-item-link-icon icon-newsfeed">
+          <i class="fa-solid fa-paper-plane"></i>
+        </div>
+        <!-- /MENU ITEM LINK ICON -->
+        {{ "navbar_home" | translate }}
+      </a>
+      <!-- /MENU ITEM LINK -->
+    </li>
+    <!-- /MENU ITEM -->
 
     <!-- MENU ITEM -->
     <li [class.menu-item]="true" [class.active]="activeMenuItem === 'follow'">
@@ -440,20 +451,20 @@
       <!-- /MENU ITEM LINK -->
     </li>
     <!-- /MENU ITEM -->
-<!-- MENU ITEM -->
-<li [class.menu-item]="true" [class.active]="activeMenuItem === 'message'">
-  <!-- MENU ITEM LINK -->
-  <a class="menu-item-link" routerLink="/message">
-    <!-- MENU ITEM LINK ICON -->
-    <div class="menu-item-link-icon icon-newsfeed">
-      <i class="fa-solid fa-paper-plane"></i>
-    </div>
-    <!-- /MENU ITEM LINK ICON -->
-    {{ "navbar_home" | translate }}
-  </a>
-  <!-- /MENU ITEM LINK -->
-</li>
-<!-- /MENU ITEM -->
+    <!-- MENU ITEM -->
+    <li [class.menu-item]="true" [class.active]="activeMenuItem === 'message'">
+      <!-- MENU ITEM LINK -->
+      <a class="menu-item-link" routerLink="/message">
+        <!-- MENU ITEM LINK ICON -->
+        <div class="menu-item-link-icon icon-newsfeed">
+          <i class="fa-solid fa-paper-plane"></i>
+        </div>
+        <!-- /MENU ITEM LINK ICON -->
+        {{ "navbar_home" | translate }}
+      </a>
+      <!-- /MENU ITEM LINK -->
+    </li>
+    <!-- /MENU ITEM -->
     <!-- MENU ITEM -->
     <li [class.menu-item]="true" [class.active]="activeMenuItem === 'follow'">
       <!-- MENU ITEM LINK -->
@@ -1095,12 +1106,11 @@
                   <!-- BUTTON -->
                   <p class="button re-fl">Theo dõi</p>
                   <!-- /BUTTON -->
-      
+
                   <!-- BUTTON -->
                   <p class="button delete-fl">Xóa</p>
                   <!-- /BUTTON -->
                 </div>
-                
               </div>
               <!-- /USER STATUS -->
             </div>
@@ -1496,7 +1506,7 @@
         <!-- <svg class="action-item-icon icon-settings">
         <use xlink:href="#svg-settings"></use>
       </svg> -->
-        <p class="fullname-logged">{{userDisplayName}}</p>
+        <p class="fullname-logged">{{ userDisplayName }}</p>
         <!-- /ACTION ITEM ICON -->
       </div>
       <!-- /ACTION ITEM -->
@@ -1508,38 +1518,26 @@
           <!-- USER STATUS -->
           <div class="user-status">
             <!-- USER STATUS AVATAR -->
-            <a class="user-status-avatar" href="profile">
-              <!-- USER AVATAR -->
-              <div class="user-avatar small no-outline">
-                <!-- USER AVATAR CONTENT -->
-                <div class="user-avatar-content">
-                  <!-- HEXAGON -->
+            <a
+              class="user-avatar small user-status-avatar no-border no-outline"
+              (click)="this.profileService.loadDataProfileTimeline(0)"
+            >
+              <div class="hexagon-container">
+                <div class="hexagon user-avatar-content">
                   <div
-                    class="hexagon-image-30-32"
-                    data-src="../../../assets/images/avatar/01.jpg"
+                    class="hexagon-image"
+                    style="background-image: url('{{ avatar }}')"
                   ></div>
-                  <!-- /HEXAGON -->
                 </div>
-                <!-- /USER AVATAR CONTENT -->
-
-                <!-- USER AVATAR PROGRESS -->
-                <div class="user-avatar-progress">
-                  <!-- HEXAGON -->
-                  <div class="hexagon-progress-40-44"></div>
-                  <!-- /HEXAGON -->
+                <div class="hexagon user-avatar-border">
+                  <div class="hexagon-border"></div>
                 </div>
-                <!-- /USER AVATAR PROGRESS -->
-
-                <!-- USER AVATAR PROGRESS BORDER -->
-                <div class="user-avatar-progress-border">
-                  <!-- HEXAGON -->
-                  <div class="hexagon-border-40-44"></div>
-                  <!-- /HEXAGON -->
+                <div class="hexagon user-avatar-progress-border">
+                  <div class="user-avatar-progress"></div>
                 </div>
-                <!-- /USER AVATAR PROGRESS BORDER -->
-              </div>
-              <!-- /USER AVATAR -->
-            </a>
+                <p class="user-avatar-badge-text">1</p>
+              </div> </a
+            >
             <!-- /USER STATUS AVATAR -->
 
             <!-- USER STATUS TITLE -->

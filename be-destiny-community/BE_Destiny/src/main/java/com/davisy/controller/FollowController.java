@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -120,7 +121,8 @@ public class FollowController {
 		return ResponseEntity.status(200).body(reloadData(email));
 	}
 
-	public void createNewChat(String fromUserId, String toUserId) {
+	@Async
+	synchronized public void createNewChat(String fromUserId, String toUserId) {
 		Chats chats = new Chats();
 		List<String> list = new ArrayList<>();
 		list.add(fromUserId);
@@ -136,7 +138,8 @@ public class FollowController {
 		}
 	}
 
-	public void updateChatsUnfollow(String fromUserId, String toUserId) {
+	@Async
+	synchronized public void updateChatsUnfollow(String fromUserId, String toUserId) {
 		Chats chats = chatsServiceImpl.findChatNames(fromUserId, toUserId);
 		chats.setIsfriend(false);
 		chatsServiceImpl.update(chats);
