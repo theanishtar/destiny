@@ -2,11 +2,12 @@ package com.davisy.dao;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.davisy.entity.Chats;
-
+//@Cacheable("chats")//Tạo bộ nhớ đệm
 public interface ChatDAO extends JpaRepository<Chats, Integer> {
 
 	@Query(value = "select *from chats c where c.name_chats like %:nameChat%", nativeQuery = true)

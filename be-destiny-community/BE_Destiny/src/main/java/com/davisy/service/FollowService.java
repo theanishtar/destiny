@@ -21,4 +21,6 @@ public interface FollowService {
 	public void create(Follower follower);
 
 	public boolean checkFriend(int id1, int id2);
+
+	public boolean checkFollow(int id1, int id2);
 }

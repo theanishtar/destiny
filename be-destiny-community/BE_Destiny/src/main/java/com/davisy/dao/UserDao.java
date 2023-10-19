@@ -2,11 +2,12 @@ package com.davisy.dao;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.davisy.entity.User;
-
+//@Cacheable("users")//Tạo bộ nhớ đệm
 public interface UserDAO extends JpaRepository<User, Integer> {
 	@Query(value = "SELECT *FROM users WHERE email:=email AND password:=password", nativeQuery = true)
 	public User findByEmailAndPassword(String email, String password);

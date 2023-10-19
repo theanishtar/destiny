@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,10 +29,12 @@ public class Interested {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	int interested_id;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	User user;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "post_id")
 	Post post;

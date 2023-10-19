@@ -2,12 +2,16 @@ package com.davisy.dao;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import com.davisy.entity.Post;
 
-public interface PostDAO extends JpaRepository<Post, Long> {
+//@Cacheable("post")//Tạo bộ nhớ đệm
+@Repository
+public interface PostDAO extends JpaRepository<Post, Integer> {
 
 	@Query(value = "select count(p.post_id) as CountPost  from post p where p.user_id =:id", nativeQuery = true)
 	public int countPost(int id);
@@ -63,5 +67,8 @@ public interface PostDAO extends JpaRepository<Post, Long> {
 			+ "GROUP BY p.post_id, p.content, u.user_id, u.avatar\n" + "ORDER BY interest_count DESC\n" + "LIMIT 5;\n"
 			+ "", nativeQuery = true)
 	public List<Object[]> getTop5postProfile(int id);
+
+	@Query(value = "select /*+ RESULT_CACHE */ *from post", nativeQuery = true)
+	public List<Post> findAllPost();
 
 }

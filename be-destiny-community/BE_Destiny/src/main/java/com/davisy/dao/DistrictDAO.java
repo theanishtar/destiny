@@ -2,11 +2,12 @@ package com.davisy.dao;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.davisy.entity.Districts;
-
+//@Cacheable("districts")//Tạo bộ nhớ đệm
 public interface DistrictDAO extends JpaRepository<Districts, Integer> {
 
 	// 22-9-2023 -tìm quận/huyện theo id

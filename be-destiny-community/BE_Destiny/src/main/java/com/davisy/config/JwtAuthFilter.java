@@ -53,7 +53,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	ObjectMapper objectMapper = new ObjectMapper();
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+	protected  void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
 		System.out.println("req" + request.getUserPrincipal());
 		request.getAttributeNames().asIterator().forEachRemaining(attributeName -> {

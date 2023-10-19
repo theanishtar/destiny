@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.davisy.RedisCheck;
 import com.davisy.config.JwtTokenUtil;
 import com.davisy.entity.ChatParticipants;
 import com.davisy.entity.ChatParticipants.Primary;

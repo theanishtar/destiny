@@ -3,6 +3,7 @@ package com.davisy.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.davisy.dao.PostDAO;
@@ -101,6 +102,17 @@ public class PostServiceImpl implements PostService {
 		if (list == null)
 			return null;
 		return list;
+	}
+
+	@Cacheable("post")
+	@Override
+	public List<Post> findAll() {
+		return postDao.findAllPost();
+	}
+
+	@Override
+	public Post findById(int id) {
+		return postDao.findById(id).get();
 	}
 
 }

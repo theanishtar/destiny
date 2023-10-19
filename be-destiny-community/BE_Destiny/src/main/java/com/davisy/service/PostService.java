@@ -7,7 +7,9 @@ import com.davisy.entity.Post;
 public interface PostService {
 	public int countPost(int id);
 
-	List<Object[]> getTOP5Post();
+	public List<Object[]> getTOP5Post();
+
+	public List<Post> findAll();
 
 	// 21-9-2023 -tìm post theo id
 	public Post findPostByID(int id);
@@ -30,6 +32,8 @@ public interface PostService {
 
 	// 23-9-2023 -Tổng bài đăng của người dùng đã dăng
 	public int getTotalPostByUser(int id);
+
+	public Post findById(int id);
 
 	// 23-9-2023 -Danh sách tất cả bài đăng của người dùng theo id
 	public List<Post> getListPostByUserID(int id);

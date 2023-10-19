@@ -2,11 +2,12 @@ package com.davisy.dao;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.davisy.entity.Wards;
-
+//@Cacheable("wards")//Tạo bộ nhớ đệm
 public interface WardDAO extends JpaRepository<Wards, Integer> {
 
 	// 22-9-2023 -tìm xã/phường theo id

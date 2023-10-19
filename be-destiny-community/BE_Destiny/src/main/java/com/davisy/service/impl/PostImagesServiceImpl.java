@@ -32,4 +32,9 @@ public class PostImagesServiceImpl implements PostImagesService {
 		List<String> list = postImagesDAO.findAllImagesUser(id);
 		return list;
 	}
+
+	@Override
+	public List<String> findAllImagesofPost(int id) {
+		return postImagesDAO.findAllImagesofPost(id);
+	}
 }

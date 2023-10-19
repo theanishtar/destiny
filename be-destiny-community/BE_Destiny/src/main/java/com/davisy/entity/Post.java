@@ -4,6 +4,9 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
@@ -30,6 +33,7 @@ public class Post {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	int post_id;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	User user;
@@ -41,14 +45,17 @@ public class Post {
 
 	String hash_Tag;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "post_provinces_id")
 	Provinces provinces;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "post_districts_id")
 	Districts districts;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "post_wards_id")
 	Wards wards;

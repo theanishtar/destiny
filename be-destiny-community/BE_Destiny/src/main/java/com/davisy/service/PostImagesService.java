@@ -13,4 +13,6 @@ public interface PostImagesService {
 
 	// 16-10-2023 - lấy tất cả hình ảnh của user đã đăng
 	public List<String> findAllImagesUser(int id);
+
+	public List<String> findAllImagesofPost(int id);
 }

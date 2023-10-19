@@ -1,9 +1,12 @@
 package com.davisy.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.davisy.dao.InterestedDAO;
+import com.davisy.entity.Interested;
 import com.davisy.service.InterestedService;
 
 @Service
@@ -21,5 +24,10 @@ public class InterestedServiceImpl implements InterestedService {
 	@Override
 	public int totalInterestedByUser(int id) {
 		return interestedDao.totalInterestedByUser(id);
+	}
+
+	@Override
+	public List<Object[]> findByIdPost(int id) {
+		return interestedDao.findByIdPost(id);
 	}
 }

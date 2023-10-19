@@ -2,11 +2,12 @@ package com.davisy.dao;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.davisy.entity.Provinces;
-
+//@Cacheable("provinces")//Tạo bộ nhớ đệm
 public interface ProvinceDAO extends JpaRepository<Provinces, Integer>{
 
 	//22-9-2023 -tìm thành phố/tỉnh theo id

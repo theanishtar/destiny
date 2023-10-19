@@ -63,17 +63,17 @@ public class User implements UserDetails {
 	@JoinColumn(name = "gender_id")
 	Gender gender;
 
-//	@JsonIgnore
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "user_provinces_id")
 	Provinces provinces;
 
-//	@JsonIgnore
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "user_districts_id")
 	Districts districts;
 
-//	@JsonIgnore
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "user_wards_id")
 	Wards wards;
