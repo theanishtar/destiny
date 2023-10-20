@@ -277,7 +277,6 @@ public class AdminControl {
 		}
 
 		return timeCaculate;
-
 	}
 
 	// update lastest 7-10

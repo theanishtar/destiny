@@ -6,19 +6,19 @@ import com.davisy.mongodb.documents.BadWord;
 
 public interface BadWordService {
 	
-	public BadWord findByName(BadWord badWord, Class<BadWord> classBadWord, String collectionName, String name);
+	public BadWord findByName(String name, String data);
 
-	public List<BadWord> findAllByName(BadWord badWord, Class<BadWord> classBadWord, String collectionName, String name);
+	public List<BadWord> findAllByName(String name, String data);
 	
-	public List<BadWord> findAll(BadWord badWord, Class<BadWord> classBadWord, String collectionName);
+	public List<BadWord> findAll();
 	
-	public BadWord insert(BadWord badWord, Class<BadWord> classBadWord, String collectionName);
+	public BadWord insert(BadWord badWord);
 	
-	public List<BadWord> inserts(List<BadWord> badWords, String collectionName);
+	public List<BadWord> inserts(List<BadWord> badWords);
 
-	public BadWord update(Class<BadWord> classBadWord, String collectionName, String name, BadWord badWordUpdate);
+	public BadWord update(String name, String data, BadWord badWordUpdate);
 	
-	public long delete(BadWord badWord, Class<BadWord> classBadWord, String collectionName, String name);
+	public long delete(String name, String data);
 	
 	public boolean checkBadword(String badword);
 }

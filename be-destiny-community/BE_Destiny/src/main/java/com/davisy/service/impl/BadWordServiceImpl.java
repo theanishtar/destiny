@@ -15,13 +15,14 @@ import com.davisy.service.CacheService;
 public class BadWordServiceImpl implements BadWordService{
 
 	@Autowired
-	MongoDBUtils dbUtils;
+	private MongoDBUtils dbUtils;
 	
 	@Value("${davis.mongodb.collectionBadWords}")
-	private String collectionName;
+	private String collectionBadWords;
 	
 	@Autowired
 	private CacheService cacheService;
+	
 	
 	@Override
 	public boolean checkBadword(String badword) {
@@ -45,47 +46,47 @@ public class BadWordServiceImpl implements BadWordService{
 			String resultWord = cacheService.getByKey(word);
 			if(resultWord != null) {
 				result = true;
-				BadWord badWord = findByName(new BadWord(), BadWord.class, collectionName, word);
+				BadWord badWord = findByName("name", word);
 				badWord.setSeverityLevel(badWord.getSeverityLevel() + 1);
-				update(BadWord.class, collectionName, word, badWord);
+				update("name", word, badWord);
 			}
 		}
 		return result;
 	}
 	
 	@Override
-	public BadWord findByName(BadWord badWord, Class<BadWord> classBadWord, String collectionName, String name) {
-		return dbUtils.findByName(badWord, classBadWord, collectionName, name);
+	public BadWord findByName(String name, String data) {
+		return dbUtils.findByColumn(BadWord.class, collectionBadWords, name, data);
 	}
 	
 	@Override
-	public List<BadWord> findAllByName(BadWord badWord, Class<BadWord> classBadWord, String collectionName, String name) {
-		return dbUtils.findAllByName(badWord, classBadWord, collectionName, name);
+	public List<BadWord> findAllByName(String name, String data) {
+		return dbUtils.findAllByColumn(BadWord.class, collectionBadWords, name, data);
 	}
 	
 	@Override
-	public List<BadWord> findAll(BadWord badWord, Class<BadWord> classBadWord, String collectionName) {
-		return dbUtils.findAll(badWord, classBadWord, collectionName);
+	public List<BadWord> findAll() {
+		return dbUtils.findAll(BadWord.class, collectionBadWords);
 	}
 	
 	@Override
-	public BadWord insert(BadWord badWord, Class<BadWord> classBadWord, String collectionName) {
-		return dbUtils.insert(badWord, classBadWord, collectionName);	
+	public BadWord insert(BadWord badWord) {
+		return dbUtils.insert(badWord ,BadWord.class, collectionBadWords);	
 	}
 	
 	@Override
-	public List<BadWord> inserts(List<BadWord> badWords, String collectionName) {
-		return dbUtils.inserts(badWords, collectionName);
+	public List<BadWord> inserts(List<BadWord> badWords) {
+		return dbUtils.inserts(badWords, collectionBadWords);
 	}
 
 	@Override
-	public BadWord update(Class<BadWord> classBadWord, String collectionName, String name, BadWord badWordUpdate) {
-		return dbUtils.updateFirstByName(classBadWord, collectionName, name, badWordUpdate);
+	public BadWord update(String name, String data, BadWord badWordUpdate) {
+		return dbUtils.updateFirstByColumn(BadWord.class, collectionBadWords, name, data, badWordUpdate);
 	}
 	
 	@Override
-	public long delete(BadWord badWord, Class<BadWord> classBadWord, String collectionName, String name) {
-		return dbUtils.deletesByName(badWord, classBadWord, collectionName, name);
+	public long delete(String name, String data) {
+		return dbUtils.deletesByColumn(BadWord.class, collectionBadWords, name, data);
 	}
 	
 }

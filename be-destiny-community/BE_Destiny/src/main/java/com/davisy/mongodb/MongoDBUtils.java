@@ -7,6 +7,7 @@ import java.util.stream.StreamSupport;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -32,18 +33,66 @@ public class MongoDBUtils {
 	@Value("${davis.mongodb.database}")
 	private String dbName;
 
-	// tìm theo trường "name"
-	public <T> T findByName(T document, Class<T> documentClass, String collectionName, String name) {
+	// tìm theo trường
+	public <T> T findByColumn(Class<T> documentClass, String collectionName, String column, String dataColumn) {
 		MongoDatabase database = client.getDatabase(dbName);
 		// MongoCollection defines a connection to a specific collection of documents in
 		// a specific database
 		MongoCollection<T> collection = database.getCollection(collectionName, documentClass);
 
 		try {
-			Bson findPotato = Filters.eq("name", name);
+			Bson findPotato = Filters.eq(column, dataColumn);
 			T firstPotato = collection.find(findPotato).first();
 			if (firstPotato == null) {
-				System.out.println("Couldn't find any Object containing " + name + " as an ingredient in MongoDB.");
+				System.out
+						.println("Couldn't find any Object containing " + dataColumn + " as an ingredient in MongoDB.");
+
+			} else {
+				System.out.println(firstPotato.toString());
+				return firstPotato;
+			}
+		} catch (MongoException me) {
+			System.err.println("Unable to find a recipe to update in MongoDB due to an error: " + me);
+		}
+		return null;
+	}
+	
+	// tìm theo 2 trường
+		public <T> T findByTwoColumn(Class<T> documentClass, String collectionName, String column1, String dataColumn1, String column2, String dataColumn2) {
+			MongoDatabase database = client.getDatabase(dbName);
+			// MongoCollection defines a connection to a specific collection of documents in
+			// a specific database
+			MongoCollection<T> collection = database.getCollection(collectionName, documentClass);
+
+			try {
+				Bson filter = Filters.and(Filters.eq(column1, dataColumn1), Filters.eq(column2, dataColumn2));
+		        T firstPotato = collection.find(filter).first();
+				if (firstPotato == null) {
+					System.out
+							.println("Couldn't find any Object containing " + dataColumn1 + "and" + dataColumn2 + " as an ingredient in MongoDB.");
+
+				} else {
+					System.out.println(firstPotato.toString());
+					return firstPotato;
+				}
+			} catch (MongoException me) {
+				System.err.println("Unable to find a recipe to update in MongoDB due to an error: " + me);
+			}
+			return null;
+		}
+
+	// tìm theo Id
+	public <T> T findById(Class<T> documentClass, String collectionName, ObjectId _id) {
+		MongoDatabase database = client.getDatabase(dbName);
+		// MongoCollection defines a connection to a specific collection of documents in
+		// a specific database
+		MongoCollection<T> collection = database.getCollection(collectionName, documentClass);
+
+		try {
+			Bson findPotato = Filters.eq("_id", _id);
+			T firstPotato = collection.find(findPotato).first();
+			if (firstPotato == null) {
+				System.out.println("Couldn't find any Object containing " + _id + " as an ingredient in MongoDB.");
 
 			} else {
 				System.out.println(firstPotato.toString());
@@ -56,33 +105,33 @@ public class MongoDBUtils {
 	}
 
 	// tìm tất cả theo trường "name"
-	public <T> List<T> findAllByName(T document, Class<T> documentClass, String collectionName, String name) {
+	public <T> List<T> findAllByColumn(Class<T> documentClass, String collectionName, String column,
+			String dataColumn) {
 		MongoDatabase database = client.getDatabase(dbName);
 		// MongoCollection defines a connection to a specific collection of documents in
 		// a specific database
 		MongoCollection<T> collection = database.getCollection(collectionName, documentClass);
 
-		Bson findPotato = Filters.eq("name", name);
+		Bson findPotato = Filters.eq(column, dataColumn);
 		try {
 			FindIterable<T> foundPotatoes = collection.find(findPotato);
 
 			List<T> list = StreamSupport.stream(foundPotatoes.spliterator(), false).collect(Collectors.toList());
 
 			if (list.size() == 0) {
-				System.out.println("Couldn't find any recipes containing 'potato' as an ingredient in MongoDB.");
+				System.out.println("Couldn't find any recipes containing " + column + " as an ingredient in MongoDB.");
 			} else {
 				return list;
 			}
 
 		} catch (MongoException me) {
 			System.err.println("Unable to find a recipe to update in MongoDB due to an error: " + me);
-			System.exit(1);
 		}
 		return null;
 	}
 
 	// tìm tất cả
-	public <T> List<T> findAll(T document, Class<T> documentClass, String collectionName) {
+	public <T> List<T> findAll(Class<T> documentClass, String collectionName) {
 		MongoDatabase database = client.getDatabase(dbName);
 		// MongoCollection defines a connection to a specific collection of documents in
 		// a specific database
@@ -97,13 +146,11 @@ public class MongoDBUtils {
 
 			if (list.isEmpty()) {
 				System.out.println("Không tìm thấy bất kỳ tài liệu nào trong MongoDB.");
-				System.exit(1);
 			} else {
 				return list;
 			}
 		} catch (MongoException me) {
 			System.err.println("Không thể tìm tài liệu trong MongoDB do lỗi: " + me);
-			System.exit(1);
 		}
 		return null;
 
@@ -152,7 +199,7 @@ public class MongoDBUtils {
 	}
 
 	// Cập nhật theo trường "name"
-	public <T> T updateFirstByName(Class<T> documentClass, String collectionName, String name,
+	public <T> T updateFirstByColumn(Class<T> documentClass, String collectionName, String column, String dataColumn,
 			T newDocument) {
 
 		MongoDatabase database = client.getDatabase(dbName);
@@ -160,7 +207,7 @@ public class MongoDBUtils {
 		// a specific database
 		MongoCollection<T> collection = database.getCollection(collectionName, documentClass);
 
-		Bson findPotato = Filters.eq("name", name);
+		Bson findPotato = Filters.eq(column, dataColumn);
 
 		FindOneAndReplaceOptions options = new FindOneAndReplaceOptions().returnDocument(ReturnDocument.AFTER);
 
@@ -177,7 +224,7 @@ public class MongoDBUtils {
 	}
 
 	// Cập nhật theo trường "_id" (_id là khóa chính và tự tạo)
-	public <T> T updateBy_Id(T document, Class<T> documentClass, String collectionName, String _id, T newDocument) {
+	public <T> T updateBy_Id(T document, Class<T> documentClass, String collectionName, ObjectId _id, T newDocument) {
 
 		MongoDatabase database = client.getDatabase(dbName);
 		// MongoCollection defines a connection to a specific collection of documents in
@@ -200,13 +247,30 @@ public class MongoDBUtils {
 	}
 
 	// xóa tất cả theo trường "name"
-	public <T> long deletesByName(T document, Class<T> documentClass, String collectionName, String name) {
+	public <T> long deleteById(Class<T> documentClass, String collectionName, ObjectId _id) {
+		MongoDatabase database = client.getDatabase(dbName);
+		// MongoCollection defines a connection to a specific collection of documents in
+		// a specific database
+		MongoCollection<T> collection = database.getCollection(collectionName, documentClass);
+		Bson deleteFilter = Filters.eq("_id", _id);
+		// Tạo bộ lọc để tìm tài liệu dựa trên ID
+		try {
+			DeleteResult deleteResult = collection.deleteOne(deleteFilter);
+			return deleteResult.getDeletedCount();
+		} catch (MongoException me) {
+			System.err.println("Unable to delete any recipes due to an error: " + me);
+		}
+		return -1;
+	}
+
+	// xóa tất cả theo trường "name"
+	public <T> long deletesByColumn(Class<T> documentClass, String collectionName, String column, String dataColumn) {
 		MongoDatabase database = client.getDatabase(dbName);
 		// MongoCollection defines a connection to a specific collection of documents in
 		// a specific database
 		MongoCollection<T> collection = database.getCollection(collectionName, documentClass);
 
-		Bson deleteFilter = Filters.in("name", Arrays.asList(name));
+		Bson deleteFilter = Filters.in(column, Arrays.asList(dataColumn));
 		try {
 			DeleteResult deleteResult = collection.deleteMany(deleteFilter);
 			return deleteResult.getDeletedCount();
@@ -215,4 +279,129 @@ public class MongoDBUtils {
 		}
 		return -1;
 	}
+
+	// tìm theo trường "post_reported_id"
+//	public <T> T findByPostReportedId(T document, Class<T> documentClass, String collectionName, int post_reported_id) {
+//		MongoDatabase database = client.getDatabase(dbName);
+//		// MongoCollection defines a connection to a specific collection of documents in
+//		// a specific database
+//		MongoCollection<T> collection = database.getCollection(collectionName, documentClass);
+//
+//		try {
+//			Bson findPotato = Filters.eq("post_reported_id", post_reported_id);
+//			T firstPotato = collection.find(findPotato).first();
+//			if (firstPotato == null) {
+//				System.out.println(
+//						"Couldn't find any Object containing " + post_reported_id + " as an ingredient in MongoDB.");
+//
+//			} else {
+//				System.out.println(firstPotato.toString());
+//				return firstPotato;
+//			}
+//		} catch (MongoException me) {
+//			System.err.println("Unable to find a recipe to update in MongoDB due to an error: " + me);
+//		}
+//		return null;
+//	}
+
+	// tìm tất cả theo trường "post_reported_id"
+//	public <T> List<T> findAllByPostReportedId(T document, Class<T> documentClass, String collectionName,
+//			int post_reported_id) {
+//		MongoDatabase database = client.getDatabase(dbName);
+//		// MongoCollection defines a connection to a specific collection of documents in
+//		// a specific database
+//		MongoCollection<T> collection = database.getCollection(collectionName, documentClass);
+//
+//		Bson findPotato = Filters.eq("post_reported_id", post_reported_id);
+//		try {
+//			FindIterable<T> foundPotatoes = collection.find(findPotato);
+//
+//			List<T> list = StreamSupport.stream(foundPotatoes.spliterator(), false).collect(Collectors.toList());
+//
+//			if (list.size() == 0) {
+//				System.out.println("Couldn't find any recipes containing 'potato' as an ingredient in MongoDB.");
+//			} else {
+//				return list;
+//			}
+//
+//		} catch (MongoException me) {
+//			System.err.println("Unable to find a recipe to update in MongoDB due to an error: " + me);
+//		}
+//		return null;
+//	}
+
+	// tìm tất cả theo trường "user_reported_id"
+//	public <T> List<T> findAllByUserReportedId(T document, Class<T> documentClass, String collectionName,
+//			int user_reported_id) {
+//		MongoDatabase database = client.getDatabase(dbName);
+//		// MongoCollection defines a connection to a specific collection of documents in
+//		// a specific database
+//		MongoCollection<T> collection = database.getCollection(collectionName, documentClass);
+//
+//		Bson findPotato = Filters.eq("user_reported_id", user_reported_id);
+//		try {
+//			FindIterable<T> foundPotatoes = collection.find(findPotato);
+//
+//			List<T> list = StreamSupport.stream(foundPotatoes.spliterator(), false).collect(Collectors.toList());
+//
+//			if (list.size() == 0) {
+//				System.out.println("Couldn't find any recipes containing 'potato' as an ingredient in MongoDB.");
+//			} else {
+//				return list;
+//			}
+//
+//		} catch (MongoException me) {
+//			System.err.println("Unable to find a recipe to update in MongoDB due to an error: " + me);
+//		}
+//		return null;
+//	}
+
+	// tìm theo trường "post_reported_id"
+//	public <T> T findByUserReportedId(T document, Class<T> documentClass, String collectionName, int user_reported_id) {
+//		MongoDatabase database = client.getDatabase(dbName);
+//		// MongoCollection defines a connection to a specific collection of documents in
+//		// a specific database
+//		MongoCollection<T> collection = database.getCollection(collectionName, documentClass);
+//
+//		try {
+//			Bson findPotato = Filters.eq("user_reported_id", user_reported_id);
+//			T firstPotato = collection.find(findPotato).first();
+//			if (firstPotato == null) {
+//				System.out.println(
+//						"Couldn't find any Object containing " + user_reported_id + " as an ingredient in MongoDB.");
+//
+//			} else {
+//				System.out.println(firstPotato.toString());
+//				return firstPotato;
+//			}
+//		} catch (MongoException me) {
+//			System.err.println("Unable to find a recipe to update in MongoDB due to an error: " + me);
+//		}
+//		return null;
+//	}
+
+	// tìm theo trường "user_send_report_id"
+//	public <T> T findUserByUserSendReportId(T document, Class<T> documentClass, String collectionName,
+//			int user_send_report_id) {
+//		MongoDatabase database = client.getDatabase(dbName);
+//		// MongoCollection defines a connection to a specific collection of documents in
+//		// a specific database
+//		MongoCollection<T> collection = database.getCollection(collectionName, documentClass);
+//
+//		try {
+//			Bson findPotato = Filters.eq("user_send_report_id", user_send_report_id);
+//			T firstPotato = collection.find(findPotato).first();
+//			if (firstPotato == null) {
+//				System.out.println(
+//						"Couldn't find any Object containing " + user_send_report_id + " as an ingredient in MongoDB.");
+//
+//			} else {
+//				System.out.println(firstPotato.toString());
+//				return firstPotato;
+//			}
+//		} catch (MongoException me) {
+//			System.err.println("Unable to find a recipe to update in MongoDB due to an error: " + me);
+//		}
+//		return null;
+//	}
 }

@@ -15,13 +15,10 @@ import com.davisy.service.BadWordService;
 import com.davisy.service.CacheService;
 
 @RestController
-public class ModeratorController {
-
-	@Autowired
-	MongoDBUtils dbUtils;
+public class ModeratorControlBadword {
 
 	@Value("${davis.mongodb.collectionBadWords}")
-	private String collectionName;
+	private String collectionBadWord;
 	
 	@Autowired
 	private BadWordService badWordService;
@@ -41,7 +38,7 @@ public class ModeratorController {
 
 	@GetMapping("/v1/moderator/badwords")
 	public List<BadWord> listBadWords() {
-		List<BadWord> badWordsList = badWordService.findAll(new BadWord(), BadWord.class, collectionName);
+		List<BadWord> badWordsList = badWordService.findAll();
 		return badWordsList;
 	}
 	
@@ -62,12 +59,12 @@ public class ModeratorController {
 		try {
 			BadWord badWord = new BadWord();
 			badWord.setLabel(1);
-			badWord.setName("sỹ chó 3");
+			badWord.setName("sỹ chó");
 			badWord.setSeverityLevel(3);
 			Date now = new Date();
 			badWord.setCreateDate(now);
 
-			badWordService.insert(badWord, BadWord.class, collectionName);
+			badWordService.insert(badWord);
 			
 			return "Successfully";
 		} catch (Exception e) {
@@ -81,7 +78,7 @@ public class ModeratorController {
 		try {
 			BadWord badWord = new BadWord();
 			badWord.setName("sỹ heo");
-			badWordService.update(BadWord.class, collectionName, "sỹ chó", badWord);
+			badWordService.update("name", "sỹ chó", badWord);
 			return "Successfully";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -92,7 +89,7 @@ public class ModeratorController {
 	@PostMapping("/v1/moderator/deleteBadword")
 	public String delete() {
 		try {
-			badWordService.delete(new BadWord() ,BadWord.class, collectionName, "sỹ heo");
+			badWordService.delete("name", "sỹ heo");
 			return "Successfully";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -102,7 +99,7 @@ public class ModeratorController {
 	
 	@GetMapping("/v1/moderator/sortBadwords")
 	public List<BadWord> sortBadwords() {
-		List<BadWord> badWordsList = badWordService.findAll(new BadWord(), BadWord.class, collectionName);
+		List<BadWord> badWordsList = badWordService.findAll();
 		List<BadWord> badWordsListSort = bubbleSort(badWordsList);
 		return badWordsListSort;
 	}
@@ -137,7 +134,7 @@ public class ModeratorController {
 //																										// JSON của bạn
 //			list = objectMapper.readValue(jsonFile,
 //					objectMapper.getTypeFactory().constructCollectionType(List.class, BadWord.class));
-//			List<BadWord> badWordsList = dbUtils.inserts(list, collectionName);
+//			List<BadWord> badWordsList = dbUtils.inserts(list, collectionBadWord);
 //
 //			return "Successfully";
 //		} catch (Exception e) {
