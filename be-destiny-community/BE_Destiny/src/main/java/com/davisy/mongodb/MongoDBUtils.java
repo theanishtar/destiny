@@ -42,7 +42,7 @@ public class MongoDBUtils {
 		MongoCollection<T> collection = database.getCollection(collectionName, documentClass);
 
 		try {
-			Bson findPotato = Filters.lte("name", name);
+			Bson findPotato = Filters.eq("name", name);
 			T firstPotato = collection.find(findPotato).first();
 			if (firstPotato == null) {
 				System.out.println("Couldn't find any Object containing " + name + " as an ingredient in MongoDB.");
@@ -64,7 +64,7 @@ public class MongoDBUtils {
 		// a specific database
 		MongoCollection<T> collection = database.getCollection(collectionName, documentClass);
 
-		Bson findPotato = Filters.eq("name", "patatas bravas");
+		Bson findPotato = Filters.eq("name", name);
 		try {
 			FindIterable<T> foundPotatoes = collection.find(findPotato);
 
@@ -72,7 +72,6 @@ public class MongoDBUtils {
 
 			if (list.size() == 0) {
 				System.out.println("Couldn't find any recipes containing 'potato' as an ingredient in MongoDB.");
-				System.exit(1);
 			} else {
 				return list;
 			}
@@ -155,7 +154,7 @@ public class MongoDBUtils {
 	}
 
 	// Cập nhật theo trường "name"
-	public <T> T updateFirstByName(T document, Class<T> documentClass, String collectionName, String name,
+	public <T> T updateFirstByName(Class<T> documentClass, String collectionName, String name,
 			T newDocument) {
 
 		MongoDatabase database = client.getDatabase(dbName);

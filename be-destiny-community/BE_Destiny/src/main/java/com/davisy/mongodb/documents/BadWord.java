@@ -1,5 +1,6 @@
 package com.davisy.mongodb.documents;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import lombok.AllArgsConstructor;
@@ -9,12 +10,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BadWord {
-
-    private String name;	//tên
-    private int label =1;		//nhãn
-    private int severityLevel =1 ;	// mức độ nghiêm trọng
-    private Date createDate = new Date();	//này tạo
+public class BadWord{
+	
+	 public String name;	//tên
+	 public int label = 1;		//nhãn
+	 public int severityLevel = 1 ;	// mức độ nghiêm trọng
+	 public Date createDate = new Date();	//này tạo
 
     @Override
     public String toString() {
