@@ -227,7 +227,7 @@ CREATE TABLE follower
 CREATE TABLE user_reported (
     user_reported_id INT NOT NULL,
     user_send_report_id INT NOT NULL,
-    content_report NVARCHAR(500) NOT NULL,
+    content_report VARCHAR(500) NOT NULL,
     date_report DATE NOT NULL,
 	PRIMARY KEY (user_reported_id, user_send_report_id),
 	FOREIGN KEY (user_send_report_id) REFERENCES users(user_id)
@@ -236,7 +236,7 @@ CREATE TABLE user_reported (
 CREATE TABLE post_reported (
     post_reported_id INT NOT NULL,
     user_send_report_id INT NOT NULL,
-    content_report NVARCHAR(500) NOT NULL,
+    content_report VARCHAR(500) NOT NULL,
     date_report DATE NOT NULL,
 	PRIMARY KEY (post_reported_id, user_send_report_id),
 	FOREIGN KEY (post_reported_id) REFERENCES post(post_id)
