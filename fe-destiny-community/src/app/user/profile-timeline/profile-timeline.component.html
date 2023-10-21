@@ -1,0 +1,1412 @@
+<app-navigation></app-navigation>
+
+<!-- CONTENT GRID -->
+
+<div class="content-grid" id="profile_timeline">
+  <!-- <app-loading *ngIf="isLoading"></app-loading> -->
+  <app-header-profile></app-header-profile>
+  <!-- GRID -->
+  <div class="grid grid-3-6-3 mobile-prefer-content">
+    <!-- GRID COLUMN -->
+    <div class="grid-column">
+      <!-- WIDGET BOX -->
+      <div class="widget-box">
+        <!-- WIDGET BOX SETTINGS -->
+        <div class="widget-box-settings">
+          <!-- POST SETTINGS WRAP -->
+          <div class="post-settings-wrap">
+            <!-- POST SETTINGS -->
+            <div
+              class="post-settings widget-box-post-settings-dropdown-trigger"
+            >
+              <!-- POST SETTINGS ICON -->
+              <svg class="post-settings-icon icon-more-dots">
+                <use xlink:href="#svg-more-dots"></use>
+              </svg>
+              <!-- /POST SETTINGS ICON -->
+            </div>
+            <!-- /POST SETTINGS -->
+
+            <!-- SIMPLE DROPDOWN -->
+            <div class="simple-dropdown widget-box-post-settings-dropdown">
+              <!-- SIMPLE DROPDOWN LINK -->
+              <a class="simple-dropdown-link" href="edit-profile">Cập nhật</a>
+              <!-- /SIMPLE DROPDOWN LINK -->
+            </div>
+            <!-- /SIMPLE DROPDOWN -->
+          </div>
+          <!-- /POST SETTINGS WRAP -->
+        </div>
+        <!-- /WIDGET BOX SETTINGS -->
+
+        <!-- WIDGET BOX TITLE -->
+        <p class="widget-box-title">Giới thiệu</p>
+        <!-- /WIDGET BOX TITLE -->
+
+        <!-- WIDGET BOX CONTENT -->
+        <div class="widget-box-content">
+          <!-- PARAGRAPH -->
+          <p class="paragraph">{{ dataFollows?.intro }}</p>
+          <!-- /PARAGRAPH -->
+
+          <!-- INFORMATION LINE LIST -->
+          <div class="information-line-list">
+            <!-- INFORMATION LINE -->
+            <div class="information-line">
+              <!-- INFORMATION LINE TITLE -->
+              <p class="information-line-title">Tham gia</p>
+              <!-- /INFORMATION LINE TITLE -->
+
+              <!-- INFORMATION LINE TEXT -->
+              <p class="information-line-text">
+                {{ dateJoin }}
+              </p>
+              <!-- /INFORMATION LINE TEXT -->
+            </div>
+            <!-- /INFORMATION LINE -->
+
+            <!-- INFORMATION LINE -->
+            <div class="information-line">
+              <!-- INFORMATION LINE TITLE -->
+              <p class="information-line-title">Thành phố</p>
+              <!-- /INFORMATION LINE TITLE -->
+
+              <!-- INFORMATION LINE TEXT -->
+              <p class="information-line-text">
+                {{ dataProfileTimeline?.address_fullname }}
+              </p>
+              <!-- /INFORMATION LINE TEXT -->
+            </div>
+            <!-- /INFORMATION LINE -->
+          </div>
+          <!-- /INFORMATION LINE LIST -->
+        </div>
+        <!-- /WIDGET BOX CONTENT -->
+      </div>
+      <!-- /WIDGET BOX -->
+
+      <!-- WIDGET BOX -->
+      <div class="widget-box">
+        <p class="widget-box-title">Đề xuất cho bạn</p>
+        <!-- <div *ngIf="checkData1" class="emty-message">Không có đề xuất</div> -->
+        <!-- <div class="lds-dual-ring" *ngIf="check"></div> -->
+
+        <div class="widget-box-content" *ngFor="let item of listSuggested">
+          <div class="user-status-list">
+            <div class="user-status">
+              <a
+                class="user-avatar small user-status-avatar no-border no-outline"
+                href="profile"
+              >
+                <div class="hexagon-container">
+                  <div class="hexagon user-avatar-content">
+                    <div
+                      class="hexagon-image"
+                      style="background-image: url('{{ item.avatar }}')"
+                    ></div>
+                  </div>
+                  <div class="hexagon user-avatar-border">
+                    <div class="hexagon-border"></div>
+                  </div>
+                  <div class="hexagon user-avatar-progress-border">
+                    <div class="user-avatar-progress"></div>
+                  </div>
+                </div>
+              </a>
+              <div class="user-status-title">
+                <a class="bold top-user" routerLink="/profile">{{
+                  item.fullname
+                }}</a>
+                <span class="bp-verified-badge"></span>
+              </div>
+              <!-- <a class="user-status-text small" (click)="addFollow(item.user_id)">Theo dõi</a> -->
+              <a
+                class="user-status-text small suggested"
+                (click)="addFollow(item.user_id)"
+              >
+                Theo dõi
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /WIDGET BOX -->
+    </div>
+    <!-- /GRID COLUMN -->
+
+    <!-- GRID COLUMN -->
+    <div class="grid-column" id="scrollableDiv">
+      <!-- SIMPLE TAB ITEMS -->
+      <div class="simple-tab-items" #elementToScroll>
+        <!-- FORM -->
+        <form class="form">
+          <!-- FORM SELECT -->
+          <div class="form-select">
+            <select
+              id="newsfeed-filter-category"
+              name="newsfeed_filter_category"
+            >
+              <option value="0">Bài đăng</option>
+            </select>
+            <!-- FORM SELECT ICON -->
+            <svg class="form-select-icon icon-small-arrow">
+              <use xlink:href="#svg-small-arrow"></use>
+            </svg>
+            <!-- /FORM SELECT ICON -->
+          </div>
+          <!-- /FORM SELECT -->
+        </form>
+        <!-- /FORM -->
+
+        <!-- SIMPLE TAB ITEM -->
+        <p class="simple-tab-item active">Bài đăng</p>
+        <!-- /SIMPLE TAB ITEM -->
+      </div>
+      <!-- /SIMPLE TAB ITEMS -->
+
+      <!-- WIDGET BOX -->
+      <div class="widget-box no-padding">
+        <!-- WIDGET BOX SETTINGS -->
+        <div class="widget-box-settings">
+          <!-- POST SETTINGS WRAP -->
+          <div class="post-settings-wrap">
+            <!-- POST SETTINGS -->
+            <div
+              class="post-settings widget-box-post-settings-dropdown-trigger"
+            >
+              <!-- POST SETTINGS ICON -->
+              <svg class="post-settings-icon icon-more-dots">
+                <use xlink:href="#svg-more-dots"></use>
+              </svg>
+              <!-- /POST SETTINGS ICON -->
+            </div>
+            <!-- /POST SETTINGS -->
+
+            <!-- SIMPLE DROPDOWN -->
+            <div class="simple-dropdown widget-box-post-settings-dropdown">
+              <!-- SIMPLE DROPDOWN LINK -->
+              <p class="simple-dropdown-link">Báo cáo bài viết</p>
+              <!-- /SIMPLE DROPDOWN LINK -->
+
+              <!-- SIMPLE DROPDOWN LINK -->
+              <p class="simple-dropdown-link">Báo cáo tài khoản</p>
+              <!-- /SIMPLE DROPDOWN LINK -->
+            </div>
+            <!-- /SIMPLE DROPDOWN -->
+          </div>
+          <!-- /POST SETTINGS WRAP -->
+        </div>
+        <!-- /WIDGET BOX SETTINGS -->
+
+        <!-- WIDGET BOX STATUS -->
+        <div class="widget-box-status">
+          <!-- WIDGET BOX STATUS CONTENT -->
+          <div class="widget-box-status-content">
+            <!-- USER STATUS -->
+            <div class="user-status">
+              <!-- USER STATUS AVATAR -->
+              <a class="user-status-avatar" href="profile">
+                <!-- USER AVATAR -->
+                <div class="user-avatar small no-outline">
+                  <!-- USER AVATAR CONTENT -->
+                  <div class="user-avatar-content">
+                    <!-- HEXAGON -->
+                    <div
+                      class="hexagon-image-30-32"
+                      data-src="../../../assets/images/avatar/05.jpg"
+                    ></div>
+                    <!-- /HEXAGON -->
+                  </div>
+                  <!-- /USER AVATAR CONTENT -->
+
+                  <!-- USER AVATAR PROGRESS -->
+                  <div class="user-avatar-progress">
+                    <!-- HEXAGON -->
+                    <div class="hexagon-progress-40-44"></div>
+                    <!-- /HEXAGON -->
+                  </div>
+                  <!-- /USER AVATAR PROGRESS -->
+
+                  <!-- USER AVATAR PROGRESS BORDER -->
+                  <div class="user-avatar-progress-border">
+                    <!-- HEXAGON -->
+                    <div class="hexagon-border-40-44"></div>
+                    <!-- /HEXAGON -->
+                  </div>
+                  <!-- /USER AVATAR PROGRESS BORDER -->
+
+                  <!-- USER AVATAR BADGE -->
+                  <div class="user-avatar-badge">
+                    <!-- USER AVATAR BADGE BORDER -->
+                    <div class="user-avatar-badge-border">
+                      <!-- HEXAGON -->
+                      <div class="hexagon-22-24"></div>
+                      <!-- /HEXAGON -->
+                    </div>
+                    <!-- /USER AVATAR BADGE BORDER -->
+
+                    <!-- USER AVATAR BADGE CONTENT -->
+                    <div class="user-avatar-badge-content">
+                      <!-- HEXAGON -->
+                      <div class="hexagon-dark-16-18"></div>
+                      <!-- /HEXAGON -->
+                    </div>
+                    <!-- /USER AVATAR BADGE CONTENT -->
+
+                    <!-- USER AVATAR BADGE TEXT -->
+                    <p class="user-avatar-badge-text">12</p>
+                    <!-- /USER AVATAR BADGE TEXT -->
+                  </div>
+                  <!-- /USER AVATAR BADGE -->
+                </div>
+                <!-- /USER AVATAR -->
+              </a>
+              <!-- /USER STATUS AVATAR -->
+
+              <!-- USER STATUS TITLE -->
+              <p class="user-status-title medium">
+                <a class="bold" href="profile">Nguyễn Khánh Đan</a>
+              </p>
+              <!-- /USER STATUS TITLE -->
+
+              <!-- USER STATUS TEXT -->
+              <p class="user-status-text small post-time">2 tuần trước</p>
+              <!-- /USER STATUS TEXT -->
+            </div>
+            <!-- /USER STATUS -->
+
+            <!-- WIDGET BOX STATUS TEXT -->
+            <p class="widget-box-status-text">
+              Mình có vài món đồ muốn tặng bạn nào cần liên hệ mình nha!! SĐT:
+              0123456789
+            </p>
+            <!-- /WIDGET BOX STATUS TEXT -->
+          </div>
+          <!-- /WIDGET BOX STATUS CONTENT -->
+
+          <!-- IFRAME WRAP -->
+          <div class="picture-collage">
+            <div class="picture-collage-row medium">
+              <div class="picture-collage-item">
+                <div class="photo-preview-wrap">
+                  <div class="photo-preview">
+                    <div
+                      class="photo-preview-image"
+                      style="
+                        background: url('../assets/images/posts/book.png')
+                          center center / cover no-repeat;
+                      "
+                    ></div>
+                  </div>
+                </div>
+              </div>
+              <div class="picture-collage-item">
+                <div class="photo-preview-wrap">
+                  <div class="photo-preview">
+                    <div
+                      class="photo-preview-image"
+                      style="
+                        background: url('../assets/images/posts/converse.png')
+                          center center / cover no-repeat;
+                      "
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="picture-collage-row">
+              <div class="picture-collage-item">
+                <div class="photo-preview-wrap">
+                  <div class="photo-preview">
+                    <div
+                      class="photo-preview-image"
+                      style="
+                        background: url('../assets/images/posts/mop.png') center
+                          center / cover no-repeat;
+                      "
+                    ></div>
+                  </div>
+                  <div></div>
+                </div>
+              </div>
+              <div class="picture-collage-item">
+                <div class="photo-preview-wrap">
+                  <div class="photo-preview">
+                    <div
+                      class="photo-preview-image"
+                      style="
+                        background: url('../assets/images/posts/pen.png') center
+                          center / cover no-repeat;
+                      "
+                    ></div>
+                  </div>
+                  <div></div>
+                </div>
+              </div>
+              <div class="picture-collage-item">
+                <a
+                  class="picture-collage-item-overlay"
+                  href="../assets/images/posts/shirt.png"
+                >
+                  <p class="picture-collage-item-overlay-text">+2</p>
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- /IFRAME WRAP -->
+
+          <!-- WIDGET BOX STATUS CONTENT -->
+          <div class="widget-box-status-content">
+            <!-- TAG LIST -->
+            <div class="tag-list">
+              <!-- TAG ITEM -->
+              <a class="tag-item secondary" href="">Stream</a>
+              <!-- /TAG ITEM -->
+
+              <!-- TAG ITEM -->
+              <a class="tag-item secondary" href="">StrikerGO</a>
+              <!-- /TAG ITEM -->
+
+              <!-- TAG ITEM -->
+              <a class="tag-item secondary" href="">Outlaws</a>
+              <!-- /TAG ITEM -->
+
+              <!-- TAG ITEM -->
+              <a class="tag-item secondary" href="">Gaming</a>
+              <!-- /TAG ITEM -->
+            </div>
+            <!-- /TAG LIST -->
+
+            <!-- CONTENT ACTIONS -->
+            <div class="content-actions">
+              <!-- CONTENT ACTION -->
+              <div class="content-action">
+                <!-- META LINE -->
+                <div class="meta-line">
+                  <!-- META LINE LIST -->
+                  <div class="meta-line-list reaction-item-list">
+                    <!-- REACTION ITEM -->
+                    <div class="reaction-item">
+                      <!-- REACTION IMAGE -->
+                      <img
+                        class="reaction-image reaction-item-dropdown-trigger"
+                        src="../../../assets/images/reaction/love.png"
+                        alt="reaction-love"
+                      />
+                      <!-- /REACTION IMAGE -->
+
+                      <!-- SIMPLE DROPDOWN -->
+                      <div
+                        class="simple-dropdown padded reaction-item-dropdown"
+                      >
+                        <!-- SIMPLE DROPDOWN TEXT -->
+                        <p class="simple-dropdown-text">
+                          <img
+                            class="reaction"
+                            src="../../../assets/images/reaction/love.png"
+                            alt="reaction-love"
+                          />
+                          <span class="bold">Love</span>
+                        </p>
+                        <!-- /SIMPLE DROPDOWN TEXT -->
+
+                        <!-- SIMPLE DROPDOWN TEXT -->
+                        <p class="simple-dropdown-text">Matt Parker</p>
+                        <!-- /SIMPLE DROPDOWN TEXT -->
+
+                        <!-- SIMPLE DROPDOWN TEXT -->
+                        <p class="simple-dropdown-text">Destroy Dex</p>
+                        <!-- /SIMPLE DROPDOWN TEXT -->
+
+                        <!-- SIMPLE DROPDOWN TEXT -->
+                        <p class="simple-dropdown-text">The Green Goo</p>
+                        <!-- /SIMPLE DROPDOWN TEXT -->
+                      </div>
+                      <!-- /SIMPLE DROPDOWN -->
+                    </div>
+                    <!-- /REACTION ITEM -->
+                  </div>
+                  <!-- /META LINE LIST -->
+
+                  <!-- META LINE TEXT -->
+                  <p class="meta-line-text">16</p>
+                  <!-- /META LINE TEXT -->
+                </div>
+                <!-- /META LINE -->
+              </div>
+              <!-- /CONTENT ACTION -->
+
+              <!-- CONTENT ACTION -->
+              <div class="content-action">
+                <!-- META LINE -->
+                <div class="meta-line">
+                  <!-- META LINE LINK -->
+                  <p class="meta-line-link">2 Bình luận</p>
+                  <!-- /META LINE LINK -->
+                </div>
+                <!-- /META LINE -->
+
+                <!-- META LINE -->
+                <div class="meta-line">
+                  <!-- META LINE TEXT -->
+                  <p class="meta-line-text">0 Chia sẻ</p>
+                  <!-- /META LINE TEXT -->
+                </div>
+                <!-- /META LINE -->
+              </div>
+              <!-- /CONTENT ACTION -->
+            </div>
+            <!-- /CONTENT ACTIONS -->
+          </div>
+          <!-- /WIDGET BOX STATUS CONTENT -->
+        </div>
+        <!-- /WIDGET BOX STATUS -->
+
+        <!-- POST OPTIONS -->
+        <div class="post-options">
+          <!-- POST OPTION WRAP -->
+          <div class="post-option-wrap">
+            <!-- POST OPTION -->
+            <div
+              class="post-option reaction-options-dropdown-trigger"
+              (click)="toggleLike()"
+              [class.active]="isLiked(postId)"
+            >
+              <!-- POST OPTION ICON -->
+              <svg class="post-option-icon icon-thumbs-up">
+                <use xlink:href="#svg-thumbs-up"></use>
+              </svg>
+              <!-- /POST OPTION ICON -->
+
+              <!-- POST OPTION TEXT -->
+              <p class="post-option-text">Quan tâm</p>
+              <!-- /POST OPTION TEXT -->
+            </div>
+            <!-- /POST OPTION -->
+          </div>
+          <!-- /POST OPTION WRAP -->
+
+          <!-- POST OPTION -->
+          <div class="post-option">
+            <!-- POST OPTION ICON -->
+            <svg class="post-option-icon icon-comment">
+              <use xlink:href="#svg-comment"></use>
+            </svg>
+            <!-- /POST OPTION ICON -->
+
+            <!-- POST OPTION TEXT -->
+            <p class="post-option-text">
+              Bình luận
+            </p>
+            <!-- /POST OPTION TEXT -->
+          </div>
+          <!-- /POST OPTION -->
+
+          <!-- POST OPTION -->
+          <div class="post-option">
+            <!-- POST OPTION ICON -->
+            <svg class="post-option-icon icon-share">
+              <use xlink:href="#svg-share"></use>
+            </svg>
+            <!-- /POST OPTION ICON -->
+
+            <!-- POST OPTION TEXT -->
+            <p class="post-option-text">Chia sẻ</p>
+            <!-- /POST OPTION TEXT -->
+          </div>
+          <!-- /POST OPTION -->
+        </div>
+        <!-- /POST OPTIONS -->
+      </div>
+      <!-- /WIDGET BOX -->
+
+      <!-- WIDGET BOX -->
+      <div class="widget-box no-padding">
+        <!-- WIDGET BOX SETTINGS -->
+        <div class="widget-box-settings">
+          <!-- POST SETTINGS WRAP -->
+          <div class="post-settings-wrap">
+            <!-- POST SETTINGS -->
+            <div
+              class="post-settings widget-box-post-settings-dropdown-trigger"
+            >
+              <!-- POST SETTINGS ICON -->
+              <svg class="post-settings-icon icon-more-dots">
+                <use xlink:href="#svg-more-dots"></use>
+              </svg>
+              <!-- /POST SETTINGS ICON -->
+            </div>
+            <!-- /POST SETTINGS -->
+
+            <!-- SIMPLE DROPDOWN -->
+            <div class="simple-dropdown widget-box-post-settings-dropdown">
+              <!-- SIMPLE DROPDOWN LINK -->
+              <p class="simple-dropdown-link">Báo cáo bài viết</p>
+              <!-- /SIMPLE DROPDOWN LINK -->
+
+              <!-- SIMPLE DROPDOWN LINK -->
+              <p class="simple-dropdown-link">Báo cáo tài khoản</p>
+              <!-- /SIMPLE DROPDOWN LINK -->
+            </div>
+            <!-- /SIMPLE DROPDOWN -->
+          </div>
+          <!-- /POST SETTINGS WRAP -->
+        </div>
+        <!-- /WIDGET BOX SETTINGS -->
+        <div class="widget-box-status">
+          <div class="widget-box-status-content">
+            <!-- USER STATUS -->
+            <div class="user-status">
+              <!-- USER STATUS AVATAR -->
+              <a class="user-status-avatar" href="profile">
+                <!-- USER AVATAR -->
+                <div class="user-avatar small no-outline">
+                  <!-- USER AVATAR CONTENT -->
+                  <div class="user-avatar-content">
+                    <!-- HEXAGON -->
+                    <div
+                      class="hexagon-image-30-32"
+                      data-src="../assets/images/avatar/03.jpg"
+                    ></div>
+                    <!-- /HEXAGON -->
+                  </div>
+                  <!-- /USER AVATAR CONTENT -->
+
+                  <!-- USER AVATAR PROGRESS -->
+                  <div class="user-avatar-progress">
+                    <!-- HEXAGON -->
+                    <div class="hexagon-progress-40-44"></div>
+                    <!-- /HEXAGON -->
+                  </div>
+                  <!-- /USER AVATAR PROGRESS -->
+
+                  <!-- USER AVATAR PROGRESS BORDER -->
+                  <div class="user-avatar-progress-border">
+                    <!-- HEXAGON -->
+                    <div class="hexagon-border-40-44"></div>
+                    <!-- /HEXAGON -->
+                  </div>
+                  <!-- /USER AVATAR PROGRESS BORDER -->
+
+                  <!-- USER AVATAR BADGE -->
+                  <div class="user-avatar-badge">
+                    <!-- USER AVATAR BADGE BORDER -->
+                    <div class="user-avatar-badge-border">
+                      <!-- HEXAGON -->
+                      <div class="hexagon-22-24"></div>
+                      <!-- /HEXAGON -->
+                    </div>
+                    <!-- /USER AVATAR BADGE BORDER -->
+
+                    <!-- USER AVATAR BADGE CONTENT -->
+                    <div class="user-avatar-badge-content">
+                      <!-- HEXAGON -->
+                      <div class="hexagon-dark-16-18"></div>
+                      <!-- /HEXAGON -->
+                    </div>
+                    <!-- /USER AVATAR BADGE CONTENT -->
+
+                    <!-- USER AVATAR BADGE TEXT -->
+                    <p class="user-avatar-badge-text">16</p>
+                    <!-- /USER AVATAR BADGE TEXT -->
+                  </div>
+                  <!-- /USER AVATAR BADGE -->
+                </div>
+                <!-- /USER AVATAR -->
+              </a>
+              <!-- /USER STATUS AVATAR -->
+
+              <!-- USER STATUS TITLE -->
+              <p class="user-status-title medium">
+                <a class="bold" href="">Trần Hữu Đang</a> đã chia sẻ bài đăng
+              </p>
+              <!-- /USER STATUS TITLE -->
+
+              <!-- USER STATUS TEXT -->
+              <p class="user-status-text small">40 minutes ago</p>
+              <!-- /USER STATUS TEXT -->
+            </div>
+            <p class="widget-box-status-text">
+              Ai cần thì liên hệ nha mọi người!
+            </p>
+            <!-- /USER STATUS -->
+            <div class="widget-box-status-content">
+              <div class="widget-box no-padding">
+                <div class="widget-box-status">
+                  <!-- USER STATUS -->
+                  <div class="user-status">
+                    <!-- USER STATUS AVATAR -->
+                    <a class="user-status-avatar" href="profile">
+                      <!-- USER AVATAR -->
+                      <div class="user-avatar small no-outline">
+                        <!-- USER AVATAR CONTENT -->
+                        <div class="user-avatar-content">
+                          <!-- HEXAGON -->
+                          <div
+                            class="hexagon-image-30-32"
+                            data-src="../assets/images/avatar/03.jpg"
+                          ></div>
+                          <!-- /HEXAGON -->
+                        </div>
+                        <!-- /USER AVATAR CONTENT -->
+
+                        <!-- USER AVATAR PROGRESS -->
+                        <div class="user-avatar-progress">
+                          <!-- HEXAGON -->
+                          <div class="hexagon-progress-40-44"></div>
+                          <!-- /HEXAGON -->
+                        </div>
+                        <!-- /USER AVATAR PROGRESS -->
+
+                        <!-- USER AVATAR PROGRESS BORDER -->
+                        <div class="user-avatar-progress-border">
+                          <!-- HEXAGON -->
+                          <div class="hexagon-border-40-44"></div>
+                          <!-- /HEXAGON -->
+                        </div>
+                        <!-- /USER AVATAR PROGRESS BORDER -->
+
+                        <!-- USER AVATAR BADGE -->
+                        <div class="user-avatar-badge">
+                          <!-- USER AVATAR BADGE BORDER -->
+                          <div class="user-avatar-badge-border">
+                            <!-- HEXAGON -->
+                            <div class="hexagon-22-24"></div>
+                            <!-- /HEXAGON -->
+                          </div>
+                          <!-- /USER AVATAR BADGE BORDER -->
+
+                          <!-- USER AVATAR BADGE CONTENT -->
+                          <div class="user-avatar-badge-content">
+                            <!-- HEXAGON -->
+                            <div class="hexagon-dark-16-18"></div>
+                            <!-- /HEXAGON -->
+                          </div>
+                          <!-- /USER AVATAR BADGE CONTENT -->
+
+                          <!-- USER AVATAR BADGE TEXT -->
+                          <p class="user-avatar-badge-text">16</p>
+                          <!-- /USER AVATAR BADGE TEXT -->
+                        </div>
+                        <!-- /USER AVATAR BADGE -->
+                      </div>
+                      <!-- /USER AVATAR -->
+                    </a>
+                    <!-- /USER STATUS AVATAR -->
+
+                    <!-- USER STATUS TITLE -->
+                    <p class="user-status-title medium">
+                      <a class="bold" href="">Lê Bích Vi</a>
+                    </p>
+                    <!-- /USER STATUS TITLE -->
+
+                    <!-- USER STATUS TEXT -->
+                    <p class="user-status-text small">40 minutes ago</p>
+                    <!-- /USER STATUS TEXT -->
+                  </div>
+                  <p class="widget-box-status-text">
+                    Ai cần liên hệ mình nha! SĐT: 012456789
+                  </p>
+                  <!-- /USER STATUS -->
+                  <div class="widget-box-status-content">
+                    <div class="picture-collage">
+                      <div class="picture-collage-row">
+                        <div class="picture-collage-item">
+                          <div class="photo-preview-wrap">
+                            <div class="photo-preview">
+                              <div
+                                class="photo-preview-image"
+                                style="
+                                  background: url('../assets/images/posts/mop.png')
+                                    center center / cover no-repeat;
+                                "
+                              ></div>
+                            </div>
+                            <div></div>
+                          </div>
+                        </div>
+                        <div class="picture-collage-item">
+                          <div class="photo-preview-wrap">
+                            <div class="photo-preview">
+                              <div
+                                class="photo-preview-image"
+                                style="
+                                  background: url('../assets/images/posts/pant.png')
+                                    center center / cover no-repeat;
+                                "
+                              ></div>
+                            </div>
+                            <div></div>
+                          </div>
+                        </div>
+                        <div class="picture-collage-item">
+                          <div class="photo-preview-wrap">
+                            <div class="photo-preview">
+                              <div
+                                class="photo-preview-image"
+                                style="
+                                  background: url('../assets/images/posts/shirt.png')
+                                    center center / cover no-repeat;
+                                "
+                              ></div>
+                            </div>
+                            <div></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- WIDGET BOX STATUS CONTENT -->
+            <div class="widget-box-status-content">
+              <!-- TAG LIST -->
+              <div class="tag-list">
+                <!-- TAG ITEM -->
+                <a class="tag-item secondary" href="">Stream</a>
+                <!-- /TAG ITEM -->
+
+                <!-- TAG ITEM -->
+                <a class="tag-item secondary" href="">StrikerGO</a>
+                <!-- /TAG ITEM -->
+
+                <!-- TAG ITEM -->
+                <a class="tag-item secondary" href="">Outlaws</a>
+                <!-- /TAG ITEM -->
+
+                <!-- TAG ITEM -->
+                <a class="tag-item secondary" href="">Gaming</a>
+                <!-- /TAG ITEM -->
+              </div>
+              <!-- /TAG LIST -->
+
+              <!-- CONTENT ACTIONS -->
+              <div class="content-actions">
+                <!-- CONTENT ACTION -->
+                <div class="content-action">
+                  <!-- META LINE -->
+                  <div class="meta-line">
+                    <!-- META LINE LIST -->
+                    <div class="meta-line-list reaction-item-list">
+                      <!-- REACTION ITEM -->
+                      <div class="reaction-item">
+                        <!-- REACTION IMAGE -->
+                        <img
+                          class="reaction-image reaction-item-dropdown-trigger"
+                          src="../../../assets/images/reaction/love.png"
+                          alt="reaction-love"
+                        />
+                        <!-- /REACTION IMAGE -->
+
+                        <!-- SIMPLE DROPDOWN -->
+                        <div
+                          class="simple-dropdown padded reaction-item-dropdown"
+                        >
+                          <!-- SIMPLE DROPDOWN TEXT -->
+                          <p class="simple-dropdown-text">
+                            <img
+                              class="reaction"
+                              src="../../../assets/images/reaction/love.png"
+                              alt="reaction-love"
+                            />
+                            <span class="bold">Love</span>
+                          </p>
+                          <!-- /SIMPLE DROPDOWN TEXT -->
+
+                          <!-- SIMPLE DROPDOWN TEXT -->
+                          <p class="simple-dropdown-text">Matt Parker</p>
+                          <!-- /SIMPLE DROPDOWN TEXT -->
+
+                          <!-- SIMPLE DROPDOWN TEXT -->
+                          <p class="simple-dropdown-text">Destroy Dex</p>
+                          <!-- /SIMPLE DROPDOWN TEXT -->
+
+                          <!-- SIMPLE DROPDOWN TEXT -->
+                          <p class="simple-dropdown-text">The Green Goo</p>
+                          <!-- /SIMPLE DROPDOWN TEXT -->
+                        </div>
+                        <!-- /SIMPLE DROPDOWN -->
+                      </div>
+                      <!-- /REACTION ITEM -->
+                    </div>
+                    <!-- /META LINE LIST -->
+
+                    <!-- META LINE TEXT -->
+                    <p class="meta-line-text">16</p>
+                    <!-- /META LINE TEXT -->
+                  </div>
+                  <!-- /META LINE -->
+                </div>
+                <!-- /CONTENT ACTION -->
+
+                <!-- CONTENT ACTION -->
+                <div class="content-action">
+                  <!-- META LINE -->
+                  <div class="meta-line">
+                    <!-- META LINE LINK -->
+                    <p class="meta-line-link">2 Bình luận</p>
+                    <!-- /META LINE LINK -->
+                  </div>
+                  <!-- /META LINE -->
+
+                  <!-- META LINE -->
+                  <div class="meta-line">
+                    <!-- META LINE TEXT -->
+                    <p class="meta-line-text">0 Chia sẻ</p>
+                    <!-- /META LINE TEXT -->
+                  </div>
+                  <!-- /META LINE -->
+                </div>
+                <!-- /CONTENT ACTION -->
+              </div>
+              <!-- /CONTENT ACTIONS -->
+            </div>
+          </div>
+          <!-- /WIDGET BOX STATUS CONTENT -->
+        </div>
+        <!-- POST OPTIONS -->
+        <div class="post-options">
+          <!-- POST OPTION WRAP -->
+          <div class="post-option-wrap">
+            <!-- POST OPTION -->
+            <div class="post-option reaction-options-dropdown-trigger">
+              <!-- POST OPTION ICON -->
+              <svg class="post-option-icon icon-thumbs-up">
+                <use xlink:href="#svg-thumbs-up"></use>
+              </svg>
+              <!-- /POST OPTION ICON -->
+
+              <!-- POST OPTION TEXT -->
+              <p class="post-option-text">Quan tâm</p>
+              <!-- /POST OPTION TEXT -->
+            </div>
+            <!-- /POST OPTION -->
+          </div>
+          <!-- /POST OPTION WRAP -->
+
+          <!-- POST OPTION -->
+          <div class="post-option">
+            <!-- POST OPTION ICON -->
+            <svg class="post-option-icon icon-comment">
+              <use xlink:href="#svg-comment"></use>
+            </svg>
+            <!-- /POST OPTION ICON -->
+
+            <!-- POST OPTION TEXT -->
+            <p class="post-option-text">Bình luận</p>
+            <!-- /POST OPTION TEXT -->
+          </div>
+          <!-- /POST OPTION -->
+
+          <!-- POST OPTION -->
+          <div class="post-option">
+            <!-- POST OPTION ICON -->
+            <svg class="post-option-icon icon-share">
+              <use xlink:href="#svg-share"></use>
+            </svg>
+            <!-- /POST OPTION ICON -->
+
+            <!-- POST OPTION TEXT -->
+            <p class="post-option-text">Chia sẻ</p>
+            <!-- /POST OPTION TEXT -->
+          </div>
+          <!-- /POST OPTION -->
+        </div>
+        <!-- /POST OPTIONS -->
+      </div>
+      <!-- /WIDGET BOX -->
+
+      <!-- WIDGET BOX -->
+      <div class="widget-box no-padding">
+        <!-- WIDGET BOX SETTINGS -->
+        <div class="widget-box-settings">
+          <!-- POST SETTINGS WRAP -->
+          <div class="post-settings-wrap">
+            <!-- POST SETTINGS -->
+            <div
+              class="post-settings widget-box-post-settings-dropdown-trigger"
+            >
+              <!-- POST SETTINGS ICON -->
+              <svg class="post-settings-icon icon-more-dots">
+                <use xlink:href="#svg-more-dots"></use>
+              </svg>
+              <!-- /POST SETTINGS ICON -->
+            </div>
+            <!-- /POST SETTINGS -->
+
+            <!-- SIMPLE DROPDOWN -->
+            <div class="simple-dropdown widget-box-post-settings-dropdown">
+              <!-- SIMPLE DROPDOWN LINK -->
+              <p class="simple-dropdown-link">Báo cáo bài viết</p>
+              <!-- /SIMPLE DROPDOWN LINK -->
+
+              <!-- SIMPLE DROPDOWN LINK -->
+              <p class="simple-dropdown-link">Báo cáo tài khoản</p>
+              <!-- /SIMPLE DROPDOWN LINK -->
+            </div>
+            <!-- /SIMPLE DROPDOWN -->
+          </div>
+          <!-- /POST SETTINGS WRAP -->
+        </div>
+        <!-- /WIDGET BOX SETTINGS -->
+
+        <!-- WIDGET BOX STATUS -->
+        <div class="widget-box-status">
+          <!-- WIDGET BOX STATUS CONTENT -->
+          <div class="widget-box-status-content">
+            <!-- USER STATUS -->
+            <div class="user-status">
+              <!-- USER STATUS AVATAR -->
+              <a class="user-status-avatar" href="profile">
+                <!-- USER AVATAR -->
+                <div class="user-avatar small no-outline">
+                  <!-- USER AVATAR CONTENT -->
+                  <div class="user-avatar-content">
+                    <!-- HEXAGON -->
+                    <div
+                      class="hexagon-image-30-32"
+                      data-src="../../../assets/images/avatar/05.jpg"
+                    ></div>
+                    <!-- /HEXAGON -->
+                  </div>
+                  <!-- /USER AVATAR CONTENT -->
+
+                  <!-- USER AVATAR PROGRESS -->
+                  <div class="user-avatar-progress">
+                    <!-- HEXAGON -->
+                    <div class="hexagon-progress-40-44"></div>
+                    <!-- /HEXAGON -->
+                  </div>
+                  <!-- /USER AVATAR PROGRESS -->
+
+                  <!-- USER AVATAR PROGRESS BORDER -->
+                  <div class="user-avatar-progress-border">
+                    <!-- HEXAGON -->
+                    <div class="hexagon-border-40-44"></div>
+                    <!-- /HEXAGON -->
+                  </div>
+                  <!-- /USER AVATAR PROGRESS BORDER -->
+
+                  <!-- USER AVATAR BADGE -->
+                  <div class="user-avatar-badge">
+                    <!-- USER AVATAR BADGE BORDER -->
+                    <div class="user-avatar-badge-border">
+                      <!-- HEXAGON -->
+                      <div class="hexagon-22-24"></div>
+                      <!-- /HEXAGON -->
+                    </div>
+                    <!-- /USER AVATAR BADGE BORDER -->
+
+                    <!-- USER AVATAR BADGE CONTENT -->
+                    <div class="user-avatar-badge-content">
+                      <!-- HEXAGON -->
+                      <div class="hexagon-dark-16-18"></div>
+                      <!-- /HEXAGON -->
+                    </div>
+                    <!-- /USER AVATAR BADGE CONTENT -->
+
+                    <!-- USER AVATAR BADGE TEXT -->
+                    <p class="user-avatar-badge-text">12</p>
+                    <!-- /USER AVATAR BADGE TEXT -->
+                  </div>
+                  <!-- /USER AVATAR BADGE -->
+                </div>
+                <!-- /USER AVATAR -->
+              </a>
+              <!-- /USER STATUS AVATAR -->
+
+              <!-- USER STATUS TITLE -->
+              <p class="user-status-title medium">
+                <a class="bold" href="profile">Nguyễn Khánh Đan</a>
+              </p>
+              <!-- /USER STATUS TITLE -->
+
+              <!-- USER STATUS TEXT -->
+              <p class="user-status-text small post-time">2 tuần trước</p>
+              <!-- /USER STATUS TEXT -->
+            </div>
+            <!-- /USER STATUS -->
+
+            <!-- WIDGET BOX STATUS TEXT -->
+            <p class="widget-box-status-text">
+              Mình có vài món đồ muốn tặng bạn nào cần liên hệ mình nha!! SĐT:
+              0123456789
+            </p>
+            <!-- /WIDGET BOX STATUS TEXT -->
+          </div>
+          <!-- /WIDGET BOX STATUS CONTENT -->
+
+          <!-- IFRAME WRAP -->
+          <div class="picture-collage">
+            <div class="picture-collage-row medium">
+              <div class="picture-collage-item">
+                <div class="photo-preview-wrap">
+                  <div class="photo-preview">
+                    <div
+                      class="photo-preview-image"
+                      style="
+                        background: url('../assets/images/posts/book.png')
+                          center center / cover no-repeat;
+                      "
+                    ></div>
+                  </div>
+                </div>
+              </div>
+              <div class="picture-collage-item">
+                <div class="photo-preview-wrap">
+                  <div class="photo-preview">
+                    <div
+                      class="photo-preview-image"
+                      style="
+                        background: url('../assets/images/posts/converse.png')
+                          center center / cover no-repeat;
+                      "
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="picture-collage-row">
+              <div class="picture-collage-item">
+                <div class="photo-preview-wrap">
+                  <div class="photo-preview">
+                    <div
+                      class="photo-preview-image"
+                      style="
+                        background: url('../assets/images/posts/mop.png') center
+                          center / cover no-repeat;
+                      "
+                    ></div>
+                  </div>
+                  <div></div>
+                </div>
+              </div>
+              <div class="picture-collage-item">
+                <div class="photo-preview-wrap">
+                  <div class="photo-preview">
+                    <div
+                      class="photo-preview-image"
+                      style="
+                        background: url('../assets/images/posts/pen.png') center
+                          center / cover no-repeat;
+                      "
+                    ></div>
+                  </div>
+                  <div></div>
+                </div>
+              </div>
+              <div class="picture-collage-item">
+                <a
+                  class="picture-collage-item-overlay"
+                  href="../assets/images/posts/shirt.png"
+                >
+                  <p class="picture-collage-item-overlay-text">+2</p>
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- /IFRAME WRAP -->
+
+          <!-- WIDGET BOX STATUS CONTENT -->
+          <div class="widget-box-status-content">
+            <!-- TAG LIST -->
+            <div class="tag-list">
+              <!-- TAG ITEM -->
+              <a class="tag-item secondary" href="">Stream</a>
+              <!-- /TAG ITEM -->
+
+              <!-- TAG ITEM -->
+              <a class="tag-item secondary" href="">StrikerGO</a>
+              <!-- /TAG ITEM -->
+
+              <!-- TAG ITEM -->
+              <a class="tag-item secondary" href="">Outlaws</a>
+              <!-- /TAG ITEM -->
+
+              <!-- TAG ITEM -->
+              <a class="tag-item secondary" href="">Gaming</a>
+              <!-- /TAG ITEM -->
+            </div>
+            <!-- /TAG LIST -->
+
+            <!-- CONTENT ACTIONS -->
+            <div class="content-actions">
+              <!-- CONTENT ACTION -->
+              <div class="content-action">
+                <!-- META LINE -->
+                <div class="meta-line">
+                  <!-- META LINE LIST -->
+                  <div class="meta-line-list reaction-item-list">
+                    <!-- REACTION ITEM -->
+                    <div class="reaction-item">
+                      <!-- REACTION IMAGE -->
+                      <img
+                        class="reaction-image reaction-item-dropdown-trigger"
+                        src="../../../assets/images/reaction/love.png"
+                        alt="reaction-love"
+                      />
+                      <!-- /REACTION IMAGE -->
+
+                      <!-- SIMPLE DROPDOWN -->
+                      <div
+                        class="simple-dropdown padded reaction-item-dropdown"
+                      >
+                        <!-- SIMPLE DROPDOWN TEXT -->
+                        <p class="simple-dropdown-text">
+                          <img
+                            class="reaction"
+                            src="../../../assets/images/reaction/love.png"
+                            alt="reaction-love"
+                          />
+                          <span class="bold">Love</span>
+                        </p>
+                        <!-- /SIMPLE DROPDOWN TEXT -->
+
+                        <!-- SIMPLE DROPDOWN TEXT -->
+                        <p class="simple-dropdown-text">Matt Parker</p>
+                        <!-- /SIMPLE DROPDOWN TEXT -->
+
+                        <!-- SIMPLE DROPDOWN TEXT -->
+                        <p class="simple-dropdown-text">Destroy Dex</p>
+                        <!-- /SIMPLE DROPDOWN TEXT -->
+
+                        <!-- SIMPLE DROPDOWN TEXT -->
+                        <p class="simple-dropdown-text">The Green Goo</p>
+                        <!-- /SIMPLE DROPDOWN TEXT -->
+                      </div>
+                      <!-- /SIMPLE DROPDOWN -->
+                    </div>
+                    <!-- /REACTION ITEM -->
+                  </div>
+                  <!-- /META LINE LIST -->
+
+                  <!-- META LINE TEXT -->
+                  <p class="meta-line-text">16</p>
+                  <!-- /META LINE TEXT -->
+                </div>
+                <!-- /META LINE -->
+              </div>
+              <!-- /CONTENT ACTION -->
+
+              <!-- CONTENT ACTION -->
+              <div class="content-action">
+                <!-- META LINE -->
+                <div class="meta-line">
+                  <!-- META LINE LINK -->
+                  <p class="meta-line-link">2 Bình luận</p>
+                  <!-- /META LINE LINK -->
+                </div>
+                <!-- /META LINE -->
+
+                <!-- META LINE -->
+                <div class="meta-line">
+                  <!-- META LINE TEXT -->
+                  <p class="meta-line-text">0 Chia sẻ</p>
+                  <!-- /META LINE TEXT -->
+                </div>
+                <!-- /META LINE -->
+              </div>
+              <!-- /CONTENT ACTION -->
+            </div>
+            <!-- /CONTENT ACTIONS -->
+          </div>
+          <!-- /WIDGET BOX STATUS CONTENT -->
+        </div>
+        <!-- /WIDGET BOX STATUS -->
+
+        <!-- POST OPTIONS -->
+        <div class="post-options">
+          <!-- POST OPTION WRAP -->
+          <div class="post-option-wrap">
+            <!-- POST OPTION -->
+            <div class="post-option reaction-options-dropdown-trigger">
+              <!-- POST OPTION ICON -->
+              <svg class="post-option-icon icon-thumbs-up">
+                <use xlink:href="#svg-thumbs-up"></use>
+              </svg>
+              <!-- /POST OPTION ICON -->
+
+              <!-- POST OPTION TEXT -->
+              <p class="post-option-text">Quan tâm</p>
+              <!-- /POST OPTION TEXT -->
+            </div>
+            <!-- /POST OPTION -->
+          </div>
+          <!-- /POST OPTION WRAP -->
+
+          <!-- POST OPTION -->
+          <div class="post-option">
+            <!-- POST OPTION ICON -->
+            <svg class="post-option-icon icon-comment">
+              <use xlink:href="#svg-comment"></use>
+            </svg>
+            <!-- /POST OPTION ICON -->
+
+            <!-- POST OPTION TEXT -->
+            <p class="post-option-text">Bình luận</p>
+            <!-- /POST OPTION TEXT -->
+          </div>
+          <!-- /POST OPTION -->
+
+          <!-- POST OPTION -->
+          <div class="post-option">
+            <!-- POST OPTION ICON -->
+            <svg class="post-option-icon icon-share">
+              <use xlink:href="#svg-share"></use>
+            </svg>
+            <!-- /POST OPTION ICON -->
+
+            <!-- POST OPTION TEXT -->
+            <p class="post-option-text">Chia sẻ</p>
+            <!-- /POST OPTION TEXT -->
+          </div>
+          <!-- /POST OPTION -->
+        </div>
+        <!-- /POST OPTIONS -->
+      </div>
+      <!-- /WIDGET BOX -->
+
+      <!-- LOADER BARS -->
+      <!-- <div class="loader-bars">
+            <div class="loader-bar"></div>
+            <div class="loader-bar"></div>
+            <div class="loader-bar"></div>
+            <div class="loader-bar"></div>
+            <div class="loader-bar"></div>
+            <div class="loader-bar"></div>
+            <div class="loader-bar"></div>
+            <div class="loader-bar"></div>
+          </div> -->
+      <!-- /LOADER BARS -->
+    </div>
+    <!-- /GRID COLUMN -->
+
+    <!-- GRID COLUMN -->
+    <div class="grid-column">
+      <!-- WIDGET BOX -->
+      <div class="widget-box">
+        <!-- WIDGET BOX SETTINGS -->
+        <div class="widget-box-settings">
+          <!-- POST SETTINGS WRAP -->
+          <div class="post-settings-wrap">
+            <!-- POST SETTINGS -->
+            <div
+              class="post-settings widget-box-post-settings-dropdown-trigger"
+            >
+              <!-- POST SETTINGS ICON -->
+              <svg class="post-settings-icon icon-more-dots">
+                <use xlink:href="#svg-more-dots"></use>
+              </svg>
+              <!-- /POST SETTINGS ICON -->
+            </div>
+            <!-- /POST SETTINGS -->
+
+            <!-- SIMPLE DROPDOWN -->
+            <div class="simple-dropdown widget-box-post-settings-dropdown">
+              <!-- SIMPLE DROPDOWN LINK -->
+              <a class="simple-dropdown-link" href="photos">Xem tất cả</a>
+              <!-- /SIMPLE DROPDOWN LINK -->
+            </div>
+            <!-- /SIMPLE DROPDOWN -->
+          </div>
+          <!-- /POST SETTINGS WRAP -->
+        </div>
+        <!-- /WIDGET BOX SETTINGS -->
+
+        <!-- WIDGET BOX TITLE -->
+        <p class="widget-box-title">Ảnh <span class="highlighted">74</span></p>
+        <!-- /WIDGET BOX TITLE -->
+
+        <!-- WIDGET BOX CONTENT -->
+        <div class="widget-box-content">
+          <!-- PICTURE ITEM LIST -->
+          <div class="picture-item-list small" >
+            <!-- PICTURE ITEM -->
+            <div class="picture-item" *ngFor="let img of dataProfileTimeline?.images.slice(0, 11)">
+              <!-- PICTURE -->
+              <figure class="picture round liquid">
+                <img [src]="img" alt="avatar-01" />
+              </figure>
+              <!-- /PICTURE -->
+            </div>
+            <!-- /PICTURE ITEM -->
+
+            <!-- PICTURE ITEM -->
+            <a class="picture-item" href="photos">
+              <!-- PICTURE -->
+              <figure class="picture round liquid">
+                <img src="../../assets/images/cover/17.jpg" alt="avatar-17" />
+              </figure>
+              <!-- /PICTURE -->
+
+              <!-- PICTURE ITEM OVERLAY -->
+              <div class="picture-item-overlay round">
+                <!-- PICTURE ITEM OVERLAY TEXT -->
+                <p class="picture-item-overlay-text">+61</p>
+                <!-- /PICTURE ITEM OVERLAY TEXT -->
+              </div>
+              <!-- /PICTURE ITEM OVERLAY -->
+            </a>
+            <!-- /PICTURE ITEM -->
+          </div>
+          <!-- /PICTURE ITEM LIST -->
+        </div>
+        <!-- /WIDGET BOX CONTENT -->
+      </div>
+      <!-- /WIDGET BOX -->
+
+      <!-- WIDGET BOX -->
+      <div class="widget-box">
+        <!-- WIDGET BOX TITLE -->
+        <p class="widget-box-title">Bài được quan tâm nhiều</p>
+        <!-- /WIDGET BOX TITLE -->
+
+        <!-- WIDGET BOX CONTENT -->
+        <div class="widget-box-content" *ngFor="let p of dataProfileTimeline?.listPostInterested">
+          <!-- POST PEEK LIST -->
+          <div class="post-peek-list">
+            <!-- POST PEEK -->
+            <div class="post-peek">
+              <!-- POST PEEK IMAGE -->
+              <a class="post-peek-image" href="">
+                <figure class="picture small round liquid">
+                  <img src="{{p[1]}}" alt="cover-19" />
+                </figure>
+              </a>
+              <!-- /POST PEEK IMAGE -->
+
+              <!-- POST PEEK TITLE -->
+              <p class="post-peek-title">
+                <a href="profile-post.html"
+                  >{{p[3]}}</a
+                >
+              </p>
+              <!-- /POST PEEK TITLE -->
+
+              <!-- POST PEEK TEXT -->
+              <p class="post-peek-text">6 days ago</p>
+              <!-- /POST PEEK TEXT -->
+            </div>
+            <!-- /POST PEEK -->
+          </div>
+          <!-- /POST PEEK LIST -->
+        </div>
+        <!-- /WIDGET BOX CONTENT -->
+      </div>
+      <!-- /WIDGET BOX -->
+    </div>
+    <!-- /GRID COLUMN -->
+  </div>
+  <!-- /GRID -->
+</div>
+<!-- /CONTENT GRID -->
+<a
+  class="scroll-to-top"
+  (click)="scrollToTop()"
+  id="scrollButton"
+  style="display: none"
+>
+  <i class="fas fa-angle-up"></i>
+</a>
