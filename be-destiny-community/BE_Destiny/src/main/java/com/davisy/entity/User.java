@@ -122,6 +122,18 @@ public class User implements UserDetails {
 //	@JsonIgnore
 //	@OneToMany(mappedBy = "user")
 //	List<Follower> followers;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "userSendReport")
+	List<PostReported> postReporteds;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "userSendReport")
+	List<UserReported> userSendReports;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "userReported")
+	List<UserReported> userReporteds;
 
 	@JsonIgnore
 	public String[] getAuth() {

@@ -11,20 +11,23 @@ import { content } from '../../../assets/js/content/content.js';
 import { form } from '../../../assets/js/form/form.utils.js';
 import 'src/assets/js/utils/svg-loader.js';
 import { DatePipe } from '@angular/common';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import {
   FormGroup,
   FormBuilder,
   Validators,
   FormControl,
 } from '@angular/forms';
+
 import Swal from 'sweetalert2';
-import {
-  Storage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from '@angular/fire/storage';
-import { AngularFireStorage } from '@angular/fire/compat/storage';
+// import {
+//   Storage,
+//   ref,
+//   uploadBytesResumable,
+//   getDownloadURL,
+// } from '@angular/fire/storage';
+
 // 
 import { ModalService } from '../service/modal.service';
 import { ProfileService } from '../service/profile.service';
@@ -40,11 +43,9 @@ declare var toast: any;
     './edit-profile.component.css'
   ]
 })
-@Injectable({
-  providedIn: 'root'
-})
+
 export class EditProfileComponent implements OnInit {
-  @ViewChild('uploadPreview') uploadPreview: ElementRef;
+  // @ViewChild('uploadPreview') uploadPreview: ElementRef;
   public profileForm!: FormGroup;
   textAreaContent: string = ''; // Nội dung của textarea
   readonlyCondition: boolean = false; // Ban đầu không bị giới hạn
@@ -59,6 +60,7 @@ export class EditProfileComponent implements OnInit {
   wards: any[] = [];
   genders: any[] = [];
   avatar = '';
+  public file: any = {};
   dataEditProfile: any = {
     "avartar": "https://firebasestorage.googleapis.com/v0/b/destiny-davisy.appspot.com/o/daviuser.png?alt=media&token=2d59b1a7-5ce8-4d5a-96f6-17b32a620b51&_gl=1*1g5m6wy*_ga*MTcxMDU3NTczOS4xNjc2OTc2NjE1*_ga_CW55HF8NVT*MTY5NjUwMzgxNi44LjEuMTY5NjUwNTk0MC4xNy4wLjA.",
     "intro": "hi",
@@ -81,6 +83,7 @@ export class EditProfileComponent implements OnInit {
     this.loadAllGender();
     this.loadAllProvince();
 
+
   }
   initialEmail: string;
   userEmail: string;
@@ -90,11 +93,11 @@ export class EditProfileComponent implements OnInit {
     private formbuilder: FormBuilder,
     private cookieService: CookieService,
     private datePipe: DatePipe, //Định dạng ngày
-    public storage: Storage,
-    private fireStorage:AngularFireStorage
+    // public storage: Storage,
+    // private fireStorage:AngularFireStorage
   ) {
-    this.initialEmail = this.dataEditProfile.email; // Gán giá trị email ban đầu
-    this.userEmail = this.initialEmail;
+    // this.initialEmail = this.dataEditProfile.email; // Gán giá trị email ban đầu
+    // this.userEmail = this.initialEmail;
   }
 
 
@@ -110,6 +113,7 @@ export class EditProfileComponent implements OnInit {
         ]],
       email: ['', [Validators.required, Validators.email]],
       intro: [''],
+      avatar: [''],
       birthday: [''],
       day_create: [''],
       gender: [''],
@@ -138,20 +142,21 @@ export class EditProfileComponent implements OnInit {
       district_name: this.profileForm.get('idDistrict')!.value,
     };
 
+    
     this.profileService.updateProfile(data).subscribe((response) => {
-      if (this.initialEmail !== this.userEmail) {
+      // if (this.initialEmail !== this.userEmail) {
         // Email đã thay đổi, thực hiện xử lý cập nhật
-        console.log('Email đã thay đổi');
+        // console.log('Email đã thay đổi');
         this.userLogined = JSON.parse(JSON.stringify(response));
         this.setUserLog(this.userLogined);
         localStorage.setItem(
           'token',
           JSON.parse(JSON.stringify(this.getUserLog())).token
         );
-      } else {
-        // Email không thay đổi
-        console.log('Email không thay đổi');
-      }
+      // } else {
+      //   // Email không thay đổi
+      //   console.log('Email không thay đổi');
+      // }
       new toast({
         title: 'Thành công!',
         message: 'Cập nhật thành công!',
@@ -162,10 +167,90 @@ export class EditProfileComponent implements OnInit {
       this.cookieService.set("avatar", this.profileForm.get('avatar')!.value);
     })
   }
+  // check: boolean = false
+  // updateProfile(): Observable<any> {
+  //   var data = {
+  //     username: this.profileForm.get('username')!.value,
+  //     password: this.profileForm.get('password')!.value,
+  //     fullname: this.profileForm.get('fullname')!.value,
+  //     email: this.profileForm.get('email')!.value,
+  //     intro: this.profileForm.get('intro')!.value,
+  //     birthday: this.profileForm.get('birthday')!.value,
+  //     gender_name: this.profileForm.get('gender')!.value,
+  //     province_name: this.profileForm.get('idProvince')!.value,
+  //     ward_name: this.profileForm.get('idWard')!.value,
+  //     district_name: this.profileForm.get('idDistrict')!.value,
+  //   };
+
+    
+  //   this.profileService.updateProfile(data).subscribe((response) => {
+  //       this.userLogined = JSON.parse(JSON.stringify(response));
+  //       this.setUserLog(this.userLogined);
+  //       localStorage.setItem(
+  //         'token',
+  //         JSON.parse(JSON.stringify(this.getUserLog())).token
+  //       );
+  //     new toast({
+  //       title: 'Thành công!',
+  //       message: 'Cập nhật thành công!',
+  //       type: 'success',
+  //       duration: 2000,
+  //     });
+  //     this.cookieService.set("full_name", this.profileForm.get('fullname')!.value);
+  //     this.cookieService.set("avatar", this.profileForm.get('avatar')!.value);
+  //     this.check = true
+  //   })
+  //   if (!this.check) {
+  //     return throwError("Cập nhật thất bại");
+  //   } else {
+  //     return new Observable((observer) => {
+  //       observer.next("Cập nhật thành công");
+  //       observer.complete();
+  //     });
+  //   }
+  // }
+  // verificationPassword(): void{
+  //     console.log("this.initialEmail: " + this.initialEmail)
+  //   this.profileForm.get('email')!.valueChanges.subscribe((value) => {
+  //     console.log("value: " + value);
+  //     console.log("this.initialEmail: " + this.initialEmail)
+  //     if (value != this.initialEmail) {
+  //       Swal.fire({
+  //         title: 'Submit your Github username',
+  //         input: 'text',
+  //         inputAttributes: {
+  //           autocapitalize: 'off'
+  //         },
+  //         showCancelButton: true,
+  //         confirmButtonText: 'Look up',
+  //         showLoaderOnConfirm: true,
+  //         preConfirm: () => {
+  //           return this.updateProfile()
+  //             .pipe(
+  //               catchError((error) => {
+  //                 Swal.showValidationMessage(`Request failed: ${error}`);
+  //                 return [];
+  //               })
+  //             )
+  //             .toPromise();
+  //         },
+  //         allowOutsideClick: () => !Swal.isLoading()
+  //       }).then((result) => {
+  //         if (result.isConfirmed) {
+  //           Swal.fire({
+  //             title: `${result.value.login}'s avatar`,
+  //             imageUrl: result.value.avatar_url
+  //           });
+  //         }
+  //       });
+  //     }
+  //   });
+  // }
 
   loadDataProfile() {
     this.profileService.loadDataEditProfile().subscribe(() => {
       this.dataEditProfile = this.profileService.getDataEditProfile();
+      this.initialEmail = this.dataEditProfile.email;
     })
   }
 
@@ -291,19 +376,6 @@ export class EditProfileComponent implements OnInit {
     this.userLogined = data;
   }
 
-  chooseFile(event: any) {
-    this.file = event.target.files[0];
-    var oFReader = new FileReader();
-    oFReader.readAsDataURL(this.file);
-
-    oFReader.onload = (oFREvent: any) => {
-      if (this.uploadPreview && this.uploadPreview.nativeElement) {
-        this.uploadPreview.nativeElement.src = oFREvent.target.result;
-      }
-    };
-    // this.addData();
-  }
-
   // addData() {
   //   const storageRef = ref(this.storage, this.file.name);
   //   const uploadTast = uploadBytesResumable(storageRef, this.file);
@@ -315,33 +387,16 @@ export class EditProfileComponent implements OnInit {
   //     },
   //     () => {
   //       getDownloadURL(uploadTast.snapshot.ref).then((downloadURL) => {
-  //         let timerInterval;
-  //         Swal.fire({
-  //           title: 'Upload!',
-  //           html: 'Quá trình upload sẽ diễn ra trong vài giây!',
-  //           timer: 2000,
-  //           timerProgressBar: true,
-  //           didOpen: () => {
-  //             Swal.showLoading();
-  //           },
-  //           willClose: () => {
-  //             clearInterval(timerInterval);
-  //           },
-  //         }).then((result) => {
-  //           if (result.dismiss === Swal.DismissReason.timer) {
-  //             console.log('I was closed by the timer');
-  //           }
-  //         });
-
-  //         var x = downloadURL;
-  //         console.log('URL', x);
-  //         this.avatar = downloadURL;
-  //         // document.getElementById('avatar').innerHTML = x;
+  //         console.log('Upload file : ', downloadURL);
   //       });
   //     }
   //   );
   // }
-  public file: any = {};
- 
+  chooseFile(event: any) {
+    this.file = event.target.files[0];
+    console.log(this.file)
+    // this.addData();
+  }
+
 }
 

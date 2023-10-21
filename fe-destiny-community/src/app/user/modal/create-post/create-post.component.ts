@@ -1,19 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
-import { ModalService } from '../service/modal.service';
-import { PostService } from '../service/post.service';
+import { ModalService } from '@app/user/service/modal.service';
+import { PostService } from '@app/user/service/post.service';
 @Component({
-  selector: 'app-modal',
-  templateUrl: './modal.component.html',
-  styleUrls: [
-    './modal.component.css',
-    `./modal-comment.css`,
-  ]
+  selector: 'app-create-post',
+  templateUrl: './create-post.component.html',
+  styleUrls: ['../css/modal.css']
 })
-export class ModalComponent implements OnInit {
+export class CreatePostComponent {
   slideIndex: number = 1;
   slidesLength: string;
-  listTop5User: any[] = [];
 
   constructor(
     public modalService: ModalService,
@@ -22,38 +18,15 @@ export class ModalComponent implements OnInit {
 
   ngOnInit() {
     this.showSlides(1);
-    this.loadDataTop5User();
   }
 
+
+  /* ============template============= */
   listCupUser = [
     "../../../assets/images/posts/book.png",
     "../../../assets/images/posts/chair.png",
     "../../../assets/images/posts/converse.png",
   ];
-  
-  loadDataTop5User() {
-    this.postService.loadTop5User().subscribe(() => {
-      this.listTop5User = this.postService.getDataTop5User();
-    });
-  }
-
-  /* ============template============= */
-  opentReplies() {
-    const showContainers = document.querySelectorAll(".show-replies");
-    showContainers.forEach((btn) =>
-      btn.addEventListener("click", (e) => {
-        const target = e.target as HTMLElement;
-        const parentContainer = target.closest(".comment__container")!;
-        let _id = parentContainer.id;
-        if (_id) {
-          let childrenContainer = parentContainer.querySelectorAll(
-            `[dataset=${_id}]`
-          );
-          childrenContainer.forEach((child) => child.classList.toggle("opened"));
-        }
-      })
-    );
-  }
   // Next/previous controls
   plusSlides(n: number) {
     this.showSlides(this.slideIndex += n);
@@ -84,16 +57,7 @@ export class ModalComponent implements OnInit {
     }
   }
 
-  openModalCreatePost() {
-    this.modalService.openModalCreatePost();
-  }
   closeModalCreatePost() {
     this.modalService.closeModalCreatePost();
-  }
-  openModalComment() {
-    this.modalService.openModalComment();
-  }
-  closeModalComment() {
-    this.modalService.closeModalComment();
   }
 }

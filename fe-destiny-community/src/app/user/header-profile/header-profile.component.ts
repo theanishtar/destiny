@@ -17,7 +17,8 @@ export class HeaderProfileComponent implements OnInit {
   activeMenuItem: string = '';
   dataProfileTimeline: any;
   isLoading = true;
-  idLocal: any
+  idLocal: any;
+  dataFollows: any
   ngOnInit() {
     
   }
@@ -37,6 +38,7 @@ export class HeaderProfileComponent implements OnInit {
     this.idLocal = parseInt((localStorage.getItem("idSelected") + '')?.trim());
     this.profileService.loadDataHeader(this.idLocal).subscribe(res => {
       this.dataProfileTimeline = this.profileService.getDataHeader();
+      this.dataFollows = this.dataProfileTimeline.dataFollows;
       this.isLoading = false
     })
 

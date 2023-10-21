@@ -145,4 +145,10 @@ public class UserServiceImpl implements UserService {
 		userDao.saveAndFlush(user);
 	}
 
+	// Lấy user đã đăng bài
+	@Override
+	public List<Object[]> getUserofPost(int id,int provinceId) {
+		return userDao.getUserofPost(id,provinceId);
+	}
+
 }

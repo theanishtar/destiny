@@ -75,7 +75,7 @@
       >
         <!-- MENU ITEM LINK -->
         <a
-          [attr.data-title]="'sidebar_setting' | translate"
+          [attr.data-title]="'Nhantin' | translate"
           class="menu-item-link"
           routerLink="/message"
         >
@@ -1558,7 +1558,7 @@
         <!-- /DROPDOWN NAVIGATION CATEGORY -->
 
         <!-- DROPDOWN NAVIGATION LINK -->
-        <a class="dropdown-navigation-link" href="profile">{{
+        <a class="dropdown-navigation-link" (click)="this.profileService.loadDataProfileTimeline(0)">{{
           "Thongtin" | translate
         }}</a>
         <!-- /DROPDOWN NAVIGATION LINK -->

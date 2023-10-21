@@ -5,9 +5,9 @@
   <!-- PROFILE HEADER COVER -->
   <figure
     class="profile-header-cover liquid"
-    style="background: url('{{dataProfileTimeline.dataFollows.thumb}}') center center / cover no-repeat;"
+    style="background: url('{{dataFollows?.thumb}}') center center / cover no-repeat;"
   >
-    <img src="{{ dataProfileTimeline.dataFollows.thumb }}" alt="cover-01" />
+    <img src="{{ dataFollows?.thumb }}" alt="cover-01" />
   </figure>
   <!-- /PROFILE HEADER COVER -->
 
@@ -21,7 +21,7 @@
           <div class="hexagon user-avatar-content">
             <div
               class="hexagon-image"
-              style="background-image: url('{{dataProfileTimeline.dataFollows.avatar}}')"
+              style="background-image: url('{{dataFollows?.avatar}}')"
             ></div>
           </div>
           <div class="hexagon user-avatar-border">
@@ -43,7 +43,7 @@
           <div class="hexagon user-avatar-content">
             <div
               class="hexagon-image"
-              style="background-image: url('{{dataProfileTimeline.dataFollows.avatar}}')"
+              style="background-image: url('{{dataFollows?.avatar}}')"
             ></div>
           </div>
           <div class="hexagon user-avatar-border">
@@ -59,14 +59,14 @@
       <!-- USER SHORT DESCRIPTION TITLE -->
       <p class="user-short-description-title">
         <a href="profile-timeline">{{
-          dataProfileTimeline.dataFollows.fullname
+          dataFollows?.fullname
         }}</a>
       </p>
       <!-- /USER SHORT DESCRIPTION TITLE -->
 
       <!-- USER SHORT DESCRIPTION TEXT -->
       <p class="user-short-description-text">
-        <a>{{ dataProfileTimeline.dataFollows.username }}</a>
+        <a>{{ dataFollows?.username }}</a>
       </p>
       <!-- /USER SHORT DESCRIPTION TEXT -->
     </div>
@@ -78,7 +78,7 @@
       <div class="user-stat big">
         <!-- USER STAT TITLE -->
         <p class="user-stat-title">
-          {{ dataProfileTimeline.dataFollows.countPost }}
+          {{ dataFollows?.countPost }}
         </p>
         <!-- /USER STAT TITLE -->
 
@@ -92,7 +92,7 @@
       <div class="user-stat big">
         <!-- USER STAT TITLE -->
         <p class="user-stat-title">
-          {{ dataProfileTimeline.dataFollows.countFollower }}
+          {{ dataFollows?.countFollower }}
         </p>
         <!-- /USER STAT TITLE -->
 
@@ -106,7 +106,7 @@
       <div class="user-stat big">
         <!-- USER STAT TITLE -->
         <p class="user-stat-title">
-          {{ dataProfileTimeline.dataFollows.countImg }}
+          {{ dataFollows?.countImg }}
         </p>
         <!-- /USER STAT TITLE -->
 
@@ -123,7 +123,7 @@
       <!-- PROFILE HEADER INFO ACTION -->
       <p
         class="profile-header-info-action button secondary"
-        *ngIf="!dataProfileTimeline.dataFollows.checkFollow"
+        *ngIf="!dataFollows?.checkFollow"
       >
         <span class="hide-text-mobile">Theo</span> dõi +
       </p>

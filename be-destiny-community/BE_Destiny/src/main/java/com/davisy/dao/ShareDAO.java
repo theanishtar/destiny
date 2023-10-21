@@ -9,7 +9,7 @@ import com.davisy.entity.Share;
 public interface ShareDAO extends JpaRepository<Share, Integer> {
 	
 	//23-9-2023 tổng lượt chia sẻ của bài đăng
-	@Query(value = "SELECT /*+ RESULT_CACHE */ COUNT(share_id) FROM share WHERE post_id =:id", nativeQuery = true)
+	@Query(value = "SELECT  COUNT(share_id) FROM share WHERE post_id =:id", nativeQuery = true)
 	public int totalShareByPost(int id);
 	
 	

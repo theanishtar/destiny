@@ -22,6 +22,6 @@ public interface PostImagesDAO extends JpaRepository<PostImages, Long> {
 	public List<String> findAllImagesUser(int id);
 
 //	@Cacheable("post_images")
-	@Query(value = "select /*+ RESULT_CACHE */ pi2.link_image from post_images pi2 where pi2.post_id=:id", nativeQuery = true)
+	@Query(value = "select  pi2.link_image from post_images pi2 where pi2.post_id=:id", nativeQuery = true)
 	public List<String> findAllImagesofPost(int id);
 }

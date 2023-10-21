@@ -22,11 +22,8 @@ import { FollowsService } from '../service/follows.service';
 import { LoadingService } from '../service/loading.service';
 import { PostService } from '../service/post.service';
 import { MessageService } from '@app/user/service/message.service';
-
-import { connectToChat } from '../../../assets/js/chat/chat.js'
-import * as Stomp from 'stompjs';
-import * as SockJS from 'sockjs-client';
-import { Observable, of } from 'rxjs';
+import { ProfileService } from '../service/profile.service';
+import { DatePipe } from '@angular/common';
 import '../../../assets/toast/main.js';
 import { forEach } from 'angular';
 declare var toast: any;
@@ -43,21 +40,22 @@ declare var toast: any;
 })
 export class NewsfeedComponent implements OnInit {
   userDisplayName = '';
-  postId = '123'; // Mã số của bài viết (có thể là mã số duy nhất của mỗi bài viết)
+  postId: string; // Mã số của bài viết (có thể là mã số duy nhất của mỗi bài viết)
   listSuggested: any[] = [];
   listTop5User: any[] = [];
   listTop5Post: any[] = [];
-  isLoading = false;
+  listPosts: any;
+  isLoading = true;
   isFollowing: boolean = false;
   checkData1: boolean = false;
   checkData2: boolean = false;
   checkData3: boolean = false;
-  // sender: any ;
-  // socket?: WebSocket;
-  // stompClient?: Stomp.Client;
+  checkData4: boolean = false;
+  datePost: string | null
 
   ngOnInit() {
     this.userDisplayName = this.cookieService.get('full_name');
+    this.loadPosts();
     this.loadDataSuggest();
     this.loadDataTop5User();
     this.loadDataTop5Post();
@@ -86,32 +84,21 @@ export class NewsfeedComponent implements OnInit {
     public followsService: FollowsService,
     public loadingService: LoadingService,
     public postService: PostService,
-    public messageService: MessageService
+    public messageService: MessageService,
+    private datePipe: DatePipe, //Định dạng ngày,
+    public profileService: ProfileService
   ) {
 
   }
 
   /* ============Suggested============= */
   check: boolean = true
-  
-  // loadDataSuggest() {
-  //   this.followsService.loadDataSuggest().subscribe(() => {
-  //     this.listSuggested = this.followsService.getDataSuggested();
-  //     // console.log('this.listSuggested 1: ' + JSON.stringify(this.listSuggested[1].avatar));
-  //     if(this.listSuggested){
-  //       this.check = false
-  //     }
-  //     if (Array.isArray(this.listSuggested) && this.listSuggested.length === 0) {
-  //       this.checkData1 = true;
-  //       this.check = false;
-  //     }
-  //   });
-  // }
+
   loadDataSuggest() {
-    if (Array.isArray(this.followsService.getDataSuggested() ) && this.followsService.getDataSuggested().length === 0) {
+    if (Array.isArray(this.followsService.getDataSuggested()) && this.followsService.getDataSuggested().length === 0) {
       this.followsService.loadDataSuggest().subscribe(() => {
         this.listSuggested = this.followsService.getDataSuggested();
-          this.check = false;
+        this.check = false;
       });
     } else {
       this.listSuggested = this.followsService.getDataSuggested();
@@ -170,12 +157,30 @@ export class NewsfeedComponent implements OnInit {
     });
   }
 
+  /* ============Post============= */
+  listPost: any;
+  listUser: any[];
+  listCount: any;
+  loadPosts() {
+    this.postService.loadPostNewsFeed().subscribe(() => {
+      this.listPosts = this.postService.getDataPostNf();
+      this.listPost = this.listPosts.post
+      this.listUser = this.listPosts.user 
+      this.listCount = this.listPosts.count
+   });
+  }
+
+
   /* ============template============= */
 
   loadData() {
-    this.isLoading = true;
+    // this.isLoading = true;
     const body_news = document.getElementById('body-news')!;
     body_news.style.display = 'none';
+    // if (Array.isArray(this.listPosts) && this.listPosts.length === 0) {
+    //   this.isLoading = false;
+    //   body_news.style.display = 'grid';
+    // }
     setTimeout(() => {
       this.isLoading = false;
       body_news.style.display = 'grid';
@@ -256,14 +261,5 @@ export class NewsfeedComponent implements OnInit {
   // Modal
   openModalCreatePost() {
     this.modalService.openModalCreatePost();
-  }
-  closeModalCreatePost() {
-    this.modalService.closeModalCreatePost();
-  }
-  openModalComment() {
-    this.modalService.openModalComment();
-  }
-  closeModalComment() {
-    this.modalService.closeModalComment();
   }
 }

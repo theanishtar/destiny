@@ -2081,13 +2081,13 @@ figure>img {
 
 .post-option.active .post-option-icon,
 .post-option:hover .post-option-icon {
-  fill: #23d2e2;
+  fill: red;
   opacity: 1;
 }
 
 .post-option.active .post-option-text,
 .post-option:hover .post-option-text {
-  color: #3e3f5e;
+  color: red;
 }
 
 .post-option .post-option-icon {
@@ -3657,6 +3657,7 @@ figure>img {
 .user-status .user-status-title .bold {
   color: #3e3f5e;
   font-weight: 700;
+  cursor: pointer;
 }
 
 .user-status .user-status-title .highlighted {

@@ -46,7 +46,7 @@
         <!-- WIDGET BOX CONTENT -->
         <div class="widget-box-content">
           <!-- PARAGRAPH -->
-          <p class="paragraph">{{ dataProfileTimeline.dataFollows.intro }}</p>
+          <p class="paragraph">{{ dataFollows?.intro }}</p>
           <!-- /PARAGRAPH -->
 
           <!-- INFORMATION LINE LIST -->
@@ -73,7 +73,7 @@
 
               <!-- INFORMATION LINE TEXT -->
               <p class="information-line-text">
-                {{ dataProfileTimeline.address_fullname }}
+                {{ dataProfileTimeline?.address_fullname }}
               </p>
               <!-- /INFORMATION LINE TEXT -->
             </div>
@@ -495,7 +495,7 @@
             <!-- /POST OPTION ICON -->
 
             <!-- POST OPTION TEXT -->
-            <p class="post-option-text" (click)="openModalComment()">
+            <p class="post-option-text">
               Bình luận
             </p>
             <!-- /POST OPTION TEXT -->
@@ -1324,7 +1324,7 @@
           <!-- PICTURE ITEM LIST -->
           <div class="picture-item-list small" >
             <!-- PICTURE ITEM -->
-            <div class="picture-item" *ngFor="let img of dataProfileTimeline.images.slice(0, 11)">
+            <div class="picture-item" *ngFor="let img of dataProfileTimeline?.images.slice(0, 11)">
               <!-- PICTURE -->
               <figure class="picture round liquid">
                 <img [src]="img" alt="avatar-01" />
@@ -1364,7 +1364,7 @@
         <!-- /WIDGET BOX TITLE -->
 
         <!-- WIDGET BOX CONTENT -->
-        <div class="widget-box-content" *ngFor="let p of dataProfileTimeline.listPostInterested">
+        <div class="widget-box-content" *ngFor="let p of dataProfileTimeline?.listPostInterested">
           <!-- POST PEEK LIST -->
           <div class="post-peek-list">
             <!-- POST PEEK -->
@@ -1410,4 +1410,3 @@
 >
   <i class="fas fa-angle-up"></i>
 </a>
-<app-modal></app-modal>

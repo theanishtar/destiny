@@ -51,7 +51,9 @@ export class ProfileService {
     this.loadDataHeader(id).subscribe((res) => {
       if (res != null) {
         this.setDataHeader(res);
+        console.log("id: " + id);
         this.router.navigate(['/profile']);
+        
       }
     })
   }
@@ -68,14 +70,7 @@ export class ProfileService {
 
   updateProfile(data: any): Observable<any> {
     return this.http.post(this.updateProfileUrl, data).pipe(
-    //   tap((response) => {
-    //     this.userLogined = JSON.parse(JSON.stringify(response));
-    //     this.setUserLog(this.userLogined);
-    //     localStorage.setItem(
-    //       'token',
-    //       JSON.parse(JSON.stringify(this.getUserLog())).token
-    //     );
-    //  }),
+
     );
   }
 

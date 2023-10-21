@@ -1,15 +1,15 @@
 export const environment = {
     production: false,
+    firebaseConfig : {
+      apiKey: "AIzaSyBJbb35x5IWeD8LaAptFOARDOCz-oEJid4",
+      authDomain: "destiny-davisy.firebaseapp.com",
+      projectId: "destiny-davisy",
+      storageBucket: "destiny-davisy.appspot.com",
+      messagingSenderId: "657490885713",
+      appId: "1:657490885713:web:1739dde38a29f027e20c70",
+      measurementId: "G-2H8D03768X"
+    },
     // baseUrl: 'https://testchat.hop.sh/'
     baseUrl: 'http://localhost:8080/',
-    firebaseConfig: {
-        apiKey: 'AIzaSyD3uIU83G4Bokv11U5YIY8-mNpIBe3y60g',
-        authDomain: 'davitickets-2e627.firebaseapp.com',
-        databaseURL: 'https://davitickets-2e627-default-rtdb.firebaseio.com',
-        projectId: 'davitickets-2e627',
-        storageBucket: 'davitickets-2e627.appspot.com',
-        messagingSenderId: '468176503693',
-        appId: '1:468176503693:web:c4d5996f707cac507833c4',
-        measurementId: 'G-0ZK86JRDMG',
-      },
+    
 };

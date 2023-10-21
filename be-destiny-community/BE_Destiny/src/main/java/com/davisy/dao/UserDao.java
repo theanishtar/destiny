@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.davisy.entity.User;
+
 //@Cacheable("users")//Tạo bộ nhớ đệm
 public interface UserDAO extends JpaRepository<User, Integer> {
 	@Query(value = "SELECT *FROM users WHERE email:=email AND password:=password", nativeQuery = true)
@@ -66,5 +67,11 @@ public interface UserDAO extends JpaRepository<User, Integer> {
 	@Query(value = "SELECT EXTRACT(MONTH FROM day_create) AS MONTH, COUNT(user_id) "
 			+ "FROM users GROUP BY EXTRACT(MONTH FROM day_create) ORDER BY EXTRACT(MONTH FROM day_create) ASC", nativeQuery = true)
 	public List<Object[]> getTotalUserEveryMonth();
+
+	// Lấy user đã đăng bài
+	@Query(value = "SELECT u.user_id, u.fullname,i.post_id \n" + "FROM interested i\n"
+			+ "INNER JOIN users u ON i.user_id = u.user_id\n"
+			+ "WHERE i.post_id IN (SELECT post_id FROM get_friend_posts(:id,:provinceId));", nativeQuery = true)
+	public List<Object[]> getUserofPost(int id,int provinceId);
 
 }

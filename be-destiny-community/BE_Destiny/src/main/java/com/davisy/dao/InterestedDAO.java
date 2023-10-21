@@ -14,14 +14,14 @@ public interface InterestedDAO extends JpaRepository<Interested, Integer> {
 
 	// 23-9-2023 tổng lượt thích của bài đăng
 //	@Cacheable("interested")
-	@Query(value = "SELECT /*+ RESULT_CACHE */ COUNT(interested_id) FROM interested WHERE post_id =:id", nativeQuery = true)
+	@Query(value = "SELECT  COUNT(interested_id) FROM interested WHERE post_id =:id", nativeQuery = true)
 	public int totalInterestedByPost(int id);
 
 	// 23-9-2023 tổng lượt thích của người dùng đã thích
-	@Query(value = "SELECT /*+ RESULT_CACHE */ COUNT(interested_id) FROM interested WHERE user_id =:id", nativeQuery = true)
+	@Query(value = "SELECT  COUNT(interested_id) FROM interested WHERE user_id =:id", nativeQuery = true)
 	public int totalInterestedByUser(int id);
 
 //	@Cacheable("interested")
-	@Query(value = "SELECT /*+ RESULT_CACHE */ users.user_id , users.fullname  FROM interested  inner join users  on interested.user_id =users.user_id  where interested.post_id =:id", nativeQuery = true)
+	@Query(value = "SELECT  users.user_id , users.fullname  FROM interested  inner join users  on interested.user_id =users.user_id  where interested.post_id =:id", nativeQuery = true)
 	public List<Object[]> findByIdPost(int id);
 }

@@ -16,7 +16,6 @@ import { HomeComponent } from './home/home.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { NewsfeedComponent } from './user/newsfeed/newsfeed.component';
 import { NavigationComponent } from './user/navigation/navigation.component';
-import { ModalComponent } from './user/modal/modal.component';
 import { HeaderProfileComponent } from './user/header-profile/header-profile.component';
 import { ProfileTimelineComponent } from './user/profile-timeline/profile-timeline.component';
 import { PhotosComponent } from './user/photos/photos.component';
@@ -64,21 +63,25 @@ import { DatePipe } from '@angular/common';
 import { APP_INITIALIZER } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from './user/service/message.service';
+import { ProfileService } from './user/service/profile.service';
 
-
+// import { AngularFireModule } from '@angular/fire/compat';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideStorage, getStorage } from '@angular/fire/storage';
 import { environment } from 'src/environments/environment';
-export function appInitializer(cookieService: CookieService, messageService: MessageService, sender: any) {
+import { CommentComponent } from './user/modal/comment/comment.component';
+import { CreatePostComponent } from './user/modal/create-post/create-post.component';
+import { ImagesComponent } from './user/modal/images-post/images.component';
+
+export function appInitializer(cookieService: CookieService, messageService: MessageService, sender: any, profileService: ProfileService, dataProfileTimeline: any) {
   return () => {
     if (cookieService.get("full_name") != '') {
-
       messageService.loadDataSender().subscribe(() => {
         sender = JSON.parse(JSON.stringify(messageService.getSender()));
         messageService.connectToChat(sender.user_id);
-
-      });
+      })
     }
   };
 }
@@ -94,7 +97,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     ForgotPasswordComponent,
     NewsfeedComponent,
     NavigationComponent,
-    ModalComponent,
     HeaderProfileComponent,
     ProfileTimelineComponent,
     PhotosComponent,
@@ -130,7 +132,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     ProfileComponent,
     UserReportComponent,
     UserReportModeratorDetailComponent,
-    ForbiddenWordComponent
+    ForbiddenWordComponent,
+    CommentComponent,
+    CreatePostComponent,
+    ImagesComponent
   ],
   imports: [
     BrowserModule,
@@ -138,7 +143,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    // AngularFireModule.initializeApp(firebaseConfig),
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+    provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore()),
+    provideStorage(() => getStorage()),
     TranslateModule.forRoot({
       defaultLanguage: 'vi_VN',
       loader: {
@@ -159,11 +168,13 @@ export function HttpLoaderFactory(http: HttpClient) {
     {
       provide: APP_INITIALIZER,
       useFactory: appInitializer,
-      deps: [CookieService, MessageService],
+      deps: [CookieService, MessageService, ProfileService],
       multi: true,
     },
     DatePipe
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {
+
+}

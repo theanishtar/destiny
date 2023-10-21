@@ -63,7 +63,7 @@ export class ProfileTimelineComponent implements OnInit {
     let idLocal = parseInt((localStorage.getItem("idSelected") + '')?.trim());
     this.profileService.loadDataHeader(idLocal).subscribe(res => {
       this.dataProfileTimeline = this.profileService.getDataHeader();
-      console.log("this.dataProfileTimeline: " + this.dataProfileTimeline.images[1])
+      this.dataFollows = this.dataProfileTimeline.dataFollows;
       this.dateJoin = this.datePipe.transform(this.dataProfileTimeline.dateJoin, 'dd/MM/yyyy');
       this.isLoading = false
     })
@@ -124,8 +124,8 @@ export class ProfileTimelineComponent implements OnInit {
     return this.interactPostsService.isLiked(postId);
   }
 
-  openModalComment() {
-    this.modalService.openModalComment();
+  openModalComment(idPost) {
+    this.modalService.openModalComment(49);
   }
   closeModalComment() {
     this.modalService.closeModalComment();

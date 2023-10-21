@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import com.davisy.entity.Post;
 
-//@Cacheable("post")//Tạo bộ nhớ đệm
 @Repository
 public interface PostDAO extends JpaRepository<Post, Integer> {
 
@@ -68,7 +67,17 @@ public interface PostDAO extends JpaRepository<Post, Integer> {
 			+ "", nativeQuery = true)
 	public List<Object[]> getTop5postProfile(int id);
 
-	@Query(value = "select /*+ RESULT_CACHE */ *from post", nativeQuery = true)
-	public List<Post> findAllPost();
+	// Lấy tất cả bài post có quan hệ bạn bè hoặc follow
+	@Query(value = "SELECT * FROM get_friend_posts(:id,:provinceId)", nativeQuery = true)
+	public List<Post> findAllPost(int id,int provinceId);
+
+	// lấy số lượng comment,interested, share của bài post
+	@Query(value = "WITH friend_posts AS (\n" + "    SELECT post_id  FROM get_friend_posts(:id,:provinceId)\n" + ")\n" + "SELECT\n"
+			+ "    fp.*,\n"
+			+ "    (SELECT COUNT(interested_id) FROM interested WHERE post_id = fp.post_id) AS interested_count,\n"
+			+ "    (SELECT  COUNT(comment_id) FROM comment WHERE post_id = fp.post_id) AS commnet_count,\n"
+			+ "    (SELECT  COUNT(share_id) FROM share WHERE  post_id = fp.post_id) AS share_count\n"
+			+ "FROM friend_posts fp;", nativeQuery = true)
+	public List<Object[]> getCountPost(int id,int provinceId);
 
 }

@@ -34,18 +34,21 @@
           <div class="change-avatar">
             <a
               class="user-short-description-avatar user-avatar big"
-              href="profile"
+              
             >
-            <input type="file" class="file" (change)="chooseFile($event)" style="display: none;">
-              <div class="hexagon-container">
+            <div class="hexagon-container">
                 <div class="hexagon user-avatar-content">
+                  <label class="upload-image">
+                    <input type="file" class="file" (change)="chooseFile($event)" style="display: none;position: absolute; z-index: 4; height: 130px;">
                   <div
                     class="hexagon-image"
                     style="background-image: url('{{dataEditProfile.avartar}}')"
                   ></div>
-                  <input type="text" formControlName="pic" [(ngModel)]="avatar" id="avatar"
+                  <input type="text" formControlName="avatar" [(ngModel)]="avatar" id="avatar"
                   style="display: none;">
+                </label>
                 </div>
+              
                 <div class="hexagon user-avatar-border">
                   <div class="hexagon-border"></div>
                 </div>
@@ -396,5 +399,3 @@
   <!-- /GRID -->
 </div>
 <!-- /CONTENT GRID -->
-
-<app-modal></app-modal>

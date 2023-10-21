@@ -3,6 +3,7 @@ package com.davisy.service;
 import java.util.List;
 
 import com.davisy.entity.Comment;
+import com.davisy.entity.CommentEntity;
 
 public interface CommentService {
 
@@ -18,5 +19,7 @@ public interface CommentService {
 	public Comment findById(int id);
 
 	public List<Comment> findAllByIdComment(int id);
+
+	public List<Object[]> findAllComment(int id,int check);
 
 }

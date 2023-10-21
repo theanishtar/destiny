@@ -7,6 +7,7 @@ import java.util.List;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import com.davisy.controller.admin.AdminControl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
@@ -68,7 +69,7 @@ public class Post {
 
 	boolean ban = false;
 
-	@JsonIgnore
+//	@JsonIgnore
 	@OneToMany(mappedBy = "post")
 	List<PostImages> postImages;
 
@@ -83,4 +84,29 @@ public class Post {
 	@JsonIgnore
 	@OneToMany(mappedBy = "post")
 	List<Share> shares;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "postReported")
+	List<PostReported> postReporteds;
+
+	public int getUserId() {
+		return user.getUser_id();
+	}
+
+	public String getFullname() {
+		return user.getFullname();
+	}
+
+	public String getUsername() {
+		return user.getUsername();
+	}
+
+	public String getAvatar() {
+		return user.getAvatar();
+	}
+
+	public String getDate() {
+		String date = AdminControl.timeCaculate(date_Post);
+		return date;
+	}
 }

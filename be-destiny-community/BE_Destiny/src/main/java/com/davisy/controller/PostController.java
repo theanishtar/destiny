@@ -18,10 +18,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.davisy.RedisCheck;
+import com.davisy.SpamRrequestCheck;
 import com.davisy.config.JwtTokenUtil;
 import com.davisy.constant.Cache;
 import com.davisy.entity.Comment;
+import com.davisy.entity.CommentEntity;
 import com.davisy.entity.Follower;
 import com.davisy.entity.Interested;
 import com.davisy.entity.Post;
@@ -36,6 +37,17 @@ import com.davisy.service.impl.ShareServiceImpl;
 import com.davisy.service.impl.UserServiceImpl;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor 
+class RepCommentModel {
+	int idPost;
+	int cmtId;
+}
 
 @RestController
 @CrossOrigin
@@ -76,126 +88,60 @@ public class PostController {
 		List<Object[]> list = postServiceImpl.getTOP5Post();
 		return ResponseEntity.ok(list);
 	}
+
 //	@RedisCheck 
 	@GetMapping("/v1/user/load/post")
-	public ResponseEntity<List<PostEntity>> loadPost(HttpServletRequest request) {
+	public ResponseEntity<PostEntity> loadPost(HttpServletRequest request) {
 		try {
 			String email = jwtTokenUtil.getEmailFromHeader(request);
 			User user = userServiceImpl.findByEmail(email);
-			asyncPost(user);
-			return ResponseEntity.ok().body(listPost);
+			int id = user.getUser_id();
+			int provinceId = Integer.valueOf(user.getIdProvince());
+			List<Object[]> listUser = userServiceImpl.getUserofPost(id, provinceId);
+			List<Post> listPosts = postServiceImpl.findAllPost(id, provinceId);
+			List<Object[]> listCount = postServiceImpl.getCountPost(id, provinceId);
+			PostEntity entity = new PostEntity();
+			entity.setUser(listUser);
+			entity.setPost(listPosts);
+			entity.setCount(listCount);
+			return ResponseEntity.ok().body(entity);
 		} catch (Exception e) {
 			System.out.println("error: " + e);
 			return ResponseEntity.badRequest().build();
 		}
 	}
 
-	@RedisCheck
+	@SpamRrequestCheck
 	@PostMapping("/v1/user/load/comment")
-	public ResponseEntity<Object[]> loadCmment(HttpServletRequest request, @RequestBody int id) {
+	public ResponseEntity<CommentEntity> loadCmment(HttpServletRequest request, @RequestBody int id) {
 		try {
-			String email = jwtTokenUtil.getEmailFromHeader(request);
-			User user = userServiceImpl.findByEmail(email);
-			asyncComment(user, id);
-			return ResponseEntity.ok().body(this.commObjects);
+//			String email = jwtTokenUtil.getEmailFromHeader(request);
+//			User user = userServiceImpl.findByEmail(email);
+			List<Object[]> commentEntities = commentServiceImpl.findAllComment(id, 0);
+			List<String> list_post_images = postImagesServiceImpl.findAllImagesofPost(id);
+			CommentEntity commentEntity = new CommentEntity(list_post_images, commentEntities);
+			return ResponseEntity.ok().body(commentEntity);
 		} catch (Exception e) {
 			System.out.println("error: " + e);
 			return ResponseEntity.badRequest().build();
 		}
 	}
 
-	@Async
-	public synchronized void asyncPost(User user) throws Exception {
-		List<Post> findAllPost = postServiceImpl.findAll();
-		List<PostEntity> postEntitieFriends = new ArrayList<>();
-		List<PostEntity> postEntitieFollows = new ArrayList<>();
-		List<PostEntity> postEntitieAddress = new ArrayList<>();
-		for (Post post : findAllPost) {
-			int id = post.getPost_id();
-			List<String> post_img = new ArrayList<>();
-			List<Object[]> interesteds = new ArrayList<>();
-			int count_interested = 0;
-			int count_comment = 0;
-			int count_share = 0;
-			post_img = postImagesServiceImpl.findAllImagesofPost(id);
-			interesteds = interestedServiceImpl.findByIdPost(id);
-			count_interested = interestedServiceImpl.totalInterestedByPost(id);
-			count_comment = commentServiceImpl.totalCommentByPost(id);
-			count_share = shareServiceImpl.totalShareByPost(id);
-
-			if (user.getUser_id() != post.getUser().getUser_id()
-					&& followServiceImpl.checkFriend(user.getUser_id(), post.getUser().getUser_id())) {
-				postEntitieFriends.add(postEntity(post.getUser().getUser_id(), post.getUser().getFullname(),
-						post.getUser().getAvatar(), post, post_img, interesteds, count_interested, count_comment,
-						count_share));
-			} else if (followServiceImpl.checkFollow(post.getUser().getUser_id(), user.getUser_id())) {
-				postEntitieFollows.add(postEntity(post.getUser().getUser_id(), post.getUser().getFullname(),
-						post.getUser().getAvatar(), post, post_img, interesteds, count_interested, count_comment,
-						count_share));
-			}
-		}
-		this.listPost.addAll(postEntitieFriends);
-		this.listPost.addAll(postEntitieFollows);
-//		Cache cache = (Cache) cacheManager.getCache("interested");
-//		System.out.println("cá chê: " + cache);
-//		List<Follower> listFollow = followServiceImpl.findALlFriend(user.getUser_id(), user.getUser_id());
-//		for (Follower fl : listFollow) {
-//			Follower.Pk pk = fl.getPk();
-//			if (followServiceImpl.checkFriend(user.getUser_id(), pk.getUser_id())) {
-//				listPost.add(null);
-//			}
-//		}
-	}
-
-	@Async
-	public synchronized void asyncComment(User user, int postId) {
-//		List<Object[]> interesteds = interestedServiceImpl.findByIdPost(postId);
-		List<String> post_img = postImagesServiceImpl.findAllImagesofPost(postId);
-		List<Comment> comments = postServiceImpl.findById(postId).getComments();
-		List<Object[]> listCmtTemp = new ArrayList<>();
-		Object[] ob;
-		int dem = 0;
-		for (Comment cm : comments) {
-			if (cm.getCommentParent() == null) {
-				dem = commentServiceImpl.findAllByIdComment(cm.getComment_id()).size();
-			}
-			listCmtTemp.add(new Object[] { cm.getUser().getUser_id(), cm.getUser().getUsername(),
-					cm.getUser().getFullname(), cm.getUser().getAvatar(), cm, dem });
-			dem = 0;
-		}
-		ob = new Object[] { post_img, listCmtTemp };
-		this.commObjects = ob;
-	}
-
-	public PostEntity postEntity(int user_id, String user_fullname, String user_avatar, Post post,
-			List<String> post_img, List<Object[]> interesteds, int count_interested, int count_comment,
-			int count_share) {
+	@SpamRrequestCheck
+	@PostMapping("/v1/user/load/comment/reply")
+	public ResponseEntity<CommentEntity> loadSeenMoreComment(HttpServletRequest request, @RequestBody RepCommentModel reModel) {
+		System.out.println(reModel.idPost + "" + reModel.cmtId);
 		try {
-			Calendar date = post.getDate_Post();
-
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-			String fommatted = format.format(date.getTime());
-
-			PostEntity postEntity = new PostEntity();
-
-			postEntity.setDate(fommatted);
-
-			postEntity.setUser_id(user_id);
-			postEntity.setUser_fullname(user_fullname);
-			postEntity.setUser_avatar(user_avatar);
-			postEntity.setPost(post);
-
-			postEntity.setPost_img(post_img);
-			postEntity.setInteresteds(interesteds);
-			postEntity.setCount_interested(count_interested);
-			postEntity.setCount_comment(count_comment);
-			postEntity.setCount_share(count_share);
-			return postEntity;
+//			String email = jwtTokenUtil.getEmailFromHeader(request);
+//			User user = userServiceImpl.findByEmail(email);
+			List<Object[]> commentEntities = commentServiceImpl.findAllComment(reModel.idPost, reModel.cmtId);
+			List<String> list_post_images = null;
+			CommentEntity commentEntity = new CommentEntity(list_post_images, commentEntities);
+			return ResponseEntity.ok().body(commentEntity);
 		} catch (Exception e) {
-			System.out.println("error date: " + e);
-			return null;
+			System.out.println("error: " + e);
+			return ResponseEntity.badRequest().build();
 		}
-
 	}
 
 	// cach sai

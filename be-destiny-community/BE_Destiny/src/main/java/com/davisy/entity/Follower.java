@@ -42,6 +42,6 @@ public class Follower{
 	
 	@Override
 	public String toString() {
-	    return "Employee [pk=" + pk + "]";
-	  }
+	    return "Follower [pk=" + pk + "]";
+	}
 }

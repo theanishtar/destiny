@@ -25,6 +25,7 @@ import { LoginService } from '../service/login.service';
 import { RegisterService } from '@app/service/register.service';
 import { FollowsService } from '@app/user/service/follows.service';
 import { MessageService } from '@app/user/service/message.service';
+
 import { environment } from 'src/environments/environment';
 @Component({
 	selector: 'app-get-started',
@@ -150,22 +151,12 @@ export class GetStartedComponent implements OnInit {
 						this.setCookie('sessionID', response.user.sesionId, 2);
 					}
 					if (response.roles[0].authority == 'ROLE_OWNER' || response.roles[0].authority == 'ROLE_ADMIN') {
-						// this.cookieService.set('full_name', response.name);
-						// this.cookieService.set('avatar', response.avartar);
-						// this.cookieService.set('role', response.roles[0].authority);
 						window.location.href = 'http://localhost:4200/admin';
 						this.loginForm.reset();
 					} else if (response.roles[0].authority == 'ROLE_MODERATOR') {
-						// this.cookieService.set('full_name', response.name);
-						// this.cookieService.set('avatar', response.avartar);
-						// this.cookieService.set('role', response.roles[0].authority);
 						window.location.href = 'http://localhost:4200/moderator/forbidden-word';
 						this.loginForm.reset();
 					} else {
-						// this.cookieService.set('full_name', response.name);
-						// this.cookieService.set('avatar', response.avartar);
-						// this.cookieService.set('role', response.roles[0].authority);
-
 						this.loginForm.reset();
 						this.router.navigate(['newsfeed']);
 						new toast({
@@ -174,9 +165,10 @@ export class GetStartedComponent implements OnInit {
 							type: 'success',
 							duration: 1500,
 						});
-						delay(100).then((res) => {
-							location.reload();
-						});
+
+						// delay(100).then((res) => {
+						// 	location.reload();
+						// });
 					}
 				}
 			});

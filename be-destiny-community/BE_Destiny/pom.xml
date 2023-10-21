@@ -202,6 +202,34 @@
 			<artifactId>netty-handler</artifactId>
 			<version>5.0.0.Alpha1</version>
 		</dependency>-->
+		
+		<!--	MONGODB-->
+		<!-- Java MongoDB Driver dependency -->
+
+		<!-- slf4j logging dependency, required for logging output from the
+		MongoDB Java Driver -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-jdk14</artifactId>
+			<version>1.7.28</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongodb-driver-sync</artifactId>
+			<version>4.9.1</version> <!-- Use a compatible version -->
+		</dependency>
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongodb-driver-core</artifactId>
+			<version>4.9.1</version> <!-- Use the same version as above -->
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.data</groupId>
+		    <artifactId>spring-data-mongodb</artifactId>
+		    <version>4.1.2</version>
+		</dependency>
+
 	</dependencies>
 
 

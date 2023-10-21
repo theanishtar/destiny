@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.davisy.RedisCheck;
+import com.davisy.SpamRrequestCheck;
 import com.davisy.auth.AuthenticationRequest;
 import com.davisy.auth.AuthenticationResponse;
 import com.davisy.config.JwtTokenUtil;
@@ -86,7 +86,7 @@ public class Login {
 		return ipAddress;
 	}
 
-	@RedisCheck // Áp dụng kiểm tra Redis trước khi xử lý method này
+	@SpamRrequestCheck // Áp dụng kiểm tra Redis trước khi xử lý method này
 	@PostMapping("/v1/oauth/login")
 	public ResponseEntity<AuthenticationResponse> authLog(@RequestBody AuthenticationRequest authenticationRequest) {
 		LoginResponse resLog = authenticationService.loginResponseService(authenticationRequest);
