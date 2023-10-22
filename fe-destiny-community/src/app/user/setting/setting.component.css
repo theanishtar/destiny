@@ -1,0 +1,23 @@
+.section-header-info[_ngcontent-ng-c3619204349]
+  .section-title[_ngcontent-ng-c3619204349] {
+  margin-top: 25px;
+  font-size: 1.625rem;
+  font-weight: 700;
+}
+p.switch-option-text{
+  width: 600px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+.account-hub-content {
+  margin-top: 1.5rem;
+}
+@media screen and (max-width: 1440px) {
+  p.switch-option-text{
+    width: 330px;
+    -webkit-line-clamp: 5;
+  }
+}
