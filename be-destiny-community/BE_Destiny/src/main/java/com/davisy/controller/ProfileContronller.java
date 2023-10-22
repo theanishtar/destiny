@@ -25,6 +25,7 @@ import com.davisy.dto.UserProfile;
 import com.davisy.entity.DataFollows;
 import com.davisy.entity.Districts;
 import com.davisy.entity.Gender;
+import com.davisy.entity.Post;
 import com.davisy.entity.ProfileEnitity;
 import com.davisy.entity.Provinces;
 import com.davisy.entity.Roles;
@@ -197,6 +198,11 @@ public class ProfileContronller {
 			check = true;
 		}
 		int id = user.getUser_id();
+		int provinceId = Integer.valueOf(user.getIdProvince());
+		List<Object[]> listUser = userServiceImpl.getUserofPostProfile(id);
+		List<Post> listPosts = postServiceImpl.getListPostByUserID(id);
+		List<Object[]> listCount = postServiceImpl.getCountPostProfile(id);
+		
 		DataFollows dataFollows = new DataFollows();
 		ProfileEnitity profileEnitity = new ProfileEnitity();
 		int countPost = postServiceImpl.countPost(id);
@@ -228,6 +234,9 @@ public class ProfileContronller {
 		profileEnitity.setAddress_fullname_en(
 				user.getDistricts().getFull_name_en() + " " + user.getProvinces().getFull_name_en());
 		profileEnitity.setListPostInterested(postServiceImpl.getTop5postProfile(id));
+		profileEnitity.setUser(listUser);
+		profileEnitity.setPost(listPosts);
+		profileEnitity.setCount(listCount);
 		return profileEnitity;
 	}
 

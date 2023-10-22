@@ -14,6 +14,8 @@ public interface PostService {
 
 	// lấy số lượng comment,interested, share của bài post
 	public List<Object[]> getCountPost(int id, int provinceId);
+	
+	public List<Object[]> getCountPostProfile(int id);
 
 	// 21-9-2023 -tìm post theo id
 	public Post findPostByID(int id);

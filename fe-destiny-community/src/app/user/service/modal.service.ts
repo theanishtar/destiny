@@ -65,7 +65,7 @@ export class ModalService {
     this.callApiLoadCmt(idPost);
   }
   callApiLoadCmt(idPost) {
-    console.log("id: "+idPost)
+    console.log("id: " + idPost)
     this.openModalComment(idPost).subscribe(() => {
       this.listComment = this.getDataCmt();
       this.images = this.listComment.list_post_images;
@@ -92,7 +92,7 @@ export class ModalService {
         this.count++;
         this.callApiLoadCmt(data.postId);
       });
-      this.stompClient?.subscribe("/topic/success-notification/"+userId, (response) => {
+      this.stompClient?.subscribe("/topic/success-notification/" + userId, (response) => {
         this.callApiLoadCmt(this.idPostCmt);
       });
 

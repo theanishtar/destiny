@@ -57,7 +57,7 @@ public class NotificationController {
 					
 				comment.setContent(model.getContent());
 				commentServiceImpl.create(comment);
-				simpMessagingTemplate.convertAndSend("/topic/success-notification/"+model.getFromUserId() ,model.getPostId());
+				simpMessagingTemplate.convertAndSend("/topic/success-notification" ,model.getPostId());
 			}
 		
 			

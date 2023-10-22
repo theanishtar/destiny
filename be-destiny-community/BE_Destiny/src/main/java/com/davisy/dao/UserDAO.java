@@ -72,6 +72,11 @@ public interface UserDAO extends JpaRepository<User, Integer> {
 	@Query(value = "SELECT u.user_id, u.fullname,i.post_id \n" + "FROM interested i\n"
 			+ "INNER JOIN users u ON i.user_id = u.user_id\n"
 			+ "WHERE i.post_id IN (SELECT post_id FROM get_friend_posts(:id,:provinceId));", nativeQuery = true)
-	public List<Object[]> getUserofPost(int id,int provinceId);
+	public List<Object[]> getUserofPost(int id, int provinceId);
+
+	@Query(value = "SELECT u.user_id, u.fullname,i.post_id \r\n" + "FROM interested i\r\n"
+			+ "INNER JOIN users u ON i.user_id = u.user_id\r\n"
+			+ "WHERE i.post_id IN (SELECT p.post_id FROM post p where p.user_id=:id)", nativeQuery = true)
+	public List<Object[]> getUserofPostProfile(int id);
 
 }

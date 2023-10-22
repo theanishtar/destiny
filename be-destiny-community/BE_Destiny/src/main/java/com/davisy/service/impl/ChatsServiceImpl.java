@@ -62,4 +62,9 @@ public class ChatsServiceImpl implements ChatsService {
 		}
 	}
 
+	@Override
+	public List<Object[]> loadAllChatRoom(int id) {
+		return chatDAO.loadAllChatRoom(id);
+	}
+
 }

@@ -89,7 +89,6 @@ public class PostController {
 		return ResponseEntity.ok(list);
 	}
 
-//	@RedisCheck 
 	@GetMapping("/v1/user/load/post")
 	public ResponseEntity<PostEntity> loadPost(HttpServletRequest request) {
 		try {
@@ -110,6 +109,27 @@ public class PostController {
 			return ResponseEntity.badRequest().build();
 		}
 	}
+	
+//	@GetMapping("/v1/user/load/postprofile")
+//	public ResponseEntity<PostEntity> loadPostProfile(HttpServletRequest request) {
+//		try {
+//			String email = jwtTokenUtil.getEmailFromHeader(request);
+//			User user = userServiceImpl.findByEmail(email);
+//			int id = user.getUser_id();
+//			int provinceId = Integer.valueOf(user.getIdProvince());
+//			List<Object[]> listUser = userServiceImpl.getUserofPostProfile(id);
+//			List<Post> listPosts = postServiceImpl.getListPostByUserID(id);
+//			List<Object[]> listCount = postServiceImpl.getCountPostProfile(id);
+//			PostEntity entity = new PostEntity();
+//			entity.setUser(listUser);
+//			entity.setPost(listPosts);
+//			entity.setCount(listCount);
+//			return ResponseEntity.ok().body(entity);
+//		} catch (Exception e) {
+//			System.out.println("error: " + e);
+//			return ResponseEntity.badRequest().build();
+//		}
+//	}
 
 	@SpamRrequestCheck
 	@PostMapping("/v1/user/load/comment")

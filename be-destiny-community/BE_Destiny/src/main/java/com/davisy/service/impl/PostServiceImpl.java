@@ -108,7 +108,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	@Cacheable("postFindAll")
 	public List<Post> findAllPost(int id, int provinceId) {
-		return postDao.findAllPost(id,provinceId);
+		return postDao.findAllPost(id, provinceId);
 	}
 
 	@Override
@@ -118,8 +118,13 @@ public class PostServiceImpl implements PostService {
 
 	// lấy số lượng comment,interested, share của bài post
 	@Override
-	public List<Object[]> getCountPost(int id,int provinceId) {
-		return postDao.getCountPost(id,provinceId);
+	public List<Object[]> getCountPost(int id, int provinceId) {
+		return postDao.getCountPost(id, provinceId);
+	}
+
+	@Override
+	public List<Object[]> getCountPostProfile(int id) {
+		return postDao.getCountPostProfile(id);
 	}
 
 }

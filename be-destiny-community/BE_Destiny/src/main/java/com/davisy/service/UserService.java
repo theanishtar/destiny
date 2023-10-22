@@ -42,6 +42,8 @@ public interface UserService {
 
 	// Lấy user đã đăng bài
 	public List<Object[]> getUserofPost(int id, int provinceId);
+	
+	public List<Object[]> getUserofPostProfile(int id);
 
 	public void create(User user);
 

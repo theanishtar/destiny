@@ -151,4 +151,9 @@ public class UserServiceImpl implements UserService {
 		return userDao.getUserofPost(id,provinceId);
 	}
 
+	@Override
+	public List<Object[]> getUserofPostProfile(int id) {
+		return userDao.getUserofPostProfile(id);
+	}
+
 }

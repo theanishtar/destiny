@@ -23,12 +23,12 @@ import {
 } from '@angular/forms';
 
 import Swal from 'sweetalert2';
-// import {
-//   Storage,
-//   ref,
-//   uploadBytesResumable,
-//   getDownloadURL,
-// } from '@angular/fire/storage';
+import {
+  Storage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from '@angular/fire/storage';
 
 // 
 import { ModalService } from '../service/modal.service';
@@ -100,7 +100,7 @@ export class EditProfileComponent implements OnInit {
     private cookieService: CookieService,
     private datePipe: DatePipe, //Định dạng ngày
     private router: Router,
-    // public storage: Storage,
+    public storage: Storage
     // private fireStorage:AngularFireStorage
   ) {
     // this.initialEmail = this.dataEditProfile.email; // Gán giá trị email ban đầu
@@ -321,22 +321,22 @@ export class EditProfileComponent implements OnInit {
     this.userLogined = data;
   }
 
-  // addData() {
-  //   const storageRef = ref(this.storage, this.file.name);
-  //   const uploadTast = uploadBytesResumable(storageRef, this.file);
-  //   uploadTast.on(
-  //     'state_changed',
-  //     (snapshot) => {},
-  //     (error) => {
-  //       console.log(error.message);
-  //     },
-  //     () => {
-  //       getDownloadURL(uploadTast.snapshot.ref).then((downloadURL) => {
-  //         console.log('Upload file : ', downloadURL);
-  //       });
-  //     }
-  //   );
-  // }
+  addData() {
+    const storageRef = ref(this.storage, this.file.name);
+    const uploadTast = uploadBytesResumable(storageRef, this.file);
+    uploadTast.on(
+      'state_changed',
+      (snapshot) => {},
+      (error) => {
+        console.log(error.message);
+      },
+      () => {
+        getDownloadURL(uploadTast.snapshot.ref).then((downloadURL) => {
+          console.log('Upload file : ', downloadURL);
+        });
+      }
+    );
+  }
   chooseFile(event: any) {
     this.file = event.target.files[0];
     console.log(this.file)
