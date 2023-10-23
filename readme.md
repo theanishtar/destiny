@@ -8,7 +8,7 @@
       - add 26 user
       - change all the image column to image in firebase
   * 12-10-2023 add 3 column isFriend, hide, status in table chats and add data to table chats and chat_participants
-  * 12-10-2023 add 2 table user_reported and post_reported, add 1 function
-    
+  * 20-10-2023 add 2 table user_reported and post_reported, add 1 function
+  * 23-10-2023 add create 1 table send_reciever with 4 column (send_reciever_id, post_id, user_id, date_send_reciever)
 
 
