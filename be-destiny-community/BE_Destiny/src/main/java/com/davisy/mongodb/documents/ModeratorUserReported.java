@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserReported {
+public class ModeratorUserReported {
 	
 	@Id
 	private ObjectId id;

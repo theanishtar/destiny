@@ -20,5 +20,5 @@ public interface WardService {
 
 	public List<Wards> findByIdDistrict(String id);
 
-	public List<Wards> findAllL();
+	public List<Wards> findAll();
 }

@@ -46,7 +46,7 @@ public class WardServiceImpl implements WardService {
 	}
 
 	@Override
-	public List<Wards> findAllL() {
+	public List<Wards> findAll() {
 		return wardDao.findAll();
 	}
 

@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.davisy.mongodb.documents.CommentReported;
-import com.davisy.mongodb.documents.PostReported;
+import com.davisy.mongodb.documents.ModeratorPostReported;
 import com.davisy.service.CommentReportedService;
 
 @Service
@@ -39,7 +39,7 @@ public class CommentReportedServiceImpl implements CommentReportedService {
 	}
 
 	@Override
-	public List<CommentReported> inserts(List<PostReported> postReporteds, String collectionName) {
+	public List<CommentReported> inserts(List<ModeratorPostReported> postReporteds, String collectionName) {
 		// TODO Auto-generated method stub
 		return null;
 	}

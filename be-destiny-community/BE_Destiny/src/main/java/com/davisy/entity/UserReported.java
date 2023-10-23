@@ -28,12 +28,10 @@ public class UserReported {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	int id;
 	
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "user_reported_id")
 	User userReported;
 	
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "user_send_report_id")
 	User userSendReport;
@@ -41,5 +39,5 @@ public class UserReported {
 	String content_report;
 	
 	@Temporal(TemporalType.DATE)
-	Calendar date_Post = GregorianCalendar.getInstance();
+	Calendar date_report = GregorianCalendar.getInstance();
 }
