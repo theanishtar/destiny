@@ -1,0 +1,74 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="description" content="">
+<meta name="author" content="">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script
+	src="https://cdn.rawgit.com/CryptoStore/crypto-js/3.1.2/build/rollups/tripledes.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<script src="/jquery.min.js"></script>
+
+</head>
+
+<body>
+
+	<!-- <ul th:object="${user}">
+		<input id="email" name="email" th:value="${user.email}" style="display: none">
+	</ul> -->
+	<input id="type" name="type" th:value="${type}" style="display: none">
+	<input id="token" name="token" th:value="${token}" style="display: none">
+	<input id="uri" name="uri" th:value="${uri}" style="display: none">
+	<script type="text/javascript">
+	/*
+		function des_encrypt(key, data) {
+			const iv = CryptoJS.lib.WordArray.random(8);
+			const encrypted = CryptoJS.DES.encrypt(data, key, { mode: CryptoJS.mode.CBC, iv });
+			return iv.toString() + encrypted.toString();
+		}
+	
+		function des_decrypt(key, encryptedData) {
+			const keyHex = CryptoJS.enc.Utf8.parse(key);
+			const decrypted = CryptoJS.DES.decrypt(encryptedData, keyHex, { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7 });
+			return decrypted.toString(CryptoJS.enc.Utf8);
+		}
+*/
+		//http://localhost:8080/rest/getAccount/
+		//var secretKey = 'davisy@poly@@';
+		var uri  = $("input[name='uri']").val();
+		var token  = $("input[name='token']").val();
+		var type = $("input[name='type']").val();
+		window.location.href = uri+"/login?token="+token+"&type="+type;
+		//var enEmail = des_decrypt(secretKey, email);
+		//console.log(email+":"+enEmail);
+		//var mail = enEmail.split(":");
+		//console.log(enEmail);
+		//alert(mail[1])
+
+		/*
+		$.ajax({
+			url: '/rest/getAccount/'+email,
+			type: "get",
+			data: "",
+			success: function(data) {
+				//console.log(data);
+				//truyền params
+				
+				window.location.href = "http://localhost:4200/login?sid="+dataEnc;
+			},
+			error: function(xhr) {
+				console.log("error")
+			}
+
+		})
+		*/
+	</script>
+</body>
+
+</html>

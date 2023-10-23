@@ -1,0 +1,150 @@
+<body>
+  <app-navigation></app-navigation>
+
+  <!-- CONTENT GRID -->
+  <div class="content-grid">
+    <!-- SECTION BANNER -->
+    <div class="section-banner">
+      <!-- SECTION BANNER ICON -->
+      <img
+        class="section-banner-icon"
+        src="../../assets/images/banner/accounthub-icon.png"
+        alt="accounthub-icon"
+      />
+      <!-- /SECTION BANNER ICON -->
+
+      <!-- SECTION BANNER TITLE -->
+      <p class="section-banner-title">{{ "sidebar_setting" | translate }}</p>
+      <!-- /SECTION BANNER TITLE -->
+
+      <!-- SECTION BANNER TEXT -->
+      <p class="section-banner-text">
+        {{ "setting_giaodien" | translate }},
+        {{ "setting_ngonngu" | translate }},...!
+      </p>
+      <!-- /SECTION BANNER TEXT -->
+    </div>
+    <!-- /SECTION BANNER -->
+
+    <!-- GRID -->
+    <!-- Setting -->
+    <div class="account-hub-content">
+      <!-- SECTION HEADER -->
+      <div class="section-header">
+        <!-- SECTION HEADER INFO -->
+        <div class="section-header-info">
+          <!-- SECTION PRETITLE -->
+          <!-- <p class="section-pretitle">Account</p> -->
+          <!-- /SECTION PRETITLE -->
+
+          <!-- SECTION TITLE -->
+          <h2 class="section-title">{{ "sidebar_setting" | translate }}</h2>
+          <!-- /SECTION TITLE -->
+        </div>
+        <!-- /SECTION HEADER INFO -->
+      </div>
+      <!-- /SECTION HEADER -->
+
+      <!-- GRID COLUMN -->
+      <div class="grid-column">
+        <!-- WIDGET BOX -->
+        <div class="widget-box">
+          <!-- WIDGET BOX TITLE -->
+          <p class="widget-box-title">{{ "setting_giaodien" | translate }}</p>
+          <!-- /WIDGET BOX TITLE -->
+
+          <!-- WIDGET BOX CONTENT -->
+          <div class="widget-box-content">
+            <!-- SWITCH OPTION LIST -->
+            <div class="switch-option-list">
+              <!-- SWITCH OPTION -->
+              <div class="switch-option">
+                <!-- SWITCH OPTION TITLE -->
+                <p class="switch-option-title">
+                  {{ "user_chedotoi" | translate }}
+                </p>
+                <!-- /SWITCH OPTION TITLE -->
+
+                <!-- SWITCH OPTION TEXT -->
+                <p class="switch-option-text">
+                  {{ "user_description_chedotoi" | translate }}
+                </p>
+                <!-- /SWITCH OPTION TEXT -->
+
+                <!-- FORM SWITCH -->
+                <div class="form-switch active">
+                  <!-- FORM SWITCH BUTTON -->
+                  <div class="form-switch-button"></div>
+                  <!-- /FORM SWITCH BUTTON -->
+                </div>
+                <!-- /FORM SWITCH -->
+              </div>
+              <!-- /SWITCH OPTION -->
+            </div>
+            <!-- /SWITCH OPTION LIST -->
+          </div>
+          <!-- WIDGET BOX CONTENT -->
+        </div>
+        <!-- /WIDGET BOX -->
+
+        <!-- WIDGET BOX -->
+        <div class="widget-box">
+          <!-- WIDGET BOX TITLE -->
+          <p class="widget-box-title">{{ "setting_ngonngu" | translate }}</p>
+          <!-- /WIDGET BOX TITLE -->
+
+          <!-- WIDGET BOX CONTENT -->
+          <div class="widget-box-content">
+            <!-- FORM -->
+            <form class="form">
+              <!-- FORM ROW -->
+              <div class="form-row split">
+                <!-- FORM ITEM -->
+                <div class="form-item centered">
+                  <label class="form-title" for="profile-privacy-visibility">{{
+                    "setting_chonngonngu" | translate
+                  }}</label>
+                </div>
+                <!-- /FORM ITEM -->
+
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM SELECT -->
+                  <div class="form-select">
+                    <select
+                      (change)="selectLg($event)"
+                      id="profile-privacy-visibility"
+                      name="profile_privacy_visibility"
+                    >
+                      <option value="en-US">
+                        {{ "setting_english" | translate }}
+                      </option>
+                      <option value="vi_VN" selected>
+                        {{ "setting_vietnam" | translate }}
+                      </option>
+                    </select>
+                    <!-- FORM SELECT ICON -->
+                    <svg class="form-select-icon icon-small-arrow">
+                      <use xlink:href="#svg-small-arrow"></use>
+                    </svg>
+                    <!-- /FORM SELECT ICON -->
+                  </div>
+                  <!-- /FORM SELECT -->
+                </div>
+                <!-- /FORM ITEM -->
+              </div>
+              <!-- /FORM ROW -->
+            </form>
+            <!-- /FORM -->
+          </div>
+          <!-- WIDGET BOX CONTENT -->
+        </div>
+        <!-- /WIDGET BOX -->
+      </div>
+      <!-- /GRID COLUMN -->
+    </div>
+    <!-- /GRID -->
+  </div>
+  <!-- /CONTENT GRID -->
+
+</body>
