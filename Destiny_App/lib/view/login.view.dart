@@ -14,12 +14,30 @@ import 'package:login_signup/view/widgets/text.form.global.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class LoginView extends StatelessWidget {
+class LoginView extends StatefulWidget {
   LoginView({super.key});
+
+  @override
+  State<LoginView> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
   final TextEditingController emailController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
+
   final _formfield = GlobalKey<FormState>();
+
   final storage = const FlutterSecureStorage();
+
+  bool isHovered = false;
+
+  void changeBC() {
+    setState(() {
+      isHovered = !isHovered;
+    });
+  }
+
   void login(String email, password) async {
     print(email);
     print(password);
@@ -153,6 +171,8 @@ class LoginView extends StatelessWidget {
                   const SizedBox(height: 20),
                   InkWell(
                     onTap: () {
+                      changeBC();
+                      print(isHovered);
                       if (_formfield.currentState!.validate()) {
                         login(emailController.text.toString(),
                             passwordController.text.toString());
@@ -162,7 +182,7 @@ class LoginView extends StatelessWidget {
                       alignment: Alignment.center,
                       height: 55,
                       decoration: BoxDecoration(
-                        color: GlobalColors.mainColor,
+                        color: isHovered ? Colors.red : Colors.blue,
                         borderRadius: BorderRadius.circular(6),
                         boxShadow: [
                           BoxShadow(

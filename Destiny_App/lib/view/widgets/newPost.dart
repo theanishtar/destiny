@@ -47,11 +47,12 @@ class _NewPostState extends State<NewPost> {
       for (var item in data) {
         String name = item['fullname'] ?? "N/A";
         // List<dynamic> roles = item['roles'] ?? "N/A";
-        String image = item['avartar'] ?? "N/A";
+        String image = item['avatar'] ?? "N/A";
         String email = item['email'] ?? "N/A";
         String refreshToken = item['refreshToken'] ?? "N/A";
         setState(() {
-          avatar = image;
+          avatar =
+              "https://firebasestorage.googleapis.com/v0/b/destiny-davisy.appspot.com/o/dang.jpg?alt=media&token=451f4ba3-5819-4899-9f86-d24069f5ab4c&_gl=1*q1ce3e*_ga*MTcxMDU3NTczOS4xNjc2OTc2NjE1*_ga_CW55HF8NVT*MTY5NjUwMzgxNi44LjEuMTY5NjUwNTcwMC42MC4wLjA";
         });
         // Sử dụng dữ liệu này theo nhu cầu của bạn
         print('Name: $name');
