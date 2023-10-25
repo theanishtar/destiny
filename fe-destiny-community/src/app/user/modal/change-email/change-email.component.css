@@ -1,0 +1,41 @@
+main.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 10001;
+}
+
+.modal-body {
+    padding-top: 0;
+}
+
+button.btnClose-change-email {
+    position: absolute;
+    right: 13px;
+    top: 8px;
+    border: none;
+    background: #fff;
+    width: auto;
+}
+form.form.change-mail {
+    position: absolute;
+    right: 0%;
+    transform: translate(-80%, 0%);
+}
+@media (max-width:390px) {
+    form.form.change-mail {
+        transform: translate(13%, 0%) !important;
+        width: clamp(392px, 50%, 530px) !important;
+    }
+}
+
+@media (max-width:  1286px) {
+    form.form.change-mail {
+        transform: translate(-170%, 0%) !important;
+    }
+}
+
+

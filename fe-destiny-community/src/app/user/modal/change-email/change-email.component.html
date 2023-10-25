@@ -1,0 +1,77 @@
+<main class="overlay" *ngIf="profileService.isOpenChangeEmail$ | async">
+    <div id="favDialog_changeMail" class="modal fade favDialog_changeMail">
+      
+      <!-- LANDING FORM -->
+  <div class="landing-form">
+    <!-- FORM BOX -->
+    <form action="#" class="form change-mail">
+        <button
+        (click)="profileService.closeModalChangeMail()"
+        class="btnClose-change-email"
+      >
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <h1 class="text-center">Thay đổi email</h1>
+      <!-- Progress bar -->
+      <div class="progressbar">
+        <div class="progress" id="progress"></div>
+
+        <div class="progress-step progress-step-active" data-title=""></div>
+        <div class="progress-step" data-title=""></div>
+        <div class="progress-step" data-title=""></div>
+      </div>
+
+      <!-- Steps -->
+      <div class="form-step form-step-active">
+        <!-- <div class="input-group">
+            <label style="font-size: large" for="username">Mật khẩu</label>
+            <input type="email" name="email" id="email" />
+          </div> -->
+
+        <div class="input-group">
+          <label style="font-size: large" for="username">Email</label>
+          <input type="email" name="email" id="email" />
+        </div>
+
+        <div class="">
+          <a style="color: #f3f3f3" class="btn btn-next width-50 ml-auto">Xác nhận</a>
+        </div>
+        
+        <div class="back-login">
+          Quay lại 
+          <a href="/get-started">đăng nhập</a>
+        </div>
+      </div>
+      <div class="form-step">
+        <div class="input-group">
+          <label style="font-size: large" for="phone">Mã xác nhận</label>
+          <input type="text" name="phone" id="phone" />
+        </div>
+
+        <div class="btns-group">
+          <a style="color: #f3f3f3" class="btn btn-prev">Trở về</a>
+          <a style="color: #f3f3f3" class="btn btn-next">Xác nhận</a>
+        </div>
+      </div>
+      <div class="form-step">
+        <div class="input-group">
+          <label style="font-size: large" for="dob">Mật khẩu mới</label>
+          <input type="text" name="dob" id="dob" />
+        </div>
+        <div class="input-group">
+          <label style="font-size: large" for="ID">Xác nhận mật khẩu mới</label>
+          <input type="text" name="ID" id="ID" />
+        </div>
+        <div class="btns-group">
+          <a style="color: #f3f3f3" class="btn btn-prev">Trở về</a>
+          <a style="color: #f3f3f3" class="btn btn-next">Xác nhận</a>
+        </div>
+      </div>
+    </form>
+    <!-- /FORM BOX -->
+  </div>
+  <!-- /LANDING FORM -->
+    </div>
+  
+    <!-- </div> -->
+  </main>

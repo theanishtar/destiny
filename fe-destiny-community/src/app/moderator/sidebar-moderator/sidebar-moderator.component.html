@@ -1,0 +1,129 @@
+<div class="sidebarD">
+    <a class="logo">
+      <div class="bx">
+        <img src="../assets/images/logo-euphoria.png" />
+      </div>
+      <div class="logo-name"><span>DES</span>TINY</div>
+    </a>
+    <ul class="side-menu" id="accordionSidebar">
+      <li [class.active]="activeMenuItem === 'forbidden-word'">
+        <a routerLink="/moderator/forbidden-word" class="1"><i class="bx bxs-dashboard"></i>Từ ngữ</a>
+      </li>
+      <li>
+        <div class="analys"><i class="bx bx-window-alt"></i>Bài đăng</div>
+      </li>
+      <li class="ml-4 2" [class.active]="activeMenuItem === 'post-report'">
+        <a routerLink="/moderator/post-report" class="2"><i class='bx bx-list-ul'></i>Danh sách</a>
+      </li>
+      <li class="ml-4 3" [class.active]="activeMenuItem === 'post-report-detail'">
+        <a routerLink="/moderator/post-report-detail" class="3"><i class="bx bx-comment-error"></i>Chi tiết</a>
+      </li>
+      <li>
+        <div class="analys"><i class="bx bx-group"></i>Người dùng</div>
+      </li>
+      <li class="ml-4 4" [class.active]="activeMenuItem === 'user-report'">
+        <a routerLink="/moderator/user-report" class="4"><i class='bx bx-list-ul'></i>Danh sách</a>
+      </li>
+      <li class="ml-4 5" [class.active]="activeMenuItem === 'user-report-detail'">
+        <a routerLink="/moderator/user-report-detail" class="5"><i class="bx bx-comment-error"></i>Chi tiết</a>
+      </li>
+      <li (click)="openNav()">
+        <a class="clickSetting"><i class="bx bx-cog"></i>Cài đặt</a>
+      </li>
+    </ul>
+    <ul class="side-menu">
+      <li>
+        <a href="#" class="logout" data-toggle="modal" data-target="#logoutModal">
+          <i class="bx bx-log-out-circle"></i>
+          Đăng xuất
+        </a>
+      </li>
+    </ul>
+    <!-- logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content card bg-gradient-dark text-white p-3 dialog-logout" style="width: 50%; margin: 0 25%">
+          <div class="modal-header">
+            <h5 class="modal-title font-weight-bold" id="exampleModalLabel">
+              ĐĂNG XUẤT
+            </h5>
+            <button class="close text-white" type="button" data-dismiss="modal" aria-label="Close"
+              style="padding-top: 1.2rem">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="profile-logo-heart mt-n4">
+              <img src="../assets/images/logo-euphoria.png" alt="" class="img-icon-dialog" />
+            </div>
+            <div class="profile-title mt-0 mb-3">
+              <div class="logo" style="height: 0 !important">
+                <h2 class="logo-name"><span class="text-white">DES</span>TINY</h2>
+              </div>
+            </div>
+            <h5 class="text-center">Bạn có chắc muốn đăng xuất?</h5>
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+            <button class="btn btn-secondary mr-4" type="button" data-dismiss="modal">
+              <i class="fa fa-ban mr-1"></i>Hủy bỏ
+            </button>
+            <a class="btn btn-danger" href="#">
+              <i class="fa fa-check"></i> Xác nhận</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- logout Modal -->
+    <div class="setting">
+      <div id="mySidenav" [style.width]="isNavOpen ? '270px' : '0px'" class="sidenav">
+        <a class="closebtn" (click)="closeNav()">&times;</a>
+        <a href="#!about">
+          <img style="width: 80%; margin: 0 5%" src="../assets/images/logo-euphoria.png" alt="" />
+        </a>
+        <div class="logo justify-content-center ml-2 mt-n5">
+          <div class="logo-name"><span>DES</span>TINY</div>
+        </div>
+        <div class="ml-2">
+          <h6 class="text-pie ml-2 mb-4">Màu sắc chính</h6>
+          <div class="row ml-1 choosemain">
+            <div class="row col-lg-12">
+              <div (click)="setMainColor('pink');"
+                class="col-lg-1 col-sm-1 offset-1 bg-gradient-pink border-radius-50 border border-active" #mainColorLink>
+                <span class="d-inline-block"></span>
+              </div>
+              <div (click)="setMainColor('blue');"
+                class="col-lg-1 col-sm-1 offset-1 bg-gradient-blue border-radius-50 border" #mainColorLink>
+                <span class="d-inline-block"></span>
+              </div>
+              <div (click)="setMainColor('green');"
+                class="col-lg-1 col-sm-1 offset-1 bg-gradient-green border-radius-50 border" #mainColorLink>
+                <span class="d-inline-block"></span>
+              </div>
+              <div (click)="setMainColor('orange');"
+                class="col-lg-1 col-sm-1 offset-1 bg-gradient-orange border-radius-50 border" #mainColorLink>
+                <span class="d-inline-block"></span>
+              </div>
+              <div (click)="setMainColor('cyan');"
+                class="col-lg-1 col-sm-1 offset-1 bg-gradient-cyan border-radius-50 border" #mainColorLink>
+                <span class="d-inline-block"></span>
+              </div>
+            </div>
+          </div>
+          <h6 class="text-pie ml-2 mb-4 mt-4">Ngôn ngữ</h6>
+          <div class="row ml-1 mr-1">
+            <div class="col-lg-6">
+              <div class="bg-gradient-endless p-2 border-radius-xl text-center">
+                <a href="" class="text-white">Tiếng Việt</a>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="bg-gradient-dark p-2 border-radius-xl text-center">
+                <a href="" class="text-white">Tiếng anh</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

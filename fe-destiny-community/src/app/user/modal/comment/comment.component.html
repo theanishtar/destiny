@@ -1,0 +1,82 @@
+<main class="overlay" *ngIf="modalService.isOpenComment$ | async">
+  <div id="favDialog_updatePost" class="modal fade favDialog_updatePost">
+    <button (click)="closeModalComment()" class="btnClose-create-post">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="post-container-update">
+      <div class="post">
+        <!-- Slideshow container -->
+        <div class="img-product">
+          <div class="slideshow-container">
+            <!-- Full-width images with number and caption text -->
+            <div class="mySlides fade" *ngFor="let img of modalService.images">
+              <img [src]="img" style="width: 100%" />
+            </div>
+            <!-- Next and previous buttons -->
+            <div class="btn-slide-show">
+              <a class="prev" (click)="plusSlides(-1)">&#10094;</a>
+              <a class="next" (click)="plusSlides(1)">&#10095;</a>
+            </div>
+          </div>
+
+          <div class="numbertext">
+            <span id="numbertext">1 </span>/ <b>{{ slidesLength }}</b>
+          </div>
+        </div>
+        <!-- ../../assets/images/cover/03.jpg -->
+        <div class="post-detail">
+          <div class="full-boxer">
+            <div *ngFor="let cmt of modalService.listCmt; let i = index">
+              <div class="comment__container opened">
+                <div class="comment__card">
+                  <div class="box-top">
+                    <div class="Profile">
+                      <div class="profile-image">
+                        <img [src]="cmt[9]" />
+                      </div>
+                      <div class="Name">
+                        <strong>{{ cmt[7] }}</strong>
+                        <span>@{{ cmt[8] }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <p>
+                    {{ cmt[5] }}
+                  </p>
+                  <div class="comment__card-footer">
+                    <div class="replies">{{ cmt[10] }} Trả lời</div>
+                    <div
+                      class="show-replies"
+                      *ngIf="modalService.checkHideSeeMore.get(cmt[0])==null || modalService.checkHideSeeMore.get(cmt[0]) "
+                      (click)="modalService.loadDataReply(cmt[3], cmt[0])"
+                    >
+                     Xem thêm
+                    </div>
+                    <div
+                      class="show-replies"
+                      *ngIf="modalService.checkHideSeeMore.get(cmt[0])!=null && !modalService.checkHideSeeMore.get(cmt[0]) "
+                      (click)="removeSeeMoreCmt(cmt[0])"
+                    >
+                     Ẩn bớt
+                    </div>
+                  </div>
+                </div>
+                <div id="first-reply-{{ cmt[0] }}">
+                  <!-- reply comment -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <form action="">
+            <div class="comment-box">
+              <input type="text" id="comment-input" name="comment-input"  [(ngModel)]="comment_input" placeholder="Bình luận" />
+              <button class="add-comment-btn" (click)="addComment()">
+                <i class="fa-regular fa-comment"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
