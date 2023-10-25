@@ -3,105 +3,91 @@ package com.davisy.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.davisy.service.impl.UserDetailsServiceImpl;
 
-import lombok.RequiredArgsConstructor;
-
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
-@EnableGlobalMethodSecurity(
-prePostEnabled = false, securedEnabled = false, jsr250Enabled = true
-)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+/* @RequiredArgsConstructor */
+
+@EnableGlobalMethodSecurity(prePostEnabled = false, securedEnabled = false, jsr250Enabled = true)
+public class SecurityConfig {
 
 	@Autowired
 	JwtAuthFilter authFilter;
-	
-	@Autowired JwtAuthEntryPoint authEntryPoint;
-	
+
+	@Autowired
+	JwtAuthEntryPoint authEntryPoint;
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+	// private final AuthenticationManager authenticationManager;
+
 	/*
-	 * @Autowired AuthenticationProvider authenticationProvider;
+	 * @Override protected void configure(HttpSecurity http) throws Exception {
+	 * 
+	 * 
+	 * http.csrf().disable().cors().disable(); http.exceptionHandling()
+	 * .authenticationEntryPoint(authEntryPoint) .and() .sessionManagement()
+	 * .sessionCreationPolicy(SessionCreationPolicy.STATELESS) .and()
+	 * .authenticationProvider(authenticationProvider())
+	 * .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class); }
 	 */
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-    	
 
-    	http.csrf().disable().cors().disable();
-    	http.exceptionHandling()
-	        .authenticationEntryPoint(authEntryPoint)
-	        .and()
-	        .sessionManagement()
-	        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-	        .and()
-	        .authenticationProvider(authenticationProvider())
-	        .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
+	@Autowired(required = true)
+	private UserDetailsServiceImpl userDetailsService;
 
-		/*
-		 * http.authorizeHttpRequests() .requestMatchers("/login")
-		 * .hasAnyAuthority("USER","ADMIN");
-		 */
-    	/*
-    	http.authorizeHttpRequests((requests) -> requests
-				.requestMatchers(new AntPathRequestMatcher("/admin/*")).hasAuthority("ADMIN")
-				.requestMatchers(new AntPathRequestMatcher("/user/*")).hasAuthority("USER")
-				.requestMatchers((new AntPathRequestMatcher(("/*")))).permitAll()
-				.anyRequest().permitAll());
-		*/
-    }
-    
-    
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecure) throws Exception {// Disable csrf
+		httpSecure.cors().and().csrf().disable()
+				.authorizeHttpRequests((requests) -> requests.requestMatchers("/user-home").authenticated()
+						.requestMatchers(new AntPathRequestMatcher("/api/v1/admin/*")).hasAuthority("ADMIN")
+						.requestMatchers(new AntPathRequestMatcher("/api/v1/user/*")).hasAnyAuthority("USER", "ADMIN")
+						.requestMatchers((new AntPathRequestMatcher(("/api/v1/auth/**")))).permitAll().anyRequest()
+						.permitAll())
+				.oauth2Login(oauth2Login -> oauth2Login.loginPage("/oauth2/authorization/facebook")
+						.defaultSuccessUrl("/user-home") // URL mặc định sau đăng nhập
+															// thành công
+				).logout(logout -> logout.logoutSuccessUrl("/") // URL sau khi đăng xuất
+				).exceptionHandling().authenticationEntryPoint(authEntryPoint).and().sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.ALWAYS).and()
+				.authenticationProvider(authenticationProvider())
+				.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+		return httpSecure.build();
+	}
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService);
-    }
+	@Bean
+	public AuthenticationProvider authenticationProvider() {
+		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+		authProvider.setUserDetailsService(userDetailsService);
+		authProvider.setPasswordEncoder(passwordEncoder());
+		return authProvider;
+	}
 
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-    
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
-    }
-    
- // Bean UserDetailsService trả về bởi JdbcDaoImpl
-//    @Bean
-//    public UserDetailsService userDetailsService(DataSource dataSource) {
-//        JdbcDaoImpl jdbcDao = new JdbcDaoImpl();
-//        jdbcDao.setDataSource(dataSource);
-//        jdbcDao.setUsersByUsernameQuery("SELECT username, password, enabled FROM users WHERE username = ?");
-//        jdbcDao.setAuthoritiesByUsernameQuery("SELECT username, authority FROM authorities WHERE username = ?");
-//        return jdbcDao;
-//    }
+	@Bean
+	public CsrfTokenRepository csrfTokenRepository() {
+		CookieCsrfTokenRepository repository = CookieCsrfTokenRepository.withHttpOnlyFalse();
+		repository.setCookieName("XSRF-TOKEN");
+		return repository;
+	}
+
 }
