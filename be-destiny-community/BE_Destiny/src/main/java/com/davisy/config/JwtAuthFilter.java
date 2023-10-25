@@ -53,7 +53,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	ObjectMapper objectMapper = new ObjectMapper();
 
 	@Override
+<<<<<<< HEAD
+	protected  void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+=======
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+>>>>>>> status-online
 			throws ServletException, IOException {
 		// return nếu đã xác thực
 //		if (SecurityContextHolder.getContext().getAuthentication().getAuthorities() != null) {
