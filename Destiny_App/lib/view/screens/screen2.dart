@@ -12,34 +12,7 @@ class FollowView extends StatefulWidget {
 }
 
 class _FollowViewState extends State<FollowView> {
-  List<Users> _users = [
-    Users(
-        "Lê Bích Vi",
-        "vilb",
-        "https://w7.pngwing.com/pngs/129/292/png-transparent-female-avatar-girl-face-woman-user-flat-classy-users-icon.png",
-        true),
-    Users(
-        "Lê Bích Vi",
-        "vilb",
-        "https://w7.pngwing.com/pngs/129/292/png-transparent-female-avatar-girl-face-woman-user-flat-classy-users-icon.png",
-        true),
-    Users(
-        "Lê Bích Vi",
-        "vilb",
-        "https://w7.pngwing.com/pngs/129/292/png-transparent-female-avatar-girl-face-woman-user-flat-classy-users-icon.png",
-        true),
-    Users(
-        "Lê Bích Vi",
-        "vilb",
-        "https://w7.pngwing.com/pngs/129/292/png-transparent-female-avatar-girl-face-woman-user-flat-classy-users-icon.png",
-        true),
-    Users(
-        "Lê Bích Vi",
-        "vilb",
-        "https://w7.pngwing.com/pngs/129/292/png-transparent-female-avatar-girl-face-woman-user-flat-classy-users-icon.png",
-        true),
-  ];
-
+  bool isFollowed = true;
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -71,54 +44,54 @@ class _FollowViewState extends State<FollowView> {
               Expanded(
                   child: TabBarView(
                 children: [
-                  Container(
-                    padding: EdgeInsets.only(right: 20, left: 20),
-                    color: Colors.white,
-                    height: double.infinity,
-                    width: double.infinity,
-                    child: ListView.builder(
-                        itemCount: _users.length,
-                        itemBuilder: (context, index) {
-                          return userComponent(
-                              name: _users[index].name,
-                              username: _users[index].username,
-                              image: _users[index].image,
-                              isFollowed: _users[index].isFlollerByMe,
-                              user: _users[index]);
-                        }),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(right: 20, left: 20),
-                    color: Colors.white,
-                    height: double.infinity,
-                    width: double.infinity,
-                    child: ListView.builder(
-                        itemCount: _users.length,
-                        itemBuilder: (context, index) {
-                          return userComponent(
-                              name: _users[index].name,
-                              username: _users[index].username,
-                              image: _users[index].image,
-                              isFollowed: _users[index].isFlollerByMe,
-                              user: _users[index]);
-                        }),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(right: 20, left: 20),
-                    color: Colors.white,
-                    height: double.infinity,
-                    width: double.infinity,
-                    child: ListView.builder(
-                        itemCount: _users.length,
-                        itemBuilder: (context, index) {
-                          return userComponent(
-                              name: _users[index].name,
-                              username: _users[index].username,
-                              image: _users[index].image,
-                              isFollowed: _users[index].isFlollerByMe,
-                              user: _users[index]);
-                        }),
-                  ),
+                  // Container(
+                  //   padding: EdgeInsets.only(right: 20, left: 20),
+                  //   color: Colors.white,
+                  //   height: double.infinity,
+                  //   width: double.infinity,
+                  //   child: ListView.builder(
+                  //       itemCount: _users.length,
+                  //       itemBuilder: (context, index) {
+                  //         return userComponent(
+                  //             name: _users[index].fullname,
+                  //             username: _users[index].username,
+                  //             image: _users[index].avatar,
+                  //             isFollowed: _users[index].ban,
+                  //             user: _users[index]);
+                  //       }),
+                  // ),
+                  // Container(
+                  //   padding: EdgeInsets.only(right: 20, left: 20),
+                  //   color: Colors.white,
+                  //   height: double.infinity,
+                  //   width: double.infinity,
+                  //   child: ListView.builder(
+                  //       itemCount: _users.length,
+                  //       itemBuilder: (context, index) {
+                  //         return userComponent(
+                  //             name: _users[index].fullname,
+                  //             username: _users[index].username,
+                  //             image: _users[index].avatar,
+                  //             isFollowed: _users[index].ban,
+                  //             user: _users[index]);
+                  //       }),
+                  // ),
+                  // Container(
+                  //   padding: EdgeInsets.only(right: 20, left: 20),
+                  //   color: Colors.white,
+                  //   height: double.infinity,
+                  //   width: double.infinity,
+                  //   child: ListView.builder(
+                  //       itemCount: _users.length,
+                  //       itemBuilder: (context, index) {
+                  //         return userComponent(
+                  //             name: _users[index].fullname,
+                  //             username: _users[index].username,
+                  //             image: _users[index].avatar,
+                  //             isFollowed: _users[index].ban,
+                  //             user: _users[index]);
+                  //       }),
+                  // ),
                 ],
               ))
             ],
@@ -126,7 +99,7 @@ class _FollowViewState extends State<FollowView> {
         ));
   }
 
-  userComponent({name, username, image, isFollowed, required Users user}) {
+  userComponent({name, username, image, isFollowed}) {
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: Row(
@@ -174,7 +147,7 @@ class _FollowViewState extends State<FollowView> {
               color: isFollowed ? Color(0xffeeeeee) : Color(0xffffff),
               onPressed: () {
                 setState(() {
-                  user.isFlollerByMe = !user.isFlollerByMe;
+                  isFollowed = !isFollowed;
                 });
               },
               shape: RoundedRectangleBorder(

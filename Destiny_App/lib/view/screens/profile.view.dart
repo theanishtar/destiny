@@ -1,13 +1,77 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:login_signup/utils/api.dart';
 import 'package:login_signup/utils/gobal.colors.dart';
+import 'package:login_signup/view/edit_profile.view.dart';
 import 'package:login_signup/view/widgets/button_screen.dart';
 import 'package:login_signup/view/widgets/post.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfileView extends StatelessWidget {
+class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
+
+  @override
+  State<ProfileView> createState() => _ProfileViewState();
+}
+
+String? ava;
+String? fullname;
+int? countPost;
+int? countFollower;
+int? countImg;
+
+class _ProfileViewState extends State<ProfileView> {
+  @override
+  void initState() {
+    super.initState();
+    this.getData();
+  }
+
+  Future getData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var value = await prefs.getString('token');
+    var headers = {
+      'Authorization': 'Bearer $value',
+      'Content-Type':
+          'application/json', // Điều này phụ thuộc vào yêu cầu cụ thể của máy chủ
+    };
+
+    http.Response response;
+    response = await http.post(
+        Uri.parse(ApiEndPoints.baseUrl + "v1/user/profile/data/timeline"),
+        headers: headers,
+        body: "0");
+    if (response.statusCode == 200) {
+      // List<dynamic> data = json.decode('[' + response.body + ']');
+      // List<int> utf8Bytes = utf8.encode(data.toString());
+      // String decodedData = utf8.decode(utf8Bytes);
+
+      // print(data1['fullname']);
+
+      setState(() {
+        Map<String, dynamic> data =
+            jsonDecode(Utf8Decoder().convert(response.bodyBytes));
+        ava = data['dataFollows']['avatar'];
+        fullname = data['dataFollows']['fullname'];
+        countPost = data['dataFollows']['countPost'];
+        countFollower = data['dataFollows']['countFollower'];
+        countImg = data['dataFollows']['countImg'];
+        print(data);
+      });
+
+      // Sử dụng dữ liệu này theo nhu cầu của bạn
+      // print('Name: $name');
+      // print('Avatar: $avatar');
+      // print('Token: $email');
+      // print('Refresh Token: $refreshToken');
+      // }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,14 +118,15 @@ class ProfileView extends StatelessWidget {
                       Stack(
                         alignment: Alignment.bottomRight,
                         children: [
-                          const CircleAvatar(
+                          CircleAvatar(
                             radius: 50,
-                            backgroundImage:
-                                AssetImage("assets/images/conan.png"),
+                            backgroundImage: NetworkImage(ava!),
                           ),
                           InkWell(
                             onTap: () {
-                              Navigator.pushNamed(context, 'editProfile');
+                              runApp(GetMaterialApp(
+                                home: EditProfile(),
+                              ));
                             },
                             child: CircleAvatar(
                               radius: 12,
@@ -78,7 +143,7 @@ class ProfileView extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: Text(
-                          "Lê Bích Vi",
+                          fullname!,
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ),
@@ -88,14 +153,14 @@ class ProfileView extends StatelessWidget {
                           Column(
                             children: [
                               Text(
-                                "32",
+                                (countPost!).toString(),
                                 style: Theme.of(context).textTheme.titleLarge,
                               ),
                               const SizedBox(
                                 height: 10,
                               ),
                               Text(
-                                "Follow",
+                                "Bài đăng",
                                 style: Theme.of(context)
                                     .textTheme
                                     .subtitle1!
@@ -106,14 +171,14 @@ class ProfileView extends StatelessWidget {
                           Column(
                             children: [
                               Text(
-                                "1.200",
+                                (countFollower!).toString(),
                                 style: Theme.of(context).textTheme.titleLarge,
                               ),
                               const SizedBox(
                                 height: 10,
                               ),
                               Text(
-                                "Like",
+                                "Theo dõi",
                                 style: Theme.of(context)
                                     .textTheme
                                     .subtitle1!
@@ -124,14 +189,14 @@ class ProfileView extends StatelessWidget {
                           Column(
                             children: [
                               Text(
-                                "200",
+                                (countImg!).toString(),
                                 style: Theme.of(context).textTheme.titleLarge,
                               ),
                               const SizedBox(
                                 height: 10,
                               ),
                               Text(
-                                "Followers",
+                                "Ảnh",
                                 style: Theme.of(context)
                                     .textTheme
                                     .subtitle1!
@@ -155,9 +220,9 @@ class ProfileView extends StatelessWidget {
                   ),
                 ),
               ),
-              Post(),
-              Post(),
-              Post(),
+              // Post(),
+              // Post(),
+              // Post(),
               SizedBox(
                 height: 80,
               )

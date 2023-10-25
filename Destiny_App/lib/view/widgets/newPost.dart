@@ -1,7 +1,67 @@
+import 'dart:convert';
+import 'dart:math';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:login_signup/models/Users.dart';
+import 'package:login_signup/utils/api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class NewPost extends StatelessWidget {
-  const NewPost({super.key});
+class NewPost extends StatefulWidget {
+  const NewPost({
+    super.key,
+  });
+
+  @override
+  State<NewPost> createState() => _NewPostState();
+}
+
+String? avatar;
+Map<String, dynamic>? mapResponse;
+
+class _NewPostState extends State<NewPost> {
+  final storage = const FlutterSecureStorage();
+  @override
+  void initState() {
+    super.initState();
+    this.getData();
+  }
+
+  Future getData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var value = await prefs.getString('token');
+    var headers = {
+      'Authorization': 'Bearer $value',
+      'Content-Type':
+          'application/json', // Điều này phụ thuộc vào yêu cầu cụ thể của máy chủ
+    };
+
+    http.Response response;
+    response = await http.get(
+        Uri.parse(ApiEndPoints.baseUrl + "v1/user/profile/load/data"),
+        headers: headers);
+    if (response.statusCode == 200) {
+      List<dynamic> data = json.decode('[' + response.body + ']');
+      print(data);
+      for (var item in data) {
+        String name = item['fullname'] ?? "N/A";
+        // List<dynamic> roles = item['roles'] ?? "N/A";
+        String image = item['avatar'] ?? "N/A";
+        String email = item['email'] ?? "N/A";
+        String refreshToken = item['refreshToken'] ?? "N/A";
+        setState(() {
+          avatar =
+              "https://firebasestorage.googleapis.com/v0/b/destiny-davisy.appspot.com/o/dang.jpg?alt=media&token=451f4ba3-5819-4899-9f86-d24069f5ab4c&_gl=1*q1ce3e*_ga*MTcxMDU3NTczOS4xNjc2OTc2NjE1*_ga_CW55HF8NVT*MTY5NjUwMzgxNi44LjEuMTY5NjUwNTcwMC42MC4wLjA";
+        });
+        // Sử dụng dữ liệu này theo nhu cầu của bạn
+        print('Name: $name');
+        print('Avatar: $avatar');
+        print('Token: $email');
+        print('Refresh Token: $refreshToken');
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +74,7 @@ class NewPost extends StatelessWidget {
         Row(
           children: [
             Container(
-              child: CircleAvatar(
-                  backgroundImage: AssetImage("assets/images/conan.png")),
+              child: CircleAvatar(backgroundImage: NetworkImage(avatar!)),
               margin: EdgeInsets.only(left: 10),
             ),
             Container(
@@ -28,6 +87,7 @@ class NewPost extends StatelessWidget {
             )
           ],
         ),
+        // Text(stringResponse.toString()),
         Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -115,4 +175,12 @@ class NewPost extends StatelessWidget {
       ]),
     );
   }
+  // );
+  //   } else if (snapshot.hasError) {
+  //     return Text(snapshot.error.toString());
+  //   }
+
+  //   return const CircularProgressIndicator();
+  // });
 }
+// }
