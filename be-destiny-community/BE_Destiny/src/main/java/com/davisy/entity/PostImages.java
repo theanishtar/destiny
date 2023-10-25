@@ -1,7 +1,10 @@
 package com.davisy.entity;
 
+<<<<<<< HEAD
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+=======
+>>>>>>> status-online
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,7 +28,10 @@ public class PostImages {
 	
 	String link_image;
 	
+<<<<<<< HEAD
 	@JsonIgnore
+=======
+>>>>>>> status-online
 	@ManyToOne
 	@JoinColumn(name = "post_id")
 	Post post;

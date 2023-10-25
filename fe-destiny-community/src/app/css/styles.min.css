@@ -47,9 +47,13 @@ ul {
 
 button,
 input[type="password"],
+<<<<<<< HEAD
 input[type="date"],
 input[type="text"],
 ng-select,
+=======
+input[type="text"],
+>>>>>>> status-online
 label,
 select,
 textarea {
@@ -65,9 +69,13 @@ label {
 
 button,
 input[type="password"],
+<<<<<<< HEAD
 input[type="date"],
 input[type="text"],
 ng-select,
+=======
+input[type="text"],
+>>>>>>> status-online
 select,
 textarea {
   width: 100%;
@@ -77,9 +85,13 @@ textarea {
 }
 
 input[type="password"],
+<<<<<<< HEAD
 input[type="date"],
 input[type="text"],
 ng-select,
+=======
+input[type="text"],
+>>>>>>> status-online
 select,
 textarea {
   background-color: #fff;
@@ -89,62 +101,90 @@ textarea {
 }
 
 input[type="password"]:focus,
+<<<<<<< HEAD
 input[type="date"]:focus,
 input[type="text"]:focus,
 ng-select:focus,
+=======
+input[type="text"]:focus,
+>>>>>>> status-online
 select:focus,
 textarea:focus {
   border-color: #615dfa;
 }
 
 input[type="password"],
+<<<<<<< HEAD
 input[type="date"],
 input[type="text"],
 ng-select {
+=======
+input[type="text"] {
+>>>>>>> status-online
   height: 54px;
   padding: 0 18px;
 }
 
 input[type="password"]::-webkit-input-placeholder,
+<<<<<<< HEAD
 input[type="date"]::-webkit-input-placeholder,
 input[type="text"]::-webkit-input-placeholder,
 ng-select::-webkit-input-placeholder{
+=======
+input[type="text"]::-webkit-input-placeholder {
+>>>>>>> status-online
   color: #adafca;
   font-size: 0.875rem;
   font-weight: 500;
 }
 
 input[type="password"]::-moz-placeholder,
+<<<<<<< HEAD
 input[type="date"]::-moz-placeholder,
 input[type="text"]::-moz-placeholder,
 ng-select::-moz-placeholder {
+=======
+input[type="text"]::-moz-placeholder {
+>>>>>>> status-online
   color: #adafca;
   font-size: 0.875rem;
   font-weight: 500;
 }
 
 input[type="password"]:-ms-input-placeholder,
+<<<<<<< HEAD
 input[type="date"]:-ms-input-placeholder,
 input[type="text"]:-ms-input-placeholder,
 ng-select:-ms-input-placeholder {
+=======
+input[type="text"]:-ms-input-placeholder {
+>>>>>>> status-online
   color: #adafca;
   font-size: 0.875rem;
   font-weight: 500;
 }
 
 input[type="password"]::-ms-input-placeholder,
+<<<<<<< HEAD
 input[type="date"]::-ms-input-placeholder,
 input[type="text"]::-ms-input-placeholder,
 ng-select::-ms-input-placeholder {
+=======
+input[type="text"]::-ms-input-placeholder {
+>>>>>>> status-online
   color: #adafca;
   font-size: 0.875rem;
   font-weight: 500;
 }
 
 input[type="password"]::placeholder,
+<<<<<<< HEAD
 input[type="date"]::placeholder
 input[type="text"]::placeholder,
 ng-select::placeholder {
+=======
+input[type="text"]::placeholder {
+>>>>>>> status-online
   color: #adafca;
   font-size: 0.875rem;
   font-weight: 500;
@@ -1571,11 +1611,19 @@ figure>img {
   fill: #3e3f5e;
 }
 
+<<<<<<< HEAD
 /* .action-list .action-list-item.unread {
   position: relative;
 } */
 
 /* .action-list .action-list-item.unread:after {
+=======
+.action-list .action-list-item.unread {
+  position: relative;
+}
+
+.action-list .action-list-item.unread:after {
+>>>>>>> status-online
   content: "";
   width: 4px;
   height: 4px;
@@ -1584,7 +1632,11 @@ figure>img {
   position: absolute;
   top: 26px;
   right: 10px;
+<<<<<<< HEAD
 } */
+=======
+}
+>>>>>>> status-online
 
 .action-list .action-list-item .action-list-item-icon {
   fill: #adafca;
@@ -2081,13 +2133,21 @@ figure>img {
 
 .post-option.active .post-option-icon,
 .post-option:hover .post-option-icon {
+<<<<<<< HEAD
   fill: red;
+=======
+  fill: #23d2e2;
+>>>>>>> status-online
   opacity: 1;
 }
 
 .post-option.active .post-option-text,
 .post-option:hover .post-option-text {
+<<<<<<< HEAD
   color: red;
+=======
+  color: #3e3f5e;
+>>>>>>> status-online
 }
 
 .post-option .post-option-icon {
@@ -3374,6 +3434,13 @@ figure>img {
   height: 164px;
 }
 
+<<<<<<< HEAD
+=======
+.user-avatar.big .user-avatar-content {
+  top: 27px;
+  left: 24px;
+}
+>>>>>>> status-online
 
 .user-avatar.big .user-avatar-progress,
 .user-avatar.big .user-avatar-progress-border {
@@ -3536,8 +3603,13 @@ figure>img {
 
 .user-avatar .user-avatar-content {
   position: absolute;
+<<<<<<< HEAD
   top: 21px;
     left: 19px;
+=======
+  top: 18px;
+  left: 16px;
+>>>>>>> status-online
   z-index: 3;
 }
 
@@ -3657,7 +3729,10 @@ figure>img {
 .user-status .user-status-title .bold {
   color: #3e3f5e;
   font-weight: 700;
+<<<<<<< HEAD
   cursor: pointer;
+=======
+>>>>>>> status-online
 }
 
 .user-status .user-status-title .highlighted {

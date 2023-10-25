@@ -27,10 +27,14 @@ export class TokenInterceptor implements HttpInterceptor {
 		if (request.url.includes('/v1/oauth/login/oauh2')) {
 			return next.handle(request);
 		}
+<<<<<<< HEAD
 		// v1/user/profile/update
 		// if (request.url.includes('/v1/user/profile/update')) {
 		// 	return next.handle(request);
 		// }
+=======
+
+>>>>>>> status-online
 		// Lấy token từ AuthService
 		const token = localStorage.getItem('token') || null;
 

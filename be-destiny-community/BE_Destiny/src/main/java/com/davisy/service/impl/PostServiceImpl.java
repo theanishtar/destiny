@@ -3,7 +3,10 @@ package com.davisy.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+<<<<<<< HEAD
 import org.springframework.cache.annotation.Cacheable;
+=======
+>>>>>>> status-online
 import org.springframework.stereotype.Service;
 
 import com.davisy.dao.PostDAO;
@@ -96,6 +99,7 @@ public class PostServiceImpl implements PostService {
 		postDao.saveAndFlush(post);
 	}
 
+<<<<<<< HEAD
 	@Override
 	public List<Object[]> getTop5postProfile(int id) {
 		List<Object[]> list = postDao.getTop5postProfile(id);
@@ -127,4 +131,6 @@ public class PostServiceImpl implements PostService {
 		return postDao.getCountPostProfile(id);
 	}
 
+=======
+>>>>>>> status-online
 }

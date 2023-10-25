@@ -122,6 +122,7 @@ public class User implements UserDetails {
 //	@JsonIgnore
 //	@OneToMany(mappedBy = "user")
 //	List<Follower> followers;
+<<<<<<< HEAD
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "userSendReport")
@@ -134,6 +135,8 @@ public class User implements UserDetails {
 	@JsonIgnore
 	@OneToMany(mappedBy = "userReported")
 	List<UserReported> userReporteds;
+=======
+>>>>>>> status-online
 
 	@JsonIgnore
 	public String[] getAuth() {
@@ -150,6 +153,7 @@ public class User implements UserDetails {
 			return null;
 		return wards.full_name + ". " + districts.full_name + ". " + provinces.full_name;
 	}
+<<<<<<< HEAD
 	
 	public String getIdProvince() {
 		if(provinces==null)
@@ -168,6 +172,8 @@ public class User implements UserDetails {
 			return null;
 		return wards.getCode();
 	}
+=======
+>>>>>>> status-online
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -59,7 +59,11 @@ public class RedisCheckAspect {
 		return ipAddress;
 	}
 
+<<<<<<< HEAD
     @Around("@annotation(com.davisy.SpamRrequestCheck)")
+=======
+    @Around("@annotation(com.davisy.RedisCheck)")
+>>>>>>> status-online
     public Object checkRedis(ProceedingJoinPoint joinPoint) throws Throwable {
     	
     	 // Lấy request hiện tại

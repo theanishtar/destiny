@@ -25,6 +25,7 @@ public class PostImagesServiceImpl implements PostImagesService {
 	public List<PostImages> getListPostImagesByPostID(int id) {
 		return postImagesDAO.getListPostImagesByPostID(id);
 	}
+<<<<<<< HEAD
 
 	// 16-10-2023 - lấy tất cả hình ảnh của user đã đăng
 	@Override
@@ -37,4 +38,6 @@ public class PostImagesServiceImpl implements PostImagesService {
 	public List<String> findAllImagesofPost(int id) {
 		return postImagesDAO.findAllImagesofPost(id);
 	}
+=======
+>>>>>>> status-online
 }

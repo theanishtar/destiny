@@ -1,5 +1,6 @@
 package com.davisy.controller;
 
+<<<<<<< HEAD
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -51,12 +52,31 @@ class RepCommentModel {
 
 @RestController
 @CrossOrigin
+=======
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.davisy.config.JwtTokenUtil;
+import com.davisy.service.impl.PostServiceImpl;
+import com.davisy.service.impl.UserServiceImpl;
+
+@RestController
+@CrossOrigin("*")
+>>>>>>> status-online
 public class PostController {
 	@Autowired
 	JwtTokenUtil jwtTokenUtil;
 
 	@Autowired
 	UserServiceImpl userServiceImpl;
+<<<<<<< HEAD
 
 	@Autowired
 	PostServiceImpl postServiceImpl;
@@ -83,11 +103,18 @@ public class PostController {
 
 	Object[] commObjects = new Object[] {};
 
+=======
+	
+	@Autowired
+	PostServiceImpl postServiceImpl;
+
+>>>>>>> status-online
 	@GetMapping("/v1/user/getTop5Post")
 	public ResponseEntity<List<Object[]>> getTOP5Post() {
 		List<Object[]> list = postServiceImpl.getTOP5Post();
 		return ResponseEntity.ok(list);
 	}
+<<<<<<< HEAD
 
 	@GetMapping("/v1/user/load/post")
 	public ResponseEntity<PostEntity> loadPost(HttpServletRequest request) {
@@ -165,6 +192,11 @@ public class PostController {
 	}
 
 	// cach sai
+=======
+	
+	
+	//cach sai
+>>>>>>> status-online
 	public void time() {
 		Calendar calendar = GregorianCalendar.getInstance();
 		int day = calendar.get(Calendar.DAY_OF_MONTH);

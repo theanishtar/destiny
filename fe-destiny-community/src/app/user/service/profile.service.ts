@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
+<<<<<<< HEAD
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import '../../../assets/toast/main.js';
@@ -10,10 +11,19 @@ import { of } from 'rxjs';
 import { environment } from '../../../environments/environment'
 import { CookieService } from 'ngx-cookie-service';
 
+=======
+import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
+import '../../../assets/toast/main.js';
+declare var toast: any;
+
+import { environment } from '../../../environments/environment'
+>>>>>>> status-online
 @Injectable({
   providedIn: 'root'
 })
 export class ProfileService {
+<<<<<<< HEAD
   private loadDataHeaderUrl = environment.baseUrl + 'v1/user/profile/data/timeline';
   private loadDataEditProfileUrl = environment.baseUrl + 'v1/user/profile/load/data';
   private updateProfileUrl = environment.baseUrl + 'v1/user/profile/update';
@@ -40,14 +50,30 @@ export class ProfileService {
   /* ============Timeline============= */
   loadDataHeader(data: any) {
     localStorage.setItem("idSelected", data);
+=======
+  private loadDataHeaderUrl = environment.baseUrl + 'v1/user/profile/data/header';
+
+  private dataHeader: any[];
+  
+  constructor(
+    private http: HttpClient,
+  ) { }
+
+  loadDataHeader(data: any) {
+>>>>>>> status-online
     return this.http.post<any[]>(this.loadDataHeaderUrl, data).pipe(
       tap((response) => {
         this.dataHeader = response;
         this.setDataHeader(this.dataHeader);
+<<<<<<< HEAD
+=======
+        // console.warn("this.dataHeader: " + JSON.stringify(this.getDataHeader()));
+>>>>>>> status-online
       }),
     );
   }
 
+<<<<<<< HEAD
   loadDataProfileTimeline(id) {
     this.loadDataHeader(id).subscribe((res) => {
       if (res != null) {
@@ -148,6 +174,8 @@ export class ProfileService {
 
 
   /* ============Getter - Setter============= */
+=======
+>>>>>>> status-online
   getDataHeader(): any[] {
     return this.dataHeader;
   }
@@ -155,6 +183,7 @@ export class ProfileService {
     this.dataHeader = data;
   }
 
+<<<<<<< HEAD
   getDataEditProfile(): any {
     return this.dataEditProfile;
   }
@@ -203,4 +232,6 @@ setUserLog(data: any[]): void {
   this.userLogined = data;
 }
 
+=======
+>>>>>>> status-online
 }

@@ -14,7 +14,11 @@ import 'src/assets/js/utils/svg-loader.js';
 import { ModalService } from '../service/modal.service';
 import { MessageService } from '../service/message.service';
 import { environment } from '../../../environments/environment'
+<<<<<<< HEAD
 import { UserModel } from '../Model/UserModel.js';
+=======
+import { UserModel } from '../service/UserModel.js';
+>>>>>>> status-online
 
 @Component({
   selector: 'app-message',

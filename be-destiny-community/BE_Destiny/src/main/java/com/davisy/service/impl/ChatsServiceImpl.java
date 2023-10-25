@@ -62,9 +62,12 @@ public class ChatsServiceImpl implements ChatsService {
 		}
 	}
 
+<<<<<<< HEAD
 	@Override
 	public List<Object[]> loadAllChatRoom(int id) {
 		return chatDAO.loadAllChatRoom(id);
 	}
 
+=======
+>>>>>>> status-online
 }

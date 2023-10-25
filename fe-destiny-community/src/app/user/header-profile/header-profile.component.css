@@ -1,14 +1,23 @@
 nav.section-navigation {
+<<<<<<< HEAD
   margin-top: 25px;
 }
 
 div#section-navigation-slider {
   position: absolute;
   top: 0;
+=======
+    margin-top: 25px;
+}
+div#section-navigation-slider {
+    position: absolute;
+    top: 0;
+>>>>>>> status-online
 }
 
 /* avatar */
 .hexagon-container {
+<<<<<<< HEAD
   width: 120px;
   height: 132px;
   background-color: transparent;
@@ -78,3 +87,60 @@ div#section-navigation-slider {
 div#section-navigation-slider {
   width: auto;
 }
+=======
+    width: 120px;
+    height: 132px;
+    background-color: transparent;
+    position: relative;
+    margin: 0 auto;
+    background: white;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    border-radius: 15px;
+  }
+  
+  .hexagon {
+    position: absolute;
+  }
+  
+  .user-avatar-content {
+    width: 100px;
+    height: 110px;
+    overflow: hidden;
+    position: absolute;
+  }
+  
+  .hexagon-image {
+    width: 82px;
+    height: 87px;;
+    position: relative;
+    z-index: 3;
+    background-size: cover;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    border-radius: 15px;
+  }
+  
+  .user-avatar-border:before {
+    width: 105px;
+    height: 113px;
+    z-index: 1;
+    content: "";
+    position: absolute;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    border-radius: 15px;
+    left: 8px;
+    top: 8px;
+    background-image: linear-gradient(to right, #41efff, #615dfa);
+  }
+  
+  .hexagon.user-avatar-progress-border {
+    position: absolute;
+    z-index: 2;
+    margin-left: 3.5%;
+    margin-top: 3.3%;
+    width: 92px;
+    height: 100px;
+    background: white;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    border-radius: 15px;
+  }
+>>>>>>> status-online

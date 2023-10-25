@@ -11,11 +11,21 @@ import { AppComponent } from './app.component';
 import { TokenInterceptor } from './interceptor';
 import { loadingInterceptor } from './loadingInterceptor';
 
+<<<<<<< HEAD
+=======
+// login GG
+
+
+>>>>>>> status-online
 // user
 import { HomeComponent } from './home/home.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { NewsfeedComponent } from './user/newsfeed/newsfeed.component';
 import { NavigationComponent } from './user/navigation/navigation.component';
+<<<<<<< HEAD
+=======
+import { ModalComponent } from './user/modal/modal.component';
+>>>>>>> status-online
 import { HeaderProfileComponent } from './user/header-profile/header-profile.component';
 import { ProfileTimelineComponent } from './user/profile-timeline/profile-timeline.component';
 import { PhotosComponent } from './user/photos/photos.component';
@@ -59,6 +69,7 @@ import { UserReportComponent } from './moderator/user-report/user-report.compone
 import { UserReportModeratorDetailComponent } from './moderator/user-report-detail/user-report-detail.component';
 import { ForbiddenWordComponent } from './moderator/forbidden-word/forbidden-word.component';
 
+<<<<<<< HEAD
 import { DatePipe } from '@angular/common';
 import { APP_INITIALIZER } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
@@ -90,6 +101,8 @@ export function appInitializer(cookieService: CookieService, messageService: Mes
   };
 }
 
+=======
+>>>>>>> status-online
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -101,6 +114,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     ForgotPasswordComponent,
     NewsfeedComponent,
     NavigationComponent,
+<<<<<<< HEAD
+=======
+    ModalComponent,
+>>>>>>> status-online
     HeaderProfileComponent,
     ProfileTimelineComponent,
     PhotosComponent,
@@ -136,10 +153,14 @@ export function HttpLoaderFactory(http: HttpClient) {
     ProfileComponent,
     UserReportComponent,
     UserReportModeratorDetailComponent,
+<<<<<<< HEAD
     ForbiddenWordComponent,
     CommentComponent,
     CreatePostComponent,
     ImagesComponent
+=======
+    ForbiddenWordComponent
+>>>>>>> status-online
   ],
   imports: [
     BrowserModule,
@@ -147,11 +168,14 @@ export function HttpLoaderFactory(http: HttpClient) {
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+<<<<<<< HEAD
     // AngularFireModule.initializeApp(firebaseConfig),
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
+=======
+>>>>>>> status-online
     TranslateModule.forRoot({
       defaultLanguage: 'vi_VN',
       loader: {
@@ -167,6 +191,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true,
+<<<<<<< HEAD
     },
     { provide: HTTP_INTERCEPTORS, useClass: loadingInterceptor, multi: true },
     {
@@ -182,3 +207,11 @@ export function HttpLoaderFactory(http: HttpClient) {
 export class AppModule {
 
 }
+=======
+  },
+  { provide: HTTP_INTERCEPTORS, useClass: loadingInterceptor, multi: true },
+  ],
+  bootstrap: [AppComponent],
+})
+export class AppModule {}
+>>>>>>> status-online

@@ -94,6 +94,7 @@ p.delete-fl {
 .user-preview-actions.nofti {
   margin-top: 0.6rem;
 }
+<<<<<<< HEAD
 /* avatar */
 .hexagon-container {
   width: 45px;
@@ -150,4 +151,6 @@ p.delete-fl {
   background: white;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
 }
+=======
+>>>>>>> status-online
   

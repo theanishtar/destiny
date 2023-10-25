@@ -236,7 +236,11 @@ public class AdminControl {
 	}
 
 	// update lastest 7-10
+<<<<<<< HEAD
 	public static String timeCaculate(Calendar datePost) {
+=======
+	public String timeCaculate(Calendar datePost) {
+>>>>>>> status-online
 		String timeCaculate = "";
 
 		Calendar calendar = GregorianCalendar.getInstance();
@@ -281,12 +285,20 @@ public class AdminControl {
 	}
 
 	// update lastest 7-10
+<<<<<<< HEAD
 	public static boolean checkYear(int year) {
+=======
+	public boolean checkYear(int year) {
+>>>>>>> status-online
 		return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
 	}
 
 	// update lastest 7-10
+<<<<<<< HEAD
 	public static int checkMonth(int month, int year) {
+=======
+	public int checkMonth(int month, int year) {
+>>>>>>> status-online
 		int totalDayInMonth = 0;
 		if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
 			totalDayInMonth = 31;

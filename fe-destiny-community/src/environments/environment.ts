@@ -1,5 +1,6 @@
 export const environment = {
     production: false,
+<<<<<<< HEAD
     firebaseConfig : {
       apiKey: "AIzaSyBJbb35x5IWeD8LaAptFOARDOCz-oEJid4",
       authDomain: "destiny-davisy.firebaseapp.com",
@@ -12,4 +13,8 @@ export const environment = {
     // baseUrl: 'https://testchat.hop.sh/'
     baseUrl: 'http://localhost:8080/',
     
+=======
+    // baseUrl: 'https://testchat.hop.sh/'
+    baseUrl: 'http://localhost:8080/'
+>>>>>>> status-online
 };

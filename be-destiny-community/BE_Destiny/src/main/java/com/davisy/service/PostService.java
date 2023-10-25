@@ -7,6 +7,7 @@ import com.davisy.entity.Post;
 public interface PostService {
 	public int countPost(int id);
 
+<<<<<<< HEAD
 	public List<Object[]> getTOP5Post();
 
 	// Lấy tất cả bài post có quan hệ bạn bè hoặc follow
@@ -16,6 +17,10 @@ public interface PostService {
 	public List<Object[]> getCountPost(int id, int provinceId);
 	
 	public List<Object[]> getCountPostProfile(int id);
+=======
+	List<Object[]> getTOP5Post();
+	
+>>>>>>> status-online
 
 	// 21-9-2023 -tìm post theo id
 	public Post findPostByID(int id);
@@ -39,6 +44,7 @@ public interface PostService {
 	// 23-9-2023 -Tổng bài đăng của người dùng đã dăng
 	public int getTotalPostByUser(int id);
 
+<<<<<<< HEAD
 	public Post findById(int id);
 
 	// 23-9-2023 -Danh sách tất cả bài đăng của người dùng theo id
@@ -46,6 +52,11 @@ public interface PostService {
 
 	public List<Object[]> getTop5postProfile(int id);
 
+=======
+	// 23-9-2023 -Danh sách tất cả bài đăng của người dùng theo id
+	public List<Post> getListPostByUserID(int id);
+
+>>>>>>> status-online
 	public void create(Post post);
 
 	public void update(Post post);

@@ -25,7 +25,10 @@ public class WebsocketConfiguration implements WebSocketMessageBrokerConfigurer 
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
 		registry.addEndpoint("/chat").setAllowedOrigins(client_uri).withSockJS();
+<<<<<<< HEAD
 		registry.addEndpoint("/notify").setAllowedOrigins(client_uri).withSockJS();
+=======
+>>>>>>> status-online
 	}
 
 	@Override

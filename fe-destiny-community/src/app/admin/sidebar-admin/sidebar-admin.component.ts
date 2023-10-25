@@ -1,6 +1,9 @@
 import { Component, HostListener, Renderer2, ElementRef, QueryList, ViewChildren } from '@angular/core';
+<<<<<<< HEAD
 import { Router, NavigationEnd } from '@angular/router';
 import { LoginService } from '@app/service/login.service';
+=======
+>>>>>>> status-online
 
 @Component({
   selector: 'app-sidebar-admin',
@@ -8,6 +11,7 @@ import { LoginService } from '@app/service/login.service';
   styleUrls: [`../css/sb-admin-2.min.css`, `../css/home.css`],
 })
 export class SidebarAdminComponent {
+<<<<<<< HEAD
   activeMenuItem: string = '';
 
   constructor(
@@ -22,6 +26,9 @@ export class SidebarAdminComponent {
         }
       });
     }
+=======
+  constructor(private renderer: Renderer2) {}
+>>>>>>> status-online
 
   @ViewChildren('mainColorLink')
   mainColorLinks!: QueryList<ElementRef>;
@@ -48,6 +55,7 @@ export class SidebarAdminComponent {
       });
     });
 
+<<<<<<< HEAD
     // const sideBarItemActive = localStorage.getItem("sidebarActive");
     // sideLinks.forEach((i: HTMLElement) => {
     //   if(sideBarItemActive?.match(i.className)){
@@ -57,6 +65,17 @@ export class SidebarAdminComponent {
     //     this.renderer.removeClass(i.parentElement, "active");
     //   }
     // });
+=======
+    const sideBarItemActive = localStorage.getItem("sidebarActive");
+    sideLinks.forEach((i: HTMLElement) => {
+      if(sideBarItemActive?.match(i.className)){
+        this.renderer.addClass(i.parentElement, "active");
+      }
+      else{
+        this.renderer.removeClass(i.parentElement, "active");
+      }
+    });
+>>>>>>> status-online
 
     this.mainColorLinks.forEach((item: ElementRef) => {
       const li = item.nativeElement;
@@ -130,6 +149,7 @@ export class SidebarAdminComponent {
     }
   }
 
+<<<<<<< HEAD
   updateActiveMenuItem() {
     const currentUrl = this.router.url;
     // Xác định menu item active dựa trên URL hiện tại
@@ -158,4 +178,9 @@ export class SidebarAdminComponent {
   logout(){
     return this.loginService.logout();
   }
+=======
+
+
+
+>>>>>>> status-online
 }

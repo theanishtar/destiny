@@ -2,6 +2,7 @@ package com.davisy.dao;
 
 import java.util.List;
 
+<<<<<<< HEAD
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,6 +12,14 @@ import com.davisy.entity.Post;
 
 @Repository
 public interface PostDAO extends JpaRepository<Post, Integer> {
+=======
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import com.davisy.entity.Post;
+
+public interface PostDAO extends JpaRepository<Post, Long> {
+>>>>>>> status-online
 
 	@Query(value = "select count(p.post_id) as CountPost  from post p where p.user_id =:id", nativeQuery = true)
 	public int countPost(int id);
@@ -36,6 +45,7 @@ public interface PostDAO extends JpaRepository<Post, Integer> {
 	public double getPercentPostSendSuccess();
 
 	// 22-9-2023 -Top 4 bài đăng có lượt yêu thích nhiều nhất
+<<<<<<< HEAD
 	@Query(value = "SELECT p.post_id, COUNT(i.post_id) \r\n" + "FROM post p \r\n" + "INNER JOIN interested i \r\n"
 			+ "ON p.post_id = i.post_id\r\n" + "GROUP BY p.post_id\r\n" + "ORDER BY COUNT(i.post_id) DESC\r\n"
 			+ "LIMIT 4;", nativeQuery = true)
@@ -43,6 +53,16 @@ public interface PostDAO extends JpaRepository<Post, Integer> {
 
 	// 22-9-2023 -Tổng số bài đăng theo từng tháng
 	@Query(value = "SELECT EXTRACT(MONTH FROM date_post) AS MONTH, COUNT(*) \r\n" + "FROM post \r\n"
+=======
+	@Query(value = "SELECT p.post_id, COUNT(i.post_id) \r\n" + "FROM post p \r\n"
+			+ "INNER JOIN interested i \r\n" + "ON p.post_id = i.post_id\r\n" + "GROUP BY p.post_id\r\n"
+			+ "ORDER BY COUNT(i.post_id) DESC\r\n" + "LIMIT 4;", nativeQuery = true)
+	public List<Object[]> getTOP4Post();
+
+	// 22-9-2023 -Tổng số bài đăng theo từng tháng
+	@Query(value = "SELECT EXTRACT(MONTH FROM date_post) AS MONTH, COUNT(*) \r\n"
+			+ "FROM post \r\n"
+>>>>>>> status-online
 			+ "GROUP BY EXTRACT(MONTH FROM date_post) \r\n"
 			+ "ORDER BY EXTRACT(MONTH FROM date_post) ASC;", nativeQuery = true)
 	public List<Object[]> getTotalPostEveryMonth();
@@ -59,6 +79,7 @@ public interface PostDAO extends JpaRepository<Post, Integer> {
 	@Query(value = "SELECT * FROM post WHERE user_id=:id", nativeQuery = true)
 	public List<Post> getListPostByUserID(int id);
 
+<<<<<<< HEAD
 	// Top 5 bài viết có nhiều lượt quan tâm của trang profile
 	@Query(value = "SELECT u.user_id, u.avatar,p.post_id, p.content, COUNT(i.interested_id) AS interest_count\n"
 			+ "FROM post p\n" + "LEFT JOIN interested i ON p.post_id = i.post_id\n"
@@ -88,4 +109,6 @@ public interface PostDAO extends JpaRepository<Post, Integer> {
 			+ "FROM friend_posts fp;", nativeQuery = true)
 	public List<Object[]> getCountPostProfile(int id);
 
+=======
+>>>>>>> status-online
 }

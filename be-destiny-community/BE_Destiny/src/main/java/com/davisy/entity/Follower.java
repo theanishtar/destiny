@@ -42,6 +42,11 @@ public class Follower{
 	
 	@Override
 	public String toString() {
+<<<<<<< HEAD
 	    return "Follower [pk=" + pk + "]";
 	}
+=======
+	    return "Employee [pk=" + pk + "]";
+	  }
+>>>>>>> status-online
 }

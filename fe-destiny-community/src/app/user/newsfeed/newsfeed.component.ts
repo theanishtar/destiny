@@ -22,8 +22,16 @@ import { FollowsService } from '../service/follows.service';
 import { LoadingService } from '../service/loading.service';
 import { PostService } from '../service/post.service';
 import { MessageService } from '@app/user/service/message.service';
+<<<<<<< HEAD
 import { ProfileService } from '../service/profile.service';
 import { DatePipe } from '@angular/common';
+=======
+
+import { connectToChat } from '../../../assets/js/chat/chat.js'
+import * as Stomp from 'stompjs';
+import * as SockJS from 'sockjs-client';
+import { Observable, of } from 'rxjs';
+>>>>>>> status-online
 import '../../../assets/toast/main.js';
 import { forEach } from 'angular';
 declare var toast: any;
@@ -40,22 +48,39 @@ declare var toast: any;
 })
 export class NewsfeedComponent implements OnInit {
   userDisplayName = '';
+<<<<<<< HEAD
   postId: string; // Mã số của bài viết (có thể là mã số duy nhất của mỗi bài viết)
   listSuggested: any[] = [];
   listTop5User: any[] = [];
   listTop5Post: any[] = [];
   listPosts: any;
   isLoading = true;
+=======
+  postId = '123'; // Mã số của bài viết (có thể là mã số duy nhất của mỗi bài viết)
+  listSuggested: any[] = [];
+  listTop5User: any[] = [];
+  listTop5Post: any[] = [];
+  isLoading = false;
+>>>>>>> status-online
   isFollowing: boolean = false;
   checkData1: boolean = false;
   checkData2: boolean = false;
   checkData3: boolean = false;
+<<<<<<< HEAD
   checkData4: boolean = false;
   datePost: string | null
 
   ngOnInit() {
     this.userDisplayName = this.cookieService.get('full_name');
     this.loadPosts();
+=======
+  // sender: any ;
+  // socket?: WebSocket;
+  // stompClient?: Stomp.Client;
+
+  ngOnInit() {
+    this.userDisplayName = this.cookieService.get('full_name');
+>>>>>>> status-online
     this.loadDataSuggest();
     this.loadDataTop5User();
     this.loadDataTop5Post();
@@ -84,15 +109,20 @@ export class NewsfeedComponent implements OnInit {
     public followsService: FollowsService,
     public loadingService: LoadingService,
     public postService: PostService,
+<<<<<<< HEAD
     public messageService: MessageService,
     private datePipe: DatePipe, //Định dạng ngày,
     public profileService: ProfileService
+=======
+    public messageService: MessageService
+>>>>>>> status-online
   ) {
 
   }
 
   /* ============Suggested============= */
   check: boolean = true
+<<<<<<< HEAD
 
   loadDataSuggest() {
     if (Array.isArray(this.followsService.getDataSuggested()) && this.followsService.getDataSuggested().length === 0) {
@@ -103,12 +133,47 @@ export class NewsfeedComponent implements OnInit {
     } else {
       this.listSuggested = this.followsService.getDataSuggested();
       this.check = false
+=======
+  
+  loadDataSuggest() {
+    this.followsService.loadDataSuggest().subscribe(() => {
+      this.listSuggested = this.followsService.getDataSuggested();
+      // console.log('this.listSuggested 1: ' + JSON.stringify(this.listSuggested[1].avatar));
+      if(this.listSuggested){
+        this.check = false
+      }
+>>>>>>> status-online
       if (Array.isArray(this.listSuggested) && this.listSuggested.length === 0) {
         this.checkData1 = true;
         this.check = false;
       }
+<<<<<<< HEAD
     }
   }
+=======
+    });
+  }
+  // loadDataSuggest() {
+  //   if (this.listSuggested) {
+  //     this.check = false;
+  //     this.followsService.loadDataSuggest().subscribe(() => {
+  //       this.listSuggested = this.followsService.getDataSuggested();
+  //       // console.log('this.listSuggested 1: ' + JSON.stringify(this.listSuggested[1].avatar));
+  //       if (Array.isArray(this.listSuggested) && this.listSuggested.length === 0) {
+  //         this.checkData1 = true;
+  //         // this.check = false;
+  //       }
+  //     });
+  //   } else {
+  //     this.listSuggested = this.followsService.getDataSuggested();
+  //     // this.check = false
+  //     if (Array.isArray(this.listSuggested) && this.listSuggested.length === 0) {
+  //       this.checkData1 = true;
+  //       this.check = false;
+  //     }
+  //   }
+  // }
+>>>>>>> status-online
 
   addFollow(id: number) {
     this.followsService.addFollow(id).subscribe((res) => {
@@ -157,6 +222,7 @@ export class NewsfeedComponent implements OnInit {
     });
   }
 
+<<<<<<< HEAD
   /* ============Post============= */
   listPost: any;
   listUser: any[];
@@ -181,6 +247,14 @@ export class NewsfeedComponent implements OnInit {
     //   this.isLoading = false;
     //   body_news.style.display = 'grid';
     // }
+=======
+  /* ============template============= */
+
+  loadData() {
+    this.isLoading = true;
+    const body_news = document.getElementById('body-news')!;
+    body_news.style.display = 'none';
+>>>>>>> status-online
     setTimeout(() => {
       this.isLoading = false;
       body_news.style.display = 'grid';
@@ -262,4 +336,16 @@ export class NewsfeedComponent implements OnInit {
   openModalCreatePost() {
     this.modalService.openModalCreatePost();
   }
+<<<<<<< HEAD
+=======
+  closeModalCreatePost() {
+    this.modalService.closeModalCreatePost();
+  }
+  openModalComment() {
+    this.modalService.openModalComment();
+  }
+  closeModalComment() {
+    this.modalService.closeModalComment();
+  }
+>>>>>>> status-online
 }

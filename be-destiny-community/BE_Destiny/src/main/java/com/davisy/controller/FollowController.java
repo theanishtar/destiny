@@ -5,7 +5,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+<<<<<<< HEAD
 import org.springframework.scheduling.annotation.Async;
+=======
+>>>>>>> status-online
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+<<<<<<< HEAD
 import com.davisy.SpamRrequestCheck;
+=======
+>>>>>>> status-online
 import com.davisy.config.JwtTokenUtil;
 import com.davisy.entity.ChatParticipants;
 import com.davisy.entity.ChatParticipants.Primary;
@@ -122,8 +128,12 @@ public class FollowController {
 		return ResponseEntity.status(200).body(reloadData(email));
 	}
 
+<<<<<<< HEAD
 	@Async
 	synchronized public void createNewChat(String fromUserId, String toUserId) {
+=======
+	public void createNewChat(String fromUserId, String toUserId) {
+>>>>>>> status-online
 		Chats chats = new Chats();
 		List<String> list = new ArrayList<>();
 		list.add(fromUserId);
@@ -139,8 +149,12 @@ public class FollowController {
 		}
 	}
 
+<<<<<<< HEAD
 	@Async
 	synchronized public void updateChatsUnfollow(String fromUserId, String toUserId) {
+=======
+	public void updateChatsUnfollow(String fromUserId, String toUserId) {
+>>>>>>> status-online
 		Chats chats = chatsServiceImpl.findChatNames(fromUserId, toUserId);
 		chats.setIsfriend(false);
 		chatsServiceImpl.update(chats);

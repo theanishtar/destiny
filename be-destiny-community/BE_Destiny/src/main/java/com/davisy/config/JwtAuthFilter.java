@@ -53,7 +53,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	ObjectMapper objectMapper = new ObjectMapper();
 
 	@Override
+<<<<<<< HEAD
 	protected  void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+=======
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+>>>>>>> status-online
 			throws ServletException, IOException {
 		System.out.println("req" + request.getUserPrincipal());
 		request.getAttributeNames().asIterator().forEachRemaining(attributeName -> {

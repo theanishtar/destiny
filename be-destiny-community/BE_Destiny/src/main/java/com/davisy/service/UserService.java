@@ -40,11 +40,14 @@ public interface UserService {
 	// 22-0-2023 -Tổng số người dùng tham gia từng theo từng tháng
 	public List<Object[]> getTotalUserEveryMonth();
 
+<<<<<<< HEAD
 	// Lấy user đã đăng bài
 	public List<Object[]> getUserofPost(int id, int provinceId);
 	
 	public List<Object[]> getUserofPostProfile(int id);
 
+=======
+>>>>>>> status-online
 	public void create(User user);
 
 	public void update(User user);

@@ -3,6 +3,7 @@
 <!-- CONTENT GRID -->
 <div class="content-grid">
   <app-header-profile></app-header-profile>
+<<<<<<< HEAD
 
   <!-- GRID -->
   <form
@@ -11,11 +12,18 @@
     action=""
     novalidate
   >
+=======
+  
+
+  <!-- GRID -->
+  <form action="">
+>>>>>>> status-online
     <div class="grid grid-3-9 medium-space">
       <!-- GRID COLUMN -->
       <div class="account-hub-sidebar">
         <!-- SIDEBAR BOX -->
         <div class="sidebar-box no-padding">
+<<<<<<< HEAD
           <figure
             class="user-preview-cover liquid"
             style="
@@ -60,10 +68,54 @@
           </div>
           <!-- /USER SHORT DESCRIPTION AVATAR -->
 
+=======
+          <figure class="user-preview-cover liquid" style="background: url(&quot;../../assets/images/cover/04.jpg&quot;) center center / cover no-repeat;"><img _ngcontent-ng-c2190160884="" src="../../assets/images/cover/04.jpg" alt="cover-04" style="display: none;"></figure>
+          <!-- USER SHORT DESCRIPTION AVATAR -->
+          <div class="change-avatar">
+            <a class="user-short-description-avatar user-avatar big">
+              <!-- USER AVATAR BORDER -->
+              <div class="user-avatar-border">
+                <!-- HEXAGON -->
+                <div class="hexagon-148-164"></div>
+                <!-- /HEXAGON -->
+              </div>
+              <!-- /USER AVATAR BORDER -->
+  
+              <!-- USER AVATAR CONTENT -->
+              <label class="user-avatar-content">
+                <input type="file" class="file" style="display: none" />
+                <!-- HEXAGON -->
+                <div class="hexagon-image-100-110" data-src="../../assets/images/avatar/01.jpg"></div>
+                <!-- /HEXAGON -->
+                <input type="text" formControlName="pic" id="avatar" style="display: none" />
+              </label>
+              <!-- /USER AVATAR CONTENT -->
+  
+              <!-- USER AVATAR PROGRESS -->
+              <div class="user-avatar-progress">
+                <!-- HEXAGON -->
+                <div class="hexagon-progress-124-136"></div>
+                <!-- /HEXAGON -->
+              </div>
+              <!-- /USER AVATAR PROGRESS -->
+  
+              <!-- USER AVATAR PROGRESS BORDER -->
+              <div class="user-avatar-progress-border">
+                <!-- HEXAGON -->
+                <div class="hexagon-border-124-136"></div>
+                <!-- /HEXAGON -->
+              </div>
+              <!-- /USER AVATAR PROGRESS BORDER -->
+            </a>
+          </div>
+          <!-- /USER SHORT DESCRIPTION AVATAR -->
+  
+>>>>>>> status-online
           <!-- FORM ITEM -->
           <div class="form-item-bio">
             <!-- FORM INPUT -->
             <div class="form-input small">
+<<<<<<< HEAD
               <textarea
                 (input)="checkCharacterLimit()"
                 [readonly]="readonlyCondition"
@@ -79,10 +131,17 @@
               <span class="count-characters"
                 ><span id="charCount">0</span><b>/180</b></span
               >
+=======
+              <textarea [(ngModel)]="textAreaContent" (input)="checkCharacterLimit()" [readonly]="readonlyCondition"
+                (keydown)="onKeyDown($event)" name="textAreaContent" class="bio" id="bio" rows="7"
+                placeholder="Viết đôi lời giới thiệu về bạn..."></textarea>
+              <span class="count-characters"><span id="charCount">0</span><b>/180</b></span>
+>>>>>>> status-online
             </div>
             <!-- /FORM INPUT -->
           </div>
           <!-- /FORM ITEM -->
+<<<<<<< HEAD
 
           <!-- SIDEBAR BOX FOOTER -->
           <div class="sidebar-box-footer">
@@ -90,6 +149,15 @@
             <button class="button primary" type="submit">Lưu thay đổi</button>
             <!-- /BUTTON -->
 
+=======
+  
+          <!-- SIDEBAR BOX FOOTER -->
+          <div class="sidebar-box-footer">
+            <!-- BUTTON -->
+            <p class="button primary">Lưu thay đổi</p>
+            <!-- /BUTTON -->
+  
+>>>>>>> status-online
             <!-- BUTTON -->
             <p class="button white small-space">Khóa tài khoản</p>
             <!-- /BUTTON -->
@@ -99,7 +167,11 @@
         <!-- /SIDEBAR BOX -->
       </div>
       <!-- /GRID COLUMN -->
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> status-online
       <!-- GRID COLUMN -->
       <div class="account-hub-content">
         <!-- SECTION HEADER -->
@@ -109,7 +181,11 @@
             <!-- SECTION PRETITLE -->
             <p class="section-pretitle">Thông tin</p>
             <!-- /SECTION PRETITLE -->
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> status-online
             <!-- SECTION TITLE -->
             <h2 class="section-title">Tài khoản</h2>
             <!-- /SECTION TITLE -->
@@ -117,7 +193,11 @@
           <!-- /SECTION HEADER INFO -->
         </div>
         <!-- /SECTION HEADER -->
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> status-online
         <!-- GRID COLUMN -->
         <div class="grid-column">
           <!-- WIDGET BOX -->
@@ -125,6 +205,7 @@
             <!-- WIDGET BOX TITLE -->
             <p class="widget-box-title">Thông tin của bạn</p>
             <!-- /WIDGET BOX TITLE -->
+<<<<<<< HEAD
 
             <!-- WIDGET BOX CONTENT -->
             <div class="widget-box-content">
@@ -385,17 +466,220 @@
                 <!-- /FORM ITEM -->
               </div>
               <!-- /FORM ROW -->
+=======
+  
+            <!-- WIDGET BOX CONTENT -->
+            <div class="widget-box-content">
+                <!-- FORM ROW -->
+                <div class="form-row split">
+                  <!-- FORM ITEM -->
+                  <div class="form-item">
+                    <!-- FORM INPUT -->
+                    <div class="form-input small">
+                      <label for="profile-name">Họ tên</label>
+                      <input type="text" id="profile-name" name="profile_name" />
+                    </div>
+                    <!-- /FORM INPUT -->
+                  </div>
+                  <!-- /FORM ITEM -->
+  
+                  <!-- FORM ITEM -->
+                  <div class="form-item">
+                    <!-- FORM INPUT -->
+                    <div class="form-input small">
+                      <label for="profile-tagline">Số điện thoại</label>
+                      <input type="text" id="profile-tagline" name="profile_tagline" />
+                    </div>
+                    <!-- /FORM INPUT -->
+                  </div>
+                  <!-- /FORM ITEM -->
+                </div>
+                <!-- /FORM ROW -->
+  
+                <!-- FORM ROW -->
+                <div class="form-row split">
+                  <!-- FORM ITEM -->
+                  <div class="form-item">
+                    <!-- FORM INPUT -->
+                    <div class="form-input small">
+                      <label for="profile-name">Email</label>
+                      <input type="text" id="profile-name" name="profile_name" />
+                    </div>
+                    <!-- /FORM INPUT -->
+                  </div>
+                  <!-- /FORM ITEM -->
+  
+                  <!-- FORM ITEM -->
+                  <div class="form-item">
+                    <!-- FORM INPUT -->
+                    <div class="form-input small">
+                      <label for="profile-tagline">Mật khẩu</label>
+                      <input type="text" id="profile-tagline" name="profile_tagline" />
+                    </div>
+                    <!-- /FORM INPUT -->
+                  </div>
+                  <!-- /FORM ITEM -->
+                </div>
+                <!-- /FORM ROW -->
+  
+  
+                <!-- FORM ROW -->
+                <div class="form-row split">
+                  <!-- FORM ITEM -->
+                  <div class="form-item">
+                    <!-- FORM INPUT DECORATED -->
+                    <div class="form-input-decorated">
+                      <!-- FORM INPUT -->
+                      <div class="form-input small">
+                        <label for="profile-birthday">Ngày sinh</label>
+                        <input type="text" id="profile-birthday" name="profile_birthday" />
+                      </div>
+                      <!-- /FORM INPUT -->
+  
+                      <!-- FORM INPUT ICON -->
+                      <svg class="form-input-icon icon-events">
+                        <use xlink:href="#svg-events"></use>
+                      </svg>
+                      <!-- /FORM INPUT ICON -->
+                    </div>
+                    <!-- /FORM INPUT DECORATED -->
+                  </div>
+                  <!-- /FORM ITEM -->
+  
+                  <!-- FORM ITEM -->
+                  <div class="form-item">
+                    <!-- FORM INPUT -->
+                    <div class="form-input-gender">
+                      <label for="profile-occupation">Giới tính</label>
+                      <div class="radio-button-container">
+                        <div class="radio-button">
+                          <input type="radio" class="radio-button__input" id="radio1" name="radio-group" />
+                          <label class="radio-button__label" for="radio1">
+                            <span class="radio-button__custom"></span>
+                            Nam
+                          </label>
+                        </div>
+                        <div class="radio-button">
+                          <input type="radio" class="radio-button__input" id="radio2" name="radio-group" />
+                          <label class="radio-button__label" for="radio2">
+                            <span class="radio-button__custom"></span>
+                            Nữ
+                          </label>
+                        </div>
+                        <div class="radio-button">
+                          <input type="radio" class="radio-button__input" id="radio3" name="radio-group" />
+                          <label class="radio-button__label" for="radio3">
+                            <span class="radio-button__custom"></span>
+                            Khác
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- /FORM INPUT -->
+                  </div>
+                  <!-- /FORM ITEM -->
+                </div>
+                <!-- /FORM ROW -->
+                <!-- FORM ROW -->
+                <div class="form-row split">
+                  <!-- FORM ITEM -->
+                  <div class="form-item">
+                    <!-- FORM SELECT -->
+                    <div class="form-select">
+                      <label for="profile-country">Tỉnh/Thành phố</label>
+                      <select id="profile-country" name="profile_country">
+                        <option value="0">Select your Country</option>
+                        <option value="1" selected>United States</option>
+                      </select>
+                      <!-- FORM SELECT ICON -->
+                      <svg class="form-select-icon icon-small-arrow">
+                        <use xlink:href="#svg-small-arrow"></use>
+                      </svg>
+                      <!-- /FORM SELECT ICON -->
+                    </div>
+                    <!-- /FORM SELECT -->
+                  </div>
+                  <!-- /FORM ITEM -->
+  
+                  <!-- FORM ITEM -->
+                  <div class="form-item">
+                    <!-- FORM SELECT -->
+                    <div class="form-select">
+                      <label for="profile-city">Quận/Huyện</label>
+                      <select id="profile-city" name="profile_city">
+                        <option value="0">Select your City</option>
+                        <option value="1" selected>New York</option>
+                      </select>
+                      <!-- FORM SELECT ICON -->
+                      <svg class="form-select-icon icon-small-arrow">
+                        <use xlink:href="#svg-small-arrow"></use>
+                      </svg>
+                      <!-- /FORM SELECT ICON -->
+                    </div>
+                    <!-- /FORM SELECT -->
+                  </div>
+                  <!-- /FORM ITEM -->
+                </div>
+                <!-- /FORM ROW -->
+  
+                <!-- FORM ROW -->
+                <div class="form-row split">
+                  <!-- FORM ITEM -->
+                  <div class="form-item">
+                    <!-- FORM SELECT -->
+                    <div class="form-select">
+                      <label for="profile-status">Phường/Xã</label>
+                      <select id="profile-status" name="profile_status">
+                        <option value="0">Select your Status</option>
+                        <option value="1" selected>In a Relationship</option>
+                      </select>
+                      <!-- FORM SELECT ICON -->
+                      <svg class="form-select-icon icon-small-arrow">
+                        <use xlink:href="#svg-small-arrow"></use>
+                      </svg>
+                      <!-- /FORM SELECT ICON -->
+                    </div>
+                    <!-- /FORM SELECT -->
+                  </div>
+                  <!-- /FORM ITEM -->
+  
+                  <!-- FORM ITEM -->
+                  <div class="form-item">
+                    <!-- FORM INPUT -->
+                    <div class="form-input small active">
+                      <label for="profile-birthplace">Ngày gia nhập</label>
+                      <input type="text" id="profile-birthplace" name="profile_birthplace" value="12/12/2023"
+                        [readOnly]="true">
+                    </div>
+                    <!-- /FORM INPUT -->
+                  </div>
+                  <!-- /FORM ITEM -->
+                </div>
+                <!-- /FORM ROW -->
+>>>>>>> status-online
             </div>
             <!-- WIDGET BOX CONTENT -->
           </div>
           <!-- /WIDGET BOX -->
+<<<<<<< HEAD
+=======
+  
+>>>>>>> status-online
         </div>
         <!-- /GRID COLUMN -->
       </div>
       <!-- /GRID COLUMN -->
     </div>
   </form>
+<<<<<<< HEAD
 
   <!-- /GRID -->
 </div>
 <!-- /CONTENT GRID -->
+=======
+  <!-- /GRID -->
+</div>
+<!-- /CONTENT GRID -->
+
+<app-modal></app-modal>
+>>>>>>> status-online

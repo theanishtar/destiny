@@ -2,7 +2,10 @@ package com.davisy.dao;
 
 import java.util.List;
 
+<<<<<<< HEAD
 import org.springframework.cache.annotation.Cacheable;
+=======
+>>>>>>> status-online
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.davisy.entity.Messages;
 
 @Transactional
+<<<<<<< HEAD
 //@Cacheable("messages")//Tạo bộ nhớ đệm
+=======
+>>>>>>> status-online
 public interface MessagesDAO extends JpaRepository<Messages, Integer> {
 
 	@Query(value = "SELECT COUNT(messages.id) FROM messages WHERE send_status =false and  sender_id =:id", nativeQuery = true)

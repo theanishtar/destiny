@@ -4,6 +4,7 @@
   align-items: center;
   margin-top: -5rem;
 }
+<<<<<<< HEAD
 
 .form-item-bio {
   padding: 0 10px;
@@ -13,11 +14,20 @@ textarea#bio {
   height: 210px;
 }
 
+=======
+.form-item-bio {
+  padding: 0 10px;
+}
+textarea#bio {
+  height: 210px;
+}
+>>>>>>> status-online
 span.count-characters {
   position: absolute;
   margin-top: 70%;
   margin-left: -20%;
 }
+<<<<<<< HEAD
 
 @media screen and (max-width: 1440px) {
   span.count-characters {
@@ -25,6 +35,13 @@ span.count-characters {
   }
 }
 
+=======
+@media screen and (max-width: 1440px) {
+span.count-characters {
+  display: none;
+}
+}
+>>>>>>> status-online
 /* ========= */
 .radio-button-container {
   display: flex;
@@ -55,7 +72,11 @@ span.count-characters {
   color: #ACAEC9;
   cursor: pointer;
   transition: all 0.3s ease;
+<<<<<<< HEAD
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+=======
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+>>>>>>> status-online
 }
 
 .radio-button__custom {
@@ -69,14 +90,22 @@ span.count-characters {
   transition: all 0.3s ease;
 }
 
+<<<<<<< HEAD
 .radio-button__input:checked+.radio-button__label .radio-button__custom {
+=======
+.radio-button__input:checked + .radio-button__label .radio-button__custom {
+>>>>>>> status-online
   background-color: #4c8bf5;
   border-color: transparent;
   transform: scale(0.8);
   box-shadow: 0 0 20px #4c8bf580;
 }
 
+<<<<<<< HEAD
 .radio-button__input:checked+.radio-button__label {
+=======
+.radio-button__input:checked + .radio-button__label {
+>>>>>>> status-online
   color: #4c8bf5;
 }
 
@@ -90,11 +119,15 @@ select {
   height: 55px;
   padding: 0 18px;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> status-online
 label {
   line-height: 1.5em !important;
   font-size: 14px;
 }
+<<<<<<< HEAD
 
 .form-input-gender {
   padding: 0 15px;
@@ -194,4 +227,25 @@ figure.user-preview-cover.liquid {
 .user-avatar.big .user-avatar-content {
   top: 20.5px;
   left: 19px;
+=======
+.form-input-gender {
+  padding: 0 15px;
+}
+.form{
+border: none;
+padding: 0px;
+box-shadow: none;
+}
+.form-input.small input, .form-select select{
+height: 55px;
+}
+.form-row + .form-row {
+margin-top: 31px;
+}
+/* banner */
+figure.user-preview-cover.liquid {
+height: 120px;
+border-top-right-radius: 12px;
+border-top-left-radius: 12px;
+>>>>>>> status-online
 }

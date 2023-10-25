@@ -145,6 +145,7 @@ public class UserServiceImpl implements UserService {
 		userDao.saveAndFlush(user);
 	}
 
+<<<<<<< HEAD
 	// Lấy user đã đăng bài
 	@Override
 	public List<Object[]> getUserofPost(int id,int provinceId) {
@@ -156,4 +157,6 @@ public class UserServiceImpl implements UserService {
 		return userDao.getUserofPostProfile(id);
 	}
 
+=======
+>>>>>>> status-online
 }

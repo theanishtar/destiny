@@ -1,22 +1,32 @@
 package com.davisy.controller;
 
+<<<<<<< HEAD
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+=======
+import java.util.ArrayList;
+>>>>>>> status-online
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+<<<<<<< HEAD
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+=======
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+>>>>>>> status-online
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+<<<<<<< HEAD
 import com.davisy.auth.AuthenticationRequest;
 import com.davisy.auth.AuthenticationResponse;
 import com.davisy.config.JwtTokenUtil;
@@ -44,6 +54,15 @@ import com.davisy.service.impl.PostServiceImpl;
 import com.davisy.service.impl.ProvinceServiceImpl;
 import com.davisy.service.impl.UserServiceImpl;
 import com.davisy.service.impl.WardServiceImpl;
+=======
+import com.davisy.config.JwtTokenUtil;
+import com.davisy.entity.DataFollows;
+import com.davisy.entity.User;
+import com.davisy.service.impl.FollowServiceImpl;
+import com.davisy.service.impl.PostImagesServiceImpl;
+import com.davisy.service.impl.PostServiceImpl;
+import com.davisy.service.impl.UserServiceImpl;
+>>>>>>> status-online
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -60,6 +79,7 @@ public class ProfileContronller {
 	PostServiceImpl postServiceImpl;
 	@Autowired
 	PostImagesServiceImpl postImagesServiceImpl;
+<<<<<<< HEAD
 	@Autowired
 	ProvinceServiceImpl provinceServiceImpl;
 	@Autowired
@@ -84,6 +104,11 @@ public class ProfileContronller {
 
 	@PostMapping("/v1/user/profile/data/timeline")
 	public ResponseEntity<ProfileEnitity> loadProfile(HttpServletRequest request, @RequestBody int toProfileUser) {
+=======
+
+	@PostMapping("/v1/user/profile/data/header")
+	public ResponseEntity<DataFollows> loadProfile(HttpServletRequest request, @RequestBody int toProfileUser) {
+>>>>>>> status-online
 		try {
 			String email = jwtTokenUtil.getEmailFromHeader(request);
 			return ResponseEntity.ok().body(loadProfile(email, toProfileUser));
@@ -92,6 +117,7 @@ public class ProfileContronller {
 		}
 	}
 
+<<<<<<< HEAD
 	@GetMapping("/v1/user/profile/load/data")
 	public ResponseEntity<UserProfile> adminProfile(HttpServletRequest request) {
 
@@ -187,17 +213,27 @@ public class ProfileContronller {
 //public ResponseEntity<T>
 
 	public ProfileEnitity loadProfile(String email, int profileId) {
+=======
+	public DataFollows loadProfile(String email, int profileId) {
+>>>>>>> status-online
 		User user1 = userServiceImpl.findByEmail(email);
 		User user = new User();
 //		int id = 0;
 		boolean check = false;
+<<<<<<< HEAD
 		if (user1.getUser_id() == profileId || profileId == 0) {
 			user = user1;
+=======
+		if (user1.getUser_id() == profileId) {
+			user = user1;
+
+>>>>>>> status-online
 		} else {
 			user = userServiceImpl.findById(profileId);
 			check = true;
 		}
 		int id = user.getUser_id();
+<<<<<<< HEAD
 		int provinceId = Integer.valueOf(user.getIdProvince());
 		List<Object[]> listUser = userServiceImpl.getUserofPostProfile(id);
 		List<Post> listPosts = postServiceImpl.getListPostByUserID(id);
@@ -205,6 +241,10 @@ public class ProfileContronller {
 		
 		DataFollows dataFollows = new DataFollows();
 		ProfileEnitity profileEnitity = new ProfileEnitity();
+=======
+		System.out.println("id: ========================================== " + id);
+		DataFollows dataFollows = new DataFollows();
+>>>>>>> status-online
 		int countPost = postServiceImpl.countPost(id);
 		int countFollower = followServiceImpl.countFollowers(id);
 		int countImg = postImagesServiceImpl.countPostImages(id);
@@ -226,6 +266,7 @@ public class ProfileContronller {
 		} else if (user1.getUser_id() == profileId) {
 			dataFollows.setCheckFollow(true);
 		}
+<<<<<<< HEAD
 		profileEnitity.setDataFollows(dataFollows);
 		profileEnitity.setImages(postImagesServiceImpl.findAllImagesUser(id));
 		profileEnitity.setDateJoin(user.getDay_create());
@@ -323,4 +364,8 @@ public class ProfileContronller {
 		}
 	}
 
+=======
+		return dataFollows;
+	}
+>>>>>>> status-online
 }

@@ -12,7 +12,11 @@ export class AdminProfileService {
 
   private getAdminAvartarAPI = environment.baseUrl + 'v1/admin/checkAdminLog';
   private getAdminProfileAPI = environment.baseUrl + 'v1/admin/profile';
+<<<<<<< HEAD
   private getAllGenderAPI = environment.baseUrl + 'v1/admin/getAllGender';
+=======
+  private getAllGenDerAPI = environment.baseUrl + 'v1/admin/getAllGender';
+>>>>>>> status-online
   private getAllProvinceNameAPI = environment.baseUrl + 'v1/admin/getAllProvinceName';
   private getAllDistrictNameAPI = environment.baseUrl + 'v1/admin/getAllDistrictName/';
   private getAllWardNameAPI = environment.baseUrl + 'v1/admin/getAllWardName/';
@@ -50,7 +54,11 @@ export class AdminProfileService {
   }
 
   loadAllGender(){
+<<<<<<< HEAD
     return this.http.get<any>(this.getAllGenderAPI).pipe(
+=======
+    return this.http.get<any>(this.getAllGenDerAPI).pipe(
+>>>>>>> status-online
       tap((response) => {
         this.genders = JSON.parse(JSON.stringify(response));
         this.setAllGender(this.genders);

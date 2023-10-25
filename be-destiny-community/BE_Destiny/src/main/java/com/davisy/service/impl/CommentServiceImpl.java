@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.davisy.dao.CommentDAO;
 import com.davisy.entity.Comment;
+<<<<<<< HEAD
 import com.davisy.entity.CommentEntity;
 import com.davisy.service.CommentService;
 
@@ -16,22 +17,43 @@ public class CommentServiceImpl implements CommentService {
 	private CommentDAO commentDao;
 
 	// 22-9-2023 -lấy tất cả bình luận của bài đăng
+=======
+import com.davisy.service.CommentService;
+
+@Service
+public class CommentServiceImpl implements CommentService{
+	@Autowired
+	private CommentDAO commentDao;
+
+	//22-9-2023 -lấy tất cả bình luận của bài đăng
+>>>>>>> status-online
 	@Override
 	public List<Comment> getListCommentByPostID(int id) {
 		return commentDao.getListCommentByPostID(id);
 	}
+<<<<<<< HEAD
 
 	// 22-9-2023 -lấy tổng bình luận của bài đăng)
+=======
+	
+	//22-9-2023 -lấy tổng bình luận của bài đăng)
+>>>>>>> status-online
 	@Override
 	public int totalCommentByPost(int id) {
 		return commentDao.totalCommentByPost(id);
 	}
+<<<<<<< HEAD
 
 	// 23-9-2023 -lấy tổng bình luận của người dùng đã bình luận
+=======
+	
+	//23-9-2023 -lấy tổng bình luận của người dùng đã bình luận
+>>>>>>> status-online
 	@Override
 	public int totalCommentByUser(int id) {
 		return commentDao.totalCommentByUser(id);
 	}
+<<<<<<< HEAD
 
 	@Override
 	public Comment findById(int id) {
@@ -62,4 +84,6 @@ public class CommentServiceImpl implements CommentService {
 	public void delete(Comment comment) {
 		commentDao.delete(comment);
 	}
+=======
+>>>>>>> status-online
 }

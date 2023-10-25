@@ -4,6 +4,7 @@
   class="navigation-widget navigation-widget-desktop closed sidebar left delayed"
 >
   <!-- USER AVATAR -->
+<<<<<<< HEAD
   <a
     class="user-avatar small user-status-avatar no-border no-outline"
     (click)="this.profileService.loadDataProfileTimeline(0)"
@@ -23,6 +24,35 @@
       </div>
       <p class="user-avatar-badge-text">1</p>
     </div>
+=======
+  <a class="user-avatar small no-outline online" href="profile">
+    <!-- USER AVATAR CONTENT -->
+    <div class="user-avatar-content">
+      <!-- HEXAGON -->
+      <div
+        class="hexagon-image-30-32"
+        data-src="../../../assets/images/avatar/01.jpg"
+      ></div>
+      <!-- /HEXAGON -->
+    </div>
+    <!-- /USER AVATAR CONTENT -->
+
+    <!-- USER AVATAR PROGRESS -->
+    <div class="user-avatar-progress">
+      <!-- HEXAGON -->
+      <div class="hexagon-progress-40-44"></div>
+      <!-- /HEXAGON -->
+    </div>
+    <!-- /USER AVATAR PROGRESS -->
+
+    <!-- USER AVATAR PROGRESS BORDER -->
+    <div class="user-avatar-progress-border">
+      <!-- HEXAGON -->
+      <div class="hexagon-border-40-44"></div>
+      <!-- /HEXAGON -->
+    </div>
+    <!-- /USER AVATAR PROGRESS BORDER -->
+>>>>>>> status-online
   </a>
   <!-- /USER AVATAR -->
 
@@ -30,10 +60,14 @@
   <div>
     <ul class="menu small">
       <!-- MENU ITEM -->
+<<<<<<< HEAD
       <li
         [class.menu-item]="true"
         [class.active]="activeMenuItem === 'newsfeed'"
       >
+=======
+      <li [class.menu-item]="true" [class.active]="activeMenuItem === 'newsfeed'">
+>>>>>>> status-online
         <!-- MENU ITEM LINK -->
         <a
           [attr.data-title]="'navbar_home' | translate"
@@ -68,6 +102,7 @@
       </li>
       <!-- /MENU ITEM -->
 
+<<<<<<< HEAD
       <!-- MENU ITEM -->
       <li
         [class.menu-item]="true"
@@ -101,6 +136,31 @@
         [class.menu-item]="true"
         [class.active]="activeMenuItem === 'history'"
       >
+=======
+<!-- MENU ITEM -->
+<li [class.menu-item]="true" [class.active]="activeMenuItem === 'message'">
+  <!-- MENU ITEM LINK -->
+  <a
+    [attr.data-title]="'sidebar_setting' | translate"
+    class="menu-item-link"
+    routerLink="/message"
+  >
+    <!-- MENU ITEM LINK ICON -->
+    <div class="user-avatar small no-outline" [ngClass]="messageService.notif_mess ? 'online notif-mess' : ''" style="margin-right: 1rem;">
+      <div class="menu-item-link-icon icon-badges">
+        <i class="fa-solid fa-paper-plane"></i>
+      </div>
+    </div>
+    
+    <!-- /MENU ITEM LINK ICON -->
+  </a>
+  <!-- /MENU ITEM LINK -->
+</li>
+<!-- /MENU ITEM -->
+
+      <!-- MENU ITEM -->
+      <li [class.menu-item]="true" [class.active]="activeMenuItem === 'history'">
+>>>>>>> status-online
         <!-- MENU ITEM LINK -->
         <a
           [attr.data-title]="'sidebar_history' | translate"
@@ -118,10 +178,14 @@
       <!-- /MENU ITEM -->
 
       <!-- MENU ITEM -->
+<<<<<<< HEAD
       <li
         [class.menu-item]="true"
         [class.active]="activeMenuItem === 'contact'"
       >
+=======
+      <li [class.menu-item]="true" [class.active]="activeMenuItem === 'contact'">
+>>>>>>> status-online
         <!-- MENU ITEM LINK -->
         <a
           [attr.data-title]="'navbar_contact' | translate"
@@ -139,10 +203,14 @@
       <!-- /MENU ITEM -->
 
       <!-- MENU ITEM -->
+<<<<<<< HEAD
       <li
         [class.menu-item]="true"
         [class.active]="activeMenuItem === 'setting'"
       >
+=======
+      <li [class.menu-item]="true" [class.active]="activeMenuItem === 'setting'">
+>>>>>>> status-online
         <!-- MENU ITEM LINK -->
         <a
           [attr.data-title]="'sidebar_setting' | translate"
@@ -283,6 +351,7 @@
     <!-- /MENU ITEM -->
 
     <!-- MENU ITEM -->
+<<<<<<< HEAD
     <li [class.menu-item]="true" [class.active]="activeMenuItem === 'message'">
       <!-- MENU ITEM LINK -->
       <a class="menu-item-link" routerLink="/message">
@@ -296,6 +365,21 @@
       <!-- /MENU ITEM LINK -->
     </li>
     <!-- /MENU ITEM -->
+=======
+<li [class.menu-item]="true" [class.active]="activeMenuItem === 'message'">
+  <!-- MENU ITEM LINK -->
+  <a class="menu-item-link" routerLink="/message">
+    <!-- MENU ITEM LINK ICON -->
+    <div class="menu-item-link-icon icon-newsfeed">
+      <i class="fa-solid fa-paper-plane"></i>
+    </div>
+    <!-- /MENU ITEM LINK ICON -->
+    {{ "navbar_home" | translate }}
+  </a>
+  <!-- /MENU ITEM LINK -->
+</li>
+<!-- /MENU ITEM -->
+>>>>>>> status-online
 
     <!-- MENU ITEM -->
     <li [class.menu-item]="true" [class.active]="activeMenuItem === 'follow'">
@@ -451,6 +535,7 @@
       <!-- /MENU ITEM LINK -->
     </li>
     <!-- /MENU ITEM -->
+<<<<<<< HEAD
     <!-- MENU ITEM -->
     <li [class.menu-item]="true" [class.active]="activeMenuItem === 'message'">
       <!-- MENU ITEM LINK -->
@@ -465,6 +550,22 @@
       <!-- /MENU ITEM LINK -->
     </li>
     <!-- /MENU ITEM -->
+=======
+<!-- MENU ITEM -->
+<li [class.menu-item]="true" [class.active]="activeMenuItem === 'message'">
+  <!-- MENU ITEM LINK -->
+  <a class="menu-item-link" routerLink="/message">
+    <!-- MENU ITEM LINK ICON -->
+    <div class="menu-item-link-icon icon-newsfeed">
+      <i class="fa-solid fa-paper-plane"></i>
+    </div>
+    <!-- /MENU ITEM LINK ICON -->
+    {{ "navbar_home" | translate }}
+  </a>
+  <!-- /MENU ITEM LINK -->
+</li>
+<!-- /MENU ITEM -->
+>>>>>>> status-online
     <!-- MENU ITEM -->
     <li [class.menu-item]="true" [class.active]="activeMenuItem === 'follow'">
       <!-- MENU ITEM LINK -->
@@ -993,6 +1094,7 @@
       <!-- ACTION LIST ITEM WRAP -->
       <div class="action-list-item-wrap">
         <!-- ACTION LIST ITEM -->
+<<<<<<< HEAD
         <div
           class="action-list-item unread header-dropdown-trigger"
           (click)="modalService.removeNotify()"
@@ -1010,6 +1112,9 @@
               right: 10px;
             "
           ></div>
+=======
+        <div class="action-list-item unread header-dropdown-trigger">
+>>>>>>> status-online
           <!-- ACTION LIST ITEM ICON -->
           <svg class="action-list-item-icon icon-notification">
             <use xlink:href="#svg-notification"></use>
@@ -1044,6 +1149,7 @@
 
           <!-- DROPDOWN BOX LIST -->
           <div class="dropdown-box-list" data-simplebar>
+<<<<<<< HEAD
             <!-- Comment -->
             <div
               class="dropdown-box-list-item"
@@ -1071,19 +1177,275 @@
                     </div>
                     <p class="user-avatar-badge-text">1</p>
                   </div>
+=======
+            <!-- DROPDOWN BOX LIST ITEM -->
+            <div class="dropdown-box-list-item unread">
+              <!-- USER STATUS -->
+              <div class="user-status notification">
+                <!-- USER STATUS AVATAR -->
+                <a class="user-status-avatar" href="profile">
+                  <!-- USER AVATAR -->
+                  <div class="user-avatar small no-outline">
+                    <!-- USER AVATAR CONTENT -->
+                    <div class="user-avatar-content">
+                      <!-- HEXAGON -->
+                      <div
+                        class="hexagon-image-30-32"
+                        data-src="../../../assets/images/avatar/03.jpg"
+                      ></div>
+                      <!-- /HEXAGON -->
+                    </div>
+                    <!-- /USER AVATAR CONTENT -->
+
+                    <!-- USER AVATAR PROGRESS -->
+                    <div class="user-avatar-progress">
+                      <!-- HEXAGON -->
+                      <div class="hexagon-progress-40-44"></div>
+                      <!-- /HEXAGON -->
+                    </div>
+                    <!-- /USER AVATAR PROGRESS -->
+
+                    <!-- USER AVATAR PROGRESS BORDER -->
+                    <div class="user-avatar-progress-border">
+                      <!-- HEXAGON -->
+                      <div class="hexagon-border-40-44"></div>
+                      <!-- /HEXAGON -->
+                    </div>
+                    <!-- /USER AVATAR PROGRESS BORDER -->
+
+                    <!-- USER AVATAR BADGE -->
+                    <div class="user-avatar-badge">
+                      <!-- USER AVATAR BADGE BORDER -->
+                      <div class="user-avatar-badge-border">
+                        <!-- HEXAGON -->
+                        <div class="hexagon-22-24"></div>
+                        <!-- /HEXAGON -->
+                      </div>
+                      <!-- /USER AVATAR BADGE BORDER -->
+
+                      <!-- USER AVATAR BADGE CONTENT -->
+                      <div class="user-avatar-badge-content">
+                        <!-- HEXAGON -->
+                        <div class="hexagon-dark-16-18"></div>
+                        <!-- /HEXAGON -->
+                      </div>
+                      <!-- /USER AVATAR BADGE CONTENT -->
+
+                      <!-- USER AVATAR BADGE TEXT -->
+                      <p class="user-avatar-badge-text">16</p>
+                      <!-- /USER AVATAR BADGE TEXT -->
+                    </div>
+                    <!-- /USER AVATAR BADGE -->
+                  </div>
+                  <!-- /USER AVATAR -->
+>>>>>>> status-online
                 </a>
                 <!-- /USER STATUS AVATAR -->
 
                 <!-- USER STATUS TITLE -->
                 <p class="user-status-title">
+<<<<<<< HEAD
                   <a class="bold" href="profile">{{ notif.value.fullname }}</a>
                   đã bình luận vào
                   <a class="highlighted" href="photos">bài đăng</a> của bạn
+=======
+                  <a class="bold" href="profile">Nick Grissom</a>
+                  đã theo dõi bạn
+                  <!-- <a class="highlighted" href="profile">status update</a> -->
+>>>>>>> status-online
                 </p>
                 <!-- /USER STATUS TITLE -->
 
                 <!-- USER STATUS TIMESTAMP -->
+<<<<<<< HEAD
                 <p class="user-status-timestamp">{{ notif.value.time }}</p>
+=======
+                <p class="user-status-timestamp">2 minutes ago</p>
+                <!-- /USER STATUS TIMESTAMP -->
+                <div class="user-preview-actions nofti">
+                  <!-- BUTTON -->
+                  <p class="button re-fl">Theo dõi</p>
+                  <!-- /BUTTON -->
+      
+                  <!-- BUTTON -->
+                  <p class="button delete-fl">Xóa</p>
+                  <!-- /BUTTON -->
+                </div>
+                
+              </div>
+              <!-- /USER STATUS -->
+            </div>
+            <!-- /DROPDOWN BOX LIST ITEM -->
+
+            <!-- DROPDOWN BOX LIST ITEM -->
+            <div class="dropdown-box-list-item">
+              <!-- USER STATUS -->
+              <div class="user-status notification">
+                <!-- USER STATUS AVATAR -->
+                <a class="user-status-avatar" href="profile">
+                  <!-- USER AVATAR -->
+                  <div class="user-avatar small no-outline">
+                    <!-- USER AVATAR CONTENT -->
+                    <div class="user-avatar-content">
+                      <!-- HEXAGON -->
+                      <div
+                        class="hexagon-image-30-32"
+                        data-src="../../../assets/images/avatar/07.jpg"
+                      ></div>
+                      <!-- /HEXAGON -->
+                    </div>
+                    <!-- /USER AVATAR CONTENT -->
+
+                    <!-- USER AVATAR PROGRESS -->
+                    <div class="user-avatar-progress">
+                      <!-- HEXAGON -->
+                      <div class="hexagon-progress-40-44"></div>
+                      <!-- /HEXAGON -->
+                    </div>
+                    <!-- /USER AVATAR PROGRESS -->
+
+                    <!-- USER AVATAR PROGRESS BORDER -->
+                    <div class="user-avatar-progress-border">
+                      <!-- HEXAGON -->
+                      <div class="hexagon-border-40-44"></div>
+                      <!-- /HEXAGON -->
+                    </div>
+                    <!-- /USER AVATAR PROGRESS BORDER -->
+
+                    <!-- USER AVATAR BADGE -->
+                    <div class="user-avatar-badge">
+                      <!-- USER AVATAR BADGE BORDER -->
+                      <div class="user-avatar-badge-border">
+                        <!-- HEXAGON -->
+                        <div class="hexagon-22-24"></div>
+                        <!-- /HEXAGON -->
+                      </div>
+                      <!-- /USER AVATAR BADGE BORDER -->
+
+                      <!-- USER AVATAR BADGE CONTENT -->
+                      <div class="user-avatar-badge-content">
+                        <!-- HEXAGON -->
+                        <div class="hexagon-dark-16-18"></div>
+                        <!-- /HEXAGON -->
+                      </div>
+                      <!-- /USER AVATAR BADGE CONTENT -->
+
+                      <!-- USER AVATAR BADGE TEXT -->
+                      <p class="user-avatar-badge-text">26</p>
+                      <!-- /USER AVATAR BADGE TEXT -->
+                    </div>
+                    <!-- /USER AVATAR BADGE -->
+                  </div>
+                  <!-- /USER AVATAR -->
+                </a>
+                <!-- /USER STATUS AVATAR -->
+
+                <!-- USER STATUS TITLE -->
+                <p class="user-status-title">
+                  <a class="bold" href="profile">Sarah Diamond</a>
+                  left a like
+                  <img
+                    class="reaction"
+                    src="../../../assets/images/reaction/like.png"
+                    alt="reaction-like"
+                  />
+                  reaction on your
+                  <a class="highlighted" href="profile">status update</a>
+                </p>
+                <!-- /USER STATUS TITLE -->
+
+                <!-- USER STATUS TIMESTAMP -->
+                <p class="user-status-timestamp">17 minutes ago</p>
+                <!-- /USER STATUS TIMESTAMP -->
+
+                <!-- USER STATUS ICON -->
+                <div class="user-status-icon">
+                  <!-- ICON THUMBS UP -->
+                  <svg class="icon-thumbs-up">
+                    <use xlink:href="#svg-thumbs-up"></use>
+                  </svg>
+                  <!-- /ICON THUMBS UP -->
+                </div>
+                <!-- /USER STATUS ICON -->
+              </div>
+              <!-- /USER STATUS -->
+            </div>
+            <!-- /DROPDOWN BOX LIST ITEM -->
+
+            <!-- DROPDOWN BOX LIST ITEM -->
+            <div class="dropdown-box-list-item">
+              <!-- USER STATUS -->
+              <div class="user-status notification">
+                <!-- USER STATUS AVATAR -->
+                <a class="user-status-avatar" href="profile">
+                  <!-- USER AVATAR -->
+                  <div class="user-avatar small no-outline">
+                    <!-- USER AVATAR CONTENT -->
+                    <div class="user-avatar-content">
+                      <!-- HEXAGON -->
+                      <div
+                        class="hexagon-image-30-32"
+                        data-src="../../../assets/images/avatar/02.jpg"
+                      ></div>
+                      <!-- /HEXAGON -->
+                    </div>
+                    <!-- /USER AVATAR CONTENT -->
+
+                    <!-- USER AVATAR PROGRESS -->
+                    <div class="user-avatar-progress">
+                      <!-- HEXAGON -->
+                      <div class="hexagon-progress-40-44"></div>
+                      <!-- /HEXAGON -->
+                    </div>
+                    <!-- /USER AVATAR PROGRESS -->
+
+                    <!-- USER AVATAR PROGRESS BORDER -->
+                    <div class="user-avatar-progress-border">
+                      <!-- HEXAGON -->
+                      <div class="hexagon-border-40-44"></div>
+                      <!-- /HEXAGON -->
+                    </div>
+                    <!-- /USER AVATAR PROGRESS BORDER -->
+
+                    <!-- USER AVATAR BADGE -->
+                    <div class="user-avatar-badge">
+                      <!-- USER AVATAR BADGE BORDER -->
+                      <div class="user-avatar-badge-border">
+                        <!-- HEXAGON -->
+                        <div class="hexagon-22-24"></div>
+                        <!-- /HEXAGON -->
+                      </div>
+                      <!-- /USER AVATAR BADGE BORDER -->
+
+                      <!-- USER AVATAR BADGE CONTENT -->
+                      <div class="user-avatar-badge-content">
+                        <!-- HEXAGON -->
+                        <div class="hexagon-dark-16-18"></div>
+                        <!-- /HEXAGON -->
+                      </div>
+                      <!-- /USER AVATAR BADGE CONTENT -->
+
+                      <!-- USER AVATAR BADGE TEXT -->
+                      <p class="user-avatar-badge-text">13</p>
+                      <!-- /USER AVATAR BADGE TEXT -->
+                    </div>
+                    <!-- /USER AVATAR BADGE -->
+                  </div>
+                  <!-- /USER AVATAR -->
+                </a>
+                <!-- /USER STATUS AVATAR -->
+
+                <!-- USER STATUS TITLE -->
+                <p class="user-status-title">
+                  <a class="bold" href="profile">Destroy Dex</a>
+                  posted a comment on your
+                  <a class="highlighted" href="photos">photo</a>
+                </p>
+                <!-- /USER STATUS TITLE -->
+
+                <!-- USER STATUS TIMESTAMP -->
+                <p class="user-status-timestamp">31 minutes ago</p>
+>>>>>>> status-online
                 <!-- /USER STATUS TIMESTAMP -->
 
                 <!-- USER STATUS ICON -->
@@ -1098,9 +1460,15 @@
               </div>
               <!-- /USER STATUS -->
             </div>
+<<<<<<< HEAD
             <!-- Comment -->
 
             <!-- interested -->
+=======
+            <!-- /DROPDOWN BOX LIST ITEM -->
+
+            <!-- DROPDOWN BOX LIST ITEM -->
+>>>>>>> status-online
             <div class="dropdown-box-list-item">
               <!-- USER STATUS -->
               <div class="user-status notification">
@@ -1193,10 +1561,17 @@
               </div>
               <!-- /USER STATUS -->
             </div>
+<<<<<<< HEAD
             <!-- interested -->
 
             <!-- follow -->
             <div class="dropdown-box-list-item unread">
+=======
+            <!-- /DROPDOWN BOX LIST ITEM -->
+
+            <!-- DROPDOWN BOX LIST ITEM -->
+            <div class="dropdown-box-list-item">
+>>>>>>> status-online
               <!-- USER STATUS -->
               <div class="user-status notification">
                 <!-- USER STATUS AVATAR -->
@@ -1208,7 +1583,11 @@
                       <!-- HEXAGON -->
                       <div
                         class="hexagon-image-30-32"
+<<<<<<< HEAD
                         data-src="../../../assets/images/avatar/03.jpg"
+=======
+                        data-src="../../../assets/images/avatar/05.jpg"
+>>>>>>> status-online
                       ></div>
                       <!-- /HEXAGON -->
                     </div>
@@ -1249,7 +1628,11 @@
                       <!-- /USER AVATAR BADGE CONTENT -->
 
                       <!-- USER AVATAR BADGE TEXT -->
+<<<<<<< HEAD
                       <p class="user-avatar-badge-text">16</p>
+=======
+                      <p class="user-avatar-badge-text">12</p>
+>>>>>>> status-online
                       <!-- /USER AVATAR BADGE TEXT -->
                     </div>
                     <!-- /USER AVATAR BADGE -->
@@ -1260,13 +1643,20 @@
 
                 <!-- USER STATUS TITLE -->
                 <p class="user-status-title">
+<<<<<<< HEAD
                   <a class="bold" href="profile">Nick Grissom</a>
                   đã theo dõi bạn
                   <!-- <a class="highlighted" href="profile">status update</a> -->
+=======
+                  <a class="bold" href="profile">Neko Bebop</a>
+                  posted a comment on your
+                  <a class="highlighted" href="profile">status update</a>
+>>>>>>> status-online
                 </p>
                 <!-- /USER STATUS TITLE -->
 
                 <!-- USER STATUS TIMESTAMP -->
+<<<<<<< HEAD
                 <p class="user-status-timestamp">2 minutes ago</p>
                 <!-- /USER STATUS TIMESTAMP -->
                 <div class="user-preview-actions nofti">
@@ -1282,6 +1672,24 @@
               <!-- /USER STATUS -->
             </div>
             <!-- follow -->
+=======
+                <p class="user-status-timestamp">3 hours ago</p>
+                <!-- /USER STATUS TIMESTAMP -->
+
+                <!-- USER STATUS ICON -->
+                <div class="user-status-icon">
+                  <!-- ICON COMMENT -->
+                  <svg class="icon-comment">
+                    <use xlink:href="#svg-comment"></use>
+                  </svg>
+                  <!-- /ICON COMMENT -->
+                </div>
+                <!-- /USER STATUS ICON -->
+              </div>
+              <!-- /USER STATUS -->
+            </div>
+            <!-- /DROPDOWN BOX LIST ITEM -->
+>>>>>>> status-online
           </div>
           <!-- /DROPDOWN BOX LIST -->
 
@@ -1305,7 +1713,11 @@
         <!-- <svg class="action-item-icon icon-settings">
         <use xlink:href="#svg-settings"></use>
       </svg> -->
+<<<<<<< HEAD
         <p class="fullname-logged">{{ userDisplayName }}</p>
+=======
+        <p class="fullname-logged">{{userDisplayName}}</p>
+>>>>>>> status-online
         <!-- /ACTION ITEM ICON -->
       </div>
       <!-- /ACTION ITEM -->
@@ -1317,6 +1729,7 @@
           <!-- USER STATUS -->
           <div class="user-status">
             <!-- USER STATUS AVATAR -->
+<<<<<<< HEAD
             <a
               class="user-avatar small user-status-avatar no-border no-outline"
               (click)="this.profileService.loadDataProfileTimeline(0)"
@@ -1336,6 +1749,39 @@
                 </div>
                 <p class="user-avatar-badge-text">1</p>
               </div>
+=======
+            <a class="user-status-avatar" href="profile">
+              <!-- USER AVATAR -->
+              <div class="user-avatar small no-outline">
+                <!-- USER AVATAR CONTENT -->
+                <div class="user-avatar-content">
+                  <!-- HEXAGON -->
+                  <div
+                    class="hexagon-image-30-32"
+                    data-src="../../../assets/images/avatar/01.jpg"
+                  ></div>
+                  <!-- /HEXAGON -->
+                </div>
+                <!-- /USER AVATAR CONTENT -->
+
+                <!-- USER AVATAR PROGRESS -->
+                <div class="user-avatar-progress">
+                  <!-- HEXAGON -->
+                  <div class="hexagon-progress-40-44"></div>
+                  <!-- /HEXAGON -->
+                </div>
+                <!-- /USER AVATAR PROGRESS -->
+
+                <!-- USER AVATAR PROGRESS BORDER -->
+                <div class="user-avatar-progress-border">
+                  <!-- HEXAGON -->
+                  <div class="hexagon-border-40-44"></div>
+                  <!-- /HEXAGON -->
+                </div>
+                <!-- /USER AVATAR PROGRESS BORDER -->
+              </div>
+              <!-- /USER AVATAR -->
+>>>>>>> status-online
             </a>
             <!-- /USER STATUS AVATAR -->
 
@@ -1357,11 +1803,17 @@
         <!-- /DROPDOWN NAVIGATION CATEGORY -->
 
         <!-- DROPDOWN NAVIGATION LINK -->
+<<<<<<< HEAD
         <a
           class="dropdown-navigation-link"
           (click)="this.profileService.loadDataProfileTimeline(0)"
           >{{ "Thongtin" | translate }}</a
         >
+=======
+        <a class="dropdown-navigation-link" href="profile">{{
+          "Thongtin" | translate
+        }}</a>
+>>>>>>> status-online
         <!-- /DROPDOWN NAVIGATION LINK -->
 
         <!-- DROPDOWN NAVIGATION LINK -->

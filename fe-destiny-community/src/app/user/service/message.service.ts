@@ -9,7 +9,11 @@ declare var toast: any;
 import SockJS from "sockjs-client"
 import Stomp from "stompjs"
 import * as Handlebars from 'handlebars';
+<<<<<<< HEAD
 import { UserModel } from '../Model/UserModel.js';
+=======
+import { UserModel } from './UserModel.js';
+>>>>>>> status-online
 import { environment } from '../../../environments/environment'
 
 @Injectable({
@@ -71,7 +75,11 @@ export class MessageService {
 
   /* ============Connect socket============= */
   connectToChat(userId) {
+<<<<<<< HEAD
     // localStorage.setItem("chatUserId", userId);
+=======
+    localStorage.setItem("chatUserId", userId);
+>>>>>>> status-online
     this.socket = new SockJS(environment.baseUrl + 'chat');
     this.stompClient = Stomp.over(this.socket!);
     this.stompClient.connect({}, (frame) => {
@@ -184,12 +192,101 @@ export class MessageService {
     this.stompClient!.send("/app/fetchAllUsers");
   }
 
+<<<<<<< HEAD
+=======
+  // async connectToChat(userId) : Promise<void>{
+  //   // Lưu trữ userId vào localStorage
+  //   localStorage.setItem("chatUserId", userId);
+
+  //   // Tạo một Promise để đợi kết nối WebSocket
+  //   return new Promise((resolve) => {
+  //     const socket = new SockJS(environment.baseUrl + 'chat');
+  //     const stompClient = Stomp.over(socket);
+
+
+  //     stompClient.connect({}, (frame) => {
+  //       // Đã kết nối thành công
+  //       console.log('Connected to: ' + frame);
+
+  //       // Bắt đầu đăng ký các chủ đề và xử lý thông điệp
+  //       stompClient.subscribe("/topic/messages/" + userId, (response) => {
+  //         let data = JSON.parse(response.body);
+  //         if (this.selectedUser == data.fromLogin && this.isOriginal == false) {
+  //           this.render(data.message, data.fromLogin, data.avatar);
+  //         } else {
+  //           this.notif_mess = true;
+  //           this.newMessage.set(data.fromLogin, { message: data.message, avatar: data.avatar });
+  //           let textLastMess = document.getElementById('last-message-' + data.fromLogin);
+  //           if (textLastMess)
+  //             textLastMess!.innerText = data.message;
+  //         }
+  //       });
+
+  //       stompClient.subscribe("/topic/public", (response) => {
+  //         let data = JSON.parse(response.body);
+  //         this.setFriend(data);
+  //         let localUserId = localStorage.getItem("chatUserId");
+  //         for (let key of Object.keys(data)) {
+  //           let value = data[key];
+  //           if (key == localUserId) {
+  //             for (let v of value) {
+  //               let user = {
+  //                 type: v.type,
+  //                 user_id: v.user_id,
+  //                 username: v.username,
+  //                 fullname: v.fullname,
+  //                 email: v.email,
+  //                 avatar: v.avatar,
+  //                 messageUnRead: v.messageUnRead,
+  //                 lastMessage: v.lastMessage,
+  //                 online: v.online,
+  //                 isFriend: v.friend,
+  //                 hide: v.hide,
+  //                 status: v.status,
+  //               };
+  //               this.newMapUser.set(v.user_id, user);
+  //             }
+  //           }
+  //         }
+  //         this.isLoading = false;
+  //         setTimeout(() => {
+  //           this.mapUser = this.newMapUser;
+  //           this.updateData();
+  //           // Hoàn thành Promise sau khi xử lý xong
+  //         }, 1);
+  //       });
+  //       stompClient.send("/app/fetchAllUsers");
+  //     });
+  //     resolve();
+  //   });
+  // }
+
+>>>>>>> status-online
   // Hàm cập nhật dữ liệu
   updateData() {
     // Thực hiện cập nhật dữ liệu ở đây.
     // Sau khi cập nhật xong, thông báo sự kiện.
     this.dataUpdated.emit();
   }
+<<<<<<< HEAD
+=======
+  // async sendMsg(from, text, img) : Promise<void> {
+  //   try {
+  //     await new Promise<void>((resolve) => {
+  //       this.stompClient!.send("/app/chat/" + this.selectedUser, {}, JSON.stringify({
+  //         fromLogin: from,
+  //         message: text,
+  //         avatar: img
+  //       }));
+  //       resolve();
+  //     });
+  //   } catch (error) {
+  //     console.error('Lỗi khi gửi tin nhắn:', error);
+  //   }
+  // }
+
+
+>>>>>>> status-online
 
   sendMsg(from, text, img) {
     this.stompClient!.send("/app/chat/" + this.selectedUser, {}, JSON.stringify({

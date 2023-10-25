@@ -4,10 +4,13 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+<<<<<<< HEAD
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.davisy.controller.admin.AdminControl;
+=======
+>>>>>>> status-online
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
@@ -34,7 +37,10 @@ public class Post {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	int post_id;
 
+<<<<<<< HEAD
 	@JsonIgnore
+=======
+>>>>>>> status-online
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	User user;
@@ -46,17 +52,26 @@ public class Post {
 
 	String hash_Tag;
 
+<<<<<<< HEAD
 	@JsonIgnore
+=======
+>>>>>>> status-online
 	@ManyToOne
 	@JoinColumn(name = "post_provinces_id")
 	Provinces provinces;
 
+<<<<<<< HEAD
 	@JsonIgnore
+=======
+>>>>>>> status-online
 	@ManyToOne
 	@JoinColumn(name = "post_districts_id")
 	Districts districts;
 
+<<<<<<< HEAD
 	@JsonIgnore
+=======
+>>>>>>> status-online
 	@ManyToOne
 	@JoinColumn(name = "post_wards_id")
 	Wards wards;
@@ -69,7 +84,11 @@ public class Post {
 
 	boolean ban = false;
 
+<<<<<<< HEAD
 //	@JsonIgnore
+=======
+	@JsonIgnore
+>>>>>>> status-online
 	@OneToMany(mappedBy = "post")
 	List<PostImages> postImages;
 
@@ -84,6 +103,7 @@ public class Post {
 	@JsonIgnore
 	@OneToMany(mappedBy = "post")
 	List<Share> shares;
+<<<<<<< HEAD
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "postReported")
@@ -109,4 +129,6 @@ public class Post {
 		String date = AdminControl.timeCaculate(date_Post);
 		return date;
 	}
+=======
+>>>>>>> status-online
 }

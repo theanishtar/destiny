@@ -15,6 +15,7 @@ import { ProfileService } from '../service/profile.service';
 })
 export class HeaderProfileComponent implements OnInit {
   activeMenuItem: string = '';
+<<<<<<< HEAD
   dataProfileTimeline: any;
   isLoading = true;
   idLocal: any;
@@ -27,6 +28,17 @@ export class HeaderProfileComponent implements OnInit {
     private cookieService: CookieService,
     private router: Router,
     public profileService: ProfileService
+=======
+  dataHeader: any;
+
+  ngOnInit() {
+    this.loadDataHeader(26);
+  }
+  constructor(
+    private cookieService: CookieService,
+    private router: Router,
+    private profileService: ProfileService
+>>>>>>> status-online
   ) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -34,6 +46,7 @@ export class HeaderProfileComponent implements OnInit {
         this.updateActiveMenuItem();
       }
     });
+<<<<<<< HEAD
 
     this.idLocal = parseInt((localStorage.getItem("idSelected") + '')?.trim());
     this.profileService.loadDataHeader(this.idLocal).subscribe(res => {
@@ -42,6 +55,13 @@ export class HeaderProfileComponent implements OnInit {
       this.isLoading = false
     })
 
+=======
+  }
+  loadDataHeader(id) {
+    this.profileService.loadDataHeader(id).subscribe(res => {
+      this.dataHeader = this.profileService.getDataHeader();
+    })
+>>>>>>> status-online
   }
 
   /* ============template============= */

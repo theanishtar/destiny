@@ -194,6 +194,7 @@ export class ProfileAdminComponent implements OnInit{
     event.target.setCustomValidity('');
   }
 
+<<<<<<< HEAD
   onInputCheckPassWorkValid(event: any) {
     const passwordPattern = /^(?=.*[!@#$%^&*]+)[a-z0-9!@#$%^&*]{4,20}$/;
     const inputValue = event.target.value;
@@ -205,6 +206,8 @@ export class ProfileAdminComponent implements OnInit{
     }
   }
 
+=======
+>>>>>>> status-online
   forgotPasswordDialog(){
     const prevBtns = document.querySelectorAll<HTMLElement>(".btn-prev");
     const nextBtns = document.querySelectorAll<HTMLElement>(".btn-next");

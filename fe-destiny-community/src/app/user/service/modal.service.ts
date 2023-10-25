@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs'; //Theo dõi trạng thái của modal
+<<<<<<< HEAD
 import { environment } from '../../../environments/environment'
 import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -12,10 +13,14 @@ import Stomp from 'stompjs';
 import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from './message.service';
 import { NotifyModel } from '../Model/NotifyModel';
+=======
+
+>>>>>>> status-online
 @Injectable({
   providedIn: 'root'
 })
 export class ModalService {
+<<<<<<< HEAD
   private loadDataComment = environment.baseUrl + 'v1/user/load/comment';
   private loadDataReplyUrl = environment.baseUrl + 'v1/user/load/comment/reply';
 
@@ -202,6 +207,14 @@ export class ModalService {
   private isOpenCreatePost = new BehaviorSubject<boolean>(false);
   isOpenCreatePost$ = this.isOpenCreatePost.asObservable();
 
+=======
+  private isOpenCreatePost = new BehaviorSubject<boolean>(false);
+  isOpenCreatePost$ = this.isOpenCreatePost.asObservable();
+
+  private isOpenComment = new BehaviorSubject<boolean>(false);
+  isOpenComment$ = this.isOpenComment.asObservable();
+
+>>>>>>> status-online
   openModalCreatePost() {
     this.isOpenCreatePost.next(true);
   }
@@ -209,13 +222,20 @@ export class ModalService {
   closeModalCreatePost() {
     this.isOpenCreatePost.next(false);
   }
+<<<<<<< HEAD
 
   private isOpenComment = new BehaviorSubject<boolean>(false);
   isOpenComment$ = this.isOpenComment.asObservable();
+=======
+  openModalComment() {
+    this.isOpenComment.next(true);
+  }
+>>>>>>> status-online
 
   closeModalComment() {
     this.isOpenComment.next(false);
   }
+<<<<<<< HEAD
 
   private isOpenSeeMoreImg = new BehaviorSubject<boolean>(false);
   isOpenSeeMoreImg$ = this.isOpenSeeMoreImg.asObservable();
@@ -239,4 +259,8 @@ export class ModalService {
   setDataReplyCmt(data: any): void {
     this.listReplyComment = data;
   }
+=======
+  
+  constructor() { }
+>>>>>>> status-online
 }

@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import { Component, OnInit, HostListener, ViewChild, ElementRef, Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
+=======
+import { Component, OnInit, HostListener } from '@angular/core';
+
+>>>>>>> status-online
 import { liquid } from "../../../assets/js/utils/liquidify.js";
 // import { tns } from '../../../assets/js/vendor/ti';
 import { avatarHexagons } from '../../../assets/js/global/global.hexagons.js';
@@ -10,6 +15,7 @@ import { sidebars } from '../../../assets/js/sidebar/sidebar.js';
 import { content } from '../../../assets/js/content/content.js';
 import { form } from '../../../assets/js/form/form.utils.js';
 import 'src/assets/js/utils/svg-loader.js';
+<<<<<<< HEAD
 import { DatePipe } from '@angular/common';
 import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
@@ -33,6 +39,12 @@ import {
 // 
 import { ModalService } from '../service/modal.service';
 import { ProfileService } from '../service/profile.service';
+=======
+
+// 
+import { ModalService } from '../service/modal.service';
+
+>>>>>>> status-online
 import '../../../assets/toast/main.js';
 declare var toast: any;
 @Component({
@@ -47,6 +59,7 @@ declare var toast: any;
 })
 
 export class EditProfileComponent implements OnInit {
+<<<<<<< HEAD
   // @ViewChild('uploadPreview') uploadPreview: ElementRef;
   public profileForm!: FormGroup;
   textAreaContent: string = ''; // Nội dung của textarea
@@ -74,6 +87,13 @@ export class EditProfileComponent implements OnInit {
   initialEmail: string; //Email lúc đầu chưa đổi
   userEmail: string; //Email sau
   ngOnInit() {
+=======
+  textAreaContent: string = ''; // Nội dung của textarea
+  readonlyCondition: boolean = false; // Ban đầu không bị giới hạn
+
+  ngOnInit() {
+
+>>>>>>> status-online
     liquid.liquid();
     avatarHexagons.avatarHexagons();
     tooltips.tooltips();
@@ -83,6 +103,7 @@ export class EditProfileComponent implements OnInit {
     sidebars.sidebars();
     content.contentTab();
     form.formInput();
+<<<<<<< HEAD
     this.createFormProfile();
     this.loadDataProfile();
     this.loadAllGender();
@@ -91,10 +112,13 @@ export class EditProfileComponent implements OnInit {
       this.userEmail = value;
     });
 
+=======
+>>>>>>> status-online
   }
 
   constructor(
     public modalService: ModalService,
+<<<<<<< HEAD
     public profileService: ProfileService,
     private formbuilder: FormBuilder,
     private cookieService: CookieService,
@@ -283,6 +307,9 @@ export class EditProfileComponent implements OnInit {
   }
 
   /* ============Template============= */
+=======
+  ) { }
+>>>>>>> status-online
 
   // Giới hạn ký tự của bio
   @HostListener('window:keydown', ['$event'])
@@ -295,7 +322,11 @@ export class EditProfileComponent implements OnInit {
   // Hàm kiểm tra giới hạn và hiển thị thông báo
   checkCharacterLimit() {
     const maxCharacters = 180; // Giới hạn ký tự
+<<<<<<< HEAD
     const characterCount = this.dataEditProfile.intro.length;
+=======
+    const characterCount = this.textAreaContent.length;
+>>>>>>> status-online
     const charCount = document.getElementById("charCount")!;
     charCount.textContent = characterCount.toString();
     if (characterCount >= maxCharacters) {
@@ -307,6 +338,7 @@ export class EditProfileComponent implements OnInit {
       });
       this.readonlyCondition = true;
       // Nếu vượt quá giới hạn, cắt nội dung để chỉ hiển thị 180 ký tự
+<<<<<<< HEAD
       this.dataEditProfile.intro = this.dataEditProfile.intro.slice(0, maxCharacters);
     }
   }
@@ -343,5 +375,10 @@ export class EditProfileComponent implements OnInit {
     // this.addData();
   }
 
+=======
+      this.textAreaContent = this.textAreaContent.slice(0, maxCharacters);
+    }
+  }
+>>>>>>> status-online
 }
 

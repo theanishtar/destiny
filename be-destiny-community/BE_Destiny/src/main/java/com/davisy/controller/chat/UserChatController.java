@@ -1,6 +1,9 @@
 package com.davisy.controller.chat;
 
+<<<<<<< HEAD
 import java.lang.management.MemoryType;
+=======
+>>>>>>> status-online
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -92,7 +95,11 @@ public class UserChatController {
 	@Async
 	public void async(User user, boolean checkRequest) {
 		try {
+<<<<<<< HEAD
 //			List<UserModel> lisModel = new ArrayList<>();
+=======
+			List<UserModel> lisModel = new ArrayList<>();
+>>>>>>> status-online
 			if (checkRequest == true) {
 				user.setOnline_last_date(null);
 
@@ -103,6 +110,7 @@ public class UserChatController {
 			String type = "";
 			if (checkRequest == true) {
 				synchronized (this) {
+<<<<<<< HEAD
 					List<Object[]> listChatsRoom = chatsServiceImpl.loadAllChatRoom(user.getUser_id());
 					List<UserModel> listModel = new ArrayList<>();
 					for (Object[] ob : listChatsRoom) {
@@ -127,6 +135,45 @@ public class UserChatController {
 						
 					}
 					UserChatStorage.getInstance().setUser(user.getUser_id(), listModel);
+=======
+					List<Follower> listFollow = followServiceImpl.findALlFriend(user.getUser_id(), user.getUser_id());
+					List<Chats> listChats = chatsServiceImpl.findAllChatsUser(String.valueOf(user.getUser_id()));
+					List<Integer> checkContains = new ArrayList<>();
+
+					for (Follower fl : listFollow) {
+						Follower.Pk pk = fl.getPk();
+						if (followServiceImpl.checkFriend(user.getUser_id(), pk.getUser_id())) {
+							User us = userServiceImpl.findById(pk.getUser_id());
+							if (us.getOnline_last_date() == null) {
+								type = "JOIN";
+							} else {
+								type = "LEAVE";
+							}
+							checkContains.add(us.getUser_id());
+							lisModel.add(userModel(us, user.getUser_id(), type, true, false, true));
+						}
+					}
+					for (Chats chats : listChats) {
+						List<ChatParticipants> listChatParticipants = chatParticipantsServiceImpl
+								.findAllId(chats.getId());
+						for (ChatParticipants participants : listChatParticipants) {
+							ChatParticipants.Primary primary = participants.getPrimary();
+							if (primary.getUser_id() != user.getUser_id()
+									&& !checkContains.contains(primary.getUser_id())) {
+								User us = userServiceImpl.findById(primary.getUser_id());
+								if (us.getOnline_last_date() == null) {
+									type = "JOIN";
+								} else {
+									type = "LEAVE";
+								}
+								lisModel.add(userModel(us, user.getUser_id(), type, chats.isIsfriend(), chats.isHide(),
+										chats.isStatus()));
+							}
+						}
+					}
+
+					UserChatStorage.getInstance().setUser(user.getUser_id(), lisModel);
+>>>>>>> status-online
 				}
 			}
 			synchronized (this) {
@@ -149,7 +196,11 @@ public class UserChatController {
 			}
 
 		} catch (Exception e) {
+<<<<<<< HEAD
 			System.out.println("Error Async: " + e);
+=======
+//			System.out.println("Error Async: " + e);
+>>>>>>> status-online
 		}
 	}
 
@@ -159,5 +210,84 @@ public class UserChatController {
 		return UserChatStorage.getInstance().getUsers();
 	}
 
+<<<<<<< HEAD
+=======
+	public UserModel userModel(User us, int user_id, String type, boolean check, boolean hide, boolean status) {
+		UserModel userModel = new UserModel();
+		String[] temp = lastMeassage(String.valueOf(user_id), String.valueOf(us.getUser_id()));
+		if (type.equalsIgnoreCase("LEAVE")) {
+			userModel.setType(MessageType.LEAVE);
+		} else {
+			userModel.setType(MessageType.JOIN);
+		}
+		userModel.setUser_id(us.getUser_id());
+		userModel.setUsername(us.getUsername());
+		userModel.setFullname(us.getFullname());
+		userModel.setEmail(us.getEmail());
+		userModel.setAvatar(us.getAvatar());
+		userModel.setMessageUnRead(messagesServiceImpl.countMessageUnread(us.getUser_id()));
+		userModel.setLastMessage(temp[0]);
+		userModel.setOnline(temp[1]);
+		userModel.setFriend(check);
+		userModel.setHide(hide);
+		userModel.setStatus(status);
+		return userModel;
+	}
+
+	public String[] lastMeassage(String fromLogin, String toUser) {
+		try {
+			String[] temp = new String[2];
+			String message = "";
+			String time = "";
+			Chats chats = chatsServiceImpl.findChatNames(fromLogin, toUser);
+			if (chats != null) {
+				List<Object[]> listMessage = messagesServiceImpl.findListMessage(chats.getName_chats());
+				if (listMessage.size() > 0) {
+					message = String.valueOf(listMessage.get(listMessage.size() - 1)[1]);
+					time = String.valueOf(listMessage.get(listMessage.size() - 1)[2]);
+					if (listMessage.get(listMessage.size() - 1)[3] == Integer.valueOf(fromLogin)) {
+						message = "Bạn: " + message;
+					}
+				}
+			}
+			temp[0] = message;
+			temp[1] = time;
+			return temp;
+		} catch (Exception e) {
+			System.out.println("Error lastMeassage: " + e);
+			throw e;
+		}
+	}
+
+	public List<DataFollows> reloadDataFriends(List<Follower> followers, User user) {
+		List<DataFollows> dataFollows = new ArrayList<>();
+		for (Follower all : followers) {
+			Follower.Pk pk1 = all.getPk();
+			if (pk1.getUser_id() == user.getUser_id()
+					&& followServiceImpl.checkFriend(pk1.getFollower_id(), pk1.getUser_id())) {
+				dataFollows.add(data(pk1.getFollower_id()));
+			}
+		}
+		return dataFollows;
+	}
+
+	public DataFollows data(int id) {
+		DataFollows data = new DataFollows();
+		User us = userServiceImpl.findById(id);
+		int countPost = postServiceImpl.countPost(id);
+		int countFollower = followServiceImpl.countFollowers(id);
+		int countImg = postImagesServiceImpl.countPostImages(id);
+		data.setUser_id(id);
+		data.setThumb(us.getThumb());
+		data.setAvatar(us.getAvatar());
+		data.setMark(us.getMark());
+		data.setFullname(us.getFullname());
+		data.setIntro(us.getIntro());
+		data.setCountPost(countPost);
+		data.setCountFollower(countFollower);
+		data.setCountImg(countImg);
+		return data;
+	}
+>>>>>>> status-online
 
 }

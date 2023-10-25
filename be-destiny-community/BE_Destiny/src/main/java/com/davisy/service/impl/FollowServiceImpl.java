@@ -67,6 +67,7 @@ public class FollowServiceImpl implements FollowService {
 		return list;
 	}
 
+<<<<<<< HEAD
 	@Override
 	public boolean checkFollow(int id1, int id2) {
 		Follower follower = followDAO.checkFollow(id1, id2);
@@ -75,4 +76,6 @@ public class FollowServiceImpl implements FollowService {
 		return true;
 	}
 
+=======
+>>>>>>> status-online
 }

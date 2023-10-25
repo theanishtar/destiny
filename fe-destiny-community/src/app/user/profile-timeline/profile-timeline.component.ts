@@ -10,14 +10,21 @@ import { sidebars } from '../../../assets/js/sidebar/sidebar.js';
 import { content } from '../../../assets/js/content/content.js';
 import { form } from '../../../assets/js/form/form.utils.js';
 import 'src/assets/js/utils/svg-loader.js';
+<<<<<<< HEAD
 import { DatePipe } from '@angular/common';
 declare var toast: any;
+=======
+
+>>>>>>> status-online
 // 
 import { ModalService } from '../service/modal.service';
 import { InteractPostsService } from '../service/interact-posts.service';
 import { ProfileService } from '../service/profile.service';
+<<<<<<< HEAD
 import { FollowsService } from '../service/follows.service';
 
+=======
+>>>>>>> status-online
 @Component({
   selector: 'app-profile-timeline',
   templateUrl: './profile-timeline.component.html',
@@ -31,6 +38,7 @@ import { FollowsService } from '../service/follows.service';
 })
 export class ProfileTimelineComponent implements OnInit {
   postId = '123'; // Mã số của bài viết (có thể là mã số duy nhất của mỗi bài viết)
+<<<<<<< HEAD
   dataProfileTimeline: any;
   listSuggested: any[] = [];
   checkData1: boolean = false;
@@ -41,6 +49,10 @@ export class ProfileTimelineComponent implements OnInit {
   ngOnInit() {
     // this.loadDataHeader(0);
     
+=======
+
+  ngOnInit() {
+>>>>>>> status-online
     this.checkSrcoll();
     liquid.liquid();
     avatarHexagons.avatarHexagons();
@@ -52,6 +64,7 @@ export class ProfileTimelineComponent implements OnInit {
     content.contentTab();
     form.formInput();
   }
+<<<<<<< HEAD
   dataFollows: any
   constructor(
     public modalService: ModalService,
@@ -90,6 +103,14 @@ export class ProfileTimelineComponent implements OnInit {
   }
 
 /* ============template============= */
+=======
+
+  constructor(
+    public modalService: ModalService,
+    public interactPostsService: InteractPostsService,
+    private profileService: ProfileService
+  ) { }
+>>>>>>> status-online
 
   @ViewChild('elementToScroll', { static: false }) elementToScroll: ElementRef;
 
@@ -124,8 +145,13 @@ export class ProfileTimelineComponent implements OnInit {
     return this.interactPostsService.isLiked(postId);
   }
 
+<<<<<<< HEAD
   openModalComment(idPost) {
     this.modalService.openModalComment(49);
+=======
+  openModalComment() {
+    this.modalService.openModalComment();
+>>>>>>> status-online
   }
   closeModalComment() {
     this.modalService.closeModalComment();
