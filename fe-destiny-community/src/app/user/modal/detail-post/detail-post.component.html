@@ -1,0 +1,235 @@
+<main class="overlay" *ngIf="historyService.isOpenDetailPost$ | async">
+  <div id="favDialog_detailPost" class="modal fade favDialog_detailPost">
+    <button
+      (click)="historyService.closeModalDetailPost()"
+      class="btnClose-detail-post"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="container-detai-post">
+      <div class="post">
+        <!-- Slideshow container -->
+        <div class="img-product">
+          <div class="slideshow-container">
+            <!-- Full-width images with number and caption text -->
+            <div class="mySlides fade" *ngFor="let img of historyService.images">
+              <img [src]="img.link_image" style="width: 100%" />
+            </div>
+            <!-- Next and previous buttons -->
+            <div class="btn-slide-show">
+              <a class="prev" (click)="plusSlides(-1)">&#10094;</a>
+              <a class="next" (click)="plusSlides(1)">&#10095;</a>
+            </div>
+          </div>
+
+          <div class="numbertext">
+            <span id="numbertext">1 </span>/ <b>{{ slidesLength }}</b>
+          </div>
+        </div>
+        <!-- ../../assets/images/cover/03.jpg -->
+        <div class="post-detail">
+          <div class="info-post">
+            <div class="widget-box-status-content">
+              <!-- USER STATUS -->
+              <div class="user-status">
+                <a
+                  class="user-avatar small user-status-avatar no-border no-outline"
+                >
+                  <div class="hexagon-container">
+                    <div class="hexagon user-avatar-content">
+                      <div
+                        class="hexagon-image"
+                        style="
+                          background-image: url('{{historyService.post?.avatar}}');
+                        "
+                      ></div>
+                    </div>
+                    <div class="hexagon user-avatar-border">
+                      <div class="hexagon-border"></div>
+                    </div>
+                    <div class="hexagon user-avatar-progress-border">
+                      <div class="user-avatar-progress"></div>
+                    </div>
+                    <p class="user-avatar-badge-text">1</p>
+                  </div>
+                </a>
+                <!-- /USER STATUS AVATAR -->
+
+                <div class="info">
+                  <!-- USER STATUS TITLE -->
+                  <p class="user-status-title medium">
+                    <a class="bold">{{historyService.post?.fullname}}</a>
+                  </p>
+
+                  <!-- USER STATUS TEXT -->
+                  <p class="user-status-text small post-time">{{historyService.post?.date}}</p>
+                  <!-- /USER STATUS -->
+                </div>
+              </div>
+              <div class="content-post">
+                <p>{{historyService.post?.content}}</p>
+              </div>
+              <!-- /USER STATUS TITLE -->
+            </div>
+            <div class="content-actions">
+              <!-- <div> -->
+              <!-- CONTENT ACTION -->
+              <div class="content-action">
+                <!-- META LINE -->
+                <div class="meta-line">
+                  <!-- META LINE LIST -->
+                  <div class="meta-line-list reaction-item-list">
+                    <!-- REACTION ITEM -->
+                    <div class="reaction-item">
+                      <!-- REACTION IMAGE -->
+                      <img
+                        class="reaction-image reaction-item-dropdown-trigger"
+                        src="../../../assets/images/reaction/love.png"
+                        alt="reaction-love"
+                      />
+                      <!-- /REACTION IMAGE -->
+
+                      <!-- SIMPLE DROPDOWN -->
+                      <div
+                        class="simple-dropdown padded reaction-item-dropdown"
+                      >
+                        <!-- <p class="simple-dropdown-text">
+                          <img
+                            class="reaction"
+                            src="../../../assets/images/reaction/love.png"
+                            alt="reaction-love"
+                          />
+                          <span class="bold">Love</span>
+                        </p> -->
+                        <!-- SIMPLE DROPDOWN TEXT -->
+                        <div *ngFor="let interesteds of historyService.listUser">
+                          <!-- <div *ngIf="interesteds[2] == historyService.post?.post_id"> -->
+                            <!-- /SIMPLE DROPDOWN TEXT -->
+
+                            <!-- SIMPLE DROPDOWN TEXT -->
+                            <p class="simple-dropdown-text">
+                              {{ interesteds[1] }}
+                            </p>
+                            <!-- <p class="simple-dropdown-text">
+                              và {{listUser.length - 5}} người khác
+                            </p> -->
+                          <!-- </div> -->
+                        </div>
+                        <!-- /SIMPLE DROPDOWN TEXT -->
+                      </div>
+                      <!-- /SIMPLE DROPDOWN -->
+                    </div>
+                    <!-- /REACTION ITEM -->
+                  </div>
+                  <!-- /META LINE LIST -->
+
+                  <!-- META LINE TEXT -->
+                  <div *ngFor="let count of historyService.listCount">
+                    <p>
+                      {{ count[1] }}
+                    </p>
+                  </div>
+
+                  <!-- /META LINE TEXT -->
+                </div>
+                <!-- /META LINE -->
+              </div>
+              <!-- /CONTENT ACTION -->
+
+              <!-- CONTENT ACTION -->
+              <div class="count-action" *ngFor="let count of historyService.listCount">
+                <div class="content-action">
+                  <!-- META LINE -->
+                  <!-- <div> -->
+                  <div class="meta-line">
+                    <!-- META LINE LINK -->
+                    <p class="meta-line-link">{{ count[2] }} Bình luận</p>
+                    <!-- /META LINE LINK -->
+                  </div>
+                  <!-- /META LINE -->
+
+                  <!-- META LINE -->
+                  <div class="meta-line">
+                    <!-- META LINE TEXT -->
+                    <p class="meta-line-text">{{ count[3] }} Chia sẻ</p>
+                    <!-- /META LINE TEXT -->
+                  </div>
+                  <!-- </div> -->
+                  <!-- /META LINE -->
+                </div>
+              </div>
+
+              <!-- /CONTENT ACTION -->
+              <!-- </div> -->
+            </div>
+          </div>
+           <br>
+          <!--<hr>-->
+          <br> 
+          <div class="full-boxer">
+            <div *ngFor="let cmt of historyService.listCmt; let i = index">
+              <div class="comment__container opened">
+                <div class="comment__card">
+                  <div class="box-top">
+                    <div class="Profile">
+                      <div class="profile-image">
+                        <img [src]="cmt[9]" />
+                      </div>
+                      <div class="Name">
+                        <strong>{{ cmt[7] }}</strong>
+                        <span>@{{ cmt[8] }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <p>
+                    {{ cmt[5] }}
+                  </p>
+                  <div class="comment__card-footer">
+                    <div class="replies">{{ cmt[10] }} Trả lời</div>
+                    <div
+                      class="show-replies"
+                      *ngIf="
+                        modalService.checkHideSeeMore.get(cmt[0]) == null ||
+                        modalService.checkHideSeeMore.get(cmt[0])
+                      "
+                      (click)="modalService.loadDataReply(cmt[3], cmt[0])"
+                    >
+                      Xem thêm
+                    </div>
+                    <div
+                      class="show-replies"
+                      *ngIf="
+                        modalService.checkHideSeeMore.get(cmt[0]) != null &&
+                        !modalService.checkHideSeeMore.get(cmt[0])
+                      "
+                      (click)="removeSeeMoreCmt(cmt[0])"
+                    >
+                      Ẩn bớt
+                    </div>
+                  </div>
+                </div>
+                <div id="first-reply-{{ cmt[0] }}">
+                  <!-- reply comment -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <form action="">
+            <div class="comment-box">
+              <input
+                type="text"
+                id="comment-input"
+                name="comment-input"
+                [(ngModel)]="comment_input"
+                placeholder="Bình luận"
+              />
+              <button class="add-comment-btn" (click)="addComment()">
+                <i class="fa-regular fa-comment"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

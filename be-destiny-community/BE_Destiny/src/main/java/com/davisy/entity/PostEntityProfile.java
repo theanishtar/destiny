@@ -1,0 +1,71 @@
+package com.davisy.entity;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Iterator;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.davisy.service.PostImagesService;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class PostEntityProfile {
+	int post_id;
+	int user_id;
+//	int parent_post_id;
+	String content;
+	Calendar date_post;
+	@JsonIgnore
+	String hash_tag;
+	boolean send_status;
+	boolean post_status;
+	String product;
+	boolean ban;
+	int countInterested;
+	int countCommnet;
+	int countShare;
+	List<String> images;
+	@JsonIgnore
+	List<Object[]> user;
+	PostEntityProfile postEntityProfile;
+	String fullname;
+	String avatar;
+
+	public List<String> getList_Hash_Tag() {
+		if (hash_tag != null) {
+			List<String> list = new ArrayList<>();
+			for (String h : hash_tag.split(",")) {
+				list.add(h);
+			}
+			return list;
+		}
+		return null;
+	}
+
+	public List<UserInterested> getUserInterested() {
+		List<UserInterested> list = new ArrayList<>();
+		for (Object[] u : user) {
+			UserInterested interested = new UserInterested();
+			interested.setUser_id(Integer.valueOf(u[0].toString()));
+			interested.setFullname(u[1] + "");
+			list.add(interested);
+		}
+		return list;
+	}
+}
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+class UserInterested {
+	int user_id;
+	String fullname;
+}

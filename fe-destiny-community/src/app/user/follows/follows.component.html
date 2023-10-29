@@ -1,0 +1,434 @@
+<app-navigation></app-navigation>
+
+<!-- CONTENT GRID -->
+<div class="content-grid">
+
+  <app-header-profile></app-header-profile>
+
+  <!-- SECTION -->
+  <section class="section">
+    <!-- SECTION HEADER -->
+    <div class="section-header">
+      <!-- SECTION HEADER INFO -->
+      <div class="section-header-info">
+
+        <!-- SECTION TITLE -->
+        <h2 class="section-title">Theo dõi</h2>
+        <!-- /SECTION TITLE -->
+      </div>
+      <!-- /SECTION HEADER INFO -->
+    </div>
+    <!-- /SECTION HEADER -->
+
+    <!-- SECTION FILTERS BAR -->
+    <div class="section-filters-bar v1">
+      <!-- SECTION FILTERS BAR ACTIONS -->
+      <div class="section-filters-bar-actions">
+        <!-- FORM -->
+        <form class="form">
+          <!-- FORM INPUT -->
+          <div class="form-input small with-button">
+            <label for="friends-search">Tìm kiếm</label>
+            <input type="text" id="friends-search" name="friends_search">
+            <!-- BUTTON -->
+            <button class="button primary">
+              <!-- ICON MAGNIFYING GLASS -->
+              <svg class="icon-magnifying-glass">
+                <use xlink:href="#svg-magnifying-glass"></use>
+              </svg>
+              <!-- /ICON MAGNIFYING GLASS -->
+            </button>
+            <!-- /BUTTON -->
+          </div>
+          <!-- /FORM INPUT -->
+
+          <!-- FORM SELECT -->
+          <div class="form-select">
+            <label for="friends-filter-category">Lọc theo</label>
+            <select id="friends-filter-category" name="friends_filter_category">
+              <option value="following" (click)="openTabFollow('following')" [ngClass]="{'active': activeContent === 'following'}">Đang theo dõi</option>
+              <option value="follower" (click)="openTabFollow('follower')" [ngClass]="{'active': activeContent === 'follower'}">Người theo dõi</option>
+              <option value="friends" (click)="openTabFollow('friends')" [ngClass]="{'active': activeContent === 'friends'}">Bạn bè</option>
+            </select>
+            <!-- FORM SELECT ICON -->
+            <svg class="form-select-icon icon-small-arrow">
+              <use xlink:href="#svg-small-arrow"></use>
+            </svg>
+            <!-- /FORM SELECT ICON -->
+          </div>
+          <!-- /FORM SELECT -->
+        </form>
+        <!-- /FORM -->
+
+        <!-- FILTER TABS -->
+        <div class="filter-tabs">
+          <!-- FILTER TAB -->
+          <div class="filter-tab active" (click)="openTabFollow('following')" [ngClass]="{'active': activeContent === 'following'}">
+            <!-- FILTER TAB TEXT -->
+            <p class="filter-tab-text">Đang theo dõi</p>
+            <!-- /FILTER TAB TEXT -->
+          </div>
+          <!-- /FILTER TAB -->
+
+          <!-- FILTER TAB -->
+          <div class="filter-tab" (click)="openTabFollow('follower')" [ngClass]="{'active': activeContent === 'follower'}">
+            <!-- FILTER TAB TEXT -->
+            <p class="filter-tab-text">Người theo dõi</p>
+            <!-- /FILTER TAB TEXT -->
+          </div>
+          <!-- /FILTER TAB -->
+
+          <!-- FILTER TAB -->
+          <div class="filter-tab" (click)="openTabFollow('friends')" [ngClass]="{'active': activeContent === 'friends'}">
+            <!-- FILTER TAB TEXT -->
+            <p class="filter-tab-text">Bạn bè</p>
+            <!-- /FILTER TAB TEXT -->
+          </div>
+          <!-- /FILTER TAB -->
+        </div>
+        <!-- /FILTER TABS -->
+      </div>
+      <!-- /SECTION FILTERS BAR ACTIONS -->
+    </div>
+    <!-- /SECTION FILTERS BAR -->
+
+    <!-- <div class="grid grid-4-4-4 centered following" *ngIf="loadingService.isLoading()">
+      <div class="lds-facebook"><div></div><div></div><div></div></div>
+    </div>-->
+    <app-loading *ngIf="isLoading"></app-loading>
+    
+    <div id="body-follow">
+      <!-- GRID -->
+      <div [ngClass]="{'hidden': activeContent !== 'following'}" >
+        <div *ngIf="checkData1" class="emty-message">Khi bạn theo dõi mọi người, bạn sẽ nhìn thấy họ ở đây</div>
+        <div class="grid grid-4-4-4 centered following">
+          <!-- USER PREVIEW -->
+          <div class="user-preview" *ngFor="let fling of listFollowing">
+            <!-- USER PREVIEW COVER -->
+            <figure class="user-preview-cover liquid">
+              <img src="{{fling.thumb}}" alt="cover-04">
+            </figure>
+            <!-- /USER PREVIEW COVER -->
+            <!-- USER PREVIEW INFO -->
+            <div class="user-preview-info">
+              <!-- USER SHORT DESCRIPTION -->
+              <div class="user-short-description">
+                <!-- USER SHORT DESCRIPTION AVATAR -->
+                <a class="user-short-description-avatar user-avatar medium">
+                  <div class="hexagon-container">
+                    <div class="hexagon user-avatar-content">
+                      <div class="hexagon-image" style="background-image: url('{{fling.avatar}}')"></div>
+                    </div>
+                    <div class="hexagon user-avatar-border">
+                      <div class="hexagon-border"></div>
+                    </div>
+                    <div class="hexagon user-avatar-progress-border">
+                      <div class="user-avatar-progress"></div>
+                    </div>
+                  </div>
+                </a>
+                <!-- /USER SHORT DESCRIPTION AVATAR -->
+    
+                <!-- USER SHORT DESCRIPTION TITLE -->
+                <p class="user-short-description-title"><a (click)="this.profileService.loadDataProfileTimeline(fling.user_id)">{{fling.fullname}}</a></p>
+                <!-- /USER SHORT DESCRIPTION TITLE -->
+    
+                <!-- USER SHORT DESCRIPTION TEXT -->
+                <p class="user-short-description-text"><a>{{fling.intro}}</a></p>
+                <!-- /USER SHORT DESCRIPTION TEXT -->
+              </div>
+              <!-- /USER SHORT DESCRIPTION -->
+    
+              <!-- USER PREVIEW STATS SLIDES -->
+              <div id="user-preview-stats-slides-01" class="user-preview-stats-slides">
+                <!-- USER PREVIEW STATS SLIDE -->
+                <div class="user-preview-stats-slide">
+                  <!-- USER STATS -->
+                  <div class="user-stats">
+                    <!-- USER STAT -->
+                    <div class="user-stat">
+                      <!-- USER STAT TITLE -->
+                      <p class="user-stat-title">{{fling.countPost}}</p>
+                      <!-- /USER STAT TITLE -->
+    
+                      <!-- USER STAT TEXT -->
+                      <p class="user-stat-text">bài đăng</p>
+                      <!-- /USER STAT TEXT -->
+                    </div>
+                    <!-- /USER STAT -->
+    
+                    <!-- USER STAT -->
+                    <div class="user-stat">
+                      <!-- USER STAT TITLE -->
+                      <p class="user-stat-title">{{fling.countFollower}}</p>
+                      <!-- /USER STAT TITLE -->
+    
+                      <!-- USER STAT TEXT -->
+                      <p class="user-stat-text">theo dõi</p>
+                      <!-- /USER STAT TEXT -->
+                    </div>
+                    <!-- /USER STAT -->
+    
+                    <!-- USER STAT -->
+                    <div class="user-stat">
+                      <!-- USER STAT TITLE -->
+                      <p class="user-stat-title">{{fling.countImg}}</p>
+                      <!-- /USER STAT TITLE -->
+    
+                      <!-- USER STAT TEXT -->
+                      <p class="user-stat-text">ảnh</p>
+                      <!-- /USER STAT TEXT -->
+                    </div>
+                    <!-- /USER STAT -->
+                  </div>
+                  <!-- /USER STATS -->
+                </div>
+                <!-- /USER PREVIEW STATS SLIDE -->
+              </div>
+              <!-- /USER PREVIEW STATS SLIDES -->
+    
+              <!-- USER PREVIEW ACTIONS -->
+              <div class="user-preview-actions">
+                <!-- BUTTON -->
+                <p class="button secondary" (click)="deleteFling(fling.user_id)">Hủy</p>
+                <!-- /BUTTON -->
+    
+                <!-- BUTTON -->
+                <p class="button primary" (click)="messageService.createChatWithStrangers(fling.user_id)">Nhắn tin</p>
+                <!-- /BUTTON -->
+              </div>
+              <!-- /USER PREVIEW ACTIONS -->
+            </div>
+            <!-- /USER PREVIEW INFO -->
+          </div>
+          <!-- /USER PREVIEW -->
+        </div>
+      </div>
+      <!-- /GRID -->
+  
+      <!-- GRID -->
+      <div [ngClass]="{'hidden': activeContent !== 'follower'}">
+        <div *ngIf="checkData2" class="emty-message">Khi mọi người theo dõi bạn, bạn sẽ nhìn thấy họ ở đây</div>
+      <div class="grid grid-4-4-4 centered follower">
+        <!-- USER PREVIEW -->
+        <div class="user-preview" *ngFor="let fler of listFollower">
+          <!-- USER PREVIEW COVER -->
+          <figure class="user-preview-cover liquid">
+            <img src="{{fler.thumb}}" alt="cover-04">
+          </figure>
+          <!-- /USER PREVIEW COVER -->
+  
+          <!-- USER PREVIEW INFO -->
+          <div class="user-preview-info">
+            <!-- USER SHORT DESCRIPTION -->
+            <div class="user-short-description">
+              <!-- USER SHORT DESCRIPTION AVATAR -->
+              <a class="user-short-description-avatar user-avatar medium" >
+                <div class="hexagon-container">
+                  <div class="hexagon user-avatar-content">
+                    <div class="hexagon-image" style="background-image: url('{{fler.avatar}}')"></div>
+                  </div>
+                  <div class="hexagon user-avatar-border">
+                    <div class="hexagon-border"></div>
+                  </div>
+                  <div class="hexagon user-avatar-progress-border">
+                    <div class="user-avatar-progress"></div>
+                  </div>
+                </div>
+              </a>
+              <!-- /USER SHORT DESCRIPTION AVATAR -->
+  
+              <!-- USER SHORT DESCRIPTION TITLE -->
+              <p class="user-short-description-title"><a (click)="this.profileService.loadDataProfileTimeline(fler.user_id)">{{fler.fullname}}</a></p>
+              <!-- /USER SHORT DESCRIPTION TITLE -->
+  
+              <!-- USER SHORT DESCRIPTION TEXT -->
+              <p class="user-short-description-text"><a>{{fler.intro}}</a></p>
+              <!-- /USER SHORT DESCRIPTION TEXT -->
+            </div>
+            <!-- /USER SHORT DESCRIPTION -->
+  
+            <!-- USER PREVIEW STATS SLIDES -->
+            <div id="user-preview-stats-slides-01" class="user-preview-stats-slides">
+              <!-- USER PREVIEW STATS SLIDE -->
+              <div class="user-preview-stats-slide">
+                <!-- USER STATS -->
+                <div class="user-stats">
+                  <!-- USER STAT -->
+                  <div class="user-stat">
+                    <!-- USER STAT TITLE -->
+                    <p class="user-stat-title">{{fler.countPost}}</p>
+                    <!-- /USER STAT TITLE -->
+  
+                    <!-- USER STAT TEXT -->
+                    <p class="user-stat-text">bài đăng</p>
+                    <!-- /USER STAT TEXT -->
+                  </div>
+                  <!-- /USER STAT -->
+  
+                  <!-- USER STAT -->
+                  <div class="user-stat">
+                    <!-- USER STAT TITLE -->
+                    <p class="user-stat-title">{{fler.countFollower}}</p>
+                    <!-- /USER STAT TITLE -->
+  
+                    <!-- USER STAT TEXT -->
+                    <p class="user-stat-text">theo dõi</p>
+                    <!-- /USER STAT TEXT -->
+                  </div>
+                  <!-- /USER STAT -->
+  
+                  <!-- USER STAT -->
+                  <div class="user-stat">
+                    <!-- USER STAT TITLE -->
+                    <p class="user-stat-title">{{fler.countImg}}</p>
+                    <!-- /USER STAT TITLE -->
+  
+                    <!-- USER STAT TEXT -->
+                    <p class="user-stat-text">ảnh</p>
+                    <!-- /USER STAT TEXT -->
+                  </div>
+                  <!-- /USER STAT -->
+                </div>
+                <!-- /USER STATS -->
+              </div>
+              <!-- /USER PREVIEW STATS SLIDE -->
+            </div>
+            <!-- /USER PREVIEW STATS SLIDES -->
+  
+            <!-- USER PREVIEW ACTIONS -->
+            <div class="user-preview-actions">
+              <!-- BUTTON -->
+              <p class="button secondary" (click)="deleteFler(fler.user_id)">Xóa</p>
+              <!-- /BUTTON -->
+  
+              <!-- BUTTON -->
+              <p class="button primary" (click)="addFollow(fler.user_id)">Theo dõi lại</p>
+              <!-- /BUTTON -->
+            </div>
+            <!-- /USER PREVIEW ACTIONS -->
+          </div>
+          <!-- /USER PREVIEW INFO -->
+        </div>
+        <!-- /USER PREVIEW -->
+      </div>
+      </div>
+      <!-- /GRID -->
+  
+       <!-- GRID -->
+       <div [ngClass]="{'hidden': activeContent !== 'friends'}">
+        <div *ngIf="checkData3" class="emty-message">Theo dõi nhiều người để có thêm bạn bè</div>
+       <div class="grid grid-4-4-4 centered friends">
+          <!-- USER PREVIEW -->
+          <div class="user-preview" *ngFor="let friend of listFriend">
+            <!-- USER PREVIEW COVER -->
+            <figure class="user-preview-cover liquid">
+              <img src="{{friend.thumb}}" alt="cover-04">
+              <!-- {{friend.thumb}} -->
+            </figure>
+            <!-- /USER PREVIEW COVER -->
+    
+            <!-- USER PREVIEW INFO -->
+            <div class="user-preview-info">
+              <!-- USER SHORT DESCRIPTION -->
+              <div class="user-short-description">
+                <!-- USER SHORT DESCRIPTION AVATAR -->
+                <a class="user-short-description-avatar user-avatar medium">
+                  <div class="hexagon-container">
+                    <div class="hexagon user-avatar-content">
+                      <div class="hexagon-image" style="background-image: url('{{friend.avatar}}')"></div>
+                    </div>
+                    <div class="hexagon user-avatar-border">
+                      <div class="hexagon-border"></div>
+                    </div>
+                    <div class="hexagon user-avatar-progress-border">
+                      <div class="user-avatar-progress"></div>
+                    </div>
+                  </div>
+                </a>
+                <!-- /USER SHORT DESCRIPTION AVATAR -->
+    
+                <!-- USER SHORT DESCRIPTION TITLE -->
+                <p class="user-short-description-title"><a (click)="this.profileService.loadDataProfileTimeline(friend.user_id)">{{friend.fullname}}</a></p>
+                <!-- /USER SHORT DESCRIPTION TITLE -->
+    
+                <!-- USER SHORT DESCRIPTION TEXT -->
+                <p class="user-short-description-text"><a>{{friend.intro}}</a></p>
+                <!-- /USER SHORT DESCRIPTION TEXT -->
+              </div>
+              <!-- /USER SHORT DESCRIPTION -->
+    
+              <!-- USER PREVIEW STATS SLIDES -->
+              <div id="user-preview-stats-slides-01" class="user-preview-stats-slides">
+                <!-- USER PREVIEW STATS SLIDE -->
+                <div class="user-preview-stats-slide">
+                  <!-- USER STATS -->
+                  <div class="user-stats">
+                    <!-- USER STAT -->
+                    <div class="user-stat">
+                      <!-- USER STAT TITLE -->
+                      <p class="user-stat-title">{{friend.countPost}}</p>
+                      <!-- /USER STAT TITLE -->
+    
+                      <!-- USER STAT TEXT -->
+                      <p class="user-stat-text">bài đăng</p>
+                      <!-- /USER STAT TEXT -->
+                    </div>
+                    <!-- /USER STAT -->
+    
+                    <!-- USER STAT -->
+                    <div class="user-stat">
+                      <!-- USER STAT TITLE -->
+                      <p class="user-stat-title">{{friend.countFollower}}</p>
+                      <!-- /USER STAT TITLE -->
+    
+                      <!-- USER STAT TEXT -->
+                      <p class="user-stat-text">theo dõi</p>
+                      <!-- /USER STAT TEXT -->
+                    </div>
+                    <!-- /USER STAT -->
+    
+                    <!-- USER STAT -->
+                    <div class="user-stat">
+                      <!-- USER STAT TITLE -->
+                      <p class="user-stat-title">{{friend.countImg}}</p>
+                      <!-- /USER STAT TITLE -->
+    
+                      <!-- USER STAT TEXT -->
+                      <p class="user-stat-text">ảnh</p>
+                      <!-- /USER STAT TEXT -->
+                    </div>
+                    <!-- /USER STAT -->
+                  </div>
+                  <!-- /USER STATS -->
+                </div>
+                <!-- /USER PREVIEW STATS SLIDE -->
+              </div>
+              <!-- /USER PREVIEW STATS SLIDES -->
+    
+              <!-- USER PREVIEW ACTIONS -->
+              <div class="user-preview-actions">
+                <!-- BUTTON -->
+                <p class="button secondary" (click)="deleteFling(friend.user_id)">Hủy</p>
+                <!-- /BUTTON -->
+    
+                <!-- BUTTON -->
+                <p class="button primary" (click)="messageService.createChatWithStrangers(friend.user_id)">Nhắn tin</p>
+                <!-- /BUTTON -->
+              </div>
+              <!-- /USER PREVIEW ACTIONS -->
+            </div>
+            <!-- /USER PREVIEW INFO -->
+          </div>
+          <!-- /USER PREVIEW -->
+      </div>
+       </div>
+       
+      <!-- /GRID -->
+</div>
+
+    
+  </section>
+  <!-- /SECTION -->
+</div>
+<!-- /CONTENT GRID -->

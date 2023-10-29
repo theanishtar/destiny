@@ -1,0 +1,212 @@
+package com.davisy.controller.chat;
+
+import java.lang.management.MemoryType;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.davisy.config.JwtTokenUtil;
+import com.davisy.entity.ChatParticipants;
+import com.davisy.entity.Chats;
+import com.davisy.entity.Follower;
+import com.davisy.entity.User;
+import com.davisy.entity.ChatParticipants.Primary;
+import com.davisy.model.chat.UserModel;
+import com.davisy.model.chat.UserModel.MessageType;
+import com.davisy.service.ChatParticipantsService;
+import com.davisy.service.ChatsService;
+import com.davisy.service.FollowService;
+import com.davisy.service.MessagesService;
+import com.davisy.service.PostImagesService;
+import com.davisy.service.PostService;
+import com.davisy.service.UserService;
+import com.davisy.service.impl.ChatParticipantsServiceImpl;
+import com.davisy.service.impl.ChatsServiceImpl;
+import com.davisy.service.impl.FollowServiceImpl;
+import com.davisy.service.impl.MessagesServiceImpl;
+import com.davisy.service.impl.PostImagesServiceImpl;
+import com.davisy.service.impl.PostServiceImpl;
+import com.davisy.service.impl.UserServiceImpl;
+import com.davisy.storage.chat.UserChatStorage;
+
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@RestController
+@CrossOrigin(origins = "http://localhost:4200")
+@Component
+public class UserChatController {
+	@Autowired
+	JwtTokenUtil jwtTokenUtil;
+	@Autowired
+	SimpMessagingTemplate simpMessagingTemplate;
+	@Autowired
+	UserServiceImpl userService;
+	@Autowired
+	FollowServiceImpl followService;
+	@Autowired
+	PostImagesServiceImpl postImagesService;
+	@Autowired
+	PostServiceImpl postService;
+	@Autowired
+	ChatsServiceImpl chatsService;
+	@Autowired
+	ChatParticipantsServiceImpl chatParticipantsService;
+	@Autowired
+	MessagesServiceImpl messagesService;
+
+	long millis = System.currentTimeMillis();
+	java.sql.Date day = new java.sql.Date(millis);
+
+	@GetMapping("/v1/user/registrationchat")
+	public ResponseEntity<UserTemp> register(HttpServletRequest request) {
+		try {
+			String email = jwtTokenUtil.getEmailFromHeader(request);
+			User user = userService.findByEmail(email);
+			user.setOnline_last_date(null);
+			userService.update(user);
+			async(user, true);
+			UserTemp temp = new UserTemp();
+			temp.setUser_id(user.getUser_id());
+			temp.setAvatar(user.getAvatar());
+			return ResponseEntity.ok().body(temp);
+		} catch (Exception e) {
+			System.out.println("Error register in userchatcontroller: " + e);
+			return ResponseEntity.badRequest().build();
+		}
+
+	}
+
+	@GetMapping("/v1/user/logoutchat")
+	public ResponseEntity<Void> logout(HttpServletRequest request) {
+		try {
+			String email = jwtTokenUtil.getEmailFromHeader(request);
+			User user = userService.findByEmail(email);
+			user.setOnline_last_date(GregorianCalendar.getInstance());
+			userService.update(user);
+			async(user, false);
+			return ResponseEntity.ok().build();
+		} catch (Exception e) {
+			System.out.println("Error logout in userchatcontroller: " + e);
+			return ResponseEntity.badRequest().build();
+		}
+
+	}
+
+	@Async
+	public void async(User user, boolean checkRequest) {
+		try {
+			if (checkRequest) {
+				synchronized (UserChatStorage.getInstance()) {
+					List<Object[]> listChatsRoom = chatsService.loadAllChatRoom(user.getUser_id());
+					List<UserModel> listModel = new ArrayList<>();
+					for (Object[] ob : listChatsRoom) {
+						UserModel model = new UserModel();
+						if (ob[0].equals("JOIN")) {
+							model.setType(MessageType.JOIN);
+						} else {
+							model.setType(MessageType.LEAVE);
+						}
+						model.setUser_id(Integer.valueOf(ob[1].toString()));
+						model.setUsername(ob[2].toString());
+						model.setFullname(ob[3].toString());
+						model.setEmail(ob[4].toString());
+						model.setAvatar(ob[5].toString());
+						model.setMessageUnRead(Integer.valueOf(ob[6].toString()));
+						model.setLastMessage(ob[7] + "");
+						model.setOnline(ob[8] + "");
+						model.setFriend(Boolean.valueOf(ob[9].toString()));
+						model.setHide(Boolean.valueOf(ob[10].toString()));
+						model.setStatus(Boolean.valueOf(ob[11].toString()));
+						listModel.add(model);
+
+					}
+					UserChatStorage.getInstance().setUser(user.getUser_id(), listModel);
+				}
+			}
+			synchronized (UserChatStorage.getInstance()) {
+				for (Integer key : UserChatStorage.getInstance().getUsers().keySet()) {
+					if (key != user.getUser_id()) {
+						List<UserModel> originalList = UserChatStorage.getInstance().getUsers().get(key);
+						List<UserModel> copyList = new ArrayList<>(originalList);
+
+						for (UserModel v : copyList) {
+							if (v.getUser_id() == user.getUser_id()) {
+								if (user.getOnline_last_date() == null)
+									v.setType(MessageType.JOIN);
+								else
+									v.setType(MessageType.LEAVE);
+							}
+						}
+						UserChatStorage.getInstance().setUser(key, copyList);
+					}
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("Error Async: " + e);
+		}
+	}
+
+	@MessageMapping("/fetchAllUsers")
+	@SendTo("/topic/public")
+	public HashMap<Integer, List<UserModel>> fetchAll() {
+		return UserChatStorage.getInstance().getUsers();
+	}
+	
+	@PostMapping("/v1/user/inbox")
+	public void createChatRoom(HttpServletRequest request, @RequestBody int id) {
+		try {
+			String email = jwtTokenUtil.getEmailFromHeader(request);
+			User user1 = userService.findByEmail(email);
+			User user2 = userService.findById(id);
+			String fromUserId =user1.getUsername();
+			String toUser =user2.getUsername();
+			if (chatsService.findChatNames(fromUserId, toUser) == null) {
+				Chats chats = new Chats();
+				List<Integer> list = new ArrayList<>();
+				list.add(user1.getUser_id());
+				list.add(user2.getUser_id());
+				chats.setName_chats(fromUserId + toUser);
+				chats.setIsfriend(false);
+				chatsService.create(chats);
+				Chats newChat = chatsService.findChatNames(fromUserId, toUser);
+				for (Integer ls : list) {
+					ChatParticipants participants = new ChatParticipants();
+					ChatParticipants.Primary primary = new Primary(newChat.getId(), ls);
+					participants.setPrimary(primary);
+					chatParticipantsService.create(participants);
+				}
+			}
+			async(user1, true);
+			simpMessagingTemplate.convertAndSend("/topic/public",UserChatStorage.getInstance().getUsers());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+
+}
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+class UserTemp {
+	int user_id;
+	String avatar;
+}
