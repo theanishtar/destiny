@@ -37,6 +37,7 @@ export class ModalService {
   idUser: any
   mapTime = new Map<number, string>();
   listNotify = new Map<number, NotifyModel>();
+  listNotifyTemp = new Map<number, NotifyModel>();
   checkNotify: boolean = false;
   socket?: WebSocket;
   stompClient?: Stomp.Client;
@@ -91,14 +92,42 @@ export class ModalService {
       this.stompClient?.subscribe("/topic/notification/" + userId, (response) => {
         let data = JSON.parse(response.body);
         this.checkNotify = true;
+        // let map=reverseMap();
+        // this.stompClient?.send('/app/load/notification/' + userId);
         this.listNotify.set(this.count, data);
         this.mapTime.set(this.count, new Date().toISOString());
         this.count++;
+
+
         this.callApiLoadCmt(data.postId);
       });
       this.stompClient?.subscribe("/topic/success-notification", (response) => {
         let id = JSON.parse(response.body);
         this.callApiLoadCmt(id);
+      });
+
+      this.stompClient?.subscribe("/topic/loaddata/notification/" + userId, (response) => {
+        let data = JSON.parse(response.body);
+        for (let k of data) {
+          let notify: NotifyModel = {
+            avatar: k!.avatar,
+            fullname: k!.fullname,
+            fromUserId: k!.fromUserId,
+            content: k!.content,
+            postId: k!.postId,
+            time: this.messageService.customTime(k!.time),
+            type: k!.type
+          }
+          this.listNotify.set(this.count, notify);
+          this.mapTime.set(this.count, new Date(k!.time).toISOString());
+          this.count++;
+
+        }
+      })
+
+      this.stompClient?.subscribe("/topic/changetoken/" + userId, (response) => {
+        let data = JSON.parse(response.body);
+        localStorage.setItem('token', data.token);
       });
 
       setInterval(() => {
@@ -118,10 +147,12 @@ export class ModalService {
           }
         }
       }, 60000);
+
+      this.stompClient?.send('/app/load/notification/' + userId);
+
     });
-
-
   }
+
   sendNotify(content, post_id, toUser, type) {
     let toUserId = toUser;
     let avatar = this.cookieService.get("avatar");

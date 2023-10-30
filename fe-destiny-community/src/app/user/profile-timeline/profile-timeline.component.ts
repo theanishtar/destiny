@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Renderer2  } from '@angular/core';
 
 import { liquid } from "../../../assets/js/utils/liquidify.js";
 // import { tns } from '../../../assets/js/vendor/ti';
@@ -18,7 +18,7 @@ import { InteractPostsService } from '../service/interact-posts.service';
 import { ProfileService } from '../service/profile.service';
 import { FollowsService } from '../service/follows.service';
 import { PostService } from '../service/post.service';
-
+import { CookieService } from 'ngx-cookie-service';
 @Component({
   selector: 'app-profile-timeline',
   templateUrl: './profile-timeline.component.html',
@@ -39,6 +39,10 @@ export class ProfileTimelineComponent implements OnInit {
   dateJoin: string | null
   isLoading = true;
   idLocal: any;
+  mapIntersted = new Map<number, boolean>();
+  checkRequest: boolean = true;
+  currentUserId = this.cookieService.get("id");
+
   ngOnInit() {
     // this.loadDataHeader(0);
     this.loadDataSuggest();
@@ -64,7 +68,10 @@ export class ProfileTimelineComponent implements OnInit {
     public profileService: ProfileService,
     private datePipe: DatePipe, //Định dạng ngày
     public followsService: FollowsService,
-    public postService: PostService
+    public postService: PostService,
+    private cookieService: CookieService,
+    private el: ElementRef,
+    private renderer: Renderer2
   ) {
     // this.idLocal = localStorage.getItem("idSelected")
     this.idLocal = parseInt((localStorage.getItem("idSelected") + '')?.trim());
@@ -106,7 +113,44 @@ export class ProfileTimelineComponent implements OnInit {
       }
     }
   }
+/* ============Interested============= */
+ 
+checkInterested(post_id: number,interested :any[]): boolean {
+  this.mapIntersted.set(post_id, false);
+  for (let user of interested) {
+    // if (user[0] == this.currentUserId && user[2] === post_id) {
+    if (user.user_id == this.currentUserId) {
+      this.mapIntersted.set(post_id, true);
+      return true;
+    }
+  }
+  return false;
+}
 
+// Interested and uninterested in the post
+interestedPost(post_id, toUser) {
+ let check = this.mapIntersted.get(post_id);
+ console.log("check: "+check);
+  let element = this.el.nativeElement.querySelector('#interest-' + post_id);
+  if (check && this.checkRequest) {
+    this.interactPostsService.deleleInterestedApi(post_id).subscribe(
+      () => {
+        console.log("Đã hủy quan tâm");
+        this.renderer.removeClass(element, 'active');
+      },
+      (error) => {
+        console.log("Error:", error);
+      }
+    );
+    this.mapIntersted.set(post_id, false);
+    this.checkRequest = false;
+  }else{
+    this.renderer.addClass(element, 'active');
+    this.interactPostsService.interestedPost(post_id, toUser);
+    this.mapIntersted.set(post_id,true);
+    this.checkRequest = true;
+  }
+}
 /* ============template============= */
 translate() {
   document.addEventListener('DOMContentLoaded', function () {

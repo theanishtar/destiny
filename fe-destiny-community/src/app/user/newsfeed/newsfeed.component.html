@@ -268,7 +268,7 @@
 
       <!-- /WIDGET BOX -->
       <!-- WIDGET BOX -->
-      <div *ngFor="let p of listPost">
+      <div *ngFor="let p of listPosts">
         <div class="widget-box no-padding">
           <!-- WIDGET BOX SETTINGS -->
           <div class="widget-box-settings">
@@ -329,7 +329,7 @@
               >
                 <!-- USER STATUS AVATAR -->
                 <div 
-                (click)="this.profileService.loadDataProfileTimeline(p.userId)">
+                (click)="this.profileService.loadDataProfileTimeline(p?.user_id)">
                   <a
                   class="user-avatar small user-status-avatar no-border no-outline"
                 >
@@ -337,7 +337,7 @@
                     <div class="hexagon user-avatar-content">
                       <div
                         class="hexagon-image"
-                        style="background-image: url('{{ p.avatar }}')"
+                        style="background-image: url('{{ p?.avatar }}')"
                       ></div>
                     </div>
                     <div class="hexagon user-avatar-border">
@@ -353,21 +353,23 @@
 
                 <!-- USER STATUS TITLE -->
                 <p class="user-status-title medium">
-                  <a class="bold" >{{ p.fullname }}</a>
+                  <a class="bold" >{{ p.fullname }}</a> <span *ngIf="p.postEntityProfile != null"> đã chia sẻ bài đăng của 
+                    <a class="bold" (click)="this.profileService.loadDataProfileTimeline(p.postEntityProfile.user_id)">{{ p.postEntityProfile.fullname }}</a> 
+                  </span>
                 </p>
                 </div>
                 <!-- /USER STATUS TITLE -->
 
                 <!-- USER STATUS TEXT -->
                 <p class="user-status-text small post-time">
-                  {{ p.date }}
+                  {{ p.date_post }}
                 </p>
                 <!-- /USER STATUS TEXT -->
               </div>
               <!-- /USER STATUS -->
 
               <!-- WIDGET BOX STATUS TEXT -->
-              <div class="translation">
+              <div class="translation"*ngIf="p.content !== 'null'">
                 <div class="original-content">
                   <p class="widget-box-status-text">
                     {{ p.content }}
@@ -386,12 +388,237 @@
                 </div>
               </div>
               <!-- /WIDGET BOX STATUS TEXT -->
+              <div class="widget-box-status-content" *ngIf="p.postEntityProfile != null">
+                <div class="widget-box no-padding">
+                  <div class="widget-box-status">
+                    <!-- USER STATUS -->
+                    <div class="user-status">
+                      <!-- USER STATUS AVATAR -->
+                      <a
+                      class="user-avatar small user-status-avatar no-border no-outline"
+                    >
+                      <div class="hexagon-container">
+                        <div class="hexagon user-avatar-content">
+                          <div
+                            class="hexagon-image"
+                            style="background-image: url('{{ p.postEntityProfile.avatar }}')"
+                          ></div>
+                        </div>
+                        <div class="hexagon user-avatar-border">
+                          <div class="hexagon-border"></div>
+                        </div>
+                        <div class="hexagon user-avatar-progress-border">
+                          <div class="user-avatar-progress"></div>
+                        </div>
+                        <p class="user-avatar-badge-text">1</p>
+                      </div>
+                    </a>
+                      <!-- /USER STATUS AVATAR -->
+  
+                      <!-- USER STATUS TITLE -->
+                      <p class="user-status-title medium">
+                        <a class="bold" (click)="this.profileService.loadDataProfileTimeline(p.postEntityProfile.user_id)">{{ p.postEntityProfile.fullname }}</a>
+                      </p>
+                      <!-- /USER STATUS TITLE -->
+  
+                      <!-- USER STATUS TEXT -->
+                      <p class="user-status-text small">{{ p.postEntityProfile.date_post }}</p>
+                      <!-- /USER STATUS TEXT -->
+                    </div>
+                    <p class="widget-box-status-text">
+                      {{ p.postEntityProfile.content }}
+                    </p>
+                    <!-- /USER STATUS -->
+                    <div class="widget-box-status-content">
+                      <div class="picture-collage" *ngIf="p.postEntityProfile.images.length === 1">
+                        <div class="picture-collage-row medium" style="margin: 0 18%">
+                          <div
+                            class="picture-collage-item"
+                            style="width: 300px; height: 300px"
+                          >
+                            <div
+                              class="photo-preview-wrap"
+                              style="width: 100%; height: 100%"
+                            >
+                              <div class="photo-preview">
+                                <div
+                                  (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
+                                  class="photo-preview-image"
+                                  style="
+                                      background: url('{{ p.postEntityProfile.images[0] }}')
+                                        center center / cover no-repeat;
+                                    "
+                                ></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="picture-collage" *ngIf="p.postEntityProfile.images.length === 2">
+                        <div class="picture-collage-row medium">
+                          <div class="picture-collage-item">
+                            <div class="photo-preview-wrap">
+                              <div class="photo-preview">
+                                <div
+                                  class="photo-preview-image"
+                                  (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
+                                  style="
+                                      background: url('{{ p.postEntityProfile.images[0] }}')
+                                        center center / cover no-repeat;
+                                    "
+                                ></div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="picture-collage-item">
+                            <div class="photo-preview-wrap">
+                              <div class="photo-preview">
+                                <div
+                                  class="photo-preview-image"
+                                  (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
+                                  style="
+                                      background: url('{{  p.postEntityProfile.images[1] }}')
+                                        center center / cover no-repeat;
+                                    "
+                                ></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="picture-collage" *ngIf=" p.postEntityProfile.images.length === 3">
+                        <div class="picture-collage-row medium">
+                          <div class="picture-collage-item">
+                            <div class="photo-preview-wrap">
+                              <div class="photo-preview">
+                                <div
+                                  class="photo-preview-image"
+                                  (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
+                                  style="
+                                      background: url('{{ p.postEntityProfile.images[0] }}')
+                                        center center / cover no-repeat;
+                                    "
+                                ></div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="picture-collage-item">
+                            <div class="photo-preview-wrap">
+                              <div class="photo-preview">
+                                <div
+                                  class="photo-preview-image"
+                                  (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
+                                  style="
+                                      background: url('{{ p.postEntityProfile.images[1] }}')
+                                        center center / cover no-repeat;
+                                    "
+                                ></div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="picture-collage-item">
+                            <div class="photo-preview-wrap">
+                              <div class="photo-preview">
+                                <div
+                                  class="photo-preview-image"
+                                  (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
+                                  style="
+                                      background: url('{{ p.postEntityProfile.images[2] }}')
+                                        center center / cover no-repeat;
+                                    "
+                                ></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="picture-collage" *ngIf=" p.postEntityProfile.images.length >= 4">
+                        <div class="picture-collage-row medium">
+                          <div class="picture-collage-item">
+                            <div class="photo-preview-wrap">
+                              <div class="photo-preview">
+                                <div
+                                  class="photo-preview-image"
+                                  (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
+                                  style="
+                                      background: url('{{ p.postEntityProfile.images[0] }}')
+                                        center center / cover no-repeat;
+                                    "
+                                ></div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="picture-collage-item">
+                            <div class="photo-preview-wrap">
+                              <div class="photo-preview">
+                                <div
+                                  class="photo-preview-image"
+                                  (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
+                                  style="
+                                      background: url('{{  p.postEntityProfile.images[1] }}')
+                                        center center / cover no-repeat;
+                                    "
+                                ></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="picture-collage-row">
+                          <div class="picture-collage-item">
+                            <div class="photo-preview-wrap">
+                              <div class="photo-preview">
+                                <div
+                                  class="photo-preview-image"
+                                  (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
+                                  style="
+                                      background: url('{{ p.postEntityProfile.images[2]}}') center
+                                        center / cover no-repeat;
+                                    "
+                                ></div>
+                              </div>
+                              <div></div>
+                            </div>
+                          </div>
+                          <div class="picture-collage-item">
+                            <div class="photo-preview-wrap">
+                              <div class="photo-preview">
+                                <div
+                                  class="photo-preview-image"
+                                  (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
+                                  style="
+                                    background: url('{{  p.postEntityProfile.images[3] }}')
+                                      center center / cover no-repeat;
+                                  "
+                                ></div>
+                              </div>
+                              <div></div>
+                            </div>
+                          </div>
+                          <div
+                            class="picture-collage-item"
+                            *ngIf="( p.postEntityProfile.images.length - 4) > 0"
+                            (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
+                          >
+                            <a class="picture-collage-item-overlay seemore">
+                              <p class="picture-collage-item-overlay-text">
+                                +{{  p.postEntityProfile.images.length - 4 }}
+                              </p>
+                            </a>
+                          </div>
+                        </div>
+                        <!-- </div> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <!-- /WIDGET BOX STATUS CONTENT -->
             <!-- {{post.post_img[0]}} -->
             <!-- IFRAME WRAP -->
             <!-- <div *ngFor="let img of p.postImages; let i = index"> -->
-            <div class="picture-collage" *ngIf="p.postImages.length === 1">
+          <div *ngIf="p.postEntityProfile == null">
+            <div class="picture-collage" *ngIf="p.images.length === 1">
               <div class="picture-collage-row medium" style="margin: 0 18%">
                 <div
                   class="picture-collage-item"
@@ -403,10 +630,10 @@
                   >
                     <div class="photo-preview">
                       <div
-                        (click)="modalService.openModalSeeMoreImg(p.post_id)"
+                        (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
                         class="photo-preview-image"
                         style="
-                            background: url('{{ p.postImages[0].link_image }}')
+                            background: url('{{ p.images[0] }}')
                               center center / cover no-repeat;
                           "
                       ></div>
@@ -415,16 +642,16 @@
                 </div>
               </div>
             </div>
-            <div class="picture-collage" *ngIf="p.postImages.length === 2">
+            <div class="picture-collage" *ngIf="p.images.length === 2">
               <div class="picture-collage-row medium">
                 <div class="picture-collage-item">
                   <div class="photo-preview-wrap">
                     <div class="photo-preview">
                       <div
                         class="photo-preview-image"
-                        (click)="modalService.openModalSeeMoreImg(p.post_id)"
+                        (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
                         style="
-                            background: url('{{ p.postImages[0].link_image }}')
+                            background: url('{{ p.images[0] }}')
                               center center / cover no-repeat;
                           "
                       ></div>
@@ -436,9 +663,9 @@
                     <div class="photo-preview">
                       <div
                         class="photo-preview-image"
-                        (click)="modalService.openModalSeeMoreImg(p.post_id)"
+                        (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
                         style="
-                            background: url('{{ p.postImages[1].link_image }}')
+                            background: url('{{ p.images[1] }}')
                               center center / cover no-repeat;
                           "
                       ></div>
@@ -447,16 +674,16 @@
                 </div>
               </div>
             </div>
-            <div class="picture-collage" *ngIf="p.postImages.length === 3">
+            <div class="picture-collage" *ngIf="p.images.length === 3">
               <div class="picture-collage-row medium">
                 <div class="picture-collage-item">
                   <div class="photo-preview-wrap">
                     <div class="photo-preview">
                       <div
                         class="photo-preview-image"
-                        (click)="modalService.openModalSeeMoreImg(p.post_id)"
+                        (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
                         style="
-                            background: url('{{ p.postImages[0].link_image }}')
+                            background: url('{{ p.images[0] }}')
                               center center / cover no-repeat;
                           "
                       ></div>
@@ -468,9 +695,9 @@
                     <div class="photo-preview">
                       <div
                         class="photo-preview-image"
-                        (click)="modalService.openModalSeeMoreImg(p.post_id)"
+                        (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
                         style="
-                            background: url('{{ p.postImages[1].link_image }}')
+                            background: url('{{ p.images[1] }}')
                               center center / cover no-repeat;
                           "
                       ></div>
@@ -482,9 +709,9 @@
                     <div class="photo-preview">
                       <div
                         class="photo-preview-image"
-                        (click)="modalService.openModalSeeMoreImg(p.post_id)"
+                        (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
                         style="
-                            background: url('{{ p.postImages[2].link_image }}')
+                            background: url('{{ p.images[2] }}')
                               center center / cover no-repeat;
                           "
                       ></div>
@@ -493,16 +720,16 @@
                 </div>
               </div>
             </div>
-            <div class="picture-collage" *ngIf="p.postImages.length >= 4">
+            <div class="picture-collage" *ngIf="p.images.length >= 4">
               <div class="picture-collage-row medium">
                 <div class="picture-collage-item">
                   <div class="photo-preview-wrap">
                     <div class="photo-preview">
                       <div
                         class="photo-preview-image"
-                        (click)="modalService.openModalSeeMoreImg(p.post_id)"
+                        (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
                         style="
-                            background: url('{{ p.postImages[0].link_image }}')
+                            background: url('{{ p.images[0] }}')
                               center center / cover no-repeat;
                           "
                       ></div>
@@ -514,9 +741,9 @@
                     <div class="photo-preview">
                       <div
                         class="photo-preview-image"
-                        (click)="modalService.openModalSeeMoreImg(p.post_id)"
+                        (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
                         style="
-                            background: url('{{ p.postImages[1].link_image }}')
+                            background: url('{{ p.images[1] }}')
                               center center / cover no-repeat;
                           "
                       ></div>
@@ -530,9 +757,9 @@
                     <div class="photo-preview">
                       <div
                         class="photo-preview-image"
-                        (click)="modalService.openModalSeeMoreImg(p.post_id)"
+                        (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
                         style="
-                            background: url('{{p.postImages[2].link_image}}') center
+                            background: url('{{p.images[2]}}') center
                               center / cover no-repeat;
                           "
                       ></div>
@@ -545,9 +772,9 @@
                     <div class="photo-preview">
                       <div
                         class="photo-preview-image"
-                        (click)="modalService.openModalSeeMoreImg(p.post_id)"
+                        (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
                         style="
-                          background: url('{{ p.postImages[3].link_image }}')
+                          background: url('{{ p.images[3] }}')
                             center center / cover no-repeat;
                         "
                       ></div>
@@ -557,24 +784,25 @@
                 </div>
                 <div
                   class="picture-collage-item"
-                  (click)="modalService.openModalSeeMoreImg(p.post_id)"
-                  *ngIf="(p.postImages.length - 4) > 0"
+                  *ngIf="(p.images.length - 4) > 0"
+                  (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
                 >
                   <a class="picture-collage-item-overlay seemore">
                     <p class="picture-collage-item-overlay-text">
-                      +{{ p.postImages.length - 4 }}
+                      +{{ p.images.length - 4 }}
                     </p>
                   </a>
                 </div>
               </div>
               <!-- </div> -->
             </div>
+          </div>
             <!-- /IFRAME WRAP -->
 
             <!-- WIDGET BOX STATUS CONTENT -->
             <div class="widget-box-status-content">
               <!-- TAG LIST -->
-              <div class="tag-list">
+              <div class="tag-list" *ngIf="p.list_Hash_Tag && p.list_Hash_Tag[0] !== 'null'">
                 <!-- TAG ITEM -->
                 <a class="tag-item secondary" *ngFor="let hashTag of p.list_Hash_Tag">{{
                   hashTag
@@ -582,7 +810,7 @@
                 <!-- /TAG ITEM -->
               </div>
               <!-- /TAG LIST -->
-
+  
               <!-- CONTENT ACTIONS -->
               <div class="content-actions">
                 <!-- <div> -->
@@ -601,7 +829,7 @@
                           alt="reaction-love"
                         />
                         <!-- /REACTION IMAGE -->
-
+  
                         <!-- SIMPLE DROPDOWN -->
                         <div
                           class="simple-dropdown padded reaction-item-dropdown"
@@ -615,18 +843,18 @@
                             <span class="bold">Love</span>
                           </p> -->
                           <!-- SIMPLE DROPDOWN TEXT -->
-                          <div *ngFor="let interesteds of listUser">
-                            <div *ngIf="interesteds[2] == p.post_id">
+                          <div *ngFor="let interesteds of p.userInterested">
+                            <!-- <div *ngIf="interesteds[2] == p.post_id"> -->
                               <!-- /SIMPLE DROPDOWN TEXT -->
-
+  
                               <!-- SIMPLE DROPDOWN TEXT -->
                               <p class="simple-dropdown-text">
-                                {{ interesteds[1] }}
+                                {{ interesteds.fullname }}
                               </p>
                               <!-- <p class="simple-dropdown-text">
                                 và {{listUser.length - 5}} người khác
                               </p> -->
-                            </div>
+                            <!-- </div> -->
                           </div>
                           <!-- /SIMPLE DROPDOWN TEXT -->
                         </div>
@@ -635,43 +863,43 @@
                       <!-- /REACTION ITEM -->
                     </div>
                     <!-- /META LINE LIST -->
-
+  
                     <!-- META LINE TEXT -->
-                    <div *ngFor="let count of listCount">
-                      <p class="meta-line-text" *ngIf="count[0] == p.post_id">
-                        {{ count[1] }}
+                    <!-- <div *ngFor="let count of profileService.listCountPr"> -->
+                      <p class="meta-line-text">
+                        {{ p.countInterested }}
                       </p>
-                    </div>
-
+                    <!-- </div> -->
+  
                     <!-- /META LINE TEXT -->
                   </div>
                   <!-- /META LINE -->
                 </div>
                 <!-- /CONTENT ACTION -->
-
+  
                 <!-- CONTENT ACTION -->
-                <div class="count-action" *ngFor="let count of listCount">
-                  <div class="content-action" *ngIf="count[0] == p.post_id">
+                <div class="count-action">
+                  <div class="content-action">
                     <!-- META LINE -->
                     <!-- <div> -->
                     <div class="meta-line">
                       <!-- META LINE LINK -->
-                      <p class="meta-line-link">{{ count[2] }} Bình luận</p>
+                      <p class="meta-line-link">{{p.countCommnet }} Bình luận</p>
                       <!-- /META LINE LINK -->
                     </div>
                     <!-- /META LINE -->
-
+  
                     <!-- META LINE -->
                     <div class="meta-line">
                       <!-- META LINE TEXT -->
-                      <p class="meta-line-text">{{ count[3] }} Chia sẻ</p>
+                      <p class="meta-line-text">{{ p.countShare }} Chia sẻ</p>
                       <!-- /META LINE TEXT -->
                     </div>
                     <!-- </div> -->
                     <!-- /META LINE -->
                   </div>
                 </div>
-
+  
                 <!-- /CONTENT ACTION -->
                 <!-- </div> -->
               </div>
@@ -687,10 +915,10 @@
             <div class="post-option-wrap">
               <!-- POST OPTION -->
               <div
-                class="post-option reaction-options-dropdown-trigger active"
+                class="post-option reaction-options-dropdown-trigger"
                 id="interest-{{p.post_id}}"
-                [ngClass]="{active: checkInterested(p.post_id)}"
-                (click)="interestedPost(p.post_id, p.userId)"
+                [ngClass]="{active: checkInterested(p.post_id, p.userInterested)}"
+                (click)="interestedPost(p.post_id, p.user_id)"
               >
                 <p class="post-option-text">Quan tâm</p>
               </div>
@@ -710,7 +938,7 @@
             <!-- POST OPTION -->
             <div
               class="post-option"
-              (click)="modalService.loadComment(p.post_id, p.userId)"
+              (click)="modalService.loadComment(p.post_id, p.user_id)"
             >
               <!-- POST OPTION ICON -->
               <!-- <svg class="post-option-icon icon-comment">
@@ -781,7 +1009,7 @@
               <!-- POST OPTION TEXT -->
               <p class="post-option-text">Chia sẻ</p>
               <div class="dropdown-content">
-                <a (click)="interactPostsService.sharePost(p.post_id, p.userId)"><i class="fa-solid fa-share"></i> Công khai</a>
+                <a (click)="interactPostsService.sharePost(p.post_id, p.user_id)"><i class="fa-solid fa-share"></i> Công khai</a>
                 <a href="#"><i class="fa-solid fa-envelope"></i> Qua email</a>
               </div>
               <!-- /POST OPTION TEXT -->

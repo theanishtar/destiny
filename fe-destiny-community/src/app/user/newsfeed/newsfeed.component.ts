@@ -152,9 +152,9 @@ export class NewsfeedComponent implements OnInit {
       this.listTop5Post = await this.postService.loadTop5Post();
       await this.loadDataSuggest();
       this.listPosts = await this.postService.loadPostNewsFeed();
-      this.listPost = this.listPosts.post;
-      this.listUser = this.listPosts.user;
-      this.listCount = this.listPosts.count;
+      // this.listPost = this.listPosts.post;
+      this.listUser = this.listPosts.userInterested;
+      // this.listCount = this.listPosts.count;
     } catch (error) {
       console.error('Error:', error);
     }
@@ -162,10 +162,11 @@ export class NewsfeedComponent implements OnInit {
 
   /* ============Interested============= */
  
-  checkInterested(post_id: number): boolean {
+  checkInterested(post_id: number,interested :any[]): boolean {
     this.mapIntersted.set(post_id, false);
-    for (let user of this.listUser) {
-      if (user[0] == this.currentUserId && user[2] === post_id) {
+    for (let user of interested) {
+      // if (user[0] == this.currentUserId && user[2] === post_id) {
+      if (user.user_id == this.currentUserId) {
         this.mapIntersted.set(post_id, true);
         return true;
       }

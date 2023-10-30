@@ -26,7 +26,10 @@ public interface MessagesDAO extends JpaRepository<Messages, Integer> {
 	@Modifying
 	@Query(value = "update  messages  set send_status =:st where send_status = false and  sender_id =:senden_id and  chat_id =:chat_id ", nativeQuery = true)
 	public void updateStatusMessages(boolean st, int senden_id, int chat_id);
-	
-	@Query(value ="SELECT * FROM messages WHERE send_Status = false AND sender_id =:id",nativeQuery = true)
+
+	@Query(value = "SELECT * FROM messages WHERE send_Status = false AND sender_id =:id", nativeQuery = true)
 	public List<Messages> findStatus(int id);
+
+	@Query(value = "select *from get_notification(:user_id) order by \"time\" DESC", nativeQuery = true)
+	public List<Object[]> loadNotification(int user_id);
 }

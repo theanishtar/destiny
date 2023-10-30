@@ -41,20 +41,31 @@
           <div class="container-post-report">
             <div class="card shadow mb-5 mt-0">
               <div class="card-body">
-                <h5 class="ml-1 mt-2 mb-3 font-weight-bold">Danh sách</h5>
+                <div class="titile">
+                  <h5 class="ml-1 mt-2 mb-3 font-weight-bold">Danh sách</h5>
+                  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#form">
+                    See Modal with Form
+                  </button>  
+                </div>
                 <div class="table-responsive ml-1">
                   <table class="table rwd-table" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                       <tr>
-                        <th>Người dùng</th>
                         <th>STT</th>
+                        <th>Tên</th>
+                        <th>Nhãn</th>
+                        <th>Mức độ nghiêm trọng</th>
+                        <th>Ngày tạo</th>
                         <th></th>
                       </tr>
                     </thead>
                     <tfoot>
                       <tr>
-                        <th>Người dùng</th>
                         <th>STT</th>
+                        <th>Tên</th>
+                        <th>Nhãn</th>
+                        <th>Mức độ nghiêm trọng</th>
+                        <th>Ngày tạo</th>
                         <th></th>
                       </tr>
                     </tfoot>
@@ -62,55 +73,8 @@
                       <tr>
                         <td class="text-substring" data-th="Nội dung">1</td>
                         <td data-th="Người dùng">Má</td>
-                        <td data-th="Xem thêm">
-                          <a href="">Xem chi tiết</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-substring" data-th="Nội dung">2</td>
-                        <td data-th="Người dùng">Má2</td>
-                        <td data-th="Xem thêm">
-                          <a href="">Xem chi tiết</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-substring" data-th="Nội dung">3</td>
-                        <td data-th="Người dùng">Má3</td>
-                        <td data-th="Xem thêm">
-                          <a href="">Xem chi tiết</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-substring" data-th="Nội dung">4</td>
-                        <td data-th="Người dùng">Má4</td>
-                        <td data-th="Xem thêm">
-                          <a href="">Xem chi tiết</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-substring" data-th="Nội dung">5</td>
-                        <td data-th="Người dùng">Má5</td>
-                        <td data-th="Xem thêm">
-                          <a href="">Xem chi tiết</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-substring" data-th="Nội dung">6</td>
-                        <td data-th="Người dùng">Má6</td>
-                        <td data-th="Xem thêm">
-                          <a href="">Xem chi tiết</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-substring" data-th="Nội dung">7</td>
-                        <td data-th="Người dùng">Má7</td>
-                        <td data-th="Xem thêm">
-                          <a href="">Xem chi tiết</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-substring" data-th="Nội dung">8</td>
-                        <td data-th="Người dùng">Má8</td>
+                        <td data-th="Người dùng">1</td> 
+                        <td data-th="Người dùng">Cao</td>
                         <td data-th="Xem thêm">
                           <a href="">Xem chi tiết</a>
                         </td>
@@ -126,4 +90,52 @@
     </div>
   
   </div>
-
+  <!-- <main class="overlay" *ngIf="isOpenCreateWord$ | async">
+    <div id="favDialog_changeMail" class="modal fade favDialog_changeMail">
+      <button
+            (click)="closeModalCreateWord()"
+            class="btnClose-change-email"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+          
+    </div>
+  </main> -->
+  <!-- <div class="container">
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#form">
+      See Modal with Form
+    </button>  
+  </div> -->
+  
+  <div class="modal fade" id="form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header border-bottom-0">
+          <h5 class="modal-title" id="exampleModalLabel">Create Account</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="email1">Email address</label>
+              <input type="email" class="form-control" id="email1" aria-describedby="emailHelp" placeholder="Enter email">
+              <small id="emailHelp" class="form-text text-muted">Your information is safe with us.</small>
+            </div>
+            <div class="form-group">
+              <label for="password1">Password</label>
+              <input type="password" class="form-control" id="password1" placeholder="Password">
+            </div>
+            <div class="form-group">
+              <label for="password1">Confirm Password</label>
+              <input type="password" class="form-control" id="password2" placeholder="Confirm Password">
+            </div>
+          </div>
+          <div class="modal-footer border-top-0 d-flex justify-content-center">
+            <button type="submit" class="btn btn-success">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

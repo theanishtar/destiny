@@ -241,3 +241,34 @@ svg.post-settings-icon.icon-more-dots {
   width: 30px;
   height: 25px;
 }
+/* ?// */
+.dropdown {
+  display: inline-block;
+  position: relative;
+}
+.dropdown-content {
+  background-color: white;
+  margin-bottom: 135px;
+  display: none;
+  position: absolute;
+  width: 100%;
+  border-radius: 5px;
+  overflow: auto;
+  box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.4);
+}
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+.dropdown-content a {
+  display: block;
+  color: #000000;
+  padding: 15px;
+  text-decoration: none;
+}
+.dropdown-content a:hover {
+  color: #ffffff;
+  background-color: #00a4bd;
+}
+.dropdown-content a i{
+  margin-right: 5px;
+}

@@ -17,5 +17,5 @@ public class ProfileEnitity {
 	String address_fullname;
 	String address_fullname_en;
 	List<Object[]> listPostInterested;
-	List<PostEntityProfile> postEntityProfile;
+	List<PostEntity> postEntityProfile;
 }

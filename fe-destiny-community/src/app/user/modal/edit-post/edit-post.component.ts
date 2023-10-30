@@ -82,6 +82,12 @@ export class EditPostComponent {
         await this.addData(img);
       }
     }
+    if(this.file.length === undefined){
+      for(let img of this.postService.listImageSources){
+        this.listImg += img.link_image;
+      }
+      
+    }
     // else{
     //   for (let img of this.postService.listImageSources) {
     //     await this.addData(img.link_image);
@@ -189,6 +195,7 @@ export class EditPostComponent {
   imageSources: any[] = [];
 
   uploadImg(event: any) {
+    // this.postService.listImageSources = [];
     this.file = event.target.files;
     const blobs = this.toBlob(this.file);
     this.imageSources = blobs.map(blob => URL.createObjectURL(blob));
@@ -214,25 +221,38 @@ export class EditPostComponent {
   }
 listImgTemp:string[] = [];
   deleteImg(event: any, i) {
-    // if(this.file.length === undefined){
-    //   for (let img of this.postService.listImageSources) {
-    //     console.log("this.file.length: " + img.link_image)
-    //     this.listImgTemp.push(img.link_image)
-    //   }
-    //   this.file = this.listImgTemp;
+  
+    console.log("this.postService.listImgTemp.length: " + this.postService.listImgTemp.length);
+    // if(i >= 0 && i < this.postService.listImgTemp.length){
+    //   console.log("===================: "+i);
+    //     this.postService.listImgTemp.splice(i,1);
+    //    this.imageSources = this.postService.listImgTemp;
+    // } else {
+    //   console.log("Chỉ mục không hợp lệ.");
     // }
-    if (i >= 0 && i < this.file.length) {
-      
-      // Tạo một mảng thường
-      const newArray = Array.from(this.file);
+    if (i >= 0 && i < this.postService.listImageSources.length) {
+      console.log("===================: " + i);
+      const newArray = Array.from(this.postService.listImageSources);
       // Xóa phần tử từ mảng thường
       newArray.splice(i, 1);
-      // Cập nhật this.file từ mảng thường
-      this.file = this.createFileList(newArray);
-      // Sau khi xóa, tạo lại danh sách blobs và image sources
-      const blobs = this.toBlob(this.file);
-      this.imageSources = blobs.map(blob => URL.createObjectURL(blob));
+      // this.postService.listImgTemp = this.postService.listImgTemp.filter((_, index) => index !== i);
+      this.postService.listImageSources = newArray;
+    } else {
+      console.log("Chỉ mục không hợp lệ.");
     }
+    
+    // if (i >= 0 && i < this.file.length) {
+      
+    //   // Tạo một mảng thường
+    //   const newArray = Array.from(this.file);
+    //   // Xóa phần tử từ mảng thường
+    //   newArray.splice(i, 1);
+    //   // Cập nhật this.file từ mảng thường
+    //   this.file = this.createFileList(newArray);
+    //   // Sau khi xóa, tạo lại danh sách blobs và image sources
+    //   const blobs = this.toBlob(this.file);
+    //   this.imageSources = blobs.map(blob => URL.createObjectURL(blob));
+    // }
   }
 
 

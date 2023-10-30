@@ -27,7 +27,7 @@ import com.davisy.entity.DataFollows;
 import com.davisy.entity.Districts;
 import com.davisy.entity.Gender;
 import com.davisy.entity.Post;
-import com.davisy.entity.PostEntityProfile;
+import com.davisy.entity.PostEntity;
 import com.davisy.entity.ProfileEnitity;
 import com.davisy.entity.Provinces;
 import com.davisy.entity.User;
@@ -38,6 +38,7 @@ import com.davisy.service.ChatsService;
 import com.davisy.service.DistrictService;
 import com.davisy.service.FollowService;
 import com.davisy.service.GenderService;
+import com.davisy.service.InterestedService;
 import com.davisy.service.PostImagesService;
 import com.davisy.service.PostService;
 import com.davisy.service.ProvinceService;
@@ -61,6 +62,8 @@ public class ProfileContronller {
 	FollowService followService;
 	@Autowired
 	PostService postService;
+	@Autowired
+	InterestedService interestedService;
 	@Autowired
 	PostImagesService postImagesService;
 	@Autowired
@@ -259,13 +262,13 @@ public class ProfileContronller {
 					user.getDistricts().getFull_name_en() + " " + user.getProvinces().getFull_name_en());
 			profileEnitity.setListPostInterested(postService.getTop5postProfile(id));
 			List<Object[]> postProfile = postService.getPostProfile(id, 0);
-			List<PostEntityProfile> postEntityProfile = new ArrayList<>();
+			List<PostEntity> postEntityProfile = new ArrayList<>();
 
 			for (Object[] ob : postProfile) {
 				if (null != ob[2]) {
 					int idPostShare = Integer.valueOf(ob[2].toString());
 					List<Object[]> postShare = postService.getPostProfile(id, idPostShare);
-					PostEntityProfile profileTemp = new PostEntityProfile();
+					PostEntity profileTemp = new PostEntity();
 					for (Object[] o : postShare) {
 						profileTemp = postEntityProfile(o, null);
 					}
@@ -283,10 +286,10 @@ public class ProfileContronller {
 
 	}
 
-	public PostEntityProfile postEntityProfile(Object[] ob, PostEntityProfile entityProfile) {
+	public PostEntity postEntityProfile(Object[] ob, PostEntity entityProfile) {
 		try {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			PostEntityProfile profile = new PostEntityProfile();
+			PostEntity profile = new PostEntity();
 			profile.setPost_id(Integer.valueOf(ob[0].toString()));
 			profile.setUser_id(Integer.valueOf(ob[1].toString()));
 			profile.setContent(ob[3] + "");
@@ -303,11 +306,10 @@ public class ProfileContronller {
 			profile.setCountCommnet(Integer.valueOf(ob[11].toString()));
 			profile.setCountShare(Integer.valueOf(ob[12].toString()));
 			profile.setImages(postImagesService.findAllImagesofPost(profile.getPost_id()));
-			List<Object[]> userOb = userService.getUserofPostProfile(profile.getPost_id());
+			List<Object[]> userOb = interestedService.findByIdPost(profile.getPost_id());
 			profile.setUser(userOb);
-			User user = userService.findById(profile.getUser_id());
-			profile.setAvatar(user.getAvatar());
-			profile.setFullname(user.getFullname());
+			profile.setFullname(ob[13] + "");
+			profile.setAvatar(ob[14] + "");
 			if (entityProfile != null)
 				profile.setPostEntityProfile(entityProfile);
 			return profile;
@@ -478,7 +480,7 @@ public class ProfileContronller {
 				AuthenticationResponse authRes = authenticationService.authenticationResponse(new AuthenticationRequest(eConfirm.newEmail, eConfirm.getCurrentPassword()));
 				
 				// gửi token mới qua socket
-				simpMessagingTemplate.convertAndSend("/topic/public/"+user.getUser_id(),authRes);
+				simpMessagingTemplate.convertAndSend("/topic/changetoken/"+user.getUser_id(),authRes);
 				cacheService.destroyCache("changemail:" + code);
 				return ResponseEntity.status(200).body(null);
 			} catch (Exception e) {

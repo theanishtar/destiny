@@ -93,7 +93,7 @@ export class ProfileService {
         this.setdataTimeLine(response);
         this.dataProfileTimeline = this.getdataTimeLine();
         this.listPostPr = this.dataProfileTimeline.postEntityProfile;
-        this.listUserPr = this.dataProfileTimeline.countInterested;
+        this.listUserPr = this.listPostPr.userInterested;
         this.dateJoin = this.datePipe.transform(this.dataProfileTimeline.dateJoin, 'dd/MM/yyyy');
       }
 

@@ -10,7 +10,7 @@ public interface PostService {
 	public List<Object[]> getTOP5Post();
 
 	// Lấy tất cả bài post có quan hệ bạn bè hoặc follow
-	public List<Post> findAllPost(int id, int provinceId);
+	public List<Object[]> findAllPost(int id, int provinceId);
 
 	// lấy số lượng comment,interested, share của bài post
 	public List<Object[]> getCountPost(int id, int provinceId);

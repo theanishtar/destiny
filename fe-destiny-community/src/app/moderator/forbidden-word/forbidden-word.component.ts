@@ -3,7 +3,7 @@ import 'datatables.net';
 import '../../../assets/js/admin/database/datatables/jquery.dataTables.min.js'
 import '../../../assets/js/admin/database/datatables/dataTables.bootstrap4.js'
 import $e from 'jquery';
-
+import { BehaviorSubject } from 'rxjs'; //Theo dõi trạng thái của modal
 declare var $: any;
 
 @Component({
@@ -11,13 +11,23 @@ declare var $: any;
   templateUrl: './forbidden-word.component.html',
   styleUrls: [
     `../../admin/css/sb-admin-2.min.css`,
-    `../../admin/css/home.css`
+    `../../admin/css/home.css`,
+    `./forbidden-word.component.css`
   ]
 })
 export class ForbiddenWordComponent {
   pagiPostReport!: HTMLElement;
   tablePostReport!: HTMLElement;
+  private isOpenCreateWord = new BehaviorSubject<boolean>(false);
+  isOpenCreateWord$ = this.isOpenCreateWord.asObservable();
 
+  openModalCreateWord() {
+    this.isOpenCreateWord.next(true);
+  }
+
+  closeModalCreateWord() {
+    this.isOpenCreateWord.next(false);
+  }
   constructor(private el: ElementRef, private renderer: Renderer2) {}
 
 

@@ -259,7 +259,7 @@
                           multiple 
                           class="absolute inset-0 z-50 m-0 h-full w-full cursor-pointer p-0 opacity-0 outline-none"
                         />
-                        <div class="slideshow-container-product" *ngIf="postService.listImageSources != 0">
+                        <div class="slideshow-container-product">
                           <!-- Full-width images with number and caption text -->
                           <div
                             class="mySlides fade-produc"
@@ -283,30 +283,7 @@
                             </div>
                           </div>
                         </div>
-                        <div class="slideshow-container-product" *ngIf="postService.listImageSources == 0">
-                          <!-- Full-width images with number and caption text -->
-                          <div
-                            class="mySlides fade-produc"
-                            id="images-to-upload"
-                            *ngFor="let imgSrc of imageSources; let i =index"
-                          >
-                            <img
-                              class="img-product"
-                              [src]="imgSrc"
-                              #uploadPreview
-                              id="uploadPreview"
-                            />
-                            <span class="delete-img" (click)="deleteImg($event, i)"><i class="fa-solid fa-xmark"></i></span>
-                            <div class="btn-slide-img">
-                              <a class="prev-img" (click)="plusSlides(-1)"
-                                >&#10094;</a
-                              >
-                              <a class="next-img" (click)="plusSlides(1)"
-                                >&#10095;</a
-                              >
-                            </div>
-                          </div>
-                        </div>
+                        
                       </div>
   
                       <div class="flex justify-end gap-4.5">

@@ -79,7 +79,7 @@ export class PostService {
   /* ============update post============= */
   private isOpenUpdatePost = new BehaviorSubject<boolean>(false);
   isOpenUpdatePost$ = this.isOpenUpdatePost.asObservable();
-
+  listImgTemp:string[] = [];
   openModalUpdatePost(idPost) {
     this.isOpenUpdatePost.next(true);
     try {
@@ -87,6 +87,8 @@ export class PostService {
         this.postUpdate = res;
         this.infoPost = this.postUpdate[0];
         this.listImageSources = this.infoPost.postImages;
+
+        this.listImgTemp = this.listImageSources;
         console.log("this.listPostUdpate: " + JSON.stringify(this.postUpdate[1]));
       })
     } catch (error) {
@@ -95,6 +97,7 @@ export class PostService {
   }
 
   closeModalUpdatePost() {
+    this.listImgTemp = this.listImageSources;
     this.isOpenUpdatePost.next(false);
   }
 

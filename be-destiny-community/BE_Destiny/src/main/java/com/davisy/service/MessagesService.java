@@ -11,6 +11,8 @@ public interface MessagesService {
 
 	public void updateStatusMessages(boolean st, int senden_id, int chat_id);
 
+	public List<Object[]> loadNotification(int user_id);
+
 	public List<Messages> findStatus(int id);
 
 	public void create(Messages messages);

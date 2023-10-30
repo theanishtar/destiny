@@ -111,7 +111,7 @@ public class PostServiceImpl implements PostService {
 	// Lấy tất cả bài post có quan hệ bạn bè hoặc follow
 	@Override
 //	@Cacheable("postFindAll")
-	public List<Post> findAllPost(int id, int provinceId) {
+	public List<Object[]> findAllPost(int id, int provinceId) {
 		return postDao.findAllPost(id, provinceId);
 	}
 

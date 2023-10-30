@@ -15,7 +15,7 @@ public class NotificationModel {
 	int fromUserId;
 	String content;
 	int postId;
-	int replyId = 0;
+	int replyId ;
 	String time;
 	MessageType type;
 
@@ -25,8 +25,8 @@ public class NotificationModel {
 
 	@Override
 	public String toString() {
-		return "NotificationModel{" + "avatar='" + avatar + '\'' + ", fullname='" + fullname + '\'' + ", fromUserId='"
+		return "NotificationModel[{" + "avatar='" + avatar + '\'' + ", fullname='" + fullname + '\'' + ", fromUserId='"
 				+ fromUserId + '\'' + ",content='" + content + '\'' + ", postId='" + postId + '\'' + ",replyId='"
-				+ replyId + '\'' + ", time='" + time + '\'' + ",type='" + type + '\'' + '}';
+				+ replyId + '\'' + ", time='" + time + '\'' + ",type='" + type + '\'' + "}]";
 	}
 }

@@ -206,7 +206,7 @@
             <!-- SIMPLE DROPDOWN -->
             <div class="simple-dropdown widget-box-post-settings-dropdown">
               <!-- SIMPLE DROPDOWN LINK -->
-              <p class="simple-dropdown-link">Báo cáo bài viết {{p.post_id}}</p>
+              <p class="simple-dropdown-link">Báo cáo bài viết</p>
               <!-- /SIMPLE DROPDOWN LINK -->
 
               <!-- SIMPLE DROPDOWN LINK -->
@@ -746,7 +746,7 @@
                           <span class="bold">Love</span>
                         </p> -->
                         <!-- SIMPLE DROPDOWN TEXT -->
-                        <div *ngFor="let interesteds of profileService.listUserPr">
+                        <div *ngFor="let interesteds of p.userInterested">
                           <!-- <div *ngIf="interesteds[2] == p.post_id"> -->
                             <!-- /SIMPLE DROPDOWN TEXT -->
 
@@ -819,31 +819,21 @@
             <!-- POST OPTION -->
             <div
               class="post-option reaction-options-dropdown-trigger"
-              (click)="toggleLike()"
-              [class.active]="isLiked(p.post_id)"
+              id="interest-{{p.post_id}}"
+              [ngClass]="{active: checkInterested(p.post_id, p.userInterested)}"
+              (click)="interestedPost(p.post_id, p.user_id)"
             >
-              <!-- POST OPTION ICON -->
-              <!-- <svg class="post-option-icon icon-thumbs-up">
-                <use xlink:routerLink="/#svg-thumbs-up"></use>
-              </svg> -->
-              <svg
-                class="post-option-icon icon-thumbs-up"
-                fill="#000000"
-                width="800px"
-                height="800px"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M20.5,4.609A5.811,5.811,0,0,0,16,2.5a5.75,5.75,0,0,0-4,1.455A5.75,5.75,0,0,0,8,2.5,5.811,5.811,0,0,0,3.5,4.609c-.953,1.156-1.95,3.249-1.289,6.66,1.055,5.447,8.966,9.917,9.3,10.1a1,1,0,0,0,.974,0c.336-.187,8.247-4.657,9.3-10.1C22.45,7.858,21.453,5.765,20.5,4.609Zm-.674,6.28C19.08,14.74,13.658,18.322,12,19.34c-2.336-1.41-7.142-4.95-7.821-8.451-.513-2.646.189-4.183.869-5.007A3.819,3.819,0,0,1,8,4.5a3.493,3.493,0,0,1,3.115,1.469,1.005,1.005,0,0,0,1.76.011A3.489,3.489,0,0,1,16,4.5a3.819,3.819,0,0,1,2.959,1.382C19.637,6.706,20.339,8.243,19.826,10.889Z"
-                />
-              </svg>
-              <!-- /POST OPTION ICON -->
-
-              <!-- POST OPTION TEXT -->
               <p class="post-option-text">Quan tâm</p>
-              <!-- /POST OPTION TEXT -->
             </div>
+
+            <!-- <div
+              class="post-option reaction-options-dropdown-trigger"
+              (click)="testCheck(p.post_id)"
+              *ngIf="!checkInterested(p.post_id) || !mapIntersted.get(p.post_id)"
+            >
+            <p class="post-option-text">{{mapIntersted.get(p.post_id)}}</p>
+              <p class="post-option-text">Quan tâm</p>
+            </div> -->
             <!-- /POST OPTION -->
           </div>
           <!-- /POST OPTION WRAP -->
@@ -851,7 +841,7 @@
           <!-- POST OPTION -->
           <div
             class="post-option"
-            (click)="modalService.loadComment(p.post_id, p.userId)"
+            (click)="modalService.loadComment(p.post_id, p.user_id)"
           >
             <!-- POST OPTION ICON -->
             <!-- <svg class="post-option-icon icon-comment">
@@ -896,6 +886,7 @@
           <!-- /POST OPTION -->
 
           <!-- POST OPTION -->
+          <div class="dropdown">
           <div class="post-option">
             <!-- POST OPTION ICON -->
             <!-- <svg class="post-option-icon icon-share">
@@ -920,8 +911,13 @@
 
             <!-- POST OPTION TEXT -->
             <p class="post-option-text">Chia sẻ</p>
+            <div class="dropdown-content">
+              <a (click)="interactPostsService.sharePost(p.post_id, p.user_id)"><i class="fa-solid fa-share"></i> Công khai</a>
+              <a href="#"><i class="fa-solid fa-envelope"></i> Qua email</a>
+            </div>
             <!-- /POST OPTION TEXT -->
           </div>
+        </div>
           <!-- /POST OPTION -->
         </div>
         <!-- /POST OPTIONS -->

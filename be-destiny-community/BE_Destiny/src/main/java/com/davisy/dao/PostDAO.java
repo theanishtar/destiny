@@ -69,7 +69,7 @@ public interface PostDAO extends JpaRepository<Post, Integer> {
 
 	// Lấy tất cả bài post có quan hệ bạn bè hoặc follow
 	@Query(value = "SELECT * FROM get_friend_posts(:id,:provinceId)", nativeQuery = true)
-	public List<Post> findAllPost(int id, int provinceId);
+	public List<Object[]> findAllPost(int id, int provinceId);
 
 	// lấy số lượng comment,interested, share của bài post
 	@Query(value = "WITH friend_posts AS (\n" + "    SELECT post_id  FROM get_friend_posts(:id,:provinceId)\n" + ")\n"
