@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProfileService } from '@app/user/service/profile.service';
+import '../../../../assets/toast/main.js';
+declare var toast: any;
 import {
   FormGroup,
   FormBuilder,
@@ -44,27 +46,36 @@ export class ChangeEmailComponent implements OnInit {
 				newEmail: this.ChangeMailForm.get("newEmail")!.value,
 				password: this.ChangeMailForm.get("password")!.value,
 			};
+      console.log("data: " + JSON.stringify(data));
+      // this.nextStep();
       this.profileService.changeMailApi(data).subscribe(() => {
 
       })
     }
-    // let timerInterval;
-		// Swal.fire({
-		// 	title: 'Thông báo!',
-		// 	html: 'Quá trình sẽ diễn ra trong vài giây!',
-		// 	timer: 16000,
-		// 	timerProgressBar: true,
-		// 	didOpen: () => {
-		// 		Swal.showLoading();
-		// 	},
-		// 	willClose: () => {
-		// 		clearInterval(timerInterval);
-		// 	},
-		// }).then((result) => {
-		// 	if (result.dismiss === Swal.DismissReason.timer) {
-		// 		console.log('I was closed by the timer');
-		// 	}
-		// });
+    this.profileService.closeModalChangeMail();
+    this.ChangeMailForm.reset();
+    let timerInterval;
+		Swal.fire({
+			title: 'Thông báo!',
+			html: 'Quá trình sẽ diễn ra trong vài giây!',
+			timer: 15000,
+			timerProgressBar: true,
+			didOpen: () => {
+				Swal.showLoading();
+			},
+			willClose: () => {
+				clearInterval(timerInterval);
+			},
+		}).then((result) => {
+			if (result.dismiss === Swal.DismissReason.timer) {
+				new toast({
+          title: 'Thông báo!',
+          message: 'Vui lòng kiểm tra Email',
+          type: 'success',
+          duration: 3000,
+        })
+			}
+		});
   }
 
 

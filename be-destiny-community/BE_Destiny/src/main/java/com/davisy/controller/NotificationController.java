@@ -136,7 +136,6 @@ public class NotificationController {
 		} catch (Exception e) {
 			System.out.println("error loadNotidication: "+e);
 		}
-
 	}
 
 }

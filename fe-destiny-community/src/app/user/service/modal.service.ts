@@ -115,11 +115,11 @@ export class ModalService {
             fromUserId: k!.fromUserId,
             content: k!.content,
             postId: k!.postId,
-            time: this.messageService.customTime(k!.time),
+            time: this.messageService.customTime(k!.time,1),
             type: k!.type
           }
           this.listNotify.set(this.count, notify);
-          this.mapTime.set(this.count, new Date(k!.time).toISOString());
+          this.mapTime.set(this.count, k!.time);
           this.count++;
 
         }
@@ -133,6 +133,7 @@ export class ModalService {
       setInterval(() => {
         if (this.listNotify != null) {
           for (let [key, value] of this.mapTime) {
+            console.log(value)
             let v = this.listNotify.get(key);
             let notify: NotifyModel = {
               avatar: v!.avatar,
@@ -140,7 +141,7 @@ export class ModalService {
               fromUserId: v!.fromUserId,
               content: v!.content,
               postId: v!.postId,
-              time: this.messageService.customTime(value),
+              time: this.messageService.customTime(value,1),
               type: v!.type
             }
             this.listNotify.set(key, notify);

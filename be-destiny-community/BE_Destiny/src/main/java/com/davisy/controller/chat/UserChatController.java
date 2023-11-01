@@ -141,24 +141,45 @@ public class UserChatController {
 					UserChatStorage.getInstance().setUser(user.getUser_id(), listModel);
 				}
 			}
-			synchronized (UserChatStorage.getInstance()) {
-				for (Integer key : UserChatStorage.getInstance().getUsers().keySet()) {
-					if (key != user.getUser_id()) {
-						List<UserModel> originalList = UserChatStorage.getInstance().getUsers().get(key);
-						List<UserModel> copyList = new ArrayList<>(originalList);
 
-						for (UserModel v : copyList) {
-							if (v.getUser_id() == user.getUser_id()) {
-								if (user.getOnline_last_date() == null)
-									v.setType(MessageType.JOIN);
-								else
-									v.setType(MessageType.LEAVE);
-							}
+			Iterator<Integer> iterator = UserChatStorage.getInstance().getUsers().keySet().iterator();
+			while (iterator.hasNext()) {
+				Integer key = iterator.next();
+
+				if (key != user.getUser_id()) {
+					List<UserModel> originalList = UserChatStorage.getInstance().getUsers().get(key);
+					List<UserModel> copyList = new ArrayList<>(originalList);
+
+					for (UserModel v : copyList) {
+						if (v.getUser_id() == user.getUser_id()) {
+							if (user.getOnline_last_date() == null)
+								v.setType(MessageType.JOIN);
+							else
+								v.setType(MessageType.LEAVE);
 						}
-						UserChatStorage.getInstance().setUser(key, copyList);
 					}
+					UserChatStorage.getInstance().getUsers().put(key, copyList);
 				}
 			}
+
+//			synchronized (UserChatStorage.getInstance()) {
+//				for (Integer key : UserChatStorage.getInstance().getUsers().keySet()) {
+//					if (key != user.getUser_id()) {
+//						List<UserModel> originalList = UserChatStorage.getInstance().getUsers().get(key);
+//						List<UserModel> copyList = new ArrayList<>(originalList);
+//
+//						for (UserModel v : copyList) {
+//							if (v.getUser_id() == user.getUser_id()) {
+//								if (user.getOnline_last_date() == null)
+//									v.setType(MessageType.JOIN);
+//								else
+//									v.setType(MessageType.LEAVE);
+//							}
+//						}
+//						UserChatStorage.getInstance().setUser(key, copyList);
+//					}
+//				}
+//			}
 		} catch (Exception e) {
 			System.out.println("Error Async: " + e);
 		}
@@ -169,15 +190,15 @@ public class UserChatController {
 	public HashMap<Integer, List<UserModel>> fetchAll() {
 		return UserChatStorage.getInstance().getUsers();
 	}
-	
+
 	@PostMapping("/v1/user/inbox")
 	public void createChatRoom(HttpServletRequest request, @RequestBody int id) {
 		try {
 			String email = jwtTokenUtil.getEmailFromHeader(request);
 			User user1 = userService.findByEmail(email);
 			User user2 = userService.findById(id);
-			String fromUserId =user1.getUsername();
-			String toUser =user2.getUsername();
+			String fromUserId = user1.getUsername();
+			String toUser = user2.getUsername();
 			if (chatsService.findChatNames(fromUserId, toUser) == null) {
 				Chats chats = new Chats();
 				List<Integer> list = new ArrayList<>();
@@ -195,7 +216,7 @@ public class UserChatController {
 				}
 			}
 			async(user1, true);
-			simpMessagingTemplate.convertAndSend("/topic/public",UserChatStorage.getInstance().getUsers());
+			simpMessagingTemplate.convertAndSend("/topic/public", UserChatStorage.getInstance().getUsers());
 		} catch (Exception e) {
 			// TODO: handle exception
 		}

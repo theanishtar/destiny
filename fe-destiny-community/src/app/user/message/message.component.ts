@@ -226,10 +226,18 @@ export class MessageComponent implements OnInit {
     this.$chatHistory.scrollTop(this.$chatHistory[0].scrollHeight);
   }
   getCurrentTime() {
-    return new Date().toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3");
+    let date = new Date();
+    let hours = (date.getHours()<10)?'0'+(date.getHours()):(date.getHours());
+    let minutes = (date.getMinutes()<10)?'0'+(date.getMinutes()):(date.getMinutes());
+    let newTime =hours+':'+minutes;
+    return newTime;
   }
   getCustomTime(time) {
-    return new Date(time).toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3");
+    let date = new Date(time);
+    let hours = (date.getHours()<10)?'0'+(date.getHours()):(date.getHours());
+    let minutes = (date.getMinutes()<10)?'0'+(date.getMinutes()):(date.getMinutes());
+    let newTime =hours+':'+minutes;
+    return newTime;
   }
 
   customTime(time) {

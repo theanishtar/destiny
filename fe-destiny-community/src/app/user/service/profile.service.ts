@@ -278,7 +278,7 @@ export class ProfileService {
       catchError((error: HttpErrorResponse) => {
         console.log("error.status 2: " + JSON.stringify(error))
         if (error.status === 200) {
-          this.router.navigate(['wait-confirm']);
+          // this.router.navigate(['wait-confirm']);
           return throwError(
             new toast({
               title: 'Thông báo!',
@@ -319,8 +319,9 @@ export class ProfileService {
     );
   }
   
-  changeToken(data: any) {
-    return this.http.post<any>(this.changeTokenUrl, data).pipe(
+  changeToken(code: string): Observable<any> {
+    const url = `${this.changeTokenUrl}?code=${code}`;
+    return this.http.post(url, {}).pipe(
       tap(() => {
 
       }),

@@ -36,6 +36,7 @@ import com.davisy.service.AuthenticationService;
 import com.davisy.service.CacheService;
 import com.davisy.service.ChatsService;
 import com.davisy.service.DistrictService;
+import com.davisy.service.EmailService;
 import com.davisy.service.FollowService;
 import com.davisy.service.GenderService;
 import com.davisy.service.InterestedService;
@@ -46,6 +47,7 @@ import com.davisy.service.UserService;
 import com.davisy.service.WardService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -89,6 +91,9 @@ public class ProfileContronller {
 	@Autowired
 	ObjectMapper mapper;
 
+	@Autowired 
+	EmailService emailService;
+	
 	String provinceCode;
 	String districtCode;
 
@@ -430,7 +435,7 @@ public class ProfileContronller {
 	}
 
 	@PostMapping("/v1/user/profile/change/email")
-	private ResponseEntity<String> changeEmail(HttpServletRequest request, @RequestBody EmailChange change) {
+	private ResponseEntity<String> changeEmail(HttpServletRequest request, @RequestBody EmailChange change) throws MessagingException {
 		String email = jwtTokenUtil.getEmailFromHeader(request);
 		User currentUser = userService.findByEmail(email);
 
@@ -460,6 +465,7 @@ public class ProfileContronller {
 		 * 		=> call api GET: /v1/user/profile/change/email?code=this.randCodeAuth
 		 * 
 		 */
+		emailService.sendHtmlEmail("http://localhost:4200/chang-email-confirm?code="+this.randCodeAuth, change.newEmail);
 		return ResponseEntity.status(200).body(this.randCodeAuth); // "OK"
 	}
 

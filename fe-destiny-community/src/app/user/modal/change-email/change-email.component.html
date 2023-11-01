@@ -3,7 +3,13 @@
     <!-- LANDING FORM -->
     <div class="landing-form">
       <!-- FORM BOX -->
-      <form action="#" class="form change-mail">
+      <form
+        [formGroup]="ChangeMailForm"
+        (ngSubmit)="changeMail()"
+        action=""
+        novalidate
+        class="form change-mail"
+      >
         <button
           (click)="profileService.closeModalChangeMail()"
           class="btnClose-change-email"
@@ -24,22 +30,38 @@
         <div class="form-step form-step-active">
           <div class="input-group">
             <label style="font-size: large" for="username">Nhập mật khẩu</label>
-            <input type="text" name="password" id="password" />
+            <input type="text" formControlName="password" name="password" id="password" />
+            <span
+            *ngIf="
+            ChangeMailForm.get('password')?.invalid &&
+            ChangeMailForm.get('password')?.touched
+            "
+          >
+            <div style="color: red">Vui lòng nhập mât khẩu!</div>
+          </span>
           </div>
 
           <div class="input-group">
             <label style="font-size: large" for="username"
               >Nhập email mới</label
             >
-            <input type="email" name="newEmail" id="newEmail" />
+            <input type="email" formControlName="newEmail" name="newEmail" id="newEmail" />
+            <span
+              *ngIf="
+              ChangeMailForm.get('newEmail')?.invalid &&
+              ChangeMailForm.get('newEmail')?.touched
+              "
+            >
+              <div style="color: red">Vui lòng nhập email!</div>
+            </span>
           </div>
 
-          <div class="">
-            <a
+          <div>
+            <button
               style="color: #f3f3f3"
               class="btn btn-next width-50 ml-auto"
-              (click)="nextStep()"
-              >Xác nhận</a
+              type="submit"
+              >Xác nhận</button
             >
           </div>
 
@@ -55,12 +77,11 @@
             <p>Vui lòng kiểm tra Email</p>
           </div>
 
-          <div class="btns-group">
+          <!-- <div class="btns-group">
             <a style="color: #f3f3f3" class="btn btn-prev" (click)="prevStep()"
               >Trở về</a
             >
-            <!-- <a style="color: #f3f3f3" class="btn btn-next" (click)="nextStep()">Xác nhận</a> -->
-          </div>
+          </div> -->
         </div>
         <!-- <div class="form-step">
         <div class="input-group">
