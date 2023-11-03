@@ -50,10 +50,35 @@ export class DetailPostComponent {
     this.idPost = this.modalService.idPostCmt;
     this.idUser = this.modalService.idUser;
     if (this.$contentCommnet.val() != null) {
-      this.modalService.sendNotify(this.$contentCommnet.val(),this.idPost,this.idUser, 'COMMENT');
+      let type = (this.modalService.repCmtId>0)?'REPCOMMENT':'COMMENT';
+      this.modalService.sendNotify(this.$contentCommnet.val(), this.idPost, this.idUser, type,this.modalService.repCmtId);
     }
     this.comment_input = '';
 
+  }
+
+  reply(idCmt: any, name: string) {
+    this.comment_input = `${name}`;
+    this.modalService.repCmtId=idCmt;
+    const input = document.getElementById("comment-input");
+    // console.log("this.repCmtId: " + this.repCmtId);
+    if (input) {
+      input.focus();
+    }
+  }
+  showDropdown: boolean = false;
+  onInput(event: any) {
+    // Kiểm tra nếu nội dung của trường input trống, đặt repCmtId thành 0
+    if (this.comment_input === '') {
+      this.modalService.repCmtId = 0;
+      // console.log("this.repCmtId: " + this.repCmtId);
+    }
+    // Kiểm tra nếu nội dung trường input chứa ký tự "@", hiển thị dropdown
+    if (this.comment_input.includes('@')) {
+      this.showDropdown = true;
+    } else {
+      this.showDropdown = false;
+    }
   }
   /* ============template============= */
   removeSeeMoreCmt(idCmt) {

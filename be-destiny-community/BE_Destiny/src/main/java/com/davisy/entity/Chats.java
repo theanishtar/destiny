@@ -29,7 +29,7 @@ public class Chats {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	int id;
 	String name_chats;
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	Calendar day_create = GregorianCalendar.getInstance();
 
 	@JsonIgnore

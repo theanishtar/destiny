@@ -37,5 +37,11 @@ form.form.change-mail {
         transform: translate(-170%, -15%) !important;
     }
 }
+.progressbar {
+    margin-bottom: 30px !important;
+}
+.input-group {
+    margin: 1.5rem 0 !important;
+}
 
 

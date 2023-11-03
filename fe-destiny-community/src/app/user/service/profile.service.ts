@@ -7,6 +7,7 @@ import '../../../assets/toast/main.js';
 declare var toast: any;
 import { Observable, throwError } from 'rxjs';
 import { of } from 'rxjs';
+import Swal from 'sweetalert2';
 import { environment } from '../../../environments/environment'
 import { CookieService } from 'ngx-cookie-service';
 import { DatePipe } from '@angular/common';
@@ -16,13 +17,14 @@ import { BehaviorSubject } from 'rxjs'; //Theo dõi trạng thái của modal
 })
 export class ProfileService {
   private loadDataTimelineUrl = environment.baseUrl + 'v1/user/profile/data/timeline';
+  private loadDataPostTimelineUrl = environment.baseUrl + 'v1/user/profile/post/timeline';
   private loadDataHeaderUrl = environment.baseUrl + 'v1/user/profile/data/header';
   private loadDataEditProfileUrl = environment.baseUrl + 'v1/user/profile/load/data';
   private updateProfileUrl = environment.baseUrl + 'v1/user/profile/update';
   private updatePasswordUrl = environment.baseUrl + 'v1/user/profile/change/password';
   private chanegMailUrl = environment.baseUrl + 'v1/user/profile/change/email';
   private changeTokenUrl = environment.baseUrl + 'v1/user/profile/change/email/confirm';
-  
+
   private contactUrl = environment.baseUrl + 'v1/user/contact';
 
   private getAllGenderAPI = environment.baseUrl + 'v1/user/getAllGender';
@@ -32,6 +34,7 @@ export class ProfileService {
 
   public dataHeader: any[];
   public dataTimeLine: any[];
+  public dataTimeLinePost: any[];
   public dataEditProfile: any;
 
   private genders: any[];
@@ -55,17 +58,52 @@ export class ProfileService {
   listHashTag: any;
   dataProfileTimeline: any;
   header: any;
-  dateJoin: string | null
+  dateJoin: string | null;
+  currentPage: number = 1;
   loadDataTimeline(data: any) {
     localStorage.setItem("idSelected", data);
     return this.http.post<any[]>(this.loadDataTimelineUrl, data).pipe(
       tap((response) => {
         this.dataTimeLine = response;
         this.setdataTimeLine(this.dataTimeLine);
-       
+
       }),
     );
   }
+  
+  loadDataProfileTimeline(id) {
+    let data = {
+      toProfile: id,
+      page: this.currentPage
+    }
+    this.loadDataProfileHeader(id);
+    this.loadDataTimeline(id).subscribe((response) => {
+      if (response != null) {
+        this.setdataTimeLine(response);
+        this.dataProfileTimeline = this.getdataTimeLine();
+        // this.listPostPr = this.dataProfileTimeline.postEntityProfile;
+        // this.listUserPr = this.listPostPr.userInterested;
+        this.dateJoin = this.datePipe.transform(this.dataProfileTimeline.dateJoin, 'dd/MM/yyyy');
+      }
+
+    })
+    this.loadDataTimelinePost(data).subscribe((data: any) => {
+      this.listPostPr = data; // Lưu dữ liệu ban đầu vào mảng
+    });
+    this.router.navigate(['profile']);
+  }
+
+  loadDataTimelinePost(data: any) {
+    return this.http.post<any[]>(this.loadDataPostTimelineUrl, data).pipe(
+      tap((response) => {
+        this.dataTimeLinePost = response;
+        this.setdataTimeLinePost(this.dataTimeLinePost);
+
+      }),
+    );
+  }
+
+
   loadDataHeader(data: any) {
     localStorage.setItem("idSelected", data);
     return this.http.post<any[]>(this.loadDataHeaderUrl, data).pipe(
@@ -83,24 +121,9 @@ export class ProfileService {
         this.header = this.getdataHeader();
       }
     })
-    
-  }
-  
-  loadDataProfileTimeline(id) {
-    this.loadDataProfileHeader(id);
-    this.loadDataTimeline(id).subscribe((response) => {
-      if (response != null) {
-        this.setdataTimeLine(response);
-        this.dataProfileTimeline = this.getdataTimeLine();
-        this.listPostPr = this.dataProfileTimeline.postEntityProfile;
-        this.listUserPr = this.listPostPr.userInterested;
-        this.dateJoin = this.datePipe.transform(this.dataProfileTimeline.dateJoin, 'dd/MM/yyyy');
-      }
 
-    })
-    this.router.navigate(['profile']);
-    // window.location.href = 'http://localhost:4200/profile';
   }
+
 
   /* ============Edit-profile============= */
   loadDataEditProfile() {
@@ -273,21 +296,33 @@ export class ProfileService {
   changeMailApi(data: any) {
     return this.http.post<any>(this.chanegMailUrl, data).pipe(
       tap(() => {
-
-      }),
-      catchError((error: HttpErrorResponse) => {
-        console.log("error.status 2: " + JSON.stringify(error))
-        if (error.status === 200) {
-          this.router.navigate(['wait-confirm']);
-          return throwError(
+        let timerInterval;
+        Swal.fire({
+          title: 'Thông báo!',
+          html: 'Quá trình sẽ diễn ra trong vài giây!',
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+          willClose: () => {
+            clearInterval(timerInterval);
+          },
+        }).then((result) => {
+          if (result.dismiss === Swal.DismissReason.timer) {
             new toast({
               title: 'Thông báo!',
               message: 'Vui lòng kiểm tra Email',
               type: 'success',
               duration: 3000,
             })
-          );
-        } else if (error.status === 300) {
+          }
+        });
+        
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.log("error.status 2: " + JSON.stringify(error.status))
+        if (error.status === 300) {
           return throwError(
             new toast({
               title: 'Thất bại!',
@@ -296,7 +331,7 @@ export class ProfileService {
               duration: 1500,
             }),
           );
-        }else if (error.status === 301) {
+        } else if (error.status === 301) {
           return throwError(
             new toast({
               title: 'Thất bại!',
@@ -318,16 +353,17 @@ export class ProfileService {
       })
     );
   }
-  
-  changeToken(data: any) {
-    return this.http.post<any>(this.changeTokenUrl, data).pipe(
+
+  changeToken(code: string): Observable<any> {
+    const url = `${this.changeTokenUrl}?code=${code}`;
+    return this.http.post(url, {}).pipe(
       tap(() => {
 
       }),
       catchError((error: HttpErrorResponse) => {
-        console.log("error.status 2: " + JSON.stringify(error))
+        console.log("error.status 2: " + error.status)
         if (error.status === 200) {
-          this.router.navigate(['setting']);
+          // this.router.navigate(['setting']);
           return throwError(
             new toast({
               title: 'Thông báo!',
@@ -380,6 +416,12 @@ export class ProfileService {
   }
   setdataTimeLine(data: any[]): void {
     this.dataTimeLine = data;
+  }
+  getdataTimeLinePost(): any[] {
+    return this.dataTimeLinePost;
+  }
+  setdataTimeLinePost(data: any[]): void {
+    this.dataTimeLinePost = data;
   }
   getdataHeader(): any[] {
     return this.dataHeader;

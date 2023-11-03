@@ -36,7 +36,7 @@ export class SettingComponent implements OnInit {
     sidebars.sidebars();
     content.contentTab();
     form.formInput();
-    this.profileService.openModalChangeMail();
+    // this.profileService.openModalChangeMail();
   }
 
   constructor(

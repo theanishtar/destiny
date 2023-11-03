@@ -17,13 +17,86 @@
             <li><a href="#" class="active">Người dùng</a></li>
           </ul>
         </div>
-        <a href="#" class="report">
-          <i class="bx bx-cloud-download"></i>
-          <span>Download</span>
-        </a>
       </div>
 
       <div class="row">
+        <div class="row col-lg-10 offset-lg-1">
+          <div class="col-xl-4 mb-3">
+            <div class="card border-left-pink shadow">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="font-weight-bold text-pink text-uppercase mb-2">
+                      <div>TỔNG SỐ NGƯỜI DÙNG TRONG<br>(NGÀY {{day}}/{{month}}/{{year}})</div>
+                    </div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                      <div>
+                        {{totalUserByDay}} <span class="text-success text-sm ml-2">+{{percentUserByDayIncrease}}%</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-auto">
+                    <i class="fas fa-calendar-day fa-2x"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-4 mb-3">
+            <div class="card border-left-warning shadow">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="font-weight-bold text-warning text-uppercase mb-2">
+                      <div>TỔNG SỐ NGƯỜI DÙNG TRONG <br>(THÁNG {{month}})</div>
+                    </div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                      <div>
+                        {{totalUserByMonth}} <span
+                          class="text-success text-sm ml-2">+{{percentUserByMonthIncrease}}%</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-auto">
+                    <i class="fas fa-calendar-week fa-2x"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-4 mb-3">
+            <div class="card border-left-shine shadow">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="font-weight-bold text-pie text-uppercase mb-2">
+                      <div>TỔNG SỐ NGƯỜI DÙNG TRONG<br>(NĂM {{year}})</div>
+                    </div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                      <div>
+                        {{totalUserByYear}} <span
+                          class="text-success text-sm ml-2">+{{percentUserByYearIncrease}}%</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-auto">
+                    <i class="fas fa-calendar fa-2x"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-4">
+          <div class="col-lg-12 profile-logo-heart">
+            <img src="../assets/images/logo-euphoria.png" alt="" />
+          </div>
+          <div class="col-lg-12 profile-title mt-3">
+            <div class="logo" style="height: 0 !important">
+              <h2 class="logo-name"><span>DES</span>TINY</h2>
+            </div>
+          </div>
+        </div>
         <div class="col-lg-4 mb-2">
           <div class="card card-profile pb-2 shadow">
             <img src="../assets/images/top1user.png" alt="Image placeholder" class="card-img-top" />
@@ -178,7 +251,6 @@
               </div>
               <div class="border-radius-lg m-1">
                 <div class="chart">
-                  <!-- <canvas id="chart-line" class="chart-canvas" height="300"></canvas> -->
                   <canvas #chartline class="chart-canvas" height="300"></canvas>
                 </div>
               </div>

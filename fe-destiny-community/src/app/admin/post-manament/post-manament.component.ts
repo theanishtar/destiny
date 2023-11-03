@@ -16,6 +16,10 @@ export class PostManamentComponent  {
   @ViewChild('myAreaChart') chartLine: ElementRef | undefined;
   @ViewChild('myPieChart') chartPie: ElementRef | undefined;
 
+  day: number;
+  month: number;
+  year: number;
+
   listTOP4Post: any[] = [];
   listTotalPostEveryMonth: number[];
   listTOP3Product: any[];
@@ -26,6 +30,15 @@ export class PostManamentComponent  {
   product3: string;
   postDetail: any;
 
+  totalPostByDay: number;
+  percentPostByDayIncrease: number;
+
+  totalPostByMonth: number;
+  percentPostByMonthIncrease: number;
+
+  totalPostByYear: number;
+  percentPostByYearIncrease: number;
+
   constructor(
     private adminPostmanagementService: AdminPostmanagementService,
     private adminIndexService: AdminIndexService,
@@ -34,9 +47,69 @@ export class PostManamentComponent  {
   {}
 
   ngAfterViewInit() {
+
     this.loadTOP4Post();
     this.loadListTotalPostEveryMonth();
     this.loadTOP3Product();
+
+    this.getTime();
+
+    this.loadTotalPostByDay();
+    this.loadTotalPostByMonth();
+    this.loadTotalPostByYear();
+
+    this.loadPercentPostByDayIncrease();
+    this.loadPercentPostByMonthIncrease();
+    this.loadPercentPostByYearIncrease();
+
+  }
+
+  getTime(){
+    this.day = new Date().getDay();
+    this.month = new Date().getMonth();
+    this.year = new Date().getFullYear();
+  }
+
+  loadTotalPostByDay(){
+    this.adminPostmanagementService.loadTotalPostByDay().subscribe(() =>{
+      this.totalPostByDay = 0;
+      this.totalPostByDay = this.adminPostmanagementService.getTotalPostByDay();
+    })
+  }
+
+  loadPercentPostByDayIncrease(){
+    this.adminPostmanagementService.loadPercentPostByDayIncrease().subscribe(() =>{
+      this.percentPostByDayIncrease = 0;
+      this.percentPostByDayIncrease = this.adminPostmanagementService.getPercentPostByDayIncrease();
+    })
+  }
+
+  loadTotalPostByMonth(){
+    this.adminPostmanagementService.loadTotalPostByMonth().subscribe(() =>{
+      this.totalPostByMonth = 0;
+      this.totalPostByMonth = this.adminPostmanagementService.getTotalPostByMonth();
+    })
+  }
+
+  loadPercentPostByMonthIncrease(){
+    this.adminPostmanagementService.loadPercentPostByMonthIncrease().subscribe(() =>{
+      this.percentPostByMonthIncrease = 0;
+      this.percentPostByMonthIncrease = this.adminPostmanagementService.getPercentPostByMonthIncrease();
+    })
+  }
+
+  loadTotalPostByYear(){
+    this.adminPostmanagementService.loadTotalPostByYear().subscribe(() =>{
+      this.totalPostByYear = 0;
+      this.totalPostByYear = this.adminPostmanagementService.getTotalPostByYear();
+    })
+  }
+
+  loadPercentPostByYearIncrease(){
+    this.adminPostmanagementService.loadPercentPostByYearIncrease().subscribe(() =>{
+      this.percentPostByYearIncrease = 0;
+      this.percentPostByYearIncrease = this.adminPostmanagementService.getPercentPostByYearIncrease();
+    })
   }
 
   selectPost(id: string): void{

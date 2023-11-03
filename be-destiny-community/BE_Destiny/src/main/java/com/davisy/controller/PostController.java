@@ -102,15 +102,16 @@ public class PostController {
 		return ResponseEntity.ok(list);
 	}
 
-	@GetMapping("/v1/user/load/post")
-	public ResponseEntity<List<PostEntity>> loadPost(HttpServletRequest request) {
+	@PostMapping("/v1/user/load/post")
+	public ResponseEntity<List<PostEntity>> loadPost(HttpServletRequest request,@RequestBody int page) {
 		try {
 			String email = jwtTokenUtil.getEmailFromHeader(request);
 			User user = userService.findByEmail(email);
 			int id = user.getUser_id();
 			int provinceId = Integer.valueOf(user.getIdProvince());
-			List<Object[]> postProfile = postService.findAllPost(id, provinceId);
-			return ResponseEntity.ok().body(postEntity(postProfile));
+			List<Object[]> post = postService.findAllPost(id, page);
+			List<Object[]> postShare = postService.findAllPostShare(id, page);
+			return ResponseEntity.ok().body(postEntity(post, postShare));
 		} catch (Exception e) {
 			System.out.println("error: " + e);
 			return ResponseEntity.badRequest().build();
@@ -156,8 +157,9 @@ public class PostController {
 				postImagesService.create(postImages);
 			}
 			int provinceId = Integer.valueOf(user.getIdProvince());
-			List<Object[]> postProfile = postService.findAllPost(id, provinceId);
-			return ResponseEntity.ok().body(postEntity(postProfile));
+			List<Object[]> postProfile = postService.findAllPost(id,1);
+			List<Object[]> postShare = postService.findAllPost(id, 1);
+			return ResponseEntity.ok().body(postEntity(postProfile, postShare));
 		} catch (Exception e) {
 			System.out.println("error: " + e);
 			return ResponseEntity.badRequest().build();
@@ -278,67 +280,141 @@ public class PostController {
 				i++;
 			}
 			int provinceId = Integer.valueOf(user.getIdProvince());
-			List<Object[]> postProfile = postService.findAllPost(id, provinceId);
-			return ResponseEntity.ok().body(postEntity(postProfile));
+			List<Object[]> postProfile = postService.findAllPost(id,1);
+			List<Object[]> postShare = postService.findAllPost(id, 1);
+			return ResponseEntity.ok().body(postEntity(postProfile, postShare));
 		} catch (Exception e) {
 			System.out.println("Lỗi nè: " + e);
 			return ResponseEntity.badRequest().build();
 		}
 	}
 
-	public List<PostEntity> postEntity(List<Object[]> postProfile) {
+	public List<PostEntity> postEntity(List<Object[]> postProfile, List<Object[]> postShare) {
 		List<PostEntity> postEntityProfile = new ArrayList<>();
 		for (Object[] ob : postProfile) {
 			if (null != ob[2]) {
-				int user_id = Integer.valueOf(ob[1].toString());
 				int idPostShare = Integer.valueOf(ob[2].toString());
-				List<Object[]> postShare = postService.getPostProfile(user_id, idPostShare);
 				PostEntity profileTemp = new PostEntity();
-				for (Object[] o : postShare) {
-					profileTemp = postEntityProfile(o, null);
+				for (Object[] ps : postShare) {
+					if (Integer.valueOf(ps[0].toString()) == idPostShare) {
+						profileTemp = postEntityProfile(ps, null, 1);
+						postEntityProfile.add(postEntityProfile(ob, profileTemp, 0));
+						break;
+					}
 				}
-				postEntityProfile.add(postEntityProfile(ob, profileTemp));
 			} else {
-				postEntityProfile.add(postEntityProfile(ob, null));
+				postEntityProfile.add(postEntityProfile(ob, null, 0));
 			}
 		}
 		return postEntityProfile;
 	}
 
-	public PostEntity postEntityProfile(Object[] ob, PostEntity entityProfile) {
-		try {
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			PostEntity profile = new PostEntity();
-			profile.setPost_id(Integer.valueOf(ob[0].toString()));
-			profile.setUser_id(Integer.valueOf(ob[1].toString()));
-			profile.setContent(ob[3] + "");
-			Date date = dateFormat.parse(ob[4] + "");
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(date);
-			profile.setDate_post(calendar);
-			profile.setHash_tag(ob[5] + "");
-			profile.setSend_status(Boolean.valueOf(ob[6] + ""));
-			profile.setPost_status(Boolean.valueOf(ob[7] + ""));
-			profile.setProduct(ob[8] + "");
-			profile.setBan(Boolean.valueOf(ob[9] + ""));
-			profile.setCountInterested(Integer.valueOf(ob[10].toString()));
-			profile.setCountCommnet(Integer.valueOf(ob[11].toString()));
-			profile.setCountShare(Integer.valueOf(ob[12].toString()));
-			profile.setImages(postImagesService.findAllImagesofPost(profile.getPost_id()));
-			User user = userService.findById(profile.getUser_id());
-			List<Object[]> userOb = interestedService.findByIdPost(profile.getPost_id());
-			profile.setUser(userOb);
-			profile.setFullname(ob[13] + "");
-			profile.setAvatar(ob[14] + "");
-			if (entityProfile != null)
-				profile.setPostEntityProfile(entityProfile);
-			return profile;
-		} catch (Exception e) {
-			System.out.println("Error postEntityProfile: " + e);
-			return null;
-		}
+	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+//	public PostEntity postEntityProfile(Object[] ob, PostEntity entityProfile, int check) {
+//		try {
+//			PostEntity profile = new PostEntity();
+//			profile.setPost_id(Integer.valueOf(ob[0].toString()));
+//			profile.setUser_id(Integer.valueOf(ob[1].toString()));
+//			profile.setContent(ob[3] + "");
+//			Date date = dateFormat.parse(ob[4] + "");
+//			Calendar calendar = Calendar.getInstance();
+//			calendar.setTime(date);
+//			profile.setDate_post(calendar);
+//			profile.setHash_tag(ob[5] + "");
+//			profile.setSend_status(Boolean.valueOf(ob[6] + ""));
+//			profile.setPost_status(Boolean.valueOf(ob[7] + ""));
+//			profile.setProduct(ob[8] + "");
+//			profile.setBan(Boolean.valueOf(ob[9] + ""));
+//			profile.setCountInterested(Integer.valueOf(ob[10].toString()));
+//			profile.setCountCommnet(Integer.valueOf(ob[11].toString()));
+//			profile.setCountShare(Integer.valueOf(ob[12].toString()));
+//			if (null == ob[2])
+//				profile.setImages(postImagesService.findAllImagesofPost(profile.getPost_id()));
+//			List<Object[]> userOb = interestedService.findByIdPost(profile.getPost_id());
+//			if (userOb != null && check == 0)
+//				profile.setUser(userOb);
+//			profile.setFullname(ob[13] + "");
+//			profile.setAvatar(ob[14] + "");
+//			if (entityProfile != null)
+//				profile.setPostEntityProfile(entityProfile);
+//			return profile;
+//		} catch (Exception e) {
+//			System.out.println("Error postEntityProfile: " + e);
+//			return null;
+//		}
+//
+//	}
+	public PostEntity postEntityProfile(Object[] ob, PostEntity entityProfile, int check) {
+	    try {
+	        PostEntity profile = new PostEntity();
+	        profile.setPost_id(Integer.valueOf(ob[0].toString()));
+	        profile.setUser_id(Integer.valueOf(ob[1].toString()));
+	        profile.setContent(ob[3] + "");
+	        
+	        // Xử lý ngày tháng
+	        Date date = null;
+	        if (ob[4] != null && !ob[4].toString().isEmpty()) {
+	            date = dateFormat.parse(ob[4].toString());
+	        }
+	        if (date != null) {
+	            Calendar calendar = Calendar.getInstance();
+	            calendar.setTime(date);
+	            profile.setDate_post(calendar);
+	        } else {
+	            // Xử lý trường hợp ngày không hợp lệ
+	            // Ví dụ: Set ngày mặc định hoặc báo lỗi
+	            // profile.setDate_post(Calendar.getInstance());
+	        }
+	        
+	        profile.setHash_tag(ob[5] + "");
+	        profile.setSend_status(Boolean.valueOf(ob[6] + ""));
+	        profile.setPost_status(Boolean.valueOf(ob[7] + ""));
+	        profile.setProduct(ob[8] + "");
+	        
+	        // Xử lý trường hợp chuỗi trống cho trường ban
+	        if (!ob[9].toString().isEmpty()) {
+	            profile.setBan(Boolean.valueOf(ob[9] + ""));
+	        } else {
+	            // Xử lý trường hợp không có giá trị cho trường ban
+	            // Ví dụ: Set giá trị mặc định hoặc báo lỗi
+	            // profile.setBan(false);
+	        }
+	        
+	        profile.setCountInterested(Integer.valueOf(ob[10].toString()));
+	        profile.setCountCommnet(Integer.valueOf(ob[11].toString()));
+	        profile.setCountShare(Integer.valueOf(ob[12].toString()));
+
+	        // Xử lý ảnh
+	        if (ob[2] == null) {
+	            profile.setImages(postImagesService.findAllImagesofPost(profile.getPost_id()));
+	        }
+	        
+	        // Xử lý danh sách người quan tâm
+	        List<Object[]> userOb = interestedService.findByIdPost(profile.getPost_id());
+	        if (userOb != null && check == 0) {
+	            profile.setUser(userOb);
+	        }
+
+	        profile.setFullname(ob[13] + "");
+	        profile.setAvatar(ob[14] + "");
+
+	        // Thiết lập postEntityProfile nếu tồn tại
+	        if (entityProfile != null) {
+	            profile.setPostEntityProfile(entityProfile);
+	        }
+
+	        return profile;
+	    } catch (NumberFormatException e) {
+	        System.out.println("Error postEntityProfile: " + e);
+	        return null;
+	    } catch (Exception e) {
+	        System.out.println("Error postEntityProfile: " + e);
+	        return null;
+	    }
 	}
+
+
 
 	public static String getTime(Calendar datePost) {
 		String timeCaculate = "";

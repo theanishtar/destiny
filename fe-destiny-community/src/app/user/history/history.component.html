@@ -165,10 +165,10 @@
               <!-- TABLE COLUMN -->
               <div class="table-column centered padded-medium">
                 <div class="dropdown">
-                  <div class="dropbtn" (click)="dropdownMenu()">
+                  <div class="dropbtn" (click)="toggleDropdown(interested[0], 'interested')">
                     <i class="fa fa-ellipsis-v"></i>
                   </div>
-                  <div id="myDropdown" class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                  <div id="myDropdown-interested-{{interested[0]}}" class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                     <a class="dropdown-item" (click)="historyService.openModalDetailPost(interested[0])">Xem lại</a>
                   </div>
                 </div>
@@ -248,10 +248,10 @@
               <!-- TABLE COLUMN -->
               <div class="table-column centered padded-medium">
                 <div class="dropdown">
-                  <div class="dropbtn" (click)="dropdownMenu2()">
+                  <div class="dropbtn" (click)="toggleDropdown(share[0], 'share')">
                     <i class="fa fa-ellipsis-v"></i>
                   </div>
-                  <div id="myDropdown2" class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                  <div id="myDropdown-share-{{share[0]}}" class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                     <a class="dropdown-item" (click)="historyService.openModalDetailPost(share[0])">Xem lại</a>
                   </div>
                 </div>
@@ -334,10 +334,10 @@
               <!-- TABLE COLUMN -->
               <div class="table-column centered padded-medium">
                 <div class="dropdown">
-                  <div class="dropbtn" (click)="dropdownMenu3()">
+                  <div class="dropbtn" (click)="toggleDropdown(Sendreciever[0], 'Sendreciever')">
                     <i class="fa fa-ellipsis-v"></i>
                   </div>
-                  <div id="myDropdown3" class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                  <div id="myDropdown-Sendreciever-{{Sendreciever[0]}}" class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                     <a class="dropdown-item" (click)="historyService.openModalDetailPost(Sendreciever[0])">Xem lại</a>
                   </div>
                 </div>

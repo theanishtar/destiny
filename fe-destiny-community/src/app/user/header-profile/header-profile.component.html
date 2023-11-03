@@ -169,7 +169,7 @@
       [class.section-menu-item]="true"
       [class.active]="activeMenuItem === 'edit-profile'"
       routerLink="/edit-profile"
-      *ngIf="idLocal === 0"
+      *ngIf="idLocal === 0 || idLocal === chatUserId"
     >
       <!-- SECTION MENU ITEM ICON -->
       <svg class="section-menu-item-icon icon-profile">
@@ -188,7 +188,7 @@
       [class.section-menu-item]="true"
       [class.active]="activeMenuItem === 'follow'"
       routerLink="/follow"
-      *ngIf="idLocal === 0"
+      *ngIf="idLocal === 0 || idLocal === chatUserId"
     >
       <!-- SECTION MENU ITEM ICON -->
       <svg class="section-menu-item-icon icon-friend">
@@ -207,7 +207,7 @@
       [class.section-menu-item]="true"
       [class.active]="activeMenuItem === 'photos'"
       routerLink="/photos"
-      *ngIf="idLocal === 0"
+      *ngIf="idLocal === 0 || idLocal === chatUserId"
     >
       <!-- SECTION MENU ITEM ICON -->
       <svg class="section-menu-item-icon icon-photos">

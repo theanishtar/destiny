@@ -15,6 +15,8 @@ public interface CommentService {
 
 	// 23-9-2023 -lấy tổng bình luận của người dùng đã bình luận
 	public int totalCommentByUser(int id);
+	
+	public Integer findByIdtoUser(int id);
 
 	public Comment findById(int id);
 

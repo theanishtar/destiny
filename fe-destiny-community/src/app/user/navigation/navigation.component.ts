@@ -70,9 +70,20 @@ export class NavigationComponent implements OnInit {
     if (type == 'FOLLOW') {
       return 'FOLLOW';
     }
+    if (type == 'REPCOMMENT') {
+      return 'REPCOMMENT';
+    }
     return null;
   }
-
+  addFollow(id: number) {
+    this.modalService.sendNotify(' ', 0, id, 'FOLLOW', this.modalService.repCmtId);
+    new toast({
+      title: 'Thông báo!',
+      message: 'Đã theo dõi',
+      type: 'success',
+      duration: 3000,
+    });
+  }
   updateActiveMenuItem() {
     const currentUrl = this.router.url;
     // Xác định menu item active dựa trên URL hiện tại

@@ -62,4 +62,9 @@ public class CommentServiceImpl implements CommentService {
 	public void delete(Comment comment) {
 		commentDao.delete(comment);
 	}
+
+	@Override
+	public Integer findByIdtoUser(int id) {
+		return commentDao.findByIdtoUser(id);
+	}
 }

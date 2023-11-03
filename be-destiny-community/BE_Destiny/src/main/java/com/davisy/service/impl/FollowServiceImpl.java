@@ -29,7 +29,10 @@ public class FollowServiceImpl implements FollowService {
 
 	@Override
 	public void delete(int id1, int id2) {
+//			Follower follower =
+//		followDAO.unFollow(id1, id2);
 		followDAO.delete(followDAO.unFollow(id1, id2));
+		
 	}
 
 	@Override

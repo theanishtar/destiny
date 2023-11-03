@@ -56,13 +56,14 @@ export class CreatePostComponent {
     this.showSlides(1);
     this.createFormPost();
     this.loadAllProvince();
-    // this.loadPosts();
+    this.loadDataProfile();
   }
 
   createFormPost() {
+    const HASHTAG_PATTERN = /^(?=.*[!@#$%^&*]+)[a-z0-9!@#$%^&*]{4,20}$/;
     this.createPostForm = this.formbuilder.group({
       content: ['', Validators.required],
-      hash_tag: ['', Validators.required],
+      hash_tag: ['', [Validators.required, Validators.pattern(HASHTAG_PATTERN),]],
       province_name: [''],
       district_name: [''],
       ward_name: [''],
@@ -92,27 +93,39 @@ export class CreatePostComponent {
       product: this.createPostForm.get('product')?.value,
       post_images: this.listImg,
     };
-    this.postService.uploadPost(data).subscribe((res) => {
-      new toast({
-        title: 'Thành công!',
-        message: 'Đăng bài thành công',
-        type: 'success',
-        duration: 1500,
-      });
-      this.listPosts = res;
-      console.warn("this.listPosts: " +  JSON.stringify(this.listPosts));
-      this.createPostForm.reset();
-      this.listImg = [];
-      this.file = {};
-      this.closeModalCreatePost();
-    });
+    if (this.createPostForm.valid) {
+      if (this.createPostForm.get('content')?.value && this.listImg.length === 0) {
+        new toast({
+          title: 'Thông báo!',
+          message: 'Vui lòng không bỏ trống đồng thời nội dung và hình ảnh',
+          type: 'warning',
+          duration: 1500,
+        });
+      } else {
+        this.postService.uploadPost(data).subscribe((res) => {
+          new toast({
+            title: 'Thành công!',
+            message: 'Đăng bài thành công',
+            type: 'success',
+            duration: 1500,
+          });
+          this.listPosts = res;
+          console.warn("this.listPosts: " + JSON.stringify(this.listPosts));
+          this.createPostForm.reset();
+          this.listImg = [];
+          this.file = {};
+          this.closeModalCreatePost();
+          // this.profileService.loadDataProfileTimeline(0);
+        });
+      }
+    }
   }
 
 
   async loadPosts() {
     try {
       // Gọi lại hàm loadTop5User() sử dụng await để đợi kết quả.
-      this.listPosts = await this.postService.loadPostNewsFeed();
+      // this.listPosts = await this.postService.loadPostNewsFeed();
       this.listPost = this.listPosts.post
       this.listUser = this.listPosts.user
       this.listCount = this.listPosts.count
@@ -123,35 +136,33 @@ export class CreatePostComponent {
   }
 
   /* ============Comboxbox address============= */
-
-  loadDataProfile() {
-    this.profileService.loadDataEditProfile().subscribe(() => {
-      this.dataEditProfile = this.profileService.getDataEditProfile();
-    })
-  }
-
   loadAllProvince() {
     this.profileService.loadAllProvince().subscribe(() => {
       this.provinces = [];
       this.provinces = this.profileService.getAllProvince();
 
-      const province = this.createPostForm.get('province_name')?.value;
-      this.profileService.loadAllDistrict(province).subscribe(() => {
-        this.districts = [];
-        this.districts = this.profileService.getAllDistrict();
+      this.profileService.loadDataEditProfile().subscribe(() => {
+        this.dataEditProfile = this.profileService.getDataEditProfile();
 
-        const district = this.createPostForm.get('district_name')?.value;
-        this.profileService.loadAllWard(district).subscribe(() => {
-          this.wards = [];
-          this.wards = this.profileService.getAllWard();
+        const province = this.dataEditProfile.province_name;
+        this.profileService.loadAllDistrict(province).subscribe(() => {
+          this.districts = [];
+          this.districts = this.profileService.getAllDistrict();
 
+          const district = this.createPostForm.get('district_name')?.value;
+          this.profileService.loadAllWard(district).subscribe(() => {
+            this.wards = [];
+            this.wards = this.profileService.getAllWard();
+
+          })
         })
       })
+
     })
   }
 
   getProvinceName() {
-    const province = this.createPostForm.get('province_name')?.value;
+    const province = this.createPostForm.get('district_name')?.value;
     this.loadAllDistrict(province);
 
   }
@@ -160,9 +171,9 @@ export class CreatePostComponent {
     this.profileService.loadAllDistrict(province).subscribe(() => {
       this.districts = [];
       this.districts = this.profileService.getAllDistrict();
-      // this.dataEditProfile.district_name = this.districts[0];
+      this.dataEditProfile.district_name = this.districts[0];
 
-      // this.loadAllWard(this.dataEditProfile.district_name);
+      this.loadAllWard(this.dataEditProfile.district_name);
 
     })
   }
@@ -176,9 +187,66 @@ export class CreatePostComponent {
     this.profileService.loadAllWard(district).subscribe(() => {
       this.wards = [];
       this.wards = this.profileService.getAllWard();
-      // this.dataEditProfile.ward_name = this.wards[0];
+      this.dataEditProfile.ward_name = this.wards[0];
     })
   }
+  loadDataProfile() {
+    this.profileService.loadDataEditProfile().subscribe(() => {
+      this.dataEditProfile = this.profileService.getDataEditProfile();
+    })
+  }
+
+  // loadAllProvince() {
+  //   this.profileService.loadAllProvince().subscribe(() => {
+  //     this.provinces = [];
+  //     this.provinces = this.profileService.getAllProvince();
+
+  //     const province = this.createPostForm.get('province_name')?.value;
+  //     //province này null nên truyền vô tìm tất cả các hiệu sẽ kh ra.
+  //     // this.profileService.loadAllDistrict(province).subscribe(() => {
+  //     //   this.districts = [];
+  //     //   this.districts = this.profileService.getAllDistrict();
+
+  //     //   const district = this.createPostForm.get('district_name')?.value;
+  //     //   this.profileService.loadAllWard(district).subscribe(() => {
+  //     //     this.wards = [];
+  //     //     this.wards = this.profileService.getAllWard();
+
+  //     //   })
+  //     // })
+  //   })
+  // }
+
+  // getProvinceName() {
+  //   const province = this.createPostForm.get('province_name')?.value;
+
+  //   this.loadAllDistrict(province);
+
+  // }
+
+  // loadAllDistrict(province: string) {
+  //   this.profileService.loadAllDistrict(province).subscribe(() => {
+  //     this.districts = [];
+  //     this.districts = this.profileService.getAllDistrict();
+  //     // this.dataEditProfile.district_name = this.districts[0];
+
+  //     // this.loadAllWard(this.dataEditProfile.district_name);
+
+  //   })
+  // }
+
+  // getDistrictName() {
+  //   const district = this.createPostForm.get('district_name')?.value;
+  //   this.loadAllWard(district);
+  // }
+
+  // loadAllWard(district: string) {
+  //   this.profileService.loadAllWard(district).subscribe(() => {
+  //     this.wards = [];
+  //     this.wards = this.profileService.getAllWard();
+  //     // this.dataEditProfile.ward_name = this.wards[0];
+  //   })
+  // }
 
   /* ============upload Images============= */
   imageSources: string[] = [];

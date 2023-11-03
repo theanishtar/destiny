@@ -15,8 +15,14 @@ export class IndexAdminComponent{
 
   totalPost: number;
   totalUser: number;
+  totalPostReported: number;
+  totalUserReported: number;
   percentPostIncrease: number;
   percentUserIncrease: number;
+  percentPostReportedIncrease: number;
+  percentUserReportedIncrease: number;
+
+  year: number;
 
   percentPost: number;
   percentPostString: string;
@@ -31,24 +37,33 @@ export class IndexAdminComponent{
   {}
 
   ngAfterViewInit() {
-    localStorage.setItem("sidebarActive", "1");
+    this.getYear();
     this.loadTotalPost();
     this.loadTotalUser();
+    this.loadTotalPostReported();
+    this.loadTotalUserReported();
     this.loadPercentPostIncrease();
     this.loadPercentUserIncrease();
+    this.loadPercentPostReportedIncrease();
+    this.loadPercentUserReportedIncrease();
     this.loadPercentPost();
     this.loadListTotalPostEveryMonth();
     this.loadListTotalUserEveryMonth();
     this.loadInteraction();
     this.loadPercentUserInteractionIncrease();
+
   }
 
-
+  getYear(){
+    this.year = new Date().getFullYear();
+  }
 
   loadTotalPost(){
     this.adminIndexService.loadTotalPost().subscribe(() =>{
       this.totalPost = 0;
       this.totalPost = this.adminIndexService.getTotalPost();
+
+
     })
   }
 
@@ -56,6 +71,23 @@ export class IndexAdminComponent{
     this.adminIndexService.loadTotalUser().subscribe(() =>{
       this.totalUser = 0;
       this.totalUser = this.adminIndexService.getTotalUser();
+
+    })
+  }
+
+  loadTotalPostReported(){
+    this.adminIndexService.loadTotalPostReported().subscribe(() =>{
+      this.totalPostReported = 0;
+      this.totalPostReported = this.adminIndexService.getTotalPostReported();
+
+    })
+  }
+
+  loadTotalUserReported(){
+    this.adminIndexService.loadTotalUserReported().subscribe(() =>{
+      this.totalUserReported = 0;
+      this.totalUserReported = this.adminIndexService.getTotalUserReported();
+
     })
   }
 
@@ -73,10 +105,26 @@ export class IndexAdminComponent{
     })
   }
 
+
+  loadPercentPostReportedIncrease(){
+    this.adminIndexService.loadPercentPostReportedIncrease().subscribe(() =>{
+      this.percentPostReportedIncrease = 0;
+      this.percentPostReportedIncrease = this.adminIndexService.getPercentPostReportedIncrease();
+    })
+  }
+
+
+  loadPercentUserReportedIncrease(){
+    this.adminIndexService.loadPercentUserReportedIncrease().subscribe(() =>{
+      this.percentUserReportedIncrease = 0;
+      this.percentUserReportedIncrease = this.adminIndexService.getPercentUserReportedIncrease();
+    })
+  }
+
   loadPercentPost(){
     this.adminIndexService.loadPercent().subscribe(() =>{
       this.percentPost = 0;
-      this.percentPost = this.adminIndexService.getPercentPost();
+      this.percentPost = this.adminIndexService.getPercentPostSendSuccess();
       this.percentPostString = this.percentPost + "%";
     })
   }
@@ -102,6 +150,7 @@ export class IndexAdminComponent{
 
       this.createChartLine();
       this.createChartBar();
+
     })
   }
 
@@ -109,6 +158,7 @@ export class IndexAdminComponent{
     this.adminIndexService.loadPercentUserInteractionIncrease().subscribe(() =>{
       this.percentUserInteractionIncrease = 0;
       this.percentUserInteractionIncrease = this.adminIndexService.getPercentUserInteraction();
+
     })
   }
 
@@ -299,7 +349,6 @@ export class IndexAdminComponent{
         console.error('Chart creation error:', error);
       }
     }
-
   }
 
 }

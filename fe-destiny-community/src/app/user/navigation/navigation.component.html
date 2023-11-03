@@ -1118,6 +1118,61 @@
               <!-- /USER STATUS -->
             </div>
             <!-- Comment -->
+            <!-- Rep Comment -->
+            <div class="dropdown-box-list-item"
+            *ngIf="checkType(notif.value.type) === 'REPCOMMENT'"
+            >
+              <!-- USER STATUS -->
+              <div class="user-status notification">
+                <!-- USER STATUS AVATAR -->
+                <a
+                  class="user-avatar small user-status-avatar no-border no-outline"
+                  routerLink="/profile"
+                  (click)="this.profileService.loadDataProfileTimeline(0)"
+                >
+                  <div class="hexagon-container">
+                    <div class="hexagon user-avatar-content">
+                      <div
+                        class="hexagon-image"
+                        style="background-image: url('{{notif.value.avatar}}')"
+                      ></div>
+                    </div>
+                    <div class="hexagon user-avatar-border">
+                      <div class="hexagon-border"></div>
+                    </div>
+                    <div class="hexagon user-avatar-progress-border">
+                      <div class="user-avatar-progress"></div>
+                    </div>
+                    <p class="user-avatar-badge-text">1</p>
+                  </div>
+                </a>
+                <!-- /USER STATUS AVATAR -->
+
+                <!-- USER STATUS TITLE -->
+                <p class="user-status-title">
+                  <a class="bold" href="profile">{{ notif.value.fullname }}</a>
+                  đã trả lời bình luận của bạn 
+                  <!-- <a class="highlighted" href="photos">bài đăng</a>  -->
+                </p>
+                <!-- /USER STATUS TITLE -->
+
+                <!-- USER STATUS TIMESTAMP -->
+                <p class="user-status-timestamp">{{ notif.value.time }}</p>
+                <!-- /USER STATUS TIMESTAMP -->
+
+                <!-- USER STATUS ICON -->
+                <div class="user-status-icon">
+                  <!-- ICON COMMENT -->
+                  <svg class="icon-comment">
+                    <use xlink:href="#svg-comment"></use>
+                  </svg>
+                  <!-- /ICON COMMENT -->
+                </div>
+                <!-- /USER STATUS ICON -->
+              </div>
+              <!-- /USER STATUS -->
+            </div>
+            <!-- Comment -->
             <!-- Share -->
             <div class="dropdown-box-list-item"
             *ngIf="checkType(notif.value.type) === 'SHARE'"
@@ -1227,6 +1282,60 @@
               <!-- /USER STATUS -->
             </div>
             <!-- interested -->
+             <!-- Follow -->
+              <!-- follow -->
+            <div class="dropdown-box-list-item"
+            *ngIf="checkType(notif.value.type) === 'FOLLOW'">
+              <!-- USER STATUS -->
+              <div class="user-status notification">
+                <!-- USER STATUS AVATAR -->
+                <a
+                  class="user-avatar small user-status-avatar no-border no-outline"
+                  routerLink="/profile"
+                  (click)="this.profileService.loadDataProfileTimeline(0)"
+                >
+                  <div class="hexagon-container">
+                    <div class="hexagon user-avatar-content">
+                      <div
+                        class="hexagon-image"
+                        style="background-image: url('{{notif.value.avatar}}')"
+                      ></div>
+                    </div>
+                    <div class="hexagon user-avatar-border">
+                      <div class="hexagon-border"></div>
+                    </div>
+                    <div class="hexagon user-avatar-progress-border">
+                      <div class="user-avatar-progress"></div>
+                    </div>
+                    <p class="user-avatar-badge-text">1</p>
+                  </div>
+                </a>
+                <!-- /USER STATUS AVATAR -->
+
+                <!-- USER STATUS TITLE -->
+                <p class="user-status-title" *ngIf="notif.value.following_status === false">
+                  <a class="bold" href="profile">{{ notif.value.fullname }}</a>
+                  đã theo dõi bạn
+                </p>
+                <p class="user-status-title" *ngIf="notif.value.following_status === true">
+                  <a class="bold" href="profile">{{ notif.value.fullname }}</a>
+                  và bạn đã là bạn bè
+                </p>
+                <!-- /USER STATUS TITLE -->
+
+                <!-- USER STATUS TIMESTAMP -->
+                <p class="user-status-timestamp">{{ notif.value.time }}</p>
+                <!-- /USER STATUS TIMESTAMP -->
+                <div class="user-preview-actions nofti">
+                  <!-- BUTTON -->
+                  <p class="button re-fl" (click)="addFollow(notif.value.fromUserId)" *ngIf="notif.value.following_status === false">Theo dõi lại</p>
+                  <!-- /BUTTON -->
+                </div>
+              </div>
+              <!-- /USER STATUS -->
+            </div>
+            <!-- follow -->
+            <!-- interested -->
             </div>
             
 
@@ -1315,7 +1424,7 @@
         <!-- /DROPDOWN NAVIGATION LINK -->
 
         <!-- DROPDOWN NAVIGATION LINK -->
-        <a class="dropdown-navigation-link" href="edit-profile">{{
+        <a class="dropdown-navigation-link" routerLink="/edit-profile">{{
           "admin_capnhat" | translate
         }}</a>
         <!-- /DROPDOWN NAVIGATION LINK -->

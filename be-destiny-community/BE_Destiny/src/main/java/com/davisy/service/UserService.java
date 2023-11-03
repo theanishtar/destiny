@@ -26,9 +26,15 @@ public interface UserService {
 
 	List<Object[]> getTOP5User();
 
+	// 1-11-2023 -lấy tổng số người dùng theo ngày
+	public int getTotalUserByDay(int day, int month);
+
 	// 21-9-2023 -lấy tổng số người dùng theo tháng
 	// lastest update 14-10
 	public int getTotalUserByMonth(int month);
+	
+	// 1-11-2023 -lấy tổng số người dùng theo năm
+	public int getTotalUserByYear(int year);
 
 	// 21-9-2023 -Tóng số lượng tương tác của người dùng theo từng tháng
 	public List<Object[]> getInteractionOfUser();

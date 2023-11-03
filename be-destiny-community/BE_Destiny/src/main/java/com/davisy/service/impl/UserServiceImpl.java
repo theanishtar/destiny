@@ -1,5 +1,6 @@
 package com.davisy.service.impl;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ import com.davisy.service.UserService;
 public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserDAO userDao;
+
+	Calendar now = Calendar.getInstance();
+	int year = now.get(Calendar.YEAR);
 
 	@Autowired
 	private UserRoleDAO userRoleDao;
@@ -80,7 +84,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<Object[]> getTOP5User() {
 		// TODO Auto-generated method stub
-		return userDao.getTOP5User();
+		return userDao.getTOP5User(year);
 	}
 
 	@Override
@@ -99,35 +103,50 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
+	// 1-11-2023 -lấy tổng số người dùng theo ngày
+	@Override
+	public int getTotalUserByDay(int day, int month) {
+		// TODO Auto-generated method stub
+		return userDao.getTotalUserByDay(day, month, year);
+	}
+
 	// 21-9-2023 -lấy tổng số người dùng theo tháng
 	// lastest update 14-10
 	@Override
 	public int getTotalUserByMonth(int month) {
-		return userDao.getTotalUserByMonth(month);
+		return userDao.getTotalUserByMonth(month, year);
+	}
+
+	// 1-11-2023 -lấy tổng số người dùng theo năm
+	@Override
+	public int getTotalUserByYear(int yearx) {
+		// TODO Auto-generated method stub
+		return userDao.getTotalUserByYear(yearx);
 	}
 
 	// 21-9-2023 -Tóng số lượng tương tác của người dùng theo từng tháng
+	// 1-11
 	@Override
 	public List<Object[]> getInteractionOfUser() {
-		return userDao.getInteractionOfUser();
+		return userDao.getInteractionOfUser(year);
 	}
 
 	// lastest update 14-10 Tóng số lượng tương tác của người dùng theo tháng
 	@Override
 	public int getInteractionOfUserByMonth(int month) {
-		return userDao.getInteractionOfUserByMonth(month);
+		return userDao.getInteractionOfUserByMonth(month, year);
 	}
 
 	// 21-9-2023 -Top 4 người dùng đăng bài nhiều nhất
 	@Override
 	public List<Object[]> getTOP4User() {
-		return userDao.getTOP4User();
+		return userDao.getTOP4User(year);
 	}
 
 	// 22-0-2023 -Tổng số người dùng tham gia từng theo từng tháng
 	@Override
 	public List<Object[]> getTotalUserEveryMonth() {
-		return userDao.getTotalUserEveryMonth();
+		return userDao.getTotalUserEveryMonth(year);
 	}
 
 	// 22-9-2023 Vô hiệu hóa người dùng

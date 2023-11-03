@@ -16,6 +16,19 @@ export class UserManamentComponent {
   listTOP4User: any[] = [{},{},{},{}];
   listTotalUserEveryMonth: number[];
 
+  day: number;
+  month: number;
+  year: number;
+
+  totalUserByDay: number;
+  percentUserByDayIncrease: number;
+
+  totalUserByMonth: number;
+  percentUserByMonthIncrease: number;
+
+  totalUserByYear: number;
+  percentUserByYearIncrease: number;
+
 
   constructor(
     private adminUsermanagementService: AdminUsermanagementService,
@@ -28,8 +41,65 @@ export class UserManamentComponent {
     this.loadTOP4User();
     this.loadListTotalUserEveryMonth();
 
+    this.getTime();
 
+    this.loadTotalUserByDay();
+    this.loadTotalUserByMonth();
+    this.loadTotalUserByYear();
+
+    this.loadPercentUserByDayIncrease();
+    this.loadPercentUserByMonthIncrease();
+    this.loadPercentUserByYearIncrease();
   }
+
+  getTime(){
+    this.day = new Date().getDay();
+    this.month = new Date().getMonth();
+    this.year = new Date().getFullYear();
+  }
+
+  loadTotalUserByDay(){
+    this.adminUsermanagementService.loadTotalUserByDay().subscribe(() =>{
+      this.totalUserByDay = 0;
+      this.totalUserByDay = this.adminUsermanagementService.getTotalUserByDay();
+    })
+  }
+
+  loadPercentUserByDayIncrease(){
+    this.adminUsermanagementService.loadPercentUserByDayIncrease().subscribe(() =>{
+      this.percentUserByDayIncrease = 0;
+      this.percentUserByDayIncrease = this.adminUsermanagementService.getPercentUserByDayIncrease();
+    })
+  }
+
+  loadTotalUserByMonth(){
+    this.adminUsermanagementService.loadTotalUserByMonth().subscribe(() =>{
+      this.totalUserByMonth = 0;
+      this.totalUserByMonth = this.adminUsermanagementService.getTotalUserByMonth();
+    })
+  }
+
+  loadPercentUserByMonthIncrease(){
+    this.adminUsermanagementService.loadPercentUserByMonthIncrease().subscribe(() =>{
+      this.percentUserByMonthIncrease = 0;
+      this.percentUserByMonthIncrease = this.adminUsermanagementService.getPercentUserByMonthIncrease();
+    })
+  }
+
+  loadTotalUserByYear(){
+    this.adminUsermanagementService.loadTotalUserByYear().subscribe(() =>{
+      this.totalUserByYear = 0;
+      this.totalUserByYear = this.adminUsermanagementService.getTotalUserByYear();
+    })
+  }
+
+  loadPercentUserByYearIncrease(){
+    this.adminUsermanagementService.loadPercentUserByYearIncrease().subscribe(() =>{
+      this.percentUserByYearIncrease = 0;
+      this.percentUserByYearIncrease = this.adminUsermanagementService.getPercentUserByYearIncrease();
+    })
+  }
+
 
   selectUser(email: string): void{
     localStorage.setItem("userDetailEmail", email);

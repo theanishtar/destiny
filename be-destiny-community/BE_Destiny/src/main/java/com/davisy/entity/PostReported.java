@@ -42,7 +42,7 @@ public class PostReported {
 	
 	String content_report;
 	@Temporal(TemporalType.DATE)
-	Calendar date_Post = GregorianCalendar.getInstance();
+	Calendar date_report = GregorianCalendar.getInstance();
 	
 	
 }

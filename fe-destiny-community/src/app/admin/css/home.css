@@ -1476,3 +1476,10 @@ ul {
   font-family: "Font Awesome 6 Free";
 }
 
+.border-left-shine {
+  border-left: .25rem solid var(--dark-admin) !important
+}
+
+.border-left-pink {
+  border-left: .25rem solid var(--primary-admin) !important
+}

@@ -52,8 +52,6 @@ public class AdminControl {
 	private UserService userService;
 	@Autowired
 	private FollowService followService;
-	@Autowired
-	private JwtTokenUtil jwtTokenUtil;
 
 	// 23-9-2023 -xem chi tiết bài đăng
 	// update lastest 7-10
@@ -145,7 +143,7 @@ public class AdminControl {
 		List<AdminPostDetail> listAdminPostDetails = new ArrayList<>();
 
 		for (Post post : listPost) {
-
+			//if() postparentid
 			listAdminPostDetails.add(setPostDetail(post));
 		}
 
@@ -319,6 +317,7 @@ public class AdminControl {
 		listImagesDetail.add(postImagesDetail);
 		PostImagesDetail postImagesDetail2 = new PostImagesDetail();
 		postImagesDetail2.setLink_image(img);
+		listImagesDetail.add(postImagesDetail2);
 		listImagesDetail.add(postImagesDetail2);
 
 		return listImagesDetail;

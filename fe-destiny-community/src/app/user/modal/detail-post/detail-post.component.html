@@ -185,26 +185,20 @@
                     {{ cmt[5] }}
                   </p>
                   <div class="comment__card-footer">
-                    <div class="replies">{{ cmt[10] }} Trả lời</div>
+                    <div class="replies" (click)="reply(cmt[0], cmt[7])">{{ cmt[11] }} Trả lời</div>
                     <div
                       class="show-replies"
-                      *ngIf="
-                        modalService.checkHideSeeMore.get(cmt[0]) == null ||
-                        modalService.checkHideSeeMore.get(cmt[0])
-                      "
+                      *ngIf="modalService.checkHideSeeMore.get(cmt[0])==null || modalService.checkHideSeeMore.get(cmt[0]) "
                       (click)="modalService.loadDataReply(cmt[3], cmt[0])"
                     >
-                      Xem thêm
+                     Xem thêm
                     </div>
                     <div
                       class="show-replies"
-                      *ngIf="
-                        modalService.checkHideSeeMore.get(cmt[0]) != null &&
-                        !modalService.checkHideSeeMore.get(cmt[0])
-                      "
+                      *ngIf="modalService.checkHideSeeMore.get(cmt[0])!=null && !modalService.checkHideSeeMore.get(cmt[0]) "
                       (click)="removeSeeMoreCmt(cmt[0])"
                     >
-                      Ẩn bớt
+                     Ẩn bớt
                     </div>
                   </div>
                 </div>
@@ -216,13 +210,15 @@
           </div>
           <form action="">
             <div class="comment-box">
-              <input
-                type="text"
-                id="comment-input"
-                name="comment-input"
-                [(ngModel)]="comment_input"
-                placeholder="Bình luận"
-              />
+              <input type="text" (input)="onInput($event)" id="comment-input" name="comment-input" [(ngModel)]="comment_input" placeholder="Bình luận" />
+              <div *ngIf="showDropdown" class="dropdown-menu">
+                <ul id="dropdown">
+                  <li>Item 1</li>
+                  <li>Item 2</li>
+                  <li>Item 3</li>
+              </ul>
+              </div>
+             
               <button class="add-comment-btn" (click)="addComment()">
                 <i class="fa-regular fa-comment"></i>
               </button>

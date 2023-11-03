@@ -44,7 +44,7 @@
                     {{ cmt[5] }}
                   </p>
                   <div class="comment__card-footer">
-                    <div class="replies">{{ cmt[10] }} Trả lời</div>
+                    <div class="replies" (click)="reply(cmt[0], cmt[7])">{{ cmt[11] }} Trả lời</div>
                     <div
                       class="show-replies"
                       *ngIf="modalService.checkHideSeeMore.get(cmt[0])==null || modalService.checkHideSeeMore.get(cmt[0]) "
@@ -69,12 +69,15 @@
           </div>
           <form action="">
             <div class="comment-box">
-              <input type="text" (keyup)="checkTagCmt($event)" id="comment-input" name="comment-input" [(ngModel)]="comment_input" placeholder="Bình luận" />
-              <ul id="dropdown" class="hidden">
-                <li>Item 1</li>
-                <li>Item 2</li>
-                <li>Item 3</li>
-            </ul>
+              <input type="text" (input)="onInput($event)" id="comment-input" name="comment-input" [(ngModel)]="comment_input" placeholder="Bình luận" />
+              <div *ngIf="showDropdown" class="dropdown-menu">
+                <ul id="dropdown">
+                  <li>Item 1</li>
+                  <li>Item 2</li>
+                  <li>Item 3</li>
+              </ul>
+              </div>
+             
               <button class="add-comment-btn" (click)="addComment()">
                 <i class="fa-regular fa-comment"></i>
               </button>

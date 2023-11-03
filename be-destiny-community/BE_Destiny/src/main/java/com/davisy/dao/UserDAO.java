@@ -23,11 +23,12 @@ public interface UserDAO extends JpaRepository<User, Integer> {
 	public List<Integer> findAllUserProvinces(String idPr, String idDt, String idW);
 
 	// 21-9-2023 -Top 5 người dùng đăng bài nhiều nhất
+	// 1-11
 	@Query(value = "SELECT users.avatar, users.fullname, users.intro, users.user_id, users.mark, COUNT(*) AS totalPost FROM post \r\n"
-			+ "INNER JOIN users ON post.user_id = users.user_id \r\n"
+			+ "INNER JOIN users ON post.user_id = users.user_id WHERE EXTRACT(YEAR FROM date_Post)=:year\r\n"
 			+ "GROUP BY users.avatar, users.fullname, users.user_id, users.mark \r\n"
 			+ "ORDER BY totalPost DESC LIMIT 5", nativeQuery = true)
-	public List<Object[]> getTOP5User();
+	public List<Object[]> getTOP5User(int year);
 
 	@Query(value = "SELECT * FROM users WHERE fb_id=:fb_id ", nativeQuery = true)
 	public User findByFbId(String fb_id);
@@ -35,41 +36,54 @@ public interface UserDAO extends JpaRepository<User, Integer> {
 	@Query(value = "SELECT * FROM users WHERE gg_id=:gg_id ", nativeQuery = true)
 	public User findByGgId(String gg_id);
 
+	// 1-11-2023 -lấy tổng số người dùng theo ngày
+	@Query(value = "SELECT COUNT(user_id) FROM users WHERE EXTRACT(DAY FROM day_create)=:day AND EXTRACT(MONTH FROM day_create)=:month AND EXTRACT(YEAR FROM day_create)=:year", nativeQuery = true)
+	public int getTotalUserByDay(int day, int month, int year);
+
 	// 21-9-2023 -lấy tổng số người dùng theo tháng
 	// lastest update 14-10
-	@Query(value = "SELECT COUNT(user_id) FROM users WHERE EXTRACT(MONTH FROM day_create)=:month", nativeQuery = true)
-	public int getTotalUserByMonth(int month);
+	// 1-11
+	@Query(value = "SELECT COUNT(user_id) FROM users WHERE EXTRACT(MONTH FROM day_create)=:month AND EXTRACT(YEAR FROM day_create)=:year", nativeQuery = true)
+	public int getTotalUserByMonth(int month, int year);
+
+	// 1-11-2023 -lấy tổng số người dùng theo năm
+	@Query(value = "SELECT COUNT(user_id) FROM users WHERE EXTRACT(YEAR FROM day_create)=:year", nativeQuery = true)
+	public int getTotalUserByYear(int year);
 
 	// 21-9-2023 -Tóng số lượng tương tác của người dùng theo từng tháng
+	// 1-11
 	@Query(value = "SELECT MONTH, SUM(COUNT) AS TotalCount\r\n" + "FROM (\r\n"
-			+ "    SELECT EXTRACT(MONTH FROM date_interested) AS MONTH, COUNT(*) AS COUNT FROM interested GROUP BY EXTRACT(MONTH FROM date_interested)\r\n"
+			+ "    SELECT EXTRACT(MONTH FROM date_interested) AS MONTH, COUNT(*) AS COUNT FROM interested WHERE EXTRACT(YEAR FROM date_interested)=:year GROUP BY EXTRACT(MONTH FROM date_interested)\r\n"
 			+ "    UNION ALL\r\n"
-			+ "    SELECT EXTRACT(MONTH FROM date_comment) AS MONTH, COUNT(*) AS COUNT FROM comment GROUP BY EXTRACT(MONTH FROM date_comment)\r\n"
+			+ "    SELECT EXTRACT(MONTH FROM date_comment) AS MONTH, COUNT(*) AS COUNT FROM comment WHERE EXTRACT(YEAR FROM date_comment)=:year GROUP BY EXTRACT(MONTH FROM date_comment)\r\n"
 			+ "    UNION ALL\r\n"
-			+ "    SELECT EXTRACT(MONTH FROM date_share) AS MONTH, COUNT(*) AS COUNT FROM share GROUP BY EXTRACT(MONTH FROM date_share)\r\n"
+			+ "    SELECT EXTRACT(MONTH FROM date_share) AS MONTH, COUNT(*) AS COUNT FROM share WHERE EXTRACT(YEAR FROM date_share)=:year GROUP BY EXTRACT(MONTH FROM date_share)\r\n"
 			+ ") AS CombinedData\r\n" + "GROUP BY MONTH\r\n" + "ORDER BY MONTH ASC", nativeQuery = true)
-	public List<Object[]> getInteractionOfUser();
+	public List<Object[]> getInteractionOfUser(int year);
 
 	// lastest update 14-10 Tóng số lượng tương tác của người dùng theo tháng
+	// 1-11
 	@Query(value = "SELECT COALESCE(SUM(COUNT), 0) AS TotalInteract\r\n" + "FROM (\r\n"
-			+ "    SELECT EXTRACT(MONTH FROM date_interested) AS MONTH, COUNT(*) AS COUNT FROM interested WHERE EXTRACT(MONTH FROM date_interested) =:month GROUP BY EXTRACT(MONTH FROM date_interested)\r\n"
+			+ "    SELECT EXTRACT(MONTH FROM date_interested) AS MONTH, COUNT(*) AS COUNT FROM interested WHERE EXTRACT(MONTH FROM date_interested)=:month AND EXTRACT(YEAR FROM date_interested)=:year GROUP BY EXTRACT(MONTH FROM date_interested)\r\n"
 			+ "    UNION ALL\r\n"
-			+ "    SELECT EXTRACT(MONTH FROM date_comment) AS MONTH, COUNT(*) AS COUNT FROM comment WHERE EXTRACT(MONTH FROM date_comment) =:month GROUP BY EXTRACT(MONTH FROM date_comment)\r\n"
+			+ "    SELECT EXTRACT(MONTH FROM date_comment) AS MONTH, COUNT(*) AS COUNT FROM comment WHERE EXTRACT(MONTH FROM date_comment)=:month AND EXTRACT(YEAR FROM date_comment)=:year GROUP BY EXTRACT(MONTH FROM date_comment)\r\n"
 			+ "    UNION ALL\r\n"
-			+ "    SELECT EXTRACT(MONTH FROM date_share) AS MONTH, COUNT(*) AS COUNT FROM share WHERE EXTRACT(MONTH FROM date_share) =:month GROUP BY EXTRACT(MONTH FROM date_share)\r\n"
+			+ "    SELECT EXTRACT(MONTH FROM date_share) AS MONTH, COUNT(*) AS COUNT FROM share WHERE EXTRACT(MONTH FROM date_share)=:month AND EXTRACT(YEAR FROM date_share)=:year GROUP BY EXTRACT(MONTH FROM date_share)\r\n"
 			+ ") AS CombinedData;", nativeQuery = true)
-	public int getInteractionOfUserByMonth(int month);
+	public int getInteractionOfUserByMonth(int month, int year);
 
 	// 21-9-2023 -Top 4 người dùng đăng bài nhiều nhất
+	// 1-11
 	@Query(value = "SELECT users.email, COUNT(*) AS totalPost FROM post \r\n"
-			+ "INNER JOIN users ON post.user_id = users.user_id \r\n" + "GROUP BY users.email \r\n"
+			+ "INNER JOIN users ON post.user_id = users.user_id WHERE EXTRACT(YEAR FROM date_Post)=:year GROUP BY users.email \r\n"
 			+ "ORDER BY totalPost DESC LIMIT 4", nativeQuery = true)
-	public List<Object[]> getTOP4User();
+	public List<Object[]> getTOP4User(int year);
 
 	// 22-9-2023 -Tổng số người dùng tham gia từng theo từng tháng
+	// 1-11
 	@Query(value = "SELECT EXTRACT(MONTH FROM day_create) AS MONTH, COUNT(user_id) "
-			+ "FROM users GROUP BY EXTRACT(MONTH FROM day_create) ORDER BY EXTRACT(MONTH FROM day_create) ASC", nativeQuery = true)
-	public List<Object[]> getTotalUserEveryMonth();
+			+ "FROM users WHERE EXTRACT(YEAR FROM day_create)=:year GROUP BY EXTRACT(MONTH FROM day_create) ORDER BY EXTRACT(MONTH FROM day_create) ASC", nativeQuery = true)
+	public List<Object[]> getTotalUserEveryMonth(int year);
 
 	// Lấy user đã đăng bài
 	@Query(value = "SELECT u.user_id, u.fullname,i.post_id \n" + "FROM interested i\n"
@@ -90,6 +104,6 @@ public interface UserDAO extends JpaRepository<User, Integer> {
 			+ "(select  count(f.follower_id)  from follower f inner join users u1 on f.user_id =u1.user_id where u1.user_id =u.user_id) as countFollower,\r\n"
 			+ "(select count(pi2.post_images_id) as imgcount from post_images pi2  inner join post p on pi2.post_id =p.post_id where p.user_id =u.user_id)as countImg,\r\n"
 			+ "u.username\r\n" + "from users u where u.email =:email", nativeQuery = true)
-	public List<Object[] > loadTimeLine(String email);
+	public List<Object[]> loadTimeLine(String email);
 
 }

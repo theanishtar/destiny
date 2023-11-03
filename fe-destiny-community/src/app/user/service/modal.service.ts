@@ -13,7 +13,8 @@ import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from './message.service';
 import { NotifyModel } from '../Model/NotifyModel';
 import { ProfileService } from './profile.service';
-
+import '../../../assets/toast/main.js';
+declare var toast: any;
 
 @Injectable({
   providedIn: 'root'
@@ -75,7 +76,6 @@ export class ModalService {
       this.listComment = this.getDataCmt();
       this.images = this.listComment.list_post_images;
       this.listCmt = this.listComment.list_comment;
-
     })
   }
 
@@ -92,14 +92,33 @@ export class ModalService {
       this.stompClient?.subscribe("/topic/notification/" + userId, (response) => {
         let data = JSON.parse(response.body);
         this.checkNotify = true;
-        // let map=reverseMap();
-        // this.stompClient?.send('/app/load/notification/' + userId);
-        this.listNotify.set(this.count, data);
-        this.mapTime.set(this.count, new Date().toISOString());
-        this.count++;
+        // this.listNotify.set(this.count, data);
+        // this.mapTime.set(this.count, new Date().toISOString());
+        // this.count++;
 
+        //Đẩy lại thông báo lên lại
+        this.listNotify.clear();
+        this.mapTime.clear();
+        this.count = 0;
+        for (let k of data) {
+          let notify: NotifyModel = {
+            avatar: k!.avatar,
+            fullname: k!.fullname,
+            fromUserId: k!.fromUserId,
+            content: k!.content,
+            postId: k!.postId,
+            time: this.messageService.customTime(k!.time, 1),
+            type: k!.type,
+            following_status: k!.following_status
+          }
+          this.listNotify.set(this.count, notify);
+          this.mapTime.set(this.count, k!.time);
+          this.count++;
 
-        this.callApiLoadCmt(data.postId);
+        }
+
+        if (this.repCmtId > 0)
+          this.callApiLoadCmt(data.postId);
       });
       this.stompClient?.subscribe("/topic/success-notification", (response) => {
         let id = JSON.parse(response.body);
@@ -115,11 +134,12 @@ export class ModalService {
             fromUserId: k!.fromUserId,
             content: k!.content,
             postId: k!.postId,
-            time: this.messageService.customTime(k!.time),
-            type: k!.type
+            time: this.messageService.customTime(k!.time, 1),
+            type: k!.type,
+            following_status: k!.following_status
           }
           this.listNotify.set(this.count, notify);
-          this.mapTime.set(this.count, new Date(k!.time).toISOString());
+          this.mapTime.set(this.count, k!.time);
           this.count++;
 
         }
@@ -128,11 +148,18 @@ export class ModalService {
       this.stompClient?.subscribe("/topic/changetoken/" + userId, (response) => {
         let data = JSON.parse(response.body);
         localStorage.setItem('token', data.token);
+        new toast({
+          title: 'Thông báo!',
+          message: 'Email đã được thay đổi',
+          type: 'success',
+          duration: 3000,
+        })
       });
 
       setInterval(() => {
         if (this.listNotify != null) {
           for (let [key, value] of this.mapTime) {
+            // console.log(value)
             let v = this.listNotify.get(key);
             let notify: NotifyModel = {
               avatar: v!.avatar,
@@ -140,8 +167,9 @@ export class ModalService {
               fromUserId: v!.fromUserId,
               content: v!.content,
               postId: v!.postId,
-              time: this.messageService.customTime(value),
-              type: v!.type
+              time: this.messageService.customTime(value, 1),
+              type: v!.type,
+              following_status: v!.following_status,
             }
             this.listNotify.set(key, notify);
           }
@@ -152,8 +180,8 @@ export class ModalService {
 
     });
   }
-
-  sendNotify(content, post_id, toUser, type) {
+  repCmtId: any = 0;
+  sendNotify(content, post_id, toUser, type, idCmt) {
     let toUserId = toUser;
     let avatar = this.cookieService.get("avatar");
     let fullname = this.cookieService.get("full_name");
@@ -164,9 +192,24 @@ export class ModalService {
       fromUserId: fromUserId,
       content: content,
       postId: post_id,
+      replyId: idCmt,
       time: 'Vừa xong',
       type: type,
-    }))
+    }));
+    let comment = document.getElementById("cmt-"+post_id);
+    let share = document.getElementById("share-"+post_id);
+    if(type == 'COMMENT' && comment){
+      let count: string | undefined;
+      count = '' + comment.textContent?.trim();
+      let num = parseInt(count) + 1;
+      comment!.innerText = num+' Bình luận';
+    }
+    if(type == 'SHARE' && share){
+      let count: string | undefined;
+      count = '' + share.textContent?.trim();
+      let num = parseInt(count) + 1;
+      share!.innerText = num+' Chia sẻ';
+    }
   }
 
   /* ============Reply Comment============= */
@@ -204,8 +247,9 @@ export class ModalService {
             '</div>' +
             '</div>' +
             '</div>' +
-            '<p style="font-size: 15px;margin-bottom: 1rem;line-height: 1.4;padding-left: 3.5rem;margin: 0;font-family: Helvetica, Arial, sans-serif"><a href="#" style="text-decoration: none;color: black;font-weight: bolder;">' +
-            rep[7] + '</a>' + ' ' + rep[5] +
+            '<p style="font-size: 15px;margin-bottom: 1rem;line-height: 1.4;padding-left: 3.5rem;margin: 0;font-family: Helvetica, Arial, sans-serif">' +
+            '<a href="#" style="text-decoration: none;color: black;font-weight: bolder;">' +
+            rep[10] + '</a>' + ' ' + this.getContent(rep[10], rep[5]) +
             '</p>' +
             '</div>' +
             '</div>'
@@ -215,34 +259,39 @@ export class ModalService {
       }
     })
   }
+  getContent(fullname: any, content: any) {
+    return content.substring(fullname.length, content.length).trim();
+  }
 
   /* ============Images============= */
+  currentPage: number = 1;
   async openModalSeeMoreImg(idPost) {
     this.isOpenSeeMoreImg.next(true);
-    this.listPosts = await this.postService.loadPostNewsFeed();
-    // this.listPosts = this.postService.getDataPostNf();
-    this.listPost = this.listPosts.post;
-    const targetPost = this.listPost.find(post => post.post_id === idPost);
-
-    if (targetPost) {
-      // Assuming postImages is an array of objects, not strings
-      this.imagesSeeMore = targetPost.postImages.map(image => image.link_image);
-    } else {
-      console.log("Post not found");
-    }
-    // });
+    // this.listPosts = await this.postService.loadPostNewsFeed();
+    this.postService.loadPostNewsFeed(this.currentPage).subscribe((data: any) => {
+      this.listPosts = data; // Lưu dữ liệu ban đầu vào mảng
+      this.currentPage++; // Tăng trang hiện tại
+      const targetPost = this.listPosts.find(post => post.post_id === idPost);
+      if (targetPost) {
+        this.imagesSeeMore = targetPost.images.map(image => image);
+      } else {
+        console.log("Post not found");
+      }
+    });
   }
 
   openModalSeeMoreImgPr(idPost) {
+    let dataPost = {
+      toProfile: localStorage.getItem("idSelected"),
+      page: this.currentPage
+    }
     this.isOpenSeeMoreImg.next(true);
-    this.profileService.loadDataTimeline(idPost).subscribe(() => {
-      this.listPosts = this.profileService.getdataTimeLine();
-      this.listPost = this.listPosts.post;
-      const targetPost = this.listPost.find(post => post.post_id === idPost);
-
+    this.profileService.loadDataTimelinePost(dataPost).subscribe((data: any) => {
+      this.listPosts = data; // Lưu dữ liệu ban đầu vào mảng
+      this.currentPage++; // Tăng trang hiện tại
+      const targetPost = this.listPosts.find(post => post.post_id === idPost);
       if (targetPost) {
-        // Assuming postImages is an array of objects, not strings
-        this.imagesSeeMore = targetPost.postImages.map(image => image.link_image);
+        this.imagesSeeMore = targetPost.images.map(image => image);
       } else {
         console.log("Post not found");
       }

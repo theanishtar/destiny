@@ -19,22 +19,9 @@ export class InteractPostsService {
   idPost: any
   sharePost(idPost, idUser) {
     this.idPost = this.modalService.idPostCmt;
-    this.modalService.sendNotify(' ', idPost, idUser, 'SHARE');
+    this.modalService.sendNotify(' ', idPost, idUser, 'SHARE', this.modalService.repCmtId);
   }
 
-
-  // deleleInterestedApi(data: any): Observable<any> {
-  //   console.log("data: " + data);
-  //   return this.http.post(this.deleleInterestedUrl, data).pipe(
-  //     tap(() => {
-  //       console.log("Đã hủy quan tâm"); // Thay đổi thông điệp tùy ý
-  //     }),
-  //     catchError((error) => {
-  //       console.error("Lỗi xảy ra khi hủy quan tâm:", error);
-  //       throw error; // Ném lỗi để thông báo lên tầng gọi
-  //     })
-  //   );
-  // }
   deleleInterestedApi(post_id: number): Observable<any> {
     return this.http.post(this.deleleInterestedUrl, post_id).pipe(
       catchError(error => {
@@ -47,7 +34,7 @@ export class InteractPostsService {
 
   interestedPost(idPost, idUser) {
     this.idPost = this.modalService.idPostCmt;
-    this.modalService.sendNotify(' ', idPost, idUser, 'INTERESTED');
+    this.modalService.sendNotify(' ', idPost, idUser, 'INTERESTED', this.modalService.repCmtId);
   }
 
 
@@ -57,17 +44,17 @@ export class InteractPostsService {
 
 
 
-  private likedPosts: Set<string> = new Set<string>();
+  // private likedPosts: Set<string> = new Set<string>();
 
-  toggleLike(postId: string): void {
-    if (this.likedPosts.has(postId)) {
-      this.likedPosts.delete(postId);
-    } else {
-      this.likedPosts.add(postId);
-    }
-  }
+  // toggleLike(postId: string): void {
+  //   if (this.likedPosts.has(postId)) {
+  //     this.likedPosts.delete(postId);
+  //   } else {
+  //     this.likedPosts.add(postId);
+  //   }
+  // }
 
-  isLiked(postId: string): boolean {
-    return this.likedPosts.has(postId);
-  }
+  // isLiked(postId: string): boolean {
+  //   return this.likedPosts.has(postId);
+  // }
 }

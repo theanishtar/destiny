@@ -68,7 +68,8 @@
                             id="viewer"
                             formControlName="post_status"
                             class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                          >
+                              [ngModel]="true"
+                            >
                             <option value="true">Công khai</option>
                             <option value="false">Riêng tư</option>
                           </select>
@@ -88,6 +89,16 @@
                           value=""
                           formControlName="product"
                         />
+                        <span
+                          *ngIf="
+                            createPostForm.get('product')?.invalid &&
+                            createPostForm.get('product')?.touched
+                          "
+                        >
+                          <div style="color: red">
+                            Vui lòng nhập tên sản phẩm!
+                          </div>
+                        </span>
                       </div>
                     </div>
                     <div class="mb-5.5">
@@ -104,6 +115,39 @@
                         value=""
                         formControlName="hash_tag"
                       />
+                      <span
+                        *ngIf="
+                          createPostForm.get('hash_tag')?.invalid &&
+                          createPostForm.get('hash_tag')?.touched
+                        "
+                      >
+                        <div
+                          *ngIf="createPostForm.get('hash_tag')?.errors"
+                          style="color: red"
+                        >
+                          <div
+                            *ngIf="
+                              createPostForm
+                                .get('hash_tag')
+                                ?.hasError('required')
+                            "
+                            style="color: red"
+                          >
+                            Vui lòng nhập mật khẩu
+                          </div>
+                          <div
+                            *ngIf="
+                              createPostForm
+                                .get('hash_tag')
+                                ?.hasError('pattern')
+                            "
+                            style="color: red"
+                          >
+                            Vui lòng kiểm tra hashtag theo đúng định dạng (VD:
+                            #davisy)
+                          </div>
+                        </div>
+                      </span>
                     </div>
                     <div class="mb-5.5">
                       <label
@@ -152,8 +196,7 @@
                           placeholder="Nhập nội dung"
                           formControlName="content"
                         >
-                        </textarea
-                        >
+                        </textarea>
                       </div>
                     </div>
                     <div class="address">
@@ -185,6 +228,7 @@
                             [items]="provinces"
                             [clearable]="false"
                             formControlName="province_name"
+                            [ngModel]="dataEditProfile.province_name"
                             (change)="getProvinceName()"
                             required
                           ></ng-select>
@@ -203,6 +247,7 @@
                             [clearable]="false"
                             formControlName="district_name"
                             class="form-controlP"
+                            [ngModel]="dataEditProfile.district_name"
                             required
                             (change)="getDistrictName()"
                           ></ng-select>
@@ -220,6 +265,7 @@
                           [items]="wards"
                           [clearable]="false"
                           formControlName="ward_name"
+                          [ngModel]="dataEditProfile.ward_name"
                           class="form-controlP"
                           required
                         ></ng-select>
@@ -251,7 +297,7 @@
                         accept="image/*"
                         name="image_file"
                         (change)="uploadImg($event)"
-                        multiple 
+                        multiple
                         class="absolute inset-0 z-50 m-0 h-full w-full cursor-pointer p-0 opacity-0 outline-none"
                       />
                       <div class="slideshow-container-product">
@@ -259,7 +305,7 @@
                         <div
                           class="mySlides fade-produc"
                           id="images-to-upload"
-                          *ngFor="let imgSrc of imageSources;let i =index"
+                          *ngFor="let imgSrc of imageSources; let i = index"
                         >
                           <img
                             class="img-product"
@@ -267,7 +313,11 @@
                             #uploadPreview
                             id="uploadPreview"
                           />
-                          <span class="delete-img" (click)="deleteImg($event, i)"><i class="fa-solid fa-xmark"></i></span>
+                          <span
+                            class="delete-img"
+                            (click)="deleteImg($event, i)"
+                            ><i class="fa-solid fa-xmark"></i
+                          ></span>
                           <div class="btn-slide-img">
                             <a class="prev-img" (click)="plusSlides(-1)"
                               >&#10094;</a
@@ -286,7 +336,7 @@
                               type="submit"
                             >
                               Xóa</button> -->
-                              <!-- <button
+                      <!-- <button
                               class="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-95"
                               type="submit"
                             >

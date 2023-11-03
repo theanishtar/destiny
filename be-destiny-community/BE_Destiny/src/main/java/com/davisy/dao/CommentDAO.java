@@ -32,5 +32,8 @@ public interface CommentDAO extends JpaRepository<Comment, Integer> {
 
 	@Query(value = "select *from get_comment_list_with_counts(:id,:check)", nativeQuery = true)
 	public List<Object[]> findAllComment(int id,int check);
+	
+	@Query(value = "select c.user_id from \"comment\" c where c.comment_id =:id",nativeQuery = true)
+	public Integer findByIdtoUser(int id);
 
 }

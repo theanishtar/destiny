@@ -55,9 +55,10 @@ export class EditPostComponent {
   }
 
   formUpdatePost() {
+    const HASHTAG_PATTERN = /^(?=.*[!@#$%^&*]+)[a-z0-9!@#$%^&*]{4,20}$/;
     this.createUpdatePostForm = this.formbuilder.group({
       content: ['', Validators.required],
-      hash_tag: ['', Validators.required],
+      hash_tag: ['', [Validators.required, Validators.pattern(HASHTAG_PATTERN),]],
       province_name: [''],
       district_name: [''],
       ward_name: [''],
@@ -73,26 +74,11 @@ export class EditPostComponent {
   }
 
   async updatePost(event: any) {
-    console.log("this.file.length: " + this.file.length)
-    for (let img of this.postService.listImageSources) {
-      console.log("this.file.length: " + img.link_image)
-    }
     if (this.file.length !== undefined) {
       for (let img of this.file) {
         await this.addData(img);
       }
     }
-    if(this.file.length === undefined){
-      for(let img of this.postService.listImageSources){
-        this.listImg += img.link_image;
-      }
-      
-    }
-    // else{
-    //   for (let img of this.postService.listImageSources) {
-    //     await this.addData(img.link_image);
-    //   }
-    // }
 
     var data = {
       content: this.createUpdatePostForm.get('content')?.value,
@@ -107,16 +93,28 @@ export class EditPostComponent {
       send_status: this.postService.infoPost.send_status,
     };
     console.warn("data: " + JSON.stringify(data));
-    this.postService.updatePost(data).subscribe(() => {
-      new toast({
-        title: 'Thành công!',
-        message: 'Chỉnh sửa thành công',
-        type: 'success',
-        duration: 1500,
-      });
-      this.profileService.loadDataProfileTimeline(this.postService.infoPost.userId)
-      this.postService.closeModalUpdatePost();
-    })
+    if(this.createUpdatePostForm.valid){
+      if(this.createUpdatePostForm.get('content')?.value && this.listImg.length === 0){
+        new toast({
+          title: 'Thông báo!',
+          message: 'Vui lòng không bỏ trống đồng thời nội dung và hình ảnh',
+          type: 'warning',
+          duration: 1500,
+        });
+      }else{
+        this.postService.updatePost(data).subscribe(() => {
+          new toast({
+            title: 'Thành công!',
+            message: 'Chỉnh sửa thành công',
+            type: 'success',
+            duration: 1500,
+          });
+          this.profileService.loadDataProfileTimeline(this.postService.infoPost.userId)
+          this.postService.closeModalUpdatePost();
+        })
+      }
+    }
+    
   }
 
   // listPostUdpate: any;
@@ -195,10 +193,12 @@ export class EditPostComponent {
   imageSources: any[] = [];
 
   uploadImg(event: any) {
-    // this.postService.listImageSources = [];
+    this.postService.listImageSources = [];
     this.file = event.target.files;
     const blobs = this.toBlob(this.file);
-    this.imageSources = blobs.map(blob => URL.createObjectURL(blob));
+    this.postService.listImageSources = blobs.map(blob => URL.createObjectURL(blob));
+    // this.postService.listImageSources.push(this.imageSources);
+    console.log("this.postService.listImageSources: " +  this.postService.listImageSources)
   }
 
   // 
@@ -259,7 +259,7 @@ listImgTemp:string[] = [];
   async addData(file: any) {
     return new Promise<void>((resolve) => {
       const storageRef = ref(this.storage, 'postsImg/' +file.name);
-      const uploadTask = uploadBytesResumable(storageRef, this.fileTemp);
+      const uploadTask = uploadBytesResumable(storageRef, file);
       uploadTask.on(
         'state_changed',
         (snapshot) => { },

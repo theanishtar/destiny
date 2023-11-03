@@ -24,6 +24,7 @@ public class PostEntity {
 	int user_id;
 //	int parent_post_id;
 	String content;
+	@JsonIgnore
 	Calendar date_post;
 	@JsonIgnore
 	String hash_tag;
@@ -54,18 +55,21 @@ public class PostEntity {
 
 	public List<UserInterested> getUserInterested() {
 		List<UserInterested> list = new ArrayList<>();
-		for (Object[] u : user) {
-			UserInterested interested = new UserInterested();
-			interested.setUser_id(Integer.valueOf(u[0].toString()));
-			interested.setFullname(u[1] + "");
-			list.add(interested);
+		if (user != null) {
+			for (Object[] u : user) {
+				UserInterested interested = new UserInterested();
+				interested.setUser_id(Integer.valueOf(u[0].toString()));
+				interested.setFullname(u[1] + "");
+				list.add(interested);
+			}
+			return list;
 		}
-		return list;
+		return null;
 	}
 
 	public String getDate() {
 		String date = AdminControl.timeCaculate(date_post);
-		if(date.equalsIgnoreCase("0 ngày trước")) {
+		if (date.equalsIgnoreCase("0 ngày trước")) {
 			return PostController.getTime(date_post);
 		}
 		return date;

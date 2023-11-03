@@ -22,9 +22,11 @@ export class HeaderProfileComponent implements OnInit {
   dataProfileTimeline: any;
   isLoading = true;
   idLocal: any;
+  chatUserId: any;
   dataFollows: any
   ngOnInit() {
     this.idLocal = parseInt((localStorage.getItem("idSelected") + '')?.trim());
+    this.chatUserId = parseInt((localStorage.getItem("chatUserId") + '')?.trim());
     // this.profileService.loadDataProfileHeader(this.idLocal);
   }
 

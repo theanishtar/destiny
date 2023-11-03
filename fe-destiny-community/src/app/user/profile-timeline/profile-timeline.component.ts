@@ -42,11 +42,11 @@ export class ProfileTimelineComponent implements OnInit {
   mapIntersted = new Map<number, boolean>();
   checkRequest: boolean = true;
   currentUserId = this.cookieService.get("id");
-
+  checkCountPosts: boolean = true;
   ngOnInit() {
     // this.loadDataHeader(0);
     this.loadDataSuggest();
-    this.checkSrcoll();
+    this.checkScroll();
     liquid.liquid();
     avatarHexagons.avatarHexagons();
     tooltips.tooltips();
@@ -73,23 +73,18 @@ export class ProfileTimelineComponent implements OnInit {
     private el: ElementRef,
     private renderer: Renderer2
   ) {
-    // this.idLocal = localStorage.getItem("idSelected")
     this.idLocal = parseInt((localStorage.getItem("idSelected") + '')?.trim());
     this.profileService.loadDataProfileTimeline(this.idLocal);
-
-    // this.listSuggested = this.followsService.getDataSuggested();
   }
 
   addFollow(id: number) {
     this.followsService.addFollowAPI(id).subscribe((res) => {
-      // this.loadDataSuggest();
       new toast({
         title: 'Thông báo!',
         message: 'Đã theo dõi',
         type: 'success',
         duration: 3000,
       })
-      // location.reload();
     });
   }
 
@@ -179,7 +174,6 @@ translate() {
   });
 }
 
-
   @ViewChild('elementToScroll', { static: false }) elementToScroll: ElementRef;
 
   scrollToTop() {
@@ -188,30 +182,58 @@ translate() {
       this.elementToScroll.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
-  checkSrcoll() {
+
+  currentPage: number = 1;
+  async checkScroll() {
+    
     const scrollableDiv = document.getElementById('scrollableDiv')!;
     const scrollButton = document.getElementById('scrollButton')!;
 
-    // Thêm sự kiện lắng nghe lướt cho thẻ div
-    scrollableDiv.addEventListener('scroll', () => {
-      // Kiểm tra vị trí cuộn
+    scrollableDiv.addEventListener('scroll', async () => {
+      
       if (scrollableDiv.scrollTop > 100) {
-        // Hiển thị nút scroll khi cuộn đến vị trí cụ thể (ở đây là 100)
         scrollButton.style.display = 'block';
       } else {
-        // Ẩn nút scroll nếu không đủ cuộn
         scrollButton.style.display = 'none';
+      }
+      let epsilon = '0';
+      if (scrollableDiv.scrollTop.toString().indexOf('.') > 0) {
+        epsilon = '0' + scrollableDiv.scrollTop.toString().substring(scrollableDiv.scrollTop.toString().indexOf('.'));
+      }
+      
+      if (
+        scrollableDiv.scrollHeight - scrollableDiv.clientHeight - (scrollableDiv.scrollTop - parseFloat(epsilon)) <= 1 &&
+        this.checkCountPosts
+      ) {
+        try {
+          let dataPost = {
+            toProfile: localStorage.getItem("idSelected"),
+            page: this.currentPage
+          }
+          this.currentPage++;
+          const data: any = await this.profileService.loadDataTimelinePost(dataPost).toPromise();
+          this.profileService.listPostPr = [...this.profileService.listPostPr, ...data];
+
+          if (data.length < 5) {
+            this.checkCountPosts = false;
+          }
+          // console.log("data.length: " + data.length);
+        } catch (error) {
+          // console.error("Error loading data:", error);
+        }
+
+        // console.log("hết nè: " + this.currentPage);
       }
     });
   }
 
-  toggleLike() {
-    this.interactPostsService.toggleLike(this.postId);
-  }
+  // toggleLike() {
+  //   this.interactPostsService.toggleLike(this.postId);
+  // }
 
-  isLiked(postId: string) {
-    return this.interactPostsService.isLiked(postId);
-  }
+  // isLiked(postId: string) {
+  //   return this.interactPostsService.isLiked(postId);
+  // }
 
   openModalComment(idPost) {
     this.modalService.openModalComment(49);

@@ -8,25 +8,47 @@ import { environment } from '../../../environments/environment'
 })
 export class AdminIndexService {
 
-  private getTotalPostAPI = environment.baseUrl + 'v1/admin/getTotalPost';
-  private getTotalUserAPI = environment.baseUrl + 'v1/admin/getTotalUser';
-  private getPercentPostIncreaseAPI = environment.baseUrl + 'v1/admin/getPercentPostIncrease';
-  private getPercentUserIncreaseAPI = environment.baseUrl + 'v1/admin/getPercentUserIncrease';
+  private getTotalPostAPI = environment.baseUrl + 'v1/admin/getTotalPostByYear';
+  private getTotalUserAPI = environment.baseUrl + 'v1/admin/getTotalUserByYear';
+
+  private getTotalPostReportedByYearAPI = environment.baseUrl + 'v1/admin/getTotalPostReportedByYear';
+  private getTotalUserReportedByYearAPI = environment.baseUrl + 'v1/admin/getTotalUserReportedByYear';
+
+  private getPercentPostIncreaseAPI = environment.baseUrl + 'v1/admin/getPercentPostYearIncrease';
+  private getPercentUserIncreaseAPI = environment.baseUrl + 'v1/admin/getPercentUserYearIncrease';
+
+  private getPercentPostReportedIncreaseAPI = environment.baseUrl + 'v1/admin/getPercentPostReportedYearIncrease';
+  private getPercentUserReportedIncreaseAPI = environment.baseUrl + 'v1/admin/getPercentUserReportedYearIncrease';
+
   private getPercentPostSendStatusAPI = environment.baseUrl + 'v1/admin/getPercentPostSendSuccess';
+
   private getTotalPostEveryMonthAPI = environment.baseUrl + 'v1/admin/getTotalPostEveryMonth';
   private getTotalUserEveryMonthAPI = environment.baseUrl + 'v1/admin/getTotalUserEveryMonth';
+
   private getUserInteractionAPI = environment.baseUrl + 'v1/admin/getInteractionOfUser';
+
   private getPercentUserInteractionAPI = environment.baseUrl + 'v1/admin/getPercentUserInteractionIncrease';
 
 
   private totalPost: number;
   private totalUser: number;
-  private percentPost: number;
+
+  private totalPostReported: number;
+  private totalUserReported: number;
+
+  private percentPostSendSuccess: number;
+
   private percentPostIncrease: number;
   private percentUserIncrease: number;
+
+  private percentPostReportedIncrease: number;
+  private percentUserReportedIncrease: number;
+
   private listTotalPostEveryMonth: number[] = [];
   private listTotalUserEveryMonth: number[] = [];
+
   private listInteractionOfUser: number[] = [];
+
   private percentUserInteraction: number;
 
   constructor(
@@ -52,6 +74,24 @@ export class AdminIndexService {
     )
   }
 
+  loadTotalPostReported() {
+    return this.http.get<number>(this.getTotalPostReportedByYearAPI).pipe(
+      tap((response) => {
+        this.totalPostReported = response;
+        this.setTotalPostReported(this.totalPostReported);
+      }),
+    )
+  }
+
+  loadTotalUserReported() {
+    return this.http.get<number>(this.getTotalUserReportedByYearAPI).pipe(
+      tap((response) => {
+        this.totalUserReported = response;
+        this.setTotalUserReported(this.totalUserReported);
+      }),
+    )
+  }
+
   loadPercentPostIncrease() {
     return this.http.get<number>(this.getPercentPostIncreaseAPI).pipe(
       tap((response) => {
@@ -70,11 +110,29 @@ export class AdminIndexService {
     )
   }
 
+  loadPercentPostReportedIncrease() {
+    return this.http.get<number>(this.getPercentPostReportedIncreaseAPI).pipe(
+      tap((response) => {
+        this.percentPostReportedIncrease = response;
+        this.setPercentPostReportedIncrease(this.percentPostReportedIncrease);
+      }),
+    )
+  }
+
+  loadPercentUserReportedIncrease() {
+    return this.http.get<number>(this.getPercentUserReportedIncreaseAPI).pipe(
+      tap((response) => {
+        this.percentUserReportedIncrease = response;
+        this.setPercentUserReportedIncrease(this.percentUserReportedIncrease);
+      }),
+    )
+  }
+
   loadPercent() {
     return this.http.get<number>(this.getPercentPostSendStatusAPI).pipe(
       tap((response) => {
-        this.percentPost = response;
-        this.setPercentPost(this.percentPost);
+        this.percentPostSendSuccess = response;
+        this.setPercentPostSendSuccess(this.percentPostSendSuccess);
       }),
     )
   }
@@ -133,8 +191,8 @@ export class AdminIndexService {
     return this.percentUserIncrease;
   }
 
-  getPercentPost(): number {
-    return this.percentPost;
+  getPercentPostSendSuccess(): number {
+    return this.percentPostSendSuccess;
   }
 
   getListTotalPostEveryMonth(): number[] {
@@ -153,6 +211,21 @@ export class AdminIndexService {
     return this.percentUserInteraction;
   }
 
+  getTotalPostReported(): number {
+    return this.totalPostReported;
+  }
+
+  getTotalUserReported(): number {
+    return this.totalUserReported;
+  }
+
+  getPercentPostReportedIncrease(): number {
+    return this.percentPostReportedIncrease;
+  }
+
+  getPercentUserReportedIncrease(): number {
+    return this.percentUserReportedIncrease;
+  }
 
   //   Setter
   setTotalPost(data: number): void {
@@ -171,8 +244,8 @@ export class AdminIndexService {
     this.percentUserIncrease = data;
   }
 
-  setPercentPost(data: number): void {
-    this.percentPost = data;
+  setPercentPostSendSuccess(data: number): void {
+    this.percentPostSendSuccess = data;
   }
 
   setListTotalPostEveryMonth(data: number[]): void{
@@ -189,6 +262,22 @@ export class AdminIndexService {
 
   setPercentUserInteraction(data: number): void {
     this.percentUserInteraction = data;
+  }
+
+  setTotalPostReported(data: number): void {
+    this.totalPostReported = data;
+  }
+
+  setTotalUserReported(data: number): void {
+    this.totalUserReported = data;
+  }
+
+  setPercentPostReportedIncrease(data: number): void {
+    this.percentPostReportedIncrease = data;
+  }
+
+  setPercentUserReportedIncrease(data: number): void {
+    this.percentUserReportedIncrease = data;
   }
 
 }

@@ -24,7 +24,7 @@ export class PostService {
   private listTop5Post: any[] = [];
   private listPostsNf: any;
   public postUpdate: any;
-  listImageSources: any
+  listImageSources: any[] = [];
   infoPost: any
 
   constructor(
@@ -57,16 +57,22 @@ export class PostService {
   }
 
   /* ============Posts newsfeed============= */
-  async loadPostNewsFeed(): Promise<any[]> {
-    try {
-      const response = await this.http.get<any>(this.loadDataPosts).toPromise();
-      this.setDataPostNf(response);
-      return response;
-    } catch (error) {
-      throw error;
-    }
+  // async loadPostNewsFeed(): Promise<any[]> {
+  //   try {
+  //     const response = await this.http.get<any>(this.loadDataPosts).toPromise();
+  //     this.setDataPostNf(response);
+  //     return response;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
+  loadPostNewsFeed(data: any): Observable<any> {
+    return this.http.post(this.loadDataPosts, data).pipe(
+      tap((response) => {
+        this.setDataPostNf(response);
+      }),
+    )
   }
-
   /* ============upload post============= */
   uploadPost(data: any): Observable<any> {
     return this.http.post(this.createPostUrl, data).pipe(

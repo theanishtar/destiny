@@ -965,4 +965,27 @@ public class EmailService {
 
 		System.out.println("Email sent successfully!");
 	}
+	
+	
+	public void sendCodeMail(String code,String email) throws MessagingException {
+		String fromEmail = "destiny.davisy@gmail.com";
+
+		String body = code+" là mã xác nhận của bạn, mã se hết hiệu lực sau 5 phút";
+		MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+		// Set email properties
+		helper.setFrom(fromEmail);
+		helper.setTo(email);
+		helper.setSubject("Subject");
+
+		// Add the HTML body with the image attachment (embedded)
+		helper.setText(body, true);
+		
+
+		// Send the email
+		mailSender.send(message);
+
+		System.out.println("Email sent successfully!");
+	}
 }

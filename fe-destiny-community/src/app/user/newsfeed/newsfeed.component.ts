@@ -59,12 +59,13 @@ export class NewsfeedComponent implements OnInit {
   mapIntersted = new Map<number, boolean>();
   checkRequest: boolean = true;
   check: boolean = true
+  checkCountPosts: boolean = true;
 
   ngOnInit() {
     this.userDisplayName = this.cookieService.get('full_name');
     this.loadPosts();
     this.loadData();
-    this.checkSrcoll();
+    this.checkScroll();
     this.translate();
     liquid.liquid();
     avatarHexagons.avatarHexagons();
@@ -117,14 +118,13 @@ export class NewsfeedComponent implements OnInit {
   }
 
   addFollow(id: number) {
-    this.followsService.addFollowAPI(id).subscribe((res) => {
-      this.loadDataSuggest();
-      new toast({
-        title: 'Thông báo!',
-        message: 'Đã theo dõi',
-        type: 'success',
-        duration: 3000,
-      })
+    this.modalService.sendNotify(' ', 0, id, 'FOLLOW', 0);
+    this.loadDataSuggest();
+    new toast({
+      title: 'Thông báo!',
+      message: 'Đã theo dõi',
+      type: 'success',
+      duration: 3000,
     });
   }
   /* ============Top 5============= */
@@ -145,24 +145,23 @@ export class NewsfeedComponent implements OnInit {
   ];
 
   /* ============Post============= */
- 
+  currentPage: number = 1;
   async loadPosts() {
     try {
       this.listTop5User = await this.postService.loadTop5User();
       this.listTop5Post = await this.postService.loadTop5Post();
       await this.loadDataSuggest();
-      this.listPosts = await this.postService.loadPostNewsFeed();
-      // this.listPost = this.listPosts.post;
-      this.listUser = this.listPosts.userInterested;
-      // this.listCount = this.listPosts.count;
+      this.postService.loadPostNewsFeed(this.currentPage).subscribe((data: any) => {
+        this.listPosts = data; // Lưu dữ liệu ban đầu vào mảng
+      });
     } catch (error) {
       console.error('Error:', error);
     }
   }
 
   /* ============Interested============= */
- 
-  checkInterested(post_id: number,interested :any[]): boolean {
+
+  checkInterested(post_id: number, interested: any[]): boolean {
     this.mapIntersted.set(post_id, false);
     for (let user of interested) {
       // if (user[0] == this.currentUserId && user[2] === post_id) {
@@ -172,30 +171,100 @@ export class NewsfeedComponent implements OnInit {
       }
     }
     return false;
- }
+  }
 
   // Interested and uninterested in the post
+  // interestedPost(post_id, toUser) {
+  //   let check = this.mapIntersted.get(post_id);
+  //   console.log("check: " + check);
+  //   console.log("this.checkRequest: " + this.checkRequest);
+  //   let element = this.el.nativeElement.querySelector('#interest-' + post_id);
+  //   if (check && this.checkRequest) {
+  //     this.interactPostsService.deleleInterestedApi(post_id).subscribe(
+  //       () => {
+  //         console.log("Đã hủy quan tâm");
+  //         this.renderer.removeClass(element, 'active');
+  //       },
+  //       (error) => {
+  //         console.log("Error:", error);
+  //       }
+  //     );
+  //     this.mapIntersted.set(post_id, false);
+  //     this.checkRequest = false;
+
+  //     // Set count interestedPost 
+  //     let interested = document.getElementById("interested-" + post_id);
+  //     if (interested) {
+  //       let count: string | undefined;
+  //       count = '' + interested.textContent?.trim();
+  //       let num = parseInt(count) - 1;
+  //       interested!.innerText = num + '';
+  //     }
+  //   } else {
+  //     this.renderer.addClass(element, 'active');
+  //     this.interactPostsService.interestedPost(post_id, toUser);
+  //     // this.mapIntersted.set(post_id, true);
+  //     // this.checkRequest = true;
+
+  //     // Set count interestedPost 
+  //     let interested = document.getElementById("interested-" + post_id);
+  //     if (interested) {
+  //       let count: string | undefined;
+  //       count = '' + interested.textContent?.trim();
+  //       let num = parseInt(count) + 1;
+  //       interested!.innerText = num + '';
+  //     }
+
+  //     this.mapIntersted.set(post_id, true);
+  //     this.checkRequest = true;
+  //   }
+  // }
+
   interestedPost(post_id, toUser) {
-   let check = this.mapIntersted.get(post_id);
-   console.log("check: "+check);
+    
+    let check = this.mapIntersted.get(post_id);
+    console.log("check: " + check);
+    console.log("this.checkRequest: " + this.checkRequest);
+    console.log("post_id: " + post_id);
     let element = this.el.nativeElement.querySelector('#interest-' + post_id);
+
     if (check && this.checkRequest) {
       this.interactPostsService.deleleInterestedApi(post_id).subscribe(
         () => {
           console.log("Đã hủy quan tâm");
           this.renderer.removeClass(element, 'active');
+          this.mapIntersted.set(post_id, false);
+          this.checkRequest = false;
+          console.log("check1: " + check);
+          // Set count interestedPost 
+          let interested = document.getElementById("interested-" + post_id);
+          if (interested) {
+            let count: string | undefined;
+            count = '' + interested.textContent?.trim();
+            let num = parseInt(count) - 1;
+            interested!.innerText = num + '';
+          }
         },
         (error) => {
           console.log("Error:", error);
         }
       );
-      this.mapIntersted.set(post_id, false);
-      this.checkRequest = false;
-    }else{
+    } else {
       this.renderer.addClass(element, 'active');
       this.interactPostsService.interestedPost(post_id, toUser);
-      this.mapIntersted.set(post_id,true);
+
+      // Set count interestedPost 
+      let interested = document.getElementById("interested-" + post_id);
+      if (interested) {
+        let count: string | undefined;
+        count = '' + interested.textContent?.trim();
+        let num = parseInt(count) + 1;
+        interested!.innerText = num + '';
+      }
+
+      this.mapIntersted.set(post_id, true);
       this.checkRequest = true;
+      console.log("check2: " + check);
     }
   }
 
@@ -247,30 +316,53 @@ export class NewsfeedComponent implements OnInit {
       });
     }
   }
-  checkSrcoll() {
+
+
+  async checkScroll() {
     const scrollableDiv = document.getElementById('scrollableDiv')!;
     const scrollButton = document.getElementById('scrollButton')!;
+    const loadThreshold = 200; // Ngưỡng khoảng cách từ cuối trang để gọi API
 
-    // Thêm sự kiện lắng nghe lướt cho thẻ div
-    scrollableDiv.addEventListener('scroll', () => {
-      // Kiểm tra vị trí cuộn
+    scrollableDiv.addEventListener('scroll', async () => {
       if (scrollableDiv.scrollTop > 100) {
-        // Hiển thị nút scroll khi cuộn đến vị trí cụ thể (ở đây là 100)
         scrollButton.style.display = 'block';
       } else {
-        // Ẩn nút scroll nếu không đủ cuộn
         scrollButton.style.display = 'none';
+      }
+      let epsilon = '0';
+      if (scrollableDiv.scrollTop.toString().indexOf('.') > 0) {
+        epsilon = '0' + scrollableDiv.scrollTop.toString().substring(scrollableDiv.scrollTop.toString().indexOf('.'));
+      }
+      if (
+        scrollableDiv.scrollHeight - scrollableDiv.clientHeight - (scrollableDiv.scrollTop - parseFloat(epsilon)) <= 1 &&
+        this.checkCountPosts
+      ) {
+        try {
+          this.currentPage++;
+          const data: any = await this.postService.loadPostNewsFeed(this.currentPage).toPromise();
+          this.listPosts = [...this.listPosts, ...data];
+
+          if (data.length < 5) {
+            this.checkCountPosts = false;
+          }
+          // console.log("data.length: " + data.length);
+        } catch (error) {
+          // console.error("Error loading data:", error);
+        }
+
+        // console.log("hết nè: " + this.currentPage);
       }
     });
   }
 
-  toggleLike() {
-    this.postService.toggleLike(this.postId);
-  }
 
-  isLiked(postId: string) {
-    return this.postService.isLiked(postId);
-  }
+  // toggleLike() {
+  //   this.postService.toggleLike(this.postId);
+  // }
+
+  // isLiked(postId: string) {
+  //   return this.postService.isLiked(postId);
+  // }
 
   isLogin() {
     return this.loginService.isLogin();

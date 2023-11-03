@@ -49,7 +49,7 @@ export class PhotosComponent implements OnInit {
     public profileService: ProfileService
   ) {
     this.idLocal = parseInt((localStorage.getItem("idSelected") + '')?.trim());
-    this.profileService.loadDataProfileTimeline(this.idLocal);
+    // this.profileService.loadDataProfileTimeline(this.idLocal);
     // this.dataProfileTimeline = this.profileService.getDataHeader();
    }
 }

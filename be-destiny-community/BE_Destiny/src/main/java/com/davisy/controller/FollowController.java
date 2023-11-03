@@ -1,6 +1,7 @@
 package com.davisy.controller;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,45 +132,70 @@ public class FollowController {
 	// Hủy following
 	@PostMapping("/v1/user/following/delete")
 	public ResponseEntity<List<DataFollows>> deleteFollow(HttpServletRequest request, @RequestBody int id) {
-		String email = jwtTokenUtil.getEmailFromHeader(request);
-		User user = userService.findByEmail(email);
-		followService.delete(user.getUser_id(), id);
-		return ResponseEntity.status(200).body(reloadData(email));
+		try {
+			String email = jwtTokenUtil.getEmailFromHeader(request);
+			User user = userService.findByEmail(email);
+			followService.delete(id,user.getUser_id());
+			User toUser = userService.findById(id);
+			String fromUserId = user.getUsername();
+			String toUserId = toUser.getUsername();
+			if (chatsService.findChatNames(fromUserId, toUserId) != null) {
+				updateChatsUnfollow(fromUserId, toUserId);
+			}
+			return ResponseEntity.status(200).body(reloadData(email));
+		} catch (Exception e) {
+			System.out.println("Error addfollowing: "+e);
+			return ResponseEntity.badRequest().build();
+		}
 	}
 
 	// thêm follow
-	@PostMapping("/v1/user/following/addFollow")
-	public ResponseEntity<List<DataFollows>> addFollows(HttpServletRequest request, @RequestBody int id) {
-		String email = jwtTokenUtil.getEmailFromHeader(request);
-		User user = userService.findByEmail(email);
-		User toUser = userService.findById(id);
-		Follower follower = new Follower();
-		Follower.Pk pk = new Follower.Pk();
-		pk.setFollower_id(user.getUser_id());
-		pk.setUser_id(id);
-		follower.setPk(pk);
-		followService.create(follower);
-		if (followService.checkFriend(user.getUser_id(), id)
-				&& chatsService.findChatNames(user.getUsername(), toUser.getUsername()) == null) {
-			createNewChat(user.getUsername(),  toUser.getUsername());
-		}
-		return ResponseEntity.status(200).body(reloadData(email));
-	}
+//	@PostMapping("/v1/user/following/addFollow")
+//	public ResponseEntity<List<DataFollows>> addFollows(HttpServletRequest request, @RequestBody int id) {
+//		try {
+//			String email = jwtTokenUtil.getEmailFromHeader(request);
+//			User user = userService.findByEmail(email);
+//			User toUser = userService.findById(id);
+//			Follower follower = new Follower();
+//			Follower.Pk pk = new Follower.Pk();
+//			pk.setFollower_id(id);
+//			pk.setUser_id(user.getUser_id());
+//			pk.setDate_follow( GregorianCalendar.getInstance());
+//			follower.setPk(pk);
+//			followService.create(follower);
+//			if (followService.checkFriend(user.getUser_id(), id)
+//					&& chatsService.findChatNames(user.getUsername(), toUser.getUsername()) == null) {
+//				createNewChat(user.getUsername(),  toUser.getUsername(),user.getUser_id(),toUser.getUser_id());
+//			}
+//			return ResponseEntity.status(200).body(reloadData(email));
+//		} catch (Exception e) {
+//			System.out.println("Error addfollow: "+e);
+//			return ResponseEntity.badRequest().build();
+//		}
+//		
+//	}
 
 	// Hủy follower
 	@PostMapping("/v1/user/follower/delete")
 	public ResponseEntity<List<DataFollows>> deleteFollower(HttpServletRequest request, @RequestBody int id) {
-		String email = jwtTokenUtil.getEmailFromHeader(request);
+		
+		try {
+			String email = jwtTokenUtil.getEmailFromHeader(request);
 		User user = userService.findByEmail(email);
 		User toUser = userService.findById(id);
 		followService.delete(id, user.getUser_id());
-		String fromUserId = user.getUsername();
-		String toUserId = toUser.getUsername();
-		if (followService.checkFriend(user.getUser_id(), id)
-				&& chatsService.findChatNames(fromUserId, toUserId) != null) {
-			updateChatsUnfollow(fromUserId, toUserId);
-		}
 		return ResponseEntity.status(200).body(reloadData(email));
+		} catch (Exception e) {
+			System.out.println("Error addfollow: "+e);
+			return ResponseEntity.badRequest().build();
+		}
+//		String fromUserId = user.getUsername();
+//		String toUserId = toUser.getUsername();
+//		if (followService.checkFriend(user.getUser_id(), id)
+//				&& chatsService.findChatNames(fromUserId, toUserId) != null) {
+//			updateChatsUnfollow(fromUserId, toUserId);
+//		}
+		
 	}
 
 //	@PostMapping("/v1/user/inbox")
@@ -201,26 +227,31 @@ public class FollowController {
 //		}
 //
 //	}
-
-	@Async
-	synchronized public void createNewChat(String fromUserId, String toUserId) {
-		if (chatsService.findChatNames(fromUserId, toUserId) == null) {
-			Chats chats = new Chats();
-			List<String> list = new ArrayList<>();
-			list.add(fromUserId);
-			list.add(toUserId);
-			chats.setName_chats(fromUserId + toUserId);
-			chatsService.create(chats);
-			Chats newChat = chatsService.findChatNames(fromUserId, toUserId);
-			for (String ls : list) {
-				ChatParticipants participants = new ChatParticipants();
-				ChatParticipants.Primary primary = new Primary(newChat.getId(), Integer.valueOf(ls));
-				participants.setPrimary(primary);
-				chatParticipantsService.create(participants);
-			}
-		}
-
-	}
+//
+//	@Async
+//	synchronized public void createNewChat(String fromUserId, String toUserId,int user1,int user2) {
+//		try {
+//			if (chatsService.findChatNames(fromUserId, toUserId) == null) {
+//			Chats chats = new Chats();
+//			List<Integer> list = new ArrayList<>();
+//			list.add(user1);
+//			list.add(user1);
+//			chats.setName_chats(fromUserId + toUserId);
+//			chatsService.create(chats);
+//			Chats newChat = chatsService.findChatNames(fromUserId, toUserId);
+//			for (Integer ls : list) {
+//				ChatParticipants participants = new ChatParticipants();
+//				ChatParticipants.Primary primary = new Primary(newChat.getId(), ls);
+//				participants.setPrimary(primary);
+//				chatParticipantsService.create(participants);
+//			}
+//		}
+//		} catch (Exception e) {
+//			System.out.println("Lối: " + e);
+//		}
+//		
+//
+//	}
 
 	@Async
 	synchronized public void updateChatsUnfollow(String fromUserId, String toUserId) {

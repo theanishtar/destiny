@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,6 +37,7 @@ import com.davisy.service.AuthenticationService;
 import com.davisy.service.CacheService;
 import com.davisy.service.ChatsService;
 import com.davisy.service.DistrictService;
+import com.davisy.service.EmailService;
 import com.davisy.service.FollowService;
 import com.davisy.service.GenderService;
 import com.davisy.service.InterestedService;
@@ -46,6 +48,7 @@ import com.davisy.service.UserService;
 import com.davisy.service.WardService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -82,17 +85,24 @@ public class ProfileContronller {
 	private GenderService genderService;
 	@Autowired
 	CacheService cacheService;
+	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
 
 	@Autowired
 	SimpMessagingTemplate simpMessagingTemplate;
-	
+
 	@Autowired
 	ObjectMapper mapper;
+
+	@Autowired
+	EmailService emailService;
 
 	String provinceCode;
 	String districtCode;
 
 	String randCodeAuth = "";
+	@Value("${davisy.client.change-email.confirm}")
+	String confirmEmail;
 
 	public static String random() {
 		String code = "";
@@ -144,6 +154,7 @@ public class ProfileContronller {
 			return ResponseEntity.badRequest().build();
 		}
 	}
+
 	@GetMapping("/v1/user/profile/load/data")
 	public ResponseEntity<UserProfile> adminProfile(HttpServletRequest request) {
 
@@ -184,7 +195,7 @@ public class ProfileContronller {
 			String email = jwtTokenUtil.getEmailFromHeader(request);
 			User userUpdate = userService.findByEmail(email);
 			userUpdate.setUsername(userRequestUpdate.getUsername());
-			if(!userUpdate.getUsername().equals(userRequestUpdate.getUsername())) {
+			if (!userUpdate.getUsername().equals(userRequestUpdate.getUsername())) {
 				chatsService.update_name_chats(userUpdate.getUser_id(), userRequestUpdate.getUsername());
 			}
 			userUpdate.setFullname(userRequestUpdate.getFullname());
@@ -236,7 +247,6 @@ public class ProfileContronller {
 		}
 	}
 
-
 	@PostMapping("/v1/user/profile/data/timeline")
 	public ResponseEntity<ProfileEnitity> loadTimeLine(HttpServletRequest request, @RequestBody int toProfileUser) {
 		try {
@@ -261,23 +271,6 @@ public class ProfileContronller {
 			profileEnitity.setAddress_fullname_en(
 					user.getDistricts().getFull_name_en() + " " + user.getProvinces().getFull_name_en());
 			profileEnitity.setListPostInterested(postService.getTop5postProfile(id));
-			List<Object[]> postProfile = postService.getPostProfile(id, 0);
-			List<PostEntity> postEntityProfile = new ArrayList<>();
-
-			for (Object[] ob : postProfile) {
-				if (null != ob[2]) {
-					int idPostShare = Integer.valueOf(ob[2].toString());
-					List<Object[]> postShare = postService.getPostProfile(id, idPostShare);
-					PostEntity profileTemp = new PostEntity();
-					for (Object[] o : postShare) {
-						profileTemp = postEntityProfile(o, null);
-					}
-					postEntityProfile.add(postEntityProfile(ob, profileTemp));
-				} else {
-					postEntityProfile.add(postEntityProfile(ob, null));
-				}
-			}
-			profileEnitity.setPostEntityProfile(postEntityProfile);
 			return ResponseEntity.ok().body(profileEnitity);
 		} catch (Exception e) {
 			System.out.println("error loadPostPro: " + e);
@@ -286,42 +279,95 @@ public class ProfileContronller {
 
 	}
 
-	public PostEntity postEntityProfile(Object[] ob, PostEntity entityProfile) {
+	@PostMapping("/v1/user/profile/post/timeline")
+	public ResponseEntity<List<PostEntity>> loadPostTimeLine(HttpServletRequest request,
+			@RequestBody Profile entityProfile) {
+		String email = jwtTokenUtil.getEmailFromHeader(request);
+		User user1 = userService.findByEmail(email);
+		User user = new User();
+		boolean check = false;
+		if (user1.getUser_id() == entityProfile.getToProfile() || entityProfile.getToProfile() == 0) {
+			user = user1;
+		} else {
+			user = userService.findById(entityProfile.getToProfile());
+			check = true;
+		}
+		int id = user.getUser_id();
+		List<Object[]> postProfile = postService.getPostProfile(id, entityProfile.getPage());
+		List<Object[]> postProfileShare = postService.getPostProfileShare(id, entityProfile.getPage());
+		List<PostEntity> postEntityProfile = new ArrayList<>();
+
+		for (Object[] ob : postProfile) {
+			if (null != ob[2]) {
+				int idPostShare = Integer.valueOf(ob[2].toString());
+				PostEntity profileTemp = new PostEntity();
+				for (Object[] ps : postProfileShare) {
+					if (Integer.valueOf(ps[0].toString()) == idPostShare) {
+						profileTemp = postEntityProfile(ps, null, 1);
+						postEntityProfile.add(postEntityProfile(ob, profileTemp, 0));
+						break;
+					}
+				}
+			} else {
+				postEntityProfile.add(postEntityProfile(ob, null, 0));
+			}
+		}
+		return ResponseEntity.ok().body(postEntityProfile);
+	}
+
+	public PostEntity postEntityProfile(Object[] ob, PostEntity entityProfile, int check) {
 		try {
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			PostEntity profile = new PostEntity();
 			profile.setPost_id(Integer.valueOf(ob[0].toString()));
 			profile.setUser_id(Integer.valueOf(ob[1].toString()));
 			profile.setContent(ob[3] + "");
-			Date date = dateFormat.parse(ob[4] + "");
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(date);
-			profile.setDate_post(calendar);
+			Date date = null;
+			if (ob[4] != null && !ob[4].toString().isEmpty()) {
+				date = dateFormat.parse(ob[4].toString());
+			}
+			if (date != null) {
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(date);
+				profile.setDate_post(calendar);
+			}
+
 			profile.setHash_tag(ob[5] + "");
 			profile.setSend_status(Boolean.valueOf(ob[6] + ""));
 			profile.setPost_status(Boolean.valueOf(ob[7] + ""));
 			profile.setProduct(ob[8] + "");
-			profile.setBan(Boolean.valueOf(ob[9] + ""));
+
+			if (!ob[9].toString().isEmpty()) {
+				profile.setBan(Boolean.valueOf(ob[9] + ""));
+			}
+
 			profile.setCountInterested(Integer.valueOf(ob[10].toString()));
 			profile.setCountCommnet(Integer.valueOf(ob[11].toString()));
 			profile.setCountShare(Integer.valueOf(ob[12].toString()));
-			profile.setImages(postImagesService.findAllImagesofPost(profile.getPost_id()));
+
+			if (ob[2] == null) {
+				profile.setImages(postImagesService.findAllImagesofPost(profile.getPost_id()));
+			}
+
 			List<Object[]> userOb = interestedService.findByIdPost(profile.getPost_id());
-			profile.setUser(userOb);
+			if (userOb != null && check == 0) {
+				profile.setUser(userOb);
+			}
+
 			profile.setFullname(ob[13] + "");
 			profile.setAvatar(ob[14] + "");
-			if (entityProfile != null)
+
+			if (entityProfile != null) {
 				profile.setPostEntityProfile(entityProfile);
+			}
 			return profile;
+		} catch (NumberFormatException e) {
+			System.out.println("Error postEntityProfile: " + e);
+			return null;
 		} catch (Exception e) {
 			System.out.println("Error postEntityProfile: " + e);
 			return null;
 		}
-
 	}
-
-
-
 
 	@GetMapping("/v1/user/getAllProvinceName")
 	public ResponseEntity<List<String>> getAllProvinceName() {
@@ -430,7 +476,8 @@ public class ProfileContronller {
 	}
 
 	@PostMapping("/v1/user/profile/change/email")
-	private ResponseEntity<String> changeEmail(HttpServletRequest request, @RequestBody EmailChange change) {
+	private ResponseEntity<String> changeEmail(HttpServletRequest request, @RequestBody EmailChange change)
+			throws MessagingException {
 		String email = jwtTokenUtil.getEmailFromHeader(request);
 		User currentUser = userService.findByEmail(email);
 
@@ -442,51 +489,53 @@ public class ProfileContronller {
 			return ResponseEntity.status(301).body(null); // "Email mới trùng với email cũ"
 		}
 
-		//currentUser.setEmail(change.getNewEmail());
+		// currentUser.setEmail(change.getNewEmail());
 
 		// userServiceImpl.update(currentUser);
 		this.randCodeAuth = random();
-		
+
 		EmailConfirm eConfirm = new EmailConfirm(currentUser.getEmail(), change.newEmail, change.getPassword());
 
 		// {key: "change:email", value: "newMail", time 5m}
-		cacheService.writeCacheAtTime("changemail:" + this.randCodeAuth, eConfirm, 5,
-				Cache.TimeUnit_MINUTE);
+		cacheService.writeCacheAtTime("changemail:" + this.randCodeAuth, eConfirm, 5, Cache.TimeUnit_MINUTE);
 
 		// Gửi mail
 		/*
 		 * 
-		 * BUTTON click : http://localhost:4200/chang-email-confirm?code=this.randCodeAuth 
-		 * 		=> call api GET: /v1/user/profile/change/email?code=this.randCodeAuth
+		 * BUTTON click :
+		 * http://localhost:4200/chang-email-confirm?code=this.randCodeAuth => call api
+		 * GET: /v1/user/profile/change/email?code=this.randCodeAuth
 		 * 
 		 */
+		emailService.sendHtmlEmail(confirmEmail + "?code=" + this.randCodeAuth, change.newEmail);
 		return ResponseEntity.status(200).body(this.randCodeAuth); // "OK"
 	}
 
 	// /v1/user/profile/change/email/confirm?code=
-		@PostMapping("/v1/user/profile/change/email/confirm")
-		private ResponseEntity<AuthenticationResponse> confirmChangeEmail(HttpServletRequest request,
-				@RequestParam String code) {
-			System.out.println(code+"::::::::");
-			String dataCache = cacheService.getByKey("changemail:" + code);
-			
-			try {
-				EmailConfirm eConfirm = mapper.readValue(dataCache, EmailConfirm.class);
-				User user = userService.findByEmail(eConfirm.getOldEmail());
-				
-				user.setEmail(eConfirm.getNewEmail());
-				userService.update(user);
-				
-				AuthenticationResponse authRes = authenticationService.authenticationResponse(new AuthenticationRequest(eConfirm.newEmail, eConfirm.getCurrentPassword()));
-				
-				// gửi token mới qua socket
-				simpMessagingTemplate.convertAndSend("/topic/changetoken/"+user.getUser_id(),authRes);
-				cacheService.destroyCache("changemail:" + code);
-				return ResponseEntity.status(200).body(null);
-			} catch (Exception e) {
-				return ResponseEntity.status(300).body(null);	// dịch vụ dừng, vui lòng thử lại sau
-			}		
+	@PostMapping("/v1/user/profile/change/email/confirm")
+	private ResponseEntity<AuthenticationResponse> confirmChangeEmail(HttpServletRequest request,
+			@RequestParam String code) {
+		System.out.println(code + "::::::::");
+		String dataCache = cacheService.getByKey("changemail:" + code);
+
+		try {
+			EmailConfirm eConfirm = mapper.readValue(dataCache, EmailConfirm.class);
+			User user = userService.findByEmail(eConfirm.getOldEmail());
+
+			user.setEmail(eConfirm.getNewEmail());
+			userService.update(user);
+
+			AuthenticationResponse authRes = authenticationService.authenticationResponse(
+					new AuthenticationRequest(eConfirm.newEmail, eConfirm.getCurrentPassword()));
+
+			// gửi token mới qua socket
+			simpMessagingTemplate.convertAndSend("/topic/changetoken/" + user.getUser_id(), authRes);
+			cacheService.destroyCache("changemail:" + code);
+			return ResponseEntity.status(200).body(null);
+		} catch (Exception e) {
+			return ResponseEntity.status(300).body(null); // dịch vụ dừng, vui lòng thử lại sau
 		}
+	}
 }
 
 @Data
@@ -508,8 +557,16 @@ class EmailChange {
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-class EmailConfirm{
+class EmailConfirm {
 	String oldEmail;
 	String newEmail;
 	String currentPassword;
+}
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+class Profile {
+	int toProfile;
+	int page;
 }

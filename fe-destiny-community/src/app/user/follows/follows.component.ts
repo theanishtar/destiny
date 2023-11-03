@@ -79,9 +79,10 @@ export class FollowsComponent implements OnInit {
   // }
 
   deleteFling(id: number) {
-    this.followsService.deleteFollowing(id).subscribe((res) => {; 
+    this.followsService.deleteFollowing(id).subscribe(() => {
+      ;
       // this.loadDataFling();
-      this.loadDataFriend();
+
       new toast({
         title: 'Thông báo!',
         message: 'Hủy thành công',
@@ -89,6 +90,7 @@ export class FollowsComponent implements OnInit {
         duration: 3000,
       })
     });
+    this.loadDataFriend();
   }
 
   /* ============follower============= */
@@ -103,7 +105,7 @@ export class FollowsComponent implements OnInit {
   // }
 
   deleteFler(id: number) {
-    this.followsService.deleteFollower(id).subscribe((res) => {
+    this.followsService.deleteFollower(id).subscribe(() => {
       // this.loadDataFler();
       this.loadDataFriend();
       new toast({
@@ -114,14 +116,24 @@ export class FollowsComponent implements OnInit {
       })
     });
   }
+  // addFollow(id: number) {
+  //   this.followsService.addFollowAPI(id).subscribe(() => {
+  //     new toast({
+  //       title: 'Thông báo!',
+  //       message: 'Đã theo dõi',
+  //       type: 'success',
+  //       duration: 3000,
+  //     })
+  //   });
+  //   this.loadDataFriend();
+  // }
   addFollow(id: number) {
-    this.followsService.addFollowAPI(id).subscribe((res) => {
-      new toast({
-        title: 'Thông báo!',
-        message: 'Đã theo dõi',
-        type: 'success',
-        duration: 3000,
-      })
+    this.modalService.sendNotify(' ', 0, id, 'FOLLOW', this.modalService.repCmtId);
+    new toast({
+      title: 'Thông báo!',
+      message: 'Đã theo dõi',
+      type: 'success',
+      duration: 3000,
     });
     this.loadDataFriend();
   }

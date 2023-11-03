@@ -47,24 +47,80 @@ public class AdminUserStatistics {
 	int previousMonth = now.get(Calendar.MONTH);
 	int currentMonth = previousMonth + 1;
 	
+	
+	// lastest update 1-11
+	@GetMapping("/v1/admin/getTotalUserByYear")
+	public int getTotalUserByYear() {
+		int year = now.get(Calendar.YEAR);
+		return userService.getTotalUserByYear(year);
+	}
+	
 	//21-9-2023 -lấy tổng số người dùng
 	//lastest update 14-10
-	@GetMapping("/v1/admin/getTotalUser")
-	public int getTotalUser() {
-		Calendar now = Calendar.getInstance();
+	//lastest 1-11
+	@GetMapping("/v1/admin/getTotalUserByMonth")
+	public int getTotalUserByMonth() {
 		int month = now.get(Calendar.MONTH) + 1;
 		return userService.getTotalUserByMonth(month);
 	}
 	
+	// lastest update 1-11
+	@GetMapping("/v1/admin/getTotalUserByDay")
+	public int getTotalUserByDay() {
+		int day = now.get(Calendar.DAY_OF_MONTH);
+		int month = now.get(Calendar.MONTH);
+		return userService.getTotalUserByDay(day, month);
+	}
+	
+	// lastest update 1-11
+	@GetMapping("/v1/admin/getPercentUserYearIncrease")
+	public double getPercentUserYearIncrease() {
+		int previousYear = now.get(Calendar.YEAR) - 1;
+		int currentYear = now.get(Calendar.YEAR);
+		int previousMonthValue = userService.getTotalUserByYear(previousYear);
+		int currentMonthValue = userService.getTotalUserByYear(currentYear);
+
+		return caculatePercentIncrease(previousMonthValue, currentMonthValue);
+	}
+	
 	// lastest update 14-10
-	@GetMapping("/v1/admin/getPercentUserIncrease")
-	public double getPercentUserIncrease() {
+	@GetMapping("/v1/admin/getPercentUserByMonthIncrease")
+	public double getPercentUserByMonthIncrease() {
 		int previousMonthValue = userService.getTotalUserByMonth(previousMonth);
 		int currentMonthValue = userService.getTotalUserByMonth(currentMonth);
 		
 		return caculatePercentIncrease(previousMonthValue, currentMonthValue);
 	}
+	
+	// lastest update 1-11
+	@GetMapping("/v1/admin/getPercentUserDayIncrease")
+	public double getPercentUserDayIncrease() {
+		int previousDay = now.get(Calendar.DAY_OF_MONTH) - 1;
+		int currentDay = now.get(Calendar.DAY_OF_MONTH);
+		int month = now.get(Calendar.MONTH) + 1;
+		int previousMonthValue = userService.getTotalUserByDay(previousDay, month);
+		int currentMonthValue = userService.getTotalUserByDay(currentDay, month);
 
+		return caculatePercentIncrease(previousMonthValue, currentMonthValue);
+	}
+
+	// lastest update 1-11
+	public double caculatePercentIncrease(int previousMonthValue, int currentMonthValue) {
+		if (currentMonthValue == 0) {
+			return 0;
+		} else if (previousMonthValue == 0) {
+			return 100;
+		} else {
+			double diff = currentMonthValue - previousMonthValue;
+			double percentageIncrease = (diff / previousMonthValue) * 100;
+			if(percentageIncrease < 0) {
+				return 0;
+			}else {
+				return percentageIncrease;
+			}
+		}
+	}
+	
 	// lastest update 14-10
 	@GetMapping("/v1/admin/getPercentUserInteractionIncrease")
 	public double getPercentUserInteractionIncrease() {
@@ -75,18 +131,6 @@ public class AdminUserStatistics {
 		return caculatePercentIncrease(previousMonthValue, currentMonthValue);
 	}
 	
-	// lastest update 14-10
-	public double caculatePercentIncrease(int previousMonthValue, int currentMonthValue) {
-		if (currentMonthValue == 0) {
-			return 0;
-		} else if (previousMonthValue == 0) {
-			return 100;
-		} else {
-			double diff = currentMonthValue - previousMonthValue;
-			double percentageIncrease = (diff / previousMonthValue) * 100;
-			return percentageIncrease;
-		}
-	}
 	
 	//21-9-2023 -Tóng số lượng tương tác của người dùng theo từng tháng
 	//update lastest 4-10

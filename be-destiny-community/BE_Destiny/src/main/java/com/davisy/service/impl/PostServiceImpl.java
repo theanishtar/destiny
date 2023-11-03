@@ -1,5 +1,6 @@
 package com.davisy.service.impl;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ public class PostServiceImpl implements PostService {
 	@Autowired
 	private PostDAO postDao;
 
+	Calendar now = Calendar.getInstance();
+	int year = now.get(Calendar.YEAR);
+
 	@Override
 	public int countPost(int id) {
 		return postDao.countPost(id);
@@ -27,29 +31,41 @@ public class PostServiceImpl implements PostService {
 		return postDao.getTOP5Post();
 	}
 
+	// 1-11-2023 -lấy tổng số bài đăng theo ngày
+	@Override
+	public int getTotalPostByDay(int day, int month) {
+		return postDao.getTotalPostByDay(day, month, year);
+	}
+
 	// 21-9-2023 -lấy tổng số bài đăng theo tháng
 	// lastest update 14-10
 	@Override
 	public int getTotalPostByMonth(int month) {
-		return postDao.getTotalPostByMonth(month);
+		return postDao.getTotalPostByMonth(month, year);
+	}
+
+	// 1-11-2023 -lấy tổng số bài đăng theo năm
+	@Override
+	public int getTotalPostByYear(int year) {
+		return postDao.getTotalPostByYear(year);
 	}
 
 	// 21-9-2023 -lấy phần trăm bài đăng có trạng thái đã gửi
 	@Override
 	public double getPercentPostSendSuccess() {
-		return postDao.getPercentPostSendSuccess();
+		return postDao.getPercentPostSendSuccess(year);
 	}
 
 	// 21-9-2023 -Top 4 bài đăng có lượt yêu thích nhiều nhất
 	@Override
 	public List<Object[]> getTOP4Post() {
-		return postDao.getTOP4Post();
+		return postDao.getTOP4Post(year);
 	}
 
 	// 22-0-2023 -Tổng số bài đăng theo từng tháng
 	@Override
 	public List<Object[]> getTotalPostEveryMonth() {
-		return postDao.getTotalPostEveryMonth();
+		return postDao.getTotalPostEveryMonth(year);
 	}
 
 	// 22-9-2023 -TOP 3 sản phẩm được đăng bài nhiều nhất
@@ -111,8 +127,13 @@ public class PostServiceImpl implements PostService {
 	// Lấy tất cả bài post có quan hệ bạn bè hoặc follow
 	@Override
 //	@Cacheable("postFindAll")
-	public List<Object[]> findAllPost(int id, int provinceId) {
-		return postDao.findAllPost(id, provinceId);
+	public List<Object[]> findAllPost(int id, int current_page) {
+		return postDao.findAllPost(id, current_page);
+	}
+
+	@Override
+	public List<Object[]> findAllPostShare(int user_id, int page) {
+		return postDao.findAllPostShare(user_id, page);
 	}
 
 	@Override
@@ -121,10 +142,10 @@ public class PostServiceImpl implements PostService {
 	}
 
 	// lấy số lượng comment,interested, share của bài post
-	@Override
-	public List<Object[]> getCountPost(int id, int provinceId) {
-		return postDao.getCountPost(id, provinceId);
-	}
+//	@Override
+//	public List<Object[]> getCountPost(int id, int provinceId) {
+//		return postDao.getCountPost(id, provinceId);
+//	}
 
 	@Override
 	public List<Object[]> getCountPostProfile(int id) {
@@ -137,8 +158,12 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public List<Object[]> getPostProfile(int user_id, int post_id) {
-		return postDao.getPostProfile(user_id, post_id);
+	public List<Object[]> getPostProfile(int user_id, int page) {
+		return postDao.getPostProfile(user_id, page);
 	}
 
+	@Override
+	public List<Object[]> getPostProfileShare(int user_id, int page) {
+		return postDao.getPostProfileShare(user_id, page);
+	}
 }

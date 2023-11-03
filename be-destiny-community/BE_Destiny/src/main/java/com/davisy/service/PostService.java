@@ -10,10 +10,12 @@ public interface PostService {
 	public List<Object[]> getTOP5Post();
 
 	// Lấy tất cả bài post có quan hệ bạn bè hoặc follow
-	public List<Object[]> findAllPost(int id, int provinceId);
+	public List<Object[]> findAllPost(int id, int current_page);
+
+	public List<Object[]> findAllPostShare(int id, int current_page);
 
 	// lấy số lượng comment,interested, share của bài post
-	public List<Object[]> getCountPost(int id, int provinceId);
+//	public List<Object[]> getCountPost(int id, int provinceId);
 
 	public List<Object[]> getCountPostProfile(int id);
 
@@ -21,6 +23,12 @@ public interface PostService {
 
 	// 21-9-2023 -tìm post theo id
 	public Post findPostByID(int id);
+
+	// 1-11-2023 -lấy tổng số bài đăng theo ngày
+	public int getTotalPostByDay(int day, int month);
+
+	// 1-11-2023 -lấy tổng số bài đăng theo năm
+	public int getTotalPostByYear(int year);
 
 	// 21-9-2023 -lấy tổng số bài đăng theo tháng
 	// lastest update 14-10
@@ -48,7 +56,9 @@ public interface PostService {
 
 	public List<Object[]> getTop5postProfile(int id);
 
-	public List<Object[]> getPostProfile(int user_id,int post_id);
+	public List<Object[]> getPostProfile(int user_id, int page);
+
+	public List<Object[]> getPostProfileShare(int user_id, int page);
 
 	public void create(Post post);
 

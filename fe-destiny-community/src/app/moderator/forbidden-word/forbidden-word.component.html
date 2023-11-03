@@ -1,141 +1,165 @@
 <div class="body-admin">
 
-    <app-sidebar-moderator></app-sidebar-moderator>
-    <div class="content">
-      <!-- Navbar -->
-      <app-navbar-moderator></app-navbar-moderator>
-  
-      <!-- End of Navbar -->
-  
-      <main>
-        <div class="header">
-          <div class="left">
-            <h1>Người Dùng</h1>
-            <ul class="breadcrumbD">
-              /
-              <li><a href="#" class="active">Báo cáo</a></li>
-            </ul>
-          </div>
-        </div>
-  
-        <div class="row justify-content-center container-post-report">
-          
-        </div>
+  <app-sidebar-moderator></app-sidebar-moderator>
+  <div class="content">
+    <!-- Navbar -->
+    <app-navbar-moderator></app-navbar-moderator>
 
-        <div class="row mb-4">
-          <div class="col-lg-12 profile-logo-heart">
-            <img src="../assets/images/logo-euphoria.png" alt="" />
-          </div>
-          <div class="col-lg-12 profile-title mt-3">
-            <div class="logo" style="height: 0 !important">
-              <h2 class="logo-name"><span>DES</span>TINY</h2>
-            </div>
+    <!-- End of Navbar -->
+
+    <main>
+      <div class="header">
+        <div class="left">
+          <h1>Người Dùng</h1>
+          <ul class="breadcrumbD">
+            /
+            <li><a href="#" class="active">Báo cáo</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="row justify-content-center container-post-report">
+        
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-lg-12 profile-logo-heart">
+          <img src="../assets/images/logo-euphoria.png" alt="" />
+        </div>
+        <div class="col-lg-12 profile-title mt-3">
+          <div class="logo" style="height: 0 !important">
+            <h2 class="logo-name"><span>DES</span>TINY</h2>
           </div>
         </div>
-  
-        <div class="" id="table-post-report">
-          <div class="d-flex justify-content-between mt-2 pl-1 container-post-report text-pink">
-            <h4>Danh sách từ ngữ bị cấm</h4>
-            <!-- <i class="bx bx-card text-pink text-md pr-1" (click)="openTable()" role="button"></i> -->
-          </div>
-          <div class="container-post-report">
-            <div class="card shadow mb-5 mt-0">
-              <div class="card-body">
-                <div class="titile">
-                  <h5 class="ml-1 mt-2 mb-3 font-weight-bold">Danh sách</h5>
-                  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#form">
-                    See Modal with Form
-                  </button>  
-                </div>
-                <div class="table-responsive ml-1">
-                  <table class="table rwd-table" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
-                      <tr>
-                        <th>STT</th>
-                        <th>Tên</th>
-                        <th>Nhãn</th>
-                        <th>Mức độ nghiêm trọng</th>
-                        <th>Ngày tạo</th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tfoot>
-                      <tr>
-                        <th>STT</th>
-                        <th>Tên</th>
-                        <th>Nhãn</th>
-                        <th>Mức độ nghiêm trọng</th>
-                        <th>Ngày tạo</th>
-                        <th></th>
-                      </tr>
-                    </tfoot>
-                    <tbody>
-                      <tr>
-                        <td class="text-substring" data-th="Nội dung">1</td>
-                        <td data-th="Người dùng">Má</td>
-                        <td data-th="Người dùng">1</td> 
-                        <td data-th="Người dùng">Cao</td>
-                        <td data-th="Xem thêm">
-                          <a href="">Xem chi tiết</a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+      </div>
+
+      <div class="" id="table-post-report">
+        <div class="d-flex justify-content-between mt-2 pl-1 container-post-report text-pink">
+          <h4>Danh sách từ ngữ bị cấm</h4>
+          <!-- <i class="bx bx-card text-pink text-md pr-1" (click)="openTable()" role="button"></i> -->
+        </div>
+        <div class="container-post-report">
+          <div class="card shadow mb-5 mt-0">
+            <div class="card-body">
+              <div class="titile">
+                <h5 class="ml-1 mt-2 mb-3 font-weight-bold">Danh sách</h5>
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#form">
+                  Thêm mới
+                </button>  
+              </div>
+              <div class="table-responsive ml-1">
+                <table class="table rwd-table" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>STT</th>
+                      <th>Tên</th>
+                      <th>Nhãn</th>
+                      <th>Mức độ nghiêm trọng</th>
+                      <th>Ngày tạo</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <th>STT</th>
+                      <th>Tên</th>
+                      <th>Nhãn</th>
+                      <th>Mức độ nghiêm trọng</th>
+                      <th>Ngày tạo</th>
+                      <th></th>
+                    </tr>
+                  </tfoot>
+                  <tbody>
+                    <tr>
+                      <td class="text-substring" data-th="Nội dung">1</td>
+                      <td data-th="Người dùng">Má</td>
+                      <td data-th="Người dùng">1</td> 
+                      <td data-th="Người dùng">Cao</td>
+                      <td data-th="Người dùng">31/10/2023</td>
+                      <td data-th="Xem thêm">
+                        <a class="edit" data-toggle="modal" data-target="#update-word">Chỉnh sửa</a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
         </div>
-      </main>
-    </div>
-  
-  </div>
-  <!-- <main class="overlay" *ngIf="isOpenCreateWord$ | async">
-    <div id="favDialog_changeMail" class="modal fade favDialog_changeMail">
-      <button
-            (click)="closeModalCreateWord()"
-            class="btnClose-change-email"
-          >
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-          
-    </div>
-  </main> -->
-  <!-- <div class="container">
-    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#form">
-      See Modal with Form
-    </button>  
-  </div> -->
-  
-  <div class="modal fade" id="form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header border-bottom-0">
-          <h5 class="modal-title" id="exampleModalLabel">Create Account</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <form>
-          <div class="modal-body">
-            <div class="form-group">
-              <label for="email1">Email address</label>
-              <input type="email" class="form-control" id="email1" aria-describedby="emailHelp" placeholder="Enter email">
-              <small id="emailHelp" class="form-text text-muted">Your information is safe with us.</small>
-            </div>
-            <div class="form-group">
-              <label for="password1">Password</label>
-              <input type="password" class="form-control" id="password1" placeholder="Password">
-            </div>
-            <div class="form-group">
-              <label for="password1">Confirm Password</label>
-              <input type="password" class="form-control" id="password2" placeholder="Confirm Password">
-            </div>
-          </div>
-          <div class="modal-footer border-top-0 d-flex justify-content-center">
-            <button type="submit" class="btn btn-success">Submit</button>
-          </div>
-        </form>
       </div>
+    </main>
+  </div>
+
+</div>
+
+<div class="modal fade" id="form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="exampleModalLabel">Thêm từ ngữ mới</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="email1">Từ ngữ</label>
+            <input type="email" class="form-control" id="email1" aria-describedby="emailHelp" placeholder="">
+          </div>
+          <div class="form-group">
+            <label for="password1">Nhãn</label>
+            <input type="password" class="form-control" id="password1" placeholder="">
+          </div>
+          <div class="form-group">
+            <label for="password1">Ngày tạo</label>
+            <input type="password" class="form-control" id="password2" placeholder="">
+          </div>
+        </div>
+        <div class="modal-footer border-top-0 d-flex justify-content-center">
+          <button type="submit" class="btn btn-success">Thêm mới</button>
+        </div>
+      </form>
     </div>
   </div>
+</div>
+
+<div class="modal fade" id="update-word" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="exampleModalLabel">Cập nhật</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="email1">STT</label>
+            <input type="email" class="form-control" id="email1" aria-describedby="emailHelp" readonly>
+          </div>
+          <div class="form-group">
+            <label for="email1">Từ ngữ</label>
+            <input type="email" class="form-control" id="email1" aria-describedby="emailHelp" placeholder="">
+          </div>
+          <div class="form-group">
+            <label for="password1">Nhãn</label>
+            <input type="password" class="form-control" id="password1" placeholder="">
+          </div>
+          <div class="form-group">
+            <label for="email1">Mức độ</label>
+            <input type="email" class="form-control" id="email1" aria-describedby="emailHelp">
+          </div>
+          <div class="form-group">
+            <label for="password1">Ngày tạo</label>
+            <input type="password" class="form-control" id="password2" readonly>
+          </div>
+        </div>
+        <div class="modal-footer border-top-0 d-flex justify-content-center">
+          <button type="submit" class="btn btn-success">Thêm mới</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

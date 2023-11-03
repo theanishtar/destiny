@@ -28,25 +28,72 @@ public class AdminPostStatistics {
 	private PostService postService;
 	@Autowired
 	private PostImagesService postImagesService;
+	
+	Calendar now = Calendar.getInstance();
 
-	// 21-9-2023 -lấy tổng số bài đăng
-	// lastest update 14-10
-	@GetMapping("/v1/admin/getTotalPost")
-	public int getTotalPost() {
+	// lastest update 1-11
+	@GetMapping("/v1/admin/getTotalPostByYear")
+	public int getTotalPostByYear() {
 		Calendar now = Calendar.getInstance();
+		int year = now.get(Calendar.YEAR);
+		return postService.getTotalPostByYear(year);
+	}
+
+//	 21-9-2023 -lấy tổng số bài đăng
+//	 lastest update 14-10
+	// latsest 1-11
+	@GetMapping("/v1/admin/getTotalPostByMonth")
+	public int getTotalPostByMonth() {
 		int month = now.get(Calendar.MONTH) + 1;
 		return postService.getTotalPostByMonth(month);
 	}
 
-	// lastest update 14-10
-	@GetMapping("/v1/admin/getPercentPostIncrease")
-	public double getPercentPostIncrease() {
-		Calendar now = Calendar.getInstance();
+	// lastest update 1-11
+	@GetMapping("/v1/admin/getTotalPostByDay")
+	public int getTotalPostByDay() {
+		int day = now.get(Calendar.DAY_OF_MONTH);
+		int month = now.get(Calendar.MONTH) + 1;
+		return postService.getTotalPostByDay(day, month);
+	}
+
+
+	// lastest update 1-11
+	@GetMapping("/v1/admin/getPercentPostYearIncrease")
+	public double getPercentPostYearIncrease() {
+		int previousYear = now.get(Calendar.YEAR) - 1;
+		int currentYear = now.get(Calendar.YEAR);
+		int previousMonthValue = postService.getTotalPostByYear(previousYear);
+		int currentMonthValue = postService.getTotalPostByYear(currentYear);
+
+		return caculatePercentIncrease(previousMonthValue, currentMonthValue);
+	}
+
+		
+	// lastest update 1-11
+	@GetMapping("/v1/admin/getPercentPostMonthIncrease")
+	public double getPercentPostMonthIncrease() {
 		int previousMonth = now.get(Calendar.MONTH);
 		int currentMonth = previousMonth + 1;
 		int previousMonthValue = postService.getTotalPostByMonth(previousMonth);
 		int currentMonthValue = postService.getTotalPostByMonth(currentMonth);
-		
+
+		return caculatePercentIncrease(previousMonthValue, currentMonthValue);
+	}
+
+	// lastest update 1-11
+	@GetMapping("/v1/admin/getPercentPostDayIncrease")
+	public double getPercentPostDayIncrease() {
+		int previousDay = now.get(Calendar.DAY_OF_MONTH) - 1;
+		int currentDay = now.get(Calendar.DAY_OF_MONTH);
+		int month = now.get(Calendar.MONTH) + 1;
+		int previousMonthValue = postService.getTotalPostByDay(previousDay, month);
+		int currentMonthValue = postService.getTotalPostByDay(currentDay, month);
+
+		return caculatePercentIncrease(previousMonthValue, currentMonthValue);
+	}
+
+	// lastest update 1-11
+	public double caculatePercentIncrease(int previousMonthValue, int currentMonthValue) {
 		if (currentMonthValue == 0) {
 			return 0;
 		} else if (previousMonthValue == 0) {
@@ -54,7 +101,11 @@ public class AdminPostStatistics {
 		} else {
 			double diff = currentMonthValue - previousMonthValue;
 			double percentageIncrease = (diff / previousMonthValue) * 100;
-			return percentageIncrease;
+			if (percentageIncrease < 0) {
+				return 0;
+			} else {
+				return percentageIncrease;
+			}
 		}
 	}
 
