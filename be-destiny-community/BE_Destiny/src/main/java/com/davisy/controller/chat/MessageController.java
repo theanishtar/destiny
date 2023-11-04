@@ -59,7 +59,6 @@ public class MessageController {
 	@Async
 	@MessageMapping("/chat/{to}")
 	public void sendMessage(@DestinationVariable int to, MessageModel message) {
-//		System.out.println("handling send message: " + message + " to: " + to);
 		User user = userService.findById(message.getFromLogin());
 		User toUser = userService.findById(to);
 		Chats chats = chatsService.findChatNames(user.getUsername(), toUser.getUsername());
@@ -74,6 +73,7 @@ public class MessageController {
 			simpMessagingTemplate.convertAndSend("/topic/messages/" + to, message);
 
 		}
+		simpMessagingTemplate.convertAndSend("/topic/statusmessages/" + message.getFromLogin(),true);
 	}
 
 	@PostMapping("/v1/user/chat/load/messages")

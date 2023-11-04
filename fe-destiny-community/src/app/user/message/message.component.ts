@@ -89,7 +89,12 @@ export class MessageComponent implements OnInit {
     if (this.id != '') {
       this.renderer.removeClass(this.el.nativeElement.querySelector('#chat-widget-message-' + this.id), 'active');
     }
-
+    this.messageService.mapNotification.set(userid,false);
+    let mapEntries=Array.from(this.messageService.mapNotification.entries());
+    let hasTrueValue=mapEntries.some(([key,value])=>value===true);
+    if(!hasTrueValue){
+      this.messageService.notif_mess=false;
+    }
     this.messageService.selectedUser = userid;
     this.id = userid;
     this.messageService.isOriginal = false;
@@ -113,7 +118,7 @@ export class MessageComponent implements OnInit {
 
     this.messageService.loadMessage(this.id).subscribe((res) => {
       if (this.count > 0) {
-        document.querySelectorAll(".chat-widget-speaker, .time-date").forEach((e) => {
+        document.querySelectorAll(".chat-widget-speaker, .time-date, .br").forEach((e) => {
           e.remove();
         });
         this.count = 0;
@@ -172,12 +177,12 @@ export class MessageComponent implements OnInit {
         }
       }
 
-      if (this.messageService.newMessage.get(userid)?.message != undefined) {
-        let message = this.messageService.newMessage.get(userid)?.message;
-        let img = this.messageService.newMessage.get(userid)?.avatar;
-        this.messageService.render(message, userid, img);
-        this.messageService.newMessage.clear();
-      };
+      // if (this.messageService.newMessage.get(userid)?.message != undefined) {
+      //   let message = this.messageService.newMessage.get(userid)?.message;
+      //   let img = this.messageService.newMessage.get(userid)?.avatar;
+      //   this.messageService.render(message, userid, img);
+      //   this.messageService.newMessage.clear();
+      // };
 
       this.scrollToBottomMessage();
     });
@@ -227,16 +232,16 @@ export class MessageComponent implements OnInit {
   }
   getCurrentTime() {
     let date = new Date();
-    let hours = (date.getHours()<10)?'0'+(date.getHours()):(date.getHours());
-    let minutes = (date.getMinutes()<10)?'0'+(date.getMinutes()):(date.getMinutes());
-    let newTime =hours+':'+minutes;
+    let hours = (date.getHours() < 10) ? '0' + (date.getHours()) : (date.getHours());
+    let minutes = (date.getMinutes() < 10) ? '0' + (date.getMinutes()) : (date.getMinutes());
+    let newTime = hours + ':' + minutes;
     return newTime;
   }
   getCustomTime(time) {
     let date = new Date(time);
-    let hours = (date.getHours()<10)?'0'+(date.getHours()):(date.getHours());
-    let minutes = (date.getMinutes()<10)?'0'+(date.getMinutes()):(date.getMinutes());
-    let newTime =hours+':'+minutes;
+    let hours = (date.getHours() < 10) ? '0' + (date.getHours()) : (date.getHours());
+    let minutes = (date.getMinutes() < 10) ? '0' + (date.getMinutes()) : (date.getMinutes());
+    let newTime = hours + ':' + minutes;
     return newTime;
   }
 
@@ -255,17 +260,20 @@ export class MessageComponent implements OnInit {
       '<div class="date-send" style="text-align: center;font-size: 12px;">' +
       this.checkDate(date) +
       '</div>' +
-      '</div> <br>';
+      '</div> <br class="br">';
     return d;
   }
   checkDate(date: string) {
     let d = date.substring(0, 10);
     let date1 = new Date(d);
     let date2 = new Date();
-    if (date1 < date2 && (date2.getDate() - 1).toString() == date.substring(8, 10)) {
+    if (date1 < date2 && (date2.getDate() - 1) == parseInt(date.substring(8, 10))) {
       return "Hôm qua";
-    } else if (date1 > date2) {
-      return null;
+    } else if (date1 < date2 && (date2.getDate() - 1) > parseInt(date.substring(8, 10))) {
+      let year = (date1.getFullYear() < date2.getFullYear()) ? '-' + date1.getFullYear() : '';
+      let month = (date1.getMonth() + 1 < 10) ? '0' + (date1.getMonth() + 1) : (date1.getMonth() + 1);
+      let day = (date1.getDate() < 10) ? '0' + date1.getDate() : date1.getDate();
+      return day + '-' + month + year;
     } else {
       return "Hôm nay";
     }

@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -162,27 +163,24 @@ public class UserChatController {
 				}
 			}
 
-//			synchronized (UserChatStorage.getInstance()) {
-//				for (Integer key : UserChatStorage.getInstance().getUsers().keySet()) {
-//					if (key != user.getUser_id()) {
-//						List<UserModel> originalList = UserChatStorage.getInstance().getUsers().get(key);
-//						List<UserModel> copyList = new ArrayList<>(originalList);
-//
-//						for (UserModel v : copyList) {
-//							if (v.getUser_id() == user.getUser_id()) {
-//								if (user.getOnline_last_date() == null)
-//									v.setType(MessageType.JOIN);
-//								else
-//									v.setType(MessageType.LEAVE);
-//							}
-//						}
-//						UserChatStorage.getInstance().setUser(key, copyList);
-//					}
-//				}
-//			}
 		} catch (Exception e) {
 			System.out.println("Error Async: " + e);
 		}
+	}
+
+	@MessageMapping("/reload/messages/{type}/{id}/{toid}")
+	@SendTo("/topic/public")
+	public HashMap<Integer, List<UserModel>> reload(@DestinationVariable boolean type, @DestinationVariable int id,
+			@DestinationVariable int toid) {
+		User user = userService.findById(toid);
+		if (type == true) {
+			User toUser = userService.findById(id);
+			Chats chats = chatsService.findChatNames(user.getUsername(), toUser.getUsername());
+			if (chats != null)
+				messagesService.updateStatusMessages(true,id, chats.getId());
+		}
+		async(user, true);
+		return UserChatStorage.getInstance().getUsers();
 	}
 
 	@MessageMapping("/fetchAllUsers")

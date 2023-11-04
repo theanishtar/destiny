@@ -147,7 +147,7 @@ public class UserController {
 					long timeDifferenceMillis = currentTimeMillis - emailTimeMillis;
 					long seconds = timeDifferenceMillis / 1000;
 					long minutes = seconds / 60;
-					if (minutes >= 2) {
+					if (minutes >= 5) {
 						userMap.remove(key);
 						System.out.println("userMap.get(key): "+userMap.get(key));
 					}

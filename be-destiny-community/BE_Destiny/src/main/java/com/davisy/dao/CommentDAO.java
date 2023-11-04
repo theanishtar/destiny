@@ -30,7 +30,7 @@ public interface CommentDAO extends JpaRepository<Comment, Integer> {
 	@Query(value = "SELECT  *FROM COMMENT WHERE parent_comment_id =:id", nativeQuery = true)
 	public List<Comment> findAllByIdComment(int id);
 
-	@Query(value = "select *from get_comment_list_with_counts(:id,:check)", nativeQuery = true)
+	@Query(value = "select *from get_comment_list_with_counts(:id,:check) ORDER BY date_comment DESC", nativeQuery = true)
 	public List<Object[]> findAllComment(int id,int check);
 	
 	@Query(value = "select c.user_id from \"comment\" c where c.comment_id =:id",nativeQuery = true)

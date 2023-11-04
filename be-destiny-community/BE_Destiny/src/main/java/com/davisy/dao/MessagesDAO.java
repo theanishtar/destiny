@@ -20,7 +20,7 @@ public interface MessagesDAO extends JpaRepository<Messages, Integer> {
 	@Query(value = "SELECT messages.id, messages.content, messages.send_Time, users.user_id,users.avatar\r\n"
 			+ "FROM messages\r\n" + "INNER JOIN users ON messages.sender_id = users.user_id\r\n"
 			+ "INNER JOIN chats ON messages.chat_id = chats.id\r\n"
-			+ "WHERE chats.name_chats =:chatName", nativeQuery = true)
+			+ "WHERE chats.name_chats =:chatName order by messages.id ", nativeQuery = true)
 	public List<Object[]> findListMessage(String chatName);
 
 	@Modifying

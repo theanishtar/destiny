@@ -40,6 +40,7 @@ export class MessageService {
   newMapUser = new Map<string, UserModel>();
   mapTime = new Map<string, string>();
   newMessage = new Map<string, { message: string; avatar: string }>();
+  mapNotification = new Map<string, boolean>();
   checkConnected: boolean = false;
   isOriginal: boolean = true;
   public notif_mess: boolean = false;
@@ -48,7 +49,7 @@ export class MessageService {
     private http: HttpClient,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   /* ============API============= */
   loadDataSender() {
@@ -118,21 +119,17 @@ export class MessageService {
       // console.log('connected to: ' + frame);
       this.stompClient!.subscribe('/topic/messages/' + userId, (response) => {
         let data = JSON.parse(response.body);
-        let time = document.getElementById('floaty-' + data.fromLogin);
-        if (time) {
-          time!.innerText = 'Vài giây';
-        }
+        let type = false; // Thay đổi giá trị "your_type_value" bằng giá trị thực tế của biến "type"
+        let from_user_id = data.fromLogin;
+        let to_user_id = localStorage.getItem('chatUserId');
         if (this.mapTime.has(data.fromLogin)) {
-          // this.mapTime.delete(data.fromLogin);
-          this.mapTime.set(data.fromLogin, new Date().toISOString() + '');
+          this.mapTime.set(data.fromLogin, new Date().toISOString());
         }
-        let textLastMess = document.getElementById(
-          'last-message-' + data.fromLogin
-        );
-        if (textLastMess) textLastMess!.innerText = data.message;
         if (this.selectedUser == data.fromLogin && this.isOriginal == false) {
           this.render(data.message, data.fromLogin, data.avatar);
+          type = true;
         } else {
+          type = false;
           let audio = new Audio();
           audio.src = '../../../assets/js/sound/notify.mp3';
           audio.play();
@@ -141,53 +138,27 @@ export class MessageService {
             message: data.message,
             avatar: data.avatar,
           });
-
-          let countMessage = document.getElementById(
-            'count-mess-' + data.fromLogin
-          );
-          // let pCount = document.getElementById('p-count-mess-' + data.fromLogin);
-          this.$pCount = $('#p-count-mess-' + data.fromLogin);
-
-          if (countMessage) {
-            let count: string | undefined;
-            count = '' + countMessage.textContent?.trim();
-            let num = parseInt(count) + 1;
-            countMessage.parentNode?.removeChild(countMessage);
-            this.$pCount.append(
-              '<p class="user-status-timestamp count-mess" id="count-mess-' +
-                data.fromLogin +
-                '"' +
-                'style="position: absolute;top: 32%;right: 5%;padding: 3px 8px;background: red;border-radius: 50%;margin-top: 10px;color: #8f91ac;font-size: 0.75rem;font-weight: 500;line-height: 1em;">' +
-                ' <span"' +
-                ' style="color: white;font-family: Helvetica,Arial,sans-serif;font-size: 9px;" >' +
-                num +
-                '</span>' +
-                '</p>'
-            );
-          } else {
-            this.$pCount.append(
-              '<p class="user-status-timestamp count-mess"  id="count-mess-' +
-                data.fromLogin +
-                '"' +
-                'style="position: absolute;top: 32%;right: 5%;padding: 3px 8px;background: red;border-radius: 50%;margin-top: 10px;color: #8f91ac;font-size: 0.75rem;font-weight: 500;line-height: 1em;">' +
-                ' <span' +
-                ' style="color: white;font-family: Helvetica,Arial,sans-serif;font-size: 9px;" >' +
-                1 +
-                '</span>' +
-                '</p>'
-            );
-          }
         }
+        this.stompClient!.send(`/app/reload/messages/${type}/${from_user_id}/${to_user_id}`);
       });
+      this.stompClient!.subscribe('/topic/statusmessages/' + userId, (response) => {
+        let data = JSON.parse(response.body);
+        if (data == true) {
+          let type = false; // Thay đổi giá trị "your_type_value" bằng giá trị thực tế của biến "type"
+          let to_user_id = this.selectedUser;
+          this.stompClient!.send(`/app/reload/messages/${type}/${to_user_id}/${userId}`);
+        }
+
+      })
       this.stompClient!.subscribe('/topic/public', (response) => {
         let data = JSON.parse(response.body);
+        this.setFriend([]);
         this.setFriend(data);
-        // let usersTemplateHTML = "";
-        let userId = localStorage.getItem('chatUserId');
+        this.mapUser.clear();
+        this.mapTime.clear();
 
         for (let key of Object.keys(data)) {
           let value = data[key];
-
           if (key == localStorage.getItem('chatUserId')) {
             for (let v of value) {
               let user: UserModel = {
@@ -207,6 +178,12 @@ export class MessageService {
               // Thêm người dùng vào danh sách của key trong map
               this.newMapUser.set(v.user_id, user);
               this.mapTime.set(v.user_id, v.online);
+              if (v.messageUnRead > 0) {
+                this.mapNotification.set(v.user_id, true);
+                this.notif_mess = true;
+              } else {
+                this.mapNotification.set(v.user_id, false);
+              }
             }
           }
         }
@@ -252,7 +229,7 @@ export class MessageService {
       JSON.stringify({
         fromLogin: from,
         message: text,
-        avatar: img,
+        avatar: img
       })
     );
     let textLastMess = document.getElementById(
@@ -264,7 +241,7 @@ export class MessageService {
       time!.innerText = 'Vài giây';
     }
     this.mapTime.set(this.selectedUser + '', new Date().toISOString() + '');
-    // }
+
   }
 
   render(message, userName, img) {
@@ -273,33 +250,34 @@ export class MessageService {
       this.scrollToBottom();
       this.$chatHistory.append(
         '<div class="chat-widget-speaker left" style="padding: 0 26px 0 36px; display: flex; flex-flow: column; position: relative; margin-bottom: 1rem !important;">' +
-          '<a class="user-avatar small user-status-avatar no-border no-outline avatar-mess" href="profile" style="position: absolute;left: -10px;top: -8px; width: 40px;height: 44px; display: block;"> ' +
-          '<div class="hexagon-container" style="width: 35px; height: 38px; position: relative; margin: 0 auto;background: white;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); "> ' +
-          '<div class="hexagon user-avatar-content" style="top: 6px;left: 5px;position: absolute;z-index: 3;width: 40px;height: 44px;overflow: hidden;">  ' +
-          '<div class="hexagon-image" ' +
-          'style="background-image: url(' +
-          img +
-          '); width: 20px; height: 23px;position: relative; z-index: 3;background-size: cover;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);left: 4%;top: 2%;"></div>' +
-          '</div>' +
-          '<div class="hexagon user-avatar-border" style="position: absolute;top: 0;left: 0;z-index: 1;">' +
-          '<div style="position: absolute; top: 0; left: 0; z-index: 1; content: \'\'; width: 32px; height: 36px; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); left: 1px; top: 0px; background-image: linear-gradient(to right, #41efff, #615dfa); display: block;"></div>' +
-          '<div class="hexagon-border"></div>' +
-          '</div>' +
-          '<div class="hexagon user-avatar-progress-border" style="margin-left: 11%;margin-top: 10.3%; width: 26px;height: 29px;top: 0;left: 0;z-index: 2;position: absolute;background: white;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">' +
-          '  <div class="user-avatar-progress" style="top: 0;left: 0;z-index: 3;position: absolute;"></div>' +
-          '</div>' +
-          '</div>' +
-          '</a>' +
-          '<p class="chat-widget-speaker-message" style="border-top-left-radius: 0; display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600; line-height: 1.1428571429em;width: fit-content; max-width: 250px; word-wrap: break-word; white-space: normal ;color: #3e3f5e;font-family: Helvetica, Arial, sans-serif;margin: 0;">' +
-          message +
-          '</p>' +
-          '<p class="chat-widget-speaker-timestamp" style="margin-top: 12px !important;color: #adafca;font-size: 0.75rem;font-weight: 500;font-family: Helvetica, Arial, sans-serif;line-height: 1em;margin: 0;">' +
-          this.getCurrentTime() +
-          '</p>' +
-          '</div>	'
+        '<a class="user-avatar small user-status-avatar no-border no-outline avatar-mess" href="profile" style="position: absolute;left: -10px;top: -8px; width: 40px;height: 44px; display: block;"> ' +
+        '<div class="hexagon-container" style="width: 35px; height: 38px; position: relative; margin: 0 auto;background: white;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); "> ' +
+        '<div class="hexagon user-avatar-content" style="top: 6px;left: 5px;position: absolute;z-index: 3;width: 40px;height: 44px;overflow: hidden;">  ' +
+        '<div class="hexagon-image" ' +
+        'style="background-image: url(' +
+        img +
+        '); width: 20px; height: 23px;position: relative; z-index: 3;background-size: cover;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);left: 4%;top: 2%;"></div>' +
+        '</div>' +
+        '<div class="hexagon user-avatar-border" style="position: absolute;top: 0;left: 0;z-index: 1;">' +
+        '<div style="position: absolute; top: 0; left: 0; z-index: 1; content: \'\'; width: 32px; height: 36px; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); left: 1px; top: 0px; background-image: linear-gradient(to right, #41efff, #615dfa); display: block;"></div>' +
+        '<div class="hexagon-border"></div>' +
+        '</div>' +
+        '<div class="hexagon user-avatar-progress-border" style="margin-left: 11%;margin-top: 10.3%; width: 26px;height: 29px;top: 0;left: 0;z-index: 2;position: absolute;background: white;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">' +
+        '  <div class="user-avatar-progress" style="top: 0;left: 0;z-index: 3;position: absolute;"></div>' +
+        '</div>' +
+        '</div>' +
+        '</a>' +
+        '<p class="chat-widget-speaker-message" style="border-top-left-radius: 0; display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600; line-height: 1.1428571429em;width: fit-content; max-width: 250px; word-wrap: break-word; white-space: normal ;color: #3e3f5e;font-family: Helvetica, Arial, sans-serif;margin: 0;">' +
+        message +
+        '</p>' +
+        '<p class="chat-widget-speaker-timestamp" style="margin-top: 12px !important;color: #adafca;font-size: 0.75rem;font-weight: 500;font-family: Helvetica, Arial, sans-serif;line-height: 1em;margin: 0;">' +
+        this.getCustomTime() +
+        '</p>' +
+        '</div>	'
       );
       this.scrollToBottom();
-    }, 1500);
+    }, 1000);
+
   }
 
   scrollToBottom() {
@@ -307,10 +285,17 @@ export class MessageService {
     this.$chatHistory.scrollTop(this.$chatHistory[0].scrollHeight);
   }
 
-  getCurrentTime() {
-    return new Date()
-      .toLocaleTimeString()
-      .replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, '$1$3');
+  // getCurrentTime() {
+  //   return new Date()
+  //     .toLocaleTimeString()
+  //     .replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, '$1$3');
+  // }
+  getCustomTime() {
+    let date = new Date();
+    let hours = (date.getHours() < 10) ? '0' + (date.getHours()) : (date.getHours());
+    let minutes = (date.getMinutes() < 10) ? '0' + (date.getMinutes()) : (date.getMinutes());
+    let newTime = hours + ':' + minutes;
+    return newTime;
   }
 
   customTime(time: string, check: number) {
@@ -378,13 +363,23 @@ export class MessageService {
     let endDate = lastDayOfWeek.toISOString().slice(0, 10);
 
     if (check > 0) {
-      let hours = (dateTemp.getHours()<10)?'0'+(dateTemp.getHours()):dateTemp.getHours();
-      let minutes = (dateTemp.getMinutes()<10)?'0'+(dateTemp.getMinutes()):dateTemp.getMinutes();
+      let hours =
+        dateTemp.getHours() < 10
+          ? '0' + dateTemp.getHours()
+          : dateTemp.getHours();
+      let minutes =
+        dateTemp.getMinutes() < 10
+          ? '0' + dateTemp.getMinutes()
+          : dateTemp.getMinutes();
       checkTime = ' lúc ' + hours + ':' + minutes;
     }
     let year = dateTemp.getFullYear();
-    let month = (dateTemp.getMonth()+1<10)?'0'+(dateTemp.getMonth()+1):(dateTemp.getMonth()+1);
-    let day =(dateTemp.getDate()<10)?'0'+(dateTemp.getDate()):(dateTemp.getDate()) ;
+    let month =
+      dateTemp.getMonth() + 1 < 10
+        ? '0' + (dateTemp.getMonth() + 1)
+        : dateTemp.getMonth() + 1;
+    let day =
+      dateTemp.getDate() < 10 ? '0' + dateTemp.getDate() : dateTemp.getDate();
     // let day =dateTemp.getDate();
 
     if (dateTemp > new Date(startDate) && dateTemp < new Date(endDate)) {
@@ -401,14 +396,12 @@ export class MessageService {
       } else {
         return 'Ngày ' + day + ' tháng ' + month + ' năm ' + year + checkTime;
       }
-    }
-    else{
-      if(year <= currentDate.getFullYear()){
-        return day+'-'+month;
-      }else{
-        return day+'-'+month+'-'+year;
+    } else {
+      if (year <= currentDate.getFullYear()) {
+        return day + '-' + month;
+      } else {
+        return day + '-' + month + '-' + year;
       }
-
     }
   }
 

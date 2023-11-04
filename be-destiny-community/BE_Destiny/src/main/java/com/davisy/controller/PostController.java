@@ -131,11 +131,6 @@ public class PostController {
 			post.setUser(user);
 			post.setContent(uploadPostEntity.getContent());
 			post.setHash_Tag(hashTag(uploadPostEntity.getHash_tag()));
-//			post.setDate_Post( GregorianCalendar.getInstance());
-//			Provinces provinces =provinceService.provinces(uploadPostEntity.getProvince_name());
-//			Districts districts =districtService.districts(uploadPostEntity.getDistrict_name(),provinces.getCode());
-//			Wards wards =wardService.ward(uploadPostEntity.getWard_name(), districts.getCode());
-
 			String provinceCode = provinceService.provinceCode(uploadPostEntity.getProvince_name());
 			Provinces province = provinceService.findProvinceByID(provinceCode);
 
@@ -196,8 +191,6 @@ public class PostController {
 	@PostMapping("/v1/user/load/comment")
 	public ResponseEntity<CommentEntity> loadCmment(HttpServletRequest request, @RequestBody int id) {
 		try {
-//			String email = jwtTokenUtil.getEmailFromHeader(request);
-//			User user = userService.findByEmail(email);
 			List<Object[]> commentEntities = commentService.findAllComment(id, 0);
 			List<String> list_post_images = postImagesService.findAllImagesofPost(id);
 			CommentEntity commentEntity = new CommentEntity(list_post_images, commentEntities);
@@ -212,10 +205,7 @@ public class PostController {
 	@PostMapping("/v1/user/load/comment/reply")
 	public ResponseEntity<CommentEntity> loadSeenMoreComment(HttpServletRequest request,
 			@RequestBody RepCommentModel reModel) {
-		System.out.println(reModel.idPost + "" + reModel.cmtId);
 		try {
-//			String email = jwtTokenUtil.getEmailFromHeader(request);
-//			User user = userService.findByEmail(email);
 			List<Object[]> commentEntities = commentService.findAllComment(reModel.idPost, reModel.cmtId);
 			List<String> list_post_images = null;
 			CommentEntity commentEntity = new CommentEntity(list_post_images, commentEntities);
@@ -361,36 +351,24 @@ public class PostController {
 	            Calendar calendar = Calendar.getInstance();
 	            calendar.setTime(date);
 	            profile.setDate_post(calendar);
-	        } else {
-	            // Xử lý trường hợp ngày không hợp lệ
-	            // Ví dụ: Set ngày mặc định hoặc báo lỗi
-	            // profile.setDate_post(Calendar.getInstance());
-	        }
+	        } 
 	        
 	        profile.setHash_tag(ob[5] + "");
 	        profile.setSend_status(Boolean.valueOf(ob[6] + ""));
 	        profile.setPost_status(Boolean.valueOf(ob[7] + ""));
 	        profile.setProduct(ob[8] + "");
 	        
-	        // Xử lý trường hợp chuỗi trống cho trường ban
 	        if (!ob[9].toString().isEmpty()) {
 	            profile.setBan(Boolean.valueOf(ob[9] + ""));
-	        } else {
-	            // Xử lý trường hợp không có giá trị cho trường ban
-	            // Ví dụ: Set giá trị mặc định hoặc báo lỗi
-	            // profile.setBan(false);
 	        }
 	        
 	        profile.setCountInterested(Integer.valueOf(ob[10].toString()));
 	        profile.setCountCommnet(Integer.valueOf(ob[11].toString()));
 	        profile.setCountShare(Integer.valueOf(ob[12].toString()));
 
-	        // Xử lý ảnh
 	        if (ob[2] == null) {
 	            profile.setImages(postImagesService.findAllImagesofPost(profile.getPost_id()));
 	        }
-	        
-	        // Xử lý danh sách người quan tâm
 	        List<Object[]> userOb = interestedService.findByIdPost(profile.getPost_id());
 	        if (userOb != null && check == 0) {
 	            profile.setUser(userOb);
@@ -399,7 +377,6 @@ public class PostController {
 	        profile.setFullname(ob[13] + "");
 	        profile.setAvatar(ob[14] + "");
 
-	        // Thiết lập postEntityProfile nếu tồn tại
 	        if (entityProfile != null) {
 	            profile.setPostEntityProfile(entityProfile);
 	        }

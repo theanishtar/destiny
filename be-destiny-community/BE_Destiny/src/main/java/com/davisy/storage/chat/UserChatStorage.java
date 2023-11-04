@@ -34,6 +34,7 @@ public class UserChatStorage {
     public void setUser(int userId, List<UserModel> userModel) throws Exception {
         synchronized (lock) {
             if (users.get(userId) != null) {
+            	System.out.println("user: "+userId);
                 users.remove(userId);
             }
             users.put(userId, userModel);
