@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, Renderer2  } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from '@angular/core';
 
 import { liquid } from "../../../assets/js/utils/liquidify.js";
 // import { tns } from '../../../assets/js/vendor/ti';
@@ -39,14 +39,15 @@ export class ProfileTimelineComponent implements OnInit {
   dateJoin: string | null
   isLoading = true;
   idLocal: any;
+  chatUserId: any;
   mapIntersted = new Map<number, boolean>();
   checkRequest: boolean = true;
   currentUserId = this.cookieService.get("id");
   checkCountPosts: boolean = true;
   ngOnInit() {
-    // this.loadDataHeader(0);
     this.loadDataSuggest();
     this.checkScroll();
+    this.profileService.loadDataProfileTimeline(this.idLocal);
     liquid.liquid();
     avatarHexagons.avatarHexagons();
     tooltips.tooltips();
@@ -56,7 +57,13 @@ export class ProfileTimelineComponent implements OnInit {
     sidebars.sidebars();
     content.contentTab();
     form.formInput();
-   
+    let profile_timeline = document.getElementById('profile_timeline')!;
+
+    profile_timeline.style.display = 'none';
+    this.profileService.getCheckData().then((result) => {
+        this.isLoading = false;
+        profile_timeline.style.display = 'grid';
+    });
   }
   dataFollows: any
   listPostPr: any;
@@ -74,7 +81,8 @@ export class ProfileTimelineComponent implements OnInit {
     private renderer: Renderer2
   ) {
     this.idLocal = parseInt((localStorage.getItem("idSelected") + '')?.trim());
-    this.profileService.loadDataProfileTimeline(this.idLocal);
+    this.chatUserId = parseInt((localStorage.getItem("chatUserId") + '')?.trim());
+
   }
 
   addFollow(id: number) {
@@ -88,91 +96,86 @@ export class ProfileTimelineComponent implements OnInit {
     });
   }
 
-  async loadDataSuggest() {
-    if (!Array.isArray(this.listSuggested) || this.listSuggested.length === 0) {
-      // Gọi API chỉ khi dữ liệu chưa tồn tại.
-      await new Promise<void>((resolve) => {
-        this.followsService.loadDataSuggest().subscribe(() => {
-          this.listSuggested = this.followsService.getDataSuggested();
-          this.check = false;
-          resolve();
-        });
-      });
-    } else {
-      // Sử dụng dữ liệu đã lưu trữ.
+  loadDataSuggest() {
+    this.followsService.loadDataSuggest().subscribe(() => {
       this.listSuggested = this.followsService.getDataSuggested();
       this.check = false;
-      if (Array.isArray(this.listSuggested) && this.listSuggested.length === 0) {
-        this.checkData1 = true;
-        this.check = false;
+    });
+  }
+  /* ============Interested============= */
+
+  checkInterested(post_id: number, interested: any[]): boolean {
+    this.mapIntersted.set(post_id, false);
+    for (let user of interested) {
+      // if (user[0] == this.currentUserId && user[2] === post_id) {
+      if (user.user_id == this.currentUserId) {
+        this.mapIntersted.set(post_id, true);
+        return true;
       }
     }
+    return false;
   }
-/* ============Interested============= */
- 
-checkInterested(post_id: number,interested :any[]): boolean {
-  this.mapIntersted.set(post_id, false);
-  for (let user of interested) {
-    // if (user[0] == this.currentUserId && user[2] === post_id) {
-    if (user.user_id == this.currentUserId) {
-      this.mapIntersted.set(post_id, true);
-      return true;
-    }
-  }
-  return false;
-}
 
-// Interested and uninterested in the post
-interestedPost(post_id, toUser) {
- let check = this.mapIntersted.get(post_id);
- console.log("check: "+check);
-  let element = this.el.nativeElement.querySelector('#interest-' + post_id);
-  if (check && this.checkRequest) {
-    this.interactPostsService.deleleInterestedApi(post_id).subscribe(
-      () => {
+  // Interested and uninterested in the post
+  async interestedPost(post_id, toUser) {
+    let check = this.mapIntersted.get(post_id);
+    console.log("check: " + check);
+    let element = this.el.nativeElement.querySelector('#interest-' + post_id);
+    if (check && this.checkRequest) {
+      try {
+        await this.interactPostsService.deleleInterestedApi(post_id);
+    
         console.log("Đã hủy quan tâm");
         this.renderer.removeClass(element, 'active');
-      },
-      (error) => {
+        this.mapIntersted.set(post_id, false);
+        this.checkRequest = false;
+        console.log("check1: " + check);
+        
+        // Set count interestedPost 
+        let interested = document.getElementById("interested-" + post_id);
+        if (interested) {
+          let count: string | undefined;
+          count = '' + interested.textContent?.trim();
+          let num = parseInt(count) - 1;
+          interested!.innerText = num + '';
+        }
+      } catch (error) {
         console.log("Error:", error);
       }
-    );
-    this.mapIntersted.set(post_id, false);
-    this.checkRequest = false;
-  }else{
-    this.renderer.addClass(element, 'active');
-    this.interactPostsService.interestedPost(post_id, toUser);
-    this.mapIntersted.set(post_id,true);
-    this.checkRequest = true;
+    } else {
+      this.renderer.addClass(element, 'active');
+      this.interactPostsService.interestedPost(post_id, toUser);
+      this.mapIntersted.set(post_id, true);
+      this.checkRequest = true;
+    }
   }
-}
-/* ============template============= */
-translate() {
-  document.addEventListener('DOMContentLoaded', function () {
-    const translateButton = document.querySelector(
-      '.translate-button'
-    ) as HTMLButtonElement;
-    const backButton = document.querySelector(
-      '.back-button'
-    ) as HTMLButtonElement;
-    const originalContent = document.querySelector(
-      '.original-content'
-    ) as HTMLElement;
-    const translatedContent = document.querySelector(
-      '.translated-content'
-    ) as HTMLElement;
+  /* ============template============= */
+  translate() {
+    document.addEventListener('DOMContentLoaded', function () {
+      const translateButton = document.querySelector(
+        '.translate-button'
+      ) as HTMLButtonElement;
+      const backButton = document.querySelector(
+        '.back-button'
+      ) as HTMLButtonElement;
+      const originalContent = document.querySelector(
+        '.original-content'
+      ) as HTMLElement;
+      const translatedContent = document.querySelector(
+        '.translated-content'
+      ) as HTMLElement;
 
-    translateButton.addEventListener('click', function () {
-      originalContent.style.display = 'none';
-      translatedContent.classList.add('active');
-    });
+      translateButton.addEventListener('click', function () {
+        originalContent.style.display = 'none';
+        translatedContent.classList.add('active');
+      });
 
-    backButton.addEventListener('click', function () {
-      originalContent.style.display = 'block';
-      translatedContent.classList.remove('active');
+      backButton.addEventListener('click', function () {
+        originalContent.style.display = 'block';
+        translatedContent.classList.remove('active');
+      });
     });
-  });
-}
+  }
 
   @ViewChild('elementToScroll', { static: false }) elementToScroll: ElementRef;
 
@@ -184,13 +187,13 @@ translate() {
   }
 
   currentPage: number = 1;
+  checkLoadingdata: boolean = true;
   async checkScroll() {
-    
     const scrollableDiv = document.getElementById('scrollableDiv')!;
     const scrollButton = document.getElementById('scrollButton')!;
 
     scrollableDiv.addEventListener('scroll', async () => {
-      
+
       if (scrollableDiv.scrollTop > 100) {
         scrollButton.style.display = 'block';
       } else {
@@ -200,11 +203,12 @@ translate() {
       if (scrollableDiv.scrollTop.toString().indexOf('.') > 0) {
         epsilon = '0' + scrollableDiv.scrollTop.toString().substring(scrollableDiv.scrollTop.toString().indexOf('.'));
       }
-      
+
       if (
         scrollableDiv.scrollHeight - scrollableDiv.clientHeight - (scrollableDiv.scrollTop - parseFloat(epsilon)) <= 1 &&
         this.checkCountPosts
       ) {
+        this.checkLoadingdata = true;
         try {
           let dataPost = {
             toProfile: localStorage.getItem("idSelected"),
@@ -213,9 +217,10 @@ translate() {
           this.currentPage++;
           const data: any = await this.profileService.loadDataTimelinePost(dataPost).toPromise();
           this.profileService.listPostPr = [...this.profileService.listPostPr, ...data];
-
+          this.checkLoadingdata = false;
           if (data.length < 5) {
             this.checkCountPosts = false;
+            this.checkLoadingdata = true;
           }
           // console.log("data.length: " + data.length);
         } catch (error) {

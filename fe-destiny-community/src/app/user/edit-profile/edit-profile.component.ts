@@ -83,6 +83,9 @@ export class EditProfileComponent implements OnInit {
   checkAvatar: boolean = false;
   checkThumb: boolean = false;
   sender: any;
+  isLoading = true;
+
+
   ngOnInit() {
     liquid.liquid();
     avatarHexagons.avatarHexagons();
@@ -208,11 +211,16 @@ export class EditProfileComponent implements OnInit {
   }
 
   loadDataProfile() {
+    let body_edit = document.getElementById('body-edit')!;
+    body_edit.style.display = 'none';
+
     this.profileService.loadDataEditProfile().subscribe(() => {
       this.dataEditProfile = this.profileService.getDataEditProfile();
       this.initialUsername = this.dataEditProfile.username;
       this.initalAvatar = this.dataEditProfile.avatar;
       this.initalThumb = this.dataEditProfile.thumb;
+      this.isLoading = false;
+      body_edit.style.display = 'grid';
     })
   }
 

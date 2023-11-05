@@ -272,3 +272,10 @@ svg.post-settings-icon.icon-more-dots {
 .dropdown-content a i{
   margin-right: 5px;
 }
+app-loading {
+  position: relative !important;
+  top: 5rem !important;
+}
+.loader-bars {
+  margin-top: 0 !important;
+}

@@ -42,13 +42,14 @@ export class ProfileService {
   private districts: any[];
   private wards: any[];
   private userLogined: any[] = [];
-
+  isLoading = true;
   constructor(
     private http: HttpClient,
     private router: Router,
     private cookieService: CookieService,
     private datePipe: DatePipe, //Định dạng ngày
-  ) { }
+  ) { 
+  }
 
   /* ============Timeline============= */
   dataFollows: any
@@ -70,8 +71,9 @@ export class ProfileService {
       }),
     );
   }
-  
+  public checkData: boolean;
   loadDataProfileTimeline(id) {
+    this.setCheckData(false) ;
     let data = {
       toProfile: id,
       page: this.currentPage
@@ -81,16 +83,16 @@ export class ProfileService {
       if (response != null) {
         this.setdataTimeLine(response);
         this.dataProfileTimeline = this.getdataTimeLine();
-        // this.listPostPr = this.dataProfileTimeline.postEntityProfile;
-        // this.listUserPr = this.listPostPr.userInterested;
         this.dateJoin = this.datePipe.transform(this.dataProfileTimeline.dateJoin, 'dd/MM/yyyy');
       }
 
     })
-    this.loadDataTimelinePost(data).subscribe((data: any) => {
-      this.listPostPr = data; // Lưu dữ liệu ban đầu vào mảng
+    this.loadDataTimelinePost(data).subscribe((res: any) => {
+      this.listPostPr = res; // Lưu dữ liệu ban đầu vào mảng
+      this.setCheckData(true) ;
     });
     this.router.navigate(['profile']);
+    // window.location.href = 'http://localhost:4200/profile';
   }
 
   loadDataTimelinePost(data: any) {
@@ -98,7 +100,6 @@ export class ProfileService {
       tap((response) => {
         this.dataTimeLinePost = response;
         this.setdataTimeLinePost(this.dataTimeLinePost);
-
       }),
     );
   }
@@ -399,12 +400,7 @@ export class ProfileService {
   contactApi(data: any): Observable<any> {
     return this.http.post(this.contactUrl, data).pipe(
       tap(() => {
-        // new toast({
-        //   title: 'Thành công!',
-        //   message: 'Phản hồi của bạn đã được gửi đi!!',
-        //   type: 'success',
-        //   duration: 3000,
-        // })
+
       })
     );
   }
@@ -477,5 +473,19 @@ export class ProfileService {
   setUserLog(data: any[]): void {
     this.userLogined = data;
   }
+  setCheckData(value: boolean) {
+    this.checkData = value;
+  }
+
+  getCheckData(): Promise<boolean> {
+    // Trả về một Promise
+    return new Promise<boolean>((resolve) => {
+      // Thực hiện logic của bạn ở đây và sau khi hoàn thành, gọi resolve với giá trị kết quả
+      setTimeout(() => {
+        resolve(true); // Thay true bằng giá trị bạn muốn trả về
+      }, 5500); // Ví dụ: đợi 2 giây trước khi trả kết quả
+    });
+  }
+  
 
 }

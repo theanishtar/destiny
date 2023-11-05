@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, HostListener  } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { ProfileService } from '../service/profile.service';
@@ -23,11 +23,15 @@ export class HeaderProfileComponent implements OnInit {
   isLoading = true;
   idLocal: any;
   chatUserId: any;
-  dataFollows: any
+  dataFollows: any;
+  checkHeaderEdit: boolean = true;
+  checkWidthMedia: boolean = true;
+
   ngOnInit() {
     this.idLocal = parseInt((localStorage.getItem("idSelected") + '')?.trim());
     this.chatUserId = parseInt((localStorage.getItem("chatUserId") + '')?.trim());
-    // this.profileService.loadDataProfileHeader(this.idLocal);
+    this.profileService.loadDataProfileHeader(this.idLocal);
+    this.checkScreenSize();
   }
 
   constructor(
@@ -63,16 +67,34 @@ export class HeaderProfileComponent implements OnInit {
     // Ví dụ: nếu có '/home' trong URL, đặt activeMenuItem thành 'home'
     if (currentUrl.includes('/profile')) {
       this.activeMenuItem = 'profile';
+      this.checkHeaderEdit = true;
     }
     // Tương tự cho các menu item khác
     if (currentUrl.includes('/edit-profile')) {
       this.activeMenuItem = 'edit-profile';
+      this.checkHeaderEdit = false;
     }
     if (currentUrl.includes('/follow')) {
       this.activeMenuItem = 'follow';
+      this.checkHeaderEdit = true;
     }
     if (currentUrl.includes('/photos')) {
       this.activeMenuItem = 'photos';
+      this.checkHeaderEdit = true;
+    }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any): void {
+    this.checkScreenSize();
+  }
+
+  checkScreenSize() {
+    // Kiểm tra kích thước màn hình ở đây
+    if (window.innerWidth <= 1285) {
+      this.checkWidthMedia = false; // Cài đặt giá trị khi kích thước màn hình nhỏ hơn hoặc bằng 1280px
+    } else {
+      this.checkWidthMedia = true; // Cài đặt giá trị khi kích thước màn hình lớn hơn 1280px
     }
   }
 }

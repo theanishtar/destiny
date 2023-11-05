@@ -1,7 +1,7 @@
 <app-navigation></app-navigation>
 
 <!-- CONTENT GRID -->
-
+<app-loading *ngIf="isLoading"></app-loading>
 <div class="content-grid" id="profile_timeline">
   <!-- <app-loading *ngIf="isLoading"></app-loading> -->
   <app-header-profile></app-header-profile>
@@ -921,6 +921,17 @@
           <!-- /POST OPTION -->
         </div>
         <!-- /POST OPTIONS -->
+      </div>
+      <!-- <div class="lds-dual-ring" *ngIf="checkLoadingdata"></div> -->
+      <div class="loader-bars" *ngIf="checkLoadingdata">
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
       </div>
     </div>
     <!-- /GRID COLUMN -->

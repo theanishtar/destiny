@@ -162,3 +162,16 @@ figure.user-preview-cover.liquid img {
 .user-short-description-title a{
   cursor: pointer;
 }
+
+/* input search */
+/* button.button.primary {
+  z-index: 2 !important;
+}
+input#friends-search {
+  position: relative !important;
+  z-index: 1 !important;
+}
+.with-button label {
+  position: absolute !important;
+  z-index: 2 !important;
+} */

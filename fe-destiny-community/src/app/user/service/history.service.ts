@@ -83,6 +83,7 @@ export class HistoryService {
   public listCount: any;
   public listUser: any;
   public listCmt: any
+  public isLoading: boolean = true;
   openModalDetailPost(idPost) {
     this.isOpenDetailPost.next(true);
     this.callApiDetailPost(idPost).subscribe(() => {
@@ -92,13 +93,15 @@ export class HistoryService {
       this.listCount = this.detailPost[1];
       this.listUser = this.detailPost[2];
       this.listCmt = this.detailPost[3];
-      console.log("this.detailPost: " + this.detailPost[0].post_id)
+      this.isLoading = false;
+      // console.log("this.detailPost: " + this.detailPost[0].post_id)
       // this.modalService.loadComment(idPost, userId)
     })
   }
 
   closeModalDetailPost() {
     this.isOpenDetailPost.next(false);
+    // this.detailPost = [];
   }
 
   /* ============Getter - Setter============= */

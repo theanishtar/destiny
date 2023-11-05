@@ -441,3 +441,9 @@ p.meta-line-text {
 .dropdown-content a i{
   margin-right: 5px;
 }
+.loader-bars {
+  margin-top: 0 !important;
+}
+textarea#quick-post-text{
+  height: 80px !important;
+}

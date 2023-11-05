@@ -1,7 +1,8 @@
 <app-navigation></app-navigation>
 
 <!-- CONTENT GRID -->
-<div class="content-grid">
+<app-loading *ngIf="isLoading"></app-loading>
+<div class="content-grid" id="body-edit">
   <app-header-profile></app-header-profile>
 
   <!-- GRID -->

@@ -82,7 +82,8 @@ export class CreatePostComponent {
         await this.addData(img);
       }
     }
-
+    console.log("this.listImg.length: " + this.listImg.length)
+    console.log("this.createPostForm.get('content')?.value: " + this.createPostForm.get('content')?.value)
     var data = {
       content: this.createPostForm.get('content')?.value,
       hash_tag: this.createPostForm.get('hash_tag')?.value,
@@ -93,31 +94,29 @@ export class CreatePostComponent {
       product: this.createPostForm.get('product')?.value,
       post_images: this.listImg,
     };
+    if (this.createPostForm.get('content')?.value === '' && this.listImg.length === 0) {
+      new toast({
+        title: 'Thông báo!',
+        message: 'Vui lòng không bỏ trống đồng thời nội dung và hình ảnh',
+        type: 'warning',
+        duration: 3000,
+      });
+    }
     if (this.createPostForm.valid) {
-      if (this.createPostForm.get('content')?.value && this.listImg.length === 0) {
+      this.postService.uploadPost(data).subscribe((res) => {
         new toast({
-          title: 'Thông báo!',
-          message: 'Vui lòng không bỏ trống đồng thời nội dung và hình ảnh',
-          type: 'warning',
+          title: 'Thành công!',
+          message: 'Đăng bài thành công',
+          type: 'success',
           duration: 1500,
         });
-      } else {
-        this.postService.uploadPost(data).subscribe((res) => {
-          new toast({
-            title: 'Thành công!',
-            message: 'Đăng bài thành công',
-            type: 'success',
-            duration: 1500,
-          });
-          this.listPosts = res;
-          console.warn("this.listPosts: " + JSON.stringify(this.listPosts));
-          this.createPostForm.reset();
-          this.listImg = [];
-          this.file = {};
-          this.closeModalCreatePost();
-          // this.profileService.loadDataProfileTimeline(0);
-        });
-      }
+        this.listPosts = res;
+        console.warn("this.listPosts: " + JSON.stringify(this.listPosts));
+        this.createPostForm.reset();
+        this.listImg = [];
+        this.file = {};
+        this.closeModalCreatePost();
+      });
     }
   }
 

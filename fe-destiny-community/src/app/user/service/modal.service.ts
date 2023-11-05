@@ -56,6 +56,7 @@ export class ModalService {
 
 
   /* ============Comment============= */
+  isLoadingCmt: boolean = true;
   openModalComment(data: any): Observable<any> {
     return this.http.post(this.loadDataComment, data).pipe(
       tap((response) => {
@@ -76,10 +77,12 @@ export class ModalService {
       this.listComment = this.getDataCmt();
       this.images = this.listComment.list_post_images;
       this.listCmt = this.listComment.list_comment;
+      this.isLoadingCmt = false;
     })
   }
 
   /* ============Add comment============= */
+  isLoading: boolean = true;
   removeNotify() {
     this.checkNotify = false
   }
@@ -95,7 +98,7 @@ export class ModalService {
         // this.listNotify.set(this.count, data);
         // this.mapTime.set(this.count, new Date().toISOString());
         // this.count++;
-
+        
         //Đẩy lại thông báo lên lại
         this.listNotify.clear();
         this.mapTime.clear();
@@ -114,7 +117,6 @@ export class ModalService {
           this.listNotify.set(this.count, notify);
           this.mapTime.set(this.count, k!.time);
           this.count++;
-
         }
 
         if (this.repCmtId > 0)
@@ -143,6 +145,8 @@ export class ModalService {
           this.count++;
 
         }
+        
+        this.isLoading = false;
       })
 
       this.stompClient?.subscribe("/topic/changetoken/" + userId, (response) => {
@@ -234,12 +238,29 @@ export class ModalService {
       if (this.$reply) {
         for (let rep of this.listReplyCmt) {
           this.$reply.append('<div class="comment__container oppen rep-' + cmtId + '"' +
-            ' dataset="first-comment" style="display: block; position: relative; margin-bottom: 2rem;padding-left: 3rem;"> ' +
+            ' dataset="first-comment" style="display: block; position: relative; margin-bottom: 1rem;margin-top: 1rem;padding-left: 3rem;"> ' +
             '<div class="comment__card" style="padding: 0px;min-width: 100%;"> ' +
             '<div class="box-top" style="display: flex;justify-content: space-between;align-items: center;"> ' +
             ' <div class="Profile" style="display: flex;align-items: center;"> ' +
             '<div class="profile-image" style="width: 40px;height: 40px;overflow: hidden;border-radius: 50%;margin-right: 10px;"> ' +
-            '<img src="' + rep[9] + '" style="width: 100%;height: 100%;object-fit: cover;object-position: center;display: block;vertical-align: middle;"/> ' +
+            // '<img src="' + rep[9] + '" style="width: 100%;height: 100%;object-fit: cover;object-position: center;display: block;vertical-align: middle;"/> ' +
+            '<a class="user-avatar small user-status-avatar no-border no-outline avatar-mess" href="profile"> ' +
+        '<div class="hexagon-container" style="width: 35px; height: 38px; position: relative; margin: 0 auto;background: white;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); "> ' +
+        '<div class="hexagon user-avatar-content" style="top: 6px;left: 5px;position: absolute;z-index: 3;width: 40px;height: 44px;overflow: hidden;">  ' +
+        '<div class="hexagon-image" ' +
+        'style="background-image: url(' +
+        rep[9] +
+        '); width: 20px; height: 23px;position: relative; z-index: 3;background-size: cover;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);left: 4%;top: 2%;"></div>' +
+        '</div>' +
+        '<div class="hexagon user-avatar-border" style="position: absolute;top: 0;left: 0;z-index: 1;">' +
+        '<div style="position: absolute; top: 0; left: 0; z-index: 1; content: \'\'; width: 32px; height: 36px; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); left: 1px; top: 0px; background-image: linear-gradient(to right, #41efff, #615dfa); display: block;"></div>' +
+        '<div class="hexagon-border"></div>' +
+        '</div>' +
+        '<div class="hexagon user-avatar-progress-border" style="margin-left: 11%;margin-top: 10.3%; width: 26px;height: 29px;top: 0;left: 0;z-index: 2;position: absolute;background: white;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">' +
+        '  <div class="user-avatar-progress" style="top: 0;left: 0;z-index: 3;position: absolute;"></div>' +
+        '</div>' +
+        '</div>' +
+        '</a>' +
             '</div> ' +
             '<div class="Name" style="display: flex;flex-direction: column;margin-left: 10px;"> ' +
             '<strong style="color: black;font-size: 15px;font-weight: bolder;font-family: Helvetica, Arial, sans-serif">' + rep[7] + '</strong> ' +
@@ -247,7 +268,7 @@ export class ModalService {
             '</div>' +
             '</div>' +
             '</div>' +
-            '<p style="font-size: 15px;margin-bottom: 1rem;line-height: 1.4;padding-left: 3.5rem;margin: 0;font-family: Helvetica, Arial, sans-serif">' +
+            '<p style="font-size: 15px;margin-bottom: 1rem;line-height: 2.4;padding-left: 3.9rem;margin: 0;font-family: Helvetica, Arial, sans-serif">' +
             '<a href="#" style="text-decoration: none;color: black;font-weight: bolder;">' +
             rep[10] + '</a>' + ' ' + this.getContent(rep[10], rep[5]) +
             '</p>' +

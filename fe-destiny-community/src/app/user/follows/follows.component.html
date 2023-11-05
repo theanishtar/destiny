@@ -19,17 +19,20 @@
       <!-- /SECTION HEADER INFO -->
     </div>
     <!-- /SECTION HEADER -->
-
+    <!-- <input type="text" id="" [(ngModel)]="searchQuery" (input)="performSearch()"> -->
     <!-- SECTION FILTERS BAR -->
     <div class="section-filters-bar v1">
       <!-- SECTION FILTERS BAR ACTIONS -->
       <div class="section-filters-bar-actions">
         <!-- FORM -->
-        <form class="form">
+        <div class="form">
           <!-- FORM INPUT -->
           <div class="form-input small with-button">
-            <label for="friends-search">Tìm kiếm</label>
-            <input type="text" id="friends-search" name="friends_search">
+            <!-- <label for="friends-search">Tìm kiếm</label> -->
+            <input type="text" [ngClass]="{'hidden': activeContent !== 'following'}" [(ngModel)]="searchQueries.following" (input)="performSearch('following')" placeholder="Tìm kiếm">
+            <input type="text" [ngClass]="{'hidden': activeContent !== 'follower'}" [(ngModel)]="searchQueries.follower" (input)="performSearch('follower')" placeholder="Tìm kiếm">
+            <input type="text" [ngClass]="{'hidden': activeContent !== 'friends'}" [(ngModel)]="searchQueries.friends" (input)="performSearch('friends')" placeholder="Tìm kiếm">
+            
             <!-- BUTTON -->
             <button class="button primary">
               <!-- ICON MAGNIFYING GLASS -->
@@ -45,11 +48,13 @@
           <!-- FORM SELECT -->
           <div class="form-select">
             <label for="friends-filter-category">Lọc theo</label>
-            <select id="friends-filter-category" name="friends_filter_category">
-              <option value="following" (click)="openTabFollow('following')" [ngClass]="{'active': activeContent === 'following'}">Đang theo dõi</option>
-              <option value="follower" (click)="openTabFollow('follower')" [ngClass]="{'active': activeContent === 'follower'}">Người theo dõi</option>
-              <option value="friends" (click)="openTabFollow('friends')" [ngClass]="{'active': activeContent === 'friends'}">Bạn bè</option>
+            <select id="friends-filter-category" name="friends_filter_category" (change)="onChange($event)">
+              <option value="following">Đang theo dõi</option>
+              <option value="follower">Người theo dõi</option>
+              <option value="friends">Bạn bè</option>
             </select>
+            
+            
             <!-- FORM SELECT ICON -->
             <svg class="form-select-icon icon-small-arrow">
               <use xlink:href="#svg-small-arrow"></use>
@@ -57,7 +62,7 @@
             <!-- /FORM SELECT ICON -->
           </div>
           <!-- /FORM SELECT -->
-        </form>
+        </div>
         <!-- /FORM -->
 
         <!-- FILTER TABS -->
@@ -92,9 +97,6 @@
     </div>
     <!-- /SECTION FILTERS BAR -->
 
-    <!-- <div class="grid grid-4-4-4 centered following" *ngIf="loadingService.isLoading()">
-      <div class="lds-facebook"><div></div><div></div><div></div></div>
-    </div>-->
     <app-loading *ngIf="isLoading"></app-loading>
     
     <div id="body-follow">
@@ -102,8 +104,10 @@
       <div [ngClass]="{'hidden': activeContent !== 'following'}" >
         <div *ngIf="checkData1" class="emty-message">Khi bạn theo dõi mọi người, bạn sẽ nhìn thấy họ ở đây</div>
         <div class="grid grid-4-4-4 centered following">
+          <div *ngIf="searchPerformed && !checkFind[activeContent!]" class="emty-message">Không tìm thấy người {{searchQueries[activeContent!]}} trong danh sách</div>
+
           <!-- USER PREVIEW -->
-          <div class="user-preview" *ngFor="let fling of listFollowing">
+          <div class="user-preview" *ngFor="let fling of (isSearching ? searchResults : listFollowing)">
             <!-- USER PREVIEW COVER -->
             <figure class="user-preview-cover liquid">
               <img src="{{fling.thumb}}" alt="cover-04">
@@ -210,8 +214,9 @@
       <div [ngClass]="{'hidden': activeContent !== 'follower'}">
         <div *ngIf="checkData2" class="emty-message">Khi mọi người theo dõi bạn, bạn sẽ nhìn thấy họ ở đây</div>
       <div class="grid grid-4-4-4 centered follower">
+        <div *ngIf="searchPerformed && !checkFind[activeContent!]" class="emty-message">Không tìm thấy người {{searchQueries[activeContent!]}} trong danh sách</div>
         <!-- USER PREVIEW -->
-        <div class="user-preview" *ngFor="let fler of listFollower">
+        <div class="user-preview" *ngFor="let fler of (isSearching ? searchResults : listFollower)">
           <!-- USER PREVIEW COVER -->
           <figure class="user-preview-cover liquid">
             <img src="{{fler.thumb}}" alt="cover-04">
@@ -319,8 +324,9 @@
        <div [ngClass]="{'hidden': activeContent !== 'friends'}">
         <div *ngIf="checkData3" class="emty-message">Theo dõi nhiều người để có thêm bạn bè</div>
        <div class="grid grid-4-4-4 centered friends">
+        <div *ngIf="searchPerformed && !checkFind[activeContent!]" class="emty-message">Không tìm thấy người {{searchQueries[activeContent!]}} trong danh sách</div>
           <!-- USER PREVIEW -->
-          <div class="user-preview" *ngFor="let friend of listFriend">
+          <div class="user-preview" *ngFor="let friend of (isSearching ? searchResults : listFriend)">
             <!-- USER PREVIEW COVER -->
             <figure class="user-preview-cover liquid">
               <img src="{{friend.thumb}}" alt="cover-04">

@@ -219,3 +219,8 @@ img#uploadPreviewAvatar {
   position: absolute;
   top: 0%;
 }
+
+app-loading {
+  position: relative !important;
+  top: 5rem !important;
+}

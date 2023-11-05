@@ -1243,3 +1243,14 @@ p.forum-category-text{
 p.table-header-title {
   font-size: 15px !important;
 }
+
+.emty-message {
+  text-align: center;
+  margin-top: 3rem;
+  font-size: 17px;
+    color: #3e3f5e;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.hidden {
+  display: none;
+}

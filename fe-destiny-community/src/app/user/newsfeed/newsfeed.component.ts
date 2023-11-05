@@ -26,6 +26,7 @@ import { ProfileService } from '../service/profile.service';
 import { DatePipe } from '@angular/common';
 import '../../../assets/toast/main.js';
 import { forEach } from 'angular';
+import { async } from 'rxjs';
 declare var toast: any;
 @Component({
   selector: 'app-newsfeed',
@@ -64,7 +65,7 @@ export class NewsfeedComponent implements OnInit {
   ngOnInit() {
     this.userDisplayName = this.cookieService.get('full_name');
     this.loadPosts();
-    this.loadData();
+    // this.modalService.loadComment(1,2);
     this.checkScroll();
     this.translate();
     liquid.liquid();
@@ -147,12 +148,18 @@ export class NewsfeedComponent implements OnInit {
   /* ============Post============= */
   currentPage: number = 1;
   async loadPosts() {
+    let body_news = document.getElementById('body-news')!;
+    body_news.style.display = 'none';
     try {
       this.listTop5User = await this.postService.loadTop5User();
       this.listTop5Post = await this.postService.loadTop5Post();
       await this.loadDataSuggest();
       this.postService.loadPostNewsFeed(this.currentPage).subscribe((data: any) => {
         this.listPosts = data; // Lưu dữ liệu ban đầu vào mảng
+        setTimeout(() => {
+          this.isLoading = false;
+          body_news.style.display = 'grid';
+        }, 1000);
       });
     } catch (error) {
       console.error('Error:', error);
@@ -220,8 +227,8 @@ export class NewsfeedComponent implements OnInit {
   //   }
   // }
 
-  interestedPost(post_id, toUser) {
-    
+  async interestedPost(post_id, toUser) {
+
     let check = this.mapIntersted.get(post_id);
     console.log("check: " + check);
     console.log("this.checkRequest: " + this.checkRequest);
@@ -229,26 +236,26 @@ export class NewsfeedComponent implements OnInit {
     let element = this.el.nativeElement.querySelector('#interest-' + post_id);
 
     if (check && this.checkRequest) {
-      this.interactPostsService.deleleInterestedApi(post_id).subscribe(
-        () => {
-          console.log("Đã hủy quan tâm");
-          this.renderer.removeClass(element, 'active');
-          this.mapIntersted.set(post_id, false);
-          this.checkRequest = false;
-          console.log("check1: " + check);
-          // Set count interestedPost 
-          let interested = document.getElementById("interested-" + post_id);
-          if (interested) {
-            let count: string | undefined;
-            count = '' + interested.textContent?.trim();
-            let num = parseInt(count) - 1;
-            interested!.innerText = num + '';
-          }
-        },
-        (error) => {
-          console.log("Error:", error);
+      try {
+        await this.interactPostsService.deleleInterestedApi(post_id);
+    
+        console.log("Đã hủy quan tâm");
+        this.renderer.removeClass(element, 'active');
+        this.mapIntersted.set(post_id, false);
+        this.checkRequest = false;
+        console.log("check1: " + check);
+        
+        // Set count interestedPost 
+        let interested = document.getElementById("interested-" + post_id);
+        if (interested) {
+          let count: string | undefined;
+          count = '' + interested.textContent?.trim();
+          let num = parseInt(count) - 1;
+          interested!.innerText = num + '';
         }
-      );
+      } catch (error) {
+        console.log("Error:", error);
+      }
     } else {
       this.renderer.addClass(element, 'active');
       this.interactPostsService.interestedPost(post_id, toUser);
@@ -273,10 +280,12 @@ export class NewsfeedComponent implements OnInit {
   loadData() {
     const body_news = document.getElementById('body-news')!;
     body_news.style.display = 'none';
-    setTimeout(() => {
-      this.isLoading = false;
+    // setTimeout(() => {
+    console.log("this.isLoading: " + this.isLoading)
+    if (!this.isLoading) {
       body_news.style.display = 'grid';
-    }, 1);
+    }
+    // }, 1);
   }
 
   translate() {
@@ -317,7 +326,7 @@ export class NewsfeedComponent implements OnInit {
     }
   }
 
-
+checkLoadingdata: boolean = true;
   async checkScroll() {
     const scrollableDiv = document.getElementById('scrollableDiv')!;
     const scrollButton = document.getElementById('scrollButton')!;
@@ -337,13 +346,15 @@ export class NewsfeedComponent implements OnInit {
         scrollableDiv.scrollHeight - scrollableDiv.clientHeight - (scrollableDiv.scrollTop - parseFloat(epsilon)) <= 1 &&
         this.checkCountPosts
       ) {
+        this.checkLoadingdata = true;
         try {
           this.currentPage++;
           const data: any = await this.postService.loadPostNewsFeed(this.currentPage).toPromise();
           this.listPosts = [...this.listPosts, ...data];
-
+          this.checkLoadingdata = false;
           if (data.length < 5) {
             this.checkCountPosts = false;
+            this.checkLoadingdata = true;
           }
           // console.log("data.length: " + data.length);
         } catch (error) {
@@ -351,6 +362,7 @@ export class NewsfeedComponent implements OnInit {
         }
 
         // console.log("hết nè: " + this.currentPage);
+        
       }
     });
   }

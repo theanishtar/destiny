@@ -22,27 +22,29 @@ export class InteractPostsService {
     this.modalService.sendNotify(' ', idPost, idUser, 'SHARE', this.modalService.repCmtId);
   }
 
-  deleleInterestedApi(post_id: number): Observable<any> {
-    return this.http.post(this.deleleInterestedUrl, post_id).pipe(
-      catchError(error => {
-        console.log("Error:", error);
-        throw error; // Re-throw the error to propagate it further if needed
-      })
-    );
-  }
+  // deleleInterestedApi(post_id: number): Observable<any> {
+  //   return this.http.post(this.deleleInterestedUrl, post_id).pipe(
+  //     catchError(error => {
+  //       console.log("Error:", error);
+  //       throw error; // Re-throw the error to propagate it further if needed
+  //     })
+  //   );
+  // }
 
+  async deleleInterestedApi(post_id: number): Promise<any> {
+    try {
+      const response = await this.http.post(this.deleleInterestedUrl, post_id).toPromise();
+      return response;
+    } catch (error) {
+      console.log("Error:", error);
+      throw error; // Re-throw the error to propagate it further if needed
+    }
+  }
 
   interestedPost(idPost, idUser) {
     this.idPost = this.modalService.idPostCmt;
     this.modalService.sendNotify(' ', idPost, idUser, 'INTERESTED', this.modalService.repCmtId);
   }
-
-
-
-
-
-
-
 
   // private likedPosts: Set<string> = new Set<string>();
 
