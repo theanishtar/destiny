@@ -15716,7 +15716,7 @@ INSERT INTO post_reported (post_reported_id, user_send_report_id, content_report
     
 INSERT INTO user_reported (user_reported_id, user_send_report_id, content_report, date_report) VALUES
 	(26, 16, 'đăng bài lừa đảo', '2023-10-20'),
-    (49, 18, 'nội dung bậy bạ', '2023-10-20');
+    (26, 18, 'nội dung bậy bạ', '2023-10-20');
     
 
 -- Trả về danh sách bài Post có quan hệ bạn hoặc đang follow----------------------------------------------------------------------------------------------------------------------------------
