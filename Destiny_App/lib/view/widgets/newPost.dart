@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:login_signup/models/Users.dart';
 import 'package:login_signup/utils/api.dart';
+import 'package:login_signup/view/widgets/createPost.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -21,7 +22,6 @@ String? avatar;
 Map<String, dynamic>? mapResponse;
 
 class _NewPostState extends State<NewPost> {
-  final storage = const FlutterSecureStorage();
   @override
   void initState() {
     super.initState();
@@ -51,14 +51,13 @@ class _NewPostState extends State<NewPost> {
         String email = item['email'] ?? "N/A";
         String refreshToken = item['refreshToken'] ?? "N/A";
         setState(() {
-          avatar =
-              "https://firebasestorage.googleapis.com/v0/b/destiny-davisy.appspot.com/o/dang.jpg?alt=media&token=451f4ba3-5819-4899-9f86-d24069f5ab4c&_gl=1*q1ce3e*_ga*MTcxMDU3NTczOS4xNjc2OTc2NjE1*_ga_CW55HF8NVT*MTY5NjUwMzgxNi44LjEuMTY5NjUwNTcwMC42MC4wLjA";
+          avatar = image;
         });
         // Sử dụng dữ liệu này theo nhu cầu của bạn
-        print('Name: $name');
-        print('Avatar: $avatar');
-        print('Token: $email');
-        print('Refresh Token: $refreshToken');
+        // print('Name: $name');
+        // print('Avatar: $avatar');
+        // print('Token: $email');
+        // print('Refresh Token: $refreshToken');
       }
     }
   }
@@ -66,8 +65,8 @@ class _NewPostState extends State<NewPost> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 10),
-      height: 120,
+      padding: EdgeInsets.only(top: 0),
+      height: 90,
       width: MediaQuery.of(context).size.width,
       color: Colors.white,
       child: Column(children: [
@@ -83,6 +82,11 @@ class _NewPostState extends State<NewPost> {
               child: TextField(
                 decoration: InputDecoration(
                     hintText: "Bạn đang nghĩ gì ?", border: InputBorder.none),
+                onTap: () {
+                  runApp(GetMaterialApp(
+                    home: CreatePost(),
+                  ));
+                },
               ),
             )
           ],
@@ -93,10 +97,10 @@ class _NewPostState extends State<NewPost> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              margin: EdgeInsets.only(top: 10),
+              margin: EdgeInsets.only(top: 0),
               alignment: Alignment.center,
               // color: Colors.black,
-              height: 50,
+              height: 40,
               width: MediaQuery.of(context).size.width * 0.33,
               child: Container(
                 width: 100,
@@ -119,10 +123,10 @@ class _NewPostState extends State<NewPost> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 10),
+              margin: EdgeInsets.only(top: 0),
               alignment: Alignment.center,
               // color: Colors.black,
-              height: 50,
+              height: 40,
               width: MediaQuery.of(context).size.width * 0.33,
               child: Container(
                 width: 100,
@@ -145,10 +149,10 @@ class _NewPostState extends State<NewPost> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 10),
+              margin: EdgeInsets.only(top: 0),
               alignment: Alignment.center,
               // color: Colors.black,
-              height: 50,
+              height: 40,
               width: MediaQuery.of(context).size.width * 0.33,
               child: Container(
                 width: 100,

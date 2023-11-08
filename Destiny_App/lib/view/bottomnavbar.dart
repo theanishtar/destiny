@@ -32,7 +32,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
       backgroundColor: Colors.red,
       bottomNavigationBar: CurvedNavigationBar(
         index: _selectedIndex,
-        buttonBackgroundColor: Colors.grey,
+        // buttonBackgroundColor: Colors.grey,
         backgroundColor: Colors.transparent,
         items: const [
           Icon(

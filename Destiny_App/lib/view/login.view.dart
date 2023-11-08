@@ -11,6 +11,7 @@ import 'package:login_signup/view/bottomnavbar.dart';
 import 'package:login_signup/view/signup.view.dart';
 import 'package:login_signup/view/widgets/socialLogin.dart';
 import 'package:login_signup/view/widgets/text.form.global.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -28,14 +29,23 @@ class _LoginViewState extends State<LoginView> {
 
   final _formfield = GlobalKey<FormState>();
 
+  bool isButtonPressed = false;
+
   final storage = const FlutterSecureStorage();
+  void showAlert() {
+    QuickAlert.show(
+        context: context,
+        title: "Cảnh báo",
+        text: "Bạn không có quyền truy cập !",
+        type: QuickAlertType.error);
+  }
 
-  bool isHovered = false;
-
-  void changeBC() {
-    setState(() {
-      isHovered = !isHovered;
-    });
+  void showAlertError() {
+    QuickAlert.show(
+        context: context,
+        title: "Thất bại",
+        text: "Vui lòng kiểm tra mật khẩu hoạc email !",
+        type: QuickAlertType.error);
   }
 
   void login(String email, password) async {
@@ -50,18 +60,25 @@ class _LoginViewState extends State<LoginView> {
               },
               body: jsonEncode(data));
       if (response.statusCode == 200) {
-        List<dynamic> data = json.decode('[' + response.body + ']');
-        for (var item in data) {
-          String token = item['token'] ?? "N/A";
+        Map<String, dynamic> data =
+            jsonDecode(Utf8Decoder().convert(response.bodyBytes));
+
+        if (data['roles'][0]['authority'] == "ROLE_USER") {
+          String token = data['token'];
+          int id = data['id'];
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString('token', token);
+          await prefs.setInt('id', id);
+          print(data);
+          print(data['roles'][0]['authority']);
+          runApp(GetMaterialApp(
+            home: BottomNavBar(),
+          ));
+        } else {
+          showAlert();
         }
-
-        runApp(GetMaterialApp(
-          home: BottomNavBar(),
-        ));
       } else {
-        // Handle API call errors
+        showAlertError();
         print('API call failed with status code: ${response.statusCode}');
       }
     } catch (e) {
@@ -69,8 +86,15 @@ class _LoginViewState extends State<LoginView> {
     }
   }
 
+  void _handleButtonPress() {
+    setState(() {
+      isButtonPressed = !isButtonPressed;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    Color buttonColor = isButtonPressed ? Colors.blue : Colors.green;
     return Scaffold(
       body: SingleChildScrollView(
         child: SafeArea(
@@ -171,8 +195,7 @@ class _LoginViewState extends State<LoginView> {
                   const SizedBox(height: 20),
                   InkWell(
                     onTap: () {
-                      changeBC();
-                      print(isHovered);
+                      _handleButtonPress();
                       if (_formfield.currentState!.validate()) {
                         login(emailController.text.toString(),
                             passwordController.text.toString());
@@ -182,7 +205,7 @@ class _LoginViewState extends State<LoginView> {
                       alignment: Alignment.center,
                       height: 55,
                       decoration: BoxDecoration(
-                        color: isHovered ? Colors.red : Colors.blue,
+                        color: isButtonPressed ? Colors.red : Colors.black,
                         borderRadius: BorderRadius.circular(6),
                         boxShadow: [
                           BoxShadow(
