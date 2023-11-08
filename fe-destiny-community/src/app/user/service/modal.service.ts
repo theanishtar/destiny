@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable,EventEmitter } from '@angular/core';
 import { BehaviorSubject } from 'rxjs'; //Theo dõi trạng thái của modal
 import { environment } from '../../../environments/environment'
 import { tap, catchError } from 'rxjs/operators';
@@ -13,6 +13,8 @@ import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from './message.service';
 import { NotifyModel } from '../Model/NotifyModel';
 import { ProfileService } from './profile.service';
+import { FollowsService } from './follows.service';
+
 import '../../../assets/toast/main.js';
 declare var toast: any;
 
@@ -42,16 +44,30 @@ export class ModalService {
   checkNotify: boolean = false;
   socket?: WebSocket;
   stompClient?: Stomp.Client;
+  repCmtId: any = 0;
+  isLoading: boolean = true;
+  count: number = 1; //gia tri key
+  checkHideSeeMore = new Map<string, Boolean>();
+  currentPage: number = 1;
+  
+  // listSuggested: any[] = [];
+  // listTop5User: any[] = [];
+  // listTop5Post: any[] = [];
+  // check: boolean = true;
+  // checkData1: boolean = false;
+  // checkData2: boolean = false;
+  // checkData3: boolean = false;
+  // checkData4: boolean = false;
+  dataUpdatedPost = new EventEmitter<void>();
 
   constructor(
     private http: HttpClient,
     private postService: PostService,
     private cookieService: CookieService,
     private messageService: MessageService,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private followsService: FollowsService
   ) {
-    // this.listNotify = modalService.listNotify;
-
   }
 
 
@@ -82,11 +98,10 @@ export class ModalService {
   }
 
   /* ============Add comment============= */
-  isLoading: boolean = true;
   removeNotify() {
     this.checkNotify = false
   }
-  count: number = 1; //gia tri key
+  
   connectToComment(userId) {
     localStorage.setItem("chatUserId", userId);
     this.socket = new SockJS(environment.baseUrl + 'notify');
@@ -126,7 +141,9 @@ export class ModalService {
         let id = JSON.parse(response.body);
         this.callApiLoadCmt(id);
       });
-
+      this.stompClient?.subscribe("/topic/loaddata/suggest-post/"+ userId, (response) => {
+        this.updateDataPost();
+      });
       this.stompClient?.subscribe("/topic/loaddata/notification/" + userId, (response) => {
         let data = JSON.parse(response.body);
         for (let k of data) {
@@ -184,7 +201,7 @@ export class ModalService {
 
     });
   }
-  repCmtId: any = 0;
+  
   sendNotify(content, post_id, toUser, type, idCmt) {
     let toUserId = toUser;
     let avatar = this.cookieService.get("avatar");
@@ -216,6 +233,70 @@ export class ModalService {
     }
   }
 
+  sendNotifyFollow(idUser: any[]) {
+    let avatar = this.cookieService.get("avatar");
+    let fullname = this.cookieService.get("full_name");
+    let fromUserId = localStorage.getItem("chatUserId");
+    this.stompClient?.send("/app/notifyfollowregister", {}, JSON.stringify({
+      avatar: avatar,
+      fullname: fullname,
+      fromUserId: fromUserId,
+      content: ' ',
+      postId: 0,
+      replyId: 0,
+      time: 'Vừa xong',
+      type: 'FOLLOW',
+      follow_id: idUser
+    }));
+    
+  }
+  // Hàm cập nhật dữ liệu
+  updateDataPost() {
+    // Thực hiện cập nhật dữ liệu ở đây.
+    // Sau khi cập nhật xong, thông báo sự kiện.
+    this.dataUpdatedPost.emit();
+  }
+
+  // async loadDataSuggest() {
+  //   if (!Array.isArray(this.listSuggested) || this.listSuggested.length === 0) {
+  //     // Gọi API chỉ khi dữ liệu chưa tồn tại.
+  //     await new Promise<void>((resolve) => {
+  //       this.followsService.loadDataSuggest().subscribe(() => {
+  //         this.listSuggested = this.followsService.getDataSuggested();
+  //         this.check = false;
+  //         resolve();
+  //       });
+  //     });
+  //   } else {
+  //     // Sử dụng dữ liệu đã lưu trữ.
+  //     this.listSuggested = this.followsService.getDataSuggested();
+  //     this.check = false;
+  //     if (Array.isArray(this.listSuggested) && this.listSuggested.length === 0) {
+  //       this.checkData1 = true;
+  //       this.check = false;
+  //     }
+  //   }
+  // }
+
+  // // currentPage: number = 1;
+  // async loadPosts() {
+  //   let body_news = document.getElementById('body-news')!;
+  //   body_news.style.display = 'none';
+  //   try {
+  //     this.listTop5User = await this.postService.loadTop5User();
+  //     this.listTop5Post = await this.postService.loadTop5Post();
+  //     await this.loadDataSuggest();
+  //     this.postService.loadPostNewsFeed(this.currentPage).subscribe((data: any) => {
+  //       this.listPosts = data; // Lưu dữ liệu ban đầu vào mảng
+  //       setTimeout(() => {
+  //         this.isLoading = false;
+  //         body_news.style.display = 'grid';
+  //       }, 1000);
+  //     });
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //   }
+  // }
   /* ============Reply Comment============= */
   loadReply(data: any): Observable<any> {
     return this.http.post(this.loadDataReplyUrl, data).pipe(
@@ -224,7 +305,7 @@ export class ModalService {
       }),
     );
   }
-  checkHideSeeMore = new Map<string, Boolean>();
+  
   loadDataReply(idPost, cmtId) {
     this.isOpenComment.next(true);
     var data = {
@@ -280,12 +361,13 @@ export class ModalService {
       }
     })
   }
+
   getContent(fullname: any, content: any) {
     return content.substring(fullname.length, content.length).trim();
   }
 
   /* ============Images============= */
-  currentPage: number = 1;
+  
   async openModalSeeMoreImg(idPost) {
     this.isOpenSeeMoreImg.next(true);
     // this.listPosts = await this.postService.loadPostNewsFeed();
@@ -319,8 +401,6 @@ export class ModalService {
     });
   }
 
-
-
   /* ============Template============= */
   private isOpenCreatePost = new BehaviorSubject<boolean>(false);
   isOpenCreatePost$ = this.isOpenCreatePost.asObservable();
@@ -347,6 +427,16 @@ export class ModalService {
     this.isOpenSeeMoreImg.next(false);
   }
 
+  private isOpenSuggest = new BehaviorSubject<boolean>(false);
+  isOpenSuggest$ = this.isOpenSuggest.asObservable();
+
+  openModalSuggest() {
+    this.isOpenSuggest.next(true);
+  }
+
+  closeModalSuggest() {
+    this.isOpenSuggest.next(false);
+  }
 
   /* ============Getter - Setter============= */
   getDataCmt(): any {

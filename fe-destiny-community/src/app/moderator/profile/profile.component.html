@@ -1,13 +1,14 @@
 <div class="body-admin">
 
     <app-sidebar-moderator></app-sidebar-moderator>
-    <div class="content">
+    
+    <div>
       <!-- Navbar -->
       <app-navbar-moderator></app-navbar-moderator>
   
       <!-- End of Navbar -->
-  
-      <main>
+      <app-loading *ngIf="isLoading"></app-loading>
+      <main class="content" *ngIf="!isLoading">
         <div class="pb-5">
           <label class="d-block">
             <input type="file" style="display: none;">

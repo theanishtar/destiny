@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient,HttpParams} from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import '../../../assets/toast/main.js';
@@ -16,6 +16,7 @@ export class PostService {
   private loadDataTop5User = environment.baseUrl + 'v1/user/getTop5User';
 
   private loadDataPosts = environment.baseUrl + 'v1/user/load/post';
+  private reloadDataPosts = environment.baseUrl + 'v1/user/reload/post';
   private createPostUrl = environment.baseUrl + 'v1/user/upload/post';
   private loadDataUpdatePostUrl = environment.baseUrl + 'v1/user/load/data/post/update';
   private updatePostUrl = environment.baseUrl + 'v1/user/data/update/post';
@@ -57,15 +58,6 @@ export class PostService {
   }
 
   /* ============Posts newsfeed============= */
-  // async loadPostNewsFeed(): Promise<any[]> {
-  //   try {
-  //     const response = await this.http.get<any>(this.loadDataPosts).toPromise();
-  //     this.setDataPostNf(response);
-  //     return response;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
   loadPostNewsFeed(data: any): Observable<any> {
     return this.http.post(this.loadDataPosts, data).pipe(
       tap((response) => {
@@ -73,6 +65,21 @@ export class PostService {
       }),
     )
   }
+  async reloadPostNewsFeed(post_id: number, page: number): Promise<any> {
+    const params = new HttpParams()
+      .set('post_id', post_id.toString()) // Chuyển số nguyên thành chuỗi
+      .set('page', page.toString());
+  
+    try {
+      let response = await this.http.get<any>(this.reloadDataPosts, { params }).toPromise();
+      // this.setDataPostNf(response);
+      return response;
+    } catch (error) {
+      console.log("error: " + error);
+      throw error;
+    }
+  }
+  
   /* ============upload post============= */
   uploadPost(data: any): Observable<any> {
     return this.http.post(this.createPostUrl, data).pipe(

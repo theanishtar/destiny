@@ -17,11 +17,8 @@ public interface MessagesDAO extends JpaRepository<Messages, Integer> {
 	@Query(value = "SELECT COUNT(messages.id) FROM messages WHERE send_status =false and  sender_id =:id", nativeQuery = true)
 	public int countMessageUnread(int id);
 
-	@Query(value = "SELECT messages.id, messages.content, messages.send_Time, users.user_id,users.avatar\r\n"
-			+ "FROM messages\r\n" + "INNER JOIN users ON messages.sender_id = users.user_id\r\n"
-			+ "INNER JOIN chats ON messages.chat_id = chats.id\r\n"
-			+ "WHERE chats.name_chats =:chatName order by messages.id ", nativeQuery = true)
-	public List<Object[]> findListMessage(String chatName);
+	@Query(value = "select *from get_messages(:from_user,:to_user)", nativeQuery = true)
+	public List<Object[]> findListMessage(int from_user, int to_user);
 
 	@Modifying
 	@Query(value = "update  messages  set send_status =:st where send_status = false and  sender_id =:senden_id and  chat_id =:chat_id ", nativeQuery = true)

@@ -19,15 +19,17 @@ public class NotificationModel {
 	String time;
 	MessageType type;
 	boolean following_status;
+	int[] follow_id;
 
 	public enum MessageType {
-		COMMENT,REPCOMMENT, INTERESTED, FOLLOW, SHARE, JOIN
+		COMMENT, REPCOMMENT, INTERESTED, FOLLOW, SHARE, JOIN
 	}
 
 	@Override
 	public String toString() {
 		return "NotificationModel[{" + "avatar='" + avatar + '\'' + ", fullname='" + fullname + '\'' + ", fromUserId='"
 				+ fromUserId + '\'' + ",content='" + content + '\'' + ", postId='" + postId + '\'' + ",replyId='"
-				+ replyId + '\'' + ", time='" + time + '\'' + ",type='" + type + '\''+ ",following_status='" + following_status + '\'' + "}]";
+				+ replyId + '\'' + ", time='" + time + '\'' + ",type='" + type + '\'' + ",following_status='"
+				+ following_status + '\'' + ",follow_id='" + follow_id + '\'' + "}]";
 	}
 }

@@ -36,6 +36,4 @@ public class Chats {
 	@OneToMany(mappedBy = "chats")
 	List<Messages> messages;
 	boolean isfriend = true;
-	boolean hide = false;
-	boolean status = true;
 }

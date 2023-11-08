@@ -1,7 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams} from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, Observable, of } from 'rxjs';
 import '../../../assets/toast/main.js';
@@ -11,7 +11,6 @@ import Stomp from 'stompjs';
 import * as Handlebars from 'handlebars';
 import { UserModel } from '../Model/UserModel.js';
 import { environment } from '../../../environments/environment';
-
 @Injectable({
   providedIn: 'root',
 })
@@ -19,6 +18,7 @@ export class MessageService {
   private loadDataChat = environment.baseUrl + 'v1/user/registrationchat';
   private loadDataMess = environment.baseUrl + 'v1/user/chat/load/messages';
   private ChatWithStrangersUrl = environment.baseUrl + 'v1/user/inbox';
+  private blockUrl = environment.baseUrl + 'v1/user/block/chat';
 
   private sender: any[] = [];
   private listFriends: any[] = [];
@@ -110,6 +110,19 @@ export class MessageService {
     });
   }
 
+  checkUserBlock: boolean = false;
+  blockApi(data: number, status: boolean) {
+    const params = new HttpParams()
+      .set('to', data) // Chuyển số nguyên thành chuỗi
+      .set('status', status)
+    return this.http.get<any>(this.blockUrl , { params }).pipe(
+      tap((res) => {
+        this.listMess = JSON.parse(JSON.stringify(res));
+        this.setListMess(this.listMess);
+      })
+    );
+  }
+
   /* ============Connect socket============= */
   connectToChat(userId) {
     // localStorage.setItem("chatUserId", userId);
@@ -171,9 +184,7 @@ export class MessageService {
                 messageUnRead: v.messageUnRead,
                 lastMessage: v.lastMessage,
                 online: this.customTime(v.online, 0),
-                isFriend: v.friend,
-                hide: v.hide,
-                status: v.status,
+                isFriend: v.friend
               };
               // Thêm người dùng vào danh sách của key trong map
               this.newMapUser.set(v.user_id, user);

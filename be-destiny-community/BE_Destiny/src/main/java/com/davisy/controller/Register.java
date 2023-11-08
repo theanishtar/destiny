@@ -2,6 +2,7 @@ package com.davisy.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,9 @@ public class Register {
 
 	@Autowired
 	private RegisterService registerService;
+	
+	@Autowired
+	SimpMessagingTemplate simpMessagingTemplate;
 
 	@Autowired
 	UserServiceImpl userService;
@@ -32,21 +36,25 @@ public class Register {
 		if (u == null) {
 			return ResponseEntity.status(202).body(null);
 		}
+		u.setCode(codeMail);
+		simpMessagingTemplate.convertAndSend("/topic/autologin/" + u.getEmail(), u);
 		return ResponseEntity.status(200).body(u);
 	}
 
 	@PostMapping("v1/oauth/register")
 	public ResponseEntity<String> toRegister(@RequestBody RegisterResponse registerResponse) {
 		// kiểm tra tính hợp lệ
-		System.out.println(registerResponse.getEmail());
 		User u = userService.findByEmail(registerResponse.getEmail());
 		if (u == null) {
 			registerService.createAccountTempWithEmail(registerResponse.getEmail(), registerResponse.getName(),
 					registerResponse.getPassword());
+//			simpMessagingTemplate.convertAndSend("/topic/autologin/" + registerResponse.getEmail(), registerResponse.getEmail());
 			return ResponseEntity.status(200).body("Check email of: "+registerResponse.getEmail());
 		}
+//		else {
+//			simpMessagingTemplate.convertAndSend("/topic/status-autologin/" + registerResponse.getEmail());
+//		}
 
 		return ResponseEntity.status(202).body(registerResponse.getEmail()+" already exists from DB");
-
 	}
 }

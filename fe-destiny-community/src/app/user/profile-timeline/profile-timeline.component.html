@@ -136,38 +136,21 @@
     <!-- /GRID COLUMN -->
 
     <!-- GRID COLUMN -->
-    <div class="grid-column" id="scrollableDiv">
+    <div class="grid-column no-post" *ngIf="profileService.listPostPr?.length === 0">Bạn chưa có bài đăng nào!</div>
+    <div class="grid-column" *ngIf="profileService.listPostPr?.length !== 0" id="scrollableDiv">
       <!-- SIMPLE TAB ITEMS -->
       <div class="simple-tab-items" #elementToScroll>
-        <!-- FORM -->
-        <form class="form">
-          <!-- FORM SELECT -->
-          <div class="form-select">
-            <select
-              id="newsfeed-filter-category"
-              name="newsfeed_filter_category"
-            >
-              <option value="0">Bài đăng</option>
-            </select>
-            <!-- FORM SELECT ICON -->
-            <svg class="form-select-icon icon-small-arrow">
-              <use xlink:href="#svg-small-arrow"></use>
-            </svg>
-            <!-- /FORM SELECT ICON -->
-          </div>
-          <!-- /FORM SELECT -->
-        </form>
-        <!-- /FORM -->
-
         <!-- SIMPLE TAB ITEM -->
         <p class="simple-tab-item active">Bài đăng</p>
         <!-- /SIMPLE TAB ITEM -->
-      </div>
+        
+       </div>
+      
+     
       <!-- /SIMPLE TAB ITEMS -->
 
       <!-- WIDGET BOX -->
       <!-- <div *ngFor="let p of profileService.listPostPr"> -->
-     
       <!-- /WIDGET BOX -->
       <div class="widget-box no-padding" *ngFor="let p of profileService.listPostPr">
         <!-- WIDGET BOX SETTINGS -->

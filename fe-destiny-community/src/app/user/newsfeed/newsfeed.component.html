@@ -268,7 +268,7 @@
 
       <!-- /WIDGET BOX -->
       <!-- WIDGET BOX -->
-      <div *ngFor="let p of listPosts">
+      <div *ngFor="let p of listPosts;let i =index">
         <div class="widget-box no-padding">
           <!-- WIDGET BOX SETTINGS -->
           <div class="widget-box-settings">
@@ -918,7 +918,7 @@
                 class="post-option reaction-options-dropdown-trigger"
                 id="interest-{{p.post_id}}"
                 [ngClass]="{active: checkInterested(p.post_id, p.userInterested)}"
-                (click)="interestedPost(p.post_id, p.user_id)"
+                (click)="interestedPost(p.post_id, p.user_id,i)"
               >
                 <p class="post-option-text">Quan tâm</p>
               </div>
@@ -1107,3 +1107,4 @@
 <app-create-post></app-create-post>
 <app-comment></app-comment>
 <app-images></app-images>
+<app-suggest-after-register></app-suggest-after-register>

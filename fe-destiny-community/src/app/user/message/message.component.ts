@@ -47,20 +47,24 @@ export class MessageComponent implements OnInit {
   usersTemplateHTML: string;
   count: number = 0;
   isLoading = true;
-  data: UserModel[];
+  // data: UserModel[];
+  data: any;
+  mapTemp: any;
   ngOnInit() {
     this.messageService.isOriginal = true;
     this.isLoading = this.messageService.isLoading;
 
-    if (this.messageService.mapUser != null) {
+    if (this.messageService.mapUser != null || this.mapTemp != null) {
       this.mapUser = this.messageService.mapUser;
       // this.messageService.isLoading = false;
       this.data = Array.from(this.messageService.mapUser.values());
+      this.mapTemp = this.messageService.mapUser;
     }
     this.messageService.dataUpdated.subscribe(() => {
       // Đây là nơi bạn đặt mã để xử lý khi dữ liệu đã được cập nhật.
       // Chuyển dữ liệu từ Map thành một mảng.
       this.data = Array.from(this.messageService.mapUser.values());
+      this.mapTemp = this.messageService.mapUser;
     });
     if (this.messageService.checkSelected != '') {
       this.selectedUser(this.messageService.checkSelected);
@@ -85,29 +89,59 @@ export class MessageComponent implements OnInit {
 
 
   /* ============Message============= */
+  checkLoadingdata: boolean = true;
+  checkBlock: boolean = false;
+  block() {
+    let id = parseInt(this.id)
+    this.messageService.blockApi(id, false).subscribe(() => {
+
+      this.selectedUser(this.id);
+    })
+  }
+
+  unBlock() {
+    let id = parseInt(this.id)
+    this.messageService.blockApi(id, true).subscribe(() => {
+
+      this.selectedUser(this.id);
+    })
+  }
+
   selectedUser(userid) {
+
+    this.checkBlock = false;
+    this.messageService.checkUserBlock = false;
+    let chatContainer = document.getElementById("chatContainer") as HTMLElement;
+    if (chatContainer) {
+      chatContainer.style.opacity = '0';
+      this.checkLoadingdata = true;
+    }
     if (this.id != '') {
       this.renderer.removeClass(this.el.nativeElement.querySelector('#chat-widget-message-' + this.id), 'active');
     }
-    this.messageService.mapNotification.set(userid,false);
-    let mapEntries=Array.from(this.messageService.mapNotification.entries());
-    let hasTrueValue=mapEntries.some(([key,value])=>value===true);
-    if(!hasTrueValue){
-      this.messageService.notif_mess=false;
+    this.messageService.mapNotification.set(userid, false);
+    let mapEntries = Array.from(this.messageService.mapNotification.entries());
+    let hasTrueValue = mapEntries.some(([key, value]) => value === true);
+    if (!hasTrueValue) {
+      this.messageService.notif_mess = false;
     }
     this.messageService.selectedUser = userid;
     this.id = userid;
     this.messageService.isOriginal = false;
-    this.image = this.mapUser.get(this.id)?.avatar;
-    this.fullname = this.mapUser.get(this.id)?.fullname;
+    if (this.mapTemp) {
+      this.image = this.mapTemp.get(userid)?.avatar;
 
-    if (this.mapUser.get(this.id)?.type == 'LEAVE') {
-      this.isOnline = 'Offline';
-      this.checkIsOnline = false;
-    } else {
-      this.isOnline = 'Online';
-      this.checkIsOnline = true;
+      this.fullname = this.mapTemp.get(userid)?.fullname;
+
+      if (this.mapTemp.get(userid)?.type == 'LEAVE') {
+        this.isOnline = 'Offline';
+        this.checkIsOnline = false;
+      } else {
+        this.isOnline = 'Online';
+        this.checkIsOnline = true;
+      }
     }
+
     //Xử lý sự kiện khi click vào chat
     let element = this.el.nativeElement.querySelector('#chat-widget-message-' + userid); // Lấy phần tử dựa trên ID
     if (element) {
@@ -118,7 +152,7 @@ export class MessageComponent implements OnInit {
 
     this.messageService.loadMessage(this.id).subscribe((res) => {
       if (this.count > 0) {
-        document.querySelectorAll(".chat-widget-speaker, .time-date, .br").forEach((e) => {
+        document.querySelectorAll(".chat-widget-speaker, .time-date, .br, .notify-block").forEach((e) => {
           e.remove();
         });
         this.count = 0;
@@ -162,6 +196,10 @@ export class MessageComponent implements OnInit {
               + this.getCustomTime(m[2]) + '</p>' +
               '</div>	'
             );
+            if (m[5] == false) {
+              this.messageService.checkUserBlock = true;
+            }
+
           } else {
             this.$chatHistory.append(
               '<div class="chat-widget-speaker right" style=" padding-left: 64px; align-items: flex-end; display: flex; flex-flow: column; position: relative;">' +
@@ -173,25 +211,33 @@ export class MessageComponent implements OnInit {
               '</p>' +
               '</div>'
             );
+            if (m[5] == false) {
+              this.checkBlock = true;
+            }
           }
         }
+        if (this.messageService.checkUserBlock === true) {
+          this.$chatHistory.append(
+            '<div>Người này đã chặn bạn!</div>'
+          )
+        }
+
+        // this.checkLoadingdata = false;
       }
-
-      // if (this.messageService.newMessage.get(userid)?.message != undefined) {
-      //   let message = this.messageService.newMessage.get(userid)?.message;
-      //   let img = this.messageService.newMessage.get(userid)?.avatar;
-      //   this.messageService.render(message, userid, img);
-      //   this.messageService.newMessage.clear();
-      // };
-
+      this.checkLoadingdata = false;
+      if (chatContainer && !this.checkLoadingdata) {
+        chatContainer.style.opacity = '1';
+      }
       this.scrollToBottomMessage();
     });
+    this.$textarea = $('#chat-widget-message-text-2');
+    this.$textarea.val('');
   }
 
 
   addMessage() {
     this.$textarea = $('#chat-widget-message-text-2');
-    if (this.$textarea.val() != null) {
+    if (this.$textarea.val().trim() !== '') {
       this.sendMessage(this.$textarea.val());
     }
   }
@@ -209,19 +255,26 @@ export class MessageComponent implements OnInit {
     this.$textarea = $('#chat-widget-message-text-2');
 
     if (message.trim() !== '') {
-      this.messageService.sendMsg(username, message, avatar);
-      this.scrollToBottom();
+      if (this.messageService.checkUserBlock === false) {
+        this.messageService.sendMsg(username, message, avatar);
+        this.scrollToBottom();
 
-      this.$chatHistory.append(
-        '<div class="chat-widget-speaker right" style=" padding-left: 64px; align-items: flex-end; display: flex; flex-flow: column; position: relative;">' +
-        ' <p class="chat-widget-speaker-message" style="border-top-right-radius: 0; background-color: #615dfa !important; font-family: Helvetica, Arial, sans-serif !important; margin-bottom: 0 !important; color: #fff;display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600;line-height: 1.1428571429em;width: auto; max-width: 250px; word-wrap: break-word; white-space: normal;">'
-        + message +
-        '</p>' +
-        '<p class="chat-widget-speaker-timestamp" style="margin-top: 12px; margin-bottom: 0 !important; color: #adafca;font-size: 0.75rem;font-weight: 500; font-family: Helvetica, Arial, sans-serif !important;line-height: 1em;">'
-        + this.getCurrentTime() +
-        '</p>' +
-        '</div>'
-      );
+        this.$chatHistory.append(
+          '<div class="chat-widget-speaker right" style=" padding-left: 64px; align-items: flex-end; display: flex; flex-flow: column; position: relative;">' +
+          ' <p class="chat-widget-speaker-message" style="border-top-right-radius: 0; background-color: #615dfa !important; font-family: Helvetica, Arial, sans-serif !important; margin-bottom: 0 !important; color: #fff;display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600;line-height: 1.1428571429em;width: auto; max-width: 250px; word-wrap: break-word; white-space: normal;">'
+          + message +
+          '</p>' +
+          '<p class="chat-widget-speaker-timestamp" style="margin-top: 12px; margin-bottom: 0 !important; color: #adafca;font-size: 0.75rem;font-weight: 500; font-family: Helvetica, Arial, sans-serif !important;line-height: 1em;">'
+          + this.getCurrentTime() +
+          '</p>' +
+          '</div>'
+        );
+      } else {
+        this.$chatHistory.append(
+          '<div class="notify-block">Bạn đã bị chặn!</div>'
+        );
+      }
+      message = '';
       this.scrollToBottom();
       this.$textarea.val('');
     }
@@ -256,11 +309,11 @@ export class MessageComponent implements OnInit {
     }
   }
   showDate(date: string) {
-    let d = '<div class="time-date" style="background: #c1c2c4;color: white;width: fit-content;padding: 4px 5px;border-radius: 8px;position: absolute;z-index: 1;right: 40%;">' +
-      '<div class="date-send" style="text-align: center;font-size: 12px;">' +
+    let d = '<div class="time-date" style="color: black;padding: 16px 20px;text-align: center;">' +
+      '<div class="date-send" style="text-align: center;font-size: 12px; font-family: Helvetica, Arial, sans-serif;">' +
       this.checkDate(date) +
       '</div>' +
-      '</div> <br class="br">';
+      '</div>';
     return d;
   }
   checkDate(date: string) {

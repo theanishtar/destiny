@@ -81,9 +81,6 @@ public class NotificationController {
 	@MessageMapping("/notify/{to}")
 	public void sendNotification(@DestinationVariable int to, NotificationModel model) {
 		try {
-			System.out.println("model: " + model);
-			System.out.println("to: " + to);
-//			simpMessagingTemplate.convertAndSend("/topic/notification/" + to, model);
 			User user = userService.findById(model.getFromUserId());
 			Post post = new Post();
 			if (model.getPostId() > 0)
@@ -119,10 +116,12 @@ public class NotificationController {
 				postService.create(post2);
 			}
 			if (model.getType().toString().equalsIgnoreCase("INTERESTED")) {
-				Interested interested = new Interested();
-				interested.setUser(user);
-				interested.setPost(post);
-				interestedService.create(interested);
+				if (interestedService.findInterested(user.getUser_id(), post.getPost_id()) == null) {
+					Interested interested = new Interested();
+					interested.setUser(user);
+					interested.setPost(post);
+					interestedService.create(interested);
+				}
 			}
 			if (model.getType().toString().equalsIgnoreCase("FOLLOW")) {
 				User toUser = userService.findById(to);
@@ -154,6 +153,29 @@ public class NotificationController {
 		} catch (Exception e) {
 			System.out.println("error sendNotification: " + e);
 		}
+	}
+
+	@Async
+	@MessageMapping("/notifyfollowregister")
+	public void sendNotificationFollow(NotificationModel model) {
+		System.out.println("array: " + model.getFollow_id().length);
+		System.out.println("array1: " + model.getFollow_id()[1]);
+		User user = userService.findById(model.getFromUserId());
+		int[] arr = model.getFollow_id();
+		for (int i = 0; i < arr.length; i++) {
+			Follower follower = new Follower();
+			Follower.Pk pk = new Follower.Pk();
+			pk.setFollower_id(arr[i]);
+			pk.setUser_id(user.getUser_id());
+			pk.setDate_follow(GregorianCalendar.getInstance());
+			follower.setPk(pk);
+			followService.create(follower);
+			simpMessagingTemplate.convertAndSend("/topic/notification/" + arr[i],
+					model(messagesService.loadNotification(arr[i])));
+		}
+		System.out.println("model.getFromUserId(): " + model.getFromUserId());
+		simpMessagingTemplate.convertAndSend("/topic/loaddata/suggest-post/"+model.getFromUserId(), "success");
+		
 	}
 
 	@MessageMapping("/load/notification/{to}")

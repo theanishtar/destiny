@@ -321,7 +321,7 @@ span.remove-block:hover{
 i.fa-solid.fa-circle-exclamation {
   position: absolute;
   left: 53.5%;
-    top: 81%;
+    top: 79.2%;
   color: #5B76FB;
 }
 
@@ -372,4 +372,20 @@ i.fa-solid.fa-circle-exclamation {
 /* Handle on hover */
 .chat-widget-conversation::-webkit-scrollbar-thumb:hover {
   background: #888; 
+}
+
+
+@media screen and (min-width: 1286px) {
+  .scrollToBottomButton{
+    position: fixed;
+    right: 3% !important;
+    bottom: 19% !important;
+  }
+}
+
+.loader-bars{
+  margin-top: 1.5rem;
+}
+.chat-widget-conversation {
+  padding: 5px 28px 35px 28px !important;
 }

@@ -166,4 +166,8 @@ public class PostServiceImpl implements PostService {
 	public List<Object[]> getPostProfileShare(int user_id, int page) {
 		return postDao.getPostProfileShare(user_id, page);
 	}
+	@Override
+	public Object[] findByIdPost(int id, int current_page, int post_id) {
+		return postDao.findByIdPost(id, current_page, post_id);
+	}
 }

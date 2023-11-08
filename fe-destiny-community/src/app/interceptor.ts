@@ -27,6 +27,7 @@ export class TokenInterceptor implements HttpInterceptor {
 		if (request.url.includes('/v1/oauth/login/oauh2')) {
 			return next.handle(request);
 		}
+		
 		// v1/user/profile/update
 		// if (request.url.includes('/v1/user/profile/update')) {
 		// 	return next.handle(request);

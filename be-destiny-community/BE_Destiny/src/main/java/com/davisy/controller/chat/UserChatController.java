@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.davisy.config.JwtTokenUtil;
@@ -51,7 +52,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin("*")
 @Component
 public class UserChatController {
 	@Autowired
@@ -134,8 +135,6 @@ public class UserChatController {
 						model.setLastMessage(ob[7] + "");
 						model.setOnline(ob[8] + "");
 						model.setFriend(Boolean.valueOf(ob[9].toString()));
-						model.setHide(Boolean.valueOf(ob[10].toString()));
-						model.setStatus(Boolean.valueOf(ob[11].toString()));
 						listModel.add(model);
 
 					}
@@ -177,7 +176,7 @@ public class UserChatController {
 			User toUser = userService.findById(id);
 			Chats chats = chatsService.findChatNames(user.getUsername(), toUser.getUsername());
 			if (chats != null)
-				messagesService.updateStatusMessages(true,id, chats.getId());
+				messagesService.updateStatusMessages(true, id, chats.getId());
 		}
 		async(user, true);
 		return UserChatStorage.getInstance().getUsers();
@@ -187,6 +186,20 @@ public class UserChatController {
 	@SendTo("/topic/public")
 	public HashMap<Integer, List<UserModel>> fetchAll() {
 		return UserChatStorage.getInstance().getUsers();
+	}
+
+	@GetMapping("/v1/user/block/chat")
+	public ResponseEntity<Void> loadMessages(HttpServletRequest request, @RequestParam("to") int to, @RequestParam("status") boolean statsus) {
+		try {
+			String email = jwtTokenUtil.getEmailFromHeader(request);
+			User user = userService.findByEmail(email);
+			int chat_id = chatParticipantsService.chat_id(user.getUser_id(), to);
+			chatParticipantsService.block(statsus,chat_id, user.getUser_id());
+			return ResponseEntity.ok().build();
+		} catch (Exception e) {
+			System.out.println("Error loadMessages in MessagesController: " + e);
+			return ResponseEntity.badRequest().build();
+		}
 	}
 
 	@PostMapping("/v1/user/inbox")

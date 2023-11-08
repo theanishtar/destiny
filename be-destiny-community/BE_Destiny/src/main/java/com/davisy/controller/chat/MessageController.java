@@ -73,7 +73,7 @@ public class MessageController {
 			simpMessagingTemplate.convertAndSend("/topic/messages/" + to, message);
 
 		}
-		simpMessagingTemplate.convertAndSend("/topic/statusmessages/" + message.getFromLogin(),true);
+		simpMessagingTemplate.convertAndSend("/topic/statusmessages/" + message.getFromLogin(), true);
 	}
 
 	@PostMapping("/v1/user/chat/load/messages")
@@ -81,18 +81,31 @@ public class MessageController {
 		try {
 			String email = jwtTokenUtil.getEmailFromHeader(request);
 			User user = userService.findByEmail(email);
-			User toUser = userService.findById(to);
-			Chats chats = chatsService.findChatNames(user.getUsername(), toUser.getUsername());
-			if (chats != null) {
-				messagesService.updateStatusMessages(true, Integer.valueOf(to), chats.getId());
-				List<Object[]> list = messagesService.findListMessage(chats.getName_chats());
-				return ResponseEntity.ok().body(list);
-			}
-			return ResponseEntity.ok().body(null);
+			List<Object[]> list = messagesService.findListMessage(user.getUser_id(),to);
+			return ResponseEntity.ok().body(list);
 		} catch (Exception e) {
 			System.out.println("Error loadMessages in MessagesController: " + e);
 			return ResponseEntity.badRequest().build();
 		}
 	}
+
+//	@PostMapping("/v1/user/chat/load/messages")
+//	public ResponseEntity<List<Object[]>> loadMessages(HttpServletRequest request, @RequestBody int to) {
+//		try {
+//			String email = jwtTokenUtil.getEmailFromHeader(request);
+//			User user = userService.findByEmail(email);
+//			User toUser = userService.findById(to);
+//			Chats chats = chatsService.findChatNames(user.getUsername(), toUser.getUsername());
+//			if (chats != null) {
+//				messagesService.updateStatusMessages(true, Integer.valueOf(to), chats.getId());
+//				List<Object[]> list = messagesService.findListMessage(chats.getName_chats());
+//				return ResponseEntity.ok().body(list);
+//			}
+//			return ResponseEntity.ok().body(null);
+//		} catch (Exception e) {
+//			System.out.println("Error loadMessages in MessagesController: " + e);
+//			return ResponseEntity.badRequest().build();
+//		}
+//	}
 
 }

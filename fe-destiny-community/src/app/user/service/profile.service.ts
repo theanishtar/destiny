@@ -32,6 +32,8 @@ export class ProfileService {
   private getAllDistrictNameAPI = environment.baseUrl + 'v1/user/getAllDistrictName/';
   private getAllWardNameAPI = environment.baseUrl + 'v1/user/getAllWardName/';
 
+  private getCheckPotsApi = environment.baseUrl + 'v1/user/load/checkpost';
+
   public dataHeader: any[];
   public dataTimeLine: any[];
   public dataTimeLinePost: any[];
@@ -67,7 +69,6 @@ export class ProfileService {
       tap((response) => {
         this.dataTimeLine = response;
         this.setdataTimeLine(this.dataTimeLine);
-
       }),
     );
   }
@@ -89,7 +90,9 @@ export class ProfileService {
     })
     this.loadDataTimelinePost(data).subscribe((res: any) => {
       this.listPostPr = res; // Lưu dữ liệu ban đầu vào mảng
-      this.setCheckData(true) ;
+      this.setCheckData(true);
+      
+    
     });
     this.router.navigate(['profile']);
     // window.location.href = 'http://localhost:4200/profile';
@@ -405,6 +408,20 @@ export class ProfileService {
     );
   }
 
+  /* ============Contact============= */
+  loadCheckPost(data: any) {
+    return this.http.post<any>(this.getCheckPotsApi, data).pipe(
+      tap((response) => {
+        // if(response == undefined){
+         
+        // }
+        // else{
+        //   console.warn("reponse2: " + response);
+        // }
+
+      }),
+    );
+  }
 
   /* ============Getter - Setter============= */
   getdataTimeLine(): any[] {

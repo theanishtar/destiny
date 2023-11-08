@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.davisy.SpamRrequestCheck;
@@ -108,10 +109,54 @@ public class PostController {
 			String email = jwtTokenUtil.getEmailFromHeader(request);
 			User user = userService.findByEmail(email);
 			int id = user.getUser_id();
-			int provinceId = Integer.valueOf(user.getIdProvince());
 			List<Object[]> post = postService.findAllPost(id, page);
 			List<Object[]> postShare = postService.findAllPostShare(id, page);
 			return ResponseEntity.ok().body(postEntity(post, postShare));
+		} catch (Exception e) {
+			System.out.println("error loadPost: " + e);
+			return ResponseEntity.badRequest().build();
+		}
+	}
+	
+	@PostMapping("/v1/user/load/checkpost")
+	public ResponseEntity<String[]> checkPost(HttpServletRequest request,@RequestBody int page) {
+		try {
+			String email = jwtTokenUtil.getEmailFromHeader(request);
+			User user = userService.findByEmail(email);
+			int id = user.getUser_id();
+			List<Object[]> post = postService.findAllPost(id, page);
+			System.out.println("post: " + post.size());
+			if (post.size() == 0)
+				return ResponseEntity.ok().body(null);
+			return ResponseEntity.ok().body(new String[] {"success"});
+		} catch (Exception e) {
+			System.out.println("error loadPost: " + e);
+			return ResponseEntity.badRequest().build();
+		}
+	}
+	@GetMapping("/v1/user/reload/post")
+	public ResponseEntity<PostEntity> reloadPost(HttpServletRequest request,@RequestParam("post_id") int post_id,@RequestParam("page") int page) {
+		try {
+			String email = jwtTokenUtil.getEmailFromHeader(request);
+			User user = userService.findByEmail(email);
+			int id = user.getUser_id();
+			Object[] post = postService.findByIdPost(id, page,post_id);
+			List<Object[]> postShare = postService.findAllPostShare(id, page);
+			PostEntity entity = new PostEntity();
+			if (null != ((Object[])post[0])[2]) {
+				int idPostShare = Integer.valueOf(((Object[])post[0])[2].toString());
+				PostEntity profileTemp = new PostEntity();
+				for (Object[] ps : postShare) {
+					if (Integer.valueOf(ps[0].toString()) == idPostShare) {
+						profileTemp = postEntityProfile(ps, null, 1);
+						entity=postEntity(post, profileTemp, 0);
+						break;
+					}
+				}
+			} else {
+				entity=postEntity(post, null, 0);
+			}
+			return ResponseEntity.ok().body(entity);
 		} catch (Exception e) {
 			System.out.println("error: " + e);
 			return ResponseEntity.badRequest().build();
@@ -151,7 +196,6 @@ public class PostController {
 				postImages.setPost(post);
 				postImagesService.create(postImages);
 			}
-			int provinceId = Integer.valueOf(user.getIdProvince());
 			List<Object[]> postProfile = postService.findAllPost(id,1);
 			List<Object[]> postShare = postService.findAllPost(id, 1);
 			return ResponseEntity.ok().body(postEntity(postProfile, postShare));
@@ -301,40 +345,62 @@ public class PostController {
 
 	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-//	public PostEntity postEntityProfile(Object[] ob, PostEntity entityProfile, int check) {
-//		try {
-//			PostEntity profile = new PostEntity();
-//			profile.setPost_id(Integer.valueOf(ob[0].toString()));
-//			profile.setUser_id(Integer.valueOf(ob[1].toString()));
-//			profile.setContent(ob[3] + "");
-//			Date date = dateFormat.parse(ob[4] + "");
-//			Calendar calendar = Calendar.getInstance();
-//			calendar.setTime(date);
-//			profile.setDate_post(calendar);
-//			profile.setHash_tag(ob[5] + "");
-//			profile.setSend_status(Boolean.valueOf(ob[6] + ""));
-//			profile.setPost_status(Boolean.valueOf(ob[7] + ""));
-//			profile.setProduct(ob[8] + "");
-//			profile.setBan(Boolean.valueOf(ob[9] + ""));
-//			profile.setCountInterested(Integer.valueOf(ob[10].toString()));
-//			profile.setCountCommnet(Integer.valueOf(ob[11].toString()));
-//			profile.setCountShare(Integer.valueOf(ob[12].toString()));
-//			if (null == ob[2])
-//				profile.setImages(postImagesService.findAllImagesofPost(profile.getPost_id()));
-//			List<Object[]> userOb = interestedService.findByIdPost(profile.getPost_id());
-//			if (userOb != null && check == 0)
-//				profile.setUser(userOb);
-//			profile.setFullname(ob[13] + "");
-//			profile.setAvatar(ob[14] + "");
-//			if (entityProfile != null)
-//				profile.setPostEntityProfile(entityProfile);
-//			return profile;
-//		} catch (Exception e) {
-//			System.out.println("Error postEntityProfile: " + e);
-//			return null;
-//		}
-//
-//	}
+	public PostEntity postEntity(Object[] ob, PostEntity entityProfile, int check) {
+	    try {
+//	    	((Object[])ob[0])[2]
+	        PostEntity profile = new PostEntity();
+	        profile.setPost_id(Integer.valueOf(((Object[])ob[0])[0].toString()));
+	        profile.setUser_id(Integer.valueOf(((Object[])ob[0])[1].toString()));
+	        profile.setContent(((Object[])ob[0])[3] + "");
+	        
+	        // Xử lý ngày tháng
+	        Date date = null;
+	        if (((Object[])ob[0])[4] != null && !((Object[])ob[0])[4].toString().isEmpty()) {
+	            date = dateFormat.parse(((Object[])ob[0])[4].toString());
+	        }
+	        if (date != null) {
+	            Calendar calendar = Calendar.getInstance();
+	            calendar.setTime(date);
+	            profile.setDate_post(calendar);
+	        } 
+	        
+	        profile.setHash_tag(((Object[])ob[0])[5] + "");
+	        profile.setSend_status(Boolean.valueOf(((Object[])ob[0])[6] + ""));
+	        profile.setPost_status(Boolean.valueOf(((Object[])ob[0])[7] + ""));
+	        profile.setProduct(((Object[])ob[0])[8] + "");
+	        
+	        if (!((Object[])ob[0])[9].toString().isEmpty()) {
+	            profile.setBan(Boolean.valueOf(((Object[])ob[0])[9] + ""));
+	        }
+	        
+	        profile.setCountInterested(Integer.valueOf(((Object[])ob[0])[10].toString()));
+	        profile.setCountCommnet(Integer.valueOf(((Object[])ob[0])[11].toString()));
+	        profile.setCountShare(Integer.valueOf(((Object[])ob[0])[12].toString()));
+
+	        if (((Object[])ob[0])[2] == null) {
+	            profile.setImages(postImagesService.findAllImagesofPost(profile.getPost_id()));
+	        }
+	        List<Object[]> userOb = interestedService.findByIdPost(profile.getPost_id());
+	        if (userOb != null && check == 0) {
+	            profile.setUser(userOb);
+	        }
+
+	        profile.setFullname(((Object[])ob[0])[13] + "");
+	        profile.setAvatar(((Object[])ob[0])[14] + "");
+
+	        if (entityProfile != null) {
+	            profile.setPostEntityProfile(entityProfile);
+	        }
+
+	        return profile;
+	    } catch (NumberFormatException e) {
+	        System.out.println("Error postEntityProfile: " + e);
+	        return null;
+	    } catch (Exception e) {
+	        System.out.println("Error postEntityProfile: " + e);
+	        return null;
+	    }
+	}
 	public PostEntity postEntityProfile(Object[] ob, PostEntity entityProfile, int check) {
 	    try {
 	        PostEntity profile = new PostEntity();

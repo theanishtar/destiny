@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,6 +55,8 @@ public class Login {
 
 	@Autowired
 	HttpServletRequest httpServletRequest;
+	
+
 
 	private final RoleCustomRepo roleCustomRepo = new RoleCustomRepo();
 
@@ -103,7 +106,15 @@ public class Login {
 			@PathVariable String email) {
 		LoginResponse resLog = authenticationService.loginWithEmailAndCodeauthregis(code, email);
 		return ResponseEntity.status(resLog.getStatusResponse()).body(resLog.getData());
-	}
+	} 
+	
+//	@GetMapping("/v1/oauth/login/authcode/{code}/{email}")
+//	public ResponseEntity<AuthenticationResponse> authLogRegisCode(@PathVariable String code,
+//			@PathVariable String email) {
+//		LoginResponse resLog = authenticationService.loginWithEmailAndCodeauthregis(code, email);
+//		
+//		return ResponseEntity.status(resLog.getStatusResponse()).body(resLog.getData());
+//	} 
 	
 	// call api by: host:port/v1/oauth/login/oauth2?token=val&type=value
 	@GetMapping("/v1/oauth/login/oauh2")

@@ -14,6 +14,8 @@ public interface PostService {
 
 	public List<Object[]> findAllPostShare(int id, int current_page);
 
+	public Object[] findByIdPost(int id, int current_page, int post_id);
+
 	// lấy số lượng comment,interested, share của bài post
 //	public List<Object[]> getCountPost(int id, int provinceId);
 

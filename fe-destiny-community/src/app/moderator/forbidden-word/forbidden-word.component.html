@@ -69,7 +69,19 @@
                       <th></th>
                     </tr>
                   </tfoot>
-                  <tbody>
+                  <tbody *ngFor="let word of listBadWord; let i = index">
+                    <tr>
+                      <td class="text-substring" data-th="Nội dung">{{i + 1}}</td>
+                      <td data-th="Người dùng">{{word.name}}</td>
+                      <td data-th="Người dùng">{{word.label}}</td> 
+                      <td data-th="Người dùng">{{word.severityLevel}}</td>
+                      <td data-th="Người dùng">{{word.createDate}}</td>
+                      <td data-th="Xem thêm">
+                        <a class="edit" data-toggle="modal" data-target="#update-word">Chỉnh sửa</a>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <!-- <tbody>
                     <tr>
                       <td class="text-substring" data-th="Nội dung">1</td>
                       <td data-th="Người dùng">Má</td>
@@ -80,7 +92,117 @@
                         <a class="edit" data-toggle="modal" data-target="#update-word">Chỉnh sửa</a>
                       </td>
                     </tr>
-                  </tbody>
+                    <tr>
+                      <td class="text-substring" data-th="Nội dung">1</td>
+                      <td data-th="Người dùng">Má</td>
+                      <td data-th="Người dùng">1</td> 
+                      <td data-th="Người dùng">Cao</td>
+                      <td data-th="Người dùng">31/10/2023</td>
+                      <td data-th="Xem thêm">
+                        <a class="edit" data-toggle="modal" data-target="#update-word">Chỉnh sửa</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-substring" data-th="Nội dung">1</td>
+                      <td data-th="Người dùng">Má 2</td>
+                      <td data-th="Người dùng">1</td> 
+                      <td data-th="Người dùng">Cao</td>
+                      <td data-th="Người dùng">31/10/2023</td>
+                      <td data-th="Xem thêm">
+                        <a class="edit" data-toggle="modal" data-target="#update-word">Chỉnh sửa</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-substring" data-th="Nội dung">1</td>
+                      <td data-th="Người dùng">Má 3</td>
+                      <td data-th="Người dùng">1</td> 
+                      <td data-th="Người dùng">Cao</td>
+                      <td data-th="Người dùng">31/10/2023</td>
+                      <td data-th="Xem thêm">
+                        <a class="edit" data-toggle="modal" data-target="#update-word">Chỉnh sửa</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-substring" data-th="Nội dung">1</td>
+                      <td data-th="Người dùng">Má</td>
+                      <td data-th="Người dùng">1</td> 
+                      <td data-th="Người dùng">Cao</td>
+                      <td data-th="Người dùng">31/10/2023</td>
+                      <td data-th="Xem thêm">
+                        <a class="edit" data-toggle="modal" data-target="#update-word">Chỉnh sửa</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-substring" data-th="Nội dung">1</td>
+                      <td data-th="Người dùng">Má</td>
+                      <td data-th="Người dùng">1</td> 
+                      <td data-th="Người dùng">Cao</td>
+                      <td data-th="Người dùng">31/10/2023</td>
+                      <td data-th="Xem thêm">
+                        <a class="edit" data-toggle="modal" data-target="#update-word">Chỉnh sửa</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-substring" data-th="Nội dung">1</td>
+                      <td data-th="Người dùng">Má 2</td>
+                      <td data-th="Người dùng">1</td> 
+                      <td data-th="Người dùng">Cao</td>
+                      <td data-th="Người dùng">31/10/2023</td>
+                      <td data-th="Xem thêm">
+                        <a class="edit" data-toggle="modal" data-target="#update-word">Chỉnh sửa</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-substring" data-th="Nội dung">1</td>
+                      <td data-th="Người dùng">Má 3</td>
+                      <td data-th="Người dùng">1</td> 
+                      <td data-th="Người dùng">Cao</td>
+                      <td data-th="Người dùng">31/10/2023</td>
+                      <td data-th="Xem thêm">
+                        <a class="edit" data-toggle="modal" data-target="#update-word">Chỉnh sửa</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-substring" data-th="Nội dung">1</td>
+                      <td data-th="Người dùng">Má</td>
+                      <td data-th="Người dùng">1</td> 
+                      <td data-th="Người dùng">Cao</td>
+                      <td data-th="Người dùng">31/10/2023</td>
+                      <td data-th="Xem thêm">
+                        <a class="edit" data-toggle="modal" data-target="#update-word">Chỉnh sửa</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-substring" data-th="Nội dung">1</td>
+                      <td data-th="Người dùng">Má</td>
+                      <td data-th="Người dùng">1</td> 
+                      <td data-th="Người dùng">Cao</td>
+                      <td data-th="Người dùng">31/10/2023</td>
+                      <td data-th="Xem thêm">
+                        <a class="edit" data-toggle="modal" data-target="#update-word">Chỉnh sửa</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-substring" data-th="Nội dung">1</td>
+                      <td data-th="Người dùng">Má nè 2</td>
+                      <td data-th="Người dùng">1</td> 
+                      <td data-th="Người dùng">Cao</td>
+                      <td data-th="Người dùng">31/10/2023</td>
+                      <td data-th="Xem thêm">
+                        <a class="edit" data-toggle="modal" data-target="#update-word">Chỉnh sửa</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-substring" data-th="Nội dung">1</td>
+                      <td data-th="Người dùng">Má 3</td>
+                      <td data-th="Người dùng">1</td> 
+                      <td data-th="Người dùng">Cao</td>
+                      <td data-th="Người dùng">31/10/2023</td>
+                      <td data-th="Xem thêm">
+                        <a class="edit" data-toggle="modal" data-target="#update-word">Chỉnh sửa</a>
+                      </td>
+                    </tr>
+                  </tbody> -->
                 </table>
               </div>
             </div>
@@ -104,16 +226,16 @@
       <form>
         <div class="modal-body">
           <div class="form-group">
-            <label for="email1">Từ ngữ</label>
-            <input type="email" class="form-control" id="email1" aria-describedby="emailHelp" placeholder="">
+            <label for="">Từ ngữ</label>
+            <input type="text" class="form-control" placeholder="">
           </div>
           <div class="form-group">
-            <label for="password1">Nhãn</label>
-            <input type="password" class="form-control" id="password1" placeholder="">
+            <label for="">Nhãn</label>
+            <input type="text" class="form-control" placeholder="">
           </div>
           <div class="form-group">
-            <label for="password1">Ngày tạo</label>
-            <input type="password" class="form-control" id="password2" placeholder="">
+            <label for="">Ngày tạo</label>
+            <input type="text" class="form-control" placeholder="">
           </div>
         </div>
         <div class="modal-footer border-top-0 d-flex justify-content-center">
@@ -136,24 +258,24 @@
       <form>
         <div class="modal-body">
           <div class="form-group">
-            <label for="email1">STT</label>
-            <input type="email" class="form-control" id="email1" aria-describedby="emailHelp" readonly>
+            <label for="">STT</label>
+            <input type="text" class="form-control" readonly>
           </div>
           <div class="form-group">
-            <label for="email1">Từ ngữ</label>
-            <input type="email" class="form-control" id="email1" aria-describedby="emailHelp" placeholder="">
+            <label for="">Từ ngữ</label>
+            <input type="text" class="form-control" placeholder="">
           </div>
           <div class="form-group">
-            <label for="password1">Nhãn</label>
-            <input type="password" class="form-control" id="password1" placeholder="">
+            <label for="">Nhãn</label>
+            <input type="text" class="form-control" placeholder="">
           </div>
           <div class="form-group">
-            <label for="email1">Mức độ</label>
-            <input type="email" class="form-control" id="email1" aria-describedby="emailHelp">
+            <label for="">Mức độ</label>
+            <input type="text" class="form-control">
           </div>
           <div class="form-group">
-            <label for="password1">Ngày tạo</label>
-            <input type="password" class="form-control" id="password2" readonly>
+            <label for="">Ngày tạo</label>
+            <input type="text" class="form-control" readonly>
           </div>
         </div>
         <div class="modal-footer border-top-0 d-flex justify-content-center">

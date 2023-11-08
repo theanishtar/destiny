@@ -1,5 +1,5 @@
 import { Component,  ElementRef, Renderer2, ViewChild } from '@angular/core';
-import { AdminProfileService } from '@app/admin/service/admin-profile.service';
+import { ModProfileService } from '../service/mod-profile.service';
 
 @Component({
   selector: 'app-navbar-moderator',
@@ -16,7 +16,7 @@ export class NavbarModeratorComponent {
 
   constructor(
     private renderer: Renderer2,
-    private adminProfileService: AdminProfileService
+    private modProfileService: ModProfileService
 
   ) {}
 
@@ -28,9 +28,9 @@ export class NavbarModeratorComponent {
 
   loadAdminAvartar(){
     const getAvartar = "getAvartar";
-    this.adminProfileService.loadAdminData(getAvartar).subscribe(() =>{
+    this.modProfileService.loadAdminData(getAvartar).subscribe(() =>{
       this.adminAvartar = {};
-      this.adminAvartar = this.adminProfileService.getAdmin();
+      this.adminAvartar = this.modProfileService.getAdmin();
     })
   }
 

@@ -81,7 +81,7 @@
                 <div class="tab-content" id="tab-message">
                   <div *ngFor="let key of data ">
                     <!-- <div class="a">{{key.value.fullname}}</div> -->
-                    <ng-container *ngIf="key.isFriend && !key.hide">
+                    <ng-container *ngIf="key.isFriend">
                       <!-- CHAT WIDGET MESSAGE -->
                       <div
                         class="chat-widget-message"
@@ -296,7 +296,7 @@
       <!-- /CHAT WIDGET -->
 
       <!-- CHAT WIDGET -->
-      <div
+          <div
         class="chat-widget chat-widget-chat"
         *ngIf="!messageService.isOriginal"
         [ngClass]="{ active: !messageService.isOriginal }"
@@ -326,7 +326,7 @@
                 <!-- /SIMPLE DROPDOWN LINK -->
 
                 <!-- SIMPLE DROPDOWN LINK -->
-                <p class="simple-dropdown-link">Chặn</p>
+                <p class="simple-dropdown-link" *ngIf="!checkBlock" (click)="block()">Chặn</p>
                 <!-- /SIMPLE DROPDOWN LINK -->
               </div>
               <!-- /SIMPLE DROPDOWN -->
@@ -396,25 +396,29 @@
           </div>
           <!-- /USER STATUS -->
         </div>
+        <div class="loader-bars" *ngIf="checkLoadingdata">
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
+        </div>
         <!-- /CHAT WIDGET HEADER -->
-
-        <!-- CHAT WIDGET CONVERSATION -->
+        <div>
+          <!-- CHAT WIDGET CONVERSATION -->
         <div class="chat-widget-conversation" id="chatContainer" (scroll)="checkScrollPosition()" data-simplebar>
           <!-- Khung chat -->
-          <!-- <div class="time-date" style="background: #c1c2c4;color: white;width: fit-content;padding: 4px 5px;border-radius: 8px;position: absolute;z-index: 1;right: 40%;top: 2%;">
-            <div class="date-send" style="text-align: center;font-size: 12px;">
-              02/08/2003
-            </div>
-          </div> -->
           <div class="scrollToBottomButton" id="scrollToBottomButton" (click)="scrollToBottomMessage()" style="display: none;">
             <i class="fa-solid fa-chevron-down"></i>
           </div>
         </div>
         <!-- /CHAT WIDGET CONVERSATION -->
-
         <!-- CHAT WIDGET FORM -->
-        <form class="chat-widget-form">
-          <div class="form-row split">
+        <form class="chat-widget-form" *ngIf="!checkLoadingdata">
+          <div class="form-row split" *ngIf="!checkBlock">
             <!-- FORM ITEM -->
             <div class="form-item">
               <!-- INTERACTIVE INPUT -->
@@ -424,7 +428,6 @@
                   id="chat-widget-message-text-2"
                   name="chat_widget_message_text_2"
                   placeholder="Nhập tin nhắn"
-                  [(ngModel)]="message"
                   (keyup)="checkEnter($event)"
                 />
                 <!-- INTERACTIVE INPUT ICON WRAP -->
@@ -476,18 +479,21 @@
             </div>
             <!-- /FORM ITEM -->
           </div>
-          <div class="form-row split block" style="display: none">
+          <div class="form-row split block" *ngIf="checkBlock">
             <!-- FORM ITEM -->
             <div class="form-item block">
               <span><i class="fa-solid fa-circle-exclamation"></i></span>
               Bỏ chặn để nhắn tin với người này
-              <span class="remove-block">Bỏ chặn</span>
+              <span class="remove-block" (click)="unBlock()">Bỏ chặn</span>
             </div>
             <!-- /FORM ITEM -->
           </div>
         </form>
         <!-- /CHAT WIDGET FORM -->
+        </div>
+        
       </div>
+     
       <!-- /CHAT WIDGET -->
       <div
         class="chat-widget chat-widget-chat-orgin"

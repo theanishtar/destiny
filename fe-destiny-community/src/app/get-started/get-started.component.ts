@@ -85,14 +85,14 @@ export class GetStartedComponent implements OnInit {
 			this.loginService.loginWithGG(this.token, this.type).subscribe((res) => {
 				// if (res !== undefined) {
 				if (res.roles[0].authority == 'ROLE_OWNER' || res.roles[0].authority == 'ROLE_ADMIN') {
-					window.location.href = 'http://localhost:4200/admin';
+					window.location.href = environment.baseUrlFe + 'admin';
 					this.loginForm.reset();
 				} else if (res.roles[0].authority == 'ROLE_MODERATOR') {
-					window.location.href = 'http://localhost:4200/moderator/forbidden-word';
+					window.location.href = environment.baseUrlFe + 'moderator/forbidden-word';
 					this.loginForm.reset();
 				} else {
 					// this.router.navigate(['newsfeed']);
-					window.location.href = 'http://localhost:4200/newsfeed';
+					window.location.href = environment.baseUrlFe + 'newsfeed';
 					new toast({
 						title: 'Thành công!',
 						message: 'Đăng nhập thành công!',
@@ -148,15 +148,15 @@ export class GetStartedComponent implements OnInit {
 						this.setCookie('sessionID', response.user.sesionId, 2);
 					}
 					if (response.roles[0].authority == 'ROLE_OWNER' || response.roles[0].authority == 'ROLE_ADMIN') {
-						window.location.href = 'http://localhost:4200/admin';
+						window.location.href = 'admin';
 						this.loginForm.reset();
 					} else if (response.roles[0].authority == 'ROLE_MODERATOR') {
-						window.location.href = 'http://localhost:4200/moderator/forbidden-word';
+						window.location.href = environment.baseUrlFe + 'moderator/forbidden-word';
 						this.loginForm.reset();
 					} else {
 						this.loginForm.reset();
 						// this.router.navigate(['newsfeed']);
-						window.location.href = 'http://localhost:4200/newsfeed';
+						window.location.href = environment.baseUrlFe + 'newsfeed';
 						new toast({
 							title: 'Thành công!',
 							message: 'Đăng nhập thành công',
@@ -238,7 +238,8 @@ export class GetStartedComponent implements OnInit {
 						duration: 3000,
 					});
 				} else {
-					console.log("Check")
+					console.log("Check");
+					
 				}
 			});
 		} else {
@@ -253,7 +254,7 @@ export class GetStartedComponent implements OnInit {
 		Swal.fire({
 			title: 'Thông báo!',
 			html: 'Quá trình sẽ diễn ra trong vài giây!',
-			timer: 16000,
+			timer: 5000,
 			timerProgressBar: true,
 			didOpen: () => {
 				Swal.showLoading();
@@ -263,7 +264,7 @@ export class GetStartedComponent implements OnInit {
 			},
 		}).then((result) => {
 			if (result.dismiss === Swal.DismissReason.timer) {
-				console.log('I was closed by the timer');
+				this.registerService.connected(this.registerForm.get("email")!.value);
 			}
 		});
 	}

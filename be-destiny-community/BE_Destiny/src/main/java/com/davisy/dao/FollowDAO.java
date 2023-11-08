@@ -50,7 +50,10 @@ public interface FollowDAO extends JpaRepository<Follower, String> {
 	@Query(value = "select *from get_friend_follow(:id)", nativeQuery = true)
 	public List<Object[]> findAllFriend(int id);
 
-	@Query(value = "select * from get_suggested(:id)  ORDER BY Random()", nativeQuery = true)
+	@Query(value = "select * from get_suggested(:id)  ORDER BY Random() LIMIT 30", nativeQuery = true)
 	public List<Object[]> loadDataSuggest(int id);
+	
+	@Query(value = "select * from get_suggested(:id)  ORDER BY Random() LIMIT 10", nativeQuery = true)
+	public List<Object[]> loadDataSuggestRegister(int id);
 
 }

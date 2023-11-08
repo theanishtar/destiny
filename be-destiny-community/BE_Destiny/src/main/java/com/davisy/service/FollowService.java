@@ -21,6 +21,8 @@ public interface FollowService {
 	public List<Object[]> findAllFriend(int id);
 
 	public List<Object[]> loadDataSuggest(int id);
+	
+	public List<Object[]> loadDataSuggestRegister(int id);
 
 	public int countFollowers(int id);
 

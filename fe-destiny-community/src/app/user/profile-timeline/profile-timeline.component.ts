@@ -44,6 +44,7 @@ export class ProfileTimelineComponent implements OnInit {
   checkRequest: boolean = true;
   currentUserId = this.cookieService.get("id");
   checkCountPosts: boolean = true;
+  checkListPost: any;
   ngOnInit() {
     this.loadDataSuggest();
     this.checkScroll();
@@ -62,6 +63,9 @@ export class ProfileTimelineComponent implements OnInit {
     profile_timeline.style.display = 'none';
     this.profileService.getCheckData().then((result) => {
         this.isLoading = false;
+        if(this.profileService.listPostPr.length === 0){
+          this.checkLoadingdata = false;
+        }
         profile_timeline.style.display = 'grid';
     });
   }
@@ -220,7 +224,7 @@ export class ProfileTimelineComponent implements OnInit {
           this.checkLoadingdata = false;
           if (data.length < 5) {
             this.checkCountPosts = false;
-            this.checkLoadingdata = true;
+            this.checkLoadingdata = false;
           }
           // console.log("data.length: " + data.length);
         } catch (error) {

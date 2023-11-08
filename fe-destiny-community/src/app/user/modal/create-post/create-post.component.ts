@@ -94,6 +94,7 @@ export class CreatePostComponent {
       product: this.createPostForm.get('product')?.value,
       post_images: this.listImg,
     };
+
     if (this.createPostForm.get('content')?.value === '' && this.listImg.length === 0) {
       new toast({
         title: 'Thông báo!',
@@ -161,7 +162,8 @@ export class CreatePostComponent {
   }
 
   getProvinceName() {
-    const province = this.createPostForm.get('district_name')?.value;
+    const province = this.createPostForm.get('province_name')?.value;
+    console.warn("province: " + province);
     this.loadAllDistrict(province);
 
   }
@@ -350,6 +352,8 @@ export class CreatePostComponent {
   }
 
   closeModalCreatePost() {
+    this.createPostForm.reset();
+    this.file = {};
     this.modalService.closeModalCreatePost();
   }
 }

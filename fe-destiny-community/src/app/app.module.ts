@@ -79,16 +79,23 @@ import { DetailPostComponent } from './user/modal/detail-post/detail-post.compon
 import { EditPostComponent } from './user/modal/edit-post/edit-post.component';
 import { ChangeEmailComponent } from './user/modal/change-email/change-email.component';
 import { ChangeConfirmComponent } from './user/modal/change-email/change-confirm/change-confirm.component';
+import { SuggestAfterRegisterComponent } from './user/modal/suggest-after-register/suggest-after-register.component';
 
 export function appInitializer(cookieService: CookieService, messageService: MessageService, sender: any,modalService:ModalService, profileService: ProfileService, dataProfileTimeline: any) {
   return () => {
     if (cookieService.get("full_name") != '') {
+      
       messageService.loadDataSender().subscribe(() => {
         sender = JSON.parse(JSON.stringify(messageService.getSender()));
         modalService.connectToComment(sender.user_id);
         messageService.connectToChat(sender.user_id);
       
       });
+      // setTimeout(() => {
+      //   profileService.loadCheckPost(1).subscribe((res) => {
+          
+      //   });
+      // }, 1);
     }
   };
 }
@@ -146,7 +153,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     DetailPostComponent,
     EditPostComponent,
     ChangeEmailComponent,
-    ChangeConfirmComponent
+    ChangeConfirmComponent,
+    SuggestAfterRegisterComponent
   ],
   imports: [
     BrowserModule,

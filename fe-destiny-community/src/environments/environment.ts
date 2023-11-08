@@ -11,5 +11,5 @@ export const environment = {
     },
     // baseUrl: 'https://testchat.hop.sh/'
     baseUrl: 'http://localhost:8080/',
-    
+    baseUrlFe: 'http://localhost:4200/',
 };

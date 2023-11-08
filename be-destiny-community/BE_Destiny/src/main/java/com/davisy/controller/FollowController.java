@@ -128,6 +128,23 @@ public class FollowController {
 		}
 		return ResponseEntity.status(200).body(data);
 	}
+	
+	@GetMapping("/v1/user/following/load/suggestregister")
+	public ResponseEntity<List<DataFollows>> loadDataFollowSuggestRegister(HttpServletRequest request) {
+		String email = jwtTokenUtil.getEmailFromHeader(request);
+		User user = userService.findByEmail(email);
+		List<DataFollows> data = new ArrayList<>();
+		List<Object[]> list = followService.loadDataSuggestRegister(user.getUser_id());
+		for (Object[] ob : list) {
+			DataFollows follows = new DataFollows();
+			follows.setUser_id(Integer.valueOf(ob[0].toString()));
+			follows.setAvatar(ob[1] + "");
+			follows.setFullname(ob[2] + "");
+			follows.setUsername(ob[3] + "");
+			data.add(follows);
+		}
+		return ResponseEntity.status(200).body(data);
+	}
 
 	// Hủy following
 	@PostMapping("/v1/user/following/delete")

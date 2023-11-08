@@ -158,14 +158,15 @@ export class LoginService {
 						duration: 2000,
 					});
 				})
-			} else {
-				new toast({
-					title: 'Lỗi!',
-					message: 'Vui lòng chờ',
-					type: 'warning',
-					duration: 2000,
-				});
-			}
+			} 
+			// else {
+			// 	new toast({
+			// 		title: 'Lỗi!',
+			// 		message: 'Vui lòng chờ',
+			// 		type: 'warning',
+			// 		duration: 2000,
+			// 	});
+			// }
 
 			// });
 		});

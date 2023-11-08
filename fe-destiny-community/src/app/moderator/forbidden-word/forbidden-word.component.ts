@@ -6,6 +6,7 @@ import $e from 'jquery';
 import { BehaviorSubject } from 'rxjs'; //Theo dõi trạng thái của modal
 declare var $: any;
 
+import { ForbiddenService } from '../service/forbidden.service';
 @Component({
   selector: 'app-forbidden-word',
   templateUrl: './forbidden-word.component.html',
@@ -15,11 +16,43 @@ declare var $: any;
     `./forbidden-word.component.css`
   ]
 })
-export class ForbiddenWordComponent {
+export class ForbiddenWordComponent{
   pagiPostReport!: HTMLElement;
   tablePostReport!: HTMLElement;
   private isOpenCreateWord = new BehaviorSubject<boolean>(false);
   isOpenCreateWord$ = this.isOpenCreateWord.asObservable();
+  listBadWord: any[] = [];
+  isLoading: boolean = true;
+  // ngOnInit() {
+    
+  // }
+
+  ngAfterViewInit() {
+    $e(document).ready(function () {
+      $e('#dataTable').DataTable();
+    });
+    this.truncateText(".text-substring", 50);
+    this.pagiPostReport = this.el.nativeElement.querySelector("#pagi-post-report");
+    this.tablePostReport = this.el.nativeElement.querySelector("#table-post-report");
+
+    this.loadBadWord();
+  }
+  constructor(
+    private el: ElementRef, 
+    private renderer: Renderer2,
+    private forbiddenService: ForbiddenService
+    ) { }
+
+  async loadBadWord() {
+    try {
+      this.listBadWord = await this.forbiddenService.loadDataBadWordApi();
+      // console.warn("list: " + JSON.stringify(this.listInterested));
+      this.isLoading = false;
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
 
   openModalCreateWord() {
     this.isOpenCreateWord.next(true);
@@ -28,20 +61,7 @@ export class ForbiddenWordComponent {
   closeModalCreateWord() {
     this.isOpenCreateWord.next(false);
   }
-  constructor(private el: ElementRef, private renderer: Renderer2) {}
 
-
-  ngAfterViewInit() {
-    $e(document).ready(function () {
-      $e('#dataTable').DataTable();
-    });
-
-
-    this.truncateText(".text-substring", 50);
-    this.pagiPostReport = this.el.nativeElement.querySelector("#pagi-post-report");
-    this.tablePostReport = this.el.nativeElement.querySelector("#table-post-report");
-
-  }
 
   private truncateText(selector: string, maxLength: number) {
     const elements = this.el.nativeElement.querySelectorAll(selector);

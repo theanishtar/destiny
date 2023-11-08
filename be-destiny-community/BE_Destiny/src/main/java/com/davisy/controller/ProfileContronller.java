@@ -87,7 +87,6 @@ public class ProfileContronller {
 	CacheService cacheService;
 	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-
 	@Autowired
 	SimpMessagingTemplate simpMessagingTemplate;
 
@@ -101,8 +100,9 @@ public class ProfileContronller {
 	String districtCode;
 
 	String randCodeAuth = "";
-	@Value("${davisy.client.change-email.confirm}")
-	String confirmEmail;
+	@Value("${davis.client.uri}")
+	String client;
+	// http://localhost:4200/chang-email-confirm
 
 	public static String random() {
 		String code = "";
@@ -169,7 +169,10 @@ public class ProfileContronller {
 
 		Calendar birthday = user.getBirthday();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		String formatted = format.format(birthday.getTime());
+		String formatted = "";
+		if (birthday != null) {
+			format.format(birthday.getTime());
+		}
 
 		userP.setBirthday(formatted);
 
@@ -177,9 +180,24 @@ public class ProfileContronller {
 		String formattedDC = format.format(daycreate.getTime());
 		userP.setDay_create(formattedDC);
 
-		userP.setProvince_name(user.getProvinces().getFull_name());
-		userP.setDistrict_name(user.getDistricts().getFull_name());
-		userP.setWard_name(user.getWards().getFull_name());
+		Provinces provinces = user.getProvinces();
+		Districts districts = user.getDistricts();
+		Wards wards = user.getWards();
+		if (provinces == null) {
+			userP.setProvince_name("");
+		} else {
+			userP.setProvince_name(provinces.getFull_name());
+		}
+		if (districts == null) {
+			userP.setDistrict_name("");
+		} else {
+			userP.setDistrict_name(districts.getFull_name());
+		}
+		if (wards == null) {
+			userP.setWard_name("");
+		} else {
+			userP.setWard_name(wards.getFull_name());
+		}
 
 		userP.setGender_name(user.getGender().getGender_name());
 		userP.setAvatar(user.getAvatar());
@@ -261,15 +279,37 @@ public class ProfileContronller {
 				check = true;
 			}
 			int id = user.getUser_id();
-			int provinceId = Integer.valueOf(user.getIdProvince());
 			ProfileEnitity profileEnitity = new ProfileEnitity();
 			profileEnitity.setIntro(user.getIntro());
 			profileEnitity.setImages(postImagesService.findAllImagesUser(id));
 			profileEnitity.setDateJoin(user.getDay_create());
-			profileEnitity
-					.setAddress_fullname(user.getDistricts().getFull_name() + " " + user.getProvinces().getFull_name());
-			profileEnitity.setAddress_fullname_en(
-					user.getDistricts().getFull_name_en() + " " + user.getProvinces().getFull_name_en());
+
+			Provinces provinces = user.getProvinces();
+			Districts districts = user.getDistricts();
+			Wards wards = user.getWards();
+			String provinces_fullname = "";
+			String district_fullname = "";
+			String ward_fullname = "";
+
+			String provinces_fullname_en = "";
+			String district_fullname_en = "";
+			String ward_fullname_en = "";
+
+			if (provinces != null) {
+				provinces_fullname = provinces.getFull_name();
+				provinces_fullname_en = provinces.getFull_name_en();
+			}
+			if (districts != null) {
+				district_fullname = districts.getFull_name();
+				district_fullname_en = districts.getFull_name_en();
+			}
+			if (wards != null) {
+				ward_fullname = wards.getFull_name();
+				ward_fullname_en = wards.getFull_name_en();
+			}
+
+			profileEnitity.setAddress_fullname(district_fullname + " " + provinces_fullname);
+			profileEnitity.setAddress_fullname_en(district_fullname_en + " " + provinces_fullname_en);
 			profileEnitity.setListPostInterested(postService.getTop5postProfile(id));
 			return ResponseEntity.ok().body(profileEnitity);
 		} catch (Exception e) {
@@ -507,7 +547,7 @@ public class ProfileContronller {
 		 * GET: /v1/user/profile/change/email?code=this.randCodeAuth
 		 * 
 		 */
-		emailService.sendHtmlEmail(confirmEmail + "?code=" + this.randCodeAuth, change.newEmail);
+		emailService.sendHtmlEmail(client + "/chang-email-confirm" + "?code=" + this.randCodeAuth, change.newEmail);
 		return ResponseEntity.status(200).body(this.randCodeAuth); // "OK"
 	}
 

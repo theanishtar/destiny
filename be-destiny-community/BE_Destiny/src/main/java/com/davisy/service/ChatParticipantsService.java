@@ -14,4 +14,8 @@ public interface ChatParticipantsService {
 
 	public void delete(ChatParticipants chatParticipants);
 
+	public void block(boolean status,int chat_id, int user_id);
+
+	public int chat_id(int id1, int id2);
+
 }
