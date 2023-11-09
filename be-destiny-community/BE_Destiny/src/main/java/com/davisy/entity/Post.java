@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -47,7 +48,7 @@ public class Post {
 	String content;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	Calendar date_Post = GregorianCalendar.getInstance();
+	Calendar date_Post= GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT+7"));
 
 	String hash_Tag;
 

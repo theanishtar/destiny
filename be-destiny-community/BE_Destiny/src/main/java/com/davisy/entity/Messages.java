@@ -2,6 +2,7 @@ package com.davisy.entity;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -12,6 +13,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,7 +29,9 @@ public class Messages {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	int id;
 	String content;
-	Calendar send_Time = GregorianCalendar.getInstance();
+
+	@Temporal(TemporalType.TIMESTAMP)
+	Calendar send_Time = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT+7"));
 
 	@JsonIgnore
 	@ManyToOne

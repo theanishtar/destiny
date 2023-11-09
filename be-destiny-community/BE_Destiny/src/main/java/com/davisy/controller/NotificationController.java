@@ -129,7 +129,6 @@ public class NotificationController {
 				Follower.Pk pk = new Follower.Pk();
 				pk.setFollower_id(to);
 				pk.setUser_id(user.getUser_id());
-				pk.setDate_follow(GregorianCalendar.getInstance());
 				follower.setPk(pk);
 				followService.create(follower);
 				if (followService.checkFriend(user.getUser_id(), to)
@@ -167,7 +166,6 @@ public class NotificationController {
 			Follower.Pk pk = new Follower.Pk();
 			pk.setFollower_id(arr[i]);
 			pk.setUser_id(user.getUser_id());
-			pk.setDate_follow(GregorianCalendar.getInstance());
 			follower.setPk(pk);
 			followService.create(follower);
 			simpMessagingTemplate.convertAndSend("/topic/notification/" + arr[i],

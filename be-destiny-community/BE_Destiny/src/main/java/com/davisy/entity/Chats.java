@@ -3,6 +3,7 @@ package com.davisy.entity;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -30,10 +31,11 @@ public class Chats {
 	int id;
 	String name_chats;
 	@Temporal(TemporalType.TIMESTAMP)
-	Calendar day_create = GregorianCalendar.getInstance();
+	Calendar day_create = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT+7"));
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "chats")
 	List<Messages> messages;
 	boolean isfriend = true;
+	
 }

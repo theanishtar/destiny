@@ -474,7 +474,7 @@ public class PostController {
 		long days = hours / 24;
 
 		if (hours > 0) {
-			timeCaculate = hours + " giờ trước";
+			timeCaculate = hours+7 + " giờ trước";
 		} else if (minutes > 0) {
 			timeCaculate = minutes + " phút trước";
 		} else {
