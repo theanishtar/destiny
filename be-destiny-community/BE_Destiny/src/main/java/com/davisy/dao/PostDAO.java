@@ -16,10 +16,8 @@ public interface PostDAO extends JpaRepository<Post, Integer> {
 	public int countPost(int id);
 
 	// 22-9-2023 -Top 5 bài đăng có lượt yêu thích nhiều nhất
-	@Query(value = "	SELECT p.post_id,u.fullname , p.content, COUNT(i.post_id) FROM post p INNER JOIN interested i\r\n"
-			+ "			ON p.post_id = i.post_id INNER JOIN users u \r\n" + "			ON p.user_id = u.user_id \r\n"
-			+ "			GROUP BY p.post_id, u.fullname\r\n" + "			ORDER BY COUNT(i.post_id) DESC\r\n"
-			+ "			LIMIT 5;", nativeQuery = true)
+	@Query(value = "SELECT p.post_id,u.fullname , p.content, COUNT(i.post_id),p.user_id  FROM post p INNER JOIN interested i ON p.post_id = i.post_id INNER JOIN users u ON  p.user_id = u.user_id GROUP BY p.post_id, u.fullname ORDER BY COUNT(i.post_id) DESC	LIMIT 5;\r\n"
+			+ "\r\n" + "", nativeQuery = true)
 	public List<Object[]> getTOP5Post();
 
 	// 21-9-2023 -tìm post theo id
