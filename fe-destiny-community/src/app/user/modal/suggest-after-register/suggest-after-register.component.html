@@ -1,13 +1,13 @@
 <main class="overlay" *ngIf="modalService.isOpenSuggest$ | async">
   <div id="favDialog_seemore" class="modal fade favDialog_seemore">
-    
+    <!-- <app-loading *ngIf="isLoading"></app-loading> -->
     <div class="widget-box">
-      <button
+      <!-- <button
         (click)="modalService.closeModalSuggest()"
         class="btnClose-seemore-img"
       >
         <i class="fa-solid fa-xmark"></i>
-      </button>
+      </button> -->
       <p class="widget-box-title">Đề xuất cho bạn</p>
       <div class="loader-bars" *ngIf="checkLoadingdata">
         <div class="loader-bar"></div>
@@ -26,9 +26,6 @@
               <div class="user-status">
                 <div class="info">
                   <div
-                    (click)="
-                      this.profileService.loadDataProfileTimeline(item.user_id)
-                    "
                   >
                     <a
                       class="user-avatar small user-status-avatar no-border no-outline"
@@ -82,7 +79,7 @@
             </div>
           </div>
         </div>
-        <div class="btns">
+        <div class="btns" id="btns">
           <button
             class="add-follow"
             id="addButton"
@@ -97,6 +94,16 @@
           >
             Tải lại
           </button>
+        </div>
+        <div class="loader-bars" *ngIf="checkAdd">
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
         </div>
       </div>
     </div>

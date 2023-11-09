@@ -1,10 +1,10 @@
-.section-header-info
-  .section-title {
+.section-header-info .section-title {
   margin-top: 25px;
   font-size: 1.625rem;
   font-weight: 700;
 }
-p.switch-option-text{
+
+p.switch-option-text {
   width: 600px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -12,25 +12,36 @@ p.switch-option-text{
   display: -webkit-box;
   -webkit-box-orient: vertical;
 }
+
 .account-hub-content {
   margin-top: 1.5rem;
 }
-form.form.ng-untouched.ng-pristine.ng-valid{
+
+form.form.ng-untouched.ng-pristine.ng-valid {
   border: none;
   padding: 0px;
   box-shadow: none;
 }
+
 svg.x1lliihq.x1k90msu.x2h7rmj.x1qfuztq.xcza8v6.xlup9mm.x1kky2od {
   position: absolute;
   right: 0;
   top: 38%;
 }
+
 .form-row.split {
   cursor: pointer;
 }
+
 @media screen and (max-width: 1440px) {
-  p.switch-option-text{
+  p.switch-option-text {
     width: 330px;
     -webkit-line-clamp: 5;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  svg.x1lliihq.x1k90msu.x2h7rmj.x1qfuztq.xcza8v6.xlup9mm.x1kky2od {
+    top: -93%;
   }
 }

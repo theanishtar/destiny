@@ -20,28 +20,42 @@ button.btnClose-change-email {
     background: #fff;
     width: auto;
 }
+
 form.form.change-mail {
     position: absolute;
     right: 0%;
     transform: translate(-80%, -10%);
 }
+
 @media (max-width:390px) {
     form.form.change-mail {
         transform: translate(13%, 0%) !important;
         width: clamp(392px, 50%, 530px) !important;
     }
+
 }
 
-@media (max-width:  1286px) {
+@media (max-width: 1286px) {
     form.form.change-mail {
         transform: translate(-170%, -15%) !important;
     }
 }
+
 .progressbar {
     margin-bottom: 30px !important;
 }
+
 .input-group {
     margin: 1.5rem 0 !important;
 }
 
+@media screen and (max-width: 480px) {
+    form.form.change-mail {
+        right: 0% !important;
+        transform: translate(0%, -12%) !important;
+    }
 
+    .form {
+        width: clamp(390px, 50%, 530px) !important;
+    }
+}

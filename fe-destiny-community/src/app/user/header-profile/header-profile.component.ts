@@ -4,6 +4,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { ProfileService } from '../service/profile.service';
 import { MessageService } from '../service/message.service';
 import { FollowsService } from '../service/follows.service';
+import { ModalService } from '../service/modal.service';
 import '../../../assets/toast/main.js';
 declare var toast: any;
 @Component({
@@ -39,7 +40,8 @@ export class HeaderProfileComponent implements OnInit {
     private router: Router,
     public profileService: ProfileService,
     public messageService: MessageService,
-    public followsService: FollowsService
+    public followsService: FollowsService,
+    public modalService: ModalService
   ) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -50,14 +52,12 @@ export class HeaderProfileComponent implements OnInit {
 
   }
   addFollow(id: number) {
-    this.followsService.addFollowAPI(id).subscribe((res) => {
-      new toast({
-        title: 'Thông báo!',
-        message: 'Đã theo dõi',
-        type: 'success',
-        duration: 3000,
-      })
-      // location.reload();
+    this.modalService.sendNotify(' ', 0, id, 'FOLLOW', 0);
+    new toast({
+      title: 'Thông báo!',
+      message: 'Đã theo dõi',
+      type: 'success',
+      duration: 3000,
     });
   }
   /* ============template============= */

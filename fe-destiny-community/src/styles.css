@@ -147,7 +147,14 @@ body {
 .dark-mode .toast__close {
   color: rgba(255, 255, 255, 0.3);
 }
-
+@media screen and (max-width: 480px) {
+  .toast {
+    padding: 0 !important;
+    margin: 0 !important;
+    min-width: 325px !important;
+    max-width: 370px !important;
+  }
+}
 
 /*  */
 i.fa-solid.fa-chevron-down {
@@ -284,4 +291,17 @@ a.nav-link.click-scroll.site-footer-link {
 }
 .modal-create-post .w-full {
   width: 100%;
+}
+
+/* No internet */
+.internet-status {
+  text-align: center;
+  margin-top: 15%;
+}
+.internet-status svg {
+  width: 10%;
+  height: 10%;
+}
+.internet-status h1, #internetStatus{
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }

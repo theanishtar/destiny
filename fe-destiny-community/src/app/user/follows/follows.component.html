@@ -1,12 +1,13 @@
 <app-navigation></app-navigation>
 
+
 <!-- CONTENT GRID -->
 <div class="content-grid">
 
-  <app-header-profile></app-header-profile>
-
+  <app-header-profile *ngIf="!isLoading"></app-header-profile>
+  <app-loading *ngIf="isLoading"></app-loading>
   <!-- SECTION -->
-  <section class="section">
+  <section class="section" id="body-follow">
     <!-- SECTION HEADER -->
     <div class="section-header">
       <!-- SECTION HEADER INFO -->
@@ -97,9 +98,7 @@
     </div>
     <!-- /SECTION FILTERS BAR -->
 
-    <app-loading *ngIf="isLoading"></app-loading>
-    
-    <div id="body-follow">
+    <div>
       <!-- GRID -->
       <div [ngClass]="{'hidden': activeContent !== 'following'}" >
         <div *ngIf="checkData1" class="emty-message">Khi bạn theo dõi mọi người, bạn sẽ nhìn thấy họ ở đây</div>
@@ -134,7 +133,7 @@
                 <!-- /USER SHORT DESCRIPTION AVATAR -->
     
                 <!-- USER SHORT DESCRIPTION TITLE -->
-                <p class="user-short-description-title"><a (click)="this.profileService.loadDataProfileTimeline(fling.user_id)">{{fling.fullname}}</a></p>
+                <p class="user-short-description-title"><a href="profile" (click)="this.profileService.loadDataProfileTimeline(fling.user_id)">{{fling.fullname}}</a></p>
                 <!-- /USER SHORT DESCRIPTION TITLE -->
     
                 <!-- USER SHORT DESCRIPTION TEXT -->
@@ -244,7 +243,7 @@
               <!-- /USER SHORT DESCRIPTION AVATAR -->
   
               <!-- USER SHORT DESCRIPTION TITLE -->
-              <p class="user-short-description-title"><a (click)="this.profileService.loadDataProfileTimeline(fler.user_id)">{{fler.fullname}}</a></p>
+              <p class="user-short-description-title"><a href="profile" (click)="this.profileService.loadDataProfileTimeline(fler.user_id)">{{fler.fullname}}</a></p>
               <!-- /USER SHORT DESCRIPTION TITLE -->
   
               <!-- USER SHORT DESCRIPTION TEXT -->
@@ -355,7 +354,7 @@
                 <!-- /USER SHORT DESCRIPTION AVATAR -->
     
                 <!-- USER SHORT DESCRIPTION TITLE -->
-                <p class="user-short-description-title"><a (click)="this.profileService.loadDataProfileTimeline(friend.user_id)">{{friend.fullname}}</a></p>
+                <p class="user-short-description-title"><a href="profile" (click)="this.profileService.loadDataProfileTimeline(friend.user_id)">{{friend.fullname}}</a></p>
                 <!-- /USER SHORT DESCRIPTION TITLE -->
     
                 <!-- USER SHORT DESCRIPTION TEXT -->

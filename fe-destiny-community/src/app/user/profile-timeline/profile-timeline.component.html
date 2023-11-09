@@ -94,7 +94,7 @@
         <div class="widget-box-content" *ngFor="let item of listSuggested">
           <div class="user-status-list">
             <div class="user-status">
-              <div (click)="this.profileService.loadDataProfileTimeline(item.user_id)">
+              <a href="profile" (click)="this.profileService.loadDataProfileTimeline(item.user_id)">
                 <a
                 class="user-avatar small user-status-avatar no-border no-outline"
               >
@@ -114,12 +114,12 @@
                 </div>
               </a>
               <div class="user-status-title">
-                <a class="bold top-user" routerLink="/profile">{{
+                <a class="bold top-user">{{
                   item.fullname
                 }}</a>
                 <span class="bp-verified-badge"></span>
               </div>
-              </div>
+              </a>
               <!-- <a class="user-status-text small" (click)="addFollow(item.user_id)">Theo dõi</a> -->
               <a
                 class="user-status-text small suggested"
@@ -136,8 +136,8 @@
     <!-- /GRID COLUMN -->
 
     <!-- GRID COLUMN -->
-    <div class="grid-column no-post" *ngIf="profileService.listPostPr?.length === 0">Bạn chưa có bài đăng nào!</div>
-    <div class="grid-column" *ngIf="profileService.listPostPr?.length !== 0" id="scrollableDiv">
+    <div class="grid-column no-post" *ngIf="listPostPr?.length === 0">Bạn chưa có bài đăng nào!</div>
+    <div class="grid-column" id="scrollableDiv">
       <!-- SIMPLE TAB ITEMS -->
       <div class="simple-tab-items" #elementToScroll>
         <!-- SIMPLE TAB ITEM -->
@@ -152,7 +152,7 @@
       <!-- WIDGET BOX -->
       <!-- <div *ngFor="let p of profileService.listPostPr"> -->
       <!-- /WIDGET BOX -->
-      <div class="widget-box no-padding" *ngFor="let p of profileService.listPostPr">
+      <div class="widget-box no-padding" *ngFor="let p of listPostPr">
         <!-- WIDGET BOX SETTINGS -->
         <div class="widget-box-settings">
           <!-- POST SETTINGS WRAP -->
@@ -239,8 +239,8 @@
 
               <!-- USER STATUS TITLE -->
               <p class="user-status-title medium">
-                <a class="bold" >{{ p.fullname }}</a> <span *ngIf="p.postEntityProfile != null"> đã chia sẻ bài đăng của 
-                  <a class="bold" (click)="this.profileService.loadDataProfileTimeline(p.postEntityProfile.user_id)">{{ p.postEntityProfile.fullname }}</a> 
+                <a class="bold">{{ p.fullname }}</a> <span *ngIf="p.postEntityProfile != null"> đã chia sẻ bài đăng của 
+                  <a class="bold" href="profile" (click)="this.profileService.loadDataProfileTimeline(p.postEntityProfile.user_id)">{{ p.postEntityProfile.fullname }}</a> 
                 </span>
               </p>
               </div>
@@ -303,7 +303,7 @@
 
                     <!-- USER STATUS TITLE -->
                     <p class="user-status-title medium">
-                      <a class="bold" (click)="this.profileService.loadDataProfileTimeline(p.postEntityProfile.user_id)">{{ p.postEntityProfile.fullname }}</a>
+                      <a class="bold" href="profile" (click)="this.profileService.loadDataProfileTimeline(p.postEntityProfile.user_id)">{{ p.postEntityProfile.fullname }}</a>
                     </p>
                     <!-- /USER STATUS TITLE -->
 
@@ -315,7 +315,8 @@
                     {{ p.postEntityProfile.content }}
                   </p>
                   <!-- /USER STATUS -->
-                  <div class="widget-box-status-content">
+                  <div class="widget-box-status-content"
+                  (click)="modalService.openModalSeeMoreImg(p.postEntityProfile.images)">
                     <div class="picture-collage" *ngIf="p.postEntityProfile.images.length === 1">
                       <div class="picture-collage-row medium" style="margin: 0 18%">
                         <div
@@ -328,7 +329,6 @@
                           >
                             <div class="photo-preview">
                               <div
-                                (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
                                 class="photo-preview-image"
                                 style="
                                     background: url('{{ p.postEntityProfile.images[0] }}')
@@ -347,7 +347,6 @@
                             <div class="photo-preview">
                               <div
                                 class="photo-preview-image"
-                                (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
                                 style="
                                     background: url('{{ p.postEntityProfile.images[0] }}')
                                       center center / cover no-repeat;
@@ -361,7 +360,6 @@
                             <div class="photo-preview">
                               <div
                                 class="photo-preview-image"
-                                (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
                                 style="
                                     background: url('{{  p.postEntityProfile.images[1] }}')
                                       center center / cover no-repeat;
@@ -379,7 +377,6 @@
                             <div class="photo-preview">
                               <div
                                 class="photo-preview-image"
-                                (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
                                 style="
                                     background: url('{{ p.postEntityProfile.images[0] }}')
                                       center center / cover no-repeat;
@@ -393,7 +390,6 @@
                             <div class="photo-preview">
                               <div
                                 class="photo-preview-image"
-                                (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
                                 style="
                                     background: url('{{ p.postEntityProfile.images[1] }}')
                                       center center / cover no-repeat;
@@ -407,7 +403,6 @@
                             <div class="photo-preview">
                               <div
                                 class="photo-preview-image"
-                                (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
                                 style="
                                     background: url('{{ p.postEntityProfile.images[2] }}')
                                       center center / cover no-repeat;
@@ -425,7 +420,6 @@
                             <div class="photo-preview">
                               <div
                                 class="photo-preview-image"
-                                (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
                                 style="
                                     background: url('{{ p.postEntityProfile.images[0] }}')
                                       center center / cover no-repeat;
@@ -439,7 +433,6 @@
                             <div class="photo-preview">
                               <div
                                 class="photo-preview-image"
-                                (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
                                 style="
                                     background: url('{{  p.postEntityProfile.images[1] }}')
                                       center center / cover no-repeat;
@@ -455,7 +448,6 @@
                             <div class="photo-preview">
                               <div
                                 class="photo-preview-image"
-                                (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
                                 style="
                                     background: url('{{ p.postEntityProfile.images[2]}}') center
                                       center / cover no-repeat;
@@ -470,7 +462,6 @@
                             <div class="photo-preview">
                               <div
                                 class="photo-preview-image"
-                                (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
                                 style="
                                   background: url('{{  p.postEntityProfile.images[3] }}')
                                     center center / cover no-repeat;
@@ -483,7 +474,6 @@
                         <div
                           class="picture-collage-item"
                           *ngIf="( p.postEntityProfile.images.length - 4) > 0"
-                          (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
                         >
                           <a class="picture-collage-item-overlay seemore">
                             <p class="picture-collage-item-overlay-text">
@@ -503,7 +493,8 @@
           <!-- {{post.post_img[0]}} -->
           <!-- IFRAME WRAP -->
           <!-- <div *ngFor="let img of p.postImages; let i = index"> -->
-        <div *ngIf="p.postEntityProfile == null">
+        <div *ngIf="p.postEntityProfile == null"
+        (click)="modalService.openModalSeeMoreImg(p.images)">
           <div class="picture-collage" *ngIf="p.images.length === 1">
             <div class="picture-collage-row medium" style="margin: 0 18%">
               <div
@@ -516,7 +507,6 @@
                 >
                   <div class="photo-preview">
                     <div
-                      (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
                       class="photo-preview-image"
                       style="
                           background: url('{{ p.images[0] }}')
@@ -535,7 +525,6 @@
                   <div class="photo-preview">
                     <div
                       class="photo-preview-image"
-                      (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
                       style="
                           background: url('{{ p.images[0] }}')
                             center center / cover no-repeat;
@@ -549,7 +538,6 @@
                   <div class="photo-preview">
                     <div
                       class="photo-preview-image"
-                      (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
                       style="
                           background: url('{{ p.images[1] }}')
                             center center / cover no-repeat;
@@ -567,7 +555,6 @@
                   <div class="photo-preview">
                     <div
                       class="photo-preview-image"
-                      (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
                       style="
                           background: url('{{ p.images[0] }}')
                             center center / cover no-repeat;
@@ -581,7 +568,6 @@
                   <div class="photo-preview">
                     <div
                       class="photo-preview-image"
-                      (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
                       style="
                           background: url('{{ p.images[1] }}')
                             center center / cover no-repeat;
@@ -595,7 +581,6 @@
                   <div class="photo-preview">
                     <div
                       class="photo-preview-image"
-                      (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
                       style="
                           background: url('{{ p.images[2] }}')
                             center center / cover no-repeat;
@@ -613,7 +598,6 @@
                   <div class="photo-preview">
                     <div
                       class="photo-preview-image"
-                      (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
                       style="
                           background: url('{{ p.images[0] }}')
                             center center / cover no-repeat;
@@ -627,7 +611,6 @@
                   <div class="photo-preview">
                     <div
                       class="photo-preview-image"
-                      (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
                       style="
                           background: url('{{ p.images[1] }}')
                             center center / cover no-repeat;
@@ -643,7 +626,6 @@
                   <div class="photo-preview">
                     <div
                       class="photo-preview-image"
-                      (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
                       style="
                           background: url('{{p.images[2]}}') center
                             center / cover no-repeat;
@@ -658,7 +640,6 @@
                   <div class="photo-preview">
                     <div
                       class="photo-preview-image"
-                      (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
                       style="
                         background: url('{{ p.images[3] }}')
                           center center / cover no-repeat;
@@ -671,7 +652,6 @@
               <div
                 class="picture-collage-item"
                 *ngIf="(p.images.length - 4) > 0"
-                (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
               >
                 <a class="picture-collage-item-overlay seemore">
                   <p class="picture-collage-item-overlay-text">
@@ -806,6 +786,9 @@
               [ngClass]="{active: checkInterested(p.post_id, p.userInterested)}"
               (click)="interestedPost(p.post_id, p.user_id)"
             >
+            <svg class="post-option-icon icon-comment interested" width="800px" height="800px" viewBox="0 -3.71 75.17 75.17" xmlns="http://www.w3.org/2000/svg">
+              <path id="Path_1" data-name="Path 1" d="M117.606,280.375s22.263-15.459,31.959-30.318c9.6-14.708.354-31.054-10.533-33.8-14.457-3.65-21.426,10.478-21.426,10.478s-6.968-14.128-21.425-10.478c-10.888,2.748-20.132,19.094-10.534,33.8C95.343,264.916,117.606,280.375,117.606,280.375Z" transform="translate(-80.021 -214.131)" fill="#f8f8fb" stroke="#BBBDD3" stroke-linejoin="round" stroke-width="3"/>
+            </svg>
               <p class="post-option-text">Quan tâm</p>
             </div>
 
@@ -942,7 +925,7 @@
             <!-- SIMPLE DROPDOWN -->
             <div class="simple-dropdown widget-box-post-settings-dropdown">
               <!-- SIMPLE DROPDOWN LINK -->
-              <a class="simple-dropdown-link" routerLink="photos">Xem tất cả</a>
+              <a class="simple-dropdown-link" (click)="this.profileService.loadDataProfileTimeline(idLocal)" routerLink="/photos">Xem tất cả</a>
               <!-- /SIMPLE DROPDOWN LINK -->
             </div>
             <!-- /SIMPLE DROPDOWN -->
@@ -970,10 +953,10 @@
             <!-- /PICTURE ITEM -->
 
             <!-- PICTURE ITEM -->
-            <a class="picture-item" routerLink="photos" *ngIf="(profileService.dataProfileTimeline?.images.length - 11) > 0">
+            <a class="picture-item" (click)="this.profileService.loadDataProfileTimeline(idLocal)" routerLink="/photos" *ngIf="(profileService.dataProfileTimeline?.images.length - 11) > 0">
               <!-- PICTURE -->
               <figure class="picture round liquid">
-                <img src="" alt="avatar-17" />
+                <!-- <img src="" alt="avatar-17" /> -->
               </figure>
               <!-- /PICTURE -->
 

@@ -4,7 +4,9 @@
       <i class="fa-solid fa-xmark"></i>
     </button>
     <div class="post-container-img">
-      <div class="post">
+      
+    <app-loading *ngIf="modalService.checkImg"></app-loading>
+      <div class="post" *ngIf="!modalService.checkImg">
         <!-- Slideshow container -->
         <div class="img-product">
           <div class="slideshow-container">
@@ -12,18 +14,6 @@
             <div class="mySlides fade" *ngFor="let img of modalService.imagesSeeMore">
               <img [src]="img" style="width: 100%" />
             </div>
-
-            <!-- <div class="mySlides fade">
-              <img src="../assets/images/posts/pant.png" style="width: 100%" />
-            </div>
-
-            <div class="mySlides fade">
-              <img src="../assets/images/posts/shirt.png" style="width: 100%" />
-            </div>
-            <div class="mySlides fade">
-              <img src="../assets/images/posts/chair.png" style="width: 100%" />
-            </div> -->
-
             <!-- Next and previous buttons -->
             <div class="btn-slide-shows">
               <a class="prev-img" (click)="plusSlides(-1)">&#10094;</a>
@@ -32,7 +22,7 @@
           </div>
 
           <div class="numbertext">
-            <span id="numbertext">1 </span>/ <b>{{ slidesLength }}</b>
+            <span id="numbertext">1 </span>/ <b>{{ modalService.imagesSeeMore.length }}</b>
           </div>
         </div>
       </div>

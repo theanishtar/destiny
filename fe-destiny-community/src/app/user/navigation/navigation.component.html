@@ -6,7 +6,7 @@
   <!-- USER AVATAR -->
   <a
     class="user-avatar small user-status-avatar no-border no-outline"
-    routerLink="/profile"
+    href="profile"
     (click)="this.profileService.loadDataProfileTimeline(0)"
   >
     <div class="hexagon-container">
@@ -39,7 +39,7 @@
         <a
           [attr.data-title]="'navbar_home' | translate"
           class="menu-item-link"
-          routerLink="/newsfeed"
+          (click)="handleLinkClick($event)" routerLink="/newsfeed"
         >
           <!-- MENU ITEM LINK ICON -->
           <div class="menu-item-link-icon icon-newsfeed">
@@ -61,7 +61,7 @@
         <a
           [attr.data-title]="'sidebar_follow' | translate"
           class="menu-item-link"
-          routerLink="/follow"
+          (click)="handleLinkClick($event)" routerLink="/follow"
         >
           <!-- MENU ITEM LINK ICON -->
           <div class="menu-item-link-icon icon-overview">
@@ -82,7 +82,7 @@
         <a
           [attr.data-title]="'Nhantin' | translate"
           class="menu-item-link"
-          routerLink="/message"
+          (click)="handleLinkClick($event)" routerLink="/message"
         >
           <!-- MENU ITEM LINK ICON -->
           <div
@@ -110,7 +110,7 @@
         <a
           [attr.data-title]="'sidebar_history' | translate"
           class="menu-item-link"
-          routerLink="/history"
+          (click)="handleLinkClick($event)" routerLink="/history"
         >
           <!-- MENU ITEM LINK ICON -->
           <div class="menu-item-link-icon icon-group">
@@ -131,7 +131,7 @@
         <a
           [attr.data-title]="'navbar_contact' | translate"
           class="menu-item-link"
-          routerLink="/contact"
+          (click)="handleLinkClick($event)" routerLink="/contact"
         >
           <!-- MENU ITEM LINK ICON -->
           <div class="menu-item-link-icon icon-members">
@@ -152,7 +152,7 @@
         <a
           [attr.data-title]="'sidebar_setting' | translate"
           class="menu-item-link"
-          routerLink="/setting"
+          (click)="handleLinkClick($event)" routerLink="/setting"
         >
           <!-- MENU ITEM LINK ICON -->
           <div class="menu-item-link-icon icon-badges">
@@ -182,9 +182,10 @@
   <!-- /NAVIGATION WIDGET COVER -->
 
   <!-- USER SHORT DESCRIPTION -->
-  <div class="user-short-description big">
+  <a class="user-short-description big" href="profile"
+  (click)="this.profileService.loadDataProfileTimeline(0)">
     <!-- USER SHORT DESCRIPTION AVATAR -->
-    <a class="user-short-description-avatar user-avatar big" href="profile">
+    <a class="user-short-description-avatar user-avatar big">
       <div class="hexagon-container">
         <div class="hexagon user-avatar-content">
           <div
@@ -204,10 +205,10 @@
 
     <!-- USER SHORT DESCRIPTION TITLE -->
     <p class="user-short-description-title">
-      <a href="profile">{{userDisplayName}}</a>
+      <a>{{userDisplayName}}</a>
     </p>
     <!-- /USER SHORT DESCRIPTION TITLE -->
-  </div>
+  </a>
   <!-- /USER SHORT DESCRIPTION -->
 
   <!-- USER STATS -->
@@ -255,7 +256,7 @@
     <!-- MENU ITEM -->
     <li [class.menu-item]="true" [class.active]="activeMenuItem === 'newsfeed'">
       <!-- MENU ITEM LINK -->
-      <a class="menu-item-link" routerLink="/newsfeed">
+      <a class="menu-item-link" (click)="handleLinkClick($event)" routerLink="/newsfeed">
         <!-- MENU ITEM LINK ICON -->
         <div class="menu-item-link-icon icon-newsfeed">
           <i class="fa-solid fa-house"></i>
@@ -270,7 +271,7 @@
     <!-- MENU ITEM -->
     <li [class.menu-item]="true" [class.active]="activeMenuItem === 'message'">
       <!-- MENU ITEM LINK -->
-      <a class="menu-item-link" routerLink="/message">
+      <a class="menu-item-link" (click)="handleLinkClick($event)" routerLink="/message">
         <!-- MENU ITEM LINK ICON -->
         <div class="menu-item-link-icon icon-newsfeed">
           <i class="fa-solid fa-paper-plane"></i>
@@ -285,7 +286,7 @@
     <!-- MENU ITEM -->
     <li [class.menu-item]="true" [class.active]="activeMenuItem === 'follow'">
       <!-- MENU ITEM LINK -->
-      <a class="menu-item-link" routerLink="/follow">
+      <a class="menu-item-link" (click)="handleLinkClick($event)" routerLink="/follow">
         <!-- MENU ITEM LINK ICON -->
         <div class="menu-item-link-icon icon-overview">
           <i class="fa-solid fa-heart"></i>
@@ -300,7 +301,7 @@
     <!-- MENU ITEM -->
     <li [class.menu-item]="true" [class.active]="activeMenuItem === 'history'">
       <!-- MENU ITEM LINK -->
-      <a class="menu-item-link" routerLink="/history">
+      <a class="menu-item-link" (click)="handleLinkClick($event)" routerLink="/history">
         <!-- MENU ITEM LINK ICON -->
         <div class="menu-item-link-icon icon-group">
           <i class="fa-solid fa-clock-rotate-left"></i>
@@ -315,7 +316,7 @@
     <!-- MENU ITEM -->
     <li [class.menu-item]="true" [class.active]="activeMenuItem === 'contact'">
       <!-- MENU ITEM LINK -->
-      <a class="menu-item-link" routerLink="/contact">
+      <a class="menu-item-link" (click)="handleLinkClick($event)" routerLink="/contact">
         <!-- MENU ITEM LINK ICON -->
         <div class="menu-item-link-icon icon-members">
           <i class="fa-solid fa-envelope"></i>
@@ -330,7 +331,7 @@
     <!-- MENU ITEM -->
     <li [class.menu-item]="true" [class.active]="activeMenuItem === 'setting'">
       <!-- MENU ITEM LINK -->
-      <a class="menu-item-link" routerLink="setting">
+      <a class="menu-item-link" (click)="handleLinkClick($event)" routerLink="setting">
         <!-- MENU ITEM LINK ICON -->
         <div class="menu-item-link-icon icon-badges">
           <i class="fa-solid fa-gear"></i>
@@ -367,39 +368,33 @@
     <!-- NAVIGATION WIDGET INFO -->
     <div class="navigation-widget-info">
       <!-- USER AVATAR -->
-      <a class="user-avatar small no-outline" href="profile">
-        <!-- USER AVATAR CONTENT -->
-        <div class="user-avatar-content">
-          <!-- HEXAGON -->
-          <div
-            class="hexagon-image-30-32"
-            data-src="../../../assets/images/avatar/01.jpg"
-          ></div>
-          <!-- /HEXAGON -->
-        </div>
-        <!-- /USER AVATAR CONTENT -->
-
-        <!-- USER AVATAR PROGRESS -->
-        <div class="user-avatar-progress">
-          <!-- HEXAGON -->
-          <div class="hexagon-progress-40-44"></div>
-          <!-- /HEXAGON -->
-        </div>
-        <!-- /USER AVATAR PROGRESS -->
-
-        <!-- USER AVATAR PROGRESS BORDER -->
-        <div class="user-avatar-progress-border">
-          <!-- HEXAGON -->
-          <div class="hexagon-border-40-44"></div>
-          <!-- /HEXAGON -->
-        </div>
-        <!-- /USER AVATAR PROGRESS BORDER -->
-      </a>
+      <a
+    class="user-avatar small user-status-avatar no-border no-outline"
+    href="profile"
+    (click)="this.profileService.loadDataProfileTimeline(0)"
+  >
+    <div class="hexagon-container">
+      <div class="hexagon user-avatar-content">
+        <div
+          class="hexagon-image"
+          style="background-image: url('{{ avatar }}')"
+        ></div>
+      </div>
+      <div class="hexagon user-avatar-border">
+        <div class="hexagon-border"></div>
+      </div>
+      <div class="hexagon user-avatar-progress-border">
+        <div class="user-avatar-progress"></div>
+      </div>
+      <p class="user-avatar-badge-text">1</p>
+    </div>
+  </a>
       <!-- /USER AVATAR -->
 
       <!-- NAVIGATION WIDGET INFO TITLE -->
       <p class="navigation-widget-info-title">
-        <a href="profile">Marina Valentine</a>
+        <a href="profile"
+        (click)="this.profileService.loadDataProfileTimeline(0)">{{ userDisplayName }}</a>
       </p>
       <!-- /NAVIGATION WIDGET INFO TITLE -->
     </div>
@@ -425,7 +420,7 @@
     <!-- MENU ITEM -->
     <li [class.menu-item]="true" [class.active]="activeMenuItem === 'newsfeed'">
       <!-- MENU ITEM LINK -->
-      <a class="menu-item-link" routerLink="/newsfeed">
+      <a class="menu-item-link" (click)="handleLinkClick($event)" routerLink="/newsfeed">
         <!-- MENU ITEM LINK ICON -->
         <div class="menu-item-link-icon icon-newsfeed">
           <i class="fa-solid fa-house"></i>
@@ -439,13 +434,13 @@
     <!-- MENU ITEM -->
     <li [class.menu-item]="true" [class.active]="activeMenuItem === 'message'">
       <!-- MENU ITEM LINK -->
-      <a class="menu-item-link" routerLink="/message">
+      <a class="menu-item-link" (click)="handleLinkClick($event)" routerLink="/message">
         <!-- MENU ITEM LINK ICON -->
         <div class="menu-item-link-icon icon-newsfeed">
           <i class="fa-solid fa-paper-plane"></i>
         </div>
         <!-- /MENU ITEM LINK ICON -->
-        {{ "navbar_home" | translate }}
+        {{ 'Nhantin' | translate }}
       </a>
       <!-- /MENU ITEM LINK -->
     </li>
@@ -453,7 +448,7 @@
     <!-- MENU ITEM -->
     <li [class.menu-item]="true" [class.active]="activeMenuItem === 'follow'">
       <!-- MENU ITEM LINK -->
-      <a class="menu-item-link" routerLink="/follow">
+      <a class="menu-item-link" (click)="handleLinkClick($event)" routerLink="/follow">
         <!-- MENU ITEM LINK ICON -->
         <div class="menu-item-link-icon icon-overview">
           <i class="fa-solid fa-heart"></i>
@@ -468,7 +463,7 @@
     <!-- MENU ITEM -->
     <li [class.menu-item]="true" [class.active]="activeMenuItem === 'history'">
       <!-- MENU ITEM LINK -->
-      <a class="menu-item-link" routerLink="/history">
+      <a class="menu-item-link" (click)="handleLinkClick($event)" routerLink="/history">
         <!-- MENU ITEM LINK ICON -->
         <div class="menu-item-link-icon icon-group">
           <i class="fa-solid fa-clock-rotate-left"></i>
@@ -483,7 +478,7 @@
     <!-- MENU ITEM -->
     <li [class.menu-item]="true" [class.active]="activeMenuItem === 'contact'">
       <!-- MENU ITEM LINK -->
-      <a class="menu-item-link" routerLink="/contact">
+      <a class="menu-item-link" (click)="handleLinkClick($event)" routerLink="/contact">
         <!-- MENU ITEM LINK ICON -->
         <div class="menu-item-link-icon icon-members">
           <i class="fa-solid fa-envelope"></i>
@@ -498,7 +493,7 @@
     <!-- MENU ITEM -->
     <li [class.menu-item]="true" [class.active]="activeMenuItem === 'setting'">
       <!-- MENU ITEM LINK -->
-      <a class="menu-item-link" routerLink="/setting">
+      <a class="menu-item-link" (click)="handleLinkClick($event)" routerLink="/setting">
         <!-- MENU ITEM LINK ICON -->
         <div class="menu-item-link-icon icon-badges">
           <i class="fa-solid fa-gear"></i>
@@ -513,7 +508,11 @@
   <!-- /MENU -->
 
   <!-- NAVIGATION WIDGET SECTION TITLE -->
+  <a href="profile"
+  (click)="this.profileService.loadDataProfileTimeline(0)">
+
   <p class="navigation-widget-section-title">{{ userDisplayName }}</p>
+</a>
   <!-- /NAVIGATION WIDGET SECTION TITLE -->
 
   <!-- NAVIGATION WIDGET SECTION LINK -->
@@ -556,15 +555,15 @@
   <!-- /NAVIGATION WIDGET SECTION TITLE -->
 
   <!-- NAVIGATION WIDGET SECTION LINK -->
-  <a class="navigation-widget-section-link" href="newsfeed">{{
+  <!-- <a class="navigation-widget-section-link" href="newsfeed">{{
     "navbar_home" | translate
-  }}</a>
+  }}</a> -->
   <!-- /NAVIGATION WIDGET SECTION LINK -->
 
   <!-- NAVIGATION WIDGET SECTION LINK -->
-  <a class="navigation-widget-section-link" href="">{{
+  <!-- <a class="navigation-widget-section-link" href="">{{
     "admin_gioithieu" | translate
-  }}</a>
+  }}</a> -->
   <!-- /NAVIGATION WIDGET SECTION LINK -->
 </nav>
 <!-- /NAVIGATION WIDGET -->
@@ -1052,7 +1051,7 @@
                 <!-- USER STATUS AVATAR -->
                 <a
                   class="user-avatar small user-status-avatar no-border no-outline"
-                  routerLink="/profile"
+                  (click)="handleLinkClick($event)" routerLink="/profile"
                   (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)"
                 >
                   <div class="hexagon-container">
@@ -1107,7 +1106,7 @@
                 <!-- USER STATUS AVATAR -->
                 <a
                   class="user-avatar small user-status-avatar no-border no-outline"
-                  routerLink="/profile"
+                  (click)="handleLinkClick($event)" routerLink="/profile"
                   (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)"
                 >
                   <div class="hexagon-container">
@@ -1162,7 +1161,7 @@
                 <!-- USER STATUS AVATAR -->
                 <a
                   class="user-avatar small user-status-avatar no-border no-outline"
-                  routerLink="/profile"
+                  (click)="handleLinkClick($event)" routerLink="/profile"
                   (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)"
                 >
                   <div class="hexagon-container">
@@ -1216,7 +1215,7 @@
                 <!-- USER STATUS AVATAR -->
                 <a
                   class="user-avatar small user-status-avatar no-border no-outline"
-                  routerLink="/profile"
+                  (click)="handleLinkClick($event)" routerLink="/profile"
                   (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)"
                 >
                   <div class="hexagon-container">
@@ -1271,7 +1270,7 @@
                 <!-- USER STATUS AVATAR -->
                 <a
                   class="user-avatar small user-status-avatar no-border no-outline"
-                  routerLink="/profile"
+                  (click)="handleLinkClick($event)" routerLink="/profile"
                   (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)"
                 >
                   <div class="hexagon-container">
@@ -1356,7 +1355,7 @@
             <!-- USER STATUS AVATAR -->
             <a
               class="user-avatar small user-status-avatar no-border no-outline"
-              routerLink="/profile"
+              (click)="handleLinkClick($event)" routerLink="/profile"
               (click)="this.profileService.loadDataProfileTimeline(0)"
             >
               <div class="hexagon-container">
@@ -1397,14 +1396,14 @@
         <!-- DROPDOWN NAVIGATION LINK -->
         <a
           class="dropdown-navigation-link"
-          routerLink="/profile"
+          (click)="handleLinkClick($event)" routerLink="/profile"
           (click)="this.profileService.loadDataProfileTimeline(0)"
           >Trang cá nhân</a
         >
         <!-- /DROPDOWN NAVIGATION LINK -->
 
         <!-- DROPDOWN NAVIGATION LINK -->
-        <a class="dropdown-navigation-link" routerLink="/edit-profile">{{
+        <a class="dropdown-navigation-link" (click)="handleLinkClick($event)" routerLink="/edit-profile">{{
           "admin_capnhat" | translate
         }}</a>
         <!-- /DROPDOWN NAVIGATION LINK -->

@@ -49,13 +49,15 @@ figure.user-preview-cover.liquid img {
   border-top-right-radius: 12px;
   border-top-left-radius: 12px;
 }
+
 .emty-message {
   text-align: center;
   margin-top: 3rem;
   font-size: 17px;
-    color: #3e3f5e;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #3e3f5e;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+
 /* Loading */
 .lds-facebook {
   display: inline-block;
@@ -127,7 +129,8 @@ figure.user-preview-cover.liquid img {
 
 .hexagon-image {
   width: 82px;
-  height: 87px;;
+  height: 87px;
+  ;
   position: relative;
   z-index: 3;
   background-size: cover;
@@ -159,19 +162,16 @@ figure.user-preview-cover.liquid img {
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   border-radius: 15px;
 }
-.user-short-description-title a{
+
+.user-short-description-title a {
   cursor: pointer;
 }
 
-/* input search */
-/* button.button.primary {
-  z-index: 2 !important;
+@media screen and (max-width: 480px) {
+  select#friends-filter-category {
+    width: 80% !important;
+  }
+  .form-select .form-select-icon{
+    right: 75px !important;
+  }
 }
-input#friends-search {
-  position: relative !important;
-  z-index: 1 !important;
-}
-.with-button label {
-  position: absolute !important;
-  z-index: 2 !important;
-} */

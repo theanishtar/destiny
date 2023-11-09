@@ -218,7 +218,7 @@ export class MessageComponent implements OnInit {
         }
         if (this.messageService.checkUserBlock === true) {
           this.$chatHistory.append(
-            '<div>Người này đã chặn bạn!</div>'
+            '<div class="noftify-block">Người này đã chặn bạn!</div>'
           )
         }
 
@@ -271,7 +271,7 @@ export class MessageComponent implements OnInit {
         );
       } else {
         this.$chatHistory.append(
-          '<div class="notify-block">Bạn đã bị chặn!</div>'
+          '<div class="notify-block" style="text-align: center;font-size: 14px;font-family: Helvetica, Arial, sans-serif;color: red;font-weight: 700;">Bạn đã bị chặn!</div>'
         );
       }
       message = '';

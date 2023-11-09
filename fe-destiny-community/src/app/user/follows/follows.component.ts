@@ -73,17 +73,6 @@ export class FollowsComponent implements OnInit {
   }
 
   /* ============following============= */
-  // loadDataFling() {
-  //   this.followsService.loadDataFollowing().subscribe(() => {
-  //     this.listFollowing = this.followsService.getDataFling();
-  //     this.isLoading = false;
-  //     if (Array.isArray(this.listFollowing) && this.listFollowing.length === 0) {
-  //       this.checkData1 = true;
-  //     }
-  //   });
-
-  // }
-
   deleteFling(id: number) {
     this.followsService.deleteFollowing(id).subscribe(() => {
       ;
@@ -100,16 +89,6 @@ export class FollowsComponent implements OnInit {
   }
 
   /* ============follower============= */
-  // loadDataFler() {
-  //   this.followsService.loadDataFollower().subscribe(() => {
-  //     this.listFollower = this.followsService.getDataFler();
-  //     if (Array.isArray(this.listFollower) && this.listFollower.length === 0) {
-  //       this.checkData2 = true;
-  //     }
-  //   });
-
-  // }
-
   deleteFler(id: number) {
     this.followsService.deleteFollower(id).subscribe(() => {
       // this.loadDataFler();
@@ -122,17 +101,7 @@ export class FollowsComponent implements OnInit {
       })
     });
   }
-  // addFollow(id: number) {
-  //   this.followsService.addFollowAPI(id).subscribe(() => {
-  //     new toast({
-  //       title: 'Thông báo!',
-  //       message: 'Đã theo dõi',
-  //       type: 'success',
-  //       duration: 3000,
-  //     })
-  //   });
-  //   this.loadDataFriend();
-  // }
+
   addFollow(id: number) {
     this.modalService.sendNotify(' ', 0, id, 'FOLLOW', this.modalService.repCmtId);
     new toast({
@@ -145,8 +114,13 @@ export class FollowsComponent implements OnInit {
   }
   /* ============friend============= */
   async loadDataFriend() {
+    const body_content = document.getElementById('body-follow')!;
+    body_content.style.display = 'none';
     this.listFollowing = await this.followsService.loadDataFollowing();
     this.isLoading = false;
+    if(!this.isLoading){
+      body_content.style.display = 'grid';
+    }
     if (Array.isArray(this.listFollowing) && this.listFollowing.length === 0) {
       this.checkData1 = true;
     }

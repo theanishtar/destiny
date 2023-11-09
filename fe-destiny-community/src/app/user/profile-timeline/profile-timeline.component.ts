@@ -46,7 +46,17 @@ export class ProfileTimelineComponent implements OnInit {
   checkCountPosts: boolean = true;
   checkListPost: any;
   ngOnInit() {
+    let profile_timeline = document.getElementById('profile_timeline')!;
+
+    profile_timeline.style.display = 'none';
+    this.profileService.getCheckData().then((result) => {
+      console.warn("result: " + result)
+        if(result){}
+        this.isLoading = false;
+        profile_timeline.style.display = 'grid';
+    });
     this.loadDataSuggest();
+    this.loadPosts();
     this.checkScroll();
     this.profileService.loadDataProfileTimeline(this.idLocal);
     liquid.liquid();
@@ -58,16 +68,7 @@ export class ProfileTimelineComponent implements OnInit {
     sidebars.sidebars();
     content.contentTab();
     form.formInput();
-    let profile_timeline = document.getElementById('profile_timeline')!;
-
-    profile_timeline.style.display = 'none';
-    this.profileService.getCheckData().then((result) => {
-        this.isLoading = false;
-        if(this.profileService.listPostPr.length === 0){
-          this.checkLoadingdata = false;
-        }
-        profile_timeline.style.display = 'grid';
-    });
+    
   }
   dataFollows: any
   listPostPr: any;
@@ -105,6 +106,21 @@ export class ProfileTimelineComponent implements OnInit {
       this.listSuggested = this.followsService.getDataSuggested();
       this.check = false;
     });
+  }
+
+  currentPage: number = 1;
+  async loadPosts() {
+    try {
+      let dataPost = {
+        toProfile: localStorage.getItem("idSelected"),
+        page: this.currentPage
+      }
+      this.profileService.loadDataTimelinePost(dataPost).subscribe((data: any) => {
+        this.listPostPr = data; // Lưu dữ liệu ban đầu vào mảng
+      });
+    } catch (error) {
+      console.error('Error:', error);
+    }
   }
   /* ============Interested============= */
 
@@ -190,7 +206,6 @@ export class ProfileTimelineComponent implements OnInit {
     }
   }
 
-  currentPage: number = 1;
   checkLoadingdata: boolean = true;
   async checkScroll() {
     const scrollableDiv = document.getElementById('scrollableDiv')!;
@@ -220,7 +235,7 @@ export class ProfileTimelineComponent implements OnInit {
           }
           this.currentPage++;
           const data: any = await this.profileService.loadDataTimelinePost(dataPost).toPromise();
-          this.profileService.listPostPr = [...this.profileService.listPostPr, ...data];
+          this.listPostPr = [...this.listPostPr, ...data];
           this.checkLoadingdata = false;
           if (data.length < 5) {
             this.checkCountPosts = false;

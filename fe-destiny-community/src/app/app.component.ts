@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from './user/service/message.service';
@@ -12,17 +12,15 @@ import { MessageService } from './user/service/message.service';
 export class AppComponent {
   title = 'FE_Destiny';
   sender: any;
+  ngOnInit() {
+  }
 
   constructor(
     private translateService: TranslateService,
     public messageService: MessageService,
     private cookieService: CookieService,
   ) {
-    // if (this.cookieService.get("full_name") != '') {
-    //   setTimeout(() => {
-    //     // this.loadDataSender();
-    //   }, 1000);
-    // }
+
   }
 
   public selectLg(event: any) {
@@ -35,5 +33,15 @@ export class AppComponent {
       this.messageService.connectToChat(this.sender.user_id);
 
     });
+  }
+
+  // Check internet
+  check: boolean = false;
+
+  @HostListener('window:load', ['$event'])
+  @HostListener('window:online', ['$event'])
+  @HostListener('window:offline', ['$event'])
+  checkInternetStatus() {
+    this.check = navigator.onLine;
   }
 }

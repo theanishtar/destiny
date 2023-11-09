@@ -3,7 +3,8 @@
     <button (click)="closeModalCreatePost()" class="btnClose-create-post">
       <i class="fa-solid fa-xmark"></i>
     </button>
-    <div class="modal-body">
+    <app-loading *ngIf="isLoading"></app-loading>
+    <div class="modal-body" id="body-create-post">
       <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
         <div class="mx-auto max-w-270">
           <div
@@ -95,7 +96,7 @@
                             createPostForm.get('product')?.touched
                           "
                         >
-                          <div style="color: red">
+                          <div style="color: red" class="noftify-error">
                             Vui lòng nhập tên sản phẩm!
                           </div>
                         </span>
@@ -132,6 +133,7 @@
                                 ?.hasError('required')
                             "
                             style="color: red"
+                            class="noftify-error"
                           >
                             Vui lòng nhập hashtag
                           </div>
@@ -142,6 +144,7 @@
                                 ?.hasError('pattern')
                             "
                             style="color: red"
+                            class="noftify-error"
                           >
                             Vui lòng kiểm tra hashtag theo đúng định dạng (VD:
                             #davisy)
@@ -228,7 +231,7 @@
                             [items]="provinces"
                             [clearable]="false"
                             formControlName="province_name"
-                            [ngModel]="dataEditProfile.province_name"
+                            [ngModel]="dataEditProfile?.province_name!"
                             (change)="getProvinceName()"
                             required
                           ></ng-select>
@@ -247,7 +250,7 @@
                             [clearable]="false"
                             formControlName="district_name"
                             class="form-controlP"
-                            [ngModel]="dataEditProfile.district_name"
+                            [ngModel]="dataEditProfile?.district_name"
                             required
                             (change)="getDistrictName()"
                           ></ng-select>
@@ -265,7 +268,7 @@
                           [items]="wards"
                           [clearable]="false"
                           formControlName="ward_name"
-                          [ngModel]="dataEditProfile.ward_name"
+                          [ngModel]="dataEditProfile?.ward_name"
                           class="form-controlP"
                           required
                         ></ng-select>

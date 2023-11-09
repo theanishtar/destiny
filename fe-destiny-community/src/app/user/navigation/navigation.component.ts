@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from '@angular/core';
 
 import { CookieService } from 'ngx-cookie-service';
 import { Router, NavigationEnd } from '@angular/router';
@@ -39,7 +39,9 @@ export class NavigationComponent implements OnInit {
     private router: Router,
     public messageService: MessageService,
     public profileService: ProfileService,
-    public modalService: ModalService
+    public modalService: ModalService,
+    private el: ElementRef,
+    private renderer: Renderer2, 
   ) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -54,6 +56,8 @@ export class NavigationComponent implements OnInit {
   }
 
   logout() {
+    // const navigationWidget = document.getElementById('navigation-widget-mobile');
+    // navigationWidget!.classList.toggle('hidden');
     return this.loginService.logout();
   }
   checkType(type: any) {
@@ -109,5 +113,20 @@ export class NavigationComponent implements OnInit {
     }
   }
 
+  handleLinkClick(event: Event): void {
+    // Xử lý logic khi liên kết được nhấp
+    // alert('Link clicked!'+ event);
+
+    const elementsWithPaddSliderClass = document.querySelectorAll('.padd-slider');
+
+    // alert(elementsWithPaddSliderClass.length);
+    elementsWithPaddSliderClass.forEach(element => {
+      this.renderer.removeAttribute(element, 'style'); // Xóa tất cả các thuộc tính style, bạn có thể thay đổi tùy ý
+    });
+
+    // Add your custom logic here
+  }
+
+  
 
 }

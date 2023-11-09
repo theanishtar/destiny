@@ -43,6 +43,8 @@ export class CreatePostComponent {
   listUser: any[];
   listCount: any;
   dataEditProfile: any
+  isLoading: boolean = false;
+  checkBtn: boolean = false;
 
   constructor(
     public modalService: ModalService,
@@ -62,12 +64,12 @@ export class CreatePostComponent {
   createFormPost() {
     const HASHTAG_PATTERN = /^(?=.*[!@#$%^&*]+)[a-z0-9!@#$%^&*]{4,20}$/;
     this.createPostForm = this.formbuilder.group({
-      content: ['', Validators.required],
+      content: [''],
       hash_tag: ['', [Validators.required, Validators.pattern(HASHTAG_PATTERN),]],
       province_name: [''],
       district_name: [''],
       ward_name: [''],
-      post_status: ['', Validators.required],
+      post_status: [''],
       product: ['', Validators.required],
       post_images: [''],
     });
@@ -77,13 +79,16 @@ export class CreatePostComponent {
   }
 
   async createPost(event: any) {
+    let body = document.getElementById('body-create-post');
+    this.isLoading = true;
+    if (body && this.isLoading) {
+      body.style.opacity = '0';
+    }
     if (this.file.length > 0) {
       for (let img of this.file) {
         await this.addData(img);
       }
     }
-    console.log("this.listImg.length: " + this.listImg.length)
-    console.log("this.createPostForm.get('content')?.value: " + this.createPostForm.get('content')?.value)
     var data = {
       content: this.createPostForm.get('content')?.value,
       hash_tag: this.createPostForm.get('hash_tag')?.value,
@@ -96,12 +101,17 @@ export class CreatePostComponent {
     };
 
     if (this.createPostForm.get('content')?.value === '' && this.listImg.length === 0) {
+      this.isLoading = false;
+      if (body && !this.isLoading) {
+        body.style.opacity = '1';
+      }
       new toast({
         title: 'Thông báo!',
         message: 'Vui lòng không bỏ trống đồng thời nội dung và hình ảnh',
         type: 'warning',
         duration: 3000,
       });
+      
     }
     if (this.createPostForm.valid) {
       this.postService.uploadPost(data).subscribe((res) => {
@@ -112,11 +122,11 @@ export class CreatePostComponent {
           duration: 1500,
         });
         this.listPosts = res;
-        console.warn("this.listPosts: " + JSON.stringify(this.listPosts));
         this.createPostForm.reset();
         this.listImg = [];
         this.file = {};
         this.closeModalCreatePost();
+        this.isLoading = false;
       });
     }
   }
@@ -149,7 +159,7 @@ export class CreatePostComponent {
           this.districts = [];
           this.districts = this.profileService.getAllDistrict();
 
-          const district = this.createPostForm.get('district_name')?.value;
+          const district = this.dataEditProfile.district_name;
           this.profileService.loadAllWard(district).subscribe(() => {
             this.wards = [];
             this.wards = this.profileService.getAllWard();

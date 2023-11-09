@@ -163,11 +163,15 @@ app.querySelector('.content-grid', function (el) {
     window.addEventListener('resize', setNavigationWidgetDimensions);
   });
 
+  
+  
   /*-------------------------------
       NAVIGATION WIDGET MOBILE
   -------------------------------*/
   app.querySelector('.navigation-widget-mobile-trigger', function (el) {
+
     const navigationMobileTrigger = el[0],
+          // linkToPop = document.querySelector('.menu-item-link');
           navigationWidgetMobile = document.querySelector('#navigation-widget-mobile'),
           navigationWidgetMobileCloseButton = navigationWidgetMobile.querySelector('.navigation-widget-close-button'),
           hiddenClass = 'hidden';
@@ -180,10 +184,11 @@ app.querySelector('.content-grid', function (el) {
     overlay.style.top = '0';
     overlay.style.left = '0';
     overlay.style.zIndex = 99998;
-    overlay.style.backgroundColor = 'rgba(21, 21, 31, .96)';
+    overlay.style.backgroundColor = 'rgb(21 21 31 / 8%)';// 'rgba(21, 21, 31, .96)';
     overlay.style.opacity = 0;
     overlay.style.visibility = 'hidden';
     overlay.style.transition = 'opacity .3s ease-in-out, visibility .3s ease-in-out';
+    overlay.className = "padd-slider";
 
     document.body.appendChild(overlay);
 
@@ -207,12 +212,18 @@ app.querySelector('.content-grid', function (el) {
       const toggleOverlay = navigationWidgetMobile.classList.contains(hiddenClass) ? hideOverlay : showOverlay;
       toggleOverlay();
     };
+
+    
   
     navigationMobileTrigger.addEventListener('click', toggleNavigationWidgetMobile);
     navigationWidgetMobileCloseButton.addEventListener('click', toggleNavigationWidgetMobile);
     overlay.addEventListener('click', toggleNavigationWidgetMobile);
+    // linkToPop.addEventListener('click',toggleNavigationWidgetMobile );
   
     setNavigationWidgetMobileDimensions();
     window.addEventListener('resize', setNavigationWidgetMobileDimensions);
   });
+
+  //document.querySelectorAll('.menu-item-link').addEventListener('click', toggleNavigationWidgetMobile);
+
 });}}

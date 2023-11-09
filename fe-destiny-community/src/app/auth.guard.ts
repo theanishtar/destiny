@@ -38,21 +38,30 @@ export class authGuard implements CanActivate {
 
     // Lấy vai trò của người dùng
     const userRole = this.getUserRole();
-
+    const isAdminRoute = /^\/(admin)/.test(state.url);
+    const isModRoute= /^\/(moderator)/.test(state.url);
     // Kiểm tra xem người dùng có quyền truy cập trang quản trị không.
-    if (userRole === 'ROLE_USER' && state.url.startsWith('/admin') && state.url.startsWith('/moderator')) {
+    if (userRole === 'ROLE_USER' && (state.url.startsWith('/admin') || state.url.startsWith('/moderator'))) {
       // Người dùng là user và truy cập vào URL bắt đầu bằng '/admin'
+      // Xử lý ở đây, có thể chuyển hướng hoặc hiển thị thông báo.
+      this.location.back();
+      return false;
+    }
+    
+    if (userRole === 'ROLE_MODERATOR' && !isModRoute ) {
+      // Người dùng là mod và truy cập vào URL ko bắt đầu bằng '/moderator'
       // Xử lý ở đây, có thể chuyển hướng hoặc hiển thị thông báo.
       this.location.back();
       return false;
     }
 
-    if (userRole === 'ROLE_MODERATOR' && state.url.startsWith('/admin')) {
-      // Người dùng là user và truy cập vào URL bắt đầu bằng '/admin'
+    if (userRole === 'ROLE_ADMIN' && !isAdminRoute) {
+      // Người dùng là admin và truy cập vào URL ko bắt đầu bằng '/admin'
       // Xử lý ở đây, có thể chuyển hướng hoặc hiển thị thông báo.
       this.location.back();
       return false;
     }
+    
 
     return true;
   }

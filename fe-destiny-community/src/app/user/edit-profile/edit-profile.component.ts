@@ -87,6 +87,9 @@ export class EditProfileComponent implements OnInit {
 
 
   ngOnInit() {
+    this.loadDataProfile();
+    this.loadAllGender();
+    this.loadAllProvince();
     liquid.liquid();
     avatarHexagons.avatarHexagons();
     tooltips.tooltips();
@@ -94,16 +97,9 @@ export class EditProfileComponent implements OnInit {
     popups.picturePopup();
     headers.headers();
     sidebars.sidebars();
-    content.contentTab();
+    // content.contentTab();
     form.formInput();
-    this.createFormProfile();
-    this.loadDataProfile();
-    this.loadAllGender();
-    this.loadAllProvince();
-    this.profileForm.get('username')!.valueChanges.subscribe((value) => {
-      this.userName = value;
-    });
-    console.warn("gender_name: " + this.profileForm.get('idWard')!.value);
+    
   }
 
   constructor(
@@ -114,6 +110,10 @@ export class EditProfileComponent implements OnInit {
     public storage: Storage,
     public messageService: MessageService
   ) {
+    this.createFormProfile();
+    this.profileForm.get('username')!.valueChanges.subscribe((value) => {
+      this.userName = value;
+    });
   }
 
 
@@ -190,9 +190,6 @@ export class EditProfileComponent implements OnInit {
         })
         this.cookieService.set('avatar', this.avatarTemp);
         if (this.userName != this.initialUsername) {
-          console.log("this.userName: " + this.userName)
-          console.log("this.userName1: " + this.initialUsername)
-          console.log("=====================================")
           this.messageService.loadDataSender().subscribe(() => {
             this.sender = JSON.parse(JSON.stringify(this.messageService.getSender()));
             this.modalService.connectToComment(this.sender.user_id);

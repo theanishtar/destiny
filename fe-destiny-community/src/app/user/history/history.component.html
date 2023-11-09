@@ -134,7 +134,7 @@
                 <!-- FORUM CATEGORY -->
                 <div class="forum-category">
                   <!-- FORUM CATEGORY IMAGE -->
-                  <a href="forums-category.html">
+                  <a>
                     <img class="forum-category-image" src="{{interested[1]}}"
                       alt="category-01">
                   </a>
@@ -143,7 +143,7 @@
                   <!-- FORUM CATEGORY INFO -->
                   <div class="forum-category-info">
                     <!-- FORUM CATEGORY TITLE -->
-                    <p class="forum-category-title"><a (click)="this.profileService.loadDataProfileTimeline(interested[1])">{{interested[2]}}</a></p>
+                    <p class="forum-category-title"><a href="profile" (click)="this.profileService.loadDataProfileTimeline(interested[5])">{{interested[2]}}</a></p>
                     <!-- /FORUM CATEGORY TITLE -->
 
                     <!-- FORUM CATEGORY TEXT -->
@@ -218,7 +218,7 @@
                 <!-- FORUM CATEGORY -->
                 <div class="forum-category">
                   <!-- FORUM CATEGORY IMAGE -->
-                  <a href="forums-category.html">
+                  <a>
                     <img class="forum-category-image" src="{{share[1]}}"
                       alt="category-01">
                   </a>
@@ -227,7 +227,7 @@
                   <!-- FORUM CATEGORY INFO -->
                   <div class="forum-category-info">
                     <!-- FORUM CATEGORY TITLE -->
-                    <p class="forum-category-title"><a href="forums-category.html">{{share[2]}}</a></p>
+                    <p class="forum-category-title"><a href="profile" (click)="this.profileService.loadDataProfileTimeline(share[5])">{{share[2]}}</a></p>
                     <!-- /FORUM CATEGORY TITLE -->
 
                     <!-- FORUM CATEGORY TEXT -->
@@ -302,7 +302,7 @@
                 <!-- FORUM CATEGORY -->
                 <div class="forum-category">
                   <!-- FORUM CATEGORY IMAGE -->
-                  <a href="forums-category.html">
+                  <a>
                     <img class="forum-category-image" src="{{sendreciever[1]}}"
                       alt="category-01">
                   </a>
@@ -311,7 +311,7 @@
                   <!-- FORUM CATEGORY INFO -->
                   <div class="forum-category-info">
                     <!-- FORUM CATEGORY TITLE -->
-                    <p class="forum-category-title"><a href="forums-category.html">{{sendreciever[2]}}</a></p>
+                    <p class="forum-category-title"><a href="profile" (click)="this.profileService.loadDataProfileTimeline(sendreciever[5])">{{sendreciever[2]}}</a></p>
                     <!-- /FORUM CATEGORY TITLE -->
 
                     <!-- FORUM CATEGORY TEXT -->

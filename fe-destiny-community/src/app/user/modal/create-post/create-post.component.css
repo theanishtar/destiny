@@ -1,4 +1,6 @@
-ng-select#post_provinces_id, ng-select#district,ng-select#ward {
+ng-select#post_provinces_id,
+ng-select#district,
+ng-select#ward {
     height: 42.6px !important;
     background: #EFF4FB;
     border-radius: 0.25rem;
@@ -6,24 +8,62 @@ ng-select#post_provinces_id, ng-select#district,ng-select#ward {
     padding-right: 1.125rem;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+
 span.delete-img {
     position: absolute;
     z-index: 51;
     top: -15%;
     right: 0%;
 }
+
 span.absolute.left-4\.5.top-4.viewer {
     top: 24%;
 }
+
 span.absolute.left-4\.5.top-4.content {
     top: 11px;
 }
+
 button.flex.justify-center.rounded.bg-primary.py-2.px-6.font-medium.text-gray.hover\:bg-opacity-95 {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+
 @media screen and (min-width: 1440px) {
     div#FileUpload {
         width: 262px;
         height: 210px;
     }
-  }
+}
+
+@media screen and (max-width: 480px) {
+    div#FileUpload {
+        width: 16rem;
+    }
+
+    img#uploadPreview {
+        width: 100%;
+    }
+
+    span.delete-img {
+        top: -10% !important;
+    }
+
+    .slideshow-container-product {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    .btn-create-post{
+        right: 14% !important;
+    }
+    button.btnClose-create-post{
+        right: 50px !important;
+    }
+    .noftify-error {
+        width: 240px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 2;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+    }
+}

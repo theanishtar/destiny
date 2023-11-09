@@ -180,7 +180,8 @@
       <!-- SOCIAL LINKS -->
       <div class="social-links">
         <!-- SOCIAL LINK -->
-        <a class="social-link youtube" href="https://accounts.google.com/gsi/select?client_id=829042615252-9cgbgmdc55famceanr15b20dq3kns76m&ux_mode=redirect&login_uri=http%3A%2F%2Flocalhost%3A8080%2Foauth%2FloginGG&ui_mode=card&as=tpphk8oJS9SGuKAiUmVKtg&g_csrf_token=2a42f6fd54be8af1&origin=http%3A%2F%2Flocalhost%3A4200">
+        <a class="social-link youtube" 
+        href="https://accounts.google.com/gsi/select?client_id=829042615252-9cgbgmdc55famceanr15b20dq3kns76m&ux_mode=redirect&login_uri=https%3A%2F%2Fdavisycompany.hop.sh%2Foauth%2FloginGG&ui_mode=card&as=3bAZAO9D1YSqZ9G9iPy71Q&g_csrf_token=bc649b19985898fb&origin=http%3A%2F%2Flocalhost%3A63834">
           <!-- ICON FACEBOOK -->
           <svg
             class="icon-twitter"
@@ -202,10 +203,11 @@
           <div id="g_id_onload" data-width="80"
             data-client_id="829042615252-9cgbgmdc55famceanr15b20dq3kns76m" data-ux_mode="redirect"
             data-callback="handleCredentialResponse"
-            data-login_uri="http://localhost:8080/oauth/loginGG">
+            data-login_uri="https://davisycompany.hop.sh/oauth/loginGG">
           </div>
           <div class="g_id_signin" data-type="standard"></div>
-        </div> sau deploy chạy demo lấy link thay cho href trên thẻ a-->
+        </div>  -->
+        <!-- sau deploy chạy demo lấy link thay cho href trên thẻ a -->
 
         <!-- /SOCIAL LINK -->
 
@@ -360,7 +362,7 @@
 									Vui lòng nhập mật khẩu
 								</div>
                 <div *ngIf="registerForm.get('password')?.hasError('pattern')" style="color: red;">
-									Mật khẩu có độ dài từ 4-20 ký tự và có ít nhất một ký tự đặc biệt: !@#\$%^&\*
+									Mật khẩu có độ dài từ 4-20 ký tự và có ít nhất một ký tự đặc biệt: '!&#64;#\$%^&\*'
 								</div>
               </div>
             </span>

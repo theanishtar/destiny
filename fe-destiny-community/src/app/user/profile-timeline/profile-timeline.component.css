@@ -288,3 +288,10 @@ app-loading {
     font-weight: 700;
     text-align: center;
 }
+.post-option.active path#Path_1 {
+  fill: red;
+  stroke: red;
+}
+.post-option:hover svg.post-option-icon.icon-comment{
+  stroke: red;
+}

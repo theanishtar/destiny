@@ -73,7 +73,7 @@
 }
 .user-avatar.small.no-outline.online.notif-mess {
   width: auto;
-  height: 0px;
+  height: -1px;
 }
 
 p.button.re-fl, p.delete-fl {

@@ -1,7 +1,11 @@
 <main class="overlay" *ngIf="modalService.isOpenComment$ | async">
   <div id="favDialog_updatePost" class="modal fade favDialog_updatePost">
     <app-loading *ngIf="modalService.isLoadingCmt"></app-loading>
-    <button (click)="closeModalComment()" class="btnClose-create-post"  *ngIf="!modalService.isLoadingCmt">
+    <button
+      (click)="closeModalComment()"
+      class="btnClose-create-post"
+      *ngIf="!modalService.isLoadingCmt"
+    >
       <i class="fa-solid fa-xmark"></i>
     </button>
     <div class="post-container-update" *ngIf="!modalService.isLoadingCmt">
@@ -26,7 +30,6 @@
         <!-- ../../assets/images/cover/03.jpg -->
         <div class="post-detail">
           <div class="cmt-body">
-
             <div class="full-boxer">
               <div *ngFor="let cmt of modalService.listCmt; let i = index">
                 <div class="comment__container opened">
@@ -36,29 +39,29 @@
                         <div class="profile-image">
                           <!-- <img [src]="cmt[9]" /> -->
                           <a
-                class="user-avatar small user-status-avatar no-border no-outline"
-              >
-                <div class="hexagon-container">
-                  <div class="hexagon user-avatar-content">
-                    <div
-                      class="hexagon-image"
-                      style="background-image: url('{{ cmt[9] }}')"
-                    ></div>
-                  </div>
-                  <div class="hexagon user-avatar-border">
-                    <div class="hexagon-border"></div>
-                  </div>
-                  <div class="hexagon user-avatar-progress-border">
-                    <div class="user-avatar-progress"></div>
-                  </div>
-                  <p class="user-avatar-badge-text">1</p>
-                </div>
-              </a>
+                            class="user-avatar small user-status-avatar no-border no-outline"
+                          >
+                            <div class="hexagon-container">
+                              <div class="hexagon user-avatar-content">
+                                <div
+                                  class="hexagon-image"
+                                  style="background-image: url('{{ cmt[9] }}')"
+                                ></div>
+                              </div>
+                              <div class="hexagon user-avatar-border">
+                                <div class="hexagon-border"></div>
+                              </div>
+                              <div class="hexagon user-avatar-progress-border">
+                                <div class="user-avatar-progress"></div>
+                              </div>
+                              <p class="user-avatar-badge-text">1</p>
+                            </div>
+                          </a>
                         </div>
-                        
+
                         <div class="Name">
                           <strong>{{ cmt[7] }}</strong>
-                          <span>@{{ cmt[8] }}</span>
+                          <span>&#64;{{ cmt[8] }}</span>
                         </div>
                       </div>
                     </div>
@@ -114,7 +117,7 @@
                     <li>Item 3</li>
                   </ul>
                 </div>
-  
+
                 <button class="add-comment-btn" (click)="addComment()">
                   <i class="fa-regular fa-comment"></i>
                 </button>

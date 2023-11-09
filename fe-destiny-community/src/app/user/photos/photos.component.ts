@@ -30,7 +30,7 @@ export class PhotosComponent implements OnInit {
   dataProfileTimeline: any;
   listImg: any
   idLocal: any;
-
+  isLoading = true;
   ngOnInit() {
 
     liquid.liquid();
@@ -42,6 +42,17 @@ export class PhotosComponent implements OnInit {
     sidebars.sidebars();
     content.contentTab();
     form.formInput();
+
+    let photo_body = document.getElementById('photo-body')!;
+
+    photo_body.style.display = 'none';
+    this.profileService.getCheckData().then((result) => {
+        this.isLoading = false;
+        // if(this.profileService.listPostPr.length === 0){
+        //   this.checkLoadingdata = false;
+        // }
+        photo_body.style.display = 'block';
+    });
   }
 
   constructor(

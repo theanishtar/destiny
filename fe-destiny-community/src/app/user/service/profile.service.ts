@@ -94,7 +94,7 @@ export class ProfileService {
       
     
     });
-    this.router.navigate(['profile']);
+    // this.router.navigate(['profile']);
     // window.location.href = 'http://localhost:4200/profile';
   }
 

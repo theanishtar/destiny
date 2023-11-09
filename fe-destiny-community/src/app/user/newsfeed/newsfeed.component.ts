@@ -83,8 +83,10 @@ export class NewsfeedComponent implements OnInit {
     popups.picturePopup();
     headers.headers();
     sidebars.sidebars();
-    content.contentTab();
+    // content.contentTab();
     form.formInput();
+
+    // this.modalService.openModalCreatePost();
   }
 
   constructor(
@@ -104,22 +106,15 @@ export class NewsfeedComponent implements OnInit {
   ) {
   }
   checkLoad() {
-    // setTimeout(() => {
     let body_news = document.getElementById('body-news')!;
     body_news.style.display = 'none';
-    // setTimeout(() => {
-      this.profileService.loadCheckPost(1).subscribe((res) => {
-        console.warn("reponse1: " + res);
-        if (res === null) {
-          // setTimeout(() => {
-            this.modalService.openModalSuggest();
-          // }, 100);
-        } else if (res == 'success') {
-          this.loadPosts();
-        }
-      });
-    // }, 100);
-    // }, 0);
+    this.profileService.loadCheckPost(1).subscribe((res) => {
+      if (res === null) {
+        this.modalService.openModalSuggest();
+      } else if (res == 'success') {
+        this.loadPosts();
+      }
+    });
   }
   /* ============Suggested============= */
   async loadDataSuggest() {
@@ -154,7 +149,7 @@ export class NewsfeedComponent implements OnInit {
     });
   }
 
-  
+
   /* ============Top 5============= */
   listCupPost = [
     "https://odindesignthemes.com/vikinger-theme/wp-content/uploads/2020/09/Credits-Tycoon.png",
@@ -198,7 +193,6 @@ export class NewsfeedComponent implements OnInit {
   checkInterested(post_id: number, interested: any[]): boolean {
     this.mapIntersted.set(post_id, false);
     for (let user of interested) {
-      // if (user[0] == this.currentUserId && user[2] === post_id) {
       if (user.user_id == this.currentUserId) {
         this.mapIntersted.set(post_id, true);
         return true;
@@ -264,17 +258,6 @@ export class NewsfeedComponent implements OnInit {
   }
   /* ============template============= */
 
-  loadData() {
-    const body_news = document.getElementById('body-news')!;
-    body_news.style.display = 'none';
-    // setTimeout(() => {
-    console.log("this.isLoading: " + this.isLoading)
-    if (!this.isLoading) {
-      body_news.style.display = 'grid';
-    }
-    // }, 1);
-  }
-
   translate() {
     document.addEventListener('DOMContentLoaded', function () {
       const translateButton = document.querySelector(
@@ -289,16 +272,20 @@ export class NewsfeedComponent implements OnInit {
       const translatedContent = document.querySelector(
         '.translated-content'
       ) as HTMLElement;
+      if (translateButton) {
+        translateButton.addEventListener('click', function () {
+          originalContent.style.display = 'none';
+          translatedContent.classList.add('active');
+        });
+      }
+      if (backButton) {
+        backButton.addEventListener('click', function () {
+          originalContent.style.display = 'block';
+          translatedContent.classList.remove('active');
+        });
+      }
 
-      translateButton.addEventListener('click', function () {
-        originalContent.style.display = 'none';
-        translatedContent.classList.add('active');
-      });
 
-      backButton.addEventListener('click', function () {
-        originalContent.style.display = 'block';
-        translatedContent.classList.remove('active');
-      });
     });
   }
 
@@ -317,7 +304,6 @@ export class NewsfeedComponent implements OnInit {
   async checkScroll() {
     const scrollableDiv = document.getElementById('scrollableDiv')!;
     const scrollButton = document.getElementById('scrollButton')!;
-    const loadThreshold = 200; // Ngưỡng khoảng cách từ cuối trang để gọi API
 
     scrollableDiv.addEventListener('scroll', async () => {
       if (scrollableDiv.scrollTop > 100) {
@@ -341,7 +327,7 @@ export class NewsfeedComponent implements OnInit {
           this.checkLoadingdata = false;
           if (data.length < 5) {
             this.checkCountPosts = false;
-            this.checkLoadingdata = true;
+            this.checkLoadingdata = false;
           }
           // console.log("data.length: " + data.length);
         } catch (error) {
@@ -353,15 +339,6 @@ export class NewsfeedComponent implements OnInit {
       }
     });
   }
-
-
-  // toggleLike() {
-  //   this.postService.toggleLike(this.postId);
-  // }
-
-  // isLiked(postId: string) {
-  //   return this.postService.isLiked(postId);
-  // }
 
   isLogin() {
     return this.loginService.isLogin();

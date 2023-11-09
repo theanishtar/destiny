@@ -1,4 +1,4 @@
-import { Injectable,EventEmitter } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { BehaviorSubject } from 'rxjs'; //Theo dõi trạng thái của modal
 import { environment } from '../../../environments/environment'
 import { tap, catchError } from 'rxjs/operators';
@@ -49,7 +49,7 @@ export class ModalService {
   count: number = 1; //gia tri key
   checkHideSeeMore = new Map<string, Boolean>();
   currentPage: number = 1;
-  
+
   // listSuggested: any[] = [];
   // listTop5User: any[] = [];
   // listTop5Post: any[] = [];
@@ -101,7 +101,7 @@ export class ModalService {
   removeNotify() {
     this.checkNotify = false
   }
-  
+
   connectToComment(userId) {
     localStorage.setItem("chatUserId", userId);
     this.socket = new SockJS(environment.baseUrl + 'notify');
@@ -113,7 +113,7 @@ export class ModalService {
         // this.listNotify.set(this.count, data);
         // this.mapTime.set(this.count, new Date().toISOString());
         // this.count++;
-        
+
         //Đẩy lại thông báo lên lại
         this.listNotify.clear();
         this.mapTime.clear();
@@ -141,7 +141,7 @@ export class ModalService {
         let id = JSON.parse(response.body);
         this.callApiLoadCmt(id);
       });
-      this.stompClient?.subscribe("/topic/loaddata/suggest-post/"+ userId, (response) => {
+      this.stompClient?.subscribe("/topic/loaddata/suggest-post/" + userId, (response) => {
         this.updateDataPost();
       });
       this.stompClient?.subscribe("/topic/loaddata/notification/" + userId, (response) => {
@@ -162,7 +162,7 @@ export class ModalService {
           this.count++;
 
         }
-        
+
         this.isLoading = false;
       })
 
@@ -201,7 +201,7 @@ export class ModalService {
 
     });
   }
-  
+
   sendNotify(content, post_id, toUser, type, idCmt) {
     let toUserId = toUser;
     let avatar = this.cookieService.get("avatar");
@@ -217,19 +217,19 @@ export class ModalService {
       time: 'Vừa xong',
       type: type,
     }));
-    let comment = document.getElementById("cmt-"+post_id);
-    let share = document.getElementById("share-"+post_id);
-    if(type == 'COMMENT' && comment){
+    let comment = document.getElementById("cmt-" + post_id);
+    let share = document.getElementById("share-" + post_id);
+    if (type == 'COMMENT' && comment) {
       let count: string | undefined;
       count = '' + comment.textContent?.trim();
       let num = parseInt(count) + 1;
-      comment!.innerText = num+' Bình luận';
+      comment!.innerText = num + ' Bình luận';
     }
-    if(type == 'SHARE' && share){
+    if (type == 'SHARE' && share) {
       let count: string | undefined;
       count = '' + share.textContent?.trim();
       let num = parseInt(count) + 1;
-      share!.innerText = num+' Chia sẻ';
+      share!.innerText = num + ' Chia sẻ';
     }
   }
 
@@ -248,7 +248,7 @@ export class ModalService {
       type: 'FOLLOW',
       follow_id: idUser
     }));
-    
+
   }
   // Hàm cập nhật dữ liệu
   updateDataPost() {
@@ -256,47 +256,6 @@ export class ModalService {
     // Sau khi cập nhật xong, thông báo sự kiện.
     this.dataUpdatedPost.emit();
   }
-
-  // async loadDataSuggest() {
-  //   if (!Array.isArray(this.listSuggested) || this.listSuggested.length === 0) {
-  //     // Gọi API chỉ khi dữ liệu chưa tồn tại.
-  //     await new Promise<void>((resolve) => {
-  //       this.followsService.loadDataSuggest().subscribe(() => {
-  //         this.listSuggested = this.followsService.getDataSuggested();
-  //         this.check = false;
-  //         resolve();
-  //       });
-  //     });
-  //   } else {
-  //     // Sử dụng dữ liệu đã lưu trữ.
-  //     this.listSuggested = this.followsService.getDataSuggested();
-  //     this.check = false;
-  //     if (Array.isArray(this.listSuggested) && this.listSuggested.length === 0) {
-  //       this.checkData1 = true;
-  //       this.check = false;
-  //     }
-  //   }
-  // }
-
-  // // currentPage: number = 1;
-  // async loadPosts() {
-  //   let body_news = document.getElementById('body-news')!;
-  //   body_news.style.display = 'none';
-  //   try {
-  //     this.listTop5User = await this.postService.loadTop5User();
-  //     this.listTop5Post = await this.postService.loadTop5Post();
-  //     await this.loadDataSuggest();
-  //     this.postService.loadPostNewsFeed(this.currentPage).subscribe((data: any) => {
-  //       this.listPosts = data; // Lưu dữ liệu ban đầu vào mảng
-  //       setTimeout(() => {
-  //         this.isLoading = false;
-  //         body_news.style.display = 'grid';
-  //       }, 1000);
-  //     });
-  //   } catch (error) {
-  //     console.error('Error:', error);
-  //   }
-  // }
   /* ============Reply Comment============= */
   loadReply(data: any): Observable<any> {
     return this.http.post(this.loadDataReplyUrl, data).pipe(
@@ -305,7 +264,7 @@ export class ModalService {
       }),
     );
   }
-  
+
   loadDataReply(idPost, cmtId) {
     this.isOpenComment.next(true);
     var data = {
@@ -326,22 +285,22 @@ export class ModalService {
             '<div class="profile-image" style="width: 40px;height: 40px;overflow: hidden;border-radius: 50%;margin-right: 10px;"> ' +
             // '<img src="' + rep[9] + '" style="width: 100%;height: 100%;object-fit: cover;object-position: center;display: block;vertical-align: middle;"/> ' +
             '<a class="user-avatar small user-status-avatar no-border no-outline avatar-mess" href="profile"> ' +
-        '<div class="hexagon-container" style="width: 35px; height: 38px; position: relative; margin: 0 auto;background: white;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); "> ' +
-        '<div class="hexagon user-avatar-content" style="top: 6px;left: 5px;position: absolute;z-index: 3;width: 40px;height: 44px;overflow: hidden;">  ' +
-        '<div class="hexagon-image" ' +
-        'style="background-image: url(' +
-        rep[9] +
-        '); width: 20px; height: 23px;position: relative; z-index: 3;background-size: cover;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);left: 4%;top: 2%;"></div>' +
-        '</div>' +
-        '<div class="hexagon user-avatar-border" style="position: absolute;top: 0;left: 0;z-index: 1;">' +
-        '<div style="position: absolute; top: 0; left: 0; z-index: 1; content: \'\'; width: 32px; height: 36px; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); left: 1px; top: 0px; background-image: linear-gradient(to right, #41efff, #615dfa); display: block;"></div>' +
-        '<div class="hexagon-border"></div>' +
-        '</div>' +
-        '<div class="hexagon user-avatar-progress-border" style="margin-left: 11%;margin-top: 10.3%; width: 26px;height: 29px;top: 0;left: 0;z-index: 2;position: absolute;background: white;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">' +
-        '  <div class="user-avatar-progress" style="top: 0;left: 0;z-index: 3;position: absolute;"></div>' +
-        '</div>' +
-        '</div>' +
-        '</a>' +
+            '<div class="hexagon-container" style="width: 35px; height: 38px; position: relative; margin: 0 auto;background: white;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); "> ' +
+            '<div class="hexagon user-avatar-content" style="top: 6px;left: 5px;position: absolute;z-index: 3;width: 40px;height: 44px;overflow: hidden;">  ' +
+            '<div class="hexagon-image" ' +
+            'style="background-image: url(' +
+            rep[9] +
+            '); width: 20px; height: 23px;position: relative; z-index: 3;background-size: cover;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);left: 4%;top: 2%;"></div>' +
+            '</div>' +
+            '<div class="hexagon user-avatar-border" style="position: absolute;top: 0;left: 0;z-index: 1;">' +
+            '<div style="position: absolute; top: 0; left: 0; z-index: 1; content: \'\'; width: 32px; height: 36px; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); left: 1px; top: 0px; background-image: linear-gradient(to right, #41efff, #615dfa); display: block;"></div>' +
+            '<div class="hexagon-border"></div>' +
+            '</div>' +
+            '<div class="hexagon user-avatar-progress-border" style="margin-left: 11%;margin-top: 10.3%; width: 26px;height: 29px;top: 0;left: 0;z-index: 2;position: absolute;background: white;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">' +
+            '  <div class="user-avatar-progress" style="top: 0;left: 0;z-index: 3;position: absolute;"></div>' +
+            '</div>' +
+            '</div>' +
+            '</a>' +
             '</div> ' +
             '<div class="Name" style="display: flex;flex-direction: column;margin-left: 10px;"> ' +
             '<strong style="color: black;font-size: 15px;font-weight: bolder;font-family: Helvetica, Arial, sans-serif">' + rep[7] + '</strong> ' +
@@ -367,38 +326,11 @@ export class ModalService {
   }
 
   /* ============Images============= */
-  
-  async openModalSeeMoreImg(idPost) {
+  checkImg: boolean = true
+  openModalSeeMoreImg(list: any) {
     this.isOpenSeeMoreImg.next(true);
-    // this.listPosts = await this.postService.loadPostNewsFeed();
-    this.postService.loadPostNewsFeed(this.currentPage).subscribe((data: any) => {
-      this.listPosts = data; // Lưu dữ liệu ban đầu vào mảng
-      this.currentPage++; // Tăng trang hiện tại
-      const targetPost = this.listPosts.find(post => post.post_id === idPost);
-      if (targetPost) {
-        this.imagesSeeMore = targetPost.images.map(image => image);
-      } else {
-        console.log("Post not found");
-      }
-    });
-  }
-
-  openModalSeeMoreImgPr(idPost) {
-    let dataPost = {
-      toProfile: localStorage.getItem("idSelected"),
-      page: this.currentPage
-    }
-    this.isOpenSeeMoreImg.next(true);
-    this.profileService.loadDataTimelinePost(dataPost).subscribe((data: any) => {
-      this.listPosts = data; // Lưu dữ liệu ban đầu vào mảng
-      this.currentPage++; // Tăng trang hiện tại
-      const targetPost = this.listPosts.find(post => post.post_id === idPost);
-      if (targetPost) {
-        this.imagesSeeMore = targetPost.images.map(image => image);
-      } else {
-        console.log("Post not found");
-      }
-    });
+    this.imagesSeeMore = list;
+    this.checkImg = false;
   }
 
   /* ============Template============= */
@@ -424,6 +356,7 @@ export class ModalService {
   isOpenSeeMoreImg$ = this.isOpenSeeMoreImg.asObservable();
 
   closeModalSeeMoreImg() {
+    this.checkImg = true;
     this.isOpenSeeMoreImg.next(false);
   }
 
