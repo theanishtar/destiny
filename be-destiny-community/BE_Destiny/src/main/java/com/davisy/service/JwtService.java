@@ -23,8 +23,9 @@ public class JwtService {
     private String secret;
 	
 
-    public static final long    JWT_TOKEN_VALIDITY  = 5 * 60 * 60 * 1000; // 5 Hours
-    //public static final long    JWT_TOKEN_VALIDITY  = 5 * 60 * 1000; // 5 Minutes
+	public static final long    JWT_TOKEN_VALIDITY  =  5 * 60 * 60 * 1000; // 5 Giờ
+//	public static final long    JWT_TOKEN_VALIDITY  =  10 * 1000; // 5 Giờ
+    public static final long    JWT_TOKEN_VALIDITY_REFRESH  = 5 * 7 *24* 60 *60 * 1000L; // 5 Tuần
 	
 	public String generateToken(User user, Collection<SimpleGrantedAuthority> authorities) {
 		Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
@@ -41,7 +42,8 @@ public class JwtService {
 		
 		return JWT.create()
 				.withSubject(user.getEmail())
-				.withExpiresAt(new Date(System.currentTimeMillis()+JWT_TOKEN_VALIDITY))
+				.withExpiresAt(new Date(System.currentTimeMillis()+JWT_TOKEN_VALIDITY_REFRESH))
+				.withClaim("roles", authorities.stream().map(GrantedAuthority:: getAuthority).collect(Collectors.toList()))
 				.sign(algorithm);
 	}
 	

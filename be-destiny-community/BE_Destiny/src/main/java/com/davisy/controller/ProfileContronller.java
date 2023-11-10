@@ -396,6 +396,12 @@ public class ProfileContronller {
 			profile.setFullname(ob[13] + "");
 			profile.setAvatar(ob[14] + "");
 
+			profile.setProvince_fullname(ob[15] + "");
+			profile.setDistrict_fullname(ob[16] + "");
+			profile.setWard_fullname(ob[17] + "");
+			profile.setProvince_fullname_en(ob[18] + "");
+			profile.setDistrict_fullname_en(ob[19] + "");
+			profile.setWard_fullname_en(ob[20] + "");
 			if (entityProfile != null) {
 				profile.setPostEntityProfile(entityProfile);
 			}

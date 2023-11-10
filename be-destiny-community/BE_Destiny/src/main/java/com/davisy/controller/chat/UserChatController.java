@@ -1,6 +1,5 @@
 package com.davisy.controller.chat;
 
-import java.lang.management.MemoryType;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -19,24 +18,17 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.davisy.config.JwtTokenUtil;
 import com.davisy.entity.ChatParticipants;
-import com.davisy.entity.Chats;
-import com.davisy.entity.Follower;
-import com.davisy.entity.User;
 import com.davisy.entity.ChatParticipants.Primary;
+import com.davisy.entity.Chats;
+import com.davisy.entity.User;
 import com.davisy.model.chat.UserModel;
 import com.davisy.model.chat.UserModel.MessageType;
-import com.davisy.service.ChatParticipantsService;
-import com.davisy.service.ChatsService;
-import com.davisy.service.FollowService;
-import com.davisy.service.MessagesService;
-import com.davisy.service.PostImagesService;
-import com.davisy.service.PostService;
-import com.davisy.service.UserService;
 import com.davisy.service.impl.ChatParticipantsServiceImpl;
 import com.davisy.service.impl.ChatsServiceImpl;
 import com.davisy.service.impl.FollowServiceImpl;
@@ -52,7 +44,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @RestController
-@CrossOrigin("*")
+//@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 @Component
 public class UserChatController {
 	@Autowired

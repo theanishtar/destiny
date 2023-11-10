@@ -21,6 +21,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -111,6 +112,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 					chain.doFilter(request, response);
 					return;
 				}
+			} catch (TokenExpiredException e) {
+				// Xử lý khi token hết hạn
+				System.out.println("Token hết hạn. Hãy làm gì đó để xử lý nó.");
+				response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 			} catch (Exception e) {
 				System.out.println("Unable to get JWT Token, possibly expired");
 				System.out.println(e);
@@ -119,7 +124,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 			}
 		}
 
-		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(null, null, null);
+		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(null, null,
+				null);
 
 		authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 

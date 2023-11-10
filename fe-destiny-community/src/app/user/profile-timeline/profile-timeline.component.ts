@@ -50,7 +50,6 @@ export class ProfileTimelineComponent implements OnInit {
 
     profile_timeline.style.display = 'none';
     this.profileService.getCheckData().then((result) => {
-      console.warn("result: " + result)
         if(result){}
         this.isLoading = false;
         profile_timeline.style.display = 'grid';
@@ -66,9 +65,15 @@ export class ProfileTimelineComponent implements OnInit {
     popups.picturePopup();
     headers.headers();
     sidebars.sidebars();
-    content.contentTab();
+    // content.contentTab();
     form.formInput();
-    
+    // Gọi hàm updatePost và cập nhật this.listPostPr sau khi nhận được response
+    // this.postService.currentListPostPr.subscribe((newList) => {
+    //   console.log("newList: " + newList.length) 
+    //   if(newList.length !== 0){
+    //     this.listPostPr = newList;
+    //   }
+    // });
   }
   dataFollows: any
   listPostPr: any;
@@ -149,7 +154,6 @@ export class ProfileTimelineComponent implements OnInit {
         this.renderer.removeClass(element, 'active');
         this.mapIntersted.set(post_id, false);
         this.checkRequest = false;
-        console.log("check1: " + check);
         
         // Set count interestedPost 
         let interested = document.getElementById("interested-" + post_id);
@@ -229,14 +233,15 @@ export class ProfileTimelineComponent implements OnInit {
       ) {
         this.checkLoadingdata = true;
         try {
+          this.currentPage++;
           let dataPost = {
             toProfile: localStorage.getItem("idSelected"),
             page: this.currentPage
           }
-          this.currentPage++;
           const data: any = await this.profileService.loadDataTimelinePost(dataPost).toPromise();
           this.listPostPr = [...this.listPostPr, ...data];
           this.checkLoadingdata = false;
+          console.warn("data.length: " + data.length);
           if (data.length < 5) {
             this.checkCountPosts = false;
             this.checkLoadingdata = false;

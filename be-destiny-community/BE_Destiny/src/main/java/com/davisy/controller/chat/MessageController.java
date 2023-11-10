@@ -38,7 +38,7 @@ import com.davisy.storage.chat.UserChatStorage;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
-@CrossOrigin("*")
+//@CrossOrigin("*")
 @Component
 public class MessageController {
 

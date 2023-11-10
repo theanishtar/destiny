@@ -6,7 +6,9 @@
     >
       <i class="fa-solid fa-xmark"></i>
     </button>
-    <div class="modal-body">
+    
+    <app-loading *ngIf="checkEdit"></app-loading>
+    <div class="modal-body" id="body-edit-post">
       <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
         <div class="mx-auto max-w-270">
           <div
@@ -76,7 +78,7 @@
                             <option
                               value="true"
                               [selected]="
-                                postService.postUpdate[0].post_status === true
+                              postService.infoPost?.post_status === true
                               "
                             >
                               Công khai
@@ -84,7 +86,7 @@
                             <option
                               value="false"
                               [selected]="
-                                postService.postUpdate[0].post_status === false
+                              postService.infoPost?.post_status === false
                               "
                             >
                               Riêng tư
@@ -127,7 +129,7 @@
                         name=""
                         id=""
                         placeholder="#but"
-                        [ngModel]="postService.infoPost?.hash_Tag"
+                        [ngModel]="postService.infoPost?.hash_tag"
                         formControlName="hash_tag"
                       />
                       <span
@@ -246,7 +248,7 @@
                             [clearable]="false"
                             formControlName="province_name"
                             (change)="getProvinceName()"
-                            [ngModel]="postService.postUpdate[1]"
+                            [ngModel]="postService.infoPost?.province_fullname"
                             required
                           ></ng-select>
                         </div>
@@ -266,7 +268,7 @@
                             class="form-controlP"
                             required
                             (change)="getDistrictName()"
-                            [ngModel]="postService.postUpdate[2]"
+                            [ngModel]="postService.infoPost?.district_fullname"
                           ></ng-select>
                         </div>
                       </div>
@@ -283,7 +285,7 @@
                           [clearable]="false"
                           formControlName="ward_name"
                           class="form-controlP"
-                          [ngModel]="postService.postUpdate[3]"
+                          [ngModel]="postService.infoPost?.ward_fullname"
                           required
                         ></ng-select>
                       </div>
@@ -327,18 +329,18 @@
                             let i = index
                           "
                         >
-                          <img
+                        <img
+                          class="img-product"
+                          *ngIf="this.file && this.file.length === undefined"
+                          [src]="imgSrc"
+                          #uploadPreview
+                          id="uploadPreview"
+                        />
+                          <!-- <img
                             class="img-product"
-                            *ngIf="imgSrc.link_image != null"
-                            [src]="imgSrc.link_image"
-                          />
-                          <img
-                            class="img-product"
-                            *ngIf="imgSrc.link_image == null"
+                            *ngIf="this.file.length !== undefined"
                             [src]="imgSrc"
-                            #uploadPreview
-                            id="uploadPreview"
-                          />
+                          /> -->
                           <!-- <span class="delete-img" (click)="deleteImg($event, i)"><i class="fa-solid fa-xmark"></i></span> -->
                           <div class="btn-slide-img">
                             <a class="prev-img" (click)="plusSlides(-1)"

@@ -173,9 +173,7 @@ export class CreatePostComponent {
 
   getProvinceName() {
     const province = this.createPostForm.get('province_name')?.value;
-    console.warn("province: " + province);
     this.loadAllDistrict(province);
-
   }
 
   loadAllDistrict(province: string) {

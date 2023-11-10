@@ -21,7 +21,10 @@ export class ChangeEmailComponent implements OnInit {
   public ChangeMailForm!: FormGroup;
 
   ngOnInit(): void {
-
+    // let body = document.getElementById('changeMailForm') as HTMLElement;
+    // if (body && !this.profileService.checkSendMail) {
+    //   body!.style.display = 'block';
+    // }
   }
 
   constructor(
@@ -41,6 +44,7 @@ export class ChangeEmailComponent implements OnInit {
     return this.ChangeMailForm.controls;
   }
   changeMail() {
+    // let body = document.getElementById('changeMailForm') as HTMLElement;
     if (this.ChangeMailForm.valid) {
       var data = {
         newEmail: this.ChangeMailForm.get("newEmail")!.value,
@@ -49,70 +53,16 @@ export class ChangeEmailComponent implements OnInit {
       console.log("data: " + JSON.stringify(data));
       // this.nextStep();
       this.profileService.changeMailApi(data).subscribe(() => {
+        // this.profileService.checkSendMail = true;
+        // if (body && this.profileService.checkSendMail) {
+        //   body!.style.display = 'none';
+        // }
         this.profileService.closeModalChangeMail();
         this.ChangeMailForm.reset();
+        // this.profileService.checkSendMail = false;
       })
     }
-   
+
   }
-
-
-
-  // nextStep() {
-  //   const nextBtns = document.querySelectorAll<HTMLElement>(".btn-next")!;
-  //   nextBtns.forEach((btn) => {
-  //     btn.addEventListener("click", () => {
-  //       this.formStepsNum++;
-  //       this.updateFormSteps();
-  //       this.updateProgressbar();
-  //     });
-  //   });
-  // }
-  // prevStep() {
-  //   const prevBtns = document.querySelectorAll<HTMLElement>(".btn-prev")!;
-  //   prevBtns.forEach((btn) => {
-  //     btn.addEventListener("click", () => {
-  //       this.formStepsNum--;
-  //       this.updateFormSteps();
-  //       this.updateProgressbar();
-  //     });
-  //   });
-  // }
-  // updateFormSteps() {
-  //   const prevBtns = document.querySelectorAll<HTMLElement>(".btn-prev")!;
-  //   const nextBtns = document.querySelectorAll<HTMLElement>(".btn-next")!;
-  //   const progress = document.getElementById("progress") as HTMLElement;
-  //   const formSteps = document.querySelectorAll<HTMLElement>(".form-step");
-  //   const progressSteps = document.querySelectorAll<HTMLElement>(".progress-step");
-  //   formSteps.forEach((formStep) => {
-  //     formStep.classList.contains("form-step-active") &&
-  //       formStep.classList.remove("form-step-active");
-  //   });
-
-  //   formSteps[this.formStepsNum].classList.add("form-step-active");
-  // }
-
-  // updateProgressbar() {
-  //   const prevBtns = document.querySelectorAll<HTMLElement>(".btn-prev")!;
-  //   const nextBtns = document.querySelectorAll<HTMLElement>(".btn-next")!;
-  //   const progress = document.getElementById("progress") as HTMLElement;
-  //   const formSteps = document.querySelectorAll<HTMLElement>(".form-step");
-  //   const progressSteps = document.querySelectorAll<HTMLElement>(".progress-step");
-  //   progressSteps.forEach((progressStep, idx) => {
-  //     if (idx < this.formStepsNum + 1) {
-  //       progressStep.classList.add("progress-step-active");
-  //     } else {
-  //       progressStep.classList.remove("progress-step-active");
-  //     }
-  //   });
-
-  //   const progressActive = document.querySelectorAll<HTMLElement>(
-  //     ".progress-step-active"
-  //   );
-
-  //   progress.style.width =
-  //     ((progressActive.length - 1) / (progressSteps.length - 1)) * 100 + "%";
-  // }
-
 
 }

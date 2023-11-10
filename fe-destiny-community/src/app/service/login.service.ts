@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment'
@@ -33,6 +33,10 @@ export class LoginService {
 					localStorage.setItem(
 						'token',
 						JSON.parse(JSON.stringify(this.getUserLog())).token
+					);
+					localStorage.setItem(
+						'refreshToken',
+						response.refreshToken
 					);
 					this.cookieService.set('full_name', response.name);
 					this.cookieService.set('avatar', response.avatar);
@@ -105,6 +109,10 @@ export class LoginService {
 					'token',
 					JSON.parse(JSON.stringify(this.getUserLogGG())).token
 				);
+				localStorage.setItem(
+					'refreshToken',
+					res.refreshToken
+				);
 				this.cookieService.set('full_name', res.name);
 				this.cookieService.set('avatar', res.avatar);
 				this.cookieService.set('id', res.id);
@@ -158,7 +166,7 @@ export class LoginService {
 						duration: 2000,
 					});
 				})
-			} 
+			}
 			// else {
 			// 	new toast({
 			// 		title: 'Lỗi!',
@@ -171,7 +179,63 @@ export class LoginService {
 			// });
 		});
 	}
-
+	private refreshTokenUrl = environment.baseUrl + 'v1/jwt/get';
+	// refreshToken(): Observable<any> {
+	// 	return this.http.get<any>(this.refreshTokenUrl)
+	// 		.pipe(
+	// 			tap((res) => {
+	// 				console.log('New token:', res);
+	// 				localStorage.setItem(
+	// 					'token',
+	// 					res.token
+	// 				);
+	// 				localStorage.setItem(
+	// 					'refreshToken',
+	// 					res.refreshToken
+	// 				);
+	// 				this.cookieService.set('full_name', res.name);
+	// 				this.cookieService.set('avatar', res.avatar);
+	// 				this.cookieService.set('id', res.id);
+	// 				this.cookieService.set('role', res.roles[0].authority);
+	// 			}),
+	// 			catchError((error) => {
+	// 				console.error('Error refreshing token:', error);
+	// 				return throwError(error);
+	// 			})
+	// 		);
+	// }
+	refreshToken(): Observable<any> {
+		console.log('hello');
+		const headers = new HttpHeaders({
+			'Content-Type': 'application/json',
+			'Authorization': `Bearer ${localStorage.getItem("refreshToken")}`
+		  });
+	
+		const options = { headers: headers };
+	
+		return this.http.get<any>(this.refreshTokenUrl, options)
+		.pipe(
+			tap((res) => {
+				console.log('New token:', res);
+				localStorage.setItem(
+					'token',
+					res.token
+				);
+				localStorage.setItem(
+					'refreshToken',
+					res.refreshToken
+				);
+				this.cookieService.set('full_name', res.name);
+				this.cookieService.set('avatar', res.avatar);
+				this.cookieService.set('id', res.id);
+				this.cookieService.set('role', res.roles[0].authority);
+			}),
+			catchError((error) => {
+				console.error('Error refreshing token:', error);
+				return throwError(error);
+			})
+		);
+	  }
 	// Getter
 	getUserLog(): any[] {
 		return this.userLogined;

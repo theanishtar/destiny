@@ -102,7 +102,7 @@
                   <div class="hexagon user-avatar-content">
                     <div
                       class="hexagon-image"
-                      style="background-image: url('{{ item.avatar }}')"
+                      style="background-image: url('{{ item?.avatar }}')"
                     ></div>
                   </div>
                   <div class="hexagon user-avatar-border">
@@ -142,13 +142,9 @@
       <div class="simple-tab-items" #elementToScroll>
         <!-- SIMPLE TAB ITEM -->
         <p class="simple-tab-item active">Bài đăng</p>
-        <!-- /SIMPLE TAB ITEM -->
-        
-       </div>
-      
-     
+        <!-- /SIMPLE TAB ITEM -->    
+       </div>  
       <!-- /SIMPLE TAB ITEMS -->
-
       <!-- WIDGET BOX -->
       <!-- <div *ngFor="let p of profileService.listPostPr"> -->
       <!-- /WIDGET BOX -->
@@ -197,7 +193,7 @@
               <!-- /SIMPLE DROPDOWN LINK -->
 
               <!-- SIMPLE DROPDOWN LINK -->
-              <p class="simple-dropdown-link" (click)="postService.openModalUpdatePost(p.post_id)">Chỉnh sửa bài viết</p>
+              <p class="simple-dropdown-link" (click)="postService.openModalUpdatePost(p)">Chỉnh sửa bài viết</p>
               <!-- /SIMPLE DROPDOWN LINK -->
             </div>
             <!-- /SIMPLE DROPDOWN -->
@@ -223,7 +219,7 @@
                   <div class="hexagon user-avatar-content">
                     <div
                       class="hexagon-image"
-                      style="background-image: url('{{ p.avatar }}')"
+                      style="background-image: url('{{ p?.avatar }}')"
                     ></div>
                   </div>
                   <div class="hexagon user-avatar-border">
@@ -248,7 +244,7 @@
 
               <!-- USER STATUS TEXT -->
               <p class="user-status-text small post-time">
-                {{ p.date }}
+                {{ p.date }} <span class="private-view" *ngIf="!p.post_status"><i class="fa-solid fa-user"></i></span>
               </p>
               <!-- /USER STATUS TEXT -->
             </div>
@@ -287,7 +283,7 @@
                       <div class="hexagon user-avatar-content">
                         <div
                           class="hexagon-image"
-                          style="background-image: url('{{ p.postEntityProfile.avatar }}')"
+                          style="background-image: url('{{ p.postEntityProfile?.avatar }}')"
                         ></div>
                       </div>
                       <div class="hexagon user-avatar-border">

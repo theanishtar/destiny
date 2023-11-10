@@ -3,6 +3,7 @@
     <!-- LANDING FORM -->
     <div class="landing-form">
       <!-- FORM BOX -->
+     
       <form
         [formGroup]="ChangeMailForm"
         (ngSubmit)="changeMail()"
@@ -55,9 +56,10 @@
               <div style="color: red">Vui lòng nhập email!</div>
             </span>
           </div>
-
+          <!-- <app-loading *ngIf="profileService.checkSendMail"></app-loading> -->
           <div>
-            <button
+            <button 
+              id="changeMailForm"
               style="color: #f3f3f3"
               class="btn btn-next width-50 ml-auto"
               type="submit"
@@ -83,20 +85,6 @@
             >
           </div> -->
         </div>
-        <!-- <div class="form-step">
-        <div class="input-group">
-          <label style="font-size: large" for="dob">Mật khẩu mới</label>
-          <input type="text" name="dob" id="dob" />
-        </div>
-        <div class="input-group">
-          <label style="font-size: large" for="ID">Xác nhận mật khẩu mới</label>
-          <input type="text" name="ID" id="ID" />
-        </div>
-        <div class="btns-group">
-          <a style="color: #f3f3f3" class="btn btn-prev" (click)="prevStep()">Trở về</a>
-          <a style="color: #f3f3f3" class="btn btn-next" (click)="nextStep()">Xác nhận</a>
-        </div>
-      </div> -->
       </form>
       <!-- /FORM BOX -->
     </div>

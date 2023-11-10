@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { HttpClient,HttpParams} from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import '../../../assets/toast/main.js';
@@ -69,7 +69,7 @@ export class PostService {
     const params = new HttpParams()
       .set('post_id', post_id.toString()) // Chuyển số nguyên thành chuỗi
       .set('page', page.toString());
-  
+
     try {
       let response = await this.http.get<any>(this.reloadDataPosts, { params }).toPromise();
       // this.setDataPostNf(response);
@@ -79,7 +79,7 @@ export class PostService {
       throw error;
     }
   }
-  
+
   /* ============upload post============= */
   uploadPost(data: any): Observable<any> {
     return this.http.post(this.createPostUrl, data).pipe(
@@ -92,18 +92,13 @@ export class PostService {
   /* ============update post============= */
   private isOpenUpdatePost = new BehaviorSubject<boolean>(false);
   isOpenUpdatePost$ = this.isOpenUpdatePost.asObservable();
-  listImgTemp:string[] = [];
-  openModalUpdatePost(idPost) {
+  listImgTemp: string[] = [];
+  openModalUpdatePost(post: any) {
     this.isOpenUpdatePost.next(true);
     try {
-      this.loadDataUpdate(idPost).subscribe((res) => {
-        this.postUpdate = res;
-        this.infoPost = this.postUpdate[0];
-        this.listImageSources = this.infoPost.postImages;
-
-        this.listImgTemp = this.listImageSources;
-        console.log("this.listPostUdpate: " + JSON.stringify(this.postUpdate[1]));
-      })
+      this.infoPost = post;
+      console.log("this.infoPost: ", this.infoPost);
+      this.listImageSources = this.infoPost.images;
     } catch (error) {
       console.error('Error:', error);
     }
@@ -123,12 +118,28 @@ export class PostService {
     );
   }
 
+  // updatePost(data: any): Observable<any> {
+  //   return this.http.post(this.updatePostUrl, data).pipe(
+  //     tap((response) => {
+        
+  //     })
+  //   )
+  // }
   updatePost(data: any): Observable<any> {
     return this.http.post(this.updatePostUrl, data).pipe(
-
-    )
+      tap((response) => {
+        // Sau khi nhận được response, cập nhật DataService để thông báo cho các component khác
+        this.updateListPostPr(response);
+      })
+    );
   }
-  
+
+  private listPostPrSource = new BehaviorSubject<any[]>([]);
+  currentListPostPr = this.listPostPrSource.asObservable();
+
+  updateListPostPr(newList: any) {
+    this.listPostPrSource.next(newList);
+  }
   /* ============Interested============= */
   private likedPosts: Set<string> = new Set<string>();
 

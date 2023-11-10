@@ -88,6 +88,7 @@ export class ModalService {
     this.callApiLoadCmt(idPost);
   }
   callApiLoadCmt(idPost) {
+    this.isLoadingCmt = true;
     // console.log("id: " + idPost)
     this.openModalComment(idPost).subscribe(() => {
       this.listComment = this.getDataCmt();
@@ -169,6 +170,10 @@ export class ModalService {
       this.stompClient?.subscribe("/topic/changetoken/" + userId, (response) => {
         let data = JSON.parse(response.body);
         localStorage.setItem('token', data.token);
+        localStorage.setItem(
+          'refreshToken',
+          data.refreshToken
+        );
         new toast({
           title: 'Thông báo!',
           message: 'Email đã được thay đổi',

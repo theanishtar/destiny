@@ -296,7 +296,7 @@ export class ProfileService {
   closeModalChangeMail() {
     this.isOpenChangeEmail.next(false);
   }
-
+  checkSendMail: boolean = false;
   changeMailApi(data: any) {
     return this.http.post<any>(this.chanegMailUrl, data).pipe(
       tap(() => {
@@ -327,6 +327,7 @@ export class ProfileService {
       catchError((error: HttpErrorResponse) => {
         console.log("error.status 2: " + JSON.stringify(error.status))
         if (error.status === 300) {
+          // this.checkSendMail = false;
           return throwError(
             new toast({
               title: 'Thất bại!',
@@ -336,6 +337,7 @@ export class ProfileService {
             }),
           );
         } else if (error.status === 301) {
+          // this.checkSendMail = false;
           return throwError(
             new toast({
               title: 'Thất bại!',
@@ -346,6 +348,7 @@ export class ProfileService {
           );
         } else {
           return throwError(
+            // this.checkSendMail = false,
             new toast({
               title: 'Server hiện không hoạt động!',
               message: 'Vui lòng quay lại sau, DaviTickets chân thành xin lỗi vì bất tiện này!',
