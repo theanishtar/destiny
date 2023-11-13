@@ -49,6 +49,10 @@ import { LoadingComponent } from './user/loading/loading.component';
 import { VideoCallComponent } from './user/video-call/video-call.component';
 //admin / comboboxsearch
 //npm install --save @ng-select/ng-select
+//npm install xlsx
+//npm install jspdf --save
+//npm install jspdf jspdf-autotable
+//npm install file-saver ngx-filesaver --save
 import { NgSelectModule } from '@ng-select/ng-select';
 import { SidebarModeratorComponent } from './moderator/sidebar-moderator/sidebar-moderator.component';
 import { NavbarModeratorComponent } from './moderator/navbar-moderator/navbar-moderator.component';
@@ -80,14 +84,14 @@ import { EditPostComponent } from './user/modal/edit-post/edit-post.component';
 import { ChangeEmailComponent } from './user/modal/change-email/change-email.component';
 import { ChangeConfirmComponent } from './user/modal/change-email/change-confirm/change-confirm.component';
 
-export function appInitializer(cookieService: CookieService, messageService: MessageService, sender: any,modalService:ModalService, profileService: ProfileService, dataProfileTimeline: any) {
+export function appInitializer(cookieService: CookieService, messageService: MessageService, sender: any, modalService: ModalService, profileService: ProfileService, dataProfileTimeline: any) {
   return () => {
     if (cookieService.get("full_name") != '') {
       messageService.loadDataSender().subscribe(() => {
         sender = JSON.parse(JSON.stringify(messageService.getSender()));
         modalService.connectToComment(sender.user_id);
         messageService.connectToChat(sender.user_id);
-      
+
       });
     }
   };
@@ -179,7 +183,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     {
       provide: APP_INITIALIZER,
       useFactory: appInitializer,
-      deps: [CookieService, MessageService, ProfileService,ModalService],
+      deps: [CookieService, MessageService, ProfileService, ModalService],
       multi: true,
     },
     DatePipe

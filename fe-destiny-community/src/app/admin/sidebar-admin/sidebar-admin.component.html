@@ -1,5 +1,5 @@
 <div class="sidebarD">
-  <a href="admin" class="logo">
+  <a routerLink="/admin" class="logo">
     <div class="bx">
       <img src="../assets/images/logo-euphoria.png" />
     </div>
@@ -21,10 +21,10 @@
     <li>
       <div class="analys"><i class="bx bx-group"></i>Người dùng</div>
     </li>
-    <li class="ml-4 4"  [class.active]="activeMenuItem === 'usermanament'">
+    <li class="ml-4 4" [class.active]="activeMenuItem === 'usermanament'">
       <a routerLink="/admin/usermanament" class="4"><i class="bx bx-analyse"></i>Thống kê</a>
     </li>
-    <li class="ml-4 5"  [class.active]="activeMenuItem === 'userreportdetail'">
+    <li class="ml-4 5" [class.active]="activeMenuItem === 'userreportdetail'">
       <a routerLink="/admin/userreportdetail" class="5"><i class="bx bx-comment-error"></i>Báo cáo</a>
     </li>
     <li (click)="openNav()">
@@ -78,8 +78,8 @@
   <div class="setting">
     <div id="mySidenav" [style.width]="isNavOpen ? '270px' : '0px'" class="sidenav">
       <a class="closebtn" (click)="closeNav()">&times;</a>
-      <a href="#!about">
-        <img style="width: 80%; margin: 0 5%" src="../assets/images/logo-euphoria.png" alt="" />
+      <a routerLink="/admin">
+        <img style=" width: 80%; margin: 0 5%" src="../assets/images/logo-euphoria.png" alt="" />
       </a>
       <div class="logo justify-content-center ml-2 mt-n5">
         <div class="logo-name"><span>DES</span>TINY</div>

@@ -1,6 +1,8 @@
 package com.davisy.controller.moderator;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -16,10 +18,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.davisy.dto.PostReportedDetail;
 import com.davisy.mongodb.MongoDBUtils;
 import com.davisy.mongodb.documents.BadWord;
 import com.davisy.service.BadWordService;
 import com.davisy.service.CacheService;
+import com.davisy.service.PostReportedService;
 
 @RestController
 @CrossOrigin("*")
@@ -33,6 +37,84 @@ public class ModeratorControlBadword {
 	
 	@Autowired
 	private CacheService cacheService;
+	
+	@Autowired
+	private PostReportedService postReportedService;
+	
+	Calendar now = Calendar.getInstance();
+	int month = now.get(Calendar.MONTH) + 1;
+	
+	// lastest update 1-11
+		@GetMapping("/v1/moderator/getTotalPostReportedByYear")
+		public int getTotalPostReportedByYear() {
+			int year = now.get(Calendar.YEAR);
+			return postReportedService.getTotalPostReportedByYear(year);
+		}
+
+		// lastest update 1-11
+		@GetMapping("/v1/moderator/getTotalPostReportedByMonth")
+		public int getTotalPostReportedByMonth() {
+
+			return postReportedService.getTotalPostReportedByMonth(month);
+		}
+
+		// lastest update 1-11
+		@GetMapping("/v1/moderator/getTotalPostReportedByDay")
+		public int getTotalPostReportedByDay() {
+			int day = now.get(Calendar.DAY_OF_MONTH);
+			return postReportedService.getTotalPostReportedByDay(day, month);
+		}
+
+		// lastest update 1-11
+		@GetMapping("/v1/moderator/getPercentPostReportedYearIncrease")
+		public double getPercentPostReportedYearIncrease() {
+			int previousYear = now.get(Calendar.YEAR) - 1;
+			int currentYear = now.get(Calendar.YEAR);
+			int previousMonthValue = postReportedService.getTotalPostReportedByYear(previousYear);
+			int currentMonthValue = postReportedService.getTotalPostReportedByYear(currentYear);
+
+			return caculatePercentIncrease(previousMonthValue, currentMonthValue);
+		}
+
+		// lastest update 1-11
+		@GetMapping("/v1/moderator/getPercentPostReportedMonthIncrease")
+		public double getPercentPostReportedMonthIncrease() {
+			int previousMonth = now.get(Calendar.MONTH);
+			int currentMonth = previousMonth + 1;
+			int previousMonthValue = postReportedService.getTotalPostReportedByMonth(previousMonth);
+			int currentMonthValue = postReportedService.getTotalPostReportedByMonth(currentMonth);
+
+			return caculatePercentIncrease(previousMonthValue, currentMonthValue);
+		}
+
+		// lastest update 1-11
+		@GetMapping("/v1/moderator/getPercentPostReportedDayIncrease")
+		public double getPercentPostReportedDayIncrease() {
+			int previousDay = now.get(Calendar.DAY_OF_MONTH) - 1;
+			int currentDay = now.get(Calendar.DAY_OF_MONTH);
+			int month = now.get(Calendar.MONTH) + 1;
+			int previousMonthValue = postReportedService.getTotalPostReportedByDay(previousDay, month);
+			int currentMonthValue = postReportedService.getTotalPostReportedByDay(currentDay, month);
+
+			return caculatePercentIncrease(previousMonthValue, currentMonthValue);
+		}
+
+		// lastest update 1-11
+		public double caculatePercentIncrease(int previousMonthValue, int currentMonthValue) {
+			if (currentMonthValue == 0) {
+				return 0;
+			} else if (previousMonthValue == 0) {
+				return 100;
+			} else {
+				double diff = currentMonthValue - previousMonthValue;
+				double percentageIncrease = (diff / previousMonthValue) * 100;
+				if (percentageIncrease < 0) {
+					return 0;
+				} else {
+					return percentageIncrease;
+				}
+			}
+		}
 	
 	@GetMapping("/v1/moderator/sendDataRedis")
 	public List<BadWord> sendToRedis() {
@@ -65,24 +147,35 @@ public class ModeratorControlBadword {
 	@PostMapping("/v1/moderator/addBadwords")
 	public ResponseEntity<String> addBadwords(@RequestBody List<BadWord> badWords) {
 		try {
-			
-			for(BadWord badWord: badWords) {
-				BadWord find = badWordService.findByName("name", badWord.getName());
-				if(find != null) {
-						
-					badWords.remove(badWord);
-					
-					System.out.println("xóa" + badWord.getName());
+			if(badWords.size() == 0) {
+				return ResponseEntity.status(302).body(null);
+			}
+			else {
+				List<BadWord> wordsToRemove = new ArrayList<>();
+				
+				for (BadWord badWord : badWords) {
+				    BadWord find = badWordService.findByName("name", badWord.getName());
+				    if (find != null) {
+				        wordsToRemove.add(badWord);
+				    }else {
+				    	cacheService.writeCache(badWord.getName(), badWord);
+				    }
+				}
+
+				badWords.removeAll(wordsToRemove);
+				
+				if(badWords.size() == 0) {
+					return ResponseEntity.status(301).body(null);
+				}else {
+					badWordService.inserts(badWords);
 				}
 				
 			}
-			
-			badWordService.inserts(badWords);
-
-			return ResponseEntity.status(200).body("Successfully");
+			return ResponseEntity.status(200).body(null);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.out.println(e + " moderator/addBadwords");
 			return ResponseEntity.status(403).body(null);
 		}
 	}
@@ -93,7 +186,7 @@ public class ModeratorControlBadword {
 
 			BadWord find = badWordService.findByName("name", badWord.getName());
 			if(find != null) {
-				System.out.println("đã tồn tại khứa này");
+//				System.out.println("đã tồn tại khứa này");
 				return ResponseEntity.status(301).body(null);
 				
 			}else {
@@ -101,7 +194,7 @@ public class ModeratorControlBadword {
 				badWordService.insert(badWord);
 				cacheService.writeCache(badWord.getName(), badWord);
 				
-				System.out.println("thêm thành công");
+//				System.out.println("thêm thành công");
 				return ResponseEntity.status(200).body(null);
 			}
 			
@@ -131,7 +224,6 @@ public class ModeratorControlBadword {
 	@DeleteMapping("/v1/moderator/removeBadword/{name}")
 	public ResponseEntity<String>  removeBadWord(@PathVariable String name) {
 		try {
-			System.out.println(name+ " name de");
 			badWordService.delete("name", name);
 			cacheService.destroyCache(name);
 

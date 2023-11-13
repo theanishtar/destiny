@@ -15,10 +15,9 @@ declare var $: any;
   ]
 })
 export class PostReportComponent {
-  pagiPostReport!: HTMLElement;
-  tablePostReport!: HTMLElement;
 
-  constructor(private el: ElementRef, private renderer: Renderer2) {}
+
+  constructor(private el: ElementRef, private renderer: Renderer2) { }
 
   ngAfterViewInit() {
     $x(document).ready(function () {
@@ -26,25 +25,7 @@ export class PostReportComponent {
     });
 
 
-    this.truncateText(".text-substring", 50);
-    this.pagiPostReport = this.el.nativeElement.querySelector("#pagi-post-report");
-    this.tablePostReport = this.el.nativeElement.querySelector("#table-post-report");
 
   }
 
-  private truncateText(selector: string, maxLength: number) {
-    const elements = this.el.nativeElement.querySelectorAll(selector);
-
-    elements.forEach((element: HTMLElement) => {
-      const originalText = element.textContent;
-
-      if ((originalText as any).length > maxLength) {
-        this.renderer.setProperty(
-          element,
-          'textContent',
-          (originalText as any).substring(0, maxLength - 3) + '...'
-        );
-      }
-    });
-  }
 }

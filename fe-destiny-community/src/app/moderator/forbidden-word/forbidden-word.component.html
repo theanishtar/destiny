@@ -17,13 +17,33 @@
           </ul>
         </div>
         <label class="report" style="z-index: 100; cursor: pointer;">
-          <input type="file" style="display: none;">
+          <input type="file" style="display: none;" (change)="readExcel($event)">
           <i class="bx bx-cloud-upload"></i>
-          <span>Tải lên</span>
+          <span>Tải lên file Excel</span>
         </label>
       </div>
 
-      <div class="row mb-4 mt-n7">
+      <div class="header">
+        <!-- <div class="left" (click)="downloadPdf()" style="z-index: 100; cursor: pointer;">
+          <div class="report">
+            <i class="bx bx-cloud-download"></i>
+            <span>Tải xuống file PDF</span>
+          </div>
+        </div> -->
+        <div class="left" (click)="downloadExcel()" style="z-index: 100; cursor: pointer;">
+          <div class="report">
+            <i class="bx bx-cloud-download"></i>
+            <span>Tải xuống file Excel</span>
+          </div>
+        </div>
+        <label class="report" style="z-index: 100; cursor: pointer;">
+          <input type="file" style="display: none;" (change)="readJson($event)">
+          <i class='bx bxs-file-json'></i>
+          <span>Tải lên file Json</span>
+        </label>
+      </div>
+
+      <div class="row mb-4 mt-n3">
         <div class="col-lg-12 profile-logo-heart">
           <img src="../assets/images/logo-euphoria.png" alt="" />
         </div>

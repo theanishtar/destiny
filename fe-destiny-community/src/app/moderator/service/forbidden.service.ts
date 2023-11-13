@@ -4,6 +4,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { environment } from '../../../environments/environment';
 import { of } from 'rxjs';
 import Swal from 'sweetalert2';
+
 declare var toast: any;
 import { Observable, throwError } from 'rxjs';
 @Injectable({
@@ -23,6 +24,7 @@ export class ForbiddenService {
     private http: HttpClient,
   ) { }
 
+
   addBadwords(data: any[]): Observable<any[]> {
     return this.http.post<any>(this.addBadWordsAPI, data).pipe(
       tap((response) => {
@@ -38,12 +40,22 @@ export class ForbiddenService {
           return throwError(
             new toast({
               title: 'Thất bại!',
-              message: 'Đã tồn tại từ ngữ này rồi!',
+              message: 'Đã tồn tại các từ ngữ này rồi!',
               type: 'error',
               duration: 1500,
             }),
           );
-        } else {
+        } if (error.status === 302) {
+          return throwError(
+            new toast({
+              title: 'Thất bại!',
+              message: 'Danh sách rỗng!',
+              type: 'error',
+              duration: 1500,
+            }),
+          );
+        }
+        else {
           return throwError(
             new toast({
               title: 'Server hiện không hoạt động!',
