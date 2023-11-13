@@ -6,7 +6,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
-import 'package:login_signup/models/Users.dart';
+
 import 'package:login_signup/utils/gobal.colors.dart';
 import 'package:login_signup/view/screens/profile.view.dart';
 import 'package:shared_preferences/shared_preferences.dart';

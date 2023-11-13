@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:login_signup/utils/gobal.colors.dart';
+import 'package:login_signup/view/screens/message.view.dart';
 import 'package:login_signup/view/widgets/chat/chatSample.dart';
 import 'package:login_signup/view/widgets/chat/chatBottomSheet.dart';
 
@@ -14,6 +16,13 @@ class ChatPage extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.only(top: 5),
           child: AppBar(
+            leading: BackButton(
+              onPressed: () {
+                runApp(GetMaterialApp(
+                  home: MessageView(),
+                ));
+              },
+            ),
             leadingWidth: 30,
             title: Row(
               children: [

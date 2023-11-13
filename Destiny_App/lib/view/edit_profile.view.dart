@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:login_signup/models/Users.dart';
 import 'package:login_signup/utils/api.dart';
 import 'package:login_signup/utils/gobal.colors.dart';
 import 'package:login_signup/view/screens/profile.view.dart';

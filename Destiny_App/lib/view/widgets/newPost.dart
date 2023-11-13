@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:login_signup/models/Users.dart';
 import 'package:login_signup/utils/api.dart';
 import 'package:login_signup/view/widgets/createPost.dart';
 import 'package:shared_preferences/shared_preferences.dart';
