@@ -39,6 +39,6 @@ public class Interested {
 	@JoinColumn(name = "post_id")
 	Post post;
 
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	Calendar date_interested = GregorianCalendar.getInstance();
 }

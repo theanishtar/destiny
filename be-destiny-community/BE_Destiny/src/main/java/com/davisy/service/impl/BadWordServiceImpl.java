@@ -23,6 +23,21 @@ public class BadWordServiceImpl implements BadWordService{
 	@Autowired
 	private CacheService cacheService;
 	
+	@Override
+	public boolean checkTheSameBadword(String badword) {
+		try {
+			boolean result = false;
+			String resultWord = cacheService.getByKey(badword);
+//			System.out.println(resultWord + "ádadsa");
+			if(resultWord != null) {
+				result = true;
+			}
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 	
 	@Override
 	public boolean checkBadword(String badword) {
@@ -53,6 +68,8 @@ public class BadWordServiceImpl implements BadWordService{
 		}
 		return result;
 	}
+	
+	
 	
 	@Override
 	public BadWord findByName(String name, String data) {

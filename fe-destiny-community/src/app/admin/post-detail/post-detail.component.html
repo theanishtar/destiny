@@ -18,20 +18,61 @@
           </ul>
         </div>
       </div>
-
+      <app-loading *ngIf="isLoading"></app-loading>
       <div class="container-postdetail pb-5">
         <div class="card-postdetail shadow">
           <div class="row ml-1 mr-1 pb-4">
             <div class="col-lg-7 col-sm-12 pt-4">
-              <div class="picture-collage pl-1 pr-1">
+
+              <div class="picture-collage pl-1 pr-1" *ngIf="totalImages == 1">
+                <div class="picture-collage-row medium" style="margin: 0 18%">
+                  <div class="picture-collage-item" style="width: 300px; height: 300px">
+                    <div class="photo-preview-wrap" style="width: 100%; height: 100%">
+                      <div class="photo-preview">
+                        <div class="photo-preview-image" style="
+                              background: url('{{postDetail.listPostImages[0].link_image}}')
+                                center center / cover no-repeat;
+                            "></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="picture-collage pl-1 pr-1" *ngIf="totalImages == 2">
+                <div class="picture-collage-row medium">
+                  <div class="picture-collage-item" style="height: 500px !important;">
+                    <div class="photo-preview-wrap">
+                      <div class="photo-preview">
+                        <div class="photo-preview-image" style="
+                              background: url('{{postDetail.listPostImages[0].link_image}}')
+                                center center / cover no-repeat;
+                            "></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="picture-collage-item">
+                    <div class="photo-preview-wrap">
+                      <div class="photo-preview">
+                        <div class="photo-preview-image" style="
+                              background: url('{{postDetail.listPostImages[1].link_image}}')
+                                center center / cover no-repeat;
+                            "></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="picture-collage pl-1 pr-1" *ngIf="totalImages == 3">
                 <div class="picture-collage-row medium">
                   <div class="picture-collage-item">
                     <div class="photo-preview-wrap">
                       <div class="photo-preview">
                         <div class="photo-preview-image" style="
-                          background: url('{{postDetail.listPostImages[0].link_image}}')
-                            center center / cover no-repeat;
-                        "></div>
+                              background: url('{{postDetail.listPostImages[0].link_image}}')
+                                center center / cover no-repeat;
+                            "></div>
                       </div>
                     </div>
                   </div>
@@ -39,48 +80,79 @@
                     <div class="photo-preview-wrap">
                       <div class="photo-preview">
                         <div class="photo-preview-image" style="
-                          background: url('{{postDetail.listPostImages[1].link_image}}')
-                            center center / cover no-repeat;
-                        "></div>
+                              background: url('{{postDetail.listPostImages[1].link_image}}')
+                                center center / cover no-repeat;
+                            "></div>
                       </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="picture-collage-row">
-                  <div class="picture-collage-item">
-                    <div class="photo-preview-wrap">
-                      <div class="photo-preview">
-                        <div class="photo-preview-image" style="
-                          background: url('{{postDetail.listPostImages[2].link_image}}')
-                            center center / cover no-repeat;
-                        "></div>
-                      </div>
-                      <div></div>
                     </div>
                   </div>
                   <div class="picture-collage-item">
                     <div class="photo-preview-wrap">
                       <div class="photo-preview">
                         <div class="photo-preview-image" style="
-                          background: url('{{postDetail.listPostImages[3].link_image}}')
-                            center center / cover no-repeat;
-                        "></div>
+                              background: url('{{postDetail.listPostImages[2].link_image}}')
+                                center center / cover no-repeat;
+                            "></div>
                       </div>
-                      <div></div>
                     </div>
-                  </div>
-                  <div class="picture-collage-item">
-                    <a class="picture-collage-item-overlay" href="">
-                      <p class="picture-collage-item-overlay-text mb-0">+1</p>
-                    </a>
                   </div>
                 </div>
               </div>
+
+              <div class="picture-collage pl-1 pr-1" *ngIf="totalImages >= 4">
+                <div class="picture-collage-row medium">
+                  <div class="picture-collage-item">
+                    <div class="photo-preview-wrap">
+                      <div class="photo-preview">
+                        <div class="photo-preview-image" style="
+                              background: url('{{postDetail.listPostImages[0].link_image}}')
+                                center center / cover no-repeat;
+                            "></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="picture-collage-item">
+                    <div class="photo-preview-wrap">
+                      <div class="photo-preview">
+                        <div class="photo-preview-image" style="
+                              background: url('{{postDetail.listPostImages[1].link_image}}')
+                                center center / cover no-repeat;
+                            "></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="picture-collage-row medium">
+                  <div class="picture-collage-item">
+                    <div class="photo-preview-wrap">
+                      <div class="photo-preview">
+                        <div class="photo-preview-image" style="
+                              background: url('{{postDetail.listPostImages[2].link_image}}') center
+                                center / cover no-repeat;
+                            "></div>
+                      </div>
+                      <div></div>
+                    </div>
+                  </div>
+                  <div class="picture-collage-item">
+                    <div class="photo-preview-wrap">
+                      <div class="photo-preview">
+                        <div class="photo-preview-image" style="
+                            background: url('{{postDetail.listPostImages[3].link_image}}')
+                              center center / cover no-repeat;
+                          "></div>
+                      </div>
+                      <div></div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
             </div>
-            <div class="col-lg-5">
-              <div class="avatar-group d-flex text-pie pl-3 pt-4">
+            <div class="col-lg-5 border-left-pink-sm mt-4">
+              <div class="avatar-group d-flex text-pie pl-3">
                 <a (click)="selectUser(postDetail.user_email)" type="button" class="avatar rounded-circle">
-                  <img class="" alt="Image placeholder" src="{{postDetail.user_avartar}}" />
+                  <img class="" alt="Image placeholder" src="{{postDetail.user_avatar}}" />
                 </a>
                 <div class="ml-3" style="padding-top: 0.1rem !important">
                   <a (click)="selectUser(postDetail.user_email)" type="button">
@@ -108,31 +180,71 @@
                   <i class="bx bx-share"></i>
                 </div>
               </div>
-              <hr class="border-primaryx mt-1 mb-3 p-0" />
-              <div class="text-black comment-section pt-1 pb-3 pl-4 pr-1">
+              <hr class="border-primaryx mt-1 mb-1 p-0" />
+              <div class="text-black comment-section pt-2 pb-3 pl-2 pr-1" *ngIf="totalComment > 0">
                 <div class="user-comment d-flex text-pie pl-0 pt-1 pb-2"
                   *ngFor="let comment of postDetail.listComments">
-                  <a href="#" class="avatar rounded-circle">
-                    <img class="" alt="" src="{{comment.user_avartar}}" />
+                  <a (click)="selectUser(comment.user_email)" type="button" class="avatar rounded-circle">
+                    <img class="" alt="" src="{{comment.user_avatar}}" />
                   </a>
-                  <div class="ml-2 content-comment">
-                    <h6>{{comment.user_fullname}}</h6>
-                    <div class="ml-0">
-                      <div class="mt-n1">
-                        {{comment.content}}
-                      </div>
-                    </div>
-                    <!-- <div class="user-comment d-flex text-pie pl-0 pt-1">
-                      <a href="#" class="avatar rounded-circle">
-                        <img class="" alt="" src="../assets/images/users/sy.jpg" />
+                  <div class="ml-2 content-comment mt-n1">
+                    <div class="card-comment shadow pl-3 pt-1 pb-1 pr-3">
+                      <a (click)="selectUser(comment.user_email)" type="button" style="width: 100%;">
+                        <h6 class="name-user-comment">{{comment.user_fullname}}</h6>
                       </a>
-                      <div class="ml-2 content-comment">
-                        <h6>Đoàn Hiệp Sỹ</h6>
-                        <div class="ml-0">
-                          <div class="mt-n1">Rep tui cái bạn ơi !!</div>
+                      <div class=" ml-0">
+                        <div class="mt-n2 content-user-comment">
+                          {{comment.content}}
                         </div>
                       </div>
-                    </div> -->
+                    </div>
+                    <div class="ml-3 content-user-comment">
+                      {{comment.time_comment}}
+                    </div>
+                    <div *ngIf="comment.listCommentReply.length > 0">
+                      <div class="user-comment d-flex text-pie pl-0 pt-2 pb-2"
+                        *ngFor="let commentReply of comment.listCommentReply">
+                        <a (click)="selectUser(commentReply.user_email)" type="button" class="avatar rounded-circle">
+                          <img class="" alt="" src="{{commentReply.user_avatar}}" />
+                        </a>
+                        <div class="ml-2 content-comment">
+                          <div class="card-comment shadow pl-3 pt-1 pb-1 pr-3">
+                            <a (click)="selectUser(commentReply.user_email)" type="button" style="width: 100%;">
+                              <h6 class="name-user-comment">{{commentReply.user_fullname}}</h6>
+                            </a>
+                            <div class="ml-0">
+                              <div class="mt-n2 content-user-comment d-flex" style="word-wrap: break-word;">
+                                <span class="font-weight-bold">
+                                  <a (click)="selectUser(comment.user_email)" type="button"
+                                    style="width: 100%;">{{comment.user_fullname}}</a></span>
+                                <div class="pl-1">
+                                  {{commentReply.content}}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class=" ml-3 content-user-comment">
+                            {{commentReply.time_comment}}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="text-pie pl-2 pr-1" *ngIf="totalComment == 0">
+                <div class="row">
+                  <div class="col-lg-12 profile-logo-heart pt-0">
+                    <img src="../assets/images/logo-euphoria.png" alt=""
+                      style="width: 30% !important; margin: 0 35% !important;" />
+                  </div>
+                  <div class="col-lg-12 profile-title mt-3 mb-2">
+                    <div class="logo" style="height: 0 !important">
+                      <h2 class="logo-name"><span>DES</span>TINY</h2>
+                    </div>
+                  </div>
+                  <div class="col-lg-10 offset-lg-1 text-center">
+                    <h5>Bài viết này chưa có bình luận!</h5>
                   </div>
                 </div>
               </div>
@@ -141,7 +253,8 @@
           <hr class="border-primaryx mb-2 mt-0 p-0" />
           <div class="col-lg-12 mt-4 pb-0 pb-4 text-pink">
             <div class="d-flex justify-content-between">
-              <h3 class="font-weight-bold ml-3">Nội dung bị báo cáo (4)</h3>
+              <h3 class="font-weight-bold ml-3">Nội dung bị báo cáo <span class="text-pie">({{totalReport}})</span>
+              </h3>
               <div class="name-user-detail mr-3">
                 <div class="text-pie">
                   <a href="#"
@@ -174,7 +287,7 @@
                           <div class="col-lg-12">
                             <div class="avatar-group row text-pie pl-3 pt-4">
                               <a (click)="selectUser(postDetail.user_email)" class="avatar rounded-circle">
-                                <img class="" alt="Image placeholder" src="{{postDetail.user_avartar}}" />
+                                <img class="" alt="Image placeholder" src="{{postDetail.user_avatar}}" />
                               </a>
                               <div class="ml-3" style="padding-top: 0.1rem !important">
                                 <h5 style="font-weight: 600">{{postDetail.user_fullname}}</h5>
@@ -212,7 +325,8 @@
                       <button class="btn btn-secondary mr-4" type="button" data-dismiss="modal">
                         <i class="fas fa-ban mr-1"></i>Hủy bỏ
                       </button>
-                      <a class="btn btn-danger" href="#">
+                      <a class="btn btn-danger" (click)="actionOnPost(postDetail.post_id)" type="button"
+                        data-dismiss="modal">
                         <i class="fas fa-check"></i> Xác nhận</a>
                     </div>
                   </div>
@@ -220,68 +334,45 @@
               </div>
             </div>
             <!-- disable Modal -->
-            <div class="avatar-group row text-pie pl-4 pt-3 pb-4">
-              <div class="d-flex col-xl-4 ml-3 col-sm-5">
-                <a href="#" class="avatar rounded-circle">
-                  <img class="" alt="Image placeholder" src="../assets/images/users/vi.jpg" />
-                </a>
-                <div class="ml-3" style="padding-top: 0.1rem !important">
-                  <h5 style="font-weight: 600">Lê Bích Vi</h5>
-                  <div class="ml-0">
-                    <div class="mt-n1">Ngày 8-9-2023</div>
+            <div class="card shadow report-left m-3 border-primaryx-xl">
+              <div class="card-body p-2" *ngIf="totalReport > 0">
+                <div *ngFor="let user of postDetail.listUserSendReports; index as i">
+                  <div class="avatar-group row text-pie pt-3 pb-3">
+                    <div class="d-flex col-xl-7 ml-3 col-sm-5">
+                      <a (click)="selectUser(user.email)" type="button" class="avatar rounded-circle">
+                        <img class="" alt="Image placeholder" src="{{user.avatar}}" />
+                      </a>
+                      <div class="ml-3" style="padding-top: 0.1rem !important">
+                        <a (click)="selectUser(user.email)" type="button">
+                          <h6 style="font-weight: 600">{{user.fullname}}</h6>
+                        </a>
+                        <div class="ml-0">
+                          <div class="mt-n1 text-sm-left">{{user.date_report}}</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-4 col-sm-6 text-center mt-3 font-weight-bold">
+                      <h6>{{user.content}}</h6>
+                    </div>
                   </div>
+                  <hr class="border-primaryx m-0 p-0" *ngIf="(i + 1) < totalReport" />
                 </div>
               </div>
-              <div class="col-xl-7 col-sm-6 text-center mt-3 font-weight-bold">
-                <h5>Dối trá !!!!</h5>
-              </div>
-            </div>
-            <div class="avatar-group row text-pie pl-4 pt-3 pb-4">
-              <div class="d-flex col-xl-4 ml-3 col-sm-5">
-                <a href="#" class="avatar rounded-circle">
-                  <img class="" alt="Image placeholder" src="../assets/images/users/vinh.jpg" />
-                </a>
-                <div class="ml-3" style="padding-top: 0.1rem !important">
-                  <h5 style="font-weight: 600">Phùng Quốc Vinh</h5>
-                  <div class="ml-0">
-                    <div class="mt-n1">Ngày 8-9-2023</div>
+
+              <div class="card-body p-2" *ngIf="totalReport == 0">
+                <div class="row mb-4">
+                  <div class="col-lg-12 profile-logo-heart">
+                    <img src="../assets/images/logo-euphoria.png" alt="" />
+                  </div>
+                  <div class="col-lg-12 profile-title mt-3 mb-4">
+                    <div class="logo" style="height: 0 !important">
+                      <h2 class="logo-name"><span>DES</span>TINY</h2>
+                    </div>
+                  </div>
+                  <div class="col-lg-10 offset-lg-1 text-center">
+                    <h2>BÀI VIẾT NÀY KHÔNG BỊ BÁO CÁO </h2>
                   </div>
                 </div>
-              </div>
-              <div class="col-xl-7 col-sm-6 text-center mt-3 font-weight-bold">
-                <h5>Lừa đảo !!!!</h5>
-              </div>
-            </div>
-            <div class="avatar-group row text-pie pl-4 pt-3 pb-4">
-              <div class="d-flex col-xl-4 ml-3 col-sm-5">
-                <a href="#" class="avatar rounded-circle">
-                  <img class="" alt="Image placeholder" src="../assets/images/users/dan.jpg" />
-                </a>
-                <div class="ml-3" style="padding-top: 0.1rem !important">
-                  <h5 style="font-weight: 600">Nguyễn Khánh Đan</h5>
-                  <div class="ml-0">
-                    <div class="mt-n1">Ngày 8-9-2023</div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-7 col-sm-6 text-center mt-3">
-                <h5>Quân khốn nạn !!!!</h5>
-              </div>
-            </div>
-            <div class="avatar-group row text-pie pl-4 pt-3 pb-4">
-              <div class="d-flex col-xl-4 ml-3 col-sm-5">
-                <a href="#" class="avatar rounded-circle">
-                  <img class="" alt="Image placeholder" src="../assets/images/users/sy.jpg" />
-                </a>
-                <div class="ml-3" style="padding-top: 0.1rem !important">
-                  <h5 style="font-weight: 600">Đoàn Hiệp Sỹ</h5>
-                  <div class="ml-0">
-                    <div class="mt-n1">Ngày 8-9-2023</div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-7 col-sm-6 text-center mt-3">
-                <h5>Lừa đảo !!!!</h5>
               </div>
             </div>
           </div>

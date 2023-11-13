@@ -14,7 +14,7 @@ import 'src/assets/js/utils/svg-loader.js';
 import { ModalService } from '../service/modal.service';
 import { MessageService } from '../service/message.service';
 import { environment } from '../../../environments/environment'
-import { UserModel } from '../service/UserModel.js';
+import { UserModel } from '../Model/UserModel.js';
 
 @Component({
   selector: 'app-message',
@@ -47,7 +47,7 @@ export class MessageComponent implements OnInit {
   usersTemplateHTML: string;
   count: number = 0;
   isLoading = true;
-  
+  data: UserModel[];
   ngOnInit() {
     this.messageService.isOriginal = true;
     this.isLoading = this.messageService.isLoading;
@@ -55,13 +55,16 @@ export class MessageComponent implements OnInit {
     if (this.messageService.mapUser != null) {
       this.mapUser = this.messageService.mapUser;
       // this.messageService.isLoading = false;
+      this.data = Array.from(this.messageService.mapUser.values());
     }
     this.messageService.dataUpdated.subscribe(() => {
       // Đây là nơi bạn đặt mã để xử lý khi dữ liệu đã được cập nhật.
-      this.mapUser = this.messageService.mapUser;
-      // Thực hiện các thao tác cần thiết sau khi dữ liệu đã được cập nhật.
+      // Chuyển dữ liệu từ Map thành một mảng.
+      this.data = Array.from(this.messageService.mapUser.values());
     });
-
+    if (this.messageService.checkSelected != '') {
+      this.selectedUser(this.messageService.checkSelected);
+    }
     liquid.liquid();
     avatarHexagons.avatarHexagons();
     tooltips.tooltips();
@@ -80,43 +83,18 @@ export class MessageComponent implements OnInit {
     private renderer: Renderer2
   ) { }
 
-  /* ============template============= */
-  scrollToBottomMessage() {
-    const chatContainer = document.getElementById("chatContainer");
-    if (chatContainer) {
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-      // Sử dụng hiệu ứng mượt
-      // chatContainer.scrollIntoView({ behavior: 'smooth', block: 'end' });
-    }
-  }
 
-  checkScrollPosition() {
-    const scrollableDiv = document.getElementById('chatContainer')!;
-    const scrollButton = document.getElementById('scrollToBottomButton')!;
-    // Thêm sự kiện lắng nghe lướt cho thẻ div
-    scrollableDiv.addEventListener('scroll', () => {
-      // Kiểm tra vị trí cuộn
-      if (Math.round(scrollableDiv.scrollTop) < scrollableDiv.scrollHeight - scrollableDiv.clientHeight) {
-        // Hiển thị nút scroll khi cuộn đến vị trí cuối cùng (điều kiện kiểm tra lúc này có thể khác)
-        scrollButton.style.display = 'block';
-      } else{
-        // Ẩn nút scroll nếu không cuộn xuống
-        scrollButton.style.display = 'none';
-      }
-    }); 
-  }
-
-  checkEnter(event: KeyboardEvent): void {
-    if (event.key === "Enter") {
-      this.addMessage();
-    }
-  }
-
+  /* ============Message============= */
   selectedUser(userid) {
     if (this.id != '') {
       this.renderer.removeClass(this.el.nativeElement.querySelector('#chat-widget-message-' + this.id), 'active');
     }
-
+    this.messageService.mapNotification.set(userid,false);
+    let mapEntries=Array.from(this.messageService.mapNotification.entries());
+    let hasTrueValue=mapEntries.some(([key,value])=>value===true);
+    if(!hasTrueValue){
+      this.messageService.notif_mess=false;
+    }
     this.messageService.selectedUser = userid;
     this.id = userid;
     this.messageService.isOriginal = false;
@@ -137,15 +115,10 @@ export class MessageComponent implements OnInit {
     }
 
     let datetemp = "";
-    // function delay(ms: number) {
-    //   return new Promise(function (resolve) {
-    //     setTimeout(resolve, ms);
-    //   });
-    // }
 
     this.messageService.loadMessage(this.id).subscribe((res) => {
       if (this.count > 0) {
-        document.querySelectorAll(".chat-widget-speaker, .time-date").forEach((e) => {
+        document.querySelectorAll(".chat-widget-speaker, .time-date, .br").forEach((e) => {
           e.remove();
         });
         this.count = 0;
@@ -186,7 +159,7 @@ export class MessageComponent implements OnInit {
               m[1] +
               '</p>' +
               '<p class="chat-widget-speaker-timestamp" style="margin-top: 12px !important;color: #adafca;font-size: 0.75rem;font-weight: 500;font-family: Helvetica, Arial, sans-serif;line-height: 1em;margin: 0;">'
-              + this.customTime(m[2]) + '</p>' +
+              + this.getCustomTime(m[2]) + '</p>' +
               '</div>	'
             );
           } else {
@@ -196,7 +169,7 @@ export class MessageComponent implements OnInit {
               + m[1] +
               '</p>' +
               '<p class="chat-widget-speaker-timestamp" style="margin-top: 12px; margin-bottom: 0 !important; color: #adafca;font-size: 0.75rem;font-weight: 500; font-family: Helvetica, Arial, sans-serif !important;line-height: 1em;">'
-              + this.customTime(m[2]) +
+              + this.getCustomTime(m[2]) +
               '</p>' +
               '</div>'
             );
@@ -204,14 +177,14 @@ export class MessageComponent implements OnInit {
         }
       }
 
-      if (this.messageService.newMessage.get(userid)?.message != undefined) {
-        let message = this.messageService.newMessage.get(userid)?.message;
-        let img = this.messageService.newMessage.get(userid)?.avatar;
-        this.messageService.render(message, userid, img);
-        this.messageService.newMessage.clear();
-      };
-      
-    this.scrollToBottomMessage();
+      // if (this.messageService.newMessage.get(userid)?.message != undefined) {
+      //   let message = this.messageService.newMessage.get(userid)?.message;
+      //   let img = this.messageService.newMessage.get(userid)?.avatar;
+      //   this.messageService.render(message, userid, img);
+      //   this.messageService.newMessage.clear();
+      // };
+
+      this.scrollToBottomMessage();
     });
   }
 
@@ -258,7 +231,18 @@ export class MessageComponent implements OnInit {
     this.$chatHistory.scrollTop(this.$chatHistory[0].scrollHeight);
   }
   getCurrentTime() {
-    return new Date().toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3");
+    let date = new Date();
+    let hours = (date.getHours() < 10) ? '0' + (date.getHours()) : (date.getHours());
+    let minutes = (date.getMinutes() < 10) ? '0' + (date.getMinutes()) : (date.getMinutes());
+    let newTime = hours + ':' + minutes;
+    return newTime;
+  }
+  getCustomTime(time) {
+    let date = new Date(time);
+    let hours = (date.getHours() < 10) ? '0' + (date.getHours()) : (date.getHours());
+    let minutes = (date.getMinutes() < 10) ? '0' + (date.getMinutes()) : (date.getMinutes());
+    let newTime = hours + ':' + minutes;
+    return newTime;
   }
 
   customTime(time) {
@@ -276,19 +260,55 @@ export class MessageComponent implements OnInit {
       '<div class="date-send" style="text-align: center;font-size: 12px;">' +
       this.checkDate(date) +
       '</div>' +
-      '</div> <br>';
+      '</div> <br class="br">';
     return d;
   }
   checkDate(date: string) {
     let d = date.substring(0, 10);
     let date1 = new Date(d);
     let date2 = new Date();
-    if (date1 < date2 && (date2.getDate() - 1).toString() == date.substring(8, 10)) {
+    if (date1 < date2 && (date2.getDate() - 1) == parseInt(date.substring(8, 10))) {
       return "Hôm qua";
-    } else if (date1 > date2) {
-      return null;
+    } else if (date1 < date2 && (date2.getDate() - 1) > parseInt(date.substring(8, 10))) {
+      let year = (date1.getFullYear() < date2.getFullYear()) ? '-' + date1.getFullYear() : '';
+      let month = (date1.getMonth() + 1 < 10) ? '0' + (date1.getMonth() + 1) : (date1.getMonth() + 1);
+      let day = (date1.getDate() < 10) ? '0' + date1.getDate() : date1.getDate();
+      return day + '-' + month + year;
     } else {
       return "Hôm nay";
     }
   }
+
+  /* ============template============= */
+  scrollToBottomMessage() {
+    const chatContainer = document.getElementById("chatContainer");
+    if (chatContainer) {
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+      // Sử dụng hiệu ứng mượt
+      // chatContainer.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+  }
+
+  checkScrollPosition() {
+    const scrollableDiv = document.getElementById('chatContainer')!;
+    const scrollButton = document.getElementById('scrollToBottomButton')!;
+    // Thêm sự kiện lắng nghe lướt cho thẻ div
+    scrollableDiv.addEventListener('scroll', () => {
+      // Kiểm tra vị trí cuộn
+      if (Math.round(scrollableDiv.scrollTop) < scrollableDiv.scrollHeight - scrollableDiv.clientHeight) {
+        // Hiển thị nút scroll khi cuộn đến vị trí cuối cùng (điều kiện kiểm tra lúc này có thể khác)
+        scrollButton.style.display = 'block';
+      } else {
+        // Ẩn nút scroll nếu không cuộn xuống
+        scrollButton.style.display = 'none';
+      }
+    });
+  }
+
+  checkEnter(event: KeyboardEvent): void {
+    if (event.key === "Enter") {
+      this.addMessage();
+    }
+  }
+
 }

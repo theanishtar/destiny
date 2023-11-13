@@ -17,6 +17,8 @@ public interface DistrictService {
 
 	// 11-10-2023 -tìm mã quận/huyện theo tên
 	public String districtCode(String districtName, String provinceCode);
+	
+	public Districts districts(String districtName, String provinceCode);
 
 	public List<Districts> findByIdProvince(String id);
 	

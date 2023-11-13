@@ -102,6 +102,10 @@ public class User implements UserDetails {
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	List<Post> posts;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "user")
+	List<SendReciever> send_reciever;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")

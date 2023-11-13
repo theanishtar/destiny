@@ -663,6 +663,7 @@ body h1 {
   
   .dropdown {
     position: relative;
+    cursor: pointer;
   }
   
   .dropdown-menu {
@@ -1227,3 +1228,29 @@ body h1 {
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
   
+img.forum-category-image {
+  width: 64px;
+  height: 64px;
+}
+p.forum-category-text{
+  /* width: 130px; */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+p.table-header-title {
+  font-size: 15px !important;
+}
+
+.emty-message {
+  text-align: center;
+  margin-top: 3rem;
+  font-size: 17px;
+    color: #3e3f5e;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.hidden {
+  display: none;
+}

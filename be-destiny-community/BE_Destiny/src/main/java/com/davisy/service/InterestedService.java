@@ -13,4 +13,15 @@ public interface InterestedService {
 	public int totalInterestedByUser(int id);
 
 	public List<Object[]> findByIdPost(int id);
+
+	// 24-10-2023 lịch sử quan tâm
+	public List<Object[]> findAllHistoryInterested(int id);
+
+	public Interested findInterested(int user_id,int post_id);
+
+	public void create(Interested interested);
+
+	public void update(Interested interested);
+
+	public void delete(Interested interested);
 }

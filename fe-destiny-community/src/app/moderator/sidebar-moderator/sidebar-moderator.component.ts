@@ -1,5 +1,6 @@
 import { Component, HostListener, Renderer2, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
+import { LoginService } from '@app/service/login.service';
 @Component({
   selector: 'app-sidebar-moderator',
   templateUrl: './sidebar-moderator.component.html',
@@ -14,6 +15,7 @@ export class SidebarModeratorComponent {
   constructor(
     private renderer: Renderer2,
     private router: Router,
+    private loginService: LoginService
     ) {
       this.router.events.subscribe((event) => {
         if (event instanceof NavigationEnd) {
@@ -140,5 +142,9 @@ export class SidebarModeratorComponent {
     if (currentUrl.includes('/moderator/user-report-detail')) {
       this.activeMenuItem = 'user-report-detail';
     }
+  }
+
+  logout(){
+    return this.loginService.logout();
   }
 }

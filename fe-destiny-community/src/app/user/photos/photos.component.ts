@@ -13,6 +13,7 @@ import 'src/assets/js/utils/svg-loader.js';
 
 // 
 import { ModalService } from '../service/modal.service';
+import { ProfileService } from '../service/profile.service';
 @Component({
   selector: 'app-photos',
   templateUrl: './photos.component.html',
@@ -25,6 +26,11 @@ import { ModalService } from '../service/modal.service';
   ]
 })
 export class PhotosComponent implements OnInit {
+  
+  dataProfileTimeline: any;
+  listImg: any
+  idLocal: any;
+
   ngOnInit() {
 
     liquid.liquid();
@@ -40,5 +46,10 @@ export class PhotosComponent implements OnInit {
 
   constructor(
     public modalService: ModalService,
-  ) { }
+    public profileService: ProfileService
+  ) {
+    this.idLocal = parseInt((localStorage.getItem("idSelected") + '')?.trim());
+    // this.profileService.loadDataProfileTimeline(this.idLocal);
+    // this.dataProfileTimeline = this.profileService.getDataHeader();
+   }
 }

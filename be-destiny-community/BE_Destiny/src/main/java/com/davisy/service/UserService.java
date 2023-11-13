@@ -12,6 +12,8 @@ public interface UserService {
 
 	User findByEmail(String email);
 
+	User findByEmailOrUsername(String email);
+
 	List<Integer> findAllUserProvinces(String idPr, String idDt, String idW);
 
 	User findById(int id);
@@ -24,9 +26,15 @@ public interface UserService {
 
 	List<Object[]> getTOP5User();
 
+	// 1-11-2023 -lấy tổng số người dùng theo ngày
+	public int getTotalUserByDay(int day, int month);
+
 	// 21-9-2023 -lấy tổng số người dùng theo tháng
 	// lastest update 14-10
 	public int getTotalUserByMonth(int month);
+	
+	// 1-11-2023 -lấy tổng số người dùng theo năm
+	public int getTotalUserByYear(int year);
 
 	// 21-9-2023 -Tóng số lượng tương tác của người dùng theo từng tháng
 	public List<Object[]> getInteractionOfUser();
@@ -42,6 +50,12 @@ public interface UserService {
 
 	// Lấy user đã đăng bài
 	public List<Object[]> getUserofPost(int id, int provinceId);
+
+	public List<Object[]> getUserofPostProfile(int id);
+
+	public List<Object[]> getUserofPostHistory(int id);
+
+	public List<Object[] > loadTimeLine(String email);
 
 	public void create(User user);
 

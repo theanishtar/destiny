@@ -13,6 +13,8 @@ import 'src/assets/js/utils/svg-loader.js';
 
 // 
 import { ModalService } from '../service/modal.service';
+import { HistoryService } from '../service/history.service';
+import { ProfileService } from '../service/profile.service';
 
 @Component({
   selector: 'app-history',
@@ -25,9 +27,18 @@ import { ModalService } from '../service/modal.service';
   ]
 })
 export class HistoryComponent implements OnInit {
-  
-  ngOnInit() {
+  listInterested: any[] = [];
+  listShare: any[] = [];
+  listSendreciever: any[] = [];
+  isLoading = true;
+  activeContent: string | null = 'interested';
+  searchQuery: string = '';
+  searchResults: any[] = [];
+  isSearching: boolean = false;
 
+  ngOnInit() {
+    // this.historyService.openModalDetailPost(49);
+    this.loadInterested();
     liquid.liquid();
     avatarHexagons.avatarHexagons();
     tooltips.tooltips();
@@ -38,15 +49,90 @@ export class HistoryComponent implements OnInit {
     content.contentTab();
     form.formInput();
   }
+  constructor(
+    public modalService: ModalService,
+    public historyService: HistoryService,
+    public profileService: ProfileService
+  ) {
+    this.isSearching = false;
+    this.searchResults = [];
+  }
 
-  dropdownMenu() {
-    document.getElementById("myDropdown")!.classList.toggle("show");
+
+  async loadInterested() {
+    try {
+      this.listInterested = await this.historyService.loadInterested();
+      // console.warn("list: " + JSON.stringify(this.listInterested));
+      this.isLoading = false;
+      this.listShare = await this.historyService.loadShare();
+      this.listSendreciever = await this.historyService.loadSendreciever();
+      // console.warn("this.listInterested: " + this.listInterested);
+    } catch (error) {
+      console.error('Error:', error);
+    }
   }
-  dropdownMenu2() {
-    document.getElementById("myDropdown2")!.classList.toggle("show");
+  /* ============Search============= */
+  //lưu trữ các biến tìm kiếm riêng cho mỗi tab
+  searchPerformed: boolean = false;
+  checkFind: {
+    interested: boolean;
+    share: boolean;
+    sendreciever: boolean;
+  } = {
+      interested: false,
+      share: false,
+      sendreciever: false,
+    };
+  searchQueries: {
+    interested: string;
+    share: string;
+    sendreciever: string;
+  } = {
+      interested: '',
+      share: '',
+      sendreciever: '',
+    };
+
+  performSearch(tab: string) {
+    const searchQuery = this.searchQueries[tab]; //truy cập biến tìm kiếm tương ứng cho tab
+    this.checkFind[tab] = false; // Mặc định đánh dấu là không tìm thấy
+    this.searchPerformed = searchQuery.trim() !== ''; // Kiểm tra nếu người dùng đã nhập và tìm kiếm
+    if (searchQuery) {
+      this.isSearching = true;
+      this.searchResults = [];
+
+      let listToSearch: any[] = [];
+
+      if (tab === 'interested') {
+        listToSearch = this.listInterested;
+      } else if (tab === 'share') {
+        listToSearch = this.listShare;
+      } else if (tab === 'sendreciever') {
+        listToSearch = this.listSendreciever;
+      }
+
+      listToSearch.forEach((item) => {
+        if (item[2].toLowerCase().includes(searchQuery.toLowerCase())) {
+          this.searchResults.push(item);
+          this.checkFind[tab] = true; // Tìm thấy kết quả
+        }
+      });
+    } else {
+      this.isSearching = false;
+      this.checkFind[tab] = true;
+    }
   }
-  dropdownMenu3() {
-    document.getElementById("myDropdown3")!.classList.toggle("show");
+  openTabFollow(content: string) {
+    if (this.activeContent !== content) {
+      this.activeContent = content;
+    }
+  }
+
+  toggleDropdown(id, menuType) {
+    const dropdown = document.getElementById(`myDropdown-${menuType}-${id}`);
+    if (dropdown) {
+      dropdown.classList.toggle("show");
+    }
   }
 
 }

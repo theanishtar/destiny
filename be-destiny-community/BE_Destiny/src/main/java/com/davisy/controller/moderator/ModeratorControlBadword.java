@@ -1,12 +1,19 @@
 package com.davisy.controller.moderator;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.davisy.mongodb.MongoDBUtils;
@@ -15,6 +22,7 @@ import com.davisy.service.BadWordService;
 import com.davisy.service.CacheService;
 
 @RestController
+@CrossOrigin("*")
 public class ModeratorControlBadword {
 
 	@Value("${davis.mongodb.collectionBadWords}")
@@ -38,8 +46,9 @@ public class ModeratorControlBadword {
 
 	@GetMapping("/v1/moderator/badwords")
 	public List<BadWord> listBadWords() {
-		List<BadWord> badWordsList = badWordService.findAll();
-		return badWordsList;
+		List<BadWord> listBadWords = badWordService.findAll();
+
+		return listBadWords;
 	}
 	
 	@GetMapping("/v1/moderator/checkBadword")
@@ -53,47 +62,83 @@ public class ModeratorControlBadword {
 		}
 	}
 	
+	@PostMapping("/v1/moderator/addBadwords")
+	public ResponseEntity<String> addBadwords(@RequestBody List<BadWord> badWords) {
+		try {
+			
+			for(BadWord badWord: badWords) {
+				BadWord find = badWordService.findByName("name", badWord.getName());
+				if(find != null) {
+						
+					badWords.remove(badWord);
+					
+					System.out.println("xóa" + badWord.getName());
+				}
+				
+			}
+			
+			badWordService.inserts(badWords);
+
+			return ResponseEntity.status(200).body("Successfully");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(403).body(null);
+		}
+	}
 	
 	@PostMapping("/v1/moderator/addBadword")
-	public String add() {
+	public ResponseEntity<String> addBadword(@RequestBody BadWord badWord) {
 		try {
-			BadWord badWord = new BadWord();
-			badWord.setLabel(1);
-			badWord.setName("sỹ chó");
-			badWord.setSeverityLevel(3);
-			Date now = new Date();
-			badWord.setCreateDate(now);
 
-			badWordService.insert(badWord);
+			BadWord find = badWordService.findByName("name", badWord.getName());
+			if(find != null) {
+				System.out.println("đã tồn tại khứa này");
+				return ResponseEntity.status(301).body(null);
+				
+			}else {
+
+				badWordService.insert(badWord);
+				cacheService.writeCache(badWord.getName(), badWord);
+				
+				System.out.println("thêm thành công");
+				return ResponseEntity.status(200).body(null);
+			}
 			
-			return "Successfully";
+			
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "ERROR" + e;
+			System.out.println(e + " moderator/addBadword");
+			return ResponseEntity.status(403).body(null);
 		}
 	}
 	
-	@PostMapping("/v1/moderator/updateBadword")
-	public String update() {
-		try {
-			BadWord badWord = new BadWord();
-			badWord.setName("sỹ heo");
-			badWordService.update("name", "sỹ chó", badWord);
-			return "Successfully";
+	@PutMapping("/v1/moderator/updateBadword/{oldName}")
+	public ResponseEntity<String> updateBadWord(@PathVariable String oldName, @RequestBody BadWord badWord) {
+		try { 
+			
+			badWordService.update("name", oldName, badWord);
+			cacheService.writeCache(oldName, badWord);
+			
+			return ResponseEntity.status(200).body(null);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "ERROR" + e;
+			return ResponseEntity.status(403).body(null);
 		}
 	}
 	
-	@PostMapping("/v1/moderator/deleteBadword")
-	public String delete() {
+	@DeleteMapping("/v1/moderator/removeBadword/{name}")
+	public ResponseEntity<String>  removeBadWord(@PathVariable String name) {
 		try {
-			badWordService.delete("name", "sỹ heo");
-			return "Successfully";
+			System.out.println(name+ " name de");
+			badWordService.delete("name", name);
+			cacheService.destroyCache(name);
+
+			return ResponseEntity.status(200).body(null);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "ERROR" + e;
+			return ResponseEntity.status(403).body(null);
 		}
 	}
 	

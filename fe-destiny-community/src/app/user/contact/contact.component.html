@@ -29,7 +29,6 @@
     <!-- Contact -->
     <section class="ftco-section">
       <div class="container">
-
         <div class="row">
           <div class="col-md-3">
             <div class="dbox w-100 text-center">
@@ -100,8 +99,10 @@
                       Your message was sent, thank you!
                     </div>
                     <form
-                      method="POST"
-                      id="contactForm"
+                      [formGroup]="contactForm"
+                      (ngSubmit)="sendContact()"
+                      action=""
+                      novalidate
                       name="contactForm"
                       class="contactForm"
                     >
@@ -115,8 +116,41 @@
                               name="name"
                               id="name"
                               placeholder="Nguyễn Văn An"
+                              formControlName="fullname"
                             />
                           </div>
+                          <span
+                            *ngIf="
+                              contactForm.get('fullname')?.invalid &&
+                              contactForm.get('fullname')?.touched
+                            "
+                          >
+                            <div
+                              *ngIf="contactForm.get('fullname')?.errors"
+                              style="color: red"
+                            >
+                              <div
+                                *ngIf="
+                                  contactForm
+                                    .get('fullname')
+                                    ?.hasError('required')
+                                "
+                                style="color: red"
+                              >
+                                Vui lòng nhập họ tên!
+                              </div>
+                              <div
+                                *ngIf="
+                                  contactForm
+                                    .get('fullname')
+                                    ?.hasError('pattern')
+                                "
+                                style="color: red"
+                              >
+                                Họ tên không chứa ký tự đặc biệt!
+                              </div>
+                            </div>
+                          </span>
                         </div>
                         <div class="col-md-6">
                           <div class="form-group">
@@ -127,8 +161,19 @@
                               name="email"
                               id="email"
                               placeholder="an@gmail.com"
+                              formControlName="email"
                             />
                           </div>
+                          <span
+                            *ngIf="
+                              contactForm.get('email')?.invalid &&
+                              contactForm.get('email')?.touched
+                            "
+                          >
+                            <div style="color: red">
+                              Vui lòng kiểm tra email!
+                            </div>
+                          </span>
                         </div>
                         <div class="col-md-12">
                           <div class="form-group">
@@ -139,8 +184,17 @@
                               name="subject"
                               id="subject"
                               placeholder="Tiêu đề"
+                              formControlName="subject"
                             />
                           </div>
+                          <span
+                            *ngIf="
+                              contactForm.get('subject')?.invalid &&
+                              contactForm.get('subject')?.touched
+                            "
+                          >
+                            <div style="color: red">Vui lòng nhập tiêu đề!</div>
+                          </span>
                         </div>
                         <div class="col-md-12">
                           <div class="form-group">
@@ -151,11 +205,22 @@
                               id="message"
                               cols="30"
                               rows="4"
+                              formControlName="description"
                             ></textarea>
                           </div>
+                          <span
+                            *ngIf="
+                              contactForm.get('description')?.invalid &&
+                              contactForm.get('description')?.touched
+                            "
+                          >
+                            <div style="color: red">
+                              Vui lòng nhập nội dung!
+                            </div>
+                          </span>
                         </div>
                         <div class="col-md-3">
-                          <button>
+                          <button type="submit">
                             <div class="svg-wrapper-1">
                               <div class="svg-wrapper">
                                 <svg
@@ -202,6 +267,4 @@
     <!-- /GRID -->
   </div>
   <!-- /CONTENT GRID -->
-
-  <app-modal></app-modal>
 </body>

@@ -1,5 +1,7 @@
 package com.davisy.entity;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -10,6 +12,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,6 +29,8 @@ public class Chats {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	int id;
 	String name_chats;
+	@Temporal(TemporalType.TIMESTAMP)
+	Calendar day_create = GregorianCalendar.getInstance();
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "chats")

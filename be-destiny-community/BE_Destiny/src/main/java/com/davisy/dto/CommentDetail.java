@@ -1,5 +1,7 @@
 package com.davisy.dto;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +14,9 @@ import lombok.NoArgsConstructor;
 public class CommentDetail {
 	String content;
 	String user_fullname;
-	String user_avartar;
+	String user_avatar;
 	String user_email;
+	String time_comment;
+	
+	List<CommentDetail> listCommentReply;
 }

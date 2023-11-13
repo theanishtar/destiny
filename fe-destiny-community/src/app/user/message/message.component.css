@@ -326,9 +326,9 @@ i.fa-solid.fa-circle-exclamation {
 }
 
 .scrollToBottomButton {
-  position: absolute;
-    right: 3%;
-    bottom: 3%;
+  position: fixed;
+  right: 13%;
+  bottom: 24%;
   width: 30px;
   height: 30px;
   text-align: center;

@@ -71,30 +71,31 @@
                   type="radio"
                   name="css-tabs"
                   id="tab-1"
-                  checked
+                  [checked]="messageService.showMessagesTab"
+                  (click)="messageService.switchToMessagesTab()"
                   class="tab-switch"
                 />
                 <label for="tab-1" class="tab-label main-message"
                   >Tin nhắn</label
                 >
                 <div class="tab-content" id="tab-message">
-                  <div *ngFor="let key of mapUser | keyvalue">
+                  <div *ngFor="let key of data ">
                     <!-- <div class="a">{{key.value.fullname}}</div> -->
-                    <ng-container *ngIf="key.value.isFriend && !key.value.hide">
+                    <ng-container *ngIf="key.isFriend && !key.hide">
                       <!-- CHAT WIDGET MESSAGE -->
                       <div
                         class="chat-widget-message"
-                        id="chat-widget-message-{{ key.value.user_id }}"
-                        (click)="selectedUser(key.value.user_id)"
+                        id="chat-widget-message-{{ key.user_id }}"
+                        (click)="selectedUser(key.user_id)"
                       >
                         <!-- USER STATUS -->
-                        <div class="user-status" id="p-count-mess-{{key.value.user_id}}">
+                        <div class="user-status" id="p-count-mess-{{key.user_id}}">
                           <!-- USER STATUS AVATAR -->
                           <div class="user-status-avatar">
                             <div
                               class="user-avatar small no-outline"
                               [ngClass]="
-                                key.value.type == 'JOIN' ? 'online' : 'away'
+                                key.type == 'JOIN' ? 'online' : 'away'
                               "
                             ></div>
                             <!-- USER AVATAR -->
@@ -106,7 +107,7 @@
                                 <div class="hexagon user-avatar-content">
                                   <div
                                     class="hexagon-image"
-                                    style="background-image: url('{{key.value.avatar}}')"
+                                    style="background-image: url('{{key.avatar}}')"
                                   ></div>
                                 </div>
                                 <div class="hexagon user-avatar-border">
@@ -125,26 +126,26 @@
 
                           <!-- USER STATUS TITLE -->
                           <p class="user-status-title">
-                            <span class="bold">{{ key.value.fullname }}</span>
+                            <span class="bold">{{ key.fullname }}</span>
                           </p>
                           <!-- /USER STATUS TITLE -->
 
                           <!-- USER STATUS TEXT -->
                           <p
                             class="user-status-text"
-                            id="last-message-{{ key.value.user_id }}"
+                            id="last-message-{{ key.user_id }}"
                           >
-                          {{key.value.lastMessage}}
+                          {{key.lastMessage}}
                           </p>
                           <!-- /USER STATUS TEXT -->
 
                           <!-- USER STATUS TIMESTAMP -->
-                          <p class="user-status-timestamp floaty" id="floaty-{{key.value.user_id}}">
-                            {{ key.value.online }}
+                          <p class="user-status-timestamp floaty" id="floaty-{{key.user_id}}">
+                            {{ key.online }}
                           </p>
                           <!-- /USER STATUS TIMESTAMP -->
-                          <p class="user-status-timestamp count-mess"  id="count-mess-{{key.value.user_id}}" *ngIf="key.value.messageUnRead > 0">
-                            <span>{{key.value.messageUnRead}}</span>
+                          <p class="user-status-timestamp count-mess"  id="count-mess-{{key.user_id}}" *ngIf="key.messageUnRead > 0">
+                            <span>{{key.messageUnRead}}</span>
                           </p>
                           <!-- <p class="user-status-timestamp count-mess" id="p-count-mess-{{key.value.user_id}}"
                           style="position: absolute;top: 32%;right: 5%;padding: 3px 8px;background: red;border-radius: 50%;margin-top: 10px;color: #8f91ac;font-size: 0.75rem;font-weight: 500;line-height: 1em;">
@@ -165,29 +166,30 @@
                   name="css-tabs"
                   id="tab-2"
                   class="tab-switch"
+                  [checked]="messageService.showWaitMessagesTab"
+                  (click)="messageService.switchToWaitMessagesTab()"
                 />
                 <label for="tab-2" class="tab-label wait-message"
                   >Tin nhắn chờ</label
                 >
-                <div
-                  class="tab-content"
-                  *ngFor="let key of mapUser | keyvalue"
-                >
-                  <ng-container *ngIf="!key.value.isFriend && key.value.hide">
-                    <!-- CHAT WIDGET MESSAGE -->
-                    <div
+                <div class="tab-content" id="tab-message">
+                  <div *ngFor="let key of data">
+                    <!-- <div class="a">{{key.value.fullname}}</div> -->
+                    <ng-container *ngIf="!key.isFriend">
+                      <!-- CHAT WIDGET MESSAGE -->
+                      <div
                         class="chat-widget-message"
-                        id="chat-widget-message-{{ key.value.user_id }}"
-                        (click)="selectedUser(key.value.user_id)"
+                        id="chat-widget-message-{{ key.user_id }}"
+                        (click)="selectedUser(key.user_id)"
                       >
                         <!-- USER STATUS -->
-                        <div class="user-status" id="p-count-mess-{{key.value.user_id}}">
+                        <div class="user-status" id="p-count-mess-{{key.user_id}}">
                           <!-- USER STATUS AVATAR -->
                           <div class="user-status-avatar">
                             <div
                               class="user-avatar small no-outline"
                               [ngClass]="
-                                key.value.type == 'JOIN' ? 'online' : 'away'
+                                key.type == 'JOIN' ? 'online' : 'away'
                               "
                             ></div>
                             <!-- USER AVATAR -->
@@ -199,7 +201,7 @@
                                 <div class="hexagon user-avatar-content">
                                   <div
                                     class="hexagon-image"
-                                    style="background-image: url('{{key.value.avatar}}')"
+                                    style="background-image: url('{{key.avatar}}')"
                                   ></div>
                                 </div>
                                 <div class="hexagon user-avatar-border">
@@ -218,26 +220,26 @@
 
                           <!-- USER STATUS TITLE -->
                           <p class="user-status-title">
-                            <span class="bold">{{ key.value.fullname }}</span>
+                            <span class="bold">{{ key.fullname }}</span>
                           </p>
                           <!-- /USER STATUS TITLE -->
 
                           <!-- USER STATUS TEXT -->
                           <p
                             class="user-status-text"
-                            id="last-message-{{ key.value.user_id }}"
+                            id="last-message-{{ key.user_id }}"
                           >
-                          {{key.value.lastMessage}}
+                          {{key.lastMessage}}
                           </p>
                           <!-- /USER STATUS TEXT -->
 
                           <!-- USER STATUS TIMESTAMP -->
-                          <p class="user-status-timestamp floaty" id="floaty-{{key.value.user_id}}">
-                            {{ key.value.online }}
+                          <p class="user-status-timestamp floaty" id="floaty-{{key.user_id}}">
+                            {{ key.online }}
                           </p>
                           <!-- /USER STATUS TIMESTAMP -->
-                          <p class="user-status-timestamp count-mess"  id="count-mess-{{key.value.user_id}}" *ngIf="key.value.messageUnRead > 0">
-                            <span>{{key.value.messageUnRead}}</span>
+                          <p class="user-status-timestamp count-mess"  id="count-mess-{{key.user_id}}" *ngIf="key.messageUnRead > 0">
+                            <span>{{key.messageUnRead}}</span>
                           </p>
                           <!-- <p class="user-status-timestamp count-mess" id="p-count-mess-{{key.value.user_id}}"
                           style="position: absolute;top: 32%;right: 5%;padding: 3px 8px;background: red;border-radius: 50%;margin-top: 10px;color: #8f91ac;font-size: 0.75rem;font-weight: 500;line-height: 1em;">
@@ -247,8 +249,9 @@
                         </div>
                         <!-- /USER STATUS -->
                       </div>
-                    <!-- /CHAT WIDGET MESSAGE -->
-                  </ng-container>
+                      <!-- /CHAT WIDGET MESSAGE -->
+                    </ng-container>
+                  </div>
                 </div>
               </div>
             </div>
@@ -264,7 +267,7 @@
               type="text"
               id="chat-widget-search-2"
               name="chat_widget_search_2"
-              placeholder="Search Messages..."
+              placeholder="Tìm kiếm..."
             />
             <!-- INTERACTIVE INPUT ICON WRAP -->
             <div class="interactive-input-icon-wrap">
@@ -499,7 +502,7 @@
             <p>Nơi bạn có thể kết bạn, trò chuyện, giao lưu với mọi người</p>
           </div>
           <div class="img-chat">
-            <img src="../../../assets/images//landing/chat-origin.jpg" alt="" />
+            <img src="../../../assets/images//landing/chat-origin.png" alt="" />
           </div>
         </div>
       </div>
@@ -509,4 +512,3 @@
   <!-- /GRID -->
 </div>
 <!-- /CONTENT GRID -->
-<app-modal></app-modal>

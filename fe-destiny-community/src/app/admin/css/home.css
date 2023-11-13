@@ -4,7 +4,7 @@
   --primary-admin: #da277b;
   --light-primary-admin: #cfe8ff;
   --grey-admin: #eee;
-  --dark-admin-grey-admin: #aaaaaa;
+  --dark-grey-admin: #dddcdc;
   --dark-admin: #363949;
   --danger-admin: #d32f4a;
   --warning-admin: #fbc02d;
@@ -44,6 +44,7 @@ li {
   --chart-bg-admin: #4e033a;
   --shadow-dark-admin: #ffffff21;
   --light-admin-blur: #181a1ecc;
+  --dark-grey-admin: #38383f;
 }
 
 .body-admin.pink {
@@ -494,6 +495,13 @@ li {
   border: none;
 }
 
+.card-comment {
+  background-color: var(--dark-grey-admin);
+  border-radius: 1.2rem;
+  border: none;
+  width: max-content;
+}
+
 .card-modal {
   background-color: var(--dark-admin);
   border-radius: 1.4rem;
@@ -568,7 +576,7 @@ label {
 }
 
 .bg-gradient-endless {
-  background-image: linear-gradient(310deg, #cc2b5e 0%, #753a88 100%);
+  background-image: linear-gradient(310deg, var(--primary-admin) 0%, #753a88 100%);
 }
 
 .card-body {
@@ -690,16 +698,28 @@ table tr td .status {
   font-weight: 700;
 }
 
-table tr td .status.completed {
+table tr td .status.green {
   background: var(--success-admin);
 }
 
-table tr td .status.process {
+table tr td .status.primary {
   background: var(--primary-admin);
 }
 
-table tr td .status.pending {
+table tr td .status.yellow {
   background: var(--warning-admin);
+}
+
+table tr td .status.red {
+  background: var(--danger-admin);
+}
+
+table tr td .status.blue {
+  background: royalblue;
+}
+
+table tr td .status.gray {
+  background: slategray;
 }
 
 .rounded-circle,
@@ -819,6 +839,12 @@ table tr td .status.pending {
 
 .border-primaryx {
   border: 1px solid var(--primary-admin) !important;
+}
+
+
+.border-primaryx-xl {
+  min-height: 100px;
+  border: 2px solid var(--primary-admin) !important;
 }
 
 /* profile */
@@ -1213,9 +1239,6 @@ table tr td .status.pending {
     margin: 0 0 !important;
   }
 
-  .user-comment a {
-    width: 20% !important;
-  }
 
   .img-user-detail {
     width: 70%;
@@ -1319,9 +1342,10 @@ table tr td .status.pending {
   width: 100%;
 }
 
-.user-comment a {
-  width: 7%;
-}
+/* .user-comment a {
+  width: 11%;
+} */
+
 
 .user-comment>.content-comment {
   width: 93%;
@@ -1335,7 +1359,7 @@ table tr td .status.pending {
 /* user detail */
 
 .user-detail-post {
-  height: 1000px;
+  height: 800px;
   overflow-y: scroll;
 }
 
@@ -1476,3 +1500,33 @@ ul {
   font-family: "Font Awesome 6 Free";
 }
 
+.border-left-shine {
+  border-left: .25rem solid var(--dark-admin) !important
+}
+
+.border-left-pink {
+  border-left: .25rem solid var(--primary-admin) !important
+}
+
+.border-left-pink-sm {
+  border-left: 2px solid var(--primary-admin) !important
+}
+
+.name-user-comment {
+  font-size: 0.8rem;
+}
+
+.content-user-comment {
+  font-size: 0.9rem;
+}
+
+
+.img-left-fr {
+  position: relative;
+
+}
+
+.img-left-fr-child {
+  position: absolute;
+  top: 150px;
+}

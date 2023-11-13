@@ -22,5 +22,5 @@ public class AdminPostTOP4 {
 	
 	String user_email;
 	String user_fullname;
-	String user_avartar;
+	String user_avatar;
 }

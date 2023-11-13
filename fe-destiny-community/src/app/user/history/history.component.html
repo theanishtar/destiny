@@ -19,8 +19,9 @@
     <!-- /SECTION BANNER TEXT -->
   </div>
   <!-- /SECTION BANNER -->
-
+  <app-loading *ngIf="isLoading"></app-loading>
   <!-- SECTION HEADER -->
+ <div *ngIf="!isLoading">
   <div class="section-header">
     <!-- SECTION HEADER INFO -->
     <div class="section-header-info">
@@ -43,13 +44,15 @@
     <!-- SECTION FILTERS BAR ACTIONS -->
     <div class="section-filters-bar-actions">
       <!-- FORM -->
-      <form class="form">
+      <div class="form">
         <!-- FORM ITEM -->
         <div class="form-item split">
           <!-- FORM INPUT -->
           <div class="form-input small">
-            <label for="forum-search">Tìm kiếm</label>
-            <input type="text" id="forum-search" name="forum_search">
+            <!-- <label for="forum-search">Tìm kiếm</label> -->
+            <input type="text" [ngClass]="{'hidden': activeContent !== 'interested'}" [(ngModel)]="searchQueries.interested" (input)="performSearch('interested')" placeholder="Nhập tên người đăng bài">
+            <input type="text" [ngClass]="{'hidden': activeContent !== 'share'}" [(ngModel)]="searchQueries.share" (input)="performSearch('share')" placeholder="Nhập tên người đăng bài">
+            <input type="text" [ngClass]="{'hidden': activeContent !== 'sendreciever'}" [(ngModel)]="searchQueries.sendreciever" (input)="performSearch('sendreciever')" placeholder="Nhập tên người đăng bài">
           </div>
           <!-- /FORM INPUT -->
 
@@ -64,7 +67,7 @@
           <!-- /BUTTON -->
         </div>
         <!-- /FORM ITEM -->
-      </form>
+      </div>
       <!-- /FORM -->
     </div>
     <!-- /SECTION FILTERS BAR ACTIONS -->
@@ -72,9 +75,9 @@
   <!-- /SECTION FILTERS BAR -->
 
   <div class="tabs">
-    <input type="radio" id="tab1" name="tab-control" checked />
-    <input type="radio" id="tab2" name="tab-control" />
-    <input type="radio" id="tab3" name="tab-control" />
+    <input type="radio" id="tab1" name="tab-control" (click)="openTabFollow('interested')" checked />
+    <input type="radio" id="tab2" name="tab-control" (click)="openTabFollow('share')"/>
+    <input type="radio" id="tab3" name="tab-control" (click)="openTabFollow('sendreciever')"/>
     <ul>
       <li title="Features">
         <label for="tab1" role="button"><svg viewBox="0 0 24 24">
@@ -101,6 +104,7 @@
         <h2>Lượt tương tác</h2>
         <!-- TABLE -->
         <div class="table table-forum-category">
+          <div *ngIf="searchPerformed && !checkFind[activeContent!]" class="emty-message">Lịch sử không tồn tại!</div>
           <!-- TABLE HEADER -->
           <div class="table-header">
             <!-- TABLE HEADER COLUMN -->
@@ -118,23 +122,20 @@
               <!-- /TABLE HEADER TITLE -->
             </div>
             <!-- /TABLE HEADER COLUMN -->
-
-
-
           </div>
           <!-- /TABLE HEADER -->
 
           <!-- TABLE BODY -->
           <div class="table-body">
             <!-- TABLE ROW -->
-            <div class="table-row big">
+            <div class="table-row big" *ngFor="let interested of (isSearching ? searchResults : listInterested)">
               <!-- TABLE COLUMN -->
               <div class="table-column">
                 <!-- FORUM CATEGORY -->
                 <div class="forum-category">
                   <!-- FORUM CATEGORY IMAGE -->
                   <a href="forums-category.html">
-                    <img class="forum-category-image" src="../../../assets/images/forum/category/01.png"
+                    <img class="forum-category-image" src="{{interested[1]}}"
                       alt="category-01">
                   </a>
                   <!-- /FORUM CATEGORY IMAGE -->
@@ -142,11 +143,11 @@
                   <!-- FORUM CATEGORY INFO -->
                   <div class="forum-category-info">
                     <!-- FORUM CATEGORY TITLE -->
-                    <p class="forum-category-title"><a href="forums-category.html">Community Hangout</a></p>
+                    <p class="forum-category-title"><a (click)="this.profileService.loadDataProfileTimeline(interested[1])">{{interested[2]}}</a></p>
                     <!-- /FORUM CATEGORY TITLE -->
 
                     <!-- FORUM CATEGORY TEXT -->
-                    <p class="forum-category-text">A place for the community to talk and chat about whatever they want!
+                    <p class="forum-category-text">{{interested[3]}}
                     </p>
                     <!-- /FORUM CATEGORY TEXT -->
                   </div>
@@ -159,7 +160,7 @@
               <!-- TABLE COLUMN -->
               <div class="table-column centered padded-medium">
                 <!-- TABLE TITLE -->
-                <p class="table-title">44</p>
+                <p class="table-title">{{interested[4]}}</p>
                 <!-- /TABLE TITLE -->
               </div>
               <!-- /TABLE COLUMN -->
@@ -167,11 +168,11 @@
               <!-- TABLE COLUMN -->
               <div class="table-column centered padded-medium">
                 <div class="dropdown">
-                  <div class="dropbtn" (click)="dropdownMenu()">
+                  <div class="dropbtn" (click)="toggleDropdown(interested[0], 'interested')">
                     <i class="fa fa-ellipsis-v"></i>
                   </div>
-                  <div id="myDropdown" class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                    <a class="dropdown-item" href="#">Xem lại</a>
+                  <div id="myDropdown-interested-{{interested[0]}}" class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                    <a class="dropdown-item" (click)="historyService.openModalDetailPost(interested[0])">Xem lại</a>
                   </div>
                 </div>
               </div>
@@ -187,6 +188,7 @@
         <h2>Lượt chia sẻ</h2>
         <!-- TABLE -->
         <div class="table table-forum-category">
+          <div *ngIf="searchPerformed && !checkFind[activeContent!]" class="emty-message">Lịch sử không tồn tại!</div>
           <!-- TABLE HEADER -->
           <div class="table-header">
             <!-- TABLE HEADER COLUMN -->
@@ -204,23 +206,20 @@
               <!-- /TABLE HEADER TITLE -->
             </div>
             <!-- /TABLE HEADER COLUMN -->
-
-
-
           </div>
           <!-- /TABLE HEADER -->
 
           <!-- TABLE BODY -->
           <div class="table-body">
             <!-- TABLE ROW -->
-            <div class="table-row big">
+            <div class="table-row big" *ngFor="let share of (isSearching ? searchResults : listShare)">
               <!-- TABLE COLUMN -->
               <div class="table-column">
                 <!-- FORUM CATEGORY -->
                 <div class="forum-category">
                   <!-- FORUM CATEGORY IMAGE -->
                   <a href="forums-category.html">
-                    <img class="forum-category-image" src="../../../assets/images/forum/category/01.png"
+                    <img class="forum-category-image" src="{{share[1]}}"
                       alt="category-01">
                   </a>
                   <!-- /FORUM CATEGORY IMAGE -->
@@ -228,11 +227,11 @@
                   <!-- FORUM CATEGORY INFO -->
                   <div class="forum-category-info">
                     <!-- FORUM CATEGORY TITLE -->
-                    <p class="forum-category-title"><a href="forums-category.html">Community Hangout</a></p>
+                    <p class="forum-category-title"><a href="forums-category.html">{{share[2]}}</a></p>
                     <!-- /FORUM CATEGORY TITLE -->
 
                     <!-- FORUM CATEGORY TEXT -->
-                    <p class="forum-category-text">A place for the community to talk and chat about whatever they want!
+                    <p class="forum-category-text">{{share[3]}}
                     </p>
                     <!-- /FORUM CATEGORY TEXT -->
                   </div>
@@ -245,7 +244,7 @@
               <!-- TABLE COLUMN -->
               <div class="table-column centered padded-medium">
                 <!-- TABLE TITLE -->
-                <p class="table-title">44</p>
+                <p class="table-title">{{share[4]}}</p>
                 <!-- /TABLE TITLE -->
               </div>
               <!-- /TABLE COLUMN -->
@@ -253,11 +252,11 @@
               <!-- TABLE COLUMN -->
               <div class="table-column centered padded-medium">
                 <div class="dropdown">
-                  <div class="dropbtn" (click)="dropdownMenu2()">
+                  <div class="dropbtn" (click)="toggleDropdown(share[0], 'share')">
                     <i class="fa fa-ellipsis-v"></i>
                   </div>
-                  <div id="myDropdown2" class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                    <a class="dropdown-item" href="#">Xem lại</a>
+                  <div id="myDropdown-share-{{share[0]}}" class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                    <a class="dropdown-item" (click)="historyService.openModalDetailPost(share[0])">Xem lại</a>
                   </div>
                 </div>
               </div>
@@ -273,6 +272,7 @@
         <h2>Hàng đã nhận</h2>
         <!-- TABLE -->
         <div class="table table-forum-category">
+          <div *ngIf="searchPerformed && !checkFind[activeContent!]" class="emty-message">Lịch sử không tồn tại!</div>
           <!-- TABLE HEADER -->
           <div class="table-header">
             <!-- TABLE HEADER COLUMN -->
@@ -290,23 +290,20 @@
               <!-- /TABLE HEADER TITLE -->
             </div>
             <!-- /TABLE HEADER COLUMN -->
-
-
-
           </div>
           <!-- /TABLE HEADER -->
 
           <!-- TABLE BODY -->
           <div class="table-body">
             <!-- TABLE ROW -->
-            <div class="table-row big">
+            <div class="table-row big" *ngFor="let sendreciever of (isSearching ? searchResults : listSendreciever)">
               <!-- TABLE COLUMN -->
               <div class="table-column">
                 <!-- FORUM CATEGORY -->
                 <div class="forum-category">
                   <!-- FORUM CATEGORY IMAGE -->
                   <a href="forums-category.html">
-                    <img class="forum-category-image" src="../../../assets/images/forum/category/01.png"
+                    <img class="forum-category-image" src="{{sendreciever[1]}}"
                       alt="category-01">
                   </a>
                   <!-- /FORUM CATEGORY IMAGE -->
@@ -314,11 +311,11 @@
                   <!-- FORUM CATEGORY INFO -->
                   <div class="forum-category-info">
                     <!-- FORUM CATEGORY TITLE -->
-                    <p class="forum-category-title"><a href="forums-category.html">Community Hangout</a></p>
+                    <p class="forum-category-title"><a href="forums-category.html">{{sendreciever[2]}}</a></p>
                     <!-- /FORUM CATEGORY TITLE -->
 
                     <!-- FORUM CATEGORY TEXT -->
-                    <p class="forum-category-text">A place for the community to talk and chat about whatever they want!
+                    <p class="forum-category-text">{{sendreciever[3]}}
                     </p>
                     <!-- /FORUM CATEGORY TEXT -->
                   </div>
@@ -331,7 +328,7 @@
               <!-- TABLE COLUMN -->
               <div class="table-column centered padded-medium">
                 <!-- TABLE TITLE -->
-                <p class="table-title">44</p>
+                <p class="table-title">{{sendreciever[4]}}</p>
                 <!-- /TABLE TITLE -->
               </div>
               <!-- /TABLE COLUMN -->
@@ -339,11 +336,11 @@
               <!-- TABLE COLUMN -->
               <div class="table-column centered padded-medium">
                 <div class="dropdown">
-                  <div class="dropbtn" (click)="dropdownMenu3()">
+                  <div class="dropbtn" (click)="toggleDropdown(sendreciever[0], 'Sendreciever')">
                     <i class="fa fa-ellipsis-v"></i>
                   </div>
-                  <div id="myDropdown3" class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                    <a class="dropdown-item" href="#">Xem lại</a>
+                  <div id="myDropdown-Sendreciever-{{sendreciever[0]}}" class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                    <a class="dropdown-item" (click)="historyService.openModalDetailPost(sendreciever[0])">Xem lại</a>
                   </div>
                 </div>
               </div>
@@ -357,8 +354,8 @@
       </section>
     </div>
   </div>
+ </div>
 
 </div>
 <!-- /CONTENT GRID -->
-
-<app-modal></app-modal>
+<app-detail-post></app-detail-post>

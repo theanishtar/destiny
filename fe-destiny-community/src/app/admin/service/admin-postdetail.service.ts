@@ -10,6 +10,7 @@ import { environment } from '../../../environments/environment'
 export class AdminPostdetailService {
 
   private getDetailPostAPI = environment.baseUrl + 'v1/admin/detailPost';
+  private actionOnPostAPI = environment.baseUrl + 'v1/admin/actionOnPost';
 
   private postDetail: any[] = [];
 
@@ -19,12 +20,16 @@ export class AdminPostdetailService {
   ) { }
 
   loadPostDetail(id: string) {
-    return this.http.get<any>(this.getDetailPostAPI+"/"+id).pipe(
+    return this.http.get<any>(this.getDetailPostAPI + "/" + id).pipe(
       tap((response) => {
         this.postDetail = JSON.parse(JSON.stringify(response));;
         this.setPostDetail(this.postDetail);
       }),
     )
+  }
+
+  actionOnPost(id: string) {
+    return this.http.get(this.actionOnPostAPI + "/" + id);
   }
 
   //getter

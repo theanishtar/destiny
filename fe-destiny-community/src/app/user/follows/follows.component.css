@@ -159,3 +159,19 @@ figure.user-preview-cover.liquid img {
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   border-radius: 15px;
 }
+.user-short-description-title a{
+  cursor: pointer;
+}
+
+/* input search */
+/* button.button.primary {
+  z-index: 2 !important;
+}
+input#friends-search {
+  position: relative !important;
+  z-index: 1 !important;
+}
+.with-button label {
+  position: absolute !important;
+  z-index: 2 !important;
+} */

@@ -31,4 +31,9 @@ public class GenderServiceImpl implements GenderService {
 	public int findIDGenderByName(String nameGender) {
 		return genderDao.findIDGenderByName(nameGender);
 	}
+
+	@Override
+	public Gender findGenderByName(String name) {
+		return genderDao.findGenderByName(name);
+	}
 }

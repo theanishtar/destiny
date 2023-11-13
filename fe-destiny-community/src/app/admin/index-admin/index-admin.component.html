@@ -13,22 +13,17 @@
             <li><a href="#" class="active">Bài đăng / Người dùng</a></li>
           </ul>
         </div>
-        <a href="#" class="report">
-          <i class="bx bx-cloud-download"></i>
-          <span>Download</span>
-        </a>
       </div>
 
       <!-- new row -->
       <div class="row">
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 mb-4">
+        <div class="col-xl-4 mb-4">
           <div class="card border-left-primary shadow">
             <div class="card-body">
               <div class="row no-gutters align-items-center">
                 <div class="col">
                   <div class="font-weight-bold text-primary text-uppercase mb-2">
-                    <div>TỔNG SỐ BÀI ĐĂNG (THÁNG)</div>
+                    <div>TỔNG SỐ BÀI ĐĂNG <span class="text-pie">({{year}})</span></div>
                   </div>
                   <div class="h5 mb-0 mb-0 font-weight-bold">
                     <div>
@@ -44,14 +39,13 @@
           </div>
         </div>
 
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 mb-4">
+        <div class="col-xl-4 mb-4">
           <div class="card border-left-success shadow">
             <div class="card-body">
               <div class="row no-gutters align-items-center">
                 <div class="col mr-2">
                   <div class="font-weight-bold text-success text-uppercase mb-2">
-                    <div>TỔNG SỐ NGƯỜI DÙNG (THÁNG)</div>
+                    <div>TỔNG SỐ NGƯỜI DÙNG <span class="text-pie">({{year}})</span></div>
                   </div>
                   <div class="h5 mb-0 font-weight-bold text-gray-800">
                     <div>
@@ -60,21 +54,20 @@
                   </div>
                 </div>
                 <div class="col-auto">
-                  <i class="fas fa-dollar-sign fa-2x"></i>
+                  <i class="fas fa-users fa-2x"></i>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 mb-4">
+        <div class="col-xl-4 mb-4">
           <div class="card border-left-info shadow">
             <div class="card-body">
               <div class="row no-gutters align-items-center">
                 <div class="col mr-2">
                   <div class="font-weight-bold text-info text-uppercase mb-2">
-                    <div>PHẦN TRĂM SẢN PHẨM ĐÃ GỬI ĐƯỢC</div>
+                    <div>PHẦN TRĂM SẢN PHẨM ĐÃ ĐƯỢC GỬI</div>
                   </div>
                   <div class="row no-gutters align-items-center">
                     <div class="col-auto">
@@ -94,35 +87,12 @@
             </div>
           </div>
         </div>
-
-        <!-- New user (Monthly) Card Example -->
-        <div class="col-xl-3 mb-4">
-          <div class="card border-left-danger shadow">
-            <div class="card-body">
-              <div class="row no-gutters align-items-center">
-                <div class="col mr-2">
-                  <div class="font-weight-bold text-danger text-uppercase mb-2">
-                    <div>SỐ BÀI VIẾT BỊ BÁO CÁO (HÔM NAY)</div>
-                  </div>
-                  <div class="h5 mb-0 font-weight-bold text-gray-800">
-                    <div>
-                      100 <span class="text-success text-sm ml-2">+15%</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-auto">
-                  <i class="fas fa-users fa-2x"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
 
       <!-- Content Row -->
 
       <div class="row">
-        <div class="col-lg-7 mb-lg-0">
+        <div class="col-lg-8">
           <div class="card z-index-2 shadow">
             <div class="card-body">
               <div class="bg-gradient-dark border-radius-lg">
@@ -131,25 +101,57 @@
                 </div>
               </div>
               <h6 class="ms-2 mt-4 mb-0">Hoạt động của người dùng</h6>
-              <p class="text-sm ms-2">
+              <div class="text-sm ms-2">
                 Nhiều hơn tháng trước (<span
                   class="text-success font-weight-bolder">+{{percentUserInteractionIncrease}}%</span>)
-              </p>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="col-lg-5 mb-lg-0 img-about">
-          <div class="thumb">
-            <img src="../assets/images/Destiny.png" alt="" />
+        <div class="col-lg-4 img-about">
+          <div class="card border-left-danger shadow mt-4">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="font-weight-bold text-danger text-uppercase mb-2">
+                    <div>TỔNG SỐ BÀI VIẾT BỊ BÁO CÁO <br> <span class="text-pie">({{year}})</span></div>
+                  </div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">
+                    <div>
+                      {{totalPostReported}} <span
+                        class="text-success text-sm ml-2">+{{percentPostReportedIncrease}}%</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-triangle-exclamation fa-2x"></i>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="logo">
-            <img src="../assets/images/logo-euphoria.png" />
+          <div class="card border-left-warning shadow mt-4">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="font-weight-bold text-warning text-uppercase mb-2">
+                    <div>TỔNG SỐ NGƯỜI DÙNG BỊ BÁO CÁO <br> <span class="text-pie">({{year}})</span></div>
+                  </div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">
+                    <div>
+                      {{totalUserReported}} <span class="text-success text-sm ml-2">+{{percentUserIncrease}}%</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-triangle-exclamation fa-2x"></i>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
-      <div class="row mt-3">
+      <div class="row mt-4">
         <div class="col-lg-12 mb-5">
           <div class="card z-index-2 shadow">
             <div class="card-body p-3">
@@ -159,7 +161,7 @@
                   <i class="fas fa-arrow-up text-success"></i>
                   <span class="font-weight-bold"> Nhiều hơn (<span
                       class="text-success font-weight-bolder">+100%</span>)</span> trong năm
-                  2022
+                  {{year - 1}}
                 </p>
               </div>
               <div class="chart">

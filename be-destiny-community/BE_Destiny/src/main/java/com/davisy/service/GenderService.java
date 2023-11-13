@@ -14,4 +14,6 @@ public interface GenderService {
 	
 	//13-10-2023 -tìm id giới tính theo tên
 	public int findIDGenderByName(String nameGender);
+	
+	public Gender findGenderByName(String name);
 }

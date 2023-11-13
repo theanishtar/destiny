@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.davisy.dao.CommentDAO;
 import com.davisy.entity.Comment;
+import com.davisy.entity.CommentEntity;
 import com.davisy.service.CommentService;
 
 @Service
@@ -40,5 +41,30 @@ public class CommentServiceImpl implements CommentService {
 	@Override
 	public List<Comment> findAllByIdComment(int id) {
 		return commentDao.findAllByIdComment(id);
+	}
+
+	@Override
+	public List<Object[]> findAllComment(int id, int check) {
+		return commentDao.findAllComment(id, check);
+	}
+
+	@Override
+	public void create(Comment comment) {
+		commentDao.save(comment);
+	}
+
+	@Override
+	public void update(Comment comment) {
+		commentDao.saveAndFlush(comment);
+	}
+
+	@Override
+	public void delete(Comment comment) {
+		commentDao.delete(comment);
+	}
+
+	@Override
+	public Integer findByIdtoUser(int id) {
+		return commentDao.findByIdtoUser(id);
 	}
 }

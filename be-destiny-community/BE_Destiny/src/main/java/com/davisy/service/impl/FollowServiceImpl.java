@@ -29,7 +29,10 @@ public class FollowServiceImpl implements FollowService {
 
 	@Override
 	public void delete(int id1, int id2) {
+//			Follower follower =
+//		followDAO.unFollow(id1, id2);
 		followDAO.delete(followDAO.unFollow(id1, id2));
+		
 	}
 
 	@Override
@@ -73,6 +76,26 @@ public class FollowServiceImpl implements FollowService {
 		if (follower == null)
 			return false;
 		return true;
+	}
+
+	@Override
+	public List<Object[]> findAllFollowing(int id) {
+		return followDAO.findAllFollowing(id);
+	}
+
+	@Override
+	public List<Object[]> findAllFollowerUser(int id) {
+		return followDAO.findAllFollowerUser(id);
+	}
+
+	@Override
+	public List<Object[]> findAllFriend(int id) {
+		return followDAO.findAllFriend(id);
+	}
+
+	@Override
+	public List<Object[]> loadDataSuggest(int id) {
+		return followDAO.loadDataSuggest(id);
 	}
 
 }

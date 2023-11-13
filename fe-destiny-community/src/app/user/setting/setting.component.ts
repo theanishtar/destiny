@@ -13,6 +13,8 @@ import 'src/assets/js/utils/svg-loader.js';
 
 //
 import { ModalService } from '../service/modal.service';
+import { ProfileService } from '../service/profile.service';
+
 @Component({
   selector: 'app-setting',
   templateUrl: './setting.component.html',
@@ -34,11 +36,13 @@ export class SettingComponent implements OnInit {
     sidebars.sidebars();
     content.contentTab();
     form.formInput();
+    // this.profileService.openModalChangeMail();
   }
 
   constructor(
     public modalService: ModalService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    public profileService: ProfileService
   ) {}
   public selectLg(event: any) {
     this.translateService.use(event.target.value);

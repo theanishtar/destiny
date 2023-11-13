@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import {Chart} from '../../../assets/js/admin/chart.js/chartjs.min.js';
+import { Chart } from '../../../assets/js/admin/chart.js/chartjs.min.js';
 import { AdminIndexService } from '../service/admin-index.service';
 
 
@@ -8,15 +8,21 @@ import { AdminIndexService } from '../service/admin-index.service';
   templateUrl: './index-admin.component.html',
   styleUrls: [`../css/sb-admin-2.min.css`, `../css/home.css`],
 })
-export class IndexAdminComponent{
+export class IndexAdminComponent {
 
   @ViewChild('chartLine') chartLine: ElementRef | undefined;
   @ViewChild('chartBars') chartBars: ElementRef | undefined;
 
   totalPost: number;
   totalUser: number;
+  totalPostReported: number;
+  totalUserReported: number;
   percentPostIncrease: number;
   percentUserIncrease: number;
+  percentPostReportedIncrease: number;
+  percentUserReportedIncrease: number;
+
+  year: any;
 
   percentPost: number;
   percentPostString: string;
@@ -27,93 +33,139 @@ export class IndexAdminComponent{
 
   constructor(
     private adminIndexService: AdminIndexService
-  )
-  {}
+  ) { }
+
+  ngOnInit(): void {
+    this.getYear();
+  }
 
   ngAfterViewInit() {
-    localStorage.setItem("sidebarActive", "1");
     this.loadTotalPost();
     this.loadTotalUser();
+    this.loadTotalPostReported();
+    this.loadTotalUserReported();
     this.loadPercentPostIncrease();
     this.loadPercentUserIncrease();
+    this.loadPercentPostReportedIncrease();
+    this.loadPercentUserReportedIncrease();
     this.loadPercentPost();
     this.loadListTotalPostEveryMonth();
     this.loadListTotalUserEveryMonth();
     this.loadInteraction();
     this.loadPercentUserInteractionIncrease();
+
   }
 
+  getYear() {
+    this.year = new Date().getFullYear();
+  }
 
-
-  loadTotalPost(){
-    this.adminIndexService.loadTotalPost().subscribe(() =>{
+  loadTotalPost() {
+    this.adminIndexService.loadTotalPost().subscribe(() => {
       this.totalPost = 0;
       this.totalPost = this.adminIndexService.getTotalPost();
+
+
     })
   }
 
-  loadTotalUser(){
-    this.adminIndexService.loadTotalUser().subscribe(() =>{
+  loadTotalUser() {
+    this.adminIndexService.loadTotalUser().subscribe(() => {
       this.totalUser = 0;
       this.totalUser = this.adminIndexService.getTotalUser();
+
     })
   }
 
-  loadPercentPostIncrease(){
-    this.adminIndexService.loadPercentPostIncrease().subscribe(() =>{
+  loadTotalPostReported() {
+    this.adminIndexService.loadTotalPostReported().subscribe(() => {
+      this.totalPostReported = 0;
+      this.totalPostReported = this.adminIndexService.getTotalPostReported();
+
+    })
+  }
+
+  loadTotalUserReported() {
+    this.adminIndexService.loadTotalUserReported().subscribe(() => {
+      this.totalUserReported = 0;
+      this.totalUserReported = this.adminIndexService.getTotalUserReported();
+
+    })
+  }
+
+  loadPercentPostIncrease() {
+    this.adminIndexService.loadPercentPostIncrease().subscribe(() => {
       this.percentPostIncrease = 0;
       this.percentPostIncrease = this.adminIndexService.getPercentPostIncrease();
     })
   }
 
-  loadPercentUserIncrease(){
-    this.adminIndexService.loadPercentUserIncrease().subscribe(() =>{
+  loadPercentUserIncrease() {
+    this.adminIndexService.loadPercentUserIncrease().subscribe(() => {
       this.percentUserIncrease = 0;
       this.percentUserIncrease = this.adminIndexService.getPercentUserIncrease();
     })
   }
 
-  loadPercentPost(){
-    this.adminIndexService.loadPercent().subscribe(() =>{
+
+  loadPercentPostReportedIncrease() {
+    this.adminIndexService.loadPercentPostReportedIncrease().subscribe(() => {
+      this.percentPostReportedIncrease = 0;
+      this.percentPostReportedIncrease = this.adminIndexService.getPercentPostReportedIncrease();
+    })
+  }
+
+
+  loadPercentUserReportedIncrease() {
+    this.adminIndexService.loadPercentUserReportedIncrease().subscribe(() => {
+      this.percentUserReportedIncrease = 0;
+      this.percentUserReportedIncrease = this.adminIndexService.getPercentUserReportedIncrease();
+    })
+  }
+
+  loadPercentPost() {
+    this.adminIndexService.loadPercent().subscribe(() => {
       this.percentPost = 0;
-      this.percentPost = this.adminIndexService.getPercentPost();
+      this.percentPost = this.adminIndexService.getPercentPostSendSuccess();
       this.percentPostString = this.percentPost + "%";
     })
   }
 
-  loadListTotalPostEveryMonth(){
-    this.adminIndexService.loadTotalPostEveryMonth().subscribe(() =>{
+  loadListTotalPostEveryMonth() {
+    this.adminIndexService.loadTotalPostEveryMonth().subscribe(() => {
       this.listTotalPostEveryMonth = [];
       this.listTotalPostEveryMonth = this.adminIndexService.getListTotalPostEveryMonth();
     })
   }
 
-  loadListTotalUserEveryMonth(){
-    this.adminIndexService.loadTotalUserEveryMonth().subscribe(() =>{
+  loadListTotalUserEveryMonth() {
+    this.adminIndexService.loadTotalUserEveryMonth().subscribe(() => {
       this.listTotalUserEveryMonth = [];
       this.listTotalUserEveryMonth = this.adminIndexService.getListTotalUserEveryMonth();
     })
   }
 
-  loadInteraction(){
-    this.adminIndexService.loadInteraction().subscribe(() =>{
+  loadInteraction() {
+    this.adminIndexService.loadInteraction().subscribe(() => {
       this.listInteraction = [];
       this.listInteraction = this.adminIndexService.getInteraction();
 
       this.createChartLine();
       this.createChartBar();
+
     })
   }
 
-  loadPercentUserInteractionIncrease(){
-    this.adminIndexService.loadPercentUserInteractionIncrease().subscribe(() =>{
+  loadPercentUserInteractionIncrease() {
+    this.adminIndexService.loadPercentUserInteractionIncrease().subscribe(() => {
       this.percentUserInteractionIncrease = 0;
       this.percentUserInteractionIncrease = this.adminIndexService.getPercentUserInteraction();
+
     })
   }
 
 
-  createChartLine(){
+  createChartLine() {
     // chartline
     if (this.chartLine) {
       try {
@@ -148,7 +200,7 @@ export class IndexAdminComponent{
         const newChart = new Chart(ctx2, {
           type: 'line',
           data: {
-            labels: ["Jan", "Feb", "Mar","Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
             datasets: [
               {
                 label: "Bài đăng",
@@ -224,7 +276,7 @@ export class IndexAdminComponent{
     }
   }
 
-  createChartBar(){
+  createChartBar() {
     // chart bar
     if (this.chartBars) {
       try {
@@ -232,7 +284,7 @@ export class IndexAdminComponent{
         const newChart = new Chart(ctx, {
           type: "bar",
           data: {
-            labels: ["Jan", "Feb", "Mar","Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
             datasets: [
               {
                 label: "Hoạt động",
@@ -299,7 +351,6 @@ export class IndexAdminComponent{
         console.error('Chart creation error:', error);
       }
     }
-
   }
 
 }

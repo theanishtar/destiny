@@ -84,7 +84,7 @@ public class AuthenticationService {
 
 	public AuthenticationResponse authenticationResponse(AuthenticationRequest authenticationRequest) {
 		try {
-			User user = userService.findByEmail(authenticationRequest.getEmail());
+			User user = userService.findByEmailOrUsername(authenticationRequest.getEmail());
 //			System.out.println(user.getFullname());
 			if (user == null) {
 				return null;
@@ -126,7 +126,7 @@ public class AuthenticationService {
 			var jwtRefreshToken = jwtService.generateRefreshToken(user, authorities);
 
 			return AuthenticationResponse.builder().token(jwtToken).refreshToken(jwtRefreshToken)
-					.name(user.getFullname()).roles(authorities).avatar(user.getAvatar()).build();
+					.name(user.getFullname()).roles(authorities).avatar(user.getAvatar()).id(user.getUser_id()).build();
 		} catch (Exception e) {
 			System.out.println("error: " + e);
 		}
@@ -142,7 +142,7 @@ public class AuthenticationService {
 		 * 401: Đăng nhập thất bại hoặc lỗi server
 		 */
 		try {
-			User user = userService.findByEmail(authenticationRequest.getEmail());
+			User user = userService.findByEmailOrUsername(authenticationRequest.getEmail());
 			if (user == null) 
 				return new LoginResponse(404, null, "Dont find your account");
 			
@@ -171,7 +171,7 @@ public class AuthenticationService {
 			var jwtRefreshToken = jwtService.generateRefreshToken(user, authorities);
 
 			AuthenticationResponse authRes = AuthenticationResponse.builder().token(jwtToken)
-					.refreshToken(jwtRefreshToken).name(user.getFullname()).roles(authorities).avatar(user.getAvatar()).build();
+					.refreshToken(jwtRefreshToken).name(user.getFullname()).roles(authorities).avatar(user.getAvatar()).id(user.getUser_id()).build();
 			return new LoginResponse(200, authRes, "Login successfully!");
 		} catch (Exception e) {
 			System.out.println("error: " + e);
@@ -188,7 +188,7 @@ public class AuthenticationService {
 		 * 401: Đăng nhập thất bại hoặc lỗi server
 		 */
 		try {
-			User user = userService.findByEmail(email);
+			User user = userService.findByEmailOrUsername(email);
 			if (user == null) 
 				return new LoginResponse(404, null, "Dont find your account");
 			
@@ -219,7 +219,7 @@ public class AuthenticationService {
 			var jwtRefreshToken = jwtService.generateRefreshToken(user, authorities);
 
 			AuthenticationResponse authRes = AuthenticationResponse.builder().token(jwtToken)
-					.refreshToken(jwtRefreshToken).name(user.getFullname()).roles(authorities).avatar(user.getAvatar()).build();
+					.refreshToken(jwtRefreshToken).name(user.getFullname()).roles(authorities).avatar(user.getAvatar()).id(user.getUser_id()).build();
 			return new LoginResponse(200, authRes, "Login successfully!");
 		} catch (Exception e) {
 			System.out.println("error: " + e);
@@ -254,7 +254,7 @@ public class AuthenticationService {
 			var jwtRefreshToken = jwtService.generateRefreshToken(user, authorities);
 
 			AuthenticationResponse authRes = AuthenticationResponse.builder().token(jwtToken)
-					.refreshToken(jwtRefreshToken).name(user.getFullname()).roles(authorities).avatar(user.getAvatar()).build();
+					.refreshToken(jwtRefreshToken).name(user.getFullname()).roles(authorities).avatar(user.getAvatar()).id(user.getUser_id()).build();
 			return new LoginResponse(200, authRes, "Login successfully!");
 		} catch (Exception e) {
 			System.out.println("error: " + e);
@@ -262,6 +262,52 @@ public class AuthenticationService {
 		return new LoginResponse(401, null, null);
 	}
 
+	public LoginResponse loginWithEmailAndPassword(String email, String password) {
+		/*
+		 * Status code: 
+		 * 200: Đăng nhập thành công 
+		 * 404: Không thể tìm thấy tài khoản trong DB 
+		 * 403: Tài khoản bị khóa, liên hệ admin để được mở 
+		 * 401: Đăng nhập thất bại hoặc lỗi server
+		 */
+		try {
+			User user = userService.findByEmailOrUsername(email);
+			if (user == null) 
+				return new LoginResponse(404, null, "Dont find your account");
+			
+			if(!passwordEncoder.matches(password, user.getPassword()))
+				return new LoginResponse(401, null, "Username or password dont match from Database!");
+			System.out.println(user.getFullname());
+			if (user.isBan())
+				return new LoginResponse(403, null, "Your account is blocked");
+
+			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+					email, password);
+
+			List<Roles> role = roleCustomRepo.getRole(user);
+
+			Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
+			Set<Roles> set = new HashSet<>();
+			role.stream().forEach(c -> set.add(new Roles(c.getName())));
+			user.setRoles(set);
+
+			set.stream().forEach(i -> authorities.add(new SimpleGrantedAuthority(i.getName())));
+
+			authenticationManager.authenticate(token);
+
+			var jwtToken = jwtService.generateToken(user, authorities);
+			var jwtRefreshToken = jwtService.generateRefreshToken(user, authorities);
+
+			AuthenticationResponse authRes = AuthenticationResponse.builder().token(jwtToken)
+					.refreshToken(jwtRefreshToken).name(user.getFullname()).roles(authorities).avatar(user.getAvatar()).id(user.getUser_id()).build();
+			return new LoginResponse(200, authRes, "Login successfully!");
+		} catch (Exception e) {
+			System.out.println("error: " + e);
+		}
+		return new LoginResponse(401, null, null);
+	}
+	
 	/*
 	 * public AuthenticationResponse authenticationResponse(OAuthenticationRequest
 	 * oAuthenticationRequest) {

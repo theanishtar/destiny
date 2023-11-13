@@ -5,11 +5,15 @@ import java.util.List;
 import com.davisy.entity.Chats;
 
 public interface ChatsService {
-	List<Chats> findAllChatsUser(String nameChat);
+	public List<Chats> findAllChatsUser(String nameChat);
 
-	Chats findChatNames(String nameChat, String chatName);
+	public Chats findChatNames(String nameChat, String chatName);
 
-	Chats findById(int id);
+	public Chats findById(int id);
+
+	public List<Object[]> loadAllChatRoom(int id);
+	
+	public void update_name_chats(int id, String chats_name);
 
 	public boolean isFriend(int id);
 

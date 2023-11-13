@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import { tap, catchError } from 'rxjs/operators';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { Observable } from 'rxjs';
 import { of } from 'rxjs';
+import Swal from 'sweetalert2';
+declare var toast: any;
+import { Observable, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,7 @@ export class AdminProfileService {
 
   private getAdminAvartarAPI = environment.baseUrl + 'v1/admin/checkAdminLog';
   private getAdminProfileAPI = environment.baseUrl + 'v1/admin/profile';
-  private getAllGenDerAPI = environment.baseUrl + 'v1/admin/getAllGender';
+  private getAllGenderAPI = environment.baseUrl + 'v1/admin/getAllGender';
   private getAllProvinceNameAPI = environment.baseUrl + 'v1/admin/getAllProvinceName';
   private getAllDistrictNameAPI = environment.baseUrl + 'v1/admin/getAllDistrictName/';
   private getAllWardNameAPI = environment.baseUrl + 'v1/admin/getAllWardName/';
@@ -20,6 +22,9 @@ export class AdminProfileService {
   private updateProfileAPI = environment.baseUrl + 'v1/admin/updateProfile';
   private checkPasswordAPI = environment.baseUrl + 'v1/admin/checkPassword';
   private changePasswordAPI = environment.baseUrl + 'v1/admin/changePassword';
+
+  private changeMailAPI = environment.baseUrl + 'v1/admin/profile/change/email';
+
 
   private admin: any;
   private api: string;
@@ -34,10 +39,70 @@ export class AdminProfileService {
 
   ) { }
 
+  changeMail(data: any) {
+    return this.http.post<any>(this.changeMailAPI, data).pipe(
+      tap((resp) => {
+        let timerInterval;
+        Swal.fire({
+          title: 'Thông báo!',
+          html: 'Quá trình sẽ diễn ra trong vài giây!',
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+          willClose: () => {
+            clearInterval(timerInterval);
+          },
+        }).then((result) => {
+          if (result.dismiss === Swal.DismissReason.timer) {
+            new toast({
+              title: 'Thông báo!',
+              message: 'Vui lòng kiểm tra Email',
+              type: 'success',
+              duration: 3000,
+            })
+          }
+        });
+
+      }),
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 300) {
+          return throwError(
+            new toast({
+              title: 'Thất bại!',
+              message: 'Mật khẩu không đúng',
+              type: 'error',
+              duration: 1500,
+            }),
+          );
+        } else if (error.status === 301) {
+          return throwError(
+            new toast({
+              title: 'Thất bại!',
+              message: 'Emai mới trùng với email cũ',
+              type: 'error',
+              duration: 1500,
+            }),
+          );
+        } else {
+          return throwError(
+            new toast({
+              title: 'Server hiện không hoạt động!',
+              message: 'Vui lòng quay lại sau, DaviTickets chân thành xin lỗi vì bất tiện này!',
+              type: 'warning',
+              duration: 1500,
+            })
+          );
+        }
+      })
+    );
+  }
+
   loadAdminData(action: string) {
-    if(action.match("getAvartar")){
+    if (action.match("getAvatar")) {
       this.api = this.getAdminAvartarAPI;
-    }else{
+    } else {
       this.api = this.getAdminProfileAPI;
     }
 
@@ -49,8 +114,8 @@ export class AdminProfileService {
     )
   }
 
-  loadAllGender(){
-    return this.http.get<any>(this.getAllGenDerAPI).pipe(
+  loadAllGender() {
+    return this.http.get<any>(this.getAllGenderAPI).pipe(
       tap((response) => {
         this.genders = JSON.parse(JSON.stringify(response));
         this.setAllGender(this.genders);
@@ -58,7 +123,7 @@ export class AdminProfileService {
     )
   }
 
-  loadAllProvince(){
+  loadAllProvince() {
     return this.http.get<any>(this.getAllProvinceNameAPI).pipe(
       tap((response) => {
         this.provinces = JSON.parse(JSON.stringify(response));
@@ -67,7 +132,7 @@ export class AdminProfileService {
     )
   }
 
-  loadAllDistrict(province: string){
+  loadAllDistrict(province: string) {
     return this.http.get<any>(this.getAllDistrictNameAPI + province).pipe(
       tap((response) => {
         this.districts = JSON.parse(JSON.stringify(response));
@@ -76,7 +141,7 @@ export class AdminProfileService {
     )
   }
 
-  loadAllWard(district: string){
+  loadAllWard(district: string) {
     return this.http.get<any>(this.getAllWardNameAPI + district).pipe(
       tap((response) => {
         this.wards = JSON.parse(JSON.stringify(response));
@@ -88,13 +153,13 @@ export class AdminProfileService {
   updateProfile(data: any): Observable<any> {
     return this.http.post(this.updateProfileAPI, data).pipe(
 
-        catchError(error => of([]))
+      catchError(error => of([]))
     );
   }
 
   checkPassword(data: any): Observable<any> {
     return this.http.post<number>(this.checkPasswordAPI, data).pipe(
-      tap((response) =>{
+      tap((response) => {
         this.resultCheckPassword = response;
         this.setResultCheckPassword(this.resultCheckPassword);
       })

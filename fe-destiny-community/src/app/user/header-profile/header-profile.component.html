@@ -1,8 +1,13 @@
 <!-- PROFILE HEADER -->
-<div class="profile-header">
+
+<div>
+<div class="profile-header" *ngIf="checkHeaderEdit || checkWidthMedia">
   <!-- PROFILE HEADER COVER -->
-  <figure class="profile-header-cover liquid" style="background: url('{{dataHeader.thumb}}') center center / cover no-repeat;">
-    <img src="{{dataHeader.thumb}}" alt="cover-01" />
+  <figure
+    class="profile-header-cover liquid"
+    style="background: url('{{profileService.header?.thumb}}') center center / cover no-repeat;"
+  >
+    <img src="{{ profileService.header?.thumb }}" alt="cover-01" />
   </figure>
   <!-- /PROFILE HEADER COVER -->
 
@@ -16,7 +21,7 @@
           <div class="hexagon user-avatar-content">
             <div
               class="hexagon-image"
-              style="background-image: url('{{ dataHeader.avatar }}')"
+              style="background-image: url('{{profileService.header?.avatar}}')"
             ></div>
           </div>
           <div class="hexagon user-avatar-border">
@@ -34,185 +39,47 @@
         class="user-short-description-avatar user-short-description-avatar-mobile user-avatar medium"
         href="profile"
       >
-        <!-- USER AVATAR BORDER -->
-        <div class="user-avatar-border">
-          <!-- HEXAGON -->
-          <div class="hexagon-120-132"></div>
-          <!-- /HEXAGON -->
+        <div class="hexagon-container">
+          <div class="hexagon user-avatar-content">
+            <div
+              class="hexagon-image"
+              style="background-image: url('{{profileService.header?.avatar}}')"
+            ></div>
+          </div>
+          <div class="hexagon user-avatar-border">
+            <div class="hexagon-border"></div>
+          </div>
+          <div class="hexagon user-avatar-progress-border">
+            <div class="user-avatar-progress"></div>
+          </div>
         </div>
-        <!-- /USER AVATAR BORDER -->
-
-        <!-- USER AVATAR CONTENT -->
-        <div class="user-avatar-content">
-          <!-- HEXAGON -->
-          <div
-            class="hexagon-image-82-90"
-            data-src="../../assets/images/avatar/01.jpg"
-          ></div>
-          <!-- /HEXAGON -->
-        </div>
-        <!-- /USER AVATAR CONTENT -->
-
-        <!-- USER AVATAR PROGRESS -->
-        <div class="user-avatar-progress">
-          <!-- HEXAGON -->
-          <div class="hexagon-progress-100-110"></div>
-          <!-- /HEXAGON -->
-        </div>
-        <!-- /USER AVATAR PROGRESS -->
-
-        <!-- USER AVATAR PROGRESS BORDER -->
-        <div class="user-avatar-progress-border">
-          <!-- HEXAGON -->
-          <div class="hexagon-border-100-110"></div>
-          <!-- /HEXAGON -->
-        </div>
-        <!-- /USER AVATAR PROGRESS BORDER -->
       </a>
       <!-- /USER SHORT DESCRIPTION AVATAR -->
 
       <!-- USER SHORT DESCRIPTION TITLE -->
       <p class="user-short-description-title">
-        <a href="profile-timeline">{{dataHeader.fullname}}</a>
+        <a href="profile-timeline">{{
+          profileService.header?.fullname
+        }}</a>
       </p>
       <!-- /USER SHORT DESCRIPTION TITLE -->
 
       <!-- USER SHORT DESCRIPTION TEXT -->
       <p class="user-short-description-text">
-        <a>{{dataHeader.username}}</a>
+        <a>{{ profileService.header?.username }}</a>
       </p>
       <!-- /USER SHORT DESCRIPTION TEXT -->
     </div>
     <!-- /USER SHORT DESCRIPTION -->
-
-    <!-- PROFILE HEADER SOCIAL LINKS WRAP -->
-    <div class="profile-header-social-links-wrap">
-      <!-- PROFILE HEADER SOCIAL LINKS -->
-      <div
-        id="profile-header-social-links-slider"
-        class="profile-header-social-links"
-      >
-        <div class="profile-header-social-link">
-          <!-- SOCIAL LINK -->
-          <a class="social-link facebook" href="#">
-            <!-- ICON FACEBOOK -->
-            <svg class="icon-facebook">
-              <use xlink:href="#svg-facebook"></use>
-            </svg>
-            <!-- /ICON FACEBOOK -->
-          </a>
-          <!-- /SOCIAL LINK -->
-        </div>
-
-        <div class="profile-header-social-link">
-          <!-- SOCIAL LINK -->
-          <a class="social-link twitter" href="#">
-            <!-- ICON TWITTER -->
-            <svg class="icon-twitter">
-              <use xlink:href="#svg-twitter"></use>
-            </svg>
-            <!-- /ICON TWITTER -->
-          </a>
-          <!-- /SOCIAL LINK -->
-        </div>
-
-        <div class="profile-header-social-link">
-          <!-- SOCIAL LINK -->
-          <a class="social-link instagram" href="#">
-            <!-- ICON INSTAGRAM -->
-            <svg class="icon-instagram">
-              <use xlink:href="#svg-instagram"></use>
-            </svg>
-            <!-- /ICON INSTAGRAM -->
-          </a>
-          <!-- /SOCIAL LINK -->
-        </div>
-
-        <div class="profile-header-social-link">
-          <!-- SOCIAL LINK -->
-          <a class="social-link twitch" href="#">
-            <!-- ICON TWITCH -->
-            <svg class="icon-twitch">
-              <use xlink:href="#svg-twitch"></use>
-            </svg>
-            <!-- /ICON TWITCH -->
-          </a>
-          <!-- /SOCIAL LINK -->
-        </div>
-
-        <div class="profile-header-social-link">
-          <!-- SOCIAL LINK -->
-          <a class="social-link youtube" href="#">
-            <!-- ICON YOUTUBE -->
-            <svg class="icon-youtube">
-              <use xlink:href="#svg-youtube"></use>
-            </svg>
-            <!-- /ICON YOUTUBE -->
-          </a>
-          <!-- /SOCIAL LINK -->
-        </div>
-
-        <div class="profile-header-social-link">
-          <!-- SOCIAL LINK -->
-          <a class="social-link patreon" href="#">
-            <!-- ICON PATREON -->
-            <svg class="icon-patreon">
-              <use xlink:href="#svg-patreon"></use>
-            </svg>
-            <!-- /ICON PATREON -->
-          </a>
-          <!-- /SOCIAL LINK -->
-        </div>
-
-        <div class="profile-header-social-link">
-          <!-- SOCIAL LINK -->
-          <a class="social-link discord" href="#">
-            <!-- ICON DISCORD -->
-            <svg class="icon-discord">
-              <use xlink:href="#svg-discord"></use>
-            </svg>
-            <!-- /ICON DISCORD -->
-          </a>
-          <!-- /SOCIAL LINK -->
-        </div>
-      </div>
-      <!-- /PROFILE HEADER SOCIAL LINKS -->
-
-      <!-- SLIDER CONTROLS -->
-      <div
-        id="profile-header-social-links-slider-controls"
-        class="slider-controls"
-      >
-        <!-- SLIDER CONTROL -->
-        <div class="slider-control left">
-          <!-- SLIDER CONTROL ICON -->
-          <svg class="slider-control-icon icon-small-arrow">
-            <use xlink:href="#svg-small-arrow"></use>
-          </svg>
-          <!-- /SLIDER CONTROL ICON -->
-        </div>
-        <!-- /SLIDER CONTROL -->
-
-        <!-- SLIDER CONTROL -->
-        <div class="slider-control right">
-          <!-- SLIDER CONTROL ICON -->
-          <svg class="slider-control-icon icon-small-arrow">
-            <use xlink:href="#svg-small-arrow"></use>
-          </svg>
-          <!-- /SLIDER CONTROL ICON -->
-        </div>
-        <!-- /SLIDER CONTROL -->
-      </div>
-      <!-- /SLIDER CONTROLS -->
-    </div>
-    <!-- /PROFILE HEADER SOCIAL LINKS WRAP -->
 
     <!-- USER STATS -->
     <div class="user-stats">
       <!-- USER STAT -->
       <div class="user-stat big">
         <!-- USER STAT TITLE -->
-        <p class="user-stat-title">{{dataHeader.countPost}}</p>
+        <p class="user-stat-title">
+          {{ profileService.header?.countPost }}
+        </p>
         <!-- /USER STAT TITLE -->
 
         <!-- USER STAT TEXT -->
@@ -224,7 +91,9 @@
       <!-- USER STAT -->
       <div class="user-stat big">
         <!-- USER STAT TITLE -->
-        <p class="user-stat-title">{{dataHeader.countFollower}}</p>
+        <p class="user-stat-title">
+          {{ profileService.header?.countFollower }}
+        </p>
         <!-- /USER STAT TITLE -->
 
         <!-- USER STAT TEXT -->
@@ -236,7 +105,9 @@
       <!-- USER STAT -->
       <div class="user-stat big">
         <!-- USER STAT TITLE -->
-        <p class="user-stat-title">{{dataHeader.countImg}}</p>
+        <p class="user-stat-title">
+          {{ profileService.header?.countImg }}
+        </p>
         <!-- /USER STAT TITLE -->
 
         <!-- USER STAT TEXT -->
@@ -248,15 +119,19 @@
     <!-- /USER STATS -->
 
     <!-- PROFILE HEADER INFO ACTIONS -->
-    <div class="profile-header-info-actions">
+    <div class="profile-header-info-actions" *ngIf="idLocal != 0">
       <!-- PROFILE HEADER INFO ACTION -->
-      <p class="profile-header-info-action button secondary" *ngIf="!dataHeader.checkFollow">
+      <p
+        class="profile-header-info-action button secondary"
+        *ngIf="!profileService.header?.checkFollow"
+        (click)="addFollow(profileService.header?.user_id)"
+      >
         <span class="hide-text-mobile">Theo</span> dõi +
       </p>
       <!-- /PROFILE HEADER INFO ACTION -->
 
       <!-- PROFILE HEADER INFO ACTION -->
-      <p class="profile-header-info-action button primary">
+      <p class="profile-header-info-action button primary" (click)="messageService.createChatWithStrangers(profileService.header?.user_id)">
         <span class="hide-text-mobile">Nhắn</span> tin
       </p>
       <!-- /PROFILE HEADER INFO ACTION -->
@@ -294,6 +169,7 @@
       [class.section-menu-item]="true"
       [class.active]="activeMenuItem === 'edit-profile'"
       routerLink="/edit-profile"
+      *ngIf="idLocal === 0 || idLocal === chatUserId"
     >
       <!-- SECTION MENU ITEM ICON -->
       <svg class="section-menu-item-icon icon-profile">
@@ -312,6 +188,7 @@
       [class.section-menu-item]="true"
       [class.active]="activeMenuItem === 'follow'"
       routerLink="/follow"
+      *ngIf="idLocal === 0 || idLocal === chatUserId"
     >
       <!-- SECTION MENU ITEM ICON -->
       <svg class="section-menu-item-icon icon-friend">
@@ -330,6 +207,7 @@
       [class.section-menu-item]="true"
       [class.active]="activeMenuItem === 'photos'"
       routerLink="/photos"
+      *ngIf="idLocal === 0 || idLocal === chatUserId"
     >
       <!-- SECTION MENU ITEM ICON -->
       <svg class="section-menu-item-icon icon-photos">
@@ -370,3 +248,5 @@
   <!-- /SLIDER CONTROLS -->
 </nav>
 <!-- /SECTION NAVIGATION -->
+</div>
+

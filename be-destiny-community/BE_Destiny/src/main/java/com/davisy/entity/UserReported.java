@@ -28,10 +28,12 @@ public class UserReported {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	int id;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "user_reported_id")
 	User userReported;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "user_send_report_id")
 	User userSendReport;

@@ -14,6 +14,14 @@ public interface FollowService {
 
 	public List<Integer> findAllFollowingUser(int id);
 
+	public List<Object[]> findAllFollowing(int id);
+
+	public List<Object[]> findAllFollowerUser(int id);
+
+	public List<Object[]> findAllFriend(int id);
+
+	public List<Object[]> loadDataSuggest(int id);
+
 	public int countFollowers(int id);
 
 	public void delete(int id1, int id2);

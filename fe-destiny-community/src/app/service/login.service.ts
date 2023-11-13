@@ -34,6 +34,10 @@ export class LoginService {
 						'token',
 						JSON.parse(JSON.stringify(this.getUserLog())).token
 					);
+					this.cookieService.set('full_name', response.name);
+					this.cookieService.set('avatar', response.avatar);
+					this.cookieService.set('id', response.id);
+					this.cookieService.set('role', response.roles[0].authority);
 					// this.cookieService.set('role', JSON.parse(JSON.stringify(this.getUserLog())).roles[0].authority);
 				}),
 				catchError((error: HttpErrorResponse) => {
@@ -102,6 +106,8 @@ export class LoginService {
 					JSON.parse(JSON.stringify(this.getUserLogGG())).token
 				);
 				this.cookieService.set('full_name', res.name);
+				this.cookieService.set('avatar', res.avatar);
+				this.cookieService.set('id', res.id);
 				this.cookieService.set('role', res.roles[0].authority);
 
 			})
@@ -140,17 +146,11 @@ export class LoginService {
 			cancelButtonText: 'No',
 		}).then((result) => {
 			if (result.value) {
-				// delay(1).then((res) => {
-				// this.messageService.loadDataSender().subscribe(() => {
-				// 	this.sender = JSON.parse(JSON.stringify(this.messageService.getSender()));
-				// 	this.messageService.connectToChat(this.sender.user_id);
-				// });
-				// if (res) {
 				this.http.get<any>(this.userLogout).subscribe(() => {
+					this.router.navigate(['home']);
 					this.cookieService.deleteAll();
 					localStorage.clear();
 					this.messageService.logout();
-					this.router.navigate(['home']);
 					new toast({
 						title: 'Đã đăng xuất!',
 						message: 'Hẹn gặp lại',
@@ -181,7 +181,7 @@ export class LoginService {
 		this.userLogined = data;
 	}
 
-	
+
 	// Getter
 	getUserLogGG(): any[] {
 		return this.userLogGG;

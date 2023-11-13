@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
-import { AdminProfileService } from '@app/admin/service/admin-profile.service';
+import { ModProfileService } from '../service/mod-profile.service';
 import {
   FormGroup,
   FormBuilder,
@@ -30,6 +30,7 @@ export class ProfileComponent {
 
   result: number = 0;
 
+  isLoading = true;
   public profileForm: FormGroup;
   public passwordForm: FormGroup;
   public newPasswordForm: FormGroup;
@@ -37,7 +38,7 @@ export class ProfileComponent {
   constructor(
     private el: ElementRef,
     private renderer: Renderer2,
-    private adminProfileService: AdminProfileService,
+    private modProfileService: ModProfileService,
     private formbuilder: FormBuilder,
   ) {}
 
@@ -76,33 +77,34 @@ export class ProfileComponent {
 
   loadAdminData(){
     const getProfile = "getProfile";
-    this.adminProfileService.loadAdminData(getProfile).subscribe(() =>{
+    this.modProfileService.loadAdminData(getProfile).subscribe(() =>{
       this.admin = {};
-      this.admin = this.adminProfileService.getAdmin();
+      this.admin = this.modProfileService.getAdmin();
+      this.isLoading = false;
     })
   }
 
   loadAllGender(){
-    this.adminProfileService.loadAllGender().subscribe(() =>{
+    this.modProfileService.loadAllGender().subscribe(() =>{
       this.genders = [];
-      this.genders = this.adminProfileService.getAllGender();
+      this.genders = this.modProfileService.getAllGender();
     })
   }
 
   loadAllProvince(){
-    this.adminProfileService.loadAllProvince().subscribe(() =>{
+    this.modProfileService.loadAllProvince().subscribe(() =>{
       this.provinces = [];
-      this.provinces = this.adminProfileService.getAllProvince();
+      this.provinces = this.modProfileService.getAllProvince();
 
       const province = this.profileForm.get('province_nameF')?.value;
-      this.adminProfileService.loadAllDistrict(province).subscribe(() =>{
+      this.modProfileService.loadAllDistrict(province).subscribe(() =>{
         this.districts = [];
-        this.districts = this.adminProfileService.getAllDistrict();
+        this.districts = this.modProfileService.getAllDistrict();
 
         const district = this.profileForm.get('district_nameF')?.value;
-        this.adminProfileService.loadAllWard(district).subscribe(() =>{
+        this.modProfileService.loadAllWard(district).subscribe(() =>{
           this.wards = [];
-          this.wards = this.adminProfileService.getAllWard();
+          this.wards = this.modProfileService.getAllWard();
 
         })
       })
@@ -116,9 +118,9 @@ export class ProfileComponent {
   }
 
   loadAllDistrict(province: string){
-    this.adminProfileService.loadAllDistrict(province).subscribe(() =>{
+    this.modProfileService.loadAllDistrict(province).subscribe(() =>{
       this.districts = [];
-      this.districts = this.adminProfileService.getAllDistrict();
+      this.districts = this.modProfileService.getAllDistrict();
       this.admin.district_name = this.districts[0];
 
       this.loadAllWard(this.admin.district_name);
@@ -132,9 +134,9 @@ export class ProfileComponent {
   }
 
   loadAllWard(district: string){
-    this.adminProfileService.loadAllWard(district).subscribe(() =>{
+    this.modProfileService.loadAllWard(district).subscribe(() =>{
       this.wards = [];
-      this.wards = this.adminProfileService.getAllWard();
+      this.wards = this.modProfileService.getAllWard();
       this.admin.ward_name = this.wards[0];
     })
   }
@@ -151,7 +153,7 @@ export class ProfileComponent {
         ward_name: this.profileForm.get('ward_nameF')?.value,
         gender_name: this.profileForm.get('gender_nameF')?.value,
       };
-      this.adminProfileService.updateProfile(data).subscribe((res) => {
+      this.modProfileService.updateProfile(data).subscribe((res) => {
         this.createToast("Thành công!", "Cập nhật thành công", "success");
         this.loadAdminData();
       });
@@ -213,8 +215,8 @@ export class ProfileComponent {
           const data = {
             oldPassword: this.passwordForm.get('oldPassword')?.value
           };
-          this.adminProfileService.checkPassword(data).subscribe(() => {
-            this.result = this.adminProfileService.getResultCheckPassword();
+          this.modProfileService.checkPassword(data).subscribe(() => {
+            this.result = this.modProfileService.getResultCheckPassword();
             if(this.result == 1){
               this.createToast("Thành công!", "Mật khẩu đã đúng!", "success");
               formStepsNum++;
@@ -231,7 +233,7 @@ export class ProfileComponent {
             reNewPassword: this.newPasswordForm.get('reNewPassword')?.value
           };
           if(data.newPassword == data.reNewPassword){
-            this.adminProfileService.changePassword(data).subscribe();
+            this.modProfileService.changePassword(data).subscribe();
             this.createToast("Thành công!", "Thay đổi mật khẩu thành công!", "success");
             setTimeout(() => {
               changePassModal.style.display = 'none';

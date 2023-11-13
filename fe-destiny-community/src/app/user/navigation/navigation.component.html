@@ -4,33 +4,26 @@
   class="navigation-widget navigation-widget-desktop closed sidebar left delayed"
 >
   <!-- USER AVATAR -->
-  <a class="user-avatar small no-outline online" href="profile">
-    <!-- USER AVATAR CONTENT -->
-    <div class="user-avatar-content">
-      <!-- HEXAGON -->
-      <div
-        class="hexagon-image-30-32"
-        data-src="../../../assets/images/avatar/01.jpg"
-      ></div>
-      <!-- /HEXAGON -->
+  <a
+    class="user-avatar small user-status-avatar no-border no-outline"
+    routerLink="/profile"
+    (click)="this.profileService.loadDataProfileTimeline(0)"
+  >
+    <div class="hexagon-container">
+      <div class="hexagon user-avatar-content">
+        <div
+          class="hexagon-image"
+          style="background-image: url('{{ avatar }}')"
+        ></div>
+      </div>
+      <div class="hexagon user-avatar-border">
+        <div class="hexagon-border"></div>
+      </div>
+      <div class="hexagon user-avatar-progress-border">
+        <div class="user-avatar-progress"></div>
+      </div>
+      <p class="user-avatar-badge-text">1</p>
     </div>
-    <!-- /USER AVATAR CONTENT -->
-
-    <!-- USER AVATAR PROGRESS -->
-    <div class="user-avatar-progress">
-      <!-- HEXAGON -->
-      <div class="hexagon-progress-40-44"></div>
-      <!-- /HEXAGON -->
-    </div>
-    <!-- /USER AVATAR PROGRESS -->
-
-    <!-- USER AVATAR PROGRESS BORDER -->
-    <div class="user-avatar-progress-border">
-      <!-- HEXAGON -->
-      <div class="hexagon-border-40-44"></div>
-      <!-- /HEXAGON -->
-    </div>
-    <!-- /USER AVATAR PROGRESS BORDER -->
   </a>
   <!-- /USER AVATAR -->
 
@@ -38,7 +31,10 @@
   <div>
     <ul class="menu small">
       <!-- MENU ITEM -->
-      <li [class.menu-item]="true" [class.active]="activeMenuItem === 'newsfeed'">
+      <li
+        [class.menu-item]="true"
+        [class.active]="activeMenuItem === 'newsfeed'"
+      >
         <!-- MENU ITEM LINK -->
         <a
           [attr.data-title]="'navbar_home' | translate"
@@ -56,7 +52,11 @@
       <!-- /MENU ITEM -->
 
       <!-- MENU ITEM -->
-      <li [class.menu-item]="true" [class.active]="activeMenuItem === 'follow'">
+      <li
+        [class.menu-item]="true"
+        [class.active]="activeMenuItem === 'follow'"
+        (click)="this.profileService.loadDataProfileHeader(0)"
+      >
         <!-- MENU ITEM LINK -->
         <a
           [attr.data-title]="'sidebar_follow' | translate"
@@ -73,29 +73,39 @@
       </li>
       <!-- /MENU ITEM -->
 
-<!-- MENU ITEM -->
-<li [class.menu-item]="true" [class.active]="activeMenuItem === 'message'">
-  <!-- MENU ITEM LINK -->
-  <a
-    [attr.data-title]="'sidebar_setting' | translate"
-    class="menu-item-link"
-    routerLink="/message"
-  >
-    <!-- MENU ITEM LINK ICON -->
-    <div class="user-avatar small no-outline" [ngClass]="messageService.notif_mess ? 'online notif-mess' : ''" style="margin-right: 1rem;">
-      <div class="menu-item-link-icon icon-badges">
-        <i class="fa-solid fa-paper-plane"></i>
-      </div>
-    </div>
-    
-    <!-- /MENU ITEM LINK ICON -->
-  </a>
-  <!-- /MENU ITEM LINK -->
-</li>
-<!-- /MENU ITEM -->
+      <!-- MENU ITEM -->
+      <li
+        [class.menu-item]="true"
+        [class.active]="activeMenuItem === 'message'"
+      >
+        <!-- MENU ITEM LINK -->
+        <a
+          [attr.data-title]="'Nhantin' | translate"
+          class="menu-item-link"
+          routerLink="/message"
+        >
+          <!-- MENU ITEM LINK ICON -->
+          <div
+            class="user-avatar small no-outline"
+            [ngClass]="messageService.notif_mess ? 'online notif-mess' : ''"
+            style="margin-right: 1rem"
+          >
+            <div class="menu-item-link-icon icon-badges">
+              <i class="fa-solid fa-paper-plane"></i>
+            </div>
+          </div>
+
+          <!-- /MENU ITEM LINK ICON -->
+        </a>
+        <!-- /MENU ITEM LINK -->
+      </li>
+      <!-- /MENU ITEM -->
 
       <!-- MENU ITEM -->
-      <li [class.menu-item]="true" [class.active]="activeMenuItem === 'history'">
+      <li
+        [class.menu-item]="true"
+        [class.active]="activeMenuItem === 'history'"
+      >
         <!-- MENU ITEM LINK -->
         <a
           [attr.data-title]="'sidebar_history' | translate"
@@ -113,7 +123,10 @@
       <!-- /MENU ITEM -->
 
       <!-- MENU ITEM -->
-      <li [class.menu-item]="true" [class.active]="activeMenuItem === 'contact'">
+      <li
+        [class.menu-item]="true"
+        [class.active]="activeMenuItem === 'contact'"
+      >
         <!-- MENU ITEM LINK -->
         <a
           [attr.data-title]="'navbar_contact' | translate"
@@ -131,7 +144,10 @@
       <!-- /MENU ITEM -->
 
       <!-- MENU ITEM -->
-      <li [class.menu-item]="true" [class.active]="activeMenuItem === 'setting'">
+      <li
+        [class.menu-item]="true"
+        [class.active]="activeMenuItem === 'setting'"
+      >
         <!-- MENU ITEM LINK -->
         <a
           [attr.data-title]="'sidebar_setting' | translate"
@@ -166,49 +182,29 @@
   <!-- /NAVIGATION WIDGET COVER -->
 
   <!-- USER SHORT DESCRIPTION -->
-  <div class="user-short-description">
+  <div class="user-short-description big">
     <!-- USER SHORT DESCRIPTION AVATAR -->
-    <a class="user-short-description-avatar user-avatar medium" href="profile">
-      <!-- USER AVATAR BORDER -->
-      <div class="user-avatar-border">
-        <!-- HEXAGON -->
-        <div class="hexagon-120-132"></div>
-        <!-- /HEXAGON -->
+    <a class="user-short-description-avatar user-avatar big" href="profile">
+      <div class="hexagon-container">
+        <div class="hexagon user-avatar-content">
+          <div
+            class="hexagon-image"
+            style="background-image: url('{{avatar}}')"
+          ></div>
+        </div>
+        <div class="hexagon user-avatar-border">
+          <div class="hexagon-border"></div>
+        </div>
+        <div class="hexagon user-avatar-progress-border">
+          <div class="user-avatar-progress"></div>
+        </div>
       </div>
-      <!-- /USER AVATAR BORDER -->
-
-      <!-- USER AVATAR CONTENT -->
-      <div class="user-avatar-content">
-        <!-- HEXAGON -->
-        <div
-          class="hexagon-image-82-90"
-          data-src="../../../assets/images/avatar/01.jpg"
-        ></div>
-        <!-- /HEXAGON -->
-      </div>
-      <!-- /USER AVATAR CONTENT -->
-
-      <!-- USER AVATAR PROGRESS -->
-      <div class="user-avatar-progress">
-        <!-- HEXAGON -->
-        <div class="hexagon-progress-100-110"></div>
-        <!-- /HEXAGON -->
-      </div>
-      <!-- /USER AVATAR PROGRESS -->
-
-      <!-- USER AVATAR PROGRESS BORDER -->
-      <div class="user-avatar-progress-border">
-        <!-- HEXAGON -->
-        <div class="hexagon-border-100-110"></div>
-        <!-- /HEXAGON -->
-      </div>
-      <!-- /USER AVATAR PROGRESS BORDER -->
     </a>
     <!-- /USER SHORT DESCRIPTION AVATAR -->
 
     <!-- USER SHORT DESCRIPTION TITLE -->
     <p class="user-short-description-title">
-      <a href="profile">Marina Valentine</a>
+      <a href="profile">{{userDisplayName}}</a>
     </p>
     <!-- /USER SHORT DESCRIPTION TITLE -->
   </div>
@@ -219,7 +215,7 @@
     <!-- USER STAT -->
     <div class="user-stat">
       <!-- USER STAT TITLE -->
-      <p class="user-stat-title">930</p>
+      <p class="user-stat-title"> {{ profileService.header?.countPost }}</p>
       <!-- /USER STAT TITLE -->
 
       <!-- USER STAT TEXT -->
@@ -231,7 +227,7 @@
     <!-- USER STAT -->
     <div class="user-stat">
       <!-- USER STAT TITLE -->
-      <p class="user-stat-title">82</p>
+      <p class="user-stat-title">{{ profileService.header?.countFollower }}</p>
       <!-- /USER STAT TITLE -->
 
       <!-- USER STAT TEXT -->
@@ -243,7 +239,7 @@
     <!-- USER STAT -->
     <div class="user-stat">
       <!-- USER STAT TITLE -->
-      <p class="user-stat-title">5.7k</p>
+      <p class="user-stat-title"> {{ profileService.header?.countImg }}</p>
       <!-- /USER STAT TITLE -->
 
       <!-- USER STAT TEXT -->
@@ -272,19 +268,19 @@
     <!-- /MENU ITEM -->
 
     <!-- MENU ITEM -->
-<li [class.menu-item]="true" [class.active]="activeMenuItem === 'message'">
-  <!-- MENU ITEM LINK -->
-  <a class="menu-item-link" routerLink="/message">
-    <!-- MENU ITEM LINK ICON -->
-    <div class="menu-item-link-icon icon-newsfeed">
-      <i class="fa-solid fa-paper-plane"></i>
-    </div>
-    <!-- /MENU ITEM LINK ICON -->
-    {{ "navbar_home" | translate }}
-  </a>
-  <!-- /MENU ITEM LINK -->
-</li>
-<!-- /MENU ITEM -->
+    <li [class.menu-item]="true" [class.active]="activeMenuItem === 'message'">
+      <!-- MENU ITEM LINK -->
+      <a class="menu-item-link" routerLink="/message">
+        <!-- MENU ITEM LINK ICON -->
+        <div class="menu-item-link-icon icon-newsfeed">
+          <i class="fa-solid fa-paper-plane"></i>
+        </div>
+        <!-- /MENU ITEM LINK ICON -->
+        {{ "navbar_home" | translate }}
+      </a>
+      <!-- /MENU ITEM LINK -->
+    </li>
+    <!-- /MENU ITEM -->
 
     <!-- MENU ITEM -->
     <li [class.menu-item]="true" [class.active]="activeMenuItem === 'follow'">
@@ -440,20 +436,20 @@
       <!-- /MENU ITEM LINK -->
     </li>
     <!-- /MENU ITEM -->
-<!-- MENU ITEM -->
-<li [class.menu-item]="true" [class.active]="activeMenuItem === 'message'">
-  <!-- MENU ITEM LINK -->
-  <a class="menu-item-link" routerLink="/message">
-    <!-- MENU ITEM LINK ICON -->
-    <div class="menu-item-link-icon icon-newsfeed">
-      <i class="fa-solid fa-paper-plane"></i>
-    </div>
-    <!-- /MENU ITEM LINK ICON -->
-    {{ "navbar_home" | translate }}
-  </a>
-  <!-- /MENU ITEM LINK -->
-</li>
-<!-- /MENU ITEM -->
+    <!-- MENU ITEM -->
+    <li [class.menu-item]="true" [class.active]="activeMenuItem === 'message'">
+      <!-- MENU ITEM LINK -->
+      <a class="menu-item-link" routerLink="/message">
+        <!-- MENU ITEM LINK ICON -->
+        <div class="menu-item-link-icon icon-newsfeed">
+          <i class="fa-solid fa-paper-plane"></i>
+        </div>
+        <!-- /MENU ITEM LINK ICON -->
+        {{ "navbar_home" | translate }}
+      </a>
+      <!-- /MENU ITEM LINK -->
+    </li>
+    <!-- /MENU ITEM -->
     <!-- MENU ITEM -->
     <li [class.menu-item]="true" [class.active]="activeMenuItem === 'follow'">
       <!-- MENU ITEM LINK -->
@@ -521,15 +517,21 @@
   <!-- /NAVIGATION WIDGET SECTION TITLE -->
 
   <!-- NAVIGATION WIDGET SECTION LINK -->
-  <a class="navigation-widget-section-link" href="profile">{{
-    "Thông tin" | translate
-  }}</a>
+  <a
+    class="navigation-widget-section-link"
+    href="profile"
+    (click)="this.profileService.loadDataProfileTimeline(0)"
+    >{{ "Thông tin" | translate }}</a
+  >
   <!-- /NAVIGATION WIDGET SECTION LINK -->
 
   <!-- NAVIGATION WIDGET SECTION LINK -->
-  <a class="navigation-widget-section-link" href="edit-profile">{{
-    "admin_capnhat" | translate
-  }}</a>
+  <a
+    class="navigation-widget-section-link"
+    href="edit-profile"
+    (click)="this.profileService.loadDataProfileHeader(0)"
+    >{{ "admin_capnhat" | translate }}</a
+  >
   <!-- /NAVIGATION WIDGET SECTION LINK -->
 
   <!-- NAVIGATION WIDGET SECTION LINK -->
@@ -545,9 +547,9 @@
   <!-- /NAVIGATION WIDGET SECTION LINK -->
 
   <!-- NAVIGATION WIDGET SECTION LINK -->
-  <a class="navigation-widget-section-link" href="change-password">{{
+  <!-- <a class="navigation-widget-section-link" href="change-password">{{
     "doimatkhau" | translate
-  }}</a>
+  }}</a> -->
   <!-- /NAVIGATION WIDGET SECTION LINK -->
   <!-- NAVIGATION WIDGET SECTION TITLE -->
   <!-- <p class="navigation-widget-section-title">Về chúng tôi</p> -->
@@ -982,7 +984,23 @@
       <!-- ACTION LIST ITEM WRAP -->
       <div class="action-list-item-wrap">
         <!-- ACTION LIST ITEM -->
-        <div class="action-list-item unread header-dropdown-trigger">
+        <div
+          class="action-list-item unread header-dropdown-trigger"
+          (click)="modalService.removeNotify()"
+        >
+          <div
+            *ngIf="modalService.checkNotify"
+            style="
+              content: '';
+              width: 4px;
+              height: 4px;
+              border-radius: 50%;
+              background-color: #41efff;
+              position: absolute;
+              top: 26px;
+              right: 10px;
+            "
+          ></div>
           <!-- ACTION LIST ITEM ICON -->
           <svg class="action-list-item-icon icon-notification">
             <use xlink:href="#svg-notification"></use>
@@ -1016,463 +1034,291 @@
           <!-- /DROPDOWN BOX HEADER -->
 
           <!-- DROPDOWN BOX LIST -->
-          <div class="dropdown-box-list" data-simplebar>
-            <!-- DROPDOWN BOX LIST ITEM -->
-            <div class="dropdown-box-list-item unread">
+          <div
+            class="dropdown-box-list"
+            data-simplebar
+           
+          >
+            <div *ngIf="!modalService.listNotify || modalService.listNotify.size === 0">
+              <p class="no-intify">Không có thông báo</p>
+            </div>
+            <div *ngFor="let notif of modalService.listNotify | keyvalue">
+            <!-- Comment -->
+            <div class="dropdown-box-list-item"
+            *ngIf="checkType(notif.value.type) === 'COMMENT'"
+            >
               <!-- USER STATUS -->
               <div class="user-status notification">
                 <!-- USER STATUS AVATAR -->
-                <a class="user-status-avatar" href="profile">
-                  <!-- USER AVATAR -->
-                  <div class="user-avatar small no-outline">
-                    <!-- USER AVATAR CONTENT -->
-                    <div class="user-avatar-content">
-                      <!-- HEXAGON -->
+                <a
+                  class="user-avatar small user-status-avatar no-border no-outline"
+                  routerLink="/profile"
+                  (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)"
+                >
+                  <div class="hexagon-container">
+                    <div class="hexagon user-avatar-content">
                       <div
-                        class="hexagon-image-30-32"
-                        data-src="../../../assets/images/avatar/03.jpg"
+                        class="hexagon-image"
+                        style="background-image: url('{{notif.value.avatar}}')"
                       ></div>
-                      <!-- /HEXAGON -->
                     </div>
-                    <!-- /USER AVATAR CONTENT -->
-
-                    <!-- USER AVATAR PROGRESS -->
-                    <div class="user-avatar-progress">
-                      <!-- HEXAGON -->
-                      <div class="hexagon-progress-40-44"></div>
-                      <!-- /HEXAGON -->
+                    <div class="hexagon user-avatar-border">
+                      <div class="hexagon-border"></div>
                     </div>
-                    <!-- /USER AVATAR PROGRESS -->
-
-                    <!-- USER AVATAR PROGRESS BORDER -->
-                    <div class="user-avatar-progress-border">
-                      <!-- HEXAGON -->
-                      <div class="hexagon-border-40-44"></div>
-                      <!-- /HEXAGON -->
+                    <div class="hexagon user-avatar-progress-border">
+                      <div class="user-avatar-progress"></div>
                     </div>
-                    <!-- /USER AVATAR PROGRESS BORDER -->
-
-                    <!-- USER AVATAR BADGE -->
-                    <div class="user-avatar-badge">
-                      <!-- USER AVATAR BADGE BORDER -->
-                      <div class="user-avatar-badge-border">
-                        <!-- HEXAGON -->
-                        <div class="hexagon-22-24"></div>
-                        <!-- /HEXAGON -->
-                      </div>
-                      <!-- /USER AVATAR BADGE BORDER -->
-
-                      <!-- USER AVATAR BADGE CONTENT -->
-                      <div class="user-avatar-badge-content">
-                        <!-- HEXAGON -->
-                        <div class="hexagon-dark-16-18"></div>
-                        <!-- /HEXAGON -->
-                      </div>
-                      <!-- /USER AVATAR BADGE CONTENT -->
-
-                      <!-- USER AVATAR BADGE TEXT -->
-                      <p class="user-avatar-badge-text">16</p>
-                      <!-- /USER AVATAR BADGE TEXT -->
-                    </div>
-                    <!-- /USER AVATAR BADGE -->
+                    <p class="user-avatar-badge-text">1</p>
                   </div>
-                  <!-- /USER AVATAR -->
                 </a>
                 <!-- /USER STATUS AVATAR -->
 
                 <!-- USER STATUS TITLE -->
                 <p class="user-status-title">
-                  <a class="bold" href="profile">Nick Grissom</a>
-                  đã theo dõi bạn
-                  <!-- <a class="highlighted" href="profile">status update</a> -->
+                  <a class="bold" href="profile">{{ notif.value.fullname }}</a>
+                  đã bình luận vào
+                  <a class="highlighted" href="photos">bài đăng</a> của bạn
                 </p>
                 <!-- /USER STATUS TITLE -->
 
                 <!-- USER STATUS TIMESTAMP -->
-                <p class="user-status-timestamp">2 minutes ago</p>
+                <p class="user-status-timestamp">{{ notif.value.time }}</p>
+                <!-- /USER STATUS TIMESTAMP -->
+
+                <!-- USER STATUS ICON -->
+                <div class="user-status-icon">
+                  <!-- ICON COMMENT -->
+                  <svg class="icon-comment">
+                    <use xlink:href="#svg-comment"></use>
+                  </svg>
+                  <!-- /ICON COMMENT -->
+                </div>
+                <!-- /USER STATUS ICON -->
+              </div>
+              <!-- /USER STATUS -->
+            </div>
+            <!-- Comment -->
+            <!-- Rep Comment -->
+            <div class="dropdown-box-list-item"
+            *ngIf="checkType(notif.value.type) === 'REPCOMMENT'"
+            >
+              <!-- USER STATUS -->
+              <div class="user-status notification">
+                <!-- USER STATUS AVATAR -->
+                <a
+                  class="user-avatar small user-status-avatar no-border no-outline"
+                  routerLink="/profile"
+                  (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)"
+                >
+                  <div class="hexagon-container">
+                    <div class="hexagon user-avatar-content">
+                      <div
+                        class="hexagon-image"
+                        style="background-image: url('{{notif.value.avatar}}')"
+                      ></div>
+                    </div>
+                    <div class="hexagon user-avatar-border">
+                      <div class="hexagon-border"></div>
+                    </div>
+                    <div class="hexagon user-avatar-progress-border">
+                      <div class="user-avatar-progress"></div>
+                    </div>
+                    <p class="user-avatar-badge-text">1</p>
+                  </div>
+                </a>
+                <!-- /USER STATUS AVATAR -->
+
+                <!-- USER STATUS TITLE -->
+                <p class="user-status-title">
+                  <a class="bold" href="profile">{{ notif.value.fullname }}</a>
+                  đã trả lời bình luận của bạn 
+                  <!-- <a class="highlighted" href="photos">bài đăng</a>  -->
+                </p>
+                <!-- /USER STATUS TITLE -->
+
+                <!-- USER STATUS TIMESTAMP -->
+                <p class="user-status-timestamp">{{ notif.value.time }}</p>
+                <!-- /USER STATUS TIMESTAMP -->
+
+                <!-- USER STATUS ICON -->
+                <div class="user-status-icon">
+                  <!-- ICON COMMENT -->
+                  <svg class="icon-comment">
+                    <use xlink:href="#svg-comment"></use>
+                  </svg>
+                  <!-- /ICON COMMENT -->
+                </div>
+                <!-- /USER STATUS ICON -->
+              </div>
+              <!-- /USER STATUS -->
+            </div>
+            <!-- Comment -->
+            <!-- Share -->
+            <div class="dropdown-box-list-item"
+            *ngIf="checkType(notif.value.type) === 'SHARE'"
+            >
+               <!-- USER STATUS -->
+               <div class="user-status notification">
+                <!-- USER STATUS AVATAR -->
+                <a
+                  class="user-avatar small user-status-avatar no-border no-outline"
+                  routerLink="/profile"
+                  (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)"
+                >
+                  <div class="hexagon-container">
+                    <div class="hexagon user-avatar-content">
+                      <div
+                        class="hexagon-image"
+                        style="background-image: url('{{notif.value.avatar}}')"
+                      ></div>
+                    </div>
+                    <div class="hexagon user-avatar-border">
+                      <div class="hexagon-border"></div>
+                    </div>
+                    <div class="hexagon user-avatar-progress-border">
+                      <div class="user-avatar-progress"></div>
+                    </div>
+                    <p class="user-avatar-badge-text">1</p>
+                  </div>
+                </a>
+                <!-- /USER STATUS AVATAR -->
+
+                <!-- USER STATUS TITLE -->
+                <p class="user-status-title">
+                  <a class="bold" href="profile">{{ notif.value.fullname }}</a>
+                  đã chia sẻ
+                  <a class="highlighted" href="photos">bài đăng</a> của bạn
+                </p>
+                <!-- /USER STATUS TITLE -->
+
+                <!-- USER STATUS TIMESTAMP -->
+                <p class="user-status-timestamp">{{ notif.value.time }}</p>
+                <!-- /USER STATUS TIMESTAMP -->
+
+                <!-- USER STATUS ICON -->
+                <div class="user-status-icon">
+                  <!-- ICON COMMENT -->
+                  <svg class="icon-comment">
+                    <use xlink:href="#svg-comment"></use>
+                  </svg>
+                  <!-- /ICON COMMENT -->
+                </div>
+                <!-- /USER STATUS ICON -->
+              </div>
+              <!-- /USER STATUS -->
+            </div>
+            <!-- Share -->
+             <!-- interested -->
+             <div class="dropdown-box-list-item" 
+             *ngIf="checkType(notif.value.type) === 'INTERESTED'">
+              <!-- USER STATUS -->
+              <div class="user-status notification">
+                <!-- USER STATUS AVATAR -->
+                <a
+                  class="user-avatar small user-status-avatar no-border no-outline"
+                  routerLink="/profile"
+                  (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)"
+                >
+                  <div class="hexagon-container">
+                    <div class="hexagon user-avatar-content">
+                      <div
+                        class="hexagon-image"
+                        style="background-image: url('{{notif.value.avatar}}')"
+                      ></div>
+                    </div>
+                    <div class="hexagon user-avatar-border">
+                      <div class="hexagon-border"></div>
+                    </div>
+                    <div class="hexagon user-avatar-progress-border">
+                      <div class="user-avatar-progress"></div>
+                    </div>
+                    <p class="user-avatar-badge-text">1</p>
+                  </div>
+                </a>
+                <!-- /USER STATUS AVATAR -->
+
+                <!-- USER STATUS TITLE -->
+                <p class="user-status-title">
+                  <a class="bold" href="profile">{{ notif.value.fullname }}</a>
+                  đã quan tâm
+                  <a class="highlighted" href="photos">bài đăng</a> của bạn
+                </p>
+                <!-- /USER STATUS TITLE -->
+
+                <!-- USER STATUS TIMESTAMP -->
+                <p class="user-status-timestamp">{{ notif.value.time }}</p>
+                <!-- /USER STATUS TIMESTAMP -->
+
+                <!-- USER STATUS ICON -->
+                <div class="user-status-icon">
+                  <!-- ICON COMMENT -->
+                  <svg class="icon-thumbs-up">
+                    <use xlink:href="#svg-thumbs-up"></use>
+                  </svg>
+                  <!-- /ICON COMMENT -->
+                </div>
+                <!-- /USER STATUS ICON -->
+              </div>
+              <!-- /USER STATUS -->
+            </div>
+            <!-- interested -->
+             <!-- Follow -->
+              <!-- follow -->
+            <div class="dropdown-box-list-item"
+            *ngIf="checkType(notif.value.type) === 'FOLLOW'">
+              <!-- USER STATUS -->
+              <div class="user-status notification">
+                <!-- USER STATUS AVATAR -->
+                <a
+                  class="user-avatar small user-status-avatar no-border no-outline"
+                  routerLink="/profile"
+                  (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)"
+                >
+                  <div class="hexagon-container">
+                    <div class="hexagon user-avatar-content">
+                      <div
+                        class="hexagon-image"
+                        style="background-image: url('{{notif.value.avatar}}')"
+                      ></div>
+                    </div>
+                    <div class="hexagon user-avatar-border">
+                      <div class="hexagon-border"></div>
+                    </div>
+                    <div class="hexagon user-avatar-progress-border">
+                      <div class="user-avatar-progress"></div>
+                    </div>
+                    <p class="user-avatar-badge-text">1</p>
+                  </div>
+                </a>
+                <!-- /USER STATUS AVATAR -->
+
+                <!-- USER STATUS TITLE -->
+                <p class="user-status-title" *ngIf="notif.value.following_status === false">
+                  <a class="bold" href="profile">{{ notif.value.fullname }}</a>
+                  đã theo dõi bạn
+                </p>
+                <p class="user-status-title" *ngIf="notif.value.following_status === true">
+                  <a class="bold" href="profile">{{ notif.value.fullname }}</a>
+                  và bạn đã là bạn bè
+                </p>
+                <!-- /USER STATUS TITLE -->
+
+                <!-- USER STATUS TIMESTAMP -->
+                <p class="user-status-timestamp">{{ notif.value.time }}</p>
                 <!-- /USER STATUS TIMESTAMP -->
                 <div class="user-preview-actions nofti">
                   <!-- BUTTON -->
-                  <p class="button re-fl">Theo dõi</p>
-                  <!-- /BUTTON -->
-      
-                  <!-- BUTTON -->
-                  <p class="button delete-fl">Xóa</p>
+                  <p class="button re-fl" (click)="addFollow(notif.value.fromUserId)" *ngIf="notif.value.following_status === false">Theo dõi lại</p>
                   <!-- /BUTTON -->
                 </div>
-                
               </div>
               <!-- /USER STATUS -->
             </div>
-            <!-- /DROPDOWN BOX LIST ITEM -->
-
-            <!-- DROPDOWN BOX LIST ITEM -->
-            <div class="dropdown-box-list-item">
-              <!-- USER STATUS -->
-              <div class="user-status notification">
-                <!-- USER STATUS AVATAR -->
-                <a class="user-status-avatar" href="profile">
-                  <!-- USER AVATAR -->
-                  <div class="user-avatar small no-outline">
-                    <!-- USER AVATAR CONTENT -->
-                    <div class="user-avatar-content">
-                      <!-- HEXAGON -->
-                      <div
-                        class="hexagon-image-30-32"
-                        data-src="../../../assets/images/avatar/07.jpg"
-                      ></div>
-                      <!-- /HEXAGON -->
-                    </div>
-                    <!-- /USER AVATAR CONTENT -->
-
-                    <!-- USER AVATAR PROGRESS -->
-                    <div class="user-avatar-progress">
-                      <!-- HEXAGON -->
-                      <div class="hexagon-progress-40-44"></div>
-                      <!-- /HEXAGON -->
-                    </div>
-                    <!-- /USER AVATAR PROGRESS -->
-
-                    <!-- USER AVATAR PROGRESS BORDER -->
-                    <div class="user-avatar-progress-border">
-                      <!-- HEXAGON -->
-                      <div class="hexagon-border-40-44"></div>
-                      <!-- /HEXAGON -->
-                    </div>
-                    <!-- /USER AVATAR PROGRESS BORDER -->
-
-                    <!-- USER AVATAR BADGE -->
-                    <div class="user-avatar-badge">
-                      <!-- USER AVATAR BADGE BORDER -->
-                      <div class="user-avatar-badge-border">
-                        <!-- HEXAGON -->
-                        <div class="hexagon-22-24"></div>
-                        <!-- /HEXAGON -->
-                      </div>
-                      <!-- /USER AVATAR BADGE BORDER -->
-
-                      <!-- USER AVATAR BADGE CONTENT -->
-                      <div class="user-avatar-badge-content">
-                        <!-- HEXAGON -->
-                        <div class="hexagon-dark-16-18"></div>
-                        <!-- /HEXAGON -->
-                      </div>
-                      <!-- /USER AVATAR BADGE CONTENT -->
-
-                      <!-- USER AVATAR BADGE TEXT -->
-                      <p class="user-avatar-badge-text">26</p>
-                      <!-- /USER AVATAR BADGE TEXT -->
-                    </div>
-                    <!-- /USER AVATAR BADGE -->
-                  </div>
-                  <!-- /USER AVATAR -->
-                </a>
-                <!-- /USER STATUS AVATAR -->
-
-                <!-- USER STATUS TITLE -->
-                <p class="user-status-title">
-                  <a class="bold" href="profile">Sarah Diamond</a>
-                  left a like
-                  <img
-                    class="reaction"
-                    src="../../../assets/images/reaction/like.png"
-                    alt="reaction-like"
-                  />
-                  reaction on your
-                  <a class="highlighted" href="profile">status update</a>
-                </p>
-                <!-- /USER STATUS TITLE -->
-
-                <!-- USER STATUS TIMESTAMP -->
-                <p class="user-status-timestamp">17 minutes ago</p>
-                <!-- /USER STATUS TIMESTAMP -->
-
-                <!-- USER STATUS ICON -->
-                <div class="user-status-icon">
-                  <!-- ICON THUMBS UP -->
-                  <svg class="icon-thumbs-up">
-                    <use xlink:href="#svg-thumbs-up"></use>
-                  </svg>
-                  <!-- /ICON THUMBS UP -->
-                </div>
-                <!-- /USER STATUS ICON -->
-              </div>
-              <!-- /USER STATUS -->
+            <!-- follow -->
+            <!-- interested -->
             </div>
-            <!-- /DROPDOWN BOX LIST ITEM -->
+            
 
-            <!-- DROPDOWN BOX LIST ITEM -->
-            <div class="dropdown-box-list-item">
-              <!-- USER STATUS -->
-              <div class="user-status notification">
-                <!-- USER STATUS AVATAR -->
-                <a class="user-status-avatar" href="profile">
-                  <!-- USER AVATAR -->
-                  <div class="user-avatar small no-outline">
-                    <!-- USER AVATAR CONTENT -->
-                    <div class="user-avatar-content">
-                      <!-- HEXAGON -->
-                      <div
-                        class="hexagon-image-30-32"
-                        data-src="../../../assets/images/avatar/02.jpg"
-                      ></div>
-                      <!-- /HEXAGON -->
-                    </div>
-                    <!-- /USER AVATAR CONTENT -->
-
-                    <!-- USER AVATAR PROGRESS -->
-                    <div class="user-avatar-progress">
-                      <!-- HEXAGON -->
-                      <div class="hexagon-progress-40-44"></div>
-                      <!-- /HEXAGON -->
-                    </div>
-                    <!-- /USER AVATAR PROGRESS -->
-
-                    <!-- USER AVATAR PROGRESS BORDER -->
-                    <div class="user-avatar-progress-border">
-                      <!-- HEXAGON -->
-                      <div class="hexagon-border-40-44"></div>
-                      <!-- /HEXAGON -->
-                    </div>
-                    <!-- /USER AVATAR PROGRESS BORDER -->
-
-                    <!-- USER AVATAR BADGE -->
-                    <div class="user-avatar-badge">
-                      <!-- USER AVATAR BADGE BORDER -->
-                      <div class="user-avatar-badge-border">
-                        <!-- HEXAGON -->
-                        <div class="hexagon-22-24"></div>
-                        <!-- /HEXAGON -->
-                      </div>
-                      <!-- /USER AVATAR BADGE BORDER -->
-
-                      <!-- USER AVATAR BADGE CONTENT -->
-                      <div class="user-avatar-badge-content">
-                        <!-- HEXAGON -->
-                        <div class="hexagon-dark-16-18"></div>
-                        <!-- /HEXAGON -->
-                      </div>
-                      <!-- /USER AVATAR BADGE CONTENT -->
-
-                      <!-- USER AVATAR BADGE TEXT -->
-                      <p class="user-avatar-badge-text">13</p>
-                      <!-- /USER AVATAR BADGE TEXT -->
-                    </div>
-                    <!-- /USER AVATAR BADGE -->
-                  </div>
-                  <!-- /USER AVATAR -->
-                </a>
-                <!-- /USER STATUS AVATAR -->
-
-                <!-- USER STATUS TITLE -->
-                <p class="user-status-title">
-                  <a class="bold" href="profile">Destroy Dex</a>
-                  posted a comment on your
-                  <a class="highlighted" href="photos">photo</a>
-                </p>
-                <!-- /USER STATUS TITLE -->
-
-                <!-- USER STATUS TIMESTAMP -->
-                <p class="user-status-timestamp">31 minutes ago</p>
-                <!-- /USER STATUS TIMESTAMP -->
-
-                <!-- USER STATUS ICON -->
-                <div class="user-status-icon">
-                  <!-- ICON COMMENT -->
-                  <svg class="icon-comment">
-                    <use xlink:href="#svg-comment"></use>
-                  </svg>
-                  <!-- /ICON COMMENT -->
-                </div>
-                <!-- /USER STATUS ICON -->
-              </div>
-              <!-- /USER STATUS -->
-            </div>
-            <!-- /DROPDOWN BOX LIST ITEM -->
-
-            <!-- DROPDOWN BOX LIST ITEM -->
-            <div class="dropdown-box-list-item">
-              <!-- USER STATUS -->
-              <div class="user-status notification">
-                <!-- USER STATUS AVATAR -->
-                <a class="user-status-avatar" href="profile">
-                  <!-- USER AVATAR -->
-                  <div class="user-avatar small no-outline">
-                    <!-- USER AVATAR CONTENT -->
-                    <div class="user-avatar-content">
-                      <!-- HEXAGON -->
-                      <div
-                        class="hexagon-image-30-32"
-                        data-src="../../../assets/images/avatar/10.jpg"
-                      ></div>
-                      <!-- /HEXAGON -->
-                    </div>
-                    <!-- /USER AVATAR CONTENT -->
-
-                    <!-- USER AVATAR PROGRESS -->
-                    <div class="user-avatar-progress">
-                      <!-- HEXAGON -->
-                      <div class="hexagon-progress-40-44"></div>
-                      <!-- /HEXAGON -->
-                    </div>
-                    <!-- /USER AVATAR PROGRESS -->
-
-                    <!-- USER AVATAR PROGRESS BORDER -->
-                    <div class="user-avatar-progress-border">
-                      <!-- HEXAGON -->
-                      <div class="hexagon-border-40-44"></div>
-                      <!-- /HEXAGON -->
-                    </div>
-                    <!-- /USER AVATAR PROGRESS BORDER -->
-
-                    <!-- USER AVATAR BADGE -->
-                    <div class="user-avatar-badge">
-                      <!-- USER AVATAR BADGE BORDER -->
-                      <div class="user-avatar-badge-border">
-                        <!-- HEXAGON -->
-                        <div class="hexagon-22-24"></div>
-                        <!-- /HEXAGON -->
-                      </div>
-                      <!-- /USER AVATAR BADGE BORDER -->
-
-                      <!-- USER AVATAR BADGE CONTENT -->
-                      <div class="user-avatar-badge-content">
-                        <!-- HEXAGON -->
-                        <div class="hexagon-dark-16-18"></div>
-                        <!-- /HEXAGON -->
-                      </div>
-                      <!-- /USER AVATAR BADGE CONTENT -->
-
-                      <!-- USER AVATAR BADGE TEXT -->
-                      <p class="user-avatar-badge-text">5</p>
-                      <!-- /USER AVATAR BADGE TEXT -->
-                    </div>
-                    <!-- /USER AVATAR BADGE -->
-                  </div>
-                  <!-- /USER AVATAR -->
-                </a>
-                <!-- /USER STATUS AVATAR -->
-
-                <!-- USER STATUS TITLE -->
-                <p class="user-status-title">
-                  <a class="bold" href="profile">The Green Goo</a>
-                  left a love
-                  <img
-                    class="reaction"
-                    src="../../../assets/images/reaction/love.png"
-                    alt="reaction-love"
-                  />
-                  reaction on your
-                  <a class="highlighted" href="profile">status update</a>
-                </p>
-                <!-- /USER STATUS TITLE -->
-
-                <!-- USER STATUS TIMESTAMP -->
-                <p class="user-status-timestamp">2 hours ago</p>
-                <!-- /USER STATUS TIMESTAMP -->
-
-                <!-- USER STATUS ICON -->
-                <div class="user-status-icon">
-                  <!-- ICON THUMBS UP -->
-                  <svg class="icon-thumbs-up">
-                    <use xlink:href="#svg-thumbs-up"></use>
-                  </svg>
-                  <!-- /ICON THUMBS UP -->
-                </div>
-                <!-- /USER STATUS ICON -->
-              </div>
-              <!-- /USER STATUS -->
-            </div>
-            <!-- /DROPDOWN BOX LIST ITEM -->
-
-            <!-- DROPDOWN BOX LIST ITEM -->
-            <div class="dropdown-box-list-item">
-              <!-- USER STATUS -->
-              <div class="user-status notification">
-                <!-- USER STATUS AVATAR -->
-                <a class="user-status-avatar" href="profile">
-                  <!-- USER AVATAR -->
-                  <div class="user-avatar small no-outline">
-                    <!-- USER AVATAR CONTENT -->
-                    <div class="user-avatar-content">
-                      <!-- HEXAGON -->
-                      <div
-                        class="hexagon-image-30-32"
-                        data-src="../../../assets/images/avatar/05.jpg"
-                      ></div>
-                      <!-- /HEXAGON -->
-                    </div>
-                    <!-- /USER AVATAR CONTENT -->
-
-                    <!-- USER AVATAR PROGRESS -->
-                    <div class="user-avatar-progress">
-                      <!-- HEXAGON -->
-                      <div class="hexagon-progress-40-44"></div>
-                      <!-- /HEXAGON -->
-                    </div>
-                    <!-- /USER AVATAR PROGRESS -->
-
-                    <!-- USER AVATAR PROGRESS BORDER -->
-                    <div class="user-avatar-progress-border">
-                      <!-- HEXAGON -->
-                      <div class="hexagon-border-40-44"></div>
-                      <!-- /HEXAGON -->
-                    </div>
-                    <!-- /USER AVATAR PROGRESS BORDER -->
-
-                    <!-- USER AVATAR BADGE -->
-                    <div class="user-avatar-badge">
-                      <!-- USER AVATAR BADGE BORDER -->
-                      <div class="user-avatar-badge-border">
-                        <!-- HEXAGON -->
-                        <div class="hexagon-22-24"></div>
-                        <!-- /HEXAGON -->
-                      </div>
-                      <!-- /USER AVATAR BADGE BORDER -->
-
-                      <!-- USER AVATAR BADGE CONTENT -->
-                      <div class="user-avatar-badge-content">
-                        <!-- HEXAGON -->
-                        <div class="hexagon-dark-16-18"></div>
-                        <!-- /HEXAGON -->
-                      </div>
-                      <!-- /USER AVATAR BADGE CONTENT -->
-
-                      <!-- USER AVATAR BADGE TEXT -->
-                      <p class="user-avatar-badge-text">12</p>
-                      <!-- /USER AVATAR BADGE TEXT -->
-                    </div>
-                    <!-- /USER AVATAR BADGE -->
-                  </div>
-                  <!-- /USER AVATAR -->
-                </a>
-                <!-- /USER STATUS AVATAR -->
-
-                <!-- USER STATUS TITLE -->
-                <p class="user-status-title">
-                  <a class="bold" href="profile">Neko Bebop</a>
-                  posted a comment on your
-                  <a class="highlighted" href="profile">status update</a>
-                </p>
-                <!-- /USER STATUS TITLE -->
-
-                <!-- USER STATUS TIMESTAMP -->
-                <p class="user-status-timestamp">3 hours ago</p>
-                <!-- /USER STATUS TIMESTAMP -->
-
-                <!-- USER STATUS ICON -->
-                <div class="user-status-icon">
-                  <!-- ICON COMMENT -->
-                  <svg class="icon-comment">
-                    <use xlink:href="#svg-comment"></use>
-                  </svg>
-                  <!-- /ICON COMMENT -->
-                </div>
-                <!-- /USER STATUS ICON -->
-              </div>
-              <!-- /USER STATUS -->
-            </div>
-            <!-- /DROPDOWN BOX LIST ITEM -->
           </div>
           <!-- /DROPDOWN BOX LIST -->
 
@@ -1496,7 +1342,7 @@
         <!-- <svg class="action-item-icon icon-settings">
         <use xlink:href="#svg-settings"></use>
       </svg> -->
-        <p class="fullname-logged">{{userDisplayName}}</p>
+        <p class="fullname-logged">{{ userDisplayName }}</p>
         <!-- /ACTION ITEM ICON -->
       </div>
       <!-- /ACTION ITEM -->
@@ -1508,37 +1354,26 @@
           <!-- USER STATUS -->
           <div class="user-status">
             <!-- USER STATUS AVATAR -->
-            <a class="user-status-avatar" href="profile">
-              <!-- USER AVATAR -->
-              <div class="user-avatar small no-outline">
-                <!-- USER AVATAR CONTENT -->
-                <div class="user-avatar-content">
-                  <!-- HEXAGON -->
+            <a
+              class="user-avatar small user-status-avatar no-border no-outline"
+              routerLink="/profile"
+              (click)="this.profileService.loadDataProfileTimeline(0)"
+            >
+              <div class="hexagon-container">
+                <div class="hexagon user-avatar-content">
                   <div
-                    class="hexagon-image-30-32"
-                    data-src="../../../assets/images/avatar/01.jpg"
+                    class="hexagon-image"
+                    style="background-image: url('{{ avatar }}')"
                   ></div>
-                  <!-- /HEXAGON -->
                 </div>
-                <!-- /USER AVATAR CONTENT -->
-
-                <!-- USER AVATAR PROGRESS -->
-                <div class="user-avatar-progress">
-                  <!-- HEXAGON -->
-                  <div class="hexagon-progress-40-44"></div>
-                  <!-- /HEXAGON -->
+                <div class="hexagon user-avatar-border">
+                  <div class="hexagon-border"></div>
                 </div>
-                <!-- /USER AVATAR PROGRESS -->
-
-                <!-- USER AVATAR PROGRESS BORDER -->
-                <div class="user-avatar-progress-border">
-                  <!-- HEXAGON -->
-                  <div class="hexagon-border-40-44"></div>
-                  <!-- /HEXAGON -->
+                <div class="hexagon user-avatar-progress-border">
+                  <div class="user-avatar-progress"></div>
                 </div>
-                <!-- /USER AVATAR PROGRESS BORDER -->
+                <p class="user-avatar-badge-text">1</p>
               </div>
-              <!-- /USER AVATAR -->
             </a>
             <!-- /USER STATUS AVATAR -->
 
@@ -1560,21 +1395,24 @@
         <!-- /DROPDOWN NAVIGATION CATEGORY -->
 
         <!-- DROPDOWN NAVIGATION LINK -->
-        <a class="dropdown-navigation-link" href="profile">{{
-          "Thongtin" | translate
-        }}</a>
+        <a
+          class="dropdown-navigation-link"
+          routerLink="/profile"
+          (click)="this.profileService.loadDataProfileTimeline(0)"
+          >Trang cá nhân</a
+        >
         <!-- /DROPDOWN NAVIGATION LINK -->
 
         <!-- DROPDOWN NAVIGATION LINK -->
-        <a class="dropdown-navigation-link" href="edit-profile">{{
+        <a class="dropdown-navigation-link" routerLink="/edit-profile">{{
           "admin_capnhat" | translate
         }}</a>
         <!-- /DROPDOWN NAVIGATION LINK -->
 
         <!-- DROPDOWN NAVIGATION LINK -->
-        <a class="dropdown-navigation-link" href="change-password">{{
+        <!-- <a class="dropdown-navigation-link" href="change-password">{{
           "doimatkhau" | translate
-        }}</a>
+        }}</a> -->
         <!-- /DROPDOWN NAVIGATION LINK -->
 
         <!-- DROPDOWN NAVIGATION BUTTON -->

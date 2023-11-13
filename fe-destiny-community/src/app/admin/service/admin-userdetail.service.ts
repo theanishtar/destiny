@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { tap, catchError } from 'rxjs/operators';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment'
-
+import { Observable } from 'rxjs';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ import { environment } from '../../../environments/environment'
 export class AdminUserdetailService {
 
   private getDetailUserAPI = environment.baseUrl + 'v1/admin/detailUser';
+  private actionOnUserAPI = environment.baseUrl + 'v1/admin/actionOnUser';
 
   private userDetail: any[] = [];
 
@@ -19,12 +21,16 @@ export class AdminUserdetailService {
   ) { }
 
   loadPostDetail(email: string) {
-    return this.http.get<any>(this.getDetailUserAPI+"/"+email).pipe(
+    return this.http.get<any>(this.getDetailUserAPI + "/" + email).pipe(
       tap((response) => {
         this.userDetail = JSON.parse(JSON.stringify(response));;
         this.setUserDetail(this.userDetail);
       }),
     )
+  }
+
+  actionOnUser(email: string) {
+    return this.http.get(this.actionOnUserAPI + "/" + email);
   }
 
 

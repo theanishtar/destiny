@@ -48,4 +48,9 @@ public class DistrictServiceImpl implements DistrictService {
 	public List<Districts> findAll() {
 		return districtDao.findAll();
 	}
+
+	@Override
+	public Districts districts(String districtName, String provinceCode) {
+		return districtDao.districts(districtName, provinceCode);
+	}
 }

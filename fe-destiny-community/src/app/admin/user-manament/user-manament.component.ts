@@ -1,5 +1,5 @@
-import {  Component, ElementRef, OnInit, ViewChild  } from '@angular/core';
-import {Chart} from '../../../assets/js/admin/chart.js/chartjs.min.js';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Chart } from '../../../assets/js/admin/chart.js/chartjs.min.js';
 import { AdminUsermanagementService } from '../service/admin-usermanagement.service';
 import { AdminIndexService } from '../service/admin-index.service';
 import { Router } from '@angular/router';
@@ -10,28 +10,100 @@ import { Router } from '@angular/router';
   templateUrl: './user-manament.component.html',
   styleUrls: [`../css/sb-admin-2.min.css`, `../css/home.css`],
 })
-export class UserManamentComponent {
+export class UserManamentComponent implements OnInit {
   @ViewChild('chartline') chartLine: ElementRef | undefined;
 
-  listTOP4User: any[] = [{},{},{},{}];
+  listTOP4User: any[] = [{}, {}, {}, {}];
   listTotalUserEveryMonth: number[];
 
+  day: any;
+  month: any;
+  year: any;
+
+  totalUserByDay: number;
+  percentUserByDayIncrease: number;
+
+  totalUserByMonth: number;
+  percentUserByMonthIncrease: number;
+
+  totalUserByYear: number;
+  percentUserByYearIncrease: number;
+
+  isLoading = true;
 
   constructor(
     private adminUsermanagementService: AdminUsermanagementService,
     private adminIndexService: AdminIndexService,
     private routers: Router,
-  )
-  {}
+  ) { }
+
+  ngOnInit(): void {
+    this.getTime();
+  }
 
   ngAfterViewInit() {
     this.loadTOP4User();
     this.loadListTotalUserEveryMonth();
 
+    this.loadTotalUserByDay();
+    this.loadTotalUserByMonth();
+    this.loadTotalUserByYear();
 
+    this.loadPercentUserByDayIncrease();
+    this.loadPercentUserByMonthIncrease();
+    this.loadPercentUserByYearIncrease();
   }
 
-  selectUser(email: string): void{
+  getTime() {
+    this.day = new Date().getDay();
+    this.month = new Date().getMonth() + 1;
+    this.year = new Date().getFullYear();
+  }
+
+  loadTotalUserByDay() {
+    this.adminUsermanagementService.loadTotalUserByDay().subscribe(() => {
+      this.totalUserByDay = 0;
+      this.totalUserByDay = this.adminUsermanagementService.getTotalUserByDay();
+    })
+  }
+
+  loadPercentUserByDayIncrease() {
+    this.adminUsermanagementService.loadPercentUserByDayIncrease().subscribe(() => {
+      this.percentUserByDayIncrease = 0;
+      this.percentUserByDayIncrease = this.adminUsermanagementService.getPercentUserByDayIncrease();
+    })
+  }
+
+  loadTotalUserByMonth() {
+    this.adminUsermanagementService.loadTotalUserByMonth().subscribe(() => {
+      this.totalUserByMonth = 0;
+      this.totalUserByMonth = this.adminUsermanagementService.getTotalUserByMonth();
+    })
+  }
+
+  loadPercentUserByMonthIncrease() {
+    this.adminUsermanagementService.loadPercentUserByMonthIncrease().subscribe(() => {
+      this.percentUserByMonthIncrease = 0;
+      this.percentUserByMonthIncrease = this.adminUsermanagementService.getPercentUserByMonthIncrease();
+    })
+  }
+
+  loadTotalUserByYear() {
+    this.adminUsermanagementService.loadTotalUserByYear().subscribe(() => {
+      this.totalUserByYear = 0;
+      this.totalUserByYear = this.adminUsermanagementService.getTotalUserByYear();
+    })
+  }
+
+  loadPercentUserByYearIncrease() {
+    this.adminUsermanagementService.loadPercentUserByYearIncrease().subscribe(() => {
+      this.percentUserByYearIncrease = 0;
+      this.percentUserByYearIncrease = this.adminUsermanagementService.getPercentUserByYearIncrease();
+    })
+  }
+
+
+  selectUser(email: string): void {
     localStorage.setItem("userDetailEmail", email);
     this.routers.navigate(['/admin/userdetail']);
   }
@@ -40,11 +112,12 @@ export class UserManamentComponent {
     this.adminUsermanagementService.loadTOP4User().subscribe(() => {
       this.listTOP4User = [];
       this.listTOP4User = this.adminUsermanagementService.getTOP4User();
+      this.isLoading = false;
     });
   }
 
-  loadListTotalUserEveryMonth(){
-    this.adminIndexService.loadTotalUserEveryMonth().subscribe(() =>{
+  loadListTotalUserEveryMonth() {
+    this.adminIndexService.loadTotalUserEveryMonth().subscribe(() => {
       this.listTotalUserEveryMonth = [];
       this.listTotalUserEveryMonth = this.adminIndexService.getListTotalUserEveryMonth();
 
@@ -52,8 +125,8 @@ export class UserManamentComponent {
     })
   }
 
-  createChartLine(){
-    if(this.chartLine){
+  createChartLine() {
+    if (this.chartLine) {
       var ctx1 = this.chartLine.nativeElement.getContext('2d');
 
       var gradientStroke1 = ctx1.createLinearGradient(0, 230, 0, 50);
@@ -64,7 +137,7 @@ export class UserManamentComponent {
       var userChart = new Chart(ctx1, {
         type: "line",
         data: {
-          labels: ["Jan", "Feb","Mar", "Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
           datasets: [
             {
               label: "Người dùng",

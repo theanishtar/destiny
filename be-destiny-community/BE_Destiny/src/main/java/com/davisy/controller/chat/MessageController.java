@@ -29,12 +29,11 @@ import com.davisy.entity.User;
 import com.davisy.model.chat.MessageModel;
 import com.davisy.model.chat.UserModel;
 import com.davisy.model.chat.UserModel.MessageType;
-import com.davisy.service.impl.ChatsServiceImpl;
-import com.davisy.service.impl.FollowServiceImpl;
-import com.davisy.service.impl.MessagesServiceImpl;
-import com.davisy.service.impl.UserServiceImpl;
+import com.davisy.service.ChatsService;
+import com.davisy.service.FollowService;
+import com.davisy.service.MessagesService;
+import com.davisy.service.UserService;
 import com.davisy.storage.chat.UserChatStorage;
-import com.davisy.storage.chat.UserStorage;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -49,42 +48,44 @@ public class MessageController {
 	@Autowired
 	SimpMessagingTemplate simpMessagingTemplate;
 	@Autowired
-	UserServiceImpl userServiceImpl;
+	UserService userService;
 	@Autowired
-	MessagesServiceImpl messagesServiceImpl;
+	MessagesService messagesService;
 	@Autowired
-	ChatsServiceImpl chatsServiceImpl;
+	ChatsService chatsService;
 	@Autowired
-	FollowServiceImpl followServiceImpl;
+	FollowService followService;
 
 	@Async
 	@MessageMapping("/chat/{to}")
 	public void sendMessage(@DestinationVariable int to, MessageModel message) {
-		System.out.println("handling send message: " + message + " to: " + to);
-		User user = userServiceImpl.findById(message.getFromLogin());
-		Chats chats = chatsServiceImpl.findChatNames(String.valueOf(user.getUser_id()), String.valueOf(to));
+		User user = userService.findById(message.getFromLogin());
+		User toUser = userService.findById(to);
+		Chats chats = chatsService.findChatNames(user.getUsername(), toUser.getUsername());
 		Messages messages = new Messages();
 		messages.setContent(message.getMessage());
 		messages.setUser(user);
 		messages.setChats(chats);
 		messages.setSend_Status(false);
-		messagesServiceImpl.create(messages);
+		messagesService.create(messages);
 		boolean isExists = UserChatStorage.getInstance().getUsers().containsKey(to);
 		if (isExists) {
 			simpMessagingTemplate.convertAndSend("/topic/messages/" + to, message);
 
 		}
+		simpMessagingTemplate.convertAndSend("/topic/statusmessages/" + message.getFromLogin(),true);
 	}
 
 	@PostMapping("/v1/user/chat/load/messages")
-	public ResponseEntity<List<Object[]>> loadMessages(HttpServletRequest request, @RequestBody String to) {
+	public ResponseEntity<List<Object[]>> loadMessages(HttpServletRequest request, @RequestBody int to) {
 		try {
 			String email = jwtTokenUtil.getEmailFromHeader(request);
-			User user = userServiceImpl.findByEmail(email);
-			Chats chats = chatsServiceImpl.findChatNames(String.valueOf(user.getUser_id()), to);
+			User user = userService.findByEmail(email);
+			User toUser = userService.findById(to);
+			Chats chats = chatsService.findChatNames(user.getUsername(), toUser.getUsername());
 			if (chats != null) {
-				messagesServiceImpl.updateStatusMessages(true, Integer.valueOf(to), chats.getId());
-				List<Object[]> list = messagesServiceImpl.findListMessage(chats.getName_chats());
+				messagesService.updateStatusMessages(true, Integer.valueOf(to), chats.getId());
+				List<Object[]> list = messagesService.findListMessage(chats.getName_chats());
 				return ResponseEntity.ok().body(list);
 			}
 			return ResponseEntity.ok().body(null);

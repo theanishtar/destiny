@@ -244,12 +244,11 @@
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
 						</exclude>
-						<exclusion>
+					</excludes>
+					<exclusion>
 							<groupId>org.mongodb</groupId>
 							<artifactId>mongodb-driver-core</artifactId>
-						</exclusion>
-					</excludes>
-
+					</exclusion>
 
 					<!--<bean id="cacheManager"
 						class="org.springframework.cache.ehcache.EhCacheCacheManager">

@@ -240,3 +240,48 @@ a.nav-link.click-scroll.site-footer-link {
 .body-admin .ng-select .ng-select-container .ng-value-container .ng-input>input {
   color: var(--primary-admin);
 }
+.ng-select .ng-select-container:after {
+  border-bottom: none;
+}
+
+/* css modal create post */
+.modal-create-post span.ng-arrow-wrapper {
+  position: absolute !important;
+  left: 82% !important;
+  top: -63% !important;
+}
+.modal-create-post .ng-select-container.ng-has-value {
+  height: 42.4px !important;
+  position: absolute !important;
+  top: -26% !important;
+}
+.modal-create-post .ng-select-container.ng-has-value {
+  height: 42.4px !important;
+}
+.modal-create-post .pr-4\.5 {
+  padding-right: 1.125rem;
+}
+.modal-create-post .pl-11\.5 {
+  padding-left: 2.875rem;
+}
+.modal-create-post .py-3 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+.modal-create-post .bg-gray {
+  --tw-bg-opacity: 1;
+  background-color: rgb(239 244 251 / var(--tw-bg-opacity));
+}
+.modal-create-post .border-stroke {
+  --tw-border-opacity: 1;
+  border-color: rgb(226 232 240 / var(--tw-border-opacity));
+}
+.modal-create-post .border {
+  border-width: 1px;
+}
+.modal-create-post .rounded {
+  border-radius: 0.25rem;
+}
+.modal-create-post .w-full {
+  width: 100%;
+}

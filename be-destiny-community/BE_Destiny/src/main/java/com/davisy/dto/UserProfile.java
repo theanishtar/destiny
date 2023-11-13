@@ -11,9 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserProfile {
 	String username;
-	String password;
-	String fullname;
 	String email;
+	String fullname;
 	String intro;
 	String birthday;
 	String day_create;
@@ -21,6 +20,6 @@ public class UserProfile {
 	String district_name;
 	String ward_name;
 	String gender_name;
-	String avartar;
+	String avatar;
 	String thumb;
 }

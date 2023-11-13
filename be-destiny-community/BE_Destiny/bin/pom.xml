@@ -245,7 +245,10 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
-
+					<exclusion>
+							<groupId>org.mongodb</groupId>
+							<artifactId>mongodb-driver-core</artifactId>
+					</exclusion>
 
 					<!--<bean id="cacheManager"
 						class="org.springframework.cache.ehcache.EhCacheCacheManager">

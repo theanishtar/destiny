@@ -16,6 +16,9 @@ declare var toast: any;
 import { ModalService } from '../service/modal.service';
 import { FollowsService } from '../service/follows.service';
 import { LoadingService } from '../service/loading.service';
+import { MessageService } from '../service/message.service';
+import { ProfileService } from '../service/profile.service';
+
 @Component({
   selector: 'app-follows',
   templateUrl: './follows.component.html',
@@ -35,13 +38,17 @@ export class FollowsComponent implements OnInit {
   listFollowing: any[];
   listFollower: any[];
   listFriend: any[];
-  isLoading = false;
+  isLoading = true;
+  searchQuery: string = '';
+  searchResults: any[] = [];
+  isSearching: boolean = false;
 
   ngOnInit() {
-    this.loadDataFling();
-    this.loadDataFler();
+    // this.loadDataFling();
+    // this.loadDataFler();
     this.loadDataFriend();
-    this.loadData();
+    // this.loadData();
+    this.profileService.loadDataProfileHeader(0);
 
     liquid.liquid();
     avatarHexagons.avatarHexagons();
@@ -57,25 +64,31 @@ export class FollowsComponent implements OnInit {
   constructor(
     public modalService: ModalService,
     public followsService: FollowsService,
-    public loadingService: LoadingService
-  ) { }
-
-  /* ============following============= */
-  loadDataFling() {
-    this.followsService.loadDataFollowing().subscribe(() => {
-      this.listFollowing = this.followsService.getDataFling();
-
-      if (Array.isArray(this.listFollowing) && this.listFollowing.length === 0) {
-        this.checkData1 = true;
-      }
-    });
-
+    public loadingService: LoadingService,
+    public messageService: MessageService,
+    public profileService: ProfileService,
+  ) {
+    this.isSearching = false;
+    this.searchResults = [];
   }
 
+  /* ============following============= */
+  // loadDataFling() {
+  //   this.followsService.loadDataFollowing().subscribe(() => {
+  //     this.listFollowing = this.followsService.getDataFling();
+  //     this.isLoading = false;
+  //     if (Array.isArray(this.listFollowing) && this.listFollowing.length === 0) {
+  //       this.checkData1 = true;
+  //     }
+  //   });
+
+  // }
+
   deleteFling(id: number) {
-    this.followsService.deleteFollowing(id).subscribe((res) => {; 
-      this.loadDataFling();
-      this.loadDataFriend();
+    this.followsService.deleteFollowing(id).subscribe(() => {
+      ;
+      // this.loadDataFling();
+
       new toast({
         title: 'Thông báo!',
         message: 'Hủy thành công',
@@ -83,22 +96,23 @@ export class FollowsComponent implements OnInit {
         duration: 3000,
       })
     });
+    this.loadDataFriend();
   }
 
   /* ============follower============= */
-  loadDataFler() {
-    this.followsService.loadDataFollower().subscribe(() => {
-      this.listFollower = this.followsService.getDataFler();
-      if (Array.isArray(this.listFollower) && this.listFollower.length === 0) {
-        this.checkData2 = true;
-      }
-    });
+  // loadDataFler() {
+  //   this.followsService.loadDataFollower().subscribe(() => {
+  //     this.listFollower = this.followsService.getDataFler();
+  //     if (Array.isArray(this.listFollower) && this.listFollower.length === 0) {
+  //       this.checkData2 = true;
+  //     }
+  //   });
 
-  }
+  // }
 
   deleteFler(id: number) {
-    this.followsService.deleteFollower(id).subscribe((res) => {
-      this.loadDataFler();
+    this.followsService.deleteFollower(id).subscribe(() => {
+      // this.loadDataFler();
       this.loadDataFriend();
       new toast({
         title: 'Thông báo!',
@@ -108,17 +122,97 @@ export class FollowsComponent implements OnInit {
       })
     });
   }
-
+  // addFollow(id: number) {
+  //   this.followsService.addFollowAPI(id).subscribe(() => {
+  //     new toast({
+  //       title: 'Thông báo!',
+  //       message: 'Đã theo dõi',
+  //       type: 'success',
+  //       duration: 3000,
+  //     })
+  //   });
+  //   this.loadDataFriend();
+  // }
+  addFollow(id: number) {
+    this.modalService.sendNotify(' ', 0, id, 'FOLLOW', this.modalService.repCmtId);
+    new toast({
+      title: 'Thông báo!',
+      message: 'Đã theo dõi',
+      type: 'success',
+      duration: 3000,
+    });
+    this.loadDataFriend();
+  }
   /* ============friend============= */
-  loadDataFriend() {
-    this.followsService.loadDataFriends().subscribe(() => {
-      this.listFriend = this.followsService.getDataFriend();
+  async loadDataFriend() {
+    this.listFollowing = await this.followsService.loadDataFollowing();
+    this.isLoading = false;
+    if (Array.isArray(this.listFollowing) && this.listFollowing.length === 0) {
+      this.checkData1 = true;
+    }
+    this.listFollower = await this.followsService.loadDataFollower();
+    if (Array.isArray(this.listFollower) && this.listFollower.length === 0) {
+      this.checkData2 = true;
+    }
 
-      if (Array.isArray(this.listFriend) && this.listFriend.length === 0) {
-        this.checkData3 = true;
+    this.listFriend = await this.followsService.loadDataFriends();
+    if (Array.isArray(this.listFriend) && this.listFriend.length === 0) {
+      this.checkData3 = true;
+    }
+
+  }
+
+  /* ============Search============= */
+
+  //lưu trữ các biến tìm kiếm riêng cho mỗi tab
+  searchPerformed: boolean = false;
+  checkFind: {
+    following: boolean;
+    follower: boolean;
+    friends: boolean;
+  } = {
+    following: false,
+    follower: false,
+    friends: false,
+  };
+  searchQueries: {
+    following: string;
+    follower: string;
+    friends: string;
+  } = {
+      following: '',
+      follower: '',
+      friends: '',
+    };
+
+  performSearch(tab: string) {
+    const searchQuery = this.searchQueries[tab]; //truy cập biến tìm kiếm tương ứng cho tab
+    this.checkFind[tab] = false; // Mặc định đánh dấu là không tìm thấy
+    this.searchPerformed = searchQuery.trim() !== ''; // Kiểm tra nếu người dùng đã nhập và tìm kiếm
+    if (searchQuery) {
+      this.isSearching = true;
+      this.searchResults = [];
+
+      let listToSearch: any[] = [];
+
+      if (tab === 'following') {
+        listToSearch = this.listFollowing; 
+      } else if (tab === 'follower') {
+        listToSearch = this.listFollower;
+      } else if (tab === 'friends') {
+        listToSearch = this.listFriend;
+      }
+
+      listToSearch.forEach((item) => {
+      if (item.fullname.toLowerCase().includes(searchQuery.toLowerCase())) {
+        this.searchResults.push(item);
+        this.checkFind[tab] = true; // Tìm thấy kết quả
       }
     });
-
+    } else {
+      this.isSearching = false;
+      this.checkFind[tab] = true;
+    }
   }
 
   /* ============template============= */
@@ -127,7 +221,10 @@ export class FollowsComponent implements OnInit {
       this.activeContent = content;
     }
   }
-
+  onChange(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    this.openTabFollow(selectElement.value);
+  }
   loadData() {
     this.isLoading = true;
     const body_content = document.getElementById('body-follow')!;

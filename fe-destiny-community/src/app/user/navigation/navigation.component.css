@@ -94,4 +94,150 @@ p.delete-fl {
 .user-preview-actions.nofti {
   margin-top: 0.6rem;
 }
+/* avatar */
+.hexagon-container {
+  width: 45px;
+  height: 48px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  background: white;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.hexagon {
+  position: absolute;
+}
+
+.user-avatar-content {
+  width: 40px;
+  height: 44px;
+  overflow: hidden;
+  position: absolute;
+}
+
+.hexagon-image {
+  width: 30px;
+  height: 33px;
+  position: relative;
+  z-index: 3;
+  background-size: cover;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  left: 4%;
+  top: 2%;
+}
+
+.user-avatar-border:before {
+  width: 42px;
+  height: 46px;
+  z-index: 1;
+  content: "";
+  position: absolute;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  /* border-radius: 15px; */
+  left: 1px;
+  top: 0px;
+  background-image: linear-gradient(to right, #41efff, #615dfa);
+}
+
+.hexagon.user-avatar-progress-border {
+  position: absolute;
+  z-index: 2;
+  margin-left: 9.6%;
+  margin-top: 8.3%;
+  width: 35px;
+  height: 39px;
+  background: white;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
   
+a.user-avatar.small.user-status-avatar.no-border.no-outline {
+  cursor: pointer;
+}
+p.no-intify {
+  color: #3e3f5e;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 1em;
+  font-size: 16px;
+  text-align: center;
+}
+
+/* avatar */
+.big .hexagon-container {
+  width: 120px;
+  height: 132px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  background: white;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  border-radius: 15px;
+  top: 32%;
+}
+
+.big .hexagon {
+  position: absolute;
+}
+
+.big .user-avatar-content {
+  width: 100px;
+  height: 110px;
+  overflow: hidden;
+  position: absolute;
+  left: 15px;
+    top: 19px;
+}
+
+.big .hexagon-image {
+  width: 82px;
+  height: 87px;
+  position: relative;
+  z-index: 3;
+  background-size: cover;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  border-radius: 15px;
+}
+
+.big .user-avatar-border:before {
+  width: 110px;
+  height: 113px;
+  z-index: 1;
+  content: "";
+  position: absolute;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  border-radius: 15px;
+  left: 5px;
+    top: 7.5px;
+  background-image: linear-gradient(to right, #41efff, #615dfa);
+}
+
+.big .hexagon.user-avatar-progress-border {
+  position: absolute;
+  z-index: 2;
+  margin-left: 3.5%;
+  margin-top: 3.3%;
+  width: 94px;
+  height: 100px;
+  background: white;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  border-radius: 15px;
+}
+.big .user-avatar.big .user-avatar-progress,
+.big .user-avatar.big .user-avatar-progress-border {
+  top: 10.5px;
+    left: 9px;
+}
+.big .user-avatar.big.user-avatar-content{
+  top: 20px !important;
+  left: 21px !important;
+}
+
+p.user-short-description-title {
+  position: relative;
+  top: 17px;
+}
+
+nav#navigation-widget::-webkit-scrollbar {
+  width: 0 !important;
+  display: none;
+}

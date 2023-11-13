@@ -7,44 +7,52 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.davisy.auth.AuthenticationRequest;
 import com.davisy.auth.AuthenticationResponse;
 import com.davisy.config.JwtTokenUtil;
-import com.davisy.dto.Admin;
+import com.davisy.constant.Cache;
 import com.davisy.dto.UserProfile;
 import com.davisy.entity.DataFollows;
 import com.davisy.entity.Districts;
 import com.davisy.entity.Gender;
+import com.davisy.entity.Post;
+import com.davisy.entity.PostEntity;
 import com.davisy.entity.ProfileEnitity;
 import com.davisy.entity.Provinces;
-import com.davisy.entity.Roles;
 import com.davisy.entity.User;
 import com.davisy.entity.Wards;
-import com.davisy.model.LoginResponse;
 import com.davisy.service.AuthenticationService;
+import com.davisy.service.CacheService;
+import com.davisy.service.ChatsService;
 import com.davisy.service.DistrictService;
+import com.davisy.service.EmailService;
+import com.davisy.service.FollowService;
 import com.davisy.service.GenderService;
+import com.davisy.service.InterestedService;
+import com.davisy.service.PostImagesService;
+import com.davisy.service.PostService;
 import com.davisy.service.ProvinceService;
+import com.davisy.service.UserService;
 import com.davisy.service.WardService;
-import com.davisy.service.impl.DistrictServiceImpl;
-import com.davisy.service.impl.FollowServiceImpl;
-import com.davisy.service.impl.PostImagesServiceImpl;
-import com.davisy.service.impl.PostServiceImpl;
-import com.davisy.service.impl.ProvinceServiceImpl;
-import com.davisy.service.impl.UserServiceImpl;
-import com.davisy.service.impl.WardServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @RestController
 @CrossOrigin
@@ -52,21 +60,19 @@ public class ProfileContronller {
 	@Autowired
 	JwtTokenUtil jwtTokenUtil;
 	@Autowired
-	UserServiceImpl userServiceImpl;
+	UserService userService;
 	@Autowired
-	FollowServiceImpl followServiceImpl;
+	FollowService followService;
 	@Autowired
-	PostServiceImpl postServiceImpl;
+	PostService postService;
 	@Autowired
-	PostImagesServiceImpl postImagesServiceImpl;
+	InterestedService interestedService;
 	@Autowired
-	ProvinceServiceImpl provinceServiceImpl;
-	@Autowired
-	WardServiceImpl wardServiceImpl;
-	@Autowired
-	DistrictServiceImpl districtServiceImpl;
+	PostImagesService postImagesService;
 	@Autowired
 	PasswordEncoder passwordEncoder;
+	@Autowired
+	ChatsService chatsService;
 	@Autowired
 	private AuthenticationService authenticationService;
 	@Autowired
@@ -77,25 +83,83 @@ public class ProfileContronller {
 	private WardService wardService;
 	@Autowired
 	private GenderService genderService;
+	@Autowired
+	CacheService cacheService;
+	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+
+	@Autowired
+	SimpMessagingTemplate simpMessagingTemplate;
+
+	@Autowired
+	ObjectMapper mapper;
+
+	@Autowired
+	EmailService emailService;
 
 	String provinceCode;
 	String districtCode;
 
-	@PostMapping("/v1/user/profile/data/timeline")
-	public ResponseEntity<ProfileEnitity> loadProfile(HttpServletRequest request, @RequestBody int toProfileUser) {
+	String randCodeAuth = "";
+	@Value("${davisy.client.change-email.confirm}")
+	String confirmEmail;
+
+	public static String random() {
+		String code = "";
+		for (int i = 0; i < 6; i++) {
+			code = code + (int) (Math.floor(Math.random() * 9));
+		}
+		return code;
+	}
+
+	@PostMapping("/v1/user/profile/data/header")
+	public ResponseEntity<DataFollows> loadProfile(HttpServletRequest request, @RequestBody int toProfileUser) {
 		try {
 			String email = jwtTokenUtil.getEmailFromHeader(request);
-			return ResponseEntity.ok().body(loadProfile(email, toProfileUser));
+			User user1 = userService.findByEmail(email);
+			User user = new User();
+			boolean check = false;
+			if (user1.getUser_id() == toProfileUser || toProfileUser == 0) {
+				user = user1;
+			} else {
+				user = userService.findById(toProfileUser);
+				check = true;
+			}
+			List<Object[]> list = userService.loadTimeLine(user.getEmail());
+			DataFollows data = new DataFollows();
+			for (Object[] ob : list) {
+				data.setUser_id(Integer.valueOf(ob[0] + ""));
+				data.setThumb(ob[1] + "");
+				data.setAvatar(ob[2] + "");
+				data.setMark(Integer.valueOf(ob[3] + ""));
+				data.setFullname(ob[4] + "");
+				data.setIntro(ob[5] + "");
+				data.setCountPost(Integer.valueOf(ob[6] + ""));
+				data.setCountFollower(Integer.valueOf(ob[7] + ""));
+				data.setCountImg(Integer.valueOf(ob[8] + ""));
+				data.setUsername(ob[9] + "");
+				if (check) {
+					List<Integer> listData = followService.findAllFollowingUser(user1.getUser_id());
+					if (listData.contains(toProfileUser)) {
+						data.setCheckFollow(true);
+					}
+				} else if (user1.getUser_id() == toProfileUser) {
+					data.setCheckFollow(true);
+				}
+			}
+
+			return ResponseEntity.ok().body(data);
 		} catch (Exception e) {
+			System.out.println("error header: " + e);
 			return ResponseEntity.badRequest().build();
 		}
 	}
-	
+
 	@GetMapping("/v1/user/profile/load/data")
 	public ResponseEntity<UserProfile> adminProfile(HttpServletRequest request) {
 
 		String email = jwtTokenUtil.getEmailFromHeader(request);
-		User user = userServiceImpl.findByEmail(email);
+		User user = userService.findByEmail(email);
 		UserProfile userP = new UserProfile();
 
 		userP.setUsername(user.getUsername());
@@ -108,7 +172,7 @@ public class ProfileContronller {
 		String formatted = format.format(birthday.getTime());
 
 		userP.setBirthday(formatted);
-		
+
 		Calendar daycreate = user.getDay_create();
 		String formattedDC = format.format(daycreate.getTime());
 		userP.setDay_create(formattedDC);
@@ -118,111 +182,193 @@ public class ProfileContronller {
 		userP.setWard_name(user.getWards().getFull_name());
 
 		userP.setGender_name(user.getGender().getGender_name());
-		userP.setAvartar(user.getAvatar());
+		userP.setAvatar(user.getAvatar());
 		userP.setThumb(user.getThumb());
 
 		return ResponseEntity.status(200).body(userP);
 	}
 
 	@PostMapping("/v1/user/profile/update")
-	public ResponseEntity<AuthenticationResponse> updateProfile(HttpServletRequest request, @RequestBody UserProfile userRequestUpdate){
+	public ResponseEntity<User> updateProfile(HttpServletRequest request, @RequestBody UserProfile userRequestUpdate) {
 		try {
+			// lấy email
 			String email = jwtTokenUtil.getEmailFromHeader(request);
-			User userUpdate = userServiceImpl.findByEmail(email);
+			User userUpdate = userService.findByEmail(email);
 			userUpdate.setUsername(userRequestUpdate.getUsername());
+			if (!userUpdate.getUsername().equals(userRequestUpdate.getUsername())) {
+				chatsService.update_name_chats(userUpdate.getUser_id(), userRequestUpdate.getUsername());
+			}
 			userUpdate.setFullname(userRequestUpdate.getFullname());
-			userUpdate.setEmail(userRequestUpdate.getEmail());
 			userUpdate.setIntro(userRequestUpdate.getIntro());
-			
+
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			Date date = sdf.parse(userRequestUpdate.getBirthday());
 			Calendar birthday = Calendar.getInstance();
 			birthday.setTime(date);
 			userUpdate.setBirthday(birthday);
-			
-			int genderID = genderService.findIDGenderByName(userRequestUpdate.getGender_name());
-			Gender gender = genderService.findGenderByID(genderID);
+
+			Gender gender = genderService.findGenderByName(userRequestUpdate.getGender_name());
 			userUpdate.setGender(gender);
-			
-			String provinceCode = provinceService.provinceCode(userRequestUpdate.getProvince_name());			
+
+			String provinceCode = provinceService.provinceCode(userRequestUpdate.getProvince_name());
 			Provinces province = provinceService.findProvinceByID(provinceCode);
 			userUpdate.setProvinces(province);
-			
+
 			String districtCode = districtService.districtCode(userRequestUpdate.getDistrict_name(), provinceCode);
 			Districts district = districtService.findDistrictByID(districtCode);
 			userUpdate.setDistricts(district);
-			
+
 			String wardCode = wardService.wardCode(userRequestUpdate.getWard_name(), districtCode);
 			Wards ward = wardService.findWardByID(wardCode);
 			userUpdate.setWards(ward);
-			
-			userUpdate.setAvatar("https://firebasestorage.googleapis.com/v0/b/destiny-davisy.appspot.com/o/daviuser.png?alt=media&token=2d59b1a7-5ce8-4d5a-96f6-17b32a620b51&_gl=1*1g5m6wy*_ga*MTcxMDU3NTczOS4xNjc2OTc2NjE1*_ga_CW55HF8NVT*MTY5NjUwMzgxNi44LjEuMTY5NjUwNTk0MC4xNy4wLjA.");
-			
-			userUpdate.setThumb("https://firebasestorage.googleapis.com/v0/b/destiny-davisy.appspot.com/o/08.jpg?alt=media&token=1027fbbb-43ee-4046-8e13-5640153356ea&_gl=1*17e3a7c*_ga*MTcxMDU3NTczOS4xNjc2OTc2NjE1*_ga_CW55HF8NVT*MTY5NjUwMzgxNi44LjEuMTY5NjUwNTg5Ny42MC4wLjA.");
-			
-			userServiceImpl.update(userUpdate);
-			if(!email.equalsIgnoreCase(userRequestUpdate.getEmail())) {
-				AuthenticationRequest authenticationRequest = new AuthenticationRequest(userRequestUpdate.getEmail(), userUpdate.getPassword());
-				LoginResponse resLog = authenticationService.loginResponseService(authenticationRequest);
-				return ResponseEntity.status(resLog.getStatusResponse()).body(resLog.getData());
+
+//			userUpdate.setAvatar("https://firebasestorage.googleapis.com/v0/b/destiny-davisy.appspot.com/o/daviuser.png?alt=media&token=2d59b1a7-5ce8-4d5a-96f6-17b32a620b51&_gl=1*1g5m6wy*_ga*MTcxMDU3NTczOS4xNjc2OTc2NjE1*_ga_CW55HF8NVT*MTY5NjUwMzgxNi44LjEuMTY5NjUwNTk0MC4xNy4wLjA.");
+			if (userRequestUpdate.getAvatar() == null) {
+				userUpdate.setAvatar(userUpdate.getAvatar());
+			} else {
+				userUpdate.setAvatar(userRequestUpdate.getAvatar());
 			}
-			return ResponseEntity.ok().body(null);
+
+			if (userRequestUpdate.getThumb() == null) {
+				userUpdate.setThumb(userUpdate.getThumb());
+			} else {
+				userUpdate.setThumb(userRequestUpdate.getThumb());
+			}
+
+//			userUpdate.setThumb("https://firebasestorage.googleapis.com/v0/b/destiny-davisy.appspot.com/o/08.jpg?alt=media&token=1027fbbb-43ee-4046-8e13-5640153356ea&_gl=1*17e3a7c*_ga*MTcxMDU3NTczOS4xNjc2OTc2NjE1*_ga_CW55HF8NVT*MTY5NjUwMzgxNi44LjEuMTY5NjUwNTg5Ny42MC4wLjA.");
+			userUpdate.setThumb(userRequestUpdate.getThumb());
+
+			userService.update(userUpdate);
+
+			return ResponseEntity.ok().body(userUpdate);
 		} catch (Exception e) {
 			System.out.println(e);
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.status(400).build();
 		}
 	}
-		
-	
-//	@PostMapping("")
-//public ResponseEntity<T>
 
-	public ProfileEnitity loadProfile(String email, int profileId) {
-		User user1 = userServiceImpl.findByEmail(email);
+	@PostMapping("/v1/user/profile/data/timeline")
+	public ResponseEntity<ProfileEnitity> loadTimeLine(HttpServletRequest request, @RequestBody int toProfileUser) {
+		try {
+			String email = jwtTokenUtil.getEmailFromHeader(request);
+			User user1 = userService.findByEmail(email);
+			User user = new User();
+			boolean check = false;
+			if (user1.getUser_id() == toProfileUser || toProfileUser == 0) {
+				user = user1;
+			} else {
+				user = userService.findById(toProfileUser);
+				check = true;
+			}
+			int id = user.getUser_id();
+			int provinceId = Integer.valueOf(user.getIdProvince());
+			ProfileEnitity profileEnitity = new ProfileEnitity();
+			profileEnitity.setIntro(user.getIntro());
+			profileEnitity.setImages(postImagesService.findAllImagesUser(id));
+			profileEnitity.setDateJoin(user.getDay_create());
+			profileEnitity
+					.setAddress_fullname(user.getDistricts().getFull_name() + " " + user.getProvinces().getFull_name());
+			profileEnitity.setAddress_fullname_en(
+					user.getDistricts().getFull_name_en() + " " + user.getProvinces().getFull_name_en());
+			profileEnitity.setListPostInterested(postService.getTop5postProfile(id));
+			return ResponseEntity.ok().body(profileEnitity);
+		} catch (Exception e) {
+			System.out.println("error loadPostPro: " + e);
+			return ResponseEntity.badRequest().build();
+		}
+
+	}
+
+	@PostMapping("/v1/user/profile/post/timeline")
+	public ResponseEntity<List<PostEntity>> loadPostTimeLine(HttpServletRequest request,
+			@RequestBody Profile entityProfile) {
+		String email = jwtTokenUtil.getEmailFromHeader(request);
+		User user1 = userService.findByEmail(email);
 		User user = new User();
-//		int id = 0;
 		boolean check = false;
-		if (user1.getUser_id() == profileId || profileId == 0) {
+		if (user1.getUser_id() == entityProfile.getToProfile() || entityProfile.getToProfile() == 0) {
 			user = user1;
 		} else {
-			user = userServiceImpl.findById(profileId);
+			user = userService.findById(entityProfile.getToProfile());
 			check = true;
 		}
 		int id = user.getUser_id();
-		DataFollows dataFollows = new DataFollows();
-		ProfileEnitity profileEnitity = new ProfileEnitity();
-		int countPost = postServiceImpl.countPost(id);
-		int countFollower = followServiceImpl.countFollowers(id);
-		int countImg = postImagesServiceImpl.countPostImages(id);
-		dataFollows.setUser_id(user.getUser_id());
-		dataFollows.setThumb(user.getThumb());
-		dataFollows.setAvatar(user.getAvatar());
-		dataFollows.setMark(user.getMark());
-		dataFollows.setFullname(user.getFullname());
-		dataFollows.setIntro(user.getIntro());
-		dataFollows.setCountPost(countPost);
-		dataFollows.setCountFollower(countFollower);
-		dataFollows.setCountImg(countImg);
-		dataFollows.setUsername(user.getUsername());
-		if (check) {
-			List<Integer> list = followServiceImpl.findAllFollowingUser(user1.getUser_id());
-			if (list.contains(profileId)) {
-				dataFollows.setCheckFollow(true);
+		List<Object[]> postProfile = postService.getPostProfile(id, entityProfile.getPage());
+		List<Object[]> postProfileShare = postService.getPostProfileShare(id, entityProfile.getPage());
+		List<PostEntity> postEntityProfile = new ArrayList<>();
+
+		for (Object[] ob : postProfile) {
+			if (null != ob[2]) {
+				int idPostShare = Integer.valueOf(ob[2].toString());
+				PostEntity profileTemp = new PostEntity();
+				for (Object[] ps : postProfileShare) {
+					if (Integer.valueOf(ps[0].toString()) == idPostShare) {
+						profileTemp = postEntityProfile(ps, null, 1);
+						postEntityProfile.add(postEntityProfile(ob, profileTemp, 0));
+						break;
+					}
+				}
+			} else {
+				postEntityProfile.add(postEntityProfile(ob, null, 0));
 			}
-		} else if (user1.getUser_id() == profileId) {
-			dataFollows.setCheckFollow(true);
 		}
-		profileEnitity.setDataFollows(dataFollows);
-		profileEnitity.setImages(postImagesServiceImpl.findAllImagesUser(id));
-		profileEnitity.setDateJoin(user.getDay_create());
-		profileEnitity
-				.setAddress_fullname(user.getDistricts().getFull_name() + " " + user.getProvinces().getFull_name());
-		profileEnitity.setAddress_fullname_en(
-				user.getDistricts().getFull_name_en() + " " + user.getProvinces().getFull_name_en());
-		profileEnitity.setListPostInterested(postServiceImpl.getTop5postProfile(id));
-		return profileEnitity;
+		return ResponseEntity.ok().body(postEntityProfile);
 	}
-	
+
+	public PostEntity postEntityProfile(Object[] ob, PostEntity entityProfile, int check) {
+		try {
+			PostEntity profile = new PostEntity();
+			profile.setPost_id(Integer.valueOf(ob[0].toString()));
+			profile.setUser_id(Integer.valueOf(ob[1].toString()));
+			profile.setContent(ob[3] + "");
+			Date date = null;
+			if (ob[4] != null && !ob[4].toString().isEmpty()) {
+				date = dateFormat.parse(ob[4].toString());
+			}
+			if (date != null) {
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(date);
+				profile.setDate_post(calendar);
+			}
+
+			profile.setHash_tag(ob[5] + "");
+			profile.setSend_status(Boolean.valueOf(ob[6] + ""));
+			profile.setPost_status(Boolean.valueOf(ob[7] + ""));
+			profile.setProduct(ob[8] + "");
+
+			if (!ob[9].toString().isEmpty()) {
+				profile.setBan(Boolean.valueOf(ob[9] + ""));
+			}
+
+			profile.setCountInterested(Integer.valueOf(ob[10].toString()));
+			profile.setCountCommnet(Integer.valueOf(ob[11].toString()));
+			profile.setCountShare(Integer.valueOf(ob[12].toString()));
+
+			if (ob[2] == null) {
+				profile.setImages(postImagesService.findAllImagesofPost(profile.getPost_id()));
+			}
+
+			List<Object[]> userOb = interestedService.findByIdPost(profile.getPost_id());
+			if (userOb != null && check == 0) {
+				profile.setUser(userOb);
+			}
+
+			profile.setFullname(ob[13] + "");
+			profile.setAvatar(ob[14] + "");
+
+			if (entityProfile != null) {
+				profile.setPostEntityProfile(entityProfile);
+			}
+			return profile;
+		} catch (NumberFormatException e) {
+			System.out.println("Error postEntityProfile: " + e);
+			return null;
+		} catch (Exception e) {
+			System.out.println("Error postEntityProfile: " + e);
+			return null;
+		}
+	}
+
 	@GetMapping("/v1/user/getAllProvinceName")
 	public ResponseEntity<List<String>> getAllProvinceName() {
 		try {
@@ -239,7 +385,7 @@ public class ProfileContronller {
 			return ResponseEntity.status(403).body(null);
 		}
 	}
-	
+
 	@GetMapping("/v1/user/getAllDistrictName/{provinceName}")
 	public ResponseEntity<List<String>> getAllDistrictName(@PathVariable String provinceName) {
 		try {
@@ -288,7 +434,7 @@ public class ProfileContronller {
 			return ResponseEntity.status(403).body(null);
 		}
 	}
-	
+
 	@GetMapping("/v1/user/getAllGender")
 	public ResponseEntity<List<String>> getAllGender() {
 		try {
@@ -306,4 +452,121 @@ public class ProfileContronller {
 		}
 	}
 
+	@PostMapping("/v1/user/profile/change/password")
+	private ResponseEntity<String> changePassword(HttpServletRequest request, @RequestBody PasswordChange change) {
+		String email = jwtTokenUtil.getEmailFromHeader(request);
+		User currentUser = userService.findByEmail(email);
+
+		if (!passwordEncoder.matches(change.oldPassword, currentUser.getPassword())) {
+			return ResponseEntity.status(300).body("Mật khẩu cũ không đúng");
+		}
+
+		if (change.getOldPassword().equalsIgnoreCase(change.getNewPassword())) {
+			return ResponseEntity.status(301).body("Mật khẩu mới trùng với mật khẩu cũ");
+		}
+
+		if (passwordEncoder.matches(change.newPassword, currentUser.getPassword())) {
+			return ResponseEntity.status(302).body("Mật khẩu trùng với mật khẩu cũ hoặc không hợp lệ!");
+		}
+
+		currentUser.setPassword(passwordEncoder.encode(change.newPassword));
+		userService.update(currentUser);
+
+		return ResponseEntity.status(200).body("OK");
+	}
+
+	@PostMapping("/v1/user/profile/change/email")
+	private ResponseEntity<String> changeEmail(HttpServletRequest request, @RequestBody EmailChange change)
+			throws MessagingException {
+		String email = jwtTokenUtil.getEmailFromHeader(request);
+		User currentUser = userService.findByEmail(email);
+
+		if (!passwordEncoder.matches(change.getPassword(), currentUser.getPassword())) {
+			return ResponseEntity.status(300).body(null); // "Mật khẩu xác nhận không đúng"
+		}
+
+		if (currentUser.getEmail().equalsIgnoreCase(change.getNewEmail())) {
+			return ResponseEntity.status(301).body(null); // "Email mới trùng với email cũ"
+		}
+
+		// currentUser.setEmail(change.getNewEmail());
+
+		// userServiceImpl.update(currentUser);
+		this.randCodeAuth = random();
+
+		EmailConfirm eConfirm = new EmailConfirm(currentUser.getEmail(), change.newEmail, change.getPassword());
+
+		// {key: "change:email", value: "newMail", time 5m}
+		cacheService.writeCacheAtTime("changemail:" + this.randCodeAuth, eConfirm, 5, Cache.TimeUnit_MINUTE);
+
+		// Gửi mail
+		/*
+		 * 
+		 * BUTTON click :
+		 * http://localhost:4200/chang-email-confirm?code=this.randCodeAuth => call api
+		 * GET: /v1/user/profile/change/email?code=this.randCodeAuth
+		 * 
+		 */
+		emailService.sendHtmlEmail(confirmEmail + "?code=" + this.randCodeAuth, change.newEmail);
+		return ResponseEntity.status(200).body(this.randCodeAuth); // "OK"
+	}
+
+	// /v1/user/profile/change/email/confirm?code=
+	@PostMapping("/v1/user/profile/change/email/confirm")
+	private ResponseEntity<AuthenticationResponse> confirmChangeEmail(HttpServletRequest request,
+			@RequestParam String code) {
+		System.out.println(code + "::::::::");
+		String dataCache = cacheService.getByKey("changemail:" + code);
+
+		try {
+			EmailConfirm eConfirm = mapper.readValue(dataCache, EmailConfirm.class);
+			User user = userService.findByEmail(eConfirm.getOldEmail());
+			
+			user.setEmail(eConfirm.getNewEmail());
+			userService.update(user);
+
+			AuthenticationResponse authRes = authenticationService.authenticationResponse(
+					new AuthenticationRequest(eConfirm.newEmail, eConfirm.getCurrentPassword()));
+
+			// gửi token mới qua socket
+			simpMessagingTemplate.convertAndSend("/topic/changetoken/" + user.getUser_id(), authRes);
+			cacheService.destroyCache("changemail:" + code);
+			return ResponseEntity.status(200).body(null);
+		} catch (Exception e) {
+			return ResponseEntity.status(300).body(null); // dịch vụ dừng, vui lòng thử lại sau
+		}
+	}
+}
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+class PasswordChange {
+	String oldPassword;
+	String newPassword;
+}
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+class EmailChange {
+	String newEmail;
+	String password;
+}
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+class EmailConfirm {
+	String oldEmail;
+	String newEmail;
+	String currentPassword;
+}
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+class Profile {
+	int toProfile;
+	int page;
 }

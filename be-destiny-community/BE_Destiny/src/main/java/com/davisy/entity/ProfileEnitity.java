@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProfileEnitity {
-	DataFollows dataFollows;
+	String intro;
 	List<String> images;
 	Calendar dateJoin;
 	String address_fullname;

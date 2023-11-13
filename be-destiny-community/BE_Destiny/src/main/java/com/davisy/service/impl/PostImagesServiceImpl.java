@@ -37,4 +37,24 @@ public class PostImagesServiceImpl implements PostImagesService {
 	public List<String> findAllImagesofPost(int id) {
 		return postImagesDAO.findAllImagesofPost(id);
 	}
+
+	@Override
+	public void create(PostImages images) {
+		postImagesDAO.save(images);
+	}
+
+	@Override
+	public void update(PostImages images) {
+		postImagesDAO.saveAndFlush(images);
+	}
+
+	@Override
+	public void delete(PostImages images) {
+		postImagesDAO.delete(images);
+	}
+
+	@Override
+	public PostImages findById(int id) {
+		return postImagesDAO.findById(id).get();
+	}
 }

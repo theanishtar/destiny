@@ -5,6 +5,9 @@ import { Router, NavigationEnd } from '@angular/router';
 import { GetStartedComponent } from '@app/get-started/get-started.component';
 import { LoginService } from '@app/service/login.service';
 import { MessageService } from '../service/message.service';
+import { ProfileService } from '../service/profile.service';
+import { ModalService } from '../service/modal.service';
+import { MessageType } from '../Model/NotifyModel';
 import '../../../assets/toast/main.js';
 declare var toast: any;
 @Component({
@@ -21,17 +24,22 @@ declare var toast: any;
 
 export class NavigationComponent implements OnInit {
   userDisplayName = '';
+  avatar = '';
   activeMenuItem: string = '';
 
+
   ngOnInit() {
-    this.userDisplayName = this.cookieService.get('full_name');  
+    this.userDisplayName = this.cookieService.get('full_name');
+    this.avatar = this.cookieService.get("avatar");
   }
-  
+
   constructor(
     private cookieService: CookieService,
     private loginService: LoginService,
     private router: Router,
-    public messageService: MessageService
+    public messageService: MessageService,
+    public profileService: ProfileService,
+    public modalService: ModalService
   ) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -39,16 +47,43 @@ export class NavigationComponent implements OnInit {
         this.updateActiveMenuItem();
       }
     });
-   }
+  }
 
-  isLogin(){
+  isLogin() {
     return this.loginService.isLogin();
   }
 
-  logout(){
+  logout() {
     return this.loginService.logout();
   }
-
+  checkType(type: any) {
+   
+    if (type == 'COMMENT') {
+      return 'COMMENT';
+    }
+    if (type == 'SHARE') {
+      return 'SHARE';
+    }
+    if (type == 'INTERESTED') {
+      return 'INTERESTED';
+    }
+    if (type == 'FOLLOW') {
+      return 'FOLLOW';
+    }
+    if (type == 'REPCOMMENT') {
+      return 'REPCOMMENT';
+    }
+    return null;
+  }
+  addFollow(id: number) {
+    this.modalService.sendNotify(' ', 0, id, 'FOLLOW', this.modalService.repCmtId);
+    new toast({
+      title: 'Thông báo!',
+      message: 'Đã theo dõi',
+      type: 'success',
+      duration: 3000,
+    });
+  }
   updateActiveMenuItem() {
     const currentUrl = this.router.url;
     // Xác định menu item active dựa trên URL hiện tại
@@ -56,7 +91,7 @@ export class NavigationComponent implements OnInit {
     if (currentUrl.includes('/newsfeed')) {
       this.activeMenuItem = 'newsfeed';
     }
-    // Tương tự cho các menu item khác
+
     if (currentUrl.includes('/follow')) {
       this.activeMenuItem = 'follow';
     }
@@ -74,5 +109,5 @@ export class NavigationComponent implements OnInit {
     }
   }
 
-  
+
 }

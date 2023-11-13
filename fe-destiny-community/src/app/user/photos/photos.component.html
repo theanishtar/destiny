@@ -15,7 +15,7 @@
         <!-- /SECTION PRETITLE -->
 
         <!-- SECTION TITLE -->
-        <h2 class="section-title">Hình ảnh <span class="highlighted">28</span></h2>
+        <h2 class="section-title">Hình ảnh <span class="highlighted">{{profileService.dataProfileTimeline?.images.length}}</span></h2>
         <!-- /SECTION TITLE -->
       </div>
       <!-- /SECTION HEADER INFO -->
@@ -25,10 +25,10 @@
     <!-- GRID -->
     <div class="grid grid-2-2-2-2-2-2 centered">
       <!-- PHOTO PREVIEW -->
-      <div class="photo-preview small popup-picture-trigger">
+      <div class="photo-preview small popup-picture-trigger" *ngFor="let img of profileService.dataProfileTimeline?.images">
         <!-- PHOTO PREVIEW IMAGE -->
         <figure class="photo-preview-image liquid">
-          <img src="../../assets/images/cover/01.jpg" alt="photo-preview-01">
+          <img [src]="img" alt="photo-preview-01">
         </figure>
         <!-- /PHOTO PREVIEW IMAGE -->
 
@@ -42,190 +42,10 @@
       </div>
       <!-- /PHOTO PREVIEW -->
 
-      <!-- PHOTO PREVIEW -->
-      <div class="photo-preview small popup-picture-trigger">
-        <!-- PHOTO PREVIEW IMAGE -->
-        <figure class="photo-preview-image liquid">
-          <img src="../../assets/images/cover/15.jpg" alt="photo-preview-15">
-        </figure>
-        <!-- /PHOTO PREVIEW IMAGE -->
-
-        <!-- PHOTO PREVIEW INFO -->
-        <div class="photo-preview-info">
-          <!-- REACTION COUNT LIST -->
-
-          <!-- /REACTION COUNT LIST -->
-        </div>
-        <!-- /PHOTO PREVIEW INFO -->
-      </div>
-      <!-- /PHOTO PREVIEW -->
-
-      <!-- PHOTO PREVIEW -->
-      <div class="photo-preview small popup-picture-trigger">
-        <!-- PHOTO PREVIEW IMAGE -->
-        <figure class="photo-preview-image liquid">
-          <img src="../../assets/images/cover/10.jpg" alt="photo-preview-10">
-        </figure>
-        <!-- /PHOTO PREVIEW IMAGE -->
-
-        <!-- PHOTO PREVIEW INFO -->
-        <div class="photo-preview-info">
-          <!-- REACTION COUNT LIST -->
-
-          <!-- /REACTION COUNT LIST -->
-        </div>
-        <!-- /PHOTO PREVIEW INFO -->
-      </div>
-      <!-- /PHOTO PREVIEW -->
-
-      <!-- PHOTO PREVIEW -->
-      <div class="photo-preview small popup-picture-trigger">
-        <!-- PHOTO PREVIEW IMAGE -->
-        <figure class="photo-preview-image liquid">
-          <img src="../../assets/images/cover/02.jpg" alt="photo-preview-02">
-        </figure>
-        <!-- /PHOTO PREVIEW IMAGE -->
-
-        <!-- PHOTO PREVIEW INFO -->
-        <div class="photo-preview-info">
-          <!-- REACTION COUNT LIST -->
-
-          <!-- /REACTION COUNT LIST -->
-        </div>
-        <!-- /PHOTO PREVIEW INFO -->
-      </div>
-      <!-- /PHOTO PREVIEW -->
-
-      <!-- PHOTO PREVIEW -->
-      <div class="photo-preview small popup-picture-trigger">
-        <!-- PHOTO PREVIEW IMAGE -->
-        <figure class="photo-preview-image liquid">
-          <img src="../../assets/images/cover/28.jpg" alt="photo-preview-28">
-        </figure>
-        <!-- /PHOTO PREVIEW IMAGE -->
-
-        <!-- PHOTO PREVIEW INFO -->
-        <div class="photo-preview-info">
-          <!-- REACTION COUNT LIST -->
-
-          <!-- /REACTION COUNT LIST -->
-        </div>
-        <!-- /PHOTO PREVIEW INFO -->
-      </div>
-      <!-- /PHOTO PREVIEW -->
-
-      <!-- PHOTO PREVIEW -->
-      <div class="photo-preview small popup-picture-trigger">
-        <!-- PHOTO PREVIEW IMAGE -->
-        <figure class="photo-preview-image liquid">
-          <img src="../../assets/images/cover/04.jpg" alt="photo-preview-04">
-        </figure>
-        <!-- /PHOTO PREVIEW IMAGE -->
-
-        <!-- PHOTO PREVIEW INFO -->
-        <div class="photo-preview-info">
-          <!-- REACTION COUNT LIST -->
-
-          <!-- /REACTION COUNT LIST -->
-        </div>
-        <!-- /PHOTO PREVIEW INFO -->
-      </div>
-      <!-- /PHOTO PREVIEW -->
-
-      <!-- PHOTO PREVIEW -->
-      <div class="photo-preview small popup-picture-trigger">
-        <!-- PHOTO PREVIEW IMAGE -->
-        <figure class="photo-preview-image liquid">
-          <img src="../../assets/images/cover/06.jpg" alt="photo-preview-06">
-        </figure>
-        <!-- /PHOTO PREVIEW IMAGE -->
-
-        <!-- PHOTO PREVIEW INFO -->
-        <div class="photo-preview-info">
-          <!-- REACTION COUNT LIST -->
-
-          <!-- /REACTION COUNT LIST -->
-        </div>
-        <!-- /PHOTO PREVIEW INFO -->
-      </div>
-      <!-- /PHOTO PREVIEW -->
-
-      <!-- PHOTO PREVIEW -->
-      <div class="photo-preview small popup-picture-trigger">
-        <!-- PHOTO PREVIEW IMAGE -->
-        <figure class="photo-preview-image liquid">
-          <img src="../../assets/images/cover/20.jpg" alt="photo-preview-20">
-        </figure>
-        <!-- /PHOTO PREVIEW IMAGE -->
-
-        <!-- PHOTO PREVIEW INFO -->
-        <div class="photo-preview-info">
-          <!-- REACTION COUNT LIST -->
-
-          <!-- /REACTION COUNT LIST -->
-        </div>
-        <!-- /PHOTO PREVIEW INFO -->
-      </div>
-      <!-- /PHOTO PREVIEW -->
-
-      <!-- PHOTO PREVIEW -->
-      <div class="photo-preview small popup-picture-trigger">
-        <!-- PHOTO PREVIEW IMAGE -->
-        <figure class="photo-preview-image liquid">
-          <img src="../../assets/images/cover/38.jpg" alt="photo-preview-38">
-        </figure>
-        <!-- /PHOTO PREVIEW IMAGE -->
-
-        <!-- PHOTO PREVIEW INFO -->
-        <div class="photo-preview-info">
-          <!-- REACTION COUNT LIST -->
-
-          <!-- /REACTION COUNT LIST -->
-        </div>
-        <!-- /PHOTO PREVIEW INFO -->
-      </div>
-      <!-- /PHOTO PREVIEW -->
-
-      <!-- PHOTO PREVIEW -->
-      <div class="photo-preview small popup-picture-trigger">
-        <!-- PHOTO PREVIEW IMAGE -->
-        <figure class="photo-preview-image liquid">
-          <img src="../../assets/images/cover/49.jpg" alt="photo-preview-49">
-        </figure>
-        <!-- /PHOTO PREVIEW IMAGE -->
-
-        <!-- PHOTO PREVIEW INFO -->
-        <div class="photo-preview-info">
-          <!-- REACTION COUNT LIST -->
-
-          <!-- /REACTION COUNT LIST -->
-        </div>
-        <!-- /PHOTO PREVIEW INFO -->
-      </div>
-      <!-- /PHOTO PREVIEW -->
-
-      <!-- PHOTO PREVIEW -->
-      <div class="photo-preview small popup-picture-trigger">
-        <!-- PHOTO PREVIEW IMAGE -->
-        <figure class="photo-preview-image liquid">
-          <img src="../../assets/images/cover/09.jpg" alt="photo-preview-09">
-        </figure>
-        <!-- /PHOTO PREVIEW IMAGE -->
-
-        <!-- PHOTO PREVIEW INFO -->
-        <div class="photo-preview-info">
-          <!-- REACTION COUNT LIST -->
-
-          <!-- /REACTION COUNT LIST -->
-        </div>
-        <!-- /PHOTO PREVIEW INFO -->
-      </div>
-      <!-- /PHOTO PREVIEW -->
+     
     </div>
     <!-- /GRID -->
   </section>
   <!-- /SECTION -->
 </div>
 <!-- /CONTENT GRID -->
-
-<app-modal></app-modal>

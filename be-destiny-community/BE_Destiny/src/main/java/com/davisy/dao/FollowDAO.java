@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.davisy.entity.Follower;
+
 //@Cacheable("follower")//Tạo bộ nhớ đệm
 @Repository
 public interface FollowDAO extends JpaRepository<Follower, String> {
@@ -39,4 +40,17 @@ public interface FollowDAO extends JpaRepository<Follower, String> {
 //	@Cacheable("follower")
 	@Query(value = "select  *from follower f where f.follower_id =:follower_id and f.user_id =:user_id", nativeQuery = true)
 	public Follower checkFollow(int follower_id, int user_id);
+
+	@Query(value = "select *from get_following(:id)", nativeQuery = true)
+	public List<Object[]> findAllFollowing(int id);
+
+	@Query(value = "select *from get_follower(:id)", nativeQuery = true)
+	public List<Object[]> findAllFollowerUser(int id);
+
+	@Query(value = "select *from get_friend_follow(:id)", nativeQuery = true)
+	public List<Object[]> findAllFriend(int id);
+
+	@Query(value = "select * from get_suggested(:id)  ORDER BY Random()", nativeQuery = true)
+	public List<Object[]> loadDataSuggest(int id);
+
 }

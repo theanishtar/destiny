@@ -11,20 +11,16 @@ import { AppComponent } from './app.component';
 import { TokenInterceptor } from './interceptor';
 import { loadingInterceptor } from './loadingInterceptor';
 
-// login GG
-
-
 // user
 import { HomeComponent } from './home/home.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { NewsfeedComponent } from './user/newsfeed/newsfeed.component';
 import { NavigationComponent } from './user/navigation/navigation.component';
-import { ModalComponent } from './user/modal/modal.component';
 import { HeaderProfileComponent } from './user/header-profile/header-profile.component';
 import { ProfileTimelineComponent } from './user/profile-timeline/profile-timeline.component';
 import { PhotosComponent } from './user/photos/photos.component';
 import { FollowsComponent } from './user/follows/follows.component';
-import { ChangePasswordComponent } from './user/change-password/change-password.component';
+import { ChangePasswordComponent } from './user/modal/change-password/change-password.component';
 import { EditProfileComponent } from './user/edit-profile/edit-profile.component';
 import { MessageComponent } from './user/message/message.component';
 import { SettingComponent } from './user/setting/setting.component';
@@ -63,6 +59,40 @@ import { UserReportComponent } from './moderator/user-report/user-report.compone
 import { UserReportModeratorDetailComponent } from './moderator/user-report-detail/user-report-detail.component';
 import { ForbiddenWordComponent } from './moderator/forbidden-word/forbidden-word.component';
 
+import { DatePipe } from '@angular/common';
+import { APP_INITIALIZER } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
+import { MessageService } from './user/service/message.service';
+import { ProfileService } from './user/service/profile.service';
+
+// import { AngularFireModule } from '@angular/fire/compat';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { provideAuth, getAuth } from '@angular/fire/auth';
+import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { provideStorage, getStorage } from '@angular/fire/storage';
+import { environment } from 'src/environments/environment';
+import { CommentComponent } from './user/modal/comment/comment.component';
+import { CreatePostComponent } from './user/modal/create-post/create-post.component';
+import { ImagesComponent } from './user/modal/images-post/images.component';
+import { ModalService } from './user/service/modal.service';
+import { DetailPostComponent } from './user/modal/detail-post/detail-post.component';
+import { EditPostComponent } from './user/modal/edit-post/edit-post.component';
+import { ChangeEmailComponent } from './user/modal/change-email/change-email.component';
+import { ChangeConfirmComponent } from './user/modal/change-email/change-confirm/change-confirm.component';
+
+export function appInitializer(cookieService: CookieService, messageService: MessageService, sender: any,modalService:ModalService, profileService: ProfileService, dataProfileTimeline: any) {
+  return () => {
+    if (cookieService.get("full_name") != '') {
+      messageService.loadDataSender().subscribe(() => {
+        sender = JSON.parse(JSON.stringify(messageService.getSender()));
+        modalService.connectToComment(sender.user_id);
+        messageService.connectToChat(sender.user_id);
+      
+      });
+    }
+  };
+}
+
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -74,7 +104,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     ForgotPasswordComponent,
     NewsfeedComponent,
     NavigationComponent,
-    ModalComponent,
     HeaderProfileComponent,
     ProfileTimelineComponent,
     PhotosComponent,
@@ -110,7 +139,14 @@ export function HttpLoaderFactory(http: HttpClient) {
     ProfileComponent,
     UserReportComponent,
     UserReportModeratorDetailComponent,
-    ForbiddenWordComponent
+    ForbiddenWordComponent,
+    CommentComponent,
+    CreatePostComponent,
+    ImagesComponent,
+    DetailPostComponent,
+    EditPostComponent,
+    ChangeEmailComponent,
+    ChangeConfirmComponent
   ],
   imports: [
     BrowserModule,
@@ -118,6 +154,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    // AngularFireModule.initializeApp(firebaseConfig),
+    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+    provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore()),
+    provideStorage(() => getStorage()),
     TranslateModule.forRoot({
       defaultLanguage: 'vi_VN',
       loader: {
@@ -133,9 +174,18 @@ export function HttpLoaderFactory(http: HttpClient) {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true,
-  },
-  { provide: HTTP_INTERCEPTORS, useClass: loadingInterceptor, multi: true },
+    },
+    { provide: HTTP_INTERCEPTORS, useClass: loadingInterceptor, multi: true },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: appInitializer,
+      deps: [CookieService, MessageService, ProfileService,ModalService],
+      multi: true,
+    },
+    DatePipe
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+
+}

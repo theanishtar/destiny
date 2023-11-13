@@ -1,129 +1,173 @@
 <div class="body-admin">
 
-    <app-sidebar-moderator></app-sidebar-moderator>
-    <div class="content">
-      <!-- Navbar -->
-      <app-navbar-moderator></app-navbar-moderator>
-  
-      <!-- End of Navbar -->
-  
-      <main>
-        <div class="header">
-          <div class="left">
-            <h1>Người Dùng</h1>
-            <ul class="breadcrumbD">
-              /
-              <li><a href="#" class="active">Báo cáo</a></li>
-            </ul>
-          </div>
-        </div>
-  
-        <div class="row justify-content-center container-post-report">
-          
-        </div>
+  <app-sidebar-moderator></app-sidebar-moderator>
+  <div class="content">
+    <!-- Navbar -->
+    <app-navbar-moderator></app-navbar-moderator>
 
-        <div class="row mb-4">
-          <div class="col-lg-12 profile-logo-heart">
-            <img src="../assets/images/logo-euphoria.png" alt="" />
-          </div>
-          <div class="col-lg-12 profile-title mt-3">
-            <div class="logo" style="height: 0 !important">
-              <h2 class="logo-name"><span>DES</span>TINY</h2>
-            </div>
+    <!-- End of Navbar -->
+
+    <main style="min-height: 800px;">
+      <div class="header">
+        <div class="left">
+          <h1>Từ ngữ</h1>
+          <ul class="breadcrumbD">
+            /
+            <li><a href="#" class="active">Danh sách</a></li>
+          </ul>
+        </div>
+        <label class="report" style="z-index: 100; cursor: pointer;">
+          <input type="file" style="display: none;">
+          <i class="bx bx-cloud-upload"></i>
+          <span>Tải lên</span>
+        </label>
+      </div>
+
+      <div class="row mb-4 mt-n7">
+        <div class="col-lg-12 profile-logo-heart">
+          <img src="../assets/images/logo-euphoria.png" alt="" />
+        </div>
+        <div class="col-lg-12 profile-title mt-3">
+          <div class="logo" style="height: 0 !important">
+            <h2 class="logo-name"><span>DES</span>TINY</h2>
           </div>
         </div>
-  
-        <div class="" id="table-post-report">
-          <div class="d-flex justify-content-between mt-2 pl-1 container-post-report text-pink">
-            <h4>Danh sách từ ngữ bị cấm</h4>
-            <!-- <i class="bx bx-card text-pink text-md pr-1" (click)="openTable()" role="button"></i> -->
-          </div>
-          <div class="container-post-report">
-            <div class="card shadow mb-5 mt-0">
-              <div class="card-body">
+      </div>
+
+      <div class="">
+        <div class="text-pink text-center text-uppercase font-weight-bold mb-3">
+          <h2>Danh sách từ ngữ bị cấm sử dụng</h2>
+        </div>
+        <app-loading *ngIf="isLoading"></app-loading>
+        <div class="container-post-report">
+          <div class="card shadow mb-5 mt-0">
+            <div class="card-body">
+              <div class="titile mb-2">
                 <h5 class="ml-1 mt-2 mb-3 font-weight-bold">Danh sách</h5>
-                <div class="table-responsive ml-1">
-                  <table class="table rwd-table" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
-                      <tr>
-                        <th>Người dùng</th>
-                        <th>STT</th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tfoot>
-                      <tr>
-                        <th>Người dùng</th>
-                        <th>STT</th>
-                        <th></th>
-                      </tr>
-                    </tfoot>
-                    <tbody>
-                      <tr>
-                        <td class="text-substring" data-th="Nội dung">1</td>
-                        <td data-th="Người dùng">Má</td>
-                        <td data-th="Xem thêm">
-                          <a href="">Xem chi tiết</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-substring" data-th="Nội dung">2</td>
-                        <td data-th="Người dùng">Má2</td>
-                        <td data-th="Xem thêm">
-                          <a href="">Xem chi tiết</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-substring" data-th="Nội dung">3</td>
-                        <td data-th="Người dùng">Má3</td>
-                        <td data-th="Xem thêm">
-                          <a href="">Xem chi tiết</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-substring" data-th="Nội dung">4</td>
-                        <td data-th="Người dùng">Má4</td>
-                        <td data-th="Xem thêm">
-                          <a href="">Xem chi tiết</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-substring" data-th="Nội dung">5</td>
-                        <td data-th="Người dùng">Má5</td>
-                        <td data-th="Xem thêm">
-                          <a href="">Xem chi tiết</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-substring" data-th="Nội dung">6</td>
-                        <td data-th="Người dùng">Má6</td>
-                        <td data-th="Xem thêm">
-                          <a href="">Xem chi tiết</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-substring" data-th="Nội dung">7</td>
-                        <td data-th="Người dùng">Má7</td>
-                        <td data-th="Xem thêm">
-                          <a href="">Xem chi tiết</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-substring" data-th="Nội dung">8</td>
-                        <td data-th="Người dùng">Má8</td>
-                        <td data-th="Xem thêm">
-                          <a href="">Xem chi tiết</a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+                <button type="submit" class="btn text-white bg-gradient-endless border-radius-50 pt-0 pb-0 pl-3 pr-3"
+                  data-toggle="modal" data-target="#form">Thêm mới <i class="fas fa-plus"></i></button>
+              </div>
+              <div class="table-responsive ml-1">
+                <table class="table rwd-table" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>STT</th>
+                      <th class="text-center">Nội dung</th>
+                      <th>Nhãn</th>
+                      <th>Mức độ nghiêm trọng</th>
+                      <th>Ngày tạo</th>
+                      <th class="text-center"><i class="fas fa-edit"></i></th>
+                      <th class="text-center"><i class="fas fa-x"></i></th>
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <th>STT</th>
+                      <th class="text-center">Nội dung</th>
+                      <th>Nhãn</th>
+                      <th>Mức độ nghiêm trọng</th>
+                      <th>Ngày tạo</th>
+                      <th class="text-center"><i class="fas fa-edit"></i></th>
+                      <th class="text-center"><i class="fas fa-trash"></i></th>
+                    </tr>
+                  </tfoot>
+                  <tbody>
+                    <tr *ngFor="let word of listBadWord; let i = index">
+                      <td class="text-substring" data-th="STT">{{i + 1}}</td>
+                      <td data-th="Từ ngữ" class="text-center">{{word.name}}</td>
+                      <td data-th="Nhãn" class="text-center">{{word.label}}</td>
+                      <td data-th="Mức độ nghiêm trọng" class="text-center">{{word.severityLevel}}</td>
+                      <td data-th="Ngày tạo">{{word.formatDate}}</td>
+                      <td data-th="Chỉnh sửa">
+                        <a class="edit" data-toggle="modal" data-target="#update-word" (click)="getBadword(word)"><i
+                            class="fas fa-edit"></i></a>
+                      </td>
+                      <td data-th="Chỉnh sửa">
+                        <a class="delete text-danger" (click)="deleteBadword(word.name)"><i
+                            class="fas fa-trash-can"></i></a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
         </div>
-      </main>
-    </div>
-  
+      </div>
+    </main>
   </div>
 
+</div>
+
+<div class="modal fade" id="form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content card">
+      <div class="card-body">
+        <div class="modal-header border-bottom-0">
+          <h5 class="modal-title" id="exampleModalLabel" class="text-pink text-uppercase ">Thêm từ ngữ
+            mới</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="newBadwordForm" ngNativeValidate (ngSubmit)="addBadword()">
+          <div class="modal-body">
+            <label for="newWord">Từ ngữ mới</label>
+            <div class="input-group mt-2 mb-3">
+              <input class="form-controlP" type="text" name="newWord" id="newWord" formControlName="newWord" required />
+            </div>
+          </div>
+          <div class="modal-footer border-top-0 d-flex justify-content-center">
+            <div class="text-center col-lg-6 offset-lg-3 col-md-6 offset-md-3 col-sm-6 offset-sm-3 mt-1">
+              <button type="submit" class="btn text-white form-controlP bg-gradient-endless">Xác nhận</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="update-word" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content card">
+      <div class="card-body">
+        <div class="modal-header border-bottom-0">
+          <h5 class="modal-title" id="exampleModalLabel" class="text-pink text-uppercase ">Cập nhật</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="badwordUpdateForm" ngNativeValidate (ngSubmit)="updateBadword()">
+          <div class="modal-body">
+            <label for="name">Từ ngữ</label>
+            <div class="input-group mt-2 mb-3">
+              <input class="form-controlP" type="text" name="name" id="name" formControlName="name" required
+                [ngModel]="badword.name" />
+            </div>
+            <label for="label">Nhãn</label>
+            <div class="input-group mt-2 mb-3">
+              <input class="form-controlP" type="text" name="label" id="label" formControlName="label" required
+                [ngModel]="badword.label" readonly />
+            </div>
+            <label for="level">Mức độ nghiêm trọng</label>
+            <div class="input-group mt-2 mb-3">
+              <input class="form-controlP" type="text" name="level" id="level" formControlName="level" required
+                [ngModel]="badword.severityLevel" readonly />
+            </div>
+            <label for="date_create">Ngày tạo</label>
+            <div class="input-group mt-2 mb-3">
+              <input class="form-controlP" type="text" name="date_create" id="date_create" formControlName="date_create"
+                required [ngModel]="badword.formatDate" readonly />
+            </div>
+          </div>
+          <div class="modal-footer border-top-0 d-flex justify-content-center">
+            <button type="submit" class="btn btn-success">Cập nhật</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -2248,13 +2248,13 @@ textarea.form-control {
   color: #000;
 }
 .dbox p a {
-  color: #2553b8;
+  color: #615DFA;
 }
 .dbox .icon {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: #2553b8;
+  background: #615DFA;
   margin: 0 auto;
   margin-bottom: 20px;
 }
@@ -2446,4 +2446,7 @@ section.ftco-section {
 textarea#message {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   border-radius: 15px;
+}
+input#name {
+  font-weight: normal;
 }

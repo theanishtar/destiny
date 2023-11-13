@@ -18,7 +18,9 @@ public interface WardService {
 	// 11-10-2023 -tìm mã xã/phường theo tên
 	public String wardCode(String wardName, String districtCode);
 
+	public Wards ward(String wardName, String districtCode);
+
 	public List<Wards> findByIdDistrict(String id);
 
-	public List<Wards> findAll();
+	public List<Wards> findAllL();
 }

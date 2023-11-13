@@ -46,6 +46,7 @@
       <!-- /SECTION HEADER -->
 
       <!-- GRID COLUMN -->
+      
       <div class="grid-column">
         <!-- WIDGET BOX -->
         <div class="widget-box">
@@ -88,7 +89,7 @@
         <!-- /WIDGET BOX -->
 
         <!-- WIDGET BOX -->
-        <div class="widget-box">
+        <div class="widget-box" style="margin-top: 1rem;">
           <!-- WIDGET BOX TITLE -->
           <p class="widget-box-title">{{ "setting_ngonngu" | translate }}</p>
           <!-- /WIDGET BOX TITLE -->
@@ -140,12 +141,80 @@
           <!-- WIDGET BOX CONTENT -->
         </div>
         <!-- /WIDGET BOX -->
+
+        <!-- WIDGET BOX -->
+        <div class="widget-box" style="margin-top: 1rem;">
+          <!-- WIDGET BOX TITLE -->
+          <p class="widget-box-title">
+            Mật khẩu và bảo mật</p>
+          <!-- /WIDGET BOX TITLE -->
+
+          <!-- WIDGET BOX CONTENT -->
+          <div class="widget-box-content">
+            <!-- FORM -->
+            <form class="form">
+              <!-- FORM ROW -->
+              <div class="form-row split" (click)="profileService.openModalChangePass()">
+                <!-- FORM ITEM -->
+                <div class="form-item centered">
+                  <label class="form-title" for="profile-privacy-visibility">Đổi mật khẩu</label>
+                </div>
+                <!-- /FORM ITEM -->
+
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM SELECT -->
+                  <div class="form-select">
+                    
+                    <!-- FORM SELECT ICON -->
+                    <!-- <svg >
+                      <use xlink:href="#svg-small-arrow"></use>
+                    </svg> -->
+                    <svg class="form-select-icon icon-small-arrow" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" class="x1lliihq x1k90msu x2h7rmj x1qfuztq xcza8v6 xlup9mm x1kky2od"><path fill-rule="evenodd" clip-rule="evenodd" d="M7.247 4.341a1 1 0 0 1 1.412-.094l8 7a1 1 0 0 1 0 1.506l-8 7a1 1 0 0 1-1.318-1.506L14.482 12l-7.14-6.247a1 1 0 0 1-.094-1.412z"></path></svg>
+                    <!-- /FORM SELECT ICON -->
+                  </div>
+                  <!-- /FORM SELECT -->
+                </div>
+                <!-- /FORM ITEM -->
+              </div>
+              <!-- /FORM ROW -->
+              <!-- FORM ROW -->
+              <div class="form-row split" (click)="profileService.openModalChangeMail()">
+                <!-- FORM ITEM -->
+                <div class="form-item centered">
+                  <label class="form-title" for="profile-privacy-visibility">Đổi email</label>
+                </div>
+                <!-- /FORM ITEM -->
+
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM SELECT -->
+                  <div class="form-select">
+                    
+                    <!-- FORM SELECT ICON -->
+                    <!-- <svg >
+                      <use xlink:href="#svg-small-arrow"></use>
+                    </svg> -->
+                    <svg class="form-select-icon icon-small-arrow" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" class="x1lliihq x1k90msu x2h7rmj x1qfuztq xcza8v6 xlup9mm x1kky2od"><path fill-rule="evenodd" clip-rule="evenodd" d="M7.247 4.341a1 1 0 0 1 1.412-.094l8 7a1 1 0 0 1 0 1.506l-8 7a1 1 0 0 1-1.318-1.506L14.482 12l-7.14-6.247a1 1 0 0 1-.094-1.412z"></path></svg>
+                    <!-- /FORM SELECT ICON -->
+                  </div>
+                  <!-- /FORM SELECT -->
+                </div>
+                <!-- /FORM ITEM -->
+              </div>
+              <!-- /FORM ROW -->
+            </form>
+            <!-- /FORM -->
+          </div>
+          <!-- WIDGET BOX CONTENT -->
+        </div>
+        <!-- /WIDGET BOX -->
       </div>
       <!-- /GRID COLUMN -->
     </div>
     <!-- /GRID -->
   </div>
   <!-- /CONTENT GRID -->
-
-  <app-modal></app-modal>
+<app-change-password></app-change-password>
+<app-change-email></app-change-email>
 </body>

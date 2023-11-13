@@ -53,34 +53,19 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	ObjectMapper objectMapper = new ObjectMapper();
 
 	@Override
-	protected  void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
-		System.out.println("req" + request.getUserPrincipal());
-		request.getAttributeNames().asIterator().forEachRemaining(attributeName -> {
-			Object attributeValue = request.getAttribute(attributeName);
-			System.out.println(attributeName + ": " + attributeValue.toString());
-		});
-		System.out.println("=======================");
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication != null) {
-			Object principal = authentication.getPrincipal();
-			if (principal instanceof DefaultOidcUser) {
-				DefaultOidcUser oidcUser = (DefaultOidcUser) principal;
-				System.out.println(oidcUser);
-				Map<String, Object> attributes = oidcUser.getAttributes();
-				
-				//System.out.println(Arrays.toString(attributes));
-//				return Collections.singletonMap("user", attributes);
-			}
-		}
+		// return nếu đã xác thực
+//		if (SecurityContextHolder.getContext().getAuthentication().getAuthorities() != null) {
+//			System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+//			return;
+//		}
 		// Kiểm tra xem yêu cầu có chứa thông tin OAuth2 không
 		OAuth2AuthenticationToken oauth2Token = OAuth2AuthenticationToken.class.cast(request.getUserPrincipal());
 		if (oauth2Token != null) {
 			// Xử lý thông tin từ OAuth2
 			// Ví dụ: Lấy thông tin người dùng từ OAuth2
-			String userName = oauth2Token.getName();
-
-			System.out.println(oauth2Token);
+			// System.out.println(oauth2Token);
 			// Thực hiện xử lý khác tùy theo thông tin từ OAuth2
 //	        response.sendRedirect("/user-home");
 			request.setAttribute("oauth2Token", oauth2Token);
@@ -123,7 +108,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
 					// Đưa thông tin xác thực vào SecurityContextHolder
 					SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
 					chain.doFilter(request, response);
 					return;
 				}
@@ -135,8 +119,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 			}
 		}
 
-		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(null, null,
-				null);
+		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(null, null, null);
 
 		authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 

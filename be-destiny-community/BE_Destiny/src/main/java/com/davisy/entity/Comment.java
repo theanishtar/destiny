@@ -43,7 +43,7 @@ public class Comment {
 	@JoinColumn(name = "post_id")
 	Post post;
 	
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	Calendar date_comment = GregorianCalendar.getInstance();
 	
 	String content;

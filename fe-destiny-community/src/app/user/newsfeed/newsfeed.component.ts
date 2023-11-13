@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from '@angular/core';
 
 import { liquid } from '../../../assets/js/utils/liquidify.js';
 // import { tns } from '../../../assets/js/vendor/ti';
@@ -22,13 +22,11 @@ import { FollowsService } from '../service/follows.service';
 import { LoadingService } from '../service/loading.service';
 import { PostService } from '../service/post.service';
 import { MessageService } from '@app/user/service/message.service';
-
-import { connectToChat } from '../../../assets/js/chat/chat.js'
-import * as Stomp from 'stompjs';
-import * as SockJS from 'sockjs-client';
-import { Observable, of } from 'rxjs';
+import { ProfileService } from '../service/profile.service';
+import { DatePipe } from '@angular/common';
 import '../../../assets/toast/main.js';
 import { forEach } from 'angular';
+import { async } from 'rxjs';
 declare var toast: any;
 @Component({
   selector: 'app-newsfeed',
@@ -43,29 +41,33 @@ declare var toast: any;
 })
 export class NewsfeedComponent implements OnInit {
   userDisplayName = '';
-  postId = '123'; // Mã số của bài viết (có thể là mã số duy nhất của mỗi bài viết)
+  currentUserId = this.cookieService.get("id");
+  postId: string; // Mã số của bài viết (có thể là mã số duy nhất của mỗi bài viết)
   listSuggested: any[] = [];
   listTop5User: any[] = [];
   listTop5Post: any[] = [];
-  isLoading = false;
+  listPosts: any;
+  listPost: any;
+  listUser: any[];
+  listCount: any;
+  isLoading = true;
   isFollowing: boolean = false;
   checkData1: boolean = false;
   checkData2: boolean = false;
   checkData3: boolean = false;
-  // sender: any ;
-  // socket?: WebSocket;
-  // stompClient?: Stomp.Client;
+  checkData4: boolean = false;
+  datePost: string | null
+  mapIntersted = new Map<number, boolean>();
+  checkRequest: boolean = true;
+  check: boolean = true
+  checkCountPosts: boolean = true;
 
   ngOnInit() {
     this.userDisplayName = this.cookieService.get('full_name');
-    this.loadDataSuggest();
-    this.loadDataTop5User();
-    this.loadDataTop5Post();
-    this.loadData();
-    this.checkSrcoll();
+    this.loadPosts();
+    // this.modalService.loadComment(1,2);
+    this.checkScroll();
     this.translate();
-    // this.loadDataSender();
-
     liquid.liquid();
     avatarHexagons.avatarHexagons();
     tooltips.tooltips();
@@ -86,58 +88,44 @@ export class NewsfeedComponent implements OnInit {
     public followsService: FollowsService,
     public loadingService: LoadingService,
     public postService: PostService,
-    public messageService: MessageService
+    public messageService: MessageService,
+    private datePipe: DatePipe, //Định dạng ngày,
+    public profileService: ProfileService,
+    private el: ElementRef,
+    private renderer: Renderer2
   ) {
-
   }
 
   /* ============Suggested============= */
-  check: boolean = true
-  
-  loadDataSuggest() {
-    this.followsService.loadDataSuggest().subscribe(() => {
+  async loadDataSuggest() {
+    if (!Array.isArray(this.listSuggested) || this.listSuggested.length === 0) {
+      // Gọi API chỉ khi dữ liệu chưa tồn tại.
+      await new Promise<void>((resolve) => {
+        this.followsService.loadDataSuggest().subscribe(() => {
+          this.listSuggested = this.followsService.getDataSuggested();
+          this.check = false;
+          resolve();
+        });
+      });
+    } else {
+      // Sử dụng dữ liệu đã lưu trữ.
       this.listSuggested = this.followsService.getDataSuggested();
-      // console.log('this.listSuggested 1: ' + JSON.stringify(this.listSuggested[1].avatar));
-      if(this.listSuggested){
-        this.check = false
-      }
+      this.check = false;
       if (Array.isArray(this.listSuggested) && this.listSuggested.length === 0) {
         this.checkData1 = true;
         this.check = false;
       }
-    });
+    }
   }
-  // loadDataSuggest() {
-  //   if (this.listSuggested) {
-  //     this.check = false;
-  //     this.followsService.loadDataSuggest().subscribe(() => {
-  //       this.listSuggested = this.followsService.getDataSuggested();
-  //       // console.log('this.listSuggested 1: ' + JSON.stringify(this.listSuggested[1].avatar));
-  //       if (Array.isArray(this.listSuggested) && this.listSuggested.length === 0) {
-  //         this.checkData1 = true;
-  //         // this.check = false;
-  //       }
-  //     });
-  //   } else {
-  //     this.listSuggested = this.followsService.getDataSuggested();
-  //     // this.check = false
-  //     if (Array.isArray(this.listSuggested) && this.listSuggested.length === 0) {
-  //       this.checkData1 = true;
-  //       this.check = false;
-  //     }
-  //   }
-  // }
 
   addFollow(id: number) {
-    this.followsService.addFollow(id).subscribe((res) => {
-      this.loadDataSuggest();
-      new toast({
-        title: 'Thông báo!',
-        message: 'Đã theo dõi',
-        type: 'success',
-        duration: 3000,
-      })
-      // location.reload();
+    this.modalService.sendNotify(' ', 0, id, 'FOLLOW', 0);
+    this.loadDataSuggest();
+    new toast({
+      title: 'Thông báo!',
+      message: 'Đã theo dõi',
+      type: 'success',
+      duration: 3000,
     });
   }
   /* ============Top 5============= */
@@ -157,34 +145,147 @@ export class NewsfeedComponent implements OnInit {
     "https://odindesignthemes.com/vikinger-theme/wp-content/uploads/2020/09/Bronze-Cup.png",
   ];
 
-  loadDataTop5User() {
-    this.postService.loadTop5User().subscribe(() => {
-      this.listTop5User = this.postService.getDataTop5User();
-      if (Array.isArray(this.listTop5User) && this.listTop5User.length === 0) {
-        this.checkData2 = true;
-      }
-    });
+  /* ============Post============= */
+  currentPage: number = 1;
+  async loadPosts() {
+    let body_news = document.getElementById('body-news')!;
+    body_news.style.display = 'none';
+    try {
+      this.listTop5User = await this.postService.loadTop5User();
+      this.listTop5Post = await this.postService.loadTop5Post();
+      await this.loadDataSuggest();
+      this.postService.loadPostNewsFeed(this.currentPage).subscribe((data: any) => {
+        this.listPosts = data; // Lưu dữ liệu ban đầu vào mảng
+        setTimeout(() => {
+          this.isLoading = false;
+          body_news.style.display = 'grid';
+        }, 1000);
+      });
+    } catch (error) {
+      console.error('Error:', error);
+    }
   }
 
-  loadDataTop5Post() {
-    this.postService.loadTop5Post().subscribe(() => {
-      this.listTop5Post = this.postService.getDataTop5Post();
-      if (Array.isArray(this.listTop5Post) && this.listTop5Post.length === 0) {
-        this.checkData3 = true;
+  /* ============Interested============= */
+
+  checkInterested(post_id: number, interested: any[]): boolean {
+    this.mapIntersted.set(post_id, false);
+    for (let user of interested) {
+      // if (user[0] == this.currentUserId && user[2] === post_id) {
+      if (user.user_id == this.currentUserId) {
+        this.mapIntersted.set(post_id, true);
+        return true;
       }
-    });
+    }
+    return false;
+  }
+
+  // Interested and uninterested in the post
+  // interestedPost(post_id, toUser) {
+  //   let check = this.mapIntersted.get(post_id);
+  //   console.log("check: " + check);
+  //   console.log("this.checkRequest: " + this.checkRequest);
+  //   let element = this.el.nativeElement.querySelector('#interest-' + post_id);
+  //   if (check && this.checkRequest) {
+  //     this.interactPostsService.deleleInterestedApi(post_id).subscribe(
+  //       () => {
+  //         console.log("Đã hủy quan tâm");
+  //         this.renderer.removeClass(element, 'active');
+  //       },
+  //       (error) => {
+  //         console.log("Error:", error);
+  //       }
+  //     );
+  //     this.mapIntersted.set(post_id, false);
+  //     this.checkRequest = false;
+
+  //     // Set count interestedPost 
+  //     let interested = document.getElementById("interested-" + post_id);
+  //     if (interested) {
+  //       let count: string | undefined;
+  //       count = '' + interested.textContent?.trim();
+  //       let num = parseInt(count) - 1;
+  //       interested!.innerText = num + '';
+  //     }
+  //   } else {
+  //     this.renderer.addClass(element, 'active');
+  //     this.interactPostsService.interestedPost(post_id, toUser);
+  //     // this.mapIntersted.set(post_id, true);
+  //     // this.checkRequest = true;
+
+  //     // Set count interestedPost 
+  //     let interested = document.getElementById("interested-" + post_id);
+  //     if (interested) {
+  //       let count: string | undefined;
+  //       count = '' + interested.textContent?.trim();
+  //       let num = parseInt(count) + 1;
+  //       interested!.innerText = num + '';
+  //     }
+
+  //     this.mapIntersted.set(post_id, true);
+  //     this.checkRequest = true;
+  //   }
+  // }
+
+  async interestedPost(post_id, toUser) {
+
+    let check = this.mapIntersted.get(post_id);
+    console.log("check: " + check);
+    console.log("this.checkRequest: " + this.checkRequest);
+    console.log("post_id: " + post_id);
+    let element = this.el.nativeElement.querySelector('#interest-' + post_id);
+
+    if (check && this.checkRequest) {
+      try {
+        await this.interactPostsService.deleleInterestedApi(post_id);
+    
+        console.log("Đã hủy quan tâm");
+        this.renderer.removeClass(element, 'active');
+        this.mapIntersted.set(post_id, false);
+        this.checkRequest = false;
+        console.log("check1: " + check);
+        
+        // Set count interestedPost 
+        let interested = document.getElementById("interested-" + post_id);
+        if (interested) {
+          let count: string | undefined;
+          count = '' + interested.textContent?.trim();
+          let num = parseInt(count) - 1;
+          interested!.innerText = num + '';
+        }
+      } catch (error) {
+        console.log("Error:", error);
+      }
+    } else {
+      this.renderer.addClass(element, 'active');
+      this.interactPostsService.interestedPost(post_id, toUser);
+
+      // Set count interestedPost 
+      let interested = document.getElementById("interested-" + post_id);
+      if (interested) {
+        let count: string | undefined;
+        count = '' + interested.textContent?.trim();
+        let num = parseInt(count) + 1;
+        interested!.innerText = num + '';
+      }
+
+      this.mapIntersted.set(post_id, true);
+      this.checkRequest = true;
+      console.log("check2: " + check);
+    }
   }
 
   /* ============template============= */
 
   loadData() {
-    this.isLoading = true;
     const body_news = document.getElementById('body-news')!;
     body_news.style.display = 'none';
-    setTimeout(() => {
-      this.isLoading = false;
+    // setTimeout(() => {
+    console.log("this.isLoading: " + this.isLoading)
+    if (!this.isLoading) {
       body_news.style.display = 'grid';
-    }, 6000);
+    }
+    // }, 1);
   }
 
   translate() {
@@ -217,7 +318,6 @@ export class NewsfeedComponent implements OnInit {
   @ViewChild('elementToScroll', { static: false }) elementToScroll: ElementRef;
 
   scrollToTop() {
-    console.log(this.elementToScroll); // In ra để kiểm tra ElementRef
     if (this.elementToScroll && this.elementToScroll.nativeElement) {
       this.elementToScroll.nativeElement.scrollIntoView({
         behavior: 'smooth',
@@ -225,30 +325,56 @@ export class NewsfeedComponent implements OnInit {
       });
     }
   }
-  checkSrcoll() {
+
+checkLoadingdata: boolean = true;
+  async checkScroll() {
     const scrollableDiv = document.getElementById('scrollableDiv')!;
     const scrollButton = document.getElementById('scrollButton')!;
+    const loadThreshold = 200; // Ngưỡng khoảng cách từ cuối trang để gọi API
 
-    // Thêm sự kiện lắng nghe lướt cho thẻ div
-    scrollableDiv.addEventListener('scroll', () => {
-      // Kiểm tra vị trí cuộn
+    scrollableDiv.addEventListener('scroll', async () => {
       if (scrollableDiv.scrollTop > 100) {
-        // Hiển thị nút scroll khi cuộn đến vị trí cụ thể (ở đây là 100)
         scrollButton.style.display = 'block';
       } else {
-        // Ẩn nút scroll nếu không đủ cuộn
         scrollButton.style.display = 'none';
+      }
+      let epsilon = '0';
+      if (scrollableDiv.scrollTop.toString().indexOf('.') > 0) {
+        epsilon = '0' + scrollableDiv.scrollTop.toString().substring(scrollableDiv.scrollTop.toString().indexOf('.'));
+      }
+      if (
+        scrollableDiv.scrollHeight - scrollableDiv.clientHeight - (scrollableDiv.scrollTop - parseFloat(epsilon)) <= 1 &&
+        this.checkCountPosts
+      ) {
+        this.checkLoadingdata = true;
+        try {
+          this.currentPage++;
+          const data: any = await this.postService.loadPostNewsFeed(this.currentPage).toPromise();
+          this.listPosts = [...this.listPosts, ...data];
+          this.checkLoadingdata = false;
+          if (data.length < 5) {
+            this.checkCountPosts = false;
+            this.checkLoadingdata = true;
+          }
+          // console.log("data.length: " + data.length);
+        } catch (error) {
+          // console.error("Error loading data:", error);
+        }
+
+        // console.log("hết nè: " + this.currentPage);
+        
       }
     });
   }
 
-  toggleLike() {
-    this.interactPostsService.toggleLike(this.postId);
-  }
 
-  isLiked(postId: string) {
-    return this.interactPostsService.isLiked(postId);
-  }
+  // toggleLike() {
+  //   this.postService.toggleLike(this.postId);
+  // }
+
+  // isLiked(postId: string) {
+  //   return this.postService.isLiked(postId);
+  // }
 
   isLogin() {
     return this.loginService.isLogin();
@@ -261,14 +387,5 @@ export class NewsfeedComponent implements OnInit {
   // Modal
   openModalCreatePost() {
     this.modalService.openModalCreatePost();
-  }
-  closeModalCreatePost() {
-    this.modalService.closeModalCreatePost();
-  }
-  openModalComment() {
-    this.modalService.openModalComment();
-  }
-  closeModalComment() {
-    this.modalService.closeModalComment();
   }
 }

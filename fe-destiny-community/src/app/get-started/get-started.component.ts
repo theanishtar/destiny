@@ -25,6 +25,7 @@ import { LoginService } from '../service/login.service';
 import { RegisterService } from '@app/service/register.service';
 import { FollowsService } from '@app/user/service/follows.service';
 import { MessageService } from '@app/user/service/message.service';
+
 import { environment } from 'src/environments/environment';
 @Component({
 	selector: 'app-get-started',
@@ -90,7 +91,8 @@ export class GetStartedComponent implements OnInit {
 					window.location.href = 'http://localhost:4200/moderator/forbidden-word';
 					this.loginForm.reset();
 				} else {
-					this.router.navigate(['newsfeed']);
+					// this.router.navigate(['newsfeed']);
+					window.location.href = 'http://localhost:4200/newsfeed';
 					new toast({
 						title: 'Thành công!',
 						message: 'Đăng nhập thành công!',
@@ -130,11 +132,7 @@ export class GetStartedComponent implements OnInit {
 		setTimeout(() => {
 			this.submitted = true;
 			this.loginService.loginUser(this.loginForm.value).subscribe((response) => {
-				function delay(ms: number) {
-					return new Promise(function (resolve) {
-						setTimeout(resolve, ms);
-					});
-				}
+
 				if (response == '') {
 					new toast({
 						title: 'Thất bại!',
@@ -150,30 +148,25 @@ export class GetStartedComponent implements OnInit {
 						this.setCookie('sessionID', response.user.sesionId, 2);
 					}
 					if (response.roles[0].authority == 'ROLE_OWNER' || response.roles[0].authority == 'ROLE_ADMIN') {
-						this.cookieService.set('full_name', response.name);
-						this.cookieService.set('role', response.roles[0].authority);
 						window.location.href = 'http://localhost:4200/admin';
 						this.loginForm.reset();
 					} else if (response.roles[0].authority == 'ROLE_MODERATOR') {
-						this.cookieService.set('full_name', response.name);
-						this.cookieService.set('role', response.roles[0].authority);
 						window.location.href = 'http://localhost:4200/moderator/forbidden-word';
 						this.loginForm.reset();
 					} else {
-						this.cookieService.set('full_name', response.name);
-						this.cookieService.set('role', response.roles[0].authority);
-
 						this.loginForm.reset();
-						this.router.navigate(['newsfeed']);
+						// this.router.navigate(['newsfeed']);
+						window.location.href = 'http://localhost:4200/newsfeed';
 						new toast({
 							title: 'Thành công!',
 							message: 'Đăng nhập thành công',
 							type: 'success',
 							duration: 1500,
 						});
-						delay(100).then((res) => {
-							location.reload();
-						});
+
+						// delay(100).then((res) => {
+						// 	location.reload();
+						// });
 					}
 				}
 			});

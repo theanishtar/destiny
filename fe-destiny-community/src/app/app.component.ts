@@ -18,11 +18,11 @@ export class AppComponent {
     public messageService: MessageService,
     private cookieService: CookieService,
   ) {
-    if (this.cookieService.get("full_name") != '') {
-      setTimeout(() => {
-        this.loadDataSender();
-      }, 1000);
-    }
+    // if (this.cookieService.get("full_name") != '') {
+    //   setTimeout(() => {
+    //     // this.loadDataSender();
+    //   }, 1000);
+    // }
   }
 
   public selectLg(event: any) {

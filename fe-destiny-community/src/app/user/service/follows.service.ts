@@ -34,13 +34,24 @@ export class FollowsService {
   ) { }
 
   /* ============following============= */
-  loadDataFollowing() {
-    return this.http.get<any>(this.loadDataFling).pipe(
-      tap((response) => {
-        this.listFollowing = JSON.parse(JSON.stringify(response));
-        this.setDataFling(this.listFollowing);
-      }),
-    );
+  // loadDataFollowing() {
+  //   return this.http.get<any>(this.loadDataFling).pipe(
+  //     tap((response) => {
+  //       this.listFollowing = JSON.parse(JSON.stringify(response));
+  //       this.setDataFling(this.listFollowing);
+  //     }),
+  //   );
+  // }
+
+  async loadDataFollowing(): Promise<any[]> {
+    try {
+      const response = await this.http.get<any>(this.loadDataFling).toPromise();
+      this.listFollowing = JSON.parse(JSON.stringify(response));
+      this.setDataFling(this.listFollowing);
+      return this.listFollowing;
+    } catch (error) {
+      throw error;
+    }
   }
 
   deleteFollowing(data: any) {
@@ -53,13 +64,24 @@ export class FollowsService {
   }
 
   /* ============follower============= */
-  loadDataFollower() {
-    return this.http.get<any>(this.loadDataFler).pipe(
-      tap((response) => {
-        this.listFollower = JSON.parse(JSON.stringify(response));
-        this.setDataFler(this.listFollower);
-      }),
-    );
+  // loadDataFollower() {
+  //   return this.http.get<any>(this.loadDataFler).pipe(
+  //     tap((response) => {
+  //       this.listFollower = JSON.parse(JSON.stringify(response));
+  //       this.setDataFler(this.listFollower);
+  //     }),
+  //   );
+  // }
+
+  async loadDataFollower(): Promise<any[]> {
+    try {
+      const response = await this.http.get<any>(this.loadDataFler).toPromise();
+      this.listFollower = JSON.parse(JSON.stringify(response));
+      this.setDataFler(this.listFollower);
+      return this.listFollower;
+    } catch (error) {
+      throw error;
+    }
   }
 
   deleteFollower(data: any) {
@@ -70,15 +92,25 @@ export class FollowsService {
       }),
     );
   }
-
+ 
   /* ============friend============= */
-  loadDataFriends() {
-    return this.http.get<any>(this.loadDataFriend).pipe(
-      tap((response) => {
-        this.listFriend = JSON.parse(JSON.stringify(response));
-        this.setDataFriend(this.listFriend);
-      }),
-    );
+  // loadDataFriends() {
+  //   return this.http.get<any>(this.loadDataFriend).pipe(
+  //     tap((response) => {
+  //       this.listFriend = JSON.parse(JSON.stringify(response));
+  //       this.setDataFriend(this.listFriend);
+  //     }),
+  //   );
+  // }
+  async loadDataFriends(): Promise<any[]> {
+    try {
+      const response = await this.http.get<any>(this.loadDataFriend).toPromise();
+      this.listFriend = JSON.parse(JSON.stringify(response));
+      this.setDataFriend(this.listFriend);
+      return this.listFriend;
+    } catch (error) {
+      throw error;
+    }
   }
 
   /* ============Suggested============= */
@@ -86,12 +118,23 @@ export class FollowsService {
     return this.http.get<any>(this.loadDataSuggested).pipe(
       tap((response) => {
         this.listSuggested = JSON.parse(JSON.stringify(response));
-        this.setDataFriend(this.listSuggested);
+        this.setDataSuggested(this.listSuggested);
       }),
     );
   }
+  // async loadDataSuggest() {
+  //   try {
+  //     const response = await this.http.get<any>(this.loadDataSuggested).toPromise();
+  //     this.listSuggested = JSON.parse(JSON.stringify(response));
+  //     this.setDataSuggested(this.listSuggested);
+  //   } catch (error) {
+  //     // Xử lý lỗi nếu có
+  //     console.error('Error:', error);
+  //   }
+  // }
+  
 
-  addFollow(data: any) {
+  addFollowAPI(data: any) {
     return this.http.post<any[]>(this.addFollowUrl, data).pipe(
       tap((response) => {
         console.log("Follow thành công");
