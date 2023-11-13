@@ -26,11 +26,12 @@ export class NavigationComponent implements OnInit {
   userDisplayName = '';
   avatar = '';
   activeMenuItem: string = '';
-
+  chatUserId: any;
 
   ngOnInit() {
     this.userDisplayName = this.cookieService.get('full_name');
     this.avatar = this.cookieService.get("avatar");
+    this.chatUserId = parseInt((localStorage.getItem("chatUserId") + '')?.trim());
   }
 
   constructor(

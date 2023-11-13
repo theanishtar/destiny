@@ -7,7 +7,7 @@
   <a
     class="user-avatar small user-status-avatar no-border no-outline"
     href="profile"
-    (click)="this.profileService.loadDataProfileTimeline(0)"
+    (click)="this.profileService.loadDataProfileTimeline(chatUserId)"
   >
     <div class="hexagon-container">
       <div class="hexagon user-avatar-content">
@@ -183,7 +183,7 @@
 
   <!-- USER SHORT DESCRIPTION -->
   <a class="user-short-description big" href="profile"
-  (click)="this.profileService.loadDataProfileTimeline(0)">
+  (click)="this.profileService.loadDataProfileTimeline(chatUserId)">
     <!-- USER SHORT DESCRIPTION AVATAR -->
     <a class="user-short-description-avatar user-avatar big">
       <div class="hexagon-container">
@@ -371,7 +371,7 @@
       <a
     class="user-avatar small user-status-avatar no-border no-outline"
     href="profile"
-    (click)="this.profileService.loadDataProfileTimeline(0)"
+    (click)="this.profileService.loadDataProfileTimeline(chatUserId)"
   >
     <div class="hexagon-container">
       <div class="hexagon user-avatar-content">
@@ -394,7 +394,7 @@
       <!-- NAVIGATION WIDGET INFO TITLE -->
       <p class="navigation-widget-info-title">
         <a href="profile"
-        (click)="this.profileService.loadDataProfileTimeline(0)">{{ userDisplayName }}</a>
+        (click)="this.profileService.loadDataProfileTimeline(chatUserId)">{{ userDisplayName }}</a>
       </p>
       <!-- /NAVIGATION WIDGET INFO TITLE -->
     </div>
@@ -509,7 +509,7 @@
 
   <!-- NAVIGATION WIDGET SECTION TITLE -->
   <a href="profile"
-  (click)="this.profileService.loadDataProfileTimeline(0)">
+  (click)="this.profileService.loadDataProfileTimeline(chatUserId)">
 
   <p class="navigation-widget-section-title">{{ userDisplayName }}</p>
 </a>
@@ -519,7 +519,7 @@
   <a
     class="navigation-widget-section-link"
     href="profile"
-    (click)="this.profileService.loadDataProfileTimeline(0)"
+    (click)="this.profileService.loadDataProfileTimeline(chatUserId)"
     >{{ "Thông tin" | translate }}</a
   >
   <!-- /NAVIGATION WIDGET SECTION LINK -->
@@ -1356,7 +1356,7 @@
             <a
               class="user-avatar small user-status-avatar no-border no-outline"
               (click)="handleLinkClick($event)" routerLink="/profile"
-              (click)="this.profileService.loadDataProfileTimeline(0)"
+              (click)="this.profileService.loadDataProfileTimeline(chatUserId)"
             >
               <div class="hexagon-container">
                 <div class="hexagon user-avatar-content">
@@ -1397,7 +1397,7 @@
         <a
           class="dropdown-navigation-link"
           (click)="handleLinkClick($event)" routerLink="/profile"
-          (click)="this.profileService.loadDataProfileTimeline(0)"
+          (click)="this.profileService.loadDataProfileTimeline(chatUserId)"
           >Trang cá nhân</a
         >
         <!-- /DROPDOWN NAVIGATION LINK -->

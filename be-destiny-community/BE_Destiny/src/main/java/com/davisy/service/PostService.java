@@ -58,9 +58,9 @@ public interface PostService {
 
 	public List<Object[]> getTop5postProfile(int id);
 
-	public List<Object[]> getPostProfile(int user_id, int page);
+	public List<Object[]> getPostProfile(int user_id, int user_guest_id, int page);
 
-	public List<Object[]> getPostProfileShare(int user_id, int page);
+	public List<Object[]> getPostProfileShare(int user_id, int user_guest_id, int page);
 
 	public void create(Post post);
 

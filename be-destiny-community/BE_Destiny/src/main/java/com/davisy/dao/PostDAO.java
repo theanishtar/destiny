@@ -110,10 +110,10 @@ public interface PostDAO extends JpaRepository<Post, Integer> {
 			+ "FROM friend_posts fp;", nativeQuery = true)
 	public Object[] getCountPostHistory(int id);
 
-	@Query(value = "select *from get_profile_posts(:user_id,:page)", nativeQuery = true)
-	public List<Object[]> getPostProfile(int user_id, int page);
+	@Query(value = "select *from get_profile_posts(:user_id,:user_guest_id,:page)", nativeQuery = true)
+	public List<Object[]> getPostProfile(int user_id,int user_guest_id, int page);
 
-	@Query(value = "select *from get_profile_posts_shares(:user_id,:page)", nativeQuery = true)
-	public List<Object[]> getPostProfileShare(int user_id, int page);
+	@Query(value = "select *from get_profile_posts_shares(:user_id,:user_guest_id,:page)", nativeQuery = true)
+	public List<Object[]> getPostProfileShare(int user_id,int user_guest_id, int page);
 
 }

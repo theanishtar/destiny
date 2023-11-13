@@ -113,6 +113,7 @@ export class CreatePostComponent {
       });
       
     }
+    console.warn("data: " + JSON.stringify(data));
     if (this.createPostForm.valid) {
       this.postService.uploadPost(data).subscribe((res) => {
         new toast({

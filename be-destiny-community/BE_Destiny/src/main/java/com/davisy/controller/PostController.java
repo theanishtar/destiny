@@ -304,31 +304,26 @@ public class PostController {
 				post.setHash_Tag(hashTag(uploadPostEntity.getHash_tag()));
 			else
 				post.setHash_Tag("");
-//			String provinceCode = provinceService.provinceCode(uploadPostEntity.getProvince_name());
-//			System.err.println("uploadPostEntity.getProvince_name(): " + uploadPostEntity.getProvince_name());
-//			System.err.println("provin1: " + provinceCode);
+			Provinces provinces = provinceService.provinces(uploadPostEntity.getProvince_name());
 			Districts district = new Districts();
 			Wards ward = new Wards();
-			Provinces province = new Provinces();
-//			try {
-//				 province = provinceService.provinces(uploadPostEntity.getProvince_name());
-//				System.err.println("provin: " + province);
-//			} catch (Exception e) {
-//				System.err.println("province error: " + e);
-//			}
-//			
-//			String districtCode = districtService.districtCode(uploadPostEntity.getDistrict_name(), province.getCode());
-//			 district = districtService.findDistrictByID(districtCode);
-//
-//			String wardCode = wardService.wardCode(uploadPostEntity.getWard_name(), districtCode);
-//			 ward = wardService.findWardByID(wardCode);
-			post.setProvinces(province);
-			post.setDistricts(district);
-			post.setWards(ward);
+			if (provinces != null) {
+				String districtCode = districtService.districtCode(uploadPostEntity.getDistrict_name(),
+						provinces.getCode());
+				district = districtService.findDistrictByID(districtCode);
+
+				String wardCode = wardService.wardCode(uploadPostEntity.getWard_name(), districtCode);
+				ward = wardService.findWardByID(wardCode);
+				post.setProvinces(provinces);
+				post.setDistricts(district);
+				post.setWards(ward);
+			}
+			
 			post.setSend_status(uploadPostEntity.isSend_status());
 			post.setPost_status(uploadPostEntity.isPost_status());
 			post.setProduct(uploadPostEntity.getProduct());
 			postService.update(post);
+			System.out.println("success update");
 			List<PostImages> listPostImg = postImagesService.getListPostImagesByPostID(idPost);
 			if (listImages.size() > listPostImg.size()) {
 				int i = 0;
@@ -427,13 +422,14 @@ public class PostController {
 
 			profile.setFullname(((Object[]) ob[0])[13] + "");
 			profile.setAvatar(((Object[]) ob[0])[14] + "");
-			profile.setProvince_fullname(((Object[]) ob[0])[15] + "");;
+			profile.setProvince_fullname(((Object[]) ob[0])[15] + "");
+			;
 			profile.setDistrict_fullname(((Object[]) ob[0])[16] + "");
 			profile.setWard_fullname(((Object[]) ob[0])[17] + "");
 			profile.setProvince_fullname_en(((Object[]) ob[0])[18] + "");
 			profile.setDistrict_fullname_en(((Object[]) ob[0])[19] + "");
 			profile.setWard_fullname_en(((Object[]) ob[0])[20] + "");
-			
+
 			if (entityProfile != null) {
 				profile.setPostEntityProfile(entityProfile);
 			}
@@ -499,7 +495,6 @@ public class PostController {
 			if (entityProfile != null) {
 				profile.setPostEntityProfile(entityProfile);
 			}
-			
 
 			return profile;
 		} catch (NumberFormatException e) {
@@ -526,7 +521,7 @@ public class PostController {
 		long days = hours / 24;
 
 		if (hours > 0) {
-			timeCaculate = hours  + " giờ trước";
+			timeCaculate = hours + " giờ trước";
 		} else if (minutes > 0) {
 			timeCaculate = minutes + " phút trước";
 		} else {

@@ -323,18 +323,10 @@ public class ProfileContronller {
 	public ResponseEntity<List<PostEntity>> loadPostTimeLine(HttpServletRequest request,
 			@RequestBody Profile entityProfile) {
 		String email = jwtTokenUtil.getEmailFromHeader(request);
-		User user1 = userService.findByEmail(email);
-		User user = new User();
-		boolean check = false;
-		if (user1.getUser_id() == entityProfile.getToProfile() || entityProfile.getToProfile() == 0) {
-			user = user1;
-		} else {
-			user = userService.findById(entityProfile.getToProfile());
-			check = true;
-		}
-		int id = user.getUser_id();
-		List<Object[]> postProfile = postService.getPostProfile(id, entityProfile.getPage());
-		List<Object[]> postProfileShare = postService.getPostProfileShare(id, entityProfile.getPage());
+		User user = userService.findByEmail(email);
+		int user_id = user.getUser_id();
+		List<Object[]> postProfile = postService.getPostProfile(entityProfile.getToProfile(),user_id, entityProfile.getPage());
+		List<Object[]> postProfileShare = postService.getPostProfileShare(entityProfile.getToProfile(),user_id, entityProfile.getPage());
 		List<PostEntity> postEntityProfile = new ArrayList<>();
 
 		for (Object[] ob : postProfile) {
