@@ -53,8 +53,6 @@
             <!-- USER STATUS AVATAR -->
             <a
             class="user-avatar small user-status-avatar no-border no-outline"
-            href="profile"
-            (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)"
           >
             <div class="hexagon-container">
               <div class="hexagon user-avatar-content">
@@ -76,9 +74,9 @@
   
             <!-- USER STATUS TITLE -->
             <p class="user-status-title">
-              <a class="bold" href="profile-timeline.html">{{ notif.value.fullname }}</a>
+              <a class="bold" href="profile" (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)">{{ notif.value.fullname }}</a>
               đã bình luận vào
-              <a class="highlighted">bài đăng</a> của bạn
+              <a class="highlighted" href="detail-post?id={{notif.value.postId}}">bài đăng</a> của bạn
             </p>
             <!-- /USER STATUS TITLE -->
   
@@ -107,8 +105,6 @@
       <!-- USER STATUS AVATAR -->
       <a
       class="user-avatar small user-status-avatar no-border no-outline"
-      href="profile"
-      (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)"
     >
       <div class="hexagon-container">
         <div class="hexagon user-avatar-content">
@@ -130,8 +126,9 @@
   
       <!-- USER STATUS TITLE -->
       <p class="user-status-title">
-        <a class="bold" href="profile-timeline.html">{{ notif.value.fullname }}</a>
-        đã trả lời bình luận vào của bạn
+        <a class="bold" href="profile" (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)">{{ notif.value.fullname }}</a>
+        đã trả lời bình luận của bạn ở
+        <a class="highlighted"  href="detail-post?id={{notif.value.postId}}"> bài đăng</a> 
       </p>
       <!-- /USER STATUS TITLE -->
   
@@ -160,8 +157,6 @@
             <!-- USER STATUS AVATAR -->
             <a
             class="user-avatar small user-status-avatar no-border no-outline"
-            href="profile"
-            (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)"
           >
             <div class="hexagon-container">
               <div class="hexagon user-avatar-content">
@@ -183,9 +178,9 @@
   
             <!-- USER STATUS TITLE -->
             <p class="user-status-title">
-              <a class="bold" href="profile-timeline.html">{{ notif.value.fullname }}</a>
-              quan tâm
-              <a class="highlighted">bài đăng</a> của bạn
+              <a class="bold" href="profile" (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)">{{ notif.value.fullname }}</a>
+              đã quan tâm
+              <a class="highlighted" href="detail-post?id={{notif.value.postId}}">bài đăng</a> của bạn
             </p>
             <!-- /USER STATUS TITLE -->
   
@@ -216,8 +211,6 @@
             <!-- USER STATUS AVATAR -->
             <a
             class="user-avatar small user-status-avatar no-border no-outline"
-            href="profile"
-            (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)"
           >
             <div class="hexagon-container">
               <div class="hexagon user-avatar-content">
@@ -239,8 +232,9 @@
   
             <!-- USER STATUS TITLE -->
             <p class="user-status-title">
-              <a class="bold" href="profile-timeline.html">{{ notif.value.fullname }}</a>
-              chia sẻ bài đăng của bạn
+              <a class="bold" href="profile" (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)">{{ notif.value.fullname }}</a>
+              đã chia sẻ
+              <a class="highlighted" href="detail-post?id={{notif.value.postId}}">bài đăng</a> của bạn
             </p>
             <!-- /USER STATUS TITLE -->
   
@@ -293,11 +287,11 @@
   
                   <!-- USER STATUS TITLE -->
                   <p class="user-status-title" *ngIf="notif.value.following_status === false">
-                    <a class="bold" href="profile">{{ notif.value.fullname }}</a>
+                    <a class="bold" href="profile" (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)">{{ notif.value.fullname }}</a>
                     đã theo dõi bạn
                   </p>
                   <p class="user-status-title" *ngIf="notif.value.following_status === true">
-                    <a class="bold" href="profile">{{ notif.value.fullname }}</a>
+                    <a class="bold" href="profile" (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)">{{ notif.value.fullname }}</a>
                     và bạn đã là bạn bè
                   </p>
                   <!-- /USER STATUS TITLE -->

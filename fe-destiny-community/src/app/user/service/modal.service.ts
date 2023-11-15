@@ -25,9 +25,11 @@ export class ModalService {
   private loadDataComment = environment.baseUrl + 'v1/user/load/comment';
   private loadDataReplyUrl = environment.baseUrl + 'v1/user/load/comment/reply';
   private searchUrl = environment.baseUrl + 'v1/user/find/user';
+  private searchPostUrl = environment.baseUrl + 'v1/user/frind/post';
 
   public listComment: any;
-  public images: string[]
+  public images: string[];
+  public imagesTemp: string[] = [];
   public listCmt: string[]
   public listReplyComment: any;
   public listReplyCmt: string[];
@@ -53,14 +55,6 @@ export class ModalService {
   checkHideSeeMore = new Map<string, Boolean>();
   currentPage: number = 1;
 
-  // listSuggested: any[] = [];
-  // listTop5User: any[] = [];
-  // listTop5Post: any[] = [];
-  // check: boolean = true;
-  // checkData1: boolean = false;
-  // checkData2: boolean = false;
-  // checkData3: boolean = false;
-  // checkData4: boolean = false;
   dataUpdatedPost = new EventEmitter<void>();
 
   constructor(
@@ -73,8 +67,38 @@ export class ModalService {
   ) {
   }
 
+  copyLink(id_post: any): void {
+    // Get the link text
+    const linkToCopy = environment.baseUrlFe + 'detail-post?id=' + id_post;
+
+    // Create a temporary text area
+    const textArea = document.createElement('textarea');
+    textArea.value = linkToCopy;
+
+    // Append the text area to the DOM
+    document.body.appendChild(textArea);
+
+    // Select the text and copy to clipboard
+    textArea.select();
+    document.execCommand('copy');
+
+    // Remove the temporary text area
+    document.body.removeChild(textArea);
+
+    new toast({
+      title: 'Thông báo!',
+      message: 'Đã sao chép',
+      type: 'success',
+      duration: 3000,
+    });
+  }
 
   /* ============Comment============= */
+
+  imgShare(images: any) {
+    this.imagesTemp = images;
+  }
+
   isLoadingCmt: boolean = true;
   openModalComment(data: any): Observable<any> {
     return this.http.post(this.loadDataComment, data).pipe(
@@ -95,11 +119,16 @@ export class ModalService {
     // console.log("id: " + idPost)
     this.openModalComment(idPost).subscribe(() => {
       this.listComment = this.getDataCmt();
-      this.images = this.listComment.list_post_images;
+      if (this.listComment.list_post_images.length > 0) {
+        this.images = this.listComment.list_post_images;
+      } else {
+        this.images = this.imagesTemp;
+      }
       this.listCmt = this.listComment.list_comment;
       this.isLoadingCmt = false;
     })
   }
+
 
   /* ============Add comment============= */
   removeNotify() {
@@ -355,7 +384,18 @@ export class ModalService {
     }
   }
 
+  async searchPostApi(keyword: any, type: any): Promise<any> {
+    const params = new HttpParams().set('keyword', keyword.toString()).set('type', type);
 
+    try {
+      const response = await this.http.post(this.searchPostUrl, params).toPromise();
+      // this.setSearchData(response);
+      return response;
+    } catch (error) {
+      console.error('Error in searchPostApi:', error);
+      throw error; // Rethrow the error for the calling code to handle
+    }
+  }
 
   /* ============Template============= */
   private isOpenCreatePost = new BehaviorSubject<boolean>(false);

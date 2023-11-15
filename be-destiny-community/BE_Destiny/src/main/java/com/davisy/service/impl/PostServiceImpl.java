@@ -128,12 +128,12 @@ public class PostServiceImpl implements PostService {
 	@Override
 //	@Cacheable("postFindAll")
 	public List<Object[]> findAllPost(int id, int current_page) {
-		return postDao.findAllPost(id, current_page);
+		return postDao.findAllPost(id, (current_page - 1) * 5);
 	}
 
 	@Override
 	public List<Object[]> findAllPostShare(int user_id, int page) {
-		return postDao.findAllPostShare(user_id, page);
+		return postDao.findAllPostShare(user_id, (page - 1) * 5);
 	}
 
 	@Override
@@ -159,17 +159,25 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public List<Object[]> getPostProfile(int user_id, int user_guest_id, int page) {
-		return postDao.getPostProfile(user_id,user_guest_id, page);
+		return postDao.getPostProfile(user_id,user_guest_id, (page - 1) * 5);
 	}
 
 	@Override
 	public List<Object[]> getPostProfileShare(int user_id, int user_guest_id, int page) {
-		return postDao.getPostProfileShare(user_id,user_guest_id, page);
+		return postDao.getPostProfileShare(user_id,user_guest_id, (page - 1) * 5);
 	}
 	@Override
 	public Object[] findByIdPost(int id, int current_page, int post_id) {
-		return postDao.findByIdPost(id, current_page, post_id);
+		return postDao.findByIdPost(id,  (current_page - 1) * 5, post_id);
 	}
 
-	
+	@Override
+	public Object[] get_posts_id(int post_id) {
+		return postDao.get_posts_id(post_id);
+	}
+
+	@Override
+	public Object[] get_posts_share_id(int post_id) {
+		return postDao.get_posts_share_id(post_id);
+	}
 }

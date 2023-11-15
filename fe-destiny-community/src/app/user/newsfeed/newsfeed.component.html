@@ -924,7 +924,8 @@
             <!-- POST OPTION -->
             <div
               class="post-option"
-              (click)="modalService.loadComment(p.post_id, p.user_id)"
+              (click)="modalService.loadComment(p.post_id, p.user_id);
+              modalService.imgShare(p.postEntityProfile?.images);"
             >
               <!-- POST OPTION ICON -->
               <!-- <svg class="post-option-icon icon-comment">
@@ -996,7 +997,7 @@
               <p class="post-option-text">Chia sẻ</p>
               <div class="dropdown-content">
                 <a (click)="interactPostsService.sharePost(p.post_id, p.user_id)"><i class="fa-solid fa-share"></i> Công khai</a>
-                <a><i class="fa-solid fa-envelope"></i> Qua email</a>
+                <a (click)="modalService.copyLink(p.post_id)"><i class="fa-solid fa-link"></i> Gửi liên kết</a>
               </div>
               <!-- /POST OPTION TEXT -->
             </div>
@@ -1040,7 +1041,7 @@
         >
           <!-- QUEST PREVIEW LIST -->
 
-          <div class="quest-preview-list">
+          <a class="quest-preview-list" href="detail-post?id={{item[0]}}">
             <!-- QUEST PREVIEW -->
             <div class="quest-preview">
               <!-- QUEST PREVIEW INFO -->
@@ -1068,7 +1069,7 @@
               <!-- /QUEST PREVIEW INFO -->
             </div>
             <!-- /QUEST PREVIEW -->
-          </div>
+          </a>
         </div>
         <!-- /QUEST PREVIEW LIST -->
       </div>

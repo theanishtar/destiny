@@ -77,14 +77,14 @@ public interface PostDAO extends JpaRepository<Post, Integer> {
 	public List<Object[]> getTop5postProfile(int id);
 
 	// Lấy tất cả bài post có quan hệ bạn bè hoặc follow
-	@Query(value = "SELECT * FROM get_friend_posts(:id,:current_page)", nativeQuery = true)
+	@Query(value = "SELECT * FROM get_friend_posts(:id) LIMIT 5 OFFSET :current_page", nativeQuery = true)
 	public List<Object[]> findAllPost(int id, int current_page);
 
-	@Query(value = "select *from get_friend_posts_share(:id,:current_page)", nativeQuery = true)
+	@Query(value = "select *from get_friend_posts_share(:id) LIMIT 5 OFFSET :current_page", nativeQuery = true)
 	public List<Object[]> findAllPostShare(int id, int current_page);
 
-	@Query(value = "SELECT * FROM get_friend_posts(:id,:current_page) where post_id =:post_id", nativeQuery = true)
-	public Object[] findByIdPost(int id, int current_page, int post_id);
+	@Query(value = "SELECT * FROM get_friend_posts(:id) where post_id =:post_id LIMIT 5 OFFSET :current_page", nativeQuery = true)
+	public Object[] findByIdPost(int id,int current_page , int post_id);
 //	// lấy số lượng comment,interested, share của bài post
 //	@Query(value = "WITH friend_posts AS (\n" + "    SELECT post_id  FROM get_friend_posts(:id,:provinceId)\n" + ")\n"
 //			+ "SELECT\n" + "    fp.*,\n"
@@ -110,12 +110,16 @@ public interface PostDAO extends JpaRepository<Post, Integer> {
 			+ "FROM friend_posts fp;", nativeQuery = true)
 	public Object[] getCountPostHistory(int id);
 
-	@Query(value = "select *from get_profile_posts(:user_id,:user_guest_id,:page)", nativeQuery = true)
+	@Query(value = "select *from get_profile_posts(:user_id,:user_guest_id)  LIMIT 5 OFFSET :page", nativeQuery = true)
 	public List<Object[]> getPostProfile(int user_id,int user_guest_id, int page);
 
-	@Query(value = "select *from get_profile_posts_shares(:user_id,:user_guest_id,:page)", nativeQuery = true)
+	@Query(value = "select *from get_profile_posts_shares(:user_id,:user_guest_id) LIMIT 5 OFFSET :page", nativeQuery = true)
 	public List<Object[]> getPostProfileShare(int user_id,int user_guest_id, int page);
 	
+	@Query(value = "select *from get_posts_id(:post_id)",nativeQuery = true)
+	public Object[] get_posts_id(int post_id);
 	
+	@Query(value = "select *from get_posts_share_id(:post_id)",nativeQuery = true)
+	public Object[] get_posts_share_id(int post_id);
 
 }

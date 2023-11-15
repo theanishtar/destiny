@@ -12,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -163,6 +165,26 @@ public class PostController {
 			System.out.println("error: " + e);
 			return ResponseEntity.badRequest().build();
 		}
+	}
+
+	@GetMapping("/v1/user/detail/post/{id}")
+	public ResponseEntity<PostEntity> detailPost(@PathVariable int id) {
+		Object[] post = postService.get_posts_id(id);
+		PostEntity entity = new PostEntity();
+		if(post.length>0) {
+			System.out.println("id2: " + ((Object[]) post[0])[2]);
+			if (null != ((Object[]) post[0])[2]) {
+				int idPostShare = Integer.valueOf(((Object[]) post[0])[2].toString());
+				Object[] postShare = postService.get_posts_share_id(idPostShare);
+//				System.out.println("id1: " + ((Object[]) postShare[0])[1]);
+				entity = postEntity(post, postEntity(postShare, null, 1), 0);
+			} else {
+				entity = postEntity(post, null, 0);
+			}
+			return ResponseEntity.ok().body(entity);
+		}
+		return ResponseEntity.ok().body(null);
+		
 	}
 
 	@PostMapping("/v1/user/upload/post")
@@ -318,39 +340,39 @@ public class PostController {
 				post.setDistricts(district);
 				post.setWards(ward);
 			}
-			
+
 			post.setSend_status(uploadPostEntity.isSend_status());
 			post.setPost_status(uploadPostEntity.isPost_status());
 			post.setProduct(uploadPostEntity.getProduct());
 			postService.update(post);
 			System.out.println("success update");
-			List<PostImages> listPostImg = postImagesService.getListPostImagesByPostID(idPost);
-			if (listImages.size() > listPostImg.size()) {
-				int i = 0;
-				for (PostImages pi : listPostImg) {
-					pi.setLink_image(listImages.get(i));
-					postImagesService.update(pi);
-					i++;
-				}
-				for (int k = i; k < listImages.size(); k++) {
-					PostImages postImages = new PostImages();
-					postImages.setPost(post);
-					postImages.setLink_image(listImages.get(k));
-					postImagesService.create(postImages);
-				}
-			} else {
-				int i = 0;
-				for (PostImages pi : listPostImg) {
-					if (!listImages.isEmpty())
-						pi.setLink_image(listImages.get(i));
-					else
-						pi.setLink_image("");
-					postImagesService.update(pi);
-					i++;
-				}
-			}
-			List<Object[]> postProfile = postService.getPostProfile(id,id, 1);
-			List<Object[]> postShare = postService.getPostProfileShare(id,id, 1);
+//			List<PostImages> listPostImg = postImagesService.getListPostImagesByPostID(idPost);
+//			if (listImages.size() > listPostImg.size()) {
+//				int i = 0;
+//				for (PostImages pi : listPostImg) {
+//					pi.setLink_image(listImages.get(i));
+//					postImagesService.update(pi);
+//					i++;
+//				}
+//				for (int k = i; k < listImages.size(); k++) {
+//					PostImages postImages = new PostImages();
+//					postImages.setPost(post);
+//					postImages.setLink_image(listImages.get(k));
+//					postImagesService.create(postImages);
+//				}
+//			} else {
+//				int i = 0;
+//				for (PostImages pi : listPostImg) {
+//					if (!listImages.isEmpty())
+//						pi.setLink_image(listImages.get(i));
+//					else
+//						pi.setLink_image("");
+//					postImagesService.update(pi);
+//					i++;
+//				}
+//			}
+			List<Object[]> postProfile = postService.getPostProfile(id, id, 1);
+			List<Object[]> postShare = postService.getPostProfileShare(id, id, 1);
 			return ResponseEntity.ok().body(postEntity(postProfile, postShare));
 		} catch (Exception e) {
 			System.out.println("Lỗi nè: " + e);

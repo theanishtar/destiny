@@ -306,7 +306,7 @@
                     </h3>
                   </div>
                   <div class="p-7">
-                    <div
+                    <!-- <div
                       id="FileUpload"
                       class="relative mb-5.5 block w-full cursor-pointer appearance-none rounded border-2 border-dashed border-primary bg-gray py-4 px-4 dark:bg-meta-4 sm:py-7.5"
                     >
@@ -320,7 +320,6 @@
                         class="absolute inset-0 z-50 m-0 h-full w-full cursor-pointer p-0 opacity-0 outline-none"
                       />
                       <div class="slideshow-container-product">
-                        <!-- Full-width images with number and caption text -->
                         <div
                           class="mySlides fade-produc"
                           id="images-to-upload"
@@ -335,13 +334,7 @@
                           #uploadPreview
                           id="uploadPreview"
                         />
-                          <!-- <img
-                            class="img-product"
-                            *ngIf="this.file.length !== undefined"
-                            [src]="imgSrc"
-                          /> -->
-                          <!-- <span class="delete-img" (click)="deleteImg($event, i)"><i class="fa-solid fa-xmark"></i></span> -->
-                          <div class="btn-slide-img">
+                        <div class="btn-slide-img">
                             <a class="prev-img" (click)="plusSlides(-1)"
                               >&#10094;</a
                             >
@@ -351,8 +344,40 @@
                           </div>
                         </div>
                       </div>
+                    </div> -->
+                    <div
+                    id="FileUpload"
+                    class="relative mb-5.5 block w-full cursor-pointer appearance-none rounded border-2 border-dashed border-primary bg-gray py-4 px-4 dark:bg-meta-4 sm:py-7.5"
+                  >
+                    <input
+                      id="ip_images"
+                      type="text"
+                      class="absolute inset-0 z-50 m-0 h-full w-full cursor-pointer p-0 opacity-0 outline-none"
+                    />
+                    <div class="slideshow-container-product">
+                      <div
+                        class="mySlides fade-produc"
+                        id="images-to-upload"
+                        *ngFor="
+                          let imgSrc of postService.listImageSources;
+                          let i = index
+                        "
+                      >
+                      <img
+                        class="img-product"
+                        [src]="imgSrc"
+                      />
+                      <div class="btn-slide-img">
+                          <a class="prev-img" (click)="plusSlides(-1)"
+                            >&#10094;</a
+                          >
+                          <a class="next-img" (click)="plusSlides(1)"
+                            >&#10095;</a
+                          >
+                        </div>
+                      </div>
                     </div>
-
+                  </div>
                     <div class="flex justify-end gap-4.5">
                       <!-- <button
                                 class="flex justify-center rounded border border-stroke py-2 px-6 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"

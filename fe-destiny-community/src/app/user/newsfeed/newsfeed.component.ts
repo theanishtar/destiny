@@ -62,6 +62,7 @@ export class NewsfeedComponent implements OnInit {
   check: boolean = true
   checkCountPosts: boolean = true;
 
+  
   ngOnInit() {
     this.userDisplayName = this.cookieService.get('full_name');
     // this.loadPosts();

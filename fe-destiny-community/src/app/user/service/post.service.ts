@@ -20,12 +20,14 @@ export class PostService {
   private createPostUrl = environment.baseUrl + 'v1/user/upload/post';
   private loadDataUpdatePostUrl = environment.baseUrl + 'v1/user/load/data/post/update';
   private updatePostUrl = environment.baseUrl + 'v1/user/data/update/post';
+  private loadDetailPostUrl = environment.baseUrl + 'v1/user/detail/post/';
 
   private listTop5User: any[] = [];
   private listTop5Post: any[] = [];
   private listPostsNf: any;
   public postUpdate: any;
   public listPostsPr: any;
+  public detailPost: any;
   listImageSources: any[] = [];
   infoPost: any
   dataUpdated = new EventEmitter<void>();
@@ -119,13 +121,6 @@ export class PostService {
     );
   }
 
-  // updatePost(data: any): Observable<any> {
-  //   return this.http.post(this.updatePostUrl, data).pipe(
-  //     tap((response) => {
-        
-  //     })
-  //   )
-  // }
   updatePost(data: any): Observable<any> {
     return this.http.post(this.updatePostUrl, data).pipe(
       tap((response) => {
@@ -142,12 +137,13 @@ export class PostService {
     this.dataUpdated.emit();
   }
 
-  // private listPostPrSource = new BehaviorSubject<any[]>([]);
-  // currentListPostPr = this.listPostPrSource.asObservable();
+  /* ============Detail post============= */
+  getPostDetails(postId: number): Observable<any> {
+    const url = `${this.loadDetailPostUrl}${postId}`;
+    return this.http.get(url);
+  }
 
-  // updateListPostPr(newList: any) {
-  //   this.listPostPrSource.next(newList);
-  // }
+
   /* ============Interested============= */
   private likedPosts: Set<string> = new Set<string>();
 

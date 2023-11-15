@@ -176,13 +176,15 @@ a.nav-link.click-scroll.site-footer-link {
 }
   .swal2-icon-content {
     font-size: 26px !important;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   }
   .swal2-icon.swal2-warning.swal2-icon-show {
     width: 50px;
     height: 50px;
   }
   h2#swal2-title {
-    font-size: 28px;
+    font-size: 26px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   }
   button.swal2-confirm.swal2-styled.swal2-default-outline, button.swal2-cancel.swal2-styled.swal2-default-outline {
     padding: 10px 20px;

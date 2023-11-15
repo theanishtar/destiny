@@ -23,6 +23,7 @@ import { HistoryComponent } from './user/history/history.component';
 import { NotificationsComponent } from './user/notifications/notifications.component';
 import { VideoCallComponent } from './user/video-call/video-call.component';
 import { ChangeConfirmComponent } from './user/modal/change-email/change-confirm/change-confirm.component';
+import { ArticleDetailsComponent } from './user/article-details/article-details.component';
 
 // Admin
 import { IndexAdminComponent } from './admin/index-admin/index-admin.component';
@@ -65,6 +66,8 @@ const routes: Routes = [
   { path: 'notifications', component: NotificationsComponent, canActivate: [authGuard]},
   { path: 'video-call', component: VideoCallComponent, canActivate: [authGuard] },
   { path: 'chang-email-confirm', component: ChangeConfirmComponent, canActivate: [authGuard] },
+  { path: 'detail-post', component: ArticleDetailsComponent, canActivate: [authGuard] },
+  
 
   { path: 'admin', component: IndexAdminComponent, canActivate: [authGuard] },
   { path: 'admin/postdetail', component: PostDetailComponent, canActivate: [authGuard] },

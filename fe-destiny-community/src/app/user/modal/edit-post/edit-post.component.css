@@ -22,7 +22,9 @@ button.flex.justify-center.rounded.bg-primary.py-2.px-6.font-medium.text-gray.ho
 textarea#bio {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-
+input#ip_images {
+    cursor: no-drop;
+}
 @media screen and (min-width: 1440px) {
     div#FileUpload {
         width: 262px;

@@ -1,4 +1,6 @@
-<router-outlet *ngIf="check"></router-outlet>
+<div *ngIf="check && !loading">
+  <router-outlet></router-outlet>
+</div>
 
 <div class="internet-status" *ngIf="!check">
   <svg
@@ -39,5 +41,8 @@
     {{ check ? "Connected to the internet" : "No internet connection" }} -->
     Không có Internet
   </h1>
-  <p id="internetStatus">Để tránh bị gián đoạn trong quá trình sử dụng vui lòng load lại trang sau khi kết nối Internet!</p>
+  <p id="internetStatus">
+    Để tránh bị gián đoạn trong quá trình sử dụng vui lòng load lại trang sau
+    khi kết nối Internet!
+  </p>
 </div>

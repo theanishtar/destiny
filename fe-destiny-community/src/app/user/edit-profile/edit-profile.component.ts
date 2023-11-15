@@ -73,6 +73,7 @@ export class EditProfileComponent implements OnInit {
   avatar = '';
   pass: any;
   dataEditProfile: any = {};
+  dataEditProfileTemp: any = {};
   initialUsername: string; //Email lúc đầu chưa đổi
   userName: string; //Email sau
   submitted: boolean = false;
@@ -204,7 +205,19 @@ export class EditProfileComponent implements OnInit {
   }
 
   cancelEdit() {
-    location.reload();
+    Swal.fire({
+			title: 'Bạn chắc chắn muốn hủy thao tác?',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#d33',
+			cancelButtonColor: '#3085d6',
+			confirmButtonText: 'Yes',
+			cancelButtonText: 'No',
+		}).then((result) => {
+			if (result.value) {
+        this.dataEditProfile = this.dataEditProfileTemp;
+			}
+		});
   }
 
   loadDataProfile() {
@@ -213,6 +226,7 @@ export class EditProfileComponent implements OnInit {
 
     this.profileService.loadDataEditProfile().subscribe(() => {
       this.dataEditProfile = this.profileService.getDataEditProfile();
+      this.dataEditProfileTemp = this.dataEditProfile;
       this.initialUsername = this.dataEditProfile.username;
       this.initalAvatar = this.dataEditProfile.avatar;
       this.initalThumb = this.dataEditProfile.thumb;

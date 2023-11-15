@@ -79,15 +79,15 @@ export class EditPostComponent {
     if (body && this.checkEdit) {
       body.style.opacity = '0';
     }
-    if (this.file.length !== undefined) {
-      for (let img of this.file) {
-        await this.addData(img);
-      }
-    }else{
-      for (let img of this.postService.listImageSources) {
-        await this.listImg.push(img)
-      }
-    }
+    // if (this.file.length !== undefined) {
+    //   for (let img of this.file) {
+    //     await this.addData(img);
+    //   }
+    // }else{
+    //   for (let img of this.postService.listImageSources) {
+    //     await this.listImg.push(img)
+    //   }
+    // }
 
     var data = {
       content: this.createUpdatePostForm.get('content')?.value,
@@ -97,7 +97,8 @@ export class EditPostComponent {
       ward_name: this.createUpdatePostForm.get('ward_name')?.value,
       post_status: this.createUpdatePostForm.get('post_status')?.value,
       product: this.createUpdatePostForm.get('product')?.value,
-      post_images: this.listImg,
+      // post_images: this.listImg,
+      post_images: this.postService.listImageSources,
       post_id: this.postService.infoPost.post_id,
       send_status: this.postService.infoPost.send_status,
     };

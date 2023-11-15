@@ -36,12 +36,12 @@ export class AppComponent {
   }
 
   // Check internet
-  check: boolean = false;
+  check: boolean = true;
+  loading: boolean = true;
 
   @HostListener('window:load', ['$event'])
-  @HostListener('window:online', ['$event'])
-  @HostListener('window:offline', ['$event'])
   checkInternetStatus() {
     this.check = navigator.onLine;
+    this.loading = false; // Set loading to false when the window is loaded
   }
 }

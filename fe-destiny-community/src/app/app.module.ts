@@ -80,6 +80,7 @@ import { EditPostComponent } from './user/modal/edit-post/edit-post.component';
 import { ChangeEmailComponent } from './user/modal/change-email/change-email.component';
 import { ChangeConfirmComponent } from './user/modal/change-email/change-confirm/change-confirm.component';
 import { SuggestAfterRegisterComponent } from './user/modal/suggest-after-register/suggest-after-register.component';
+import { ArticleDetailsComponent } from './user/article-details/article-details.component';
 
 export function appInitializer(cookieService: CookieService, messageService: MessageService, sender: any,modalService:ModalService, profileService: ProfileService, dataProfileTimeline: any) {
   return () => {
@@ -154,7 +155,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     EditPostComponent,
     ChangeEmailComponent,
     ChangeConfirmComponent,
-    SuggestAfterRegisterComponent
+    SuggestAfterRegisterComponent,
+    ArticleDetailsComponent
   ],
   imports: [
     BrowserModule,

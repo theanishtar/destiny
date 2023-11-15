@@ -807,7 +807,8 @@
             <!-- POST OPTION -->
             <div
               class="post-option"
-              (click)="modalService.loadComment(p.post_id, p.user_id)"
+              (click)="modalService.loadComment(p.post_id, p.user_id);
+              modalService.imgShare(p.postEntityProfile?.images);"
             >
               <!-- POST OPTION ICON -->
               <!-- <svg class="post-option-icon icon-comment">
@@ -879,7 +880,7 @@
               <p class="post-option-text">Chia sẻ</p>
               <div class="dropdown-content">
                 <a (click)="interactPostsService.sharePost(p.post_id, p.user_id)"><i class="fa-solid fa-share"></i> Công khai</a>
-                <a href="#"><i class="fa-solid fa-envelope"></i> Qua email</a>
+                <a (click)="modalService.copyLink(p.post_id)"><i class="fa-solid fa-link"></i> Gửi liên kết</a>
               </div>
               <!-- /POST OPTION TEXT -->
             </div>

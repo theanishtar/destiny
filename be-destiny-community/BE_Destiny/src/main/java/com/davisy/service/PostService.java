@@ -52,6 +52,10 @@ public interface PostService {
 	public int getTotalPostByUser(int id);
 
 	public Post findById(int id);
+	
+	public Object[] get_posts_id(int post_id);
+	
+	public Object[] get_posts_share_id(int post_id);
 
 	// 23-9-2023 -Danh sách tất cả bài đăng của người dùng theo id
 	public List<Post> getListPostByUserID(int id);

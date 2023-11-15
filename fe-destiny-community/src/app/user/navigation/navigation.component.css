@@ -259,5 +259,12 @@ nav#navigation-widget::-webkit-scrollbar {
   font-size: 17px;
   color: #3e3f5e;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  padding: 5rem;
+}
+span.bold{
+  max-width: 416px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
 }

@@ -700,15 +700,15 @@
     <!-- DROPDOWN BOX -->
     <div class="dropdown-box padding-bottom-small header-search-dropdown">
       <!-- DROPDOWN BOX CATEGORY -->
-      <!-- <div class="dropdown-box-category">
-        <p class="dropdown-box-category-title">Members</p>
-      </div> -->
+      <div class="dropdown-box-category">
+        <p class="dropdown-box-category-title">Người dùng</p>
+      </div>
       <!-- /DROPDOWN BOX CATEGORY -->
 
       <!-- DROPDOWN BOX LIST -->
       <div class="dropdown-box-list small no-scroll">
         <!-- DROPDOWN BOX LIST ITEM -->
-        <div *ngIf="listSearch.length === 0" class="no-find">Không tìm thầy</div>
+        <div *ngIf="listSearch.length === 0" class="no-find">Không tìm thầy người dùng</div>
         <div *ngFor="let u of listSearch">
           <a class="dropdown-box-list-item" href="profile" (click)="this.profileService.loadDataProfileTimeline(u[0])">
             <!-- USER STATUS -->
@@ -758,7 +758,108 @@
           </a>
         </div>
         <!-- /DROPDOWN BOX LIST ITEM -->
+      </div>
+      <!-- /DROPDOWN BOX LIST -->
 
+      <!-- DROPDOWN BOX CATEGORY -->
+      <div class="dropdown-box-category">
+        <p class="dropdown-box-category-title">Bài đăng</p>
+      </div>
+      <!-- /DROPDOWN BOX CATEGORY -->
+
+      <!-- DROPDOWN BOX LIST -->
+      <div class="dropdown-box-list small no-scroll">
+        <!-- DROPDOWN BOX LIST ITEM -->
+        <div *ngIf="listSearchPost.length === 0" class="no-find">Không tìm thầy bài đăng</div>
+        <div *ngFor="let u of listSearchPost">
+          <a class="dropdown-box-list-item" href="detail-post?id={{u[0]}}" (click)="this.profileService.loadDataProfileTimeline(u[0])">
+            <!-- USER STATUS -->
+            <div class="user-status notification">
+              <div class="user-status-avatar">
+                <!-- PICTURE -->
+                <figure class="picture small round liquid">
+                  <img
+                    src="{{u[3]}}"
+                    alt="item-07"
+                  />
+                </figure>
+                <!-- /PICTURE -->
+              </div>
+              <!-- USER STATUS TITLE -->
+              <p class="user-status-title">
+                <span class="bold">{{u[1]}}</span>
+              </p>
+              <!-- /USER STATUS TITLE -->
+  
+              <!-- USER STATUS TEXT -->
+              <p class="user-status-text">{{u[2]}} lượt tương tác</p>
+              <!-- /USER STATUS TEXT -->
+  
+              <!-- USER STATUS ICON -->
+              <div class="user-status-icon">
+                <!-- ICON FRIEND -->
+                <svg class="icon-friend">
+                  <use xlink:href="#svg-status"></use>
+                </svg>
+                <!-- /ICON FRIEND -->
+              </div>
+              <!-- /USER STATUS ICON -->
+            </div>
+            <!-- /USER STATUS -->
+          </a>
+        </div>
+        <!-- /DROPDOWN BOX LIST ITEM -->
+      </div>
+      <!-- /DROPDOWN BOX LIST -->
+    
+       <!-- DROPDOWN BOX CATEGORY -->
+       <div class="dropdown-box-category">
+        <p class="dropdown-box-category-title">Hashtag</p>
+      </div>
+      <!-- /DROPDOWN BOX CATEGORY -->
+
+      <!-- DROPDOWN BOX LIST -->
+      <div class="dropdown-box-list small no-scroll">
+        <!-- DROPDOWN BOX LIST ITEM -->
+        <div *ngIf="listSearchHashTag.length === 0" class="no-find">Không tìm thầy hashtag</div>
+        <div *ngFor="let u of listSearchHashTag">
+          <a class="dropdown-box-list-item" href="detail-post?id={{u[0]}}" (click)="this.profileService.loadDataProfileTimeline(u[0])">
+            <!-- USER STATUS -->
+            <div class="user-status notification">
+              <div class="user-status-avatar">
+                <!-- PICTURE -->
+                <figure class="picture small round liquid">
+                  <img
+                    src="{{u[3]}}"
+                    alt="item-07"
+                  />
+                </figure>
+                <!-- /PICTURE -->
+              </div>
+              <!-- USER STATUS TITLE -->
+              <p class="user-status-title">
+                <span class="bold">{{u[1]}}</span>
+              </p>
+              <!-- /USER STATUS TITLE -->
+  
+              <!-- USER STATUS TEXT -->
+              <p class="user-status-text">{{u[2]}} lượt tương tác</p>
+              <!-- /USER STATUS TEXT -->
+  
+              <!-- USER STATUS ICON -->
+              <div class="user-status-icon">
+                <!-- ICON FRIEND -->
+                <svg class="icon-friend" width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10 4L7 20M17 4L14 20M5 8H20M4 16H19" stroke="#000000" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                <!-- /ICON FRIEND -->
+              </div>
+              <!-- /USER STATUS ICON -->
+            </div>
+            <!-- /USER STATUS -->
+          </a>
+        </div>
+        <!-- /DROPDOWN BOX LIST ITEM -->
       </div>
       <!-- /DROPDOWN BOX LIST -->
     </div>
@@ -841,8 +942,7 @@
                 <!-- USER STATUS AVATAR -->
                 <a
                   class="user-avatar small user-status-avatar no-border no-outline"
-                  (click)="handleLinkClick($event)" routerLink="/profile"
-                  (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)"
+                  (click)="handleLinkClick($event)"
                 >
                   <div class="hexagon-container">
                     <div class="hexagon user-avatar-content">
@@ -864,9 +964,9 @@
 
                 <!-- USER STATUS TITLE -->
                 <p class="user-status-title">
-                  <a class="bold" href="profile">{{ notif.value.fullname }}</a>
+                  <a class="bold" href="profile" (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)">{{ notif.value.fullname }}</a>
                   đã bình luận vào
-                  <a class="highlighted" href="photos">bài đăng</a> của bạn
+                  <a class="highlighted" href="detail-post?id={{notif.value.postId}}">bài đăng</a> của bạn
                 </p>
                 <!-- /USER STATUS TITLE -->
 
@@ -896,8 +996,7 @@
                 <!-- USER STATUS AVATAR -->
                 <a
                   class="user-avatar small user-status-avatar no-border no-outline"
-                  (click)="handleLinkClick($event)" routerLink="/profile"
-                  (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)"
+                  (click)="handleLinkClick($event)"
                 >
                   <div class="hexagon-container">
                     <div class="hexagon user-avatar-content">
@@ -919,9 +1018,9 @@
 
                 <!-- USER STATUS TITLE -->
                 <p class="user-status-title">
-                  <a class="bold" href="profile">{{ notif.value.fullname }}</a>
-                  đã trả lời bình luận của bạn 
-                  <!-- <a class="highlighted" href="photos">bài đăng</a>  -->
+                  <a class="bold" href="profile" (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)">{{ notif.value.fullname }}</a>
+                  đã trả lời bình luận của bạn ở
+                  <a class="highlighted"  href="detail-post?id={{notif.value.postId}}"> bài đăng</a> 
                 </p>
                 <!-- /USER STATUS TITLE -->
 
@@ -951,8 +1050,7 @@
                 <!-- USER STATUS AVATAR -->
                 <a
                   class="user-avatar small user-status-avatar no-border no-outline"
-                  (click)="handleLinkClick($event)" routerLink="/profile"
-                  (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)"
+                  (click)="handleLinkClick($event)"
                 >
                   <div class="hexagon-container">
                     <div class="hexagon user-avatar-content">
@@ -974,9 +1072,9 @@
 
                 <!-- USER STATUS TITLE -->
                 <p class="user-status-title">
-                  <a class="bold" href="profile">{{ notif.value.fullname }}</a>
+                  <a class="bold" href="profile" (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)">{{ notif.value.fullname }}</a>
                   đã chia sẻ
-                  <a class="highlighted" href="photos">bài đăng</a> của bạn
+                  <a class="highlighted" href="detail-post?id={{notif.value.postId}}">bài đăng</a> của bạn
                 </p>
                 <!-- /USER STATUS TITLE -->
 
@@ -1005,8 +1103,7 @@
                 <!-- USER STATUS AVATAR -->
                 <a
                   class="user-avatar small user-status-avatar no-border no-outline"
-                  (click)="handleLinkClick($event)" routerLink="/profile"
-                  (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)"
+                  (click)="handleLinkClick($event)"
                 >
                   <div class="hexagon-container">
                     <div class="hexagon user-avatar-content">
@@ -1028,9 +1125,9 @@
 
                 <!-- USER STATUS TITLE -->
                 <p class="user-status-title">
-                  <a class="bold" href="profile">{{ notif.value.fullname }}</a>
+                  <a class="bold" href="profile" (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)">{{ notif.value.fullname }}</a>
                   đã quan tâm
-                  <a class="highlighted" href="photos">bài đăng</a> của bạn
+                  <a class="highlighted" href="detail-post?id={{notif.value.postId}}">bài đăng</a> của bạn
                 </p>
                 <!-- /USER STATUS TITLE -->
 
@@ -1060,8 +1157,7 @@
                 <!-- USER STATUS AVATAR -->
                 <a
                   class="user-avatar small user-status-avatar no-border no-outline"
-                  (click)="handleLinkClick($event)" routerLink="/profile"
-                  (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)"
+                  (click)="handleLinkClick($event)"
                 >
                   <div class="hexagon-container">
                     <div class="hexagon user-avatar-content">
@@ -1083,11 +1179,11 @@
 
                 <!-- USER STATUS TITLE -->
                 <p class="user-status-title" *ngIf="notif.value.following_status === false">
-                  <a class="bold" href="profile">{{ notif.value.fullname }}</a>
+                  <a class="bold" href="profile" (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)">{{ notif.value.fullname }}</a>
                   đã theo dõi bạn
                 </p>
                 <p class="user-status-title" *ngIf="notif.value.following_status === true">
-                  <a class="bold" href="profile">{{ notif.value.fullname }}</a>
+                  <a class="bold" href="profile" (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)">{{ notif.value.fullname }}</a>
                   và bạn đã là bạn bè
                 </p>
                 <!-- /USER STATUS TITLE -->
