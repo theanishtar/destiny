@@ -22,9 +22,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.davisy.config.JwtTokenUtil;
+import com.davisy.dao.UserDAO;
 import com.davisy.entity.User;
 import com.davisy.service.EmailService;
 import com.davisy.service.UserService;
+import com.davisy.service.impl.UserServiceImpl;
 
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,7 +44,7 @@ public class UserController {
 	JwtTokenUtil jwtTokenUtil;
 
 	@Autowired
-	UserService userService;
+	UserServiceImpl userService;
 
 	@Autowired
 	EmailService emailService;
@@ -72,6 +74,18 @@ public class UserController {
 		}
 		
 	}
+	
+	@PostMapping("/v1/user/frind/post")
+	public ResponseEntity<List<Object[]>> findPost(@RequestParam("keyword") String keyword, @RequestParam("type") String type){
+		System.out.println(keyword);
+		if (type.equalsIgnoreCase("content"))
+			return ResponseEntity.ok(userService.findTop5Post(keyword));
+		if (type.equalsIgnoreCase("hashtag"))
+			return ResponseEntity.ok(userService.findTop5PostByHashtag(keyword));
+		return ResponseEntity.badRequest().body(null);
+	}
+	
+	
 
 	@PostMapping("/v1/user/forgotpassword")
 	public CompletableFuture<ResponseEntity<String[]>> forgotpass(@RequestBody String email) {

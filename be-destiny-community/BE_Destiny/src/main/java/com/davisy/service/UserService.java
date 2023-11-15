@@ -25,6 +25,15 @@ public interface UserService {
 	List<User> findAll();
 
 	List<Object[]> getTOP5User();
+	
+	
+	//15/11/2023 -Tìm kiếm các bài post theo keyword với điều kiện có tổng like, share, comment lớn nhất
+	public List<Object[]> findTop5Post(String keyword);
+
+	//15/11/2023 -Tìm kiếm các bài post theo keyword với điều kiện có tổng like, share, comment lớn nhất
+	public List<Object[]> findTop5PostByHashtag(String keyword);
+
+		
 
 	// 1-11-2023 -lấy tổng số người dùng theo ngày
 	public int getTotalUserByDay(int day, int month);

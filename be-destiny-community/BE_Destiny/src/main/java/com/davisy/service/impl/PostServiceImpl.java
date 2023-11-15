@@ -170,4 +170,6 @@ public class PostServiceImpl implements PostService {
 	public Object[] findByIdPost(int id, int current_page, int post_id) {
 		return postDao.findByIdPost(id, current_page, post_id);
 	}
+
+	
 }

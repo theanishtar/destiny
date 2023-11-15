@@ -108,5 +108,74 @@ public interface UserDAO extends JpaRepository<User, Integer> {
 	
 	@Query(value = "select *from find_user(:user_id,:fullname)",nativeQuery = true)
 	public List<Object[]>findFullnameUser(int user_id,String fullname);
+	
+	@Query(value = "SELECT\r\n"
+			+ "        p.post_id,\r\n"
+			+ "        p.content AS post_title,\r\n"
+			+ "        COALESCE(SUM(i.interested_count + s.share_count + c.comment_count), 0) AS total_engagement\r\n"
+			+ "    FROM\r\n"
+			+ "        post p\r\n"
+			+ "    LEFT JOIN (\r\n"
+			+ "        SELECT post_id, COUNT(*) AS interested_count\r\n"
+			+ "        FROM interested\r\n"
+			+ "        GROUP BY post_id\r\n"
+			+ "    ) i ON p.post_id = i.post_id\r\n"
+			+ "    LEFT JOIN (\r\n"
+			+ "        SELECT post_id, COUNT(*) AS share_count\r\n"
+			+ "        FROM share\r\n"
+			+ "        WHERE share_status = true\r\n"
+			+ "        GROUP BY post_id\r\n"
+			+ "    ) s ON p.post_id = s.post_id\r\n"
+			+ "    LEFT JOIN (\r\n"
+			+ "        SELECT post_id, COUNT(*) AS comment_count\r\n"
+			+ "        FROM comment\r\n"
+			+ "        GROUP BY post_id\r\n"
+			+ "    ) c ON p.post_id = c.post_id\r\n"
+			+ "    WHERE\r\n"
+			+ "        p.post_status = true\r\n"
+			+ "        AND p.ban = false\r\n"
+			+ "        AND p.hash_tag ILIKE '%' || :hashtag || '%'\r\n"
+			+ "    GROUP BY\r\n"
+			+ "        p.post_id, p.content\r\n"
+			+ "    ORDER BY\r\n"
+			+ "        total_engagement DESC\r\n"
+			+ "    LIMIT 5;", nativeQuery = true)
+	public List<Object[]> get5PostByHashtagKeyword(String hashtag);
+	
+	@Query(value = "SELECT\r\n"
+			+ "        p.post_id,\r\n"
+			+ "        p.content AS post_title,\r\n"
+			+ "        COALESCE(SUM(i.interested_count + s.share_count + c.comment_count), 0) AS total_engagement\r\n"
+			+ "    FROM\r\n"
+			+ "        post p\r\n"
+			+ "    LEFT JOIN (\r\n"
+			+ "        SELECT post_id, COUNT(*) AS interested_count\r\n"
+			+ "        FROM interested\r\n"
+			+ "        GROUP BY post_id\r\n"
+			+ "    ) i ON p.post_id = i.post_id\r\n"
+			+ "    LEFT JOIN (\r\n"
+			+ "        SELECT post_id, COUNT(*) AS share_count\r\n"
+			+ "        FROM share\r\n"
+			+ "        WHERE share_status = true\r\n"
+			+ "        GROUP BY post_id\r\n"
+			+ "    ) s ON p.post_id = s.post_id\r\n"
+			+ "    LEFT JOIN (\r\n"
+			+ "        SELECT post_id, COUNT(*) AS comment_count\r\n"
+			+ "        FROM comment\r\n"
+			+ "        GROUP BY post_id\r\n"
+			+ "    ) c ON p.post_id = c.post_id\r\n"
+			+ "    WHERE\r\n"
+			+ "        p.post_status = true\r\n"
+			+ "        AND p.ban = false\r\n"
+			+ "        AND p.content ILIKE '%' || :keyword || '%'\r\n"
+			+ "    GROUP BY\r\n"
+			+ "        p.post_id, p.content\r\n"
+			+ "    ORDER BY\r\n"
+			+ "        total_engagement DESC\r\n"
+			+ "    LIMIT 5;", nativeQuery = true)
+	public List<Object[]> get5PostByKeyword(String keyword);
+	
+	
+	
 
 }

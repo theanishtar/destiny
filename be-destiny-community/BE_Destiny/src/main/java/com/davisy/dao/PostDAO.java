@@ -115,5 +115,7 @@ public interface PostDAO extends JpaRepository<Post, Integer> {
 
 	@Query(value = "select *from get_profile_posts_shares(:user_id,:user_guest_id,:page)", nativeQuery = true)
 	public List<Object[]> getPostProfileShare(int user_id,int user_guest_id, int page);
+	
+	
 
 }
