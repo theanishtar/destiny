@@ -90,7 +90,6 @@ class _Screen1State extends State<Screen1> {
                                     onTap: () async {
                                       SharedPreferences prefs =
                                           await SharedPreferences.getInstance();
-
                                       await prefs.setInt(
                                           'id', listPost![i]['user_id']);
                                       runApp(GetMaterialApp(

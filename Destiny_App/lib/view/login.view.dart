@@ -16,9 +16,6 @@ import 'package:login_signup/view/widgets/text.form.global.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-// import 'package:stomp_dart_client/stomp_config.dart';
-// import 'package:web_socket_channel/web_socket_channel.dart';
-// import 'package:web_socket_channel/io.dart';
 import 'package:stomp_dart_client/stomp.dart' as stomp;
 import 'package:stomp_dart_client/stomp_frame.dart' as stomp;
 import 'package:stomp_dart_client/stomp_config.dart';
@@ -31,6 +28,7 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
+  late SocketManager manager = SocketManager();
   final TextEditingController emailController = TextEditingController();
 
   final TextEditingController passwordController = TextEditingController();
@@ -40,62 +38,6 @@ class _LoginViewState extends State<LoginView> {
   bool isButtonPressed = false;
 
   final storage = const FlutterSecureStorage();
-  late stomp.StompClient stompClient;
-
-  // late WebSocketChannel channel;
-  final StreamController<String> _streamController = StreamController<String>();
-
-  void _connectWebSocket() {
-    final socketUrl = 'http://192.168.137.1:8080/chat';
-    stompClient = stomp.StompClient(
-      config: StompConfig.sockJS(
-        url: socketUrl,
-        onConnect: onConnectCallback,
-        onWebSocketError: (dynamic error) => print(error.toString()),
-      ),
-    );
-
-    print(stompClient.config.url);
-
-    stompClient.activate();
-    // Tạo client STOMP
-    // stompClient = stomp.StompClient(
-    //     config: StompConfig(
-    //   url: 'http://192.168.137.1:8080/chat',
-    //   onConnect: onConnectCallback,
-    //   onWebSocketError: (dynamic error) => print('WebSocket Error: $error'),
-    // ));
-    // (
-
-    // );
-
-    // Kết nối STOMP
-    // stompClient.activate();
-  }
-
-  void onConnectCallback(stomp.StompFrame frame) {
-    stompClient.send(
-      destination: '/app/fetchAllUsers',
-      body: 'Hello STOMP!',
-    );
-    // Subscribe đến một topic
-    stompClient.subscribe(
-      destination: '/topic/public',
-      callback: (stomp.StompFrame frame) {
-        // Xử lý tin nhắn nhận được từ topic
-        print('Received STOMP Message: ${frame.body}');
-        _streamController.add(frame.body!);
-      },
-    );
-  }
-
-  void sendMessage() {
-    // Gửi tin nhắn STOMP
-    stompClient.send(
-      destination: '/app/chat',
-      body: 'Hello STOMP!',
-    );
-  }
 
   void showAlert() {
     QuickAlert.show(
@@ -144,7 +86,8 @@ class _LoginViewState extends State<LoginView> {
               headers: headers);
           Map<String, dynamic> registrationchat =
               jsonDecode(Utf8Decoder().convert(res.bodyBytes));
-          _connectWebSocket();
+          manager.connectWebSocket();
+        
           print(data);
           runApp(GetMaterialApp(
             home: BottomNavBar(),

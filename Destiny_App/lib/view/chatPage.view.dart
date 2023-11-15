@@ -1,12 +1,36 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
+import 'package:login_signup/models/SocketManager%20.dart';
+import 'package:login_signup/models/UserModel.dart';
 import 'package:login_signup/utils/gobal.colors.dart';
 import 'package:login_signup/view/screens/message.view.dart';
 import 'package:login_signup/view/widgets/chat/chatSample.dart';
 import 'package:login_signup/view/widgets/chat/chatBottomSheet.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ChatPage extends StatelessWidget {
+class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
+
+  @override
+  State<ChatPage> createState() => _ChatPageState();
+}
+
+class _ChatPageState extends State<ChatPage> {
+  SocketManager socketManager = SocketManager();
+  UserModel userModel = new UserModel();
+  @override
+void initState() {
+  super.initState();
+  SharedPreferences.getInstance().then((prefs) {
+    String listTemp = prefs.getString('myListUser') ?? '[]';
+    userModel = socketManager.userChatPage;
+    print('fullname: ' + userModel.fullname.toString());
+     print('fullname: ' + userModel.avatar.toString());
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +52,8 @@ class ChatPage extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(30),
-                  child: Image.asset(
-                    "assets/images/conan.png",
+                  child: Image.network(
+                    userModel.avatar,
                     height: 45,
                     width: 45,
                   ),
@@ -37,7 +61,7 @@ class ChatPage extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(left: 10),
                   child: Text(
-                    "Lê Bích Vi",
+                    userModel.fullname,
                     style: TextStyle(color: GlobalColors.mainColor),
                   ),
                 )

@@ -1,8 +1,31 @@
-import 'package:flutter/material.dart';
-import 'package:login_signup/utils/gobal.colors.dart';
+import 'dart:convert';
 
-class RecentCharts extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:login_signup/models/SocketManager%20.dart';
+import 'package:login_signup/models/UserModel.dart';
+import 'package:login_signup/utils/gobal.colors.dart';
+import 'package:login_signup/view/chatPage.view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class RecentCharts extends StatefulWidget {
   const RecentCharts({super.key});
+
+  @override
+  State<RecentCharts> createState() => _RecentChartsState();
+}
+
+class _RecentChartsState extends State<RecentCharts> {
+  
+  late SocketManager socketManager = SocketManager();
+  late List<UserModel> listUser = socketManager.mapUser.values.toList();
+  @override
+  void initState() {
+    super.initState();
+    if (!SocketManager().isConnected) {
+      SocketManager().connectWebSocket();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,12 +45,16 @@ class RecentCharts extends StatelessWidget {
             )
           ]),
       child: Column(children: [
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < listUser.length; i++)
           Padding(
             padding: EdgeInsets.symmetric(vertical: 15),
-            child: InkWell(
-              onTap: () {
-                Navigator.pushNamed(context, "chatPage");
+            child: InkWell (
+              onTap: ()async {
+                // SharedPreferences prefs = await SharedPreferences.getInstance();
+                // String jsonUser = json.encode(listUser[i]);
+                // await prefs.setString('myListUser',jsonUser);
+                socketManager.userChatPage = listUser[i] ;
+               runApp(GetMaterialApp(home:ChatPage(),));
               },
               child: Container(
                 height: 65,
@@ -35,8 +62,8 @@ class RecentCharts extends StatelessWidget {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(35),
-                      child: Image.asset(
-                        "assets/images/conan.png",
+                      child: Image.network(
+                        listUser[i]!.avatar,
                         height: 65,
                         width: 65,
                       ),
@@ -47,7 +74,7 @@ class RecentCharts extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Lê Bích Vi",
+                            listUser[i]!.fullname,
                             style: TextStyle(
                                 fontSize: 18,
                                 color: GlobalColors.mainColor,
@@ -55,7 +82,7 @@ class RecentCharts extends StatelessWidget {
                           ),
                           SizedBox(height: 10),
                           Text(
-                            "Xin chào,Bạn khỏe không ?",
+                            listUser[i]!.lastMessage,
                             style:
                                 TextStyle(fontSize: 16, color: Colors.black54),
                           )
@@ -75,21 +102,22 @@ class RecentCharts extends StatelessWidget {
                           SizedBox(
                             height: 10,
                           ),
-                          Container(
-                            height: 23,
-                            width: 23,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: GlobalColors.mainColor,
-                                borderRadius: BorderRadius.circular(25)),
-                            child: Text(
-                              "1",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          )
+                          if (listUser[i]!.messageUnRead > 0)
+                            Container(
+                              height: 23,
+                              width: 23,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  color: GlobalColors.mainColor,
+                                  borderRadius: BorderRadius.circular(25)),
+                              child: Text(
+                                listUser[i]!.messageUnRead.toString(),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )
                         ],
                       ),
                     )

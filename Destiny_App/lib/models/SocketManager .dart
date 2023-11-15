@@ -1,43 +1,103 @@
-// import 'package:socket_io_client/socket_io_client.dart' as io;
+import 'dart:async';
+import 'dart:convert';
+import 'dart:ffi';
 
-// class SocketManager {
-//   static final SocketManager _singleton = SocketManager._internal();
+import 'package:get/get.dart';
+import 'package:image/image.dart';
+import 'package:login_signup/models/UserModel.dart';
+import 'package:login_signup/utils/api.dart';
+import 'package:stomp_dart_client/stomp.dart' as stomp;
+import 'package:stomp_dart_client/stomp_frame.dart' as stomp;
+import 'package:stomp_dart_client/stomp_config.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-//   factory SocketManager() {
-//     return _singleton;
-//   }
+class SocketManager {
+  static final SocketManager _instance = SocketManager._internal();
+  factory SocketManager() {
+    return _instance;
+  }
 
-//   SocketManager._internal();
+  SocketManager._internal();
+  late stomp.StompClient stompClient;
+  final StreamController<String> _streamController = StreamController<String>();
+  var user_id = 0;
+ UserModel userChatPage = new UserModel();
+  bool isConnected = false;
+  Map<String, UserModel> mapUser = new Map<String, UserModel>();
+  void connectWebSocket() {
+    if (isConnected) {
+      return; // Already connected, no need to reconnect
+    }
+    final socketUrl = ApiEndPoints.baseUrl + 'chat';
+    stompClient = stomp.StompClient(
+      config: StompConfig.sockJS(
+        url: socketUrl,
+        onConnect: onConnectCallback,
+        onWebSocketError: (dynamic error) => print(error.toString()),
+      ),
+    );
 
-//   io.Socket? socket;
+    if (stompClient != null) {
+      print(stompClient.config.url);
+      stompClient.activate();
+    } else {
+      print('StompClient is null');
+    }
+  }
 
-//   void connectSocket(String token) {
-//     // Kết nối socket sau khi đăng nhập thành công
-//     socket = io.io(
-//       'http://192.168.137.1:8000/',
-//       <String, dynamic>{
-//         'transports': ['websocket'],
-//         'autoConnect': false,
-//         'query': {'token': token}, // Truyền token vào query params
-//       },
-//     );
+  stomp.StompClient getSocket() {
+    return stompClient;
+  }
 
-//     // Lắng nghe sự kiện khi kết nối thành công
-//     socket!.on('connect', (_) {
-//       print('Connected to socket server');
-//     });
+  void onConnectCallback(stomp.StompFrame frame) async {
+    isConnected = true;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    user_id = await prefs.getInt('id') ?? 0;
+    var check = 26;
+    stompClient.send(
+      destination: '/app/fetchAllUsers',
+      body: 'Hello STOMP!',
+    );
+    // Subscribe đến một topic
+    stompClient.subscribe(
+      destination: '/topic/public',
+      callback: (stomp.StompFrame frame) {
+        // Xử lý tin nhắn nhận được từ topic
+        print('Received STOMP Message: ${frame.body}');
+        String? data = frame.body;
 
-//     // Lắng nghe sự kiện khi nhận dữ liệu từ server
-//     socket!.on('message', (data) {
-//       print('Received data: $data');
-//     });
+        Map<String, dynamic> datajson = json.decode(data!);
 
-//     // Kết nối socket
-//     socket!.connect();
-//   }
+        for (var key in datajson.keys) {
+          if (key == user_id.toString()) {
+            var value = datajson[key];
+            for (var v in value) {
+              UserModel model = new UserModel();
+              model.type = v['type'].toString();
+              model.user_id = int.parse(v['user_id'].toString());
+              model.username = v['username'];
+              model.fullname = v['fullname'];
+              model.email = v['email'];
+              model.avatar = v['avatar'].toString();
+              model.messageUnRead = int.parse(v['messageUnRead'].toString());
+              model.lastMessage = v['lastMessage'];
+              model.online = v['online'];
+              model.isFriend = bool.parse(v['friend'].toString());
+              mapUser[v['user_id'].toString()] = model;
+            }
+          }
+        }
+        print("length: " + mapUser.length.toString());
+        _streamController.add(frame.body!);
+      },
+    );
+  }
 
-//   void disconnectSocket() {
-//     // Ngắt kết nối socket
-//     socket?.disconnect();
-//   }
-// }
+  void sendMessage() {
+    // Gửi tin nhắn STOMP
+    stompClient.send(
+      destination: '/app/chat',
+      body: 'Hello STOMP!',
+    );
+  }
+}
