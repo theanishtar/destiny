@@ -188,4 +188,9 @@ public class UserServiceImpl implements UserService {
 	public List<Object[]> loadTimeLine(String email) {
 		return userDao.loadTimeLine(email);
 	}
+
+	@Override
+	public List<Object[]> findFullnameUser(int user_id, String fullname) {
+		return userDao.findFullnameUser(user_id, fullname);
+	}
 }

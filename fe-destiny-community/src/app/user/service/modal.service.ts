@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs'; //Theo dõi trạng thái của modal
 import { environment } from '../../../environments/environment'
 import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { PostService } from './post.service';
@@ -24,6 +24,7 @@ declare var toast: any;
 export class ModalService {
   private loadDataComment = environment.baseUrl + 'v1/user/load/comment';
   private loadDataReplyUrl = environment.baseUrl + 'v1/user/load/comment/reply';
+  private searchUrl = environment.baseUrl + 'v1/user/find/user';
 
   public listComment: any;
   public images: string[]
@@ -31,6 +32,8 @@ export class ModalService {
   public listReplyComment: any;
   public listReplyCmt: string[];
   public imagesSeeMore: string[] = [];
+  public listSearch: any[] = [];
+
   listPosts: any;
   listPost: any;
   $reply: any;
@@ -338,6 +341,22 @@ export class ModalService {
     this.checkImg = false;
   }
 
+  /* ============Search============= */
+  async searchApi(id: number, fullname: string): Promise<any> {
+    const params = new HttpParams().set('id', id.toString()).set('fullname', fullname);
+
+    try {
+      const response = await this.http.post(this.searchUrl, params).toPromise();
+      this.setSearchData(response);
+      return response;
+    } catch (error) {
+      console.error('Error in searchApi:', error);
+      throw error; // Rethrow the error for the calling code to handle
+    }
+  }
+
+
+
   /* ============Template============= */
   private isOpenCreatePost = new BehaviorSubject<boolean>(false);
   isOpenCreatePost$ = this.isOpenCreatePost.asObservable();
@@ -389,5 +408,12 @@ export class ModalService {
   }
   setDataReplyCmt(data: any): void {
     this.listReplyComment = data;
+  }
+
+  getSearchData(): any {
+    return this.listSearch;
+  }
+  setSearchData(data: any): void {
+    this.listSearch = data;
   }
 }

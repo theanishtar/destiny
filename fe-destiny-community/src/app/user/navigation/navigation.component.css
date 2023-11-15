@@ -241,3 +241,23 @@ nav#navigation-widget::-webkit-scrollbar {
   width: 0 !important;
   display: none;
 }
+
+.dropdown-box.padding-bottom-small.header-search-dropdown{
+  max-height: 500px !important;
+  height: auto !important;
+  overflow: auto;
+  overflow: -moz-scrollbars-none;
+  -ms-overflow-style: none;
+}
+
+.dropdown-box.padding-bottom-small.header-search-dropdown::-webkit-scrollbar {
+  width: 0 !important;
+  display: none;
+}
+.no-find {
+  text-align: center;
+  font-size: 17px;
+  color: #3e3f5e;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding: 5rem;
+}

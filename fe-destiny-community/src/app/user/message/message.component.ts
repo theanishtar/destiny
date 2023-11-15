@@ -50,6 +50,11 @@ export class MessageComponent implements OnInit {
   // data: UserModel[];
   data: any;
   mapTemp: any;
+  searchResult: any[] = [];
+  searchTerm: string = '';
+  checkLoadingdata: boolean = true;
+  checkBlock: boolean = false;
+
   ngOnInit() {
     this.messageService.isOriginal = true;
     this.isLoading = this.messageService.isLoading;
@@ -87,10 +92,11 @@ export class MessageComponent implements OnInit {
     private renderer: Renderer2
   ) { }
 
-
   /* ============Message============= */
-  checkLoadingdata: boolean = true;
-  checkBlock: boolean = false;
+  search() {
+    this.searchResult = this.data.filter(item => item.fullname.includes(this.searchTerm));
+  }
+
   block() {
     let id = parseInt(this.id)
     this.messageService.blockApi(id, false).subscribe(() => {

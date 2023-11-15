@@ -104,8 +104,6 @@ export class EditPostComponent {
     console.warn("data: " + JSON.stringify(data));
     if (this.createUpdatePostForm.valid) {
         this.postService.updatePost(data).subscribe((res) => {
-          this.postService.updateListPostPr(this.listImg);
-          // location.reload();
           new toast({
             title: 'Thành công!',
             message: 'Chỉnh sửa thành công',

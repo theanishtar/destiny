@@ -209,6 +209,49 @@
           <!-- WIDGET BOX CONTENT -->
         </div>
         <!-- /WIDGET BOX -->
+
+         <!-- WIDGET BOX -->
+         <div class="widget-box" style="margin-top: 1rem;">
+          <!-- WIDGET BOX TITLE -->
+          <p class="widget-box-title">
+            Liên kết đến trang cá nhân của bạn</p>
+          <!-- /WIDGET BOX TITLE -->
+
+          <!-- WIDGET BOX CONTENT -->
+          <div class="widget-box-content">
+            <!-- FORM -->
+            <form class="form">
+              <!-- FORM ROW -->
+              <div class="form-row split">
+                <!-- FORM ITEM -->
+                <div class="form-item centered">
+                  <label class="form-title" id="linkToCopy" for="profile-privacy-visibility">{{linkProfile}}</label>
+                </div>
+                <!-- /FORM ITEM -->
+
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM SELECT -->
+                  <div class="form-select">
+                    
+                    <!-- FORM SELECT ICON -->
+                    <!-- <svg >
+                      <use xlink:href="#svg-small-arrow"></use>
+                    </svg> -->
+                    <button class="btn btn-primary copy-link" (click)="copyLink()">Sao chép liên kết</button>
+                    <!-- /FORM SELECT ICON -->
+                  </div>
+                  <!-- /FORM SELECT -->
+                </div>
+                <!-- /FORM ITEM -->
+              </div>
+              <!-- /FORM ROW -->
+            </form>
+            <!-- /FORM -->
+          </div>
+          <!-- WIDGET BOX CONTENT -->
+        </div>
+        <!-- /WIDGET BOX -->
       </div>
       <!-- /GRID COLUMN -->
     </div>

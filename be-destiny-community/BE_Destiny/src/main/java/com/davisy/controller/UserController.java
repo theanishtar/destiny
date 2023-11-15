@@ -60,9 +60,22 @@ public class UserController {
 		return ResponseEntity.ok(list);
 	}
 
+	@PostMapping("/v1/user/find/user")
+	public ResponseEntity<List<Object[]>> findUser(@RequestParam("id") int user_id,
+			@RequestParam("fullname") String fullname) {
+		try {
+			List<Object[]> list = userService.findFullnameUser(user_id, fullname);
+			return ResponseEntity.ok().body(list);
+		} catch (Exception e) {
+			System.out.println("Lỗi tìm kiếm: " + e);
+			return ResponseEntity.badRequest().build();
+		}
+		
+	}
+
 	@PostMapping("/v1/user/forgotpassword")
 	public CompletableFuture<ResponseEntity<String[]>> forgotpass(@RequestBody String email) {
-	
+
 		try {
 			Thread.sleep(100);
 			stopClock();
@@ -72,12 +85,12 @@ public class UserController {
 		CompletableFuture<ResponseEntity<String[]>> future = CompletableFuture.supplyAsync(() -> {
 			User user = userService.findByEmail(email);
 			String[] res;
-			System.out.println("status: "+userMap.containsKey(email));
+			System.out.println("status: " + userMap.containsKey(email));
 			if (user == null) {
-				res = new String[] {"wrongemail"};
+				res = new String[] { "wrongemail" };
 				return ResponseEntity.ok().body(res);
 			} else if (userMap.containsKey(email)) {
-				res = new String[] {"isExists"};
+				res = new String[] { "isExists" };
 				return ResponseEntity.ok().body(res);
 			} else {
 				String code = generateRandomNumbers();
@@ -91,7 +104,7 @@ public class UserController {
 				}
 				if (!userMap.isEmpty())
 					time();
-				res = new String[] {"success"};
+				res = new String[] { "success" };
 				return ResponseEntity.ok().body(res);
 			}
 		});
@@ -105,11 +118,11 @@ public class UserController {
 		System.out.println("value: " + value);
 		System.out.println("code: " + forgot.code);
 		if (value == null)
-			return ResponseEntity.ok().body(new String [] {"timeup"});
+			return ResponseEntity.ok().body(new String[] { "timeup" });
 		else if (!value.equals(forgot.code))
-			return ResponseEntity.ok().body(new String [] {"wrongcode"});
+			return ResponseEntity.ok().body(new String[] { "wrongcode" });
 		else
-			return ResponseEntity.ok().body(new String [] {"success"});
+			return ResponseEntity.ok().body(new String[] { "success" });
 	}
 
 	@PostMapping("/v1/user/changepassword")
@@ -121,9 +134,9 @@ public class UserController {
 			user.setPassword(passwordEncoder.encode(forgot.pass));
 			userService.update(user);
 			userMap.remove(forgot.email);
-			return ResponseEntity.ok().body(new String [] {"success"});
+			return ResponseEntity.ok().body(new String[] { "success" });
 		} else {
-			return ResponseEntity.ok().body(new String [] {"error"});
+			return ResponseEntity.ok().body(new String[] { "error" });
 		}
 	}
 
@@ -149,7 +162,7 @@ public class UserController {
 					long minutes = seconds / 60;
 					if (minutes >= 5) {
 						userMap.remove(key);
-						System.out.println("userMap.get(key): "+userMap.get(key));
+						System.out.println("userMap.get(key): " + userMap.get(key));
 					}
 				}
 			}
@@ -179,10 +192,11 @@ class MapSendMail {
 	Calendar calendar = GregorianCalendar.getInstance();
 	String code;
 }
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-class Forgot{
+class Forgot {
 	String email;
 	String code;
 	String pass;

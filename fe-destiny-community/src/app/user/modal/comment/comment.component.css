@@ -413,7 +413,7 @@ button.btnClose-create-post {
 }
 
 .mySlides.fade img {
-  max-height: 400px;
+  max-height: 466px;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -428,7 +428,39 @@ button.btnClose-create-post {
 }
 
 /*  */
+.form-cmt {
+  position: relative;
+}
+
+.comment-box {
+  position: relative;
+}
+
 .hidden {
+  display: none;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: -200%;
+  left: 20%;
+  transform: translateX(-50%);
+  z-index: 1;
+  padding: 10px 0;
+  border-radius: 12px;
+  background-color: #fff;
+  box-shadow: 0 0 40px 0 rgba(94, 92, 154, 0.12);
+  text-align: center;
+  font-size: 14px;
+  color: #3e3f5e;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  max-height: 130px;
+  min-height: 130px;
+  overflow-y: auto;
+}
+
+.dropdown-menu::-webkit-scrollbar {
+  width: 0 !important;
   display: none;
 }
 
@@ -436,8 +468,6 @@ button.btnClose-create-post {
   list-style: none;
   padding: 0;
   margin: 0;
-  border: 1px solid #ccc;
-  position: absolute;
   z-index: 1;
 }
 
@@ -526,8 +556,8 @@ button.btnClose-create-post {
 }
 
 @media screen and (max-width: 480px) {
-button.btnClose-create-post {
-  right: 39% !important;
-  /* color: white; */
-}
+  button.btnClose-create-post {
+    right: 39% !important;
+    /* color: white; */
+  }
 }

@@ -35,8 +35,8 @@ export class ProfileService {
   private getCheckPotsApi = environment.baseUrl + 'v1/user/load/checkpost';
 
   public dataHeader: any[];
-  public dataTimeLine: any[];
-  public dataTimeLinePost: any[];
+  public dataTimeLine: any;
+  public dataTimeLinePost: any;
   public dataEditProfile: any;
 
   private genders: any[];
@@ -63,50 +63,57 @@ export class ProfileService {
   header: any;
   dateJoin: string | null;
   currentPage: number = 1;
-  loadDataTimeline(data: any) {
-    localStorage.setItem("idSelected", data);
-    return this.http.post<any[]>(this.loadDataTimelineUrl, data).pipe(
-      tap((response) => {
-        this.dataTimeLine = response;
-        this.setdataTimeLine(this.dataTimeLine);
-      }),
-    );
-  }
   public checkData: boolean;
-  loadDataProfileTimeline(id) {
-    this.setCheckData(false) ;
+
+  async loadDataTimeline(data: any): Promise<any> {
+    localStorage.setItem('idSelected', data);
+    try {
+      const response = await this.http.post<any[]>(this.loadDataTimelineUrl, data).toPromise();
+      this.dataTimeLine = response;
+      this.setdataTimeLine(this.dataTimeLine);
+      return response;
+    } catch (error) {
+      console.error('Error in loadDataTimeline:', error);
+      throw error;
+    }
+  }
+  
+  async loadDataTimelinePost(data: any): Promise<any> {
+    try {
+      const response = await this.http.post<any[]>(this.loadDataPostTimelineUrl, data).toPromise();
+      this.dataTimeLinePost = response;
+      this.setdataTimeLinePost(this.dataTimeLinePost);
+      return response;
+    } catch (error) {
+      console.error('Error in loadDataTimelinePost:', error);
+      throw error;
+    }
+  }
+
+  async loadDataProfileTimeline(id: any) {
+    this.setCheckData(false);
     let data = {
       toProfile: id,
-      page: this.currentPage
-    }
-    this.loadDataProfileHeader(id);
-    this.loadDataTimeline(id).subscribe((response) => {
-      if (response != null) {
-        this.setdataTimeLine(response);
+      page: this.currentPage,
+    };
+  
+    try {
+      const timelineResponse = await this.loadDataTimeline(id);
+      if (timelineResponse != null) {
+        this.setdataTimeLine(timelineResponse);
         this.dataProfileTimeline = this.getdataTimeLine();
         this.dateJoin = this.datePipe.transform(this.dataProfileTimeline.dateJoin, 'dd/MM/yyyy');
       }
-
-    })
-    this.loadDataTimelinePost(data).subscribe((res: any) => {
-      this.listPostPr = res; // Lưu dữ liệu ban đầu vào mảng
+  
+      const timelinePostResponse = await this.loadDataTimelinePost(data);
+      this.listPostPr = timelinePostResponse; // Save initial data to the array
       this.setCheckData(true);
-      
-    
-    });
-    // this.router.navigate(['profile']);
-    // window.location.href = 'http://localhost:4200/profile';
+    } catch (error) {
+      console.error('Error in loadDataProfileTimeline:', error);
+      throw error;
+    }
   }
-
-  loadDataTimelinePost(data: any) {
-    return this.http.post<any[]>(this.loadDataPostTimelineUrl, data).pipe(
-      tap((response) => {
-        this.dataTimeLinePost = response;
-        this.setdataTimeLinePost(this.dataTimeLinePost);
-      }),
-    );
-  }
-
+  
 
   loadDataHeader(data: any) {
     localStorage.setItem("idSelected", data);

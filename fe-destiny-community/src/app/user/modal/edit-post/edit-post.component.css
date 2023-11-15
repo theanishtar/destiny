@@ -18,9 +18,11 @@ span.absolute.left-4\.5.top-4.viewer {
 span.absolute.left-4\.5.top-4.content {
     top: 11px;
 }
-button.flex.justify-center.rounded.bg-primary.py-2.px-6.font-medium.text-gray.hover\:bg-opacity-95 {
+button.flex.justify-center.rounded.bg-primary.py-2.px-6.font-medium.text-gray.hover\:bg-opacity-95,
+textarea#bio {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+
 @media screen and (min-width: 1440px) {
     div#FileUpload {
         width: 262px;

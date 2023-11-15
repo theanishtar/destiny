@@ -67,4 +67,9 @@ public class CommentServiceImpl implements CommentService {
 	public Integer findByIdtoUser(int id) {
 		return commentDao.findByIdtoUser(id);
 	}
+
+	@Override
+	public List<Object[]> loadHistoryComment(int id) {
+		return commentDao.loadHistoryComment(id);
+	}
 }

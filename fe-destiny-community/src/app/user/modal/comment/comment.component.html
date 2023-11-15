@@ -24,7 +24,8 @@
             </div>
           </div>
           <div class="numbertext">
-            <span id="numbertext">1 </span>/ <b>{{ modalService.images.length }}</b>
+            <span id="numbertext">1 </span>/
+            <b>{{ modalService.images.length }}</b>
           </div>
         </div>
         <!-- ../../assets/images/cover/03.jpg -->
@@ -100,7 +101,7 @@
                 </div>
               </div>
             </div>
-            <form action="">
+            <form action="" class="form-cmt">
               <div class="comment-box">
                 <input
                   type="text"
@@ -109,18 +110,19 @@
                   name="comment-input"
                   [(ngModel)]="comment_input"
                   placeholder="Bình luận"
+                  autocomplete="off"
                 />
-                <div *ngIf="showDropdown" class="dropdown-menu">
-                  <ul id="dropdown">
-                    <li>Item 1</li>
-                    <li>Item 2</li>
-                    <li>Item 3</li>
-                  </ul>
-                </div>
-
                 <button class="add-comment-btn" (click)="addComment()">
                   <i class="fa-regular fa-comment"></i>
                 </button>
+              </div>
+              <div *ngIf="showDropdown" class="dropdown-menu">
+                <ul id="dropdown">
+                  <!-- <li>Item 1</li>
+                  <li>Item 2</li>
+                  <li>Item 3</li> -->
+                  <li *ngFor="let item of filteredItems" (click)="selectItem(item)">{{ item.fullname }}</li>
+                </ul>
               </div>
             </form>
           </div>

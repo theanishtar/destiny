@@ -79,7 +79,7 @@
                   >Tin nhắn</label
                 >
                 <div class="tab-content" id="tab-message">
-                  <div *ngFor="let key of data ">
+                  <div *ngFor="let key of searchResult.length > 0 ? searchResult : data">
                     <!-- <div class="a">{{key.value.fullname}}</div> -->
                     <ng-container *ngIf="key.isFriend">
                       <!-- CHAT WIDGET MESSAGE -->
@@ -173,7 +173,7 @@
                   >Tin nhắn chờ</label
                 >
                 <div class="tab-content" id="tab-message">
-                  <div *ngFor="let key of data">
+                  <div *ngFor="let key of searchResult.length > 0 ? searchResult : data">
                     <!-- <div class="a">{{key.value.fullname}}</div> -->
                     <ng-container *ngIf="!key.isFriend">
                       <!-- CHAT WIDGET MESSAGE -->
@@ -267,7 +267,8 @@
               type="text"
               id="chat-widget-search-2"
               name="chat_widget_search_2"
-              placeholder="Tìm kiếm..."
+              [(ngModel)]="searchTerm" (input)="search()"
+              placeholder="Tìm kiếm theo tên"
             />
             <!-- INTERACTIVE INPUT ICON WRAP -->
             <div class="interactive-input-icon-wrap">

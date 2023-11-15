@@ -35,5 +35,9 @@ public interface CommentDAO extends JpaRepository<Comment, Integer> {
 	
 	@Query(value = "select c.user_id from \"comment\" c where c.comment_id =:id",nativeQuery = true)
 	public Integer findByIdtoUser(int id);
+	
+	@Query(value = "select p.post_id,(select pi2.link_image  from post_images pi2 where pi2.post_id =p.post_id limit 1) AS link_image,u.fullname,p.\"content\",TO_CHAR( c.date_comment, 'DD-MM-YYYY'),p.user_id\r\n"
+			+ "from post p  inner join \"comment\" c  on p.post_id =c.post_id inner join users u on p.user_id =u.user_id  where c.user_id =:id order by  c.date_comment  desc",nativeQuery = true)
+	public List<Object[]>loadHistoryComment(int id);
 
 }

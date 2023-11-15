@@ -33,6 +33,14 @@ svg.x1lliihq.x1k90msu.x2h7rmj.x1qfuztq.xcza8v6.xlup9mm.x1kky2od {
   cursor: pointer;
 }
 
+button.btn.btn-primary.copy-link {
+  width: auto;
+  position: absolute;
+  right: 0;
+  font-size: 14px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
 @media screen and (max-width: 1440px) {
   p.switch-option-text {
     width: 330px;

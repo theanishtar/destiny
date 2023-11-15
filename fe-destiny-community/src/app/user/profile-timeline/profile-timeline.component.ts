@@ -12,7 +12,7 @@ import { form } from '../../../assets/js/form/form.utils.js';
 import 'src/assets/js/utils/svg-loader.js';
 import { DatePipe } from '@angular/common';
 declare var toast: any;
-// 
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { ModalService } from '../service/modal.service';
 import { InteractPostsService } from '../service/interact-posts.service';
 import { ProfileService } from '../service/profile.service';
@@ -45,19 +45,28 @@ export class ProfileTimelineComponent implements OnInit {
   currentUserId = this.cookieService.get("id");
   checkCountPosts: boolean = true;
   checkListPost: any;
+  id_user: any | null = '';
+
+
   ngOnInit() {
+    this.linkProfile();
     let profile_timeline = document.getElementById('profile_timeline')!;
 
     profile_timeline.style.display = 'none';
     this.profileService.getCheckData().then((result) => {
-        if(result){}
-        this.isLoading = false;
-        profile_timeline.style.display = 'grid';
+      if (result) { }
+      this.isLoading = false;
+      profile_timeline.style.display = 'grid';
     });
+
+    //Cập nhật lại listPostPr khi cập nhật bài đăng
+    this.postService.dataUpdated.subscribe(() => {
+      this.listPostPr = this.postService.getListDataPostUpdate();
+    })
     this.loadDataSuggest();
     this.loadPosts();
     this.checkScroll();
-    this.profileService.loadDataProfileTimeline(this.idLocal);
+
     liquid.liquid();
     avatarHexagons.avatarHexagons();
     tooltips.tooltips();
@@ -65,15 +74,8 @@ export class ProfileTimelineComponent implements OnInit {
     popups.picturePopup();
     headers.headers();
     sidebars.sidebars();
-    // content.contentTab();
     form.formInput();
-    // Gọi hàm updatePost và cập nhật this.listPostPr sau khi nhận được response
-    // this.postService.currentListPostPr.subscribe((newList) => {
-    //   console.log("newList: " + newList.length) 
-    //   if(newList.length !== 0){
-    //     this.listPostPr = newList;
-    //   }
-    // });
+
   }
   dataFollows: any
   listPostPr: any;
@@ -88,13 +90,23 @@ export class ProfileTimelineComponent implements OnInit {
     public postService: PostService,
     private cookieService: CookieService,
     private el: ElementRef,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private route: ActivatedRoute,
   ) {
     this.idLocal = parseInt((localStorage.getItem("idSelected") + '')?.trim());
     this.chatUserId = parseInt((localStorage.getItem("chatUserId") + '')?.trim());
 
   }
-
+  linkProfile() {
+    this.route.queryParamMap.subscribe((params: ParamMap) => {
+      this.id_user = parseInt((params.get('id') + '')?.trim());
+    });
+    if (this.id_user) {
+      this.profileService.loadDataProfileTimeline(this.id_user);
+    } else {
+      this.profileService.loadDataProfileTimeline(this.idLocal);
+    }
+  }
   addFollow(id: number) {
     this.followsService.addFollowAPI(id).subscribe((res) => {
       new toast({
@@ -120,9 +132,11 @@ export class ProfileTimelineComponent implements OnInit {
         toProfile: localStorage.getItem("idSelected"),
         page: this.currentPage
       }
-      this.profileService.loadDataTimelinePost(dataPost).subscribe((data: any) => {
-        this.listPostPr = data; // Lưu dữ liệu ban đầu vào mảng
-      });
+      // this.profileService.loadDataTimelinePost(dataPost).subscribe((data: any) => {
+      //   this.listPostPr = data; // Lưu dữ liệu ban đầu vào mảng
+      // });
+      const data: any = await this.profileService.loadDataTimelinePost(dataPost);
+      this.listPostPr = data;
     } catch (error) {
       console.error('Error:', error);
     }
@@ -149,12 +163,12 @@ export class ProfileTimelineComponent implements OnInit {
     if (check && this.checkRequest) {
       try {
         await this.interactPostsService.deleleInterestedApi(post_id);
-    
+
         console.log("Đã hủy quan tâm");
         this.renderer.removeClass(element, 'active');
         this.mapIntersted.set(post_id, false);
         this.checkRequest = false;
-        
+
         // Set count interestedPost 
         let interested = document.getElementById("interested-" + post_id);
         if (interested) {
@@ -238,7 +252,7 @@ export class ProfileTimelineComponent implements OnInit {
             toProfile: localStorage.getItem("idSelected"),
             page: this.currentPage
           }
-          const data: any = await this.profileService.loadDataTimelinePost(dataPost).toPromise();
+          const data: any = await this.profileService.loadDataTimelinePost(dataPost);
           this.listPostPr = [...this.listPostPr, ...data];
           this.checkLoadingdata = false;
           console.warn("data.length: " + data.length);

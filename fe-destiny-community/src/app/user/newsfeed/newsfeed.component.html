@@ -1008,15 +1008,18 @@
       </div>
       <!-- /WIDGET BOX -->
       <!-- <div class="lds-dual-ring" *ngIf="checkLoadingdata"></div> -->
-      <div class="loader-bars" *ngIf="checkLoadingdata">
-        <div class="loader-bar"></div>
-        <div class="loader-bar"></div>
-        <div class="loader-bar"></div>
-        <div class="loader-bar"></div>
-        <div class="loader-bar"></div>
-        <div class="loader-bar"></div>
-        <div class="loader-bar"></div>
-        <div class="loader-bar"></div>
+      <div *ngIf="checkLoadingdata">
+        <div class="loader-bars">
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
+        </div>
+        <div class="loading">Đang tải</div>
       </div>
     </div>
     <!-- /GRID COLUMN -->

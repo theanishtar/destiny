@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -25,9 +25,10 @@ export class PostService {
   private listTop5Post: any[] = [];
   private listPostsNf: any;
   public postUpdate: any;
+  public listPostsPr: any;
   listImageSources: any[] = [];
   infoPost: any
-
+  dataUpdated = new EventEmitter<void>();
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -128,18 +129,25 @@ export class PostService {
   updatePost(data: any): Observable<any> {
     return this.http.post(this.updatePostUrl, data).pipe(
       tap((response) => {
-        // Sau khi nhận được response, cập nhật DataService để thông báo cho các component khác
-        this.updateListPostPr(response);
+        this.setListDataPostUpdate(response);
+        this.updateData();
       })
     );
   }
 
-  private listPostPrSource = new BehaviorSubject<any[]>([]);
-  currentListPostPr = this.listPostPrSource.asObservable();
-
-  updateListPostPr(newList: any) {
-    this.listPostPrSource.next(newList);
+  // Hàm cập nhật dữ liệu
+  updateData() {
+    // Thực hiện cập nhật dữ liệu ở đây.
+    // Sau khi cập nhật xong, thông báo sự kiện.
+    this.dataUpdated.emit();
   }
+
+  // private listPostPrSource = new BehaviorSubject<any[]>([]);
+  // currentListPostPr = this.listPostPrSource.asObservable();
+
+  // updateListPostPr(newList: any) {
+  //   this.listPostPrSource.next(newList);
+  // }
   /* ============Interested============= */
   private likedPosts: Set<string> = new Set<string>();
 
@@ -178,5 +186,12 @@ export class PostService {
   }
   setDataPostUpdate(data: any): void {
     this.postUpdate = data;
+  }
+
+  getListDataPostUpdate(): any {
+    return this.listPostsPr;
+  }
+  setListDataPostUpdate(data: any): void {
+    this.listPostsPr = data;
   }
 }

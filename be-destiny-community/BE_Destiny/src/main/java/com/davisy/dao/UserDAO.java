@@ -105,5 +105,8 @@ public interface UserDAO extends JpaRepository<User, Integer> {
 			+ "(select count(pi2.post_images_id) as imgcount from post_images pi2  inner join post p on pi2.post_id =p.post_id where p.user_id =u.user_id)as countImg,\r\n"
 			+ "u.username\r\n" + "from users u where u.email =:email", nativeQuery = true)
 	public List<Object[]> loadTimeLine(String email);
+	
+	@Query(value = "select *from find_user(:user_id,:fullname)",nativeQuery = true)
+	public List<Object[]>findFullnameUser(int user_id,String fullname);
 
 }

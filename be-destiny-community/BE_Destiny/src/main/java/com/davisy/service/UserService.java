@@ -32,7 +32,7 @@ public interface UserService {
 	// 21-9-2023 -lấy tổng số người dùng theo tháng
 	// lastest update 14-10
 	public int getTotalUserByMonth(int month);
-	
+
 	// 1-11-2023 -lấy tổng số người dùng theo năm
 	public int getTotalUserByYear(int year);
 
@@ -55,7 +55,9 @@ public interface UserService {
 
 	public List<Object[]> getUserofPostHistory(int id);
 
-	public List<Object[] > loadTimeLine(String email);
+	public List<Object[]> loadTimeLine(String email);
+
+	public List<Object[]> findFullnameUser(int user_id, String fullname);
 
 	public void create(User user);
 

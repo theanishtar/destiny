@@ -27,7 +27,8 @@ export class NavigationComponent implements OnInit {
   avatar = '';
   activeMenuItem: string = '';
   chatUserId: any;
-
+  searchTerm: string = '';
+  listSearch: any[] = [];
   ngOnInit() {
     this.userDisplayName = this.cookieService.get('full_name');
     this.avatar = this.cookieService.get("avatar");
@@ -42,7 +43,7 @@ export class NavigationComponent implements OnInit {
     public profileService: ProfileService,
     public modalService: ModalService,
     private el: ElementRef,
-    private renderer: Renderer2, 
+    private renderer: Renderer2,
   ) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -50,6 +51,21 @@ export class NavigationComponent implements OnInit {
         this.updateActiveMenuItem();
       }
     });
+  }
+
+  async search() {
+    let user_id: number | null = null;
+  
+    const storedUserId = localStorage.getItem('chatUserId');
+    if (storedUserId !== null) {
+      user_id = parseInt(storedUserId, 10);
+      console.log("this.searchTerm: " + this.searchTerm);
+      // this.modalService.searchApi(user_id, this.searchTerm).subscribe((res: any) => {
+      //   this.listSearch = res;
+      // });
+      this.listSearch = await this.modalService.searchApi(user_id, this.searchTerm);
+      console.log("listSearch.length: " + this.listSearch.length)
+    }
   }
 
   isLogin() {
@@ -62,7 +78,7 @@ export class NavigationComponent implements OnInit {
     return this.loginService.logout();
   }
   checkType(type: any) {
-   
+
     if (type == 'COMMENT') {
       return 'COMMENT';
     }
@@ -128,6 +144,6 @@ export class NavigationComponent implements OnInit {
     // Add your custom logic here
   }
 
-  
+
 
 }

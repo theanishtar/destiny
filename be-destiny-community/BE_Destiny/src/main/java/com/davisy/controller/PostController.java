@@ -349,8 +349,8 @@ public class PostController {
 					i++;
 				}
 			}
-			List<Object[]> postProfile = postService.findAllPost(id, 1);
-			List<Object[]> postShare = postService.findAllPost(id, 1);
+			List<Object[]> postProfile = postService.getPostProfile(id,id, 1);
+			List<Object[]> postShare = postService.getPostProfileShare(id,id, 1);
 			return ResponseEntity.ok().body(postEntity(postProfile, postShare));
 		} catch (Exception e) {
 			System.out.println("Lỗi nè: " + e);

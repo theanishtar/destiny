@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 
 import { ModalService } from '@app/user/service/modal.service';
 import { PostService } from '@app/user/service/post.service';
+import { FollowsService } from '@app/user/service/follows.service';
+
 @Component({
   selector: 'app-comment',
   templateUrl: './comment.component.html',
@@ -12,14 +14,20 @@ import { PostService } from '@app/user/service/post.service';
 export class CommentComponent {
   slideIndex: number = 1;
   slidesLength: string;
-
+  // dropdownItems = ['Nguyễn Văn A', 'Phan Nguyễn Hải Yến', 'Nguyễn Văn C','Nguyễn Văn D', 'Đào Ngọc Hân', 'Nguyễn Văn F'];
+  filteredItems: any[] = [];
+  listFriend: any[];
+  listFriendTemp: any[];
+  
   constructor(
     public modalService: ModalService,
     public postService: PostService,
+    public followsService: FollowsService
   ) { }
 
   ngOnInit() {
     this.showSlides(1);
+    this.loadFriend();
   }
 
   /* ============Add comment============= */
@@ -90,6 +98,15 @@ export class CommentComponent {
       input.focus();
     }
   }
+
+  async loadFriend(){
+    this.listFriend = await this.followsService.loadDataFriends();
+    this.listFriendTemp = JSON.parse(JSON.stringify(this.listFriend))
+    // if (Array.isArray(this.listFriend) && this.listFriend.length === 0) {
+    //   this.checkData3 = true;
+    // }
+  }
+
   showDropdown: boolean = false;
   onInput(event: any) {
     // Kiểm tra nếu nội dung của trường input trống, đặt repCmtId thành 0
@@ -97,9 +114,34 @@ export class CommentComponent {
       this.modalService.repCmtId = 0;
       // console.log("this.repCmtId: " + this.repCmtId);
     }
-    // Kiểm tra nếu nội dung trường input chứa ký tự "@", hiển thị dropdown
-    if (this.comment_input.includes('@')) {
+    // Kiểm tra nếu nội dung trường input chứa ký tự "@" hoặc dropdown đã hiển thị
+    if (this.comment_input.includes('@') || this.showDropdown ){
       this.showDropdown = true;
+      this.filterDropdown();
+    } else {
+      this.showDropdown = false;
+    }
+
+  }
+
+  selectItem(item: any) {
+    if (this.comment_input.includes('@')) {
+      // xóa '@' và thêm item vào cuối chuỗi
+      this.comment_input = this.comment_input.replace('@', `${item.fullname} `);
+    } else {
+      this.comment_input = `${item.fullname} `;
+    }
+  }
+  
+  filterDropdown() {
+    const searchTerm = this.comment_input.toLowerCase().trim();
+  
+    if (searchTerm.includes('@') && searchTerm.length > 0) {
+      const searchQuery = searchTerm.substring(searchTerm.indexOf('@') + 1);
+      this.filteredItems = this.listFriendTemp.filter(item =>
+        item.fullname.toLowerCase().includes(searchQuery)
+      );
+      this.showDropdown = this.filteredItems.length > 0;
     } else {
       this.showDropdown = false;
     }

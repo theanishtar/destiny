@@ -295,3 +295,9 @@ app-loading {
 .post-option:hover svg.post-option-icon.icon-comment{
   stroke: red;
 }
+.loading {
+  text-align: center;
+  font-size: 17px;
+  color: #3e3f5e;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
