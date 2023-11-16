@@ -95,7 +95,7 @@ class _RecentChartsState extends State<RecentCharts> {
                       child: Column(
                         children: [
                           Text(
-                            "12:30",
+                            listUser[i]!.online,
                             style:
                                 TextStyle(fontSize: 15, color: Colors.black54),
                           ),

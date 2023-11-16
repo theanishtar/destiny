@@ -18,19 +18,23 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  SocketManager socketManager = SocketManager();
-  UserModel userModel = new UserModel();
+  late SocketManager socketManager = SocketManager();
+  late UserModel userModel = socketManager.userChatPage;
   @override
-void initState() {
-  super.initState();
-  SharedPreferences.getInstance().then((prefs) {
-    String listTemp = prefs.getString('myListUser') ?? '[]';
-    userModel = socketManager.userChatPage;
-    print('fullname: ' + userModel.fullname.toString());
-     print('fullname: ' + userModel.avatar.toString());
-  });
-}
+  void initState() {
+    super.initState();
+    SharedPreferences.getInstance().then((prefs) {
+      userModel = socketManager.userChatPage;
 
+      // Check if userModel is not null before accessing its properties
+      if (userModel != null) {
+        print('fullname: ' + userModel.fullname.toString());
+        print('avatar: ' + userModel.avatar.toString());
+      } else {
+        print('userModel is null');
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

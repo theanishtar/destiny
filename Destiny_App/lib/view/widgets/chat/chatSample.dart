@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:custom_clippers/custom_clippers.dart';
 import 'package:flutter/material.dart';
+import 'package:login_signup/models/SocketManager%20.dart';
 import 'package:login_signup/models/UserModel.dart';
 import 'package:login_signup/utils/api.dart';
 import 'package:login_signup/utils/gobal.colors.dart';
@@ -16,27 +17,31 @@ class ChatSample extends StatefulWidget {
 }
 
 class _ChatSampleState extends State<ChatSample> {
+  late SocketManager socketManager = SocketManager();
   List<dynamic> message = [];
-  @override
-  void initState() async {
-    super.initState();
-    UserModel userModel = new UserModel();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var value = await prefs.getString('token');
-    var headers = {
-      'Authorization': ' Bearer $value',
-      'Content-Type':
-          'application/json', // Điều này phụ thuộc vào yêu cầu cụ thể của máy chủ
-    };
-    final res = await http.post(
-        Uri.parse(ApiEndPoints.baseUrl + "/v1/user/chat/load/messages"),
-        headers: headers,
-        body: userModel.user_id);
-    Map<String, dynamic> data =
-        jsonDecode(Utf8Decoder().convert(res.bodyBytes));
-         message = data.values.toList();
-        print('messages: '+message[0]);
-  }
+@override
+void initState() {
+  super.initState();
+  loadData();
+}
+
+Future<void> loadData() async {
+  UserModel userModel = socketManager.userChatPage;
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var value = await prefs.getString('token');
+  var headers = {
+    'Authorization': 'Bearer $value',
+    'Content-Type': 'application/json',
+  };
+  final res = await http.post(
+    Uri.parse(ApiEndPoints.baseUrl + "/v1/user/chat/load/messages"),
+    headers: headers,
+    body: userModel.user_id.toString(),
+  );
+  Map<String, dynamic> data = jsonDecode(Utf8Decoder().convert(res.bodyBytes));
+  message = data.values.toList();
+  print('messages: ' + message[0]);
+}
 
   @override
   Widget build(BuildContext context) {

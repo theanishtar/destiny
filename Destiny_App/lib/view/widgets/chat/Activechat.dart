@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:login_signup/models/SocketManager%20.dart';
+import 'package:login_signup/models/UserModel.dart';
 
-class ActiveChat extends StatelessWidget {
+class ActiveChat extends StatefulWidget {
   const ActiveChat({super.key});
 
+  @override
+  State<ActiveChat> createState() => _ActiveChatState();
+}
+
+class _ActiveChatState extends State<ActiveChat> {
+  late SocketManager socketManager = SocketManager();
+  late List<UserModel> listUser = socketManager.mapUser.values.toList();
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -11,7 +20,7 @@ class ActiveChat extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         child: Row(
           children: [
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < listUser.length; i++)
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                 child: Container(
@@ -30,7 +39,7 @@ class ActiveChat extends StatelessWidget {
                       ]),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(35),
-                    child: Image.asset("assets/images/conan.png"),
+                    child: Image.network(listUser[i].avatar),
                   ),
                 ),
               )
