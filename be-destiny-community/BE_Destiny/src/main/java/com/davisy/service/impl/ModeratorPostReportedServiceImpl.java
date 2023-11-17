@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.davisy.mongodb.MongoDBUtils;
-import com.davisy.mongodb.documents.PostReported;
+import com.davisy.mongodb.documents.ModeratorPostReported;
 import com.davisy.service.ModeratorPostReportedService;
 
 @Service
@@ -23,8 +23,9 @@ public class ModeratorPostReportedServiceImpl implements ModeratorPostReportedSe
 	@Override
 	public boolean checkExistReport(String post_reported_id, String user_send_report_id) {
 		
-		PostReported postReported = findByTwoColumn("post_reported_id", post_reported_id, "user_send_report_id", user_send_report_id);
+		ModeratorPostReported postReported = findByTwoColumn("post_reported_id", post_reported_id, "user_send_report_id", user_send_report_id);
 		if(postReported != null) {
+			System.out.println("Ban da bao cao roi");
 			return true;
 		}else {
 			return false;
@@ -32,44 +33,44 @@ public class ModeratorPostReportedServiceImpl implements ModeratorPostReportedSe
 	}
 	
 	@Override
-	public List<PostReported> findAll() {
+	public List<ModeratorPostReported> findAll() {
 		
-		return dbUtils.findAll(PostReported.class, collectionPostReported);
+		return dbUtils.findAll(ModeratorPostReported.class, collectionPostReported);
 	}
 	
 	@Override
-	public List<PostReported> findAllByColumn(String column, String id) {
+	public List<ModeratorPostReported> findAllByColumn(String column, String id) {
 		
-		return dbUtils.findAllByColumn(PostReported.class, collectionPostReported, column, id);
+		return dbUtils.findAllByColumn(ModeratorPostReported.class, collectionPostReported, column, id);
 	}
 	
 	@Override
-	public PostReported findByColumn(String column, String id) {
+	public ModeratorPostReported findByColumn(String column, String id) {
 		
-		return dbUtils.findByColumn(PostReported.class, collectionPostReported, column, id);
+		return dbUtils.findByColumn(ModeratorPostReported.class, collectionPostReported, column, id);
 	}
 	
 	@Override
-	public PostReported findByTwoColumn(String column1, String id1, String column2, String id2) {
+	public ModeratorPostReported findByTwoColumn(String column1, String id1, String column2, String id2) {
 		
-		return dbUtils.findByTwoColumn(PostReported.class, collectionPostReported, column1,  id1, column2, id2);
+		return dbUtils.findByTwoColumn(ModeratorPostReported.class, collectionPostReported, column1,  id1, column2, id2);
 	}
 	
 	@Override
-	public PostReported findById(ObjectId _id) {
+	public ModeratorPostReported findById(ObjectId _id) {
 		
-		return dbUtils.findById(PostReported.class, collectionPostReported, _id);
+		return dbUtils.findById(ModeratorPostReported.class, collectionPostReported, _id);
 	}
 		
 	@Override
-	public PostReported insert(PostReported postReported) {
+	public ModeratorPostReported insert(ModeratorPostReported postReported) {
 		
-		return dbUtils.insert(postReported, PostReported.class, collectionPostReported);
+		return dbUtils.insert(postReported, ModeratorPostReported.class, collectionPostReported);
 	}
 	
 	@Override
 	public long delete(ObjectId _id) {
 		
-		return dbUtils.deleteById(PostReported.class, collectionPostReported, _id);
+		return dbUtils.deleteById(ModeratorPostReported.class, collectionPostReported, _id);
 	}
 }

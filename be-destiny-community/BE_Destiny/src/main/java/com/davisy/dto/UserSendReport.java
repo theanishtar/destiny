@@ -2,8 +2,6 @@ package com.davisy.dto;
 
 import java.util.List;
 
-import com.davisy.entity.PostImages;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,14 +11,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdminPostTOP4 {
-	int post_id;
+public class UserSendReport {
+	String email;
+	String avatar;
+	String fullname;
 	String content;
-	String product;
-	
-	public List<PostImagesDetail> listPostImages;
-	
-	String user_email;
-	String user_fullname;
-	String user_avatar;
+	String date_report;
+
 }

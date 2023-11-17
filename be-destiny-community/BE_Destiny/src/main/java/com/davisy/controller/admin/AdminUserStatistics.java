@@ -84,7 +84,7 @@ public class AdminUserStatistics {
 	}
 	
 	// lastest update 14-10
-	@GetMapping("/v1/admin/getPercentUserByMonthIncrease")
+	@GetMapping("/v1/admin/getPercentUserMonthIncrease")
 	public double getPercentUserByMonthIncrease() {
 		int previousMonthValue = userService.getTotalUserByMonth(previousMonth);
 		int currentMonthValue = userService.getTotalUserByMonth(currentMonth);
@@ -171,7 +171,7 @@ public class AdminUserStatistics {
 				
 				adminUserTOP4.setEmail(user.getEmail());
 				adminUserTOP4.setFullname(user.getFullname());
-				adminUserTOP4.setAvartar(user.getAvatar());
+				adminUserTOP4.setAvatar(user.getAvatar());
 				adminUserTOP4.setLocation(user.getLocation());
 				
 				int birthdayYear = user.getBirthday().get(Calendar.YEAR);

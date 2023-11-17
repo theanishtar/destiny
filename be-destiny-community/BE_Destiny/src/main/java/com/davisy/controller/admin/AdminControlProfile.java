@@ -1,7 +1,11 @@
 package com.davisy.controller.admin;
 
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,7 +14,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +26,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.davisy.config.JwtTokenUtil;
+import com.davisy.constant.Cache;
+import com.davisy.controller.ProfileContronller;
+import com.davisy.controller.admin.EmailChange;
+import com.davisy.controller.admin.EmailConfirm;
 import com.davisy.dto.Admin;
 import com.davisy.dto.AdminPassword;
 import com.davisy.entity.Districts;
@@ -27,7 +37,9 @@ import com.davisy.entity.Gender;
 import com.davisy.entity.Provinces;
 import com.davisy.entity.User;
 import com.davisy.entity.Wards;
+import com.davisy.service.CacheService;
 import com.davisy.service.DistrictService;
+import com.davisy.service.EmailService;
 import com.davisy.service.GenderService;
 import com.davisy.service.ProvinceService;
 import com.davisy.service.UserService;
@@ -56,6 +68,64 @@ public class AdminControlProfile {
 
 	String provinceCode;
 	String districtCode;
+	
+	@Autowired
+	CacheService cacheService;
+	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+
+	@Autowired
+	SimpMessagingTemplate simpMessagingTemplate;
+
+	@Autowired
+	ObjectMapper mapper;
+
+	@Autowired
+	EmailService emailService;
+	
+	String randCodeAuth = "";
+	
+	@Value("${davis.client.uri}")
+	String confirmEmail;
+	
+	//8-11
+	@PostMapping("/v1/admin/profile/change/email")
+	public ResponseEntity<String> changeEmail(@RequestBody EmailChange change, HttpServletRequest request)
+			throws MessagingException {
+
+		String email = jwtTokenUtil.getEmailFromHeader(request);
+		User currentUser = userService.findByEmail(email);
+
+		if (!passwordEncoder.matches(change.getPassword(), currentUser.getPassword())) {
+			return ResponseEntity.status(300).body(null); // "Mật khẩu xác nhận không đúng"
+		}
+
+		if (currentUser.getEmail().equalsIgnoreCase(change.getNewEmail())) {
+			return ResponseEntity.status(301).body(null); // "Email mới trùng với email cũ"
+		}
+
+		// currentUser.setEmail(change.getNewEmail());
+
+		// userServiceImpl.update(currentUser);
+		this.randCodeAuth = ProfileContronller.random();
+
+		EmailConfirm eConfirm = new EmailConfirm(currentUser.getEmail(), change.newEmail, change.getPassword());
+
+		// {key: "change:email", value: "newMail", time 5m}
+		cacheService.writeCacheAtTime("changemail:" + this.randCodeAuth, eConfirm, 5, Cache.TimeUnit_MINUTE);
+
+		// Gửi mail
+		/*
+		 * 
+		 * BUTTON click :
+		 * http://localhost:4200/chang-email-confirm?code=this.randCodeAuth => call api
+		 * GET: /v1/user/profile/change/email?code=this.randCodeAuth
+		 * 
+		 */
+		emailService.sendHtmlEmail(confirmEmail + "?code=" + this.randCodeAuth, change.newEmail);
+		return ResponseEntity.status(200).body(this.randCodeAuth); // "OK"
+	}
+	
 
 	// update lastest 9-10
 	@GetMapping("/v1/admin/checkAdminLog")
@@ -64,7 +134,7 @@ public class AdminControlProfile {
 		String email = jwtTokenUtil.getEmailFromHeader(request);
 		User user = userService.findByEmail(email);
 		Admin admin = new Admin();
-		admin.setAvartar(user.getAvatar());
+		admin.setAvatar(user.getAvatar());
 
 		return ResponseEntity.status(200).body(admin);
 	}
@@ -107,7 +177,7 @@ public class AdminControlProfile {
 		admin.setWard_name(user.getWards().getFull_name());
 
 		admin.setGender_name(user.getGender().getGender_name());
-		admin.setAvartar(user.getAvatar());
+		admin.setAvatar(user.getAvatar());
 		admin.setThumb(user.getThumb());
 
 		return ResponseEntity.status(200).body(admin);
@@ -210,7 +280,11 @@ public class AdminControlProfile {
 			admin.setUsername(adminRequestUpdate.getUsername());
 			admin.setFullname(adminRequestUpdate.getFullname());	
 			admin.setIntro(adminRequestUpdate.getIntro());
-					
+			
+			admin.setAvatar(adminRequestUpdate.getAvatar());
+			
+			admin.setThumb(adminRequestUpdate.getThumb());
+			
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			Date date = sdf.parse(adminRequestUpdate.getBirthday());
 			Calendar birthday = Calendar.getInstance();
@@ -284,4 +358,21 @@ public class AdminControlProfile {
 		}
 	}
 
+}
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+class EmailChange {
+	String newEmail;
+	String password;
+}
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+class EmailConfirm {
+	String oldEmail;
+	String newEmail;
+	String currentPassword;
 }

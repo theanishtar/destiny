@@ -24,7 +24,7 @@ public class AdminUserProfile {
 	
 	String city_name;
 	String gender_name;
-	String avartar;
+	String avatar;
 	String thumb;
 	int mark;
 	
@@ -35,5 +35,6 @@ public class AdminUserProfile {
 	int totalShare;
 	
 	List<AdminPostDetail> listAllPostOfUser;
+	List<UserSendReport> listUserSendReports;
 	
 }

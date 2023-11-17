@@ -1,5 +1,6 @@
 package com.davisy.mongodb.documents;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.bson.types.ObjectId;
@@ -20,6 +21,11 @@ public class BadWord {
 	private int label = 1; // nhãn
 	private int severityLevel = 1; // mức độ nghiêm trọng
 	private Date createDate = new Date(); // này tạo
+	
+	public String getFormatDate() {
+		
+		return new SimpleDateFormat("dd-MM-yyyy").format(this.getCreateDate());
+	}
 
 //	@Override
 //	public String toString() {

@@ -6,8 +6,18 @@ import java.util.List;
 import com.davisy.entity.PostReported;
 
 public interface PostReportedService {
+	
+	// 6-11-2023
+	public List<Object[]> getAllPostReportedByDay(int day, int month);
+	
+	// 6-11-2023
+	public List<Object[]> getAllPostReportedByYear(int year);
+	
+	// 6-11-2023
+	public List<PostReported> getAllPostReported();
 
-	public List<PostReported> getAllPostReporedById(int id);
+	// 6-11-2023
+	public List<PostReported> getAllPostReportedById(int id);
 	
 	// 1-11-2023 -lấy tổng số bài đăng bị báo cáo theo ngày
 	public int getTotalPostReportedByDay(int day, int month);

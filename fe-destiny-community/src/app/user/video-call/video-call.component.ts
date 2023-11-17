@@ -52,18 +52,14 @@ export class VideoCallComponent {
 
     const iceServers = {
       iceServers: [
-        { urls: `stun:${LOCAL_IP_ADDRESS}:3478` },
-        {
-          urls: `turn:${LOCAL_IP_ADDRESS}:3478`,
-          username: "username",
-          credential: "password"
-        }
+          { 'urls': 'stun:stun.stunprotocol.org:3478' },
+          { 'urls': 'stun:stun.l.google.com:19302' },
       ]
     };
 
     const streamConstraints = { audio: true, video: true };
 
-    this.socket = io('http://localhost:8000');
+    this.socket = io('https://vnjrbdujf.onrender.com:443');
 
     btnToggleVideo!.addEventListener("click", () => toggleTrack("video"));
     btnToggleAudio!.addEventListener("click", () => toggleTrack("audio"));

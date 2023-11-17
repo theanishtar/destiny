@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.davisy.dao.UserReportedDAO;
-import com.davisy.entity.PostReported;
 import com.davisy.entity.UserReported;
 import com.davisy.service.UserReportedService;
 
@@ -19,11 +18,29 @@ public class UserReportedServiceImpl implements UserReportedService {
 	
 	Calendar now = Calendar.getInstance();
 	int year = now.get(Calendar.YEAR);
+	
+	@Override
+	public List<Object[]> getAllUserReportedByDay(int day, int month) {
+		// TODO Auto-generated method stub
+		return userReportedDAO.getAllUserReportedByDay(day, month, year);
+	}
+	
+	@Override
+	public List<Object[]> getAllUserReportedByYear(int year) {
+		// TODO Auto-generated method stub
+		return userReportedDAO.getAllUserReportedByYear(year);
+	}
+	
+	@Override
+	public List<UserReported> getAllUserReported() {
+		// TODO Auto-generated method stub
+		return userReportedDAO.findAll();
+	}
 
 	@Override
-	public List<UserReported> getAllPostReporedById(int id) {
+	public List<UserReported> getAllUserReportedById(int id) {
 		// TODO Auto-generated method stub
-		return userReportedDAO.getAllUserReporedById(id);
+		return userReportedDAO.getAllUserReportedById(id);
 	}
 
 	@Override

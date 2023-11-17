@@ -23,6 +23,7 @@ import { LoadingService } from '../service/loading.service';
 import { PostService } from '../service/post.service';
 import { MessageService } from '@app/user/service/message.service';
 import { ProfileService } from '../service/profile.service';
+import { ReportService } from '../service/report.service';
 import { DatePipe } from '@angular/common';
 import '../../../assets/toast/main.js';
 import { forEach } from 'angular';
@@ -64,6 +65,7 @@ export class NewsfeedComponent implements OnInit {
 
   
   ngOnInit() {
+    // this.reportService.openReportPost();
     this.userDisplayName = this.cookieService.get('full_name');
     // this.loadPosts();
     this.checkLoad();
@@ -103,7 +105,8 @@ export class NewsfeedComponent implements OnInit {
     private datePipe: DatePipe, //Định dạng ngày,
     public profileService: ProfileService,
     private el: ElementRef,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    public reportService: ReportService
   ) {
   }
   checkLoad() {

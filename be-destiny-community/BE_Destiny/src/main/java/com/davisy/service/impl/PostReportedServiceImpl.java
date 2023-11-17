@@ -20,9 +20,27 @@ public class PostReportedServiceImpl implements PostReportedService{
 	int year = now.get(Calendar.YEAR);
 
 	@Override
-	public List<PostReported> getAllPostReporedById(int id) {
+	public List<Object[]> getAllPostReportedByDay(int day, int month) {
+		// TODO Auto-generated method stub
+		return postReportedDAO.getAllPostReportedByDay(day, month, year);
+	}
+	
+	@Override
+	public List<Object[]> getAllPostReportedByYear(int year) {
+		// TODO Auto-generated method stub
+		return postReportedDAO.getAllPostReportedByYear(year);
+	}
+	
+	@Override
+	public List<PostReported> getAllPostReported() {
+		// TODO Auto-generated method stub
+		return postReportedDAO.findAll();
+	}
 
-		return postReportedDAO.getAllPostReporedById(id);
+	@Override
+	public List<PostReported> getAllPostReportedById(int id) {
+
+		return postReportedDAO.getAllPostReportedById(id);
 	}
 	
 	@Override

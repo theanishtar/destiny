@@ -134,7 +134,7 @@ public class AdminPostStatistics {
 
 				adminPostTOP4.setUser_email(post.getUser().getEmail());
 				adminPostTOP4.setUser_fullname(post.getUser().getFullname());
-				adminPostTOP4.setUser_avartar(post.getUser().getAvatar());
+				adminPostTOP4.setUser_avatar(post.getUser().getAvatar());
 				newList.add(adminPostTOP4);
 			}
 			return ResponseEntity.status(200).body(newList);
@@ -147,14 +147,17 @@ public class AdminPostStatistics {
 	// update lastest 7-10
 	public List<PostImagesDetail> listImagesDetail(int postId) {
 
+		String img = "https://firebasestorage.googleapis.com/v0/b/destiny-davisy.appspot.com/o/08.jpg?alt=media&token=1027fbbb-43ee-4046-8e13-5640153356ea&_gl=1*17e3a7c*_ga*MTcxMDU3NTczOS4xNjc2OTc2NjE1*_ga_CW55HF8NVT*MTY5NjUwMzgxNi44LjEuMTY5NjUwNTg5Ny42MC4wLjA.";
 		List<PostImages> listImages = postImagesService.getListPostImagesByPostID(postId);
 		List<PostImagesDetail> listImagesDetail = new ArrayList<>();
 		for (PostImages postImages : listImages) {
 			PostImagesDetail postImagesDetail = new PostImagesDetail();
+			if(postImages.getLink_image().equals("")) {
+				postImages.setLink_image(img);
+			}
 			postImagesDetail.setLink_image(postImages.getLink_image());
 			listImagesDetail.add(postImagesDetail);
 		}
-
 		return listImagesDetail;
 	}
 
@@ -169,7 +172,7 @@ public class AdminPostStatistics {
 
 			for (Object[] oj : list) {
 				String month = String.valueOf(oj[0]);
-				for (int i = 1; i < listMonth.length; i++) {
+				for (int i = 0; i < listMonth.length; i++) {
 					if (month.equals(String.valueOf(i + 1))) {
 						listTotalPost[i] = Integer.valueOf(String.valueOf(oj[1]));
 					}

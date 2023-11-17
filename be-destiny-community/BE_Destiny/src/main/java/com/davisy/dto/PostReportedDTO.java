@@ -2,7 +2,7 @@ package com.davisy.dto;
 
 import java.util.List;
 
-import com.davisy.entity.PostImages;
+import org.bson.types.ObjectId;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,14 +13,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdminPostTOP4 {
-	int post_id;
-	String content;
+public class PostReportedDTO {
+	private ObjectId id;
+	String post_id;
+	String content_post;
 	String product;
-	
-	public List<PostImagesDetail> listPostImages;
-	
-	String user_email;
-	String user_fullname;
-	String user_avatar;
+	String date_post;
+	String postImage;
+	String content_report;
+	String date_report;
+
 }

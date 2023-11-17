@@ -64,7 +64,7 @@ public class ModeratorControlProfile {
 		String email = jwtTokenUtil.getEmailFromHeader(request);
 		User user = userService.findByEmail(email);
 		Admin admin = new Admin();
-		admin.setAvartar(user.getAvatar());
+		admin.setAvatar(user.getAvatar());
 
 		return ResponseEntity.status(200).body(admin);
 	}
@@ -107,7 +107,7 @@ public class ModeratorControlProfile {
 		admin.setWard_name(user.getWards().getFull_name());
 
 		admin.setGender_name(user.getGender().getGender_name());
-		admin.setAvartar(user.getAvatar());
+		admin.setAvatar(user.getAvatar());
 		admin.setThumb(user.getThumb());
 
 		return ResponseEntity.status(200).body(admin);

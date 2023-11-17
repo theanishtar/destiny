@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class AdminUserTOP4 {
 	String email;
 	String fullname;
-	String avartar;
+	String avatar;
 	String location;
 	int age;
 	

@@ -11,22 +11,23 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdminPostDetail{
-	
+public class AdminPostDetail {
+
 	int post_id;
 	String user_fullname;
-	String user_avartar;
+	String user_avatar;
 	String user_email;
-	
+
 	String content;
 	String date_Post;
 	String product;
-	
+
 	int totalInterested;
 	int totalShare;
 	int totalComment;
-	
-	public List<PostImagesDetail> listPostImages;
-	public List<CommentDetail> listComments;
+
+	List<PostImagesDetail> listPostImages;
+	List<CommentDetail> listComments;
+	List<UserSendReport> listUserSendReports;
 
 }

@@ -4,23 +4,23 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 
-import com.davisy.mongodb.documents.PostReported;
+import com.davisy.mongodb.documents.ModeratorPostReported;
 
 public interface ModeratorPostReportedService {
 	
 	public boolean checkExistReport(String post_reported_id, String user_send_report_id);
 	
-	public PostReported findById(ObjectId _id);
+	public ModeratorPostReported findById(ObjectId _id);
 	
-	public PostReported findByColumn(String column, String id);
+	public ModeratorPostReported findByColumn(String column, String id);
 	
-	public PostReported findByTwoColumn(String column1, String id1, String column2, String id2);
+	public ModeratorPostReported findByTwoColumn(String column1, String id1, String column2, String id2);
 	
-	public List<PostReported> findAllByColumn(String column, String id);
+	public List<ModeratorPostReported> findAllByColumn(String column, String id);
 	
-	public List<PostReported> findAll();
+	public List<ModeratorPostReported> findAll();
 	
-	public PostReported insert(PostReported postReported);
+	public ModeratorPostReported insert(ModeratorPostReported postReported);
 	
 	public long delete(ObjectId _id);
 

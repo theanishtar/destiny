@@ -91,3 +91,6 @@ div#section-navigation-slider {
     overflow: scroll;
   }
 }
+img, a.user-short-description-avatar.user-avatar {
+  cursor: no-drop;
+}

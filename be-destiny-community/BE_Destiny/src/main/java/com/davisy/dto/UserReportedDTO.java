@@ -1,6 +1,6 @@
 package com.davisy.dto;
 
-import java.util.List;
+import org.bson.types.ObjectId;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentDetail {
-	String content;
-	String user_fullname;
-	String user_avatar;
-	String user_email;
-	String time_comment;
+public class UserReportedDTO {
+	private ObjectId id;
+	String fullname;
+	String avatar;
+	String content_report;
+	String date_report;
 	
-	List<CommentDetail> listCommentReply;
+	int totalPost;
 }

@@ -2,20 +2,25 @@ package com.davisy.service;
 
 import java.util.List;
 
-import com.davisy.mongodb.documents.UserReported;
+import org.bson.types.ObjectId;
+
+import com.davisy.mongodb.documents.ModeratorUserReported;
 
 public interface ModeratorUserReportedService {
-	public UserReported findByUserReportedId(UserReported userReported, Class<UserReported> classUserReported, String collectionName, int user_reported_id);
-
-	public List<UserReported> findAllByUserReportedId(UserReported userReported, Class<UserReported> classUserReported, String collectionName, int user_reported_id);
 	
-	public List<UserReported> findAll(UserReported userReported, Class<UserReported> classUserReported, String collectionName);
+	public boolean checkExistReport(String user_reported_id, String user_send_report_id);
 	
-	public UserReported insert(UserReported userReported, Class<UserReported> classUserReported, String collectionName);
+	public ModeratorUserReported findById(ObjectId _id);
 	
-	public List<UserReported> inserts(List<UserReported> userReporteds, String collectionName);
-
-	public UserReported update(Class<UserReported> classUserReported, String collectionName, String name,UserReported userReportedUpdate);
+	public ModeratorUserReported findByColumn(String column, String id);
 	
-	public long delete(UserReported userReported, Class<UserReported> classUserReported, String collectionName, String name);
+	public ModeratorUserReported findByTwoColumn(String column1, String id1, String column2, String id2);
+	
+	public List<ModeratorUserReported> findAllByColumn(String column, String id);
+	
+	public List<ModeratorUserReported> findAll();
+	
+	public ModeratorUserReported insert(ModeratorUserReported UserReported);
+	
+	public long delete(ObjectId _id);
 }

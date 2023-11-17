@@ -11,12 +11,17 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentDetail {
-	String content;
-	String user_fullname;
-	String user_avatar;
-	String user_email;
-	String time_comment;
+public class UserReportedDetail {
+	String email;
+	String fullname;
+	String intro;
+	String avatar;
+	String location;
+	String date_join;
+	String birthday;
+	String gender_name;
 	
-	List<CommentDetail> listCommentReply;
+	int total_post;
+	int total_report;
+	
 }

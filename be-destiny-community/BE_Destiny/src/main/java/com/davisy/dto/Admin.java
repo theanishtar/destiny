@@ -22,6 +22,6 @@ public class Admin {
 	String district_name;
 	String ward_name;
 	String gender_name;
-	String avartar;
+	String avatar;
 	String thumb;
 }

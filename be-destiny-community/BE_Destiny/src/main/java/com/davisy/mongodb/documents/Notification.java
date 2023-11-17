@@ -12,10 +12,11 @@ import lombok.NoArgsConstructor;
 public class Notification {
 	private String idUserSend;
 	private String idUserReceive;
-	private String postId;
+	private String postId="";
 	private String replyId;
 	private String contentNotification;
 	private String typeNotification;
-	private Date dateNotification;
+	private String dateNotification;
+	private boolean status=false;
 	
 }

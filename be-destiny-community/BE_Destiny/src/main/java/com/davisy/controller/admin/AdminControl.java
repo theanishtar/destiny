@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.davisy.config.JwtTokenUtil;
@@ -22,16 +23,21 @@ import com.davisy.dto.AdminPostDetail;
 import com.davisy.dto.AdminUserProfile;
 import com.davisy.dto.CommentDetail;
 import com.davisy.dto.PostImagesDetail;
+import com.davisy.dto.UserSendReport;
 import com.davisy.entity.Comment;
 import com.davisy.entity.Post;
 import com.davisy.entity.PostImages;
+import com.davisy.entity.PostReported;
 import com.davisy.entity.User;
+import com.davisy.entity.UserReported;
 import com.davisy.service.CommentService;
 import com.davisy.service.FollowService;
 import com.davisy.service.InterestedService;
 import com.davisy.service.PostImagesService;
+import com.davisy.service.PostReportedService;
 import com.davisy.service.PostService;
 import com.davisy.service.ShareService;
+import com.davisy.service.UserReportedService;
 import com.davisy.service.UserService;
 
 @RestController
@@ -52,6 +58,10 @@ public class AdminControl {
 	private UserService userService;
 	@Autowired
 	private FollowService followService;
+	@Autowired
+	private PostReportedService postReportedService;
+	@Autowired
+	private UserReportedService userReportedService;
 
 	// 23-9-2023 -xem chi tiết bài đăng
 	// update lastest 7-10
@@ -84,27 +94,23 @@ public class AdminControl {
 
 	// 22-9-2023 -Vô hiệu hóa bài viết
 	@GetMapping("/v1/admin/actionOnPost/{postid}")
-	public ResponseEntity<Post> adminGetActionPost(@PathVariable int postid) {
+	public void adminGetActionPost(@PathVariable int postid) {
 		try {
 			Post post = postService.findPostByID(postid);
 			postService.disable(post);
-			return ResponseEntity.status(200).body(post);
 		} catch (Exception e) {
 			System.out.println("Error at admin/actionOnPost: " + e);
-			return ResponseEntity.status(403).body(null);
 		}
 	}
 
 	// 22-9-2023 -Vô hiệu hóa người dùng
 	@GetMapping("/v1/admin/actionOnUser/{email}")
-	public ResponseEntity<User> adminGetActionUser(@PathVariable String email) {
+	public void adminGetActionUser(@PathVariable String email) {
 		try {
 			User user = userService.findByEmail(email);
 			userService.disable(user);
-			return ResponseEntity.status(200).body(user);
 		} catch (Exception e) {
 			System.out.println("Error at admin/actionOnUser: " + e);
-			return ResponseEntity.status(403).body(null);
 		}
 	}
 
@@ -124,7 +130,7 @@ public class AdminControl {
 
 		userProfile.setCity_name(user.getProvinces().getFull_name());
 		userProfile.setGender_name(user.getGender().getGender_name());
-		userProfile.setAvartar(user.getAvatar());
+		userProfile.setAvatar(user.getAvatar());
 		userProfile.setThumb(user.getThumb());
 		userProfile.setMark(user.getMark());
 
@@ -143,11 +149,13 @@ public class AdminControl {
 		List<AdminPostDetail> listAdminPostDetails = new ArrayList<>();
 
 		for (Post post : listPost) {
-			//if() postparentid
-			listAdminPostDetails.add(setPostDetail(post));
+			if (post.getPostParent() == null && post.isBan() == false && post.isPost_status() == true) {
+				listAdminPostDetails.add(setPostDetail(post));
+			}
 		}
 
 		userProfile.setListAllPostOfUser(listAdminPostDetails);
+		userProfile.setListUserSendReports(listUserSendReportToUser(user.getUser_id()));
 
 		return userProfile;
 	}
@@ -163,7 +171,7 @@ public class AdminControl {
 
 		postDTO.setUser_fullname(post.getUser().getFullname());
 
-		postDTO.setUser_avartar(post.getUser().getAvatar());
+		postDTO.setUser_avatar(post.getUser().getAvatar());
 
 		postDTO.setContent(post.getContent());
 
@@ -181,13 +189,15 @@ public class AdminControl {
 
 		postDTO.setListComments(listCommentDetail(post.getPost_id()));
 
+		postDTO.setListUserSendReports(listUserSendReportToPost(post.getPost_id()));
+
 		return postDTO;
 	}
 
 	// update lastest 7-10
 	public String formatDate(Calendar birthday) {
 		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-		
+
 		String formatted = format.format(birthday.getTime());
 
 		return formatted;
@@ -271,7 +281,13 @@ public class AdminControl {
 		} else if (monthCaculate > 1) {
 			timeCaculate = String.valueOf(monthCaculate + " tháng trước");
 		} else {
-			timeCaculate = String.valueOf(dayCaculate - totalDayInMonth + " ngày trước");
+			int time = dayCaculate - totalDayInMonth;
+			if(time == 0) {
+				timeCaculate = String.valueOf("Vài giờ trước");
+			}
+			else {
+				timeCaculate = String.valueOf(time + " ngày trước");
+			}
 		}
 
 		return timeCaculate;
@@ -302,24 +318,17 @@ public class AdminControl {
 
 	// update lastest 7-10
 	public List<PostImagesDetail> listImagesDetail(int postId) {
-
+		String img = "https://firebasestorage.googleapis.com/v0/b/destiny-davisy.appspot.com/o/08.jpg?alt=media&token=1027fbbb-43ee-4046-8e13-5640153356ea&_gl=1*17e3a7c*_ga*MTcxMDU3NTczOS4xNjc2OTc2NjE1*_ga_CW55HF8NVT*MTY5NjUwMzgxNi44LjEuMTY5NjUwNTg5Ny42MC4wLjA.";
 		List<PostImages> listImages = postImagesService.getListPostImagesByPostID(postId);
 		List<PostImagesDetail> listImagesDetail = new ArrayList<>();
 		for (PostImages postImages : listImages) {
 			PostImagesDetail postImagesDetail = new PostImagesDetail();
+			if(postImages.getLink_image().equals("")) {
+				postImages.setLink_image(img);
+			}
 			postImagesDetail.setLink_image(postImages.getLink_image());
 			listImagesDetail.add(postImagesDetail);
 		}
-		String img = "https://firebasestorage.googleapis.com/v0/b/destiny-davisy.appspot.com/o/08.jpg?alt=media&token=1027fbbb-43ee-4046-8e13-5640153356ea&_gl=1*17e3a7c*_ga*MTcxMDU3NTczOS4xNjc2OTc2NjE1*_ga_CW55HF8NVT*MTY5NjUwMzgxNi44LjEuMTY5NjUwNTg5Ny42MC4wLjA.";
-
-		PostImagesDetail postImagesDetail = new PostImagesDetail();
-		postImagesDetail.setLink_image(img);
-		listImagesDetail.add(postImagesDetail);
-		PostImagesDetail postImagesDetail2 = new PostImagesDetail();
-		postImagesDetail2.setLink_image(img);
-		listImagesDetail.add(postImagesDetail2);
-		listImagesDetail.add(postImagesDetail2);
-
 		return listImagesDetail;
 	}
 
@@ -327,17 +336,79 @@ public class AdminControl {
 	public List<CommentDetail> listCommentDetail(int postId) {
 
 		List<Comment> listComment = commentService.getListCommentByPostID(postId);
+
 		List<CommentDetail> listCommentDetail = new ArrayList<>();
+
+		for (Comment comment : listComment) {
+			if (comment.getCommentParent() == null) {
+				CommentDetail commentDetail = new CommentDetail();
+				commentDetail.setContent(comment.getContent());
+				commentDetail.setUser_fullname(comment.getUser().getFullname());
+				commentDetail.setUser_avatar(comment.getUser().getAvatar());
+				commentDetail.setUser_email(comment.getUser().getEmail());
+				commentDetail.setTime_comment(timeCaculate(comment.getDate_comment()));;
+				List<Comment> listCommentReply = commentService.findAllByIdComment(comment.getComment_id());
+				commentDetail.setListCommentReply(setlistCommentDetail(listCommentReply));
+
+				listCommentDetail.add(commentDetail);
+			}
+		}
+
+		return listCommentDetail;
+	}
+
+	public List<CommentDetail> setlistCommentDetail(List<Comment> listComment) {
+
+		List<CommentDetail> listCommentDetail = new ArrayList<>();
+
 		for (Comment comment : listComment) {
 			CommentDetail commentDetail = new CommentDetail();
 			commentDetail.setContent(comment.getContent());
 			commentDetail.setUser_fullname(comment.getUser().getFullname());
-			commentDetail.setUser_avartar(comment.getUser().getAvatar());
+			commentDetail.setUser_avatar(comment.getUser().getAvatar());
 			commentDetail.setUser_email(comment.getUser().getEmail());
+			commentDetail.setTime_comment(timeCaculate(comment.getDate_comment()));
+			
 			listCommentDetail.add(commentDetail);
 		}
 
 		return listCommentDetail;
+	}
+
+	// update lastest 8-11
+	public List<UserSendReport> listUserSendReportToPost(int postId) {
+
+		List<PostReported> postReporteds = postReportedService.getAllPostReportedById(postId);
+		List<UserSendReport> listUserSendReport = new ArrayList<>();
+		for (PostReported postR : postReporteds) {
+			UserSendReport userSendReport = new UserSendReport();
+			userSendReport.setEmail(postR.getUserSendReport().getEmail());
+			userSendReport.setFullname(postR.getUserSendReport().getFullname());
+			userSendReport.setAvatar(postR.getUserSendReport().getAvatar());
+			userSendReport.setContent(postR.getContent_report());
+			userSendReport.setDate_report(formatDate(postR.getDate_report()));
+			listUserSendReport.add(userSendReport);
+		}
+
+		return listUserSendReport;
+	}
+
+	// update lastest 8-11
+	public List<UserSendReport> listUserSendReportToUser(int userId) {
+
+		List<UserReported> userReporteds = userReportedService.getAllUserReportedById(userId);
+		List<UserSendReport> listUserSendReport = new ArrayList<>();
+		for (UserReported userR : userReporteds) {
+			UserSendReport userSendReport = new UserSendReport();
+			userSendReport.setEmail(userR.getUserSendReport().getEmail());
+			userSendReport.setFullname(userR.getUserSendReport().getFullname());
+			userSendReport.setAvatar(userR.getUserSendReport().getAvatar());
+			userSendReport.setContent(userR.getContent_report());
+			userSendReport.setDate_report(formatDate(userR.getDate_report()));
+			listUserSendReport.add(userSendReport);
+		}
+
+		return listUserSendReport;
 	}
 
 }
