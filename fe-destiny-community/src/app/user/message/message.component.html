@@ -397,20 +397,77 @@
           </div>
           <!-- /USER STATUS -->
         </div>
-        <div class="loader-bars" *ngIf="checkLoadingdata">
-          <div class="loader-bar"></div>
-          <div class="loader-bar"></div>
-          <div class="loader-bar"></div>
-          <div class="loader-bar"></div>
-          <div class="loader-bar"></div>
-          <div class="loader-bar"></div>
-          <div class="loader-bar"></div>
-          <div class="loader-bar"></div>
+        <div *ngIf="checkLoadingdata">
+          <div class="loader-bars">
+            <div class="loader-bar"></div>
+            <div class="loader-bar"></div>
+            <div class="loader-bar"></div>
+            <div class="loader-bar"></div>
+            <div class="loader-bar"></div>
+            <div class="loader-bar"></div>
+            <div class="loader-bar"></div>
+            <div class="loader-bar"></div>
+          </div>
+          <div class="loading">Đang tải</div>
         </div>
         <!-- /CHAT WIDGET HEADER -->
         <div>
           <!-- CHAT WIDGET CONVERSATION -->
         <div class="chat-widget-conversation" id="chatContainer" (scroll)="checkScrollPosition()" data-simplebar>
+          <!-- Khung chat -->
+          <div class="message-content" *ngFor="let m of messageService.listMessages;let i =index">
+            
+            <div *ngIf="m[6]!=null" class="time-date" style="color: black;padding: 16px 20px;text-align: center;">
+              <div class="date-send" style="text-align: center;font-size: 12px; font-family: Helvetica, Arial, sans-serif;">
+              {{checkDate(m[6])}}
+              </div>
+              </div>
+            <div *ngIf="m[3] == id && m[7] === 'text'" class="chat-widget-speaker left" (contextmenu)="onRightClick($event, m[0])" style="padding: 0 26px 0 36px; display: flex; flex-flow: column; position: relative; margin-bottom: 1rem !important;">
+              <a class="user-avatar small user-status-avatar no-border no-outline avatar-mess" href="profile" style="position: absolute;left: -10px;top: -8px; width: 40px;height: 44px; display: block;">
+              <div class="hexagon-container" style="width: 35px; height: 38px; position: relative; margin: 0 auto;background: white;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); ">
+              <div class="hexagon user-avatar-content" style="top: 6px;left: 5px;position: absolute;z-index: 3;width: 40px;height: 44px;overflow: hidden;">
+              <div class="hexagon-image" 
+              style="background-image: url({{m[4]}}); width: 20px; height: 23px;position: relative; z-index: 3;background-size: cover;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);left: 4%;top: 2%;"></div>
+              </div>
+              <div class="hexagon user-avatar-border" style="position: absolute;top: 0;left: 0;z-index: 1;">
+              <div style="position: absolute; top: 0; left: 0; z-index: 1; content: \'\'; width: 32px; height: 36px; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); left: 1px; top: 0px; background-image: linear-gradient(to right, #41efff, #615dfa); display: block;"></div>
+              <div class="hexagon-border"></div>
+              </div>
+              <div class="hexagon user-avatar-progress-border" style="margin-left: 11%;margin-top: 10.3%; width: 26px;height: 29px;top: 0;left: 0;z-index: 2;position: absolute;background: white;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">
+                <div class="user-avatar-progress" style="top: 0;left: 0;z-index: 3;position: absolute;"></div>
+              </div>
+              </div>
+              </a>
+              <p class="chat-widget-speaker-message" style="border-top-left-radius: 0; display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600; line-height: 1.1428571429em;width: fit-content; max-width: 250px; word-wrap: break-word; white-space: normal; color: #3e3f5e;font-family: Helvetica, Arial, sans-serif;margin: 0;">
+                {{(m[8] === false) ? m[1] : 'Tin nhắn đã bị thu hồi'}}
+              </p>
+              <p class="chat-widget-speaker-timestamp" style="margin-top: 12px !important;color: #adafca;font-size: 0.75rem;font-weight: 500;font-family: Helvetica, Arial, sans-serif;line-height: 1em;margin: 0;">
+                {{getCustomTime(m[2])}} </p>
+              </div>
+
+              <div *ngIf="m[3] != id && m[7] === 'text'" class="chat-widget-speaker right" (contextmenu)="onRightClick($event, m[0])" style=" padding-left: 64px; align-items: flex-end; display: flex; flex-flow: column; position: relative;">
+               <p class="chat-widget-speaker-message" style="border-top-right-radius: 0; background-color: #615dfa !important; font-family: Helvetica, Arial, sans-serif !important; margin-bottom: 0 !important; color: #fff;display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600;line-height: 1.1428571429em;width: auto; max-width: 250px; word-wrap: break-word; white-space: normal;">
+                {{(m[8] === false) ? m[1] : 'Tin nhắn đã bị thu hồi'}}
+              </p>
+              <p class="chat-widget-speaker-timestamp" style="margin-top: 12px; margin-bottom: 12px !important; color: #adafca;font-size: 0.75rem;font-weight: 500; font-family: Helvetica, Arial, sans-serif !important;line-height: 1em;">
+                {{getCustomTime(m[2])}}
+              </p>
+              <!-- SIMPLE DROPDOWN -->
+              <div
+              class="simple-dropdown widget-box-post-settings-dropdown recall-menu right"
+              [attr.id]="'recall-menu-' + m[0]"
+            >
+              <!-- SIMPLE DROPDOWN LINK -->
+              <p class="simple-dropdown-link" (click)="messageRecall(m[0], i, +id, m[3] !== id ? m[3] : +id)">Thu hồi</p>
+              <!-- /SIMPLE DROPDOWN LINK -->
+            </div>
+            <!-- /SIMPLE DROPDOWN -->
+              </div>
+              
+
+
+              <div *ngIf="messageService.checkUserBlock === true" class="noftify-block">Người này đã chặn bạn!</div>
+          </div>
           <!-- Khung chat -->
           <div class="scrollToBottomButton" id="scrollToBottomButton" (click)="scrollToBottomMessage()" style="display: none;">
             <i class="fa-solid fa-chevron-down"></i>

@@ -15,6 +15,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -68,12 +69,15 @@ public class MessageController {
 		messages.setChats(chats);
 		messages.setSend_Status(false);
 		messagesService.create(messages);
+		Object[] o = messagesService.findByIdMessage(message.getFromLogin(), to, messages.getId());
+		simpMessagingTemplate.convertAndSend("/topic/statusmessages/" + message.getFromLogin(), o);
 		boolean isExists = UserChatStorage.getInstance().getUsers().containsKey(to);
 		if (isExists) {
 			simpMessagingTemplate.convertAndSend("/topic/messages/" + to, message);
 
 		}
-		simpMessagingTemplate.convertAndSend("/topic/statusmessages/" + message.getFromLogin(), true);
+		System.out.println("messages id: "+messages.getId());
+		
 	}
 
 	@PostMapping("/v1/user/chat/load/messages")
@@ -87,6 +91,14 @@ public class MessageController {
 			System.out.println("Error loadMessages in MessagesController: " + e);
 			return ResponseEntity.badRequest().build();
 		}
+	}
+	@GetMapping("/v1/user/chat/recall/messages/{id}/{position}/{from}/{to}")
+	public ResponseEntity<Object[]> updateRecallMessage(@PathVariable int id,@PathVariable int position, @PathVariable int from,
+			@PathVariable int to) {
+		messagesService.updateRecallMessages(true, id);
+		Object[] o = messagesService.findByIdMessage(from, to, id);
+		simpMessagingTemplate.convertAndSend("/topic/recall/messages/" + to, o);
+		return ResponseEntity.ok().body(o);
 	}
 
 //	@PostMapping("/v1/user/chat/load/messages")

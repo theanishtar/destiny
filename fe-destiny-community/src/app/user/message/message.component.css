@@ -442,3 +442,23 @@ i.fa-solid.fa-circle-exclamation {
   color: red;
   font-weight: 700;
 }
+.loading {
+  text-align: center;
+  font-size: 17px;
+  color: #3e3f5e;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.chat-widget-speaker{
+  position: relative;
+}
+.simple-dropdown.widget-box-post-settings-dropdown.recall-menu {
+  border-radius: 4px;
+  z-index: 9999;
+  box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
+  border: 1px solid #d6dbe1;
+  background: white;
+}
+.simple-dropdown.widget-box-post-settings-dropdown.recall-menu.right {
+  right: 15%;
+  top: 40%;
+}

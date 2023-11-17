@@ -44,4 +44,7 @@ public class Messages {
 	Chats chats;
 
 	boolean send_Status;
+	
+	String type ="text";
+	boolean recall =false;
 }

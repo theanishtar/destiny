@@ -32,7 +32,7 @@ export class MessageComponent implements OnInit {
   sender: any;
   checkListChat: boolean = false;
   listFriendss: any;
-  listMess: any;
+  // listMess: any;
   mapUser = new Map<string, UserModel>();
   isOnline: string | undefined;
   image: string | undefined;
@@ -54,8 +54,11 @@ export class MessageComponent implements OnInit {
   searchTerm: string = '';
   checkLoadingdata: boolean = true;
   checkBlock: boolean = false;
+  dateTemp: string = "";
 
   ngOnInit() {
+    
+    this.scrollToBottomMessage();
     this.messageService.isOriginal = true;
     this.isLoading = this.messageService.isLoading;
 
@@ -74,6 +77,7 @@ export class MessageComponent implements OnInit {
     if (this.messageService.checkSelected != '') {
       this.selectedUser(this.messageService.checkSelected);
     }
+
     liquid.liquid();
     avatarHexagons.avatarHexagons();
     tooltips.tooltips();
@@ -83,6 +87,8 @@ export class MessageComponent implements OnInit {
     sidebars.sidebars();
     content.contentTab();
     form.formInput();
+
+    this.checkScrollPosition();
   }
 
   constructor(
@@ -90,7 +96,8 @@ export class MessageComponent implements OnInit {
     public messageService: MessageService,
     private el: ElementRef,
     private renderer: Renderer2
-  ) { }
+  ) { 
+  }
 
   /* ============Message============= */
   search() {
@@ -114,7 +121,7 @@ export class MessageComponent implements OnInit {
   }
 
   selectedUser(userid) {
-
+    this.dateTemp = "";
     this.checkBlock = false;
     this.messageService.checkUserBlock = false;
     let chatContainer = document.getElementById("chatContainer") as HTMLElement;
@@ -166,81 +173,85 @@ export class MessageComponent implements OnInit {
       this.count++;
 
       this.$chatHistory = $('.chat-widget-conversation');
-      this.listMess = JSON.parse(JSON.stringify(res));
-      if (res != null) {
-        for (let m of this.listMess) {
-          if (datetemp.substring(0, 10).toString() !== m[2].substring(0, 10).toString() || datetemp == '') {
-            this.$chatHistory.append(this.showDate(m[2]));
-            datetemp = m[2];
-          }
-          let countMessage = document.getElementById('count-mess-' + this.id);
-          if (countMessage) {
-            countMessage.parentNode?.removeChild(countMessage);
-          }
-          if (m[3] == this.id) {
-            this.$chatHistory.append(
-              '<div class="chat-widget-speaker left" style="padding: 0 26px 0 36px; display: flex; flex-flow: column; position: relative; margin-bottom: 1rem !important;">' +
-              '<a class="user-avatar small user-status-avatar no-border no-outline avatar-mess" href="profile" style="position: absolute;left: -10px;top: -8px; width: 40px;height: 44px; display: block;"> ' +
-              '<div class="hexagon-container" style="width: 35px; height: 38px; position: relative; margin: 0 auto;background: white;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); "> ' +
-              '<div class="hexagon user-avatar-content" style="top: 6px;left: 5px;position: absolute;z-index: 3;width: 40px;height: 44px;overflow: hidden;">  ' +
-              '<div class="hexagon-image" ' +
-              'style="background-image: url(' + m[4] + '); width: 20px; height: 23px;position: relative; z-index: 3;background-size: cover;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);left: 4%;top: 2%;"></div>' +
-              '</div>' +
-              '<div class="hexagon user-avatar-border" style="position: absolute;top: 0;left: 0;z-index: 1;">' +
-              '<div style="position: absolute; top: 0; left: 0; z-index: 1; content: \'\'; width: 32px; height: 36px; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); left: 1px; top: 0px; background-image: linear-gradient(to right, #41efff, #615dfa); display: block;"></div>' +
-              '<div class="hexagon-border"></div>' +
-              '</div>' +
-              '<div class="hexagon user-avatar-progress-border" style="margin-left: 11%;margin-top: 10.3%; width: 26px;height: 29px;top: 0;left: 0;z-index: 2;position: absolute;background: white;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">' +
-              '  <div class="user-avatar-progress" style="top: 0;left: 0;z-index: 3;position: absolute;"></div>' +
-              '</div>' +
-              '</div>' +
-              '</a>' +
-              '<p class="chat-widget-speaker-message" style="border-top-left-radius: 0; display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600; line-height: 1.1428571429em;width: fit-content; max-width: 250px; word-wrap: break-word; white-space: normal; color: #3e3f5e;font-family: Helvetica, Arial, sans-serif;margin: 0;">' +
-              m[1] +
-              '</p>' +
-              '<p class="chat-widget-speaker-timestamp" style="margin-top: 12px !important;color: #adafca;font-size: 0.75rem;font-weight: 500;font-family: Helvetica, Arial, sans-serif;line-height: 1em;margin: 0;">'
-              + this.getCustomTime(m[2]) + '</p>' +
-              '</div>	'
-            );
-            if (m[5] == false) {
-              this.messageService.checkUserBlock = true;
-            }
+      this.messageService.listMessages = JSON.parse(JSON.stringify(res));
+      // if (res != null) {
+      //   for (let m of this.listMess) {
+      //     if (datetemp.substring(0, 10).toString() !== m[2].substring(0, 10).toString() || datetemp == '') {
+      //       this.$chatHistory.append(this.showDate(m[2]));
+      //       datetemp = m[2];
+      //     }
+      //     let countMessage = document.getElementById('count-mess-' + this.id);
+      //     if (countMessage) {
+      //       countMessage.parentNode?.removeChild(countMessage);
+      //     }
+      //     if (m[3] == this.id) {
+      //       // this.$chatHistory.append(
+      //       //   '<div class="chat-widget-speaker left" style="padding: 0 26px 0 36px; display: flex; flex-flow: column; position: relative; margin-bottom: 1rem !important;">' +
+      //       //   '<a class="user-avatar small user-status-avatar no-border no-outline avatar-mess" href="profile" style="position: absolute;left: -10px;top: -8px; width: 40px;height: 44px; display: block;"> ' +
+      //       //   '<div class="hexagon-container" style="width: 35px; height: 38px; position: relative; margin: 0 auto;background: white;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); "> ' +
+      //       //   '<div class="hexagon user-avatar-content" style="top: 6px;left: 5px;position: absolute;z-index: 3;width: 40px;height: 44px;overflow: hidden;">  ' +
+      //       //   '<div class="hexagon-image" ' +
+      //       //   'style="background-image: url(' + m[4] + '); width: 20px; height: 23px;position: relative; z-index: 3;background-size: cover;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);left: 4%;top: 2%;"></div>' +
+      //       //   '</div>' +
+      //       //   '<div class="hexagon user-avatar-border" style="position: absolute;top: 0;left: 0;z-index: 1;">' +
+      //       //   '<div style="position: absolute; top: 0; left: 0; z-index: 1; content: \'\'; width: 32px; height: 36px; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); left: 1px; top: 0px; background-image: linear-gradient(to right, #41efff, #615dfa); display: block;"></div>' +
+      //       //   '<div class="hexagon-border"></div>' +
+      //       //   '</div>' +
+      //       //   '<div class="hexagon user-avatar-progress-border" style="margin-left: 11%;margin-top: 10.3%; width: 26px;height: 29px;top: 0;left: 0;z-index: 2;position: absolute;background: white;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">' +
+      //       //   '  <div class="user-avatar-progress" style="top: 0;left: 0;z-index: 3;position: absolute;"></div>' +
+      //       //   '</div>' +
+      //       //   '</div>' +
+      //       //   '</a>' +
+      //       //   '<p class="chat-widget-speaker-message" style="border-top-left-radius: 0; display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600; line-height: 1.1428571429em;width: fit-content; max-width: 250px; word-wrap: break-word; white-space: normal; color: #3e3f5e;font-family: Helvetica, Arial, sans-serif;margin: 0;">' +
+      //       //   m[1] +
+      //       //   '</p>' +
+      //       //   '<p class="chat-widget-speaker-timestamp" style="margin-top: 12px !important;color: #adafca;font-size: 0.75rem;font-weight: 500;font-family: Helvetica, Arial, sans-serif;line-height: 1em;margin: 0;">'
+      //       //   + this.getCustomTime(m[2]) + '</p>' +
+      //       //   '</div>	'
+      //       // );
+      //       if (m[5] == false) {
+      //         this.messageService.checkUserBlock = true;
+      //       }
 
-          } else {
-            this.$chatHistory.append(
-              '<div class="chat-widget-speaker right" style=" padding-left: 64px; align-items: flex-end; display: flex; flex-flow: column; position: relative;">' +
-              ' <p class="chat-widget-speaker-message" style="border-top-right-radius: 0; background-color: #615dfa !important; font-family: Helvetica, Arial, sans-serif !important; margin-bottom: 0 !important; color: #fff;display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600;line-height: 1.1428571429em;width: auto; max-width: 250px; word-wrap: break-word; white-space: normal;">'
-              + m[1] +
-              '</p>' +
-              '<p class="chat-widget-speaker-timestamp" style="margin-top: 12px; margin-bottom: 0 !important; color: #adafca;font-size: 0.75rem;font-weight: 500; font-family: Helvetica, Arial, sans-serif !important;line-height: 1em;">'
-              + this.getCustomTime(m[2]) +
-              '</p>' +
-              '</div>'
-            );
-            if (m[5] == false) {
-              this.checkBlock = true;
-            }
-          }
-        }
-        if (this.messageService.checkUserBlock === true) {
-          this.$chatHistory.append(
-            '<div class="noftify-block">Người này đã chặn bạn!</div>'
-          )
-        }
+      //     } else {
+      //       // this.$chatHistory.append(
+      //       //   '<div class="chat-widget-speaker right" style=" padding-left: 64px; align-items: flex-end; display: flex; flex-flow: column; position: relative;">' +
+      //       //   ' <p class="chat-widget-speaker-message" style="border-top-right-radius: 0; background-color: #615dfa !important; font-family: Helvetica, Arial, sans-serif !important; margin-bottom: 0 !important; color: #fff;display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600;line-height: 1.1428571429em;width: auto; max-width: 250px; word-wrap: break-word; white-space: normal;">'
+      //       //   + m[1] +
+      //       //   '</p>' +
+      //       //   '<p class="chat-widget-speaker-timestamp" style="margin-top: 12px; margin-bottom: 0 !important; color: #adafca;font-size: 0.75rem;font-weight: 500; font-family: Helvetica, Arial, sans-serif !important;line-height: 1em;">'
+      //       //   + this.getCustomTime(m[2]) +
+      //       //   '</p>' +
+      //       //   '</div>'
+      //       // );
+      //       if (m[5] == false) {
+      //         this.checkBlock = true;
+      //       }
+      //     }
+      //   }
+      //   // if (this.messageService.checkUserBlock === true) {
+      //   //   this.$chatHistory.append(
+      //   //     '<div class="noftify-block">Người này đã chặn bạn!</div>'
+      //   //   )
+      //   // }
 
-        // this.checkLoadingdata = false;
-      }
+      //   // this.checkLoadingdata = false;
+      // }
       this.checkLoadingdata = false;
       if (chatContainer && !this.checkLoadingdata) {
         chatContainer.style.opacity = '1';
       }
-      this.scrollToBottomMessage();
+      // this.scrollToBottomMessage();
     });
     this.$textarea = $('#chat-widget-message-text-2');
     this.$textarea.val('');
   }
 
-
+messageRecall(id: number, position: number, from: number, to: number){
+  this.messageService.messageRecallApi(id, position, from, to).subscribe((res) => {
+    this.messageService.listMessages[position] = res;
+  })
+}
   addMessage() {
     this.$textarea = $('#chat-widget-message-text-2');
     if (this.$textarea.val().trim() !== '') {
@@ -265,16 +276,16 @@ export class MessageComponent implements OnInit {
         this.messageService.sendMsg(username, message, avatar);
         this.scrollToBottom();
 
-        this.$chatHistory.append(
-          '<div class="chat-widget-speaker right" style=" padding-left: 64px; align-items: flex-end; display: flex; flex-flow: column; position: relative;">' +
-          ' <p class="chat-widget-speaker-message" style="border-top-right-radius: 0; background-color: #615dfa !important; font-family: Helvetica, Arial, sans-serif !important; margin-bottom: 0 !important; color: #fff;display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600;line-height: 1.1428571429em;width: auto; max-width: 250px; word-wrap: break-word; white-space: normal;">'
-          + message +
-          '</p>' +
-          '<p class="chat-widget-speaker-timestamp" style="margin-top: 12px; margin-bottom: 0 !important; color: #adafca;font-size: 0.75rem;font-weight: 500; font-family: Helvetica, Arial, sans-serif !important;line-height: 1em;">'
-          + this.getCurrentTime() +
-          '</p>' +
-          '</div>'
-        );
+        // this.$chatHistory.append(
+        //   '<div class="chat-widget-speaker right" style=" padding-left: 64px; align-items: flex-end; display: flex; flex-flow: column; position: relative;">' +
+        //   ' <p class="chat-widget-speaker-message" style="border-top-right-radius: 0; background-color: #615dfa !important; font-family: Helvetica, Arial, sans-serif !important; margin-bottom: 0 !important; color: #fff;display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600;line-height: 1.1428571429em;width: auto; max-width: 250px; word-wrap: break-word; white-space: normal;">'
+        //   + message +
+        //   '</p>' +
+        //   '<p class="chat-widget-speaker-timestamp" style="margin-top: 12px; margin-bottom: 0 !important; color: #adafca;font-size: 0.75rem;font-weight: 500; font-family: Helvetica, Arial, sans-serif !important;line-height: 1em;">'
+        //   + this.getCurrentTime() +
+        //   '</p>' +
+        //   '</div>'
+        // );
       } else {
         this.$chatHistory.append(
           '<div class="notify-block" style="text-align: center;font-size: 14px;font-family: Helvetica, Arial, sans-serif;color: red;font-weight: 700;">Bạn đã bị chặn!</div>'
@@ -314,12 +325,18 @@ export class MessageComponent implements OnInit {
       return null;
     }
   }
-  showDate(date: string) {
-    let d = '<div class="time-date" style="color: black;padding: 16px 20px;text-align: center;">' +
-      '<div class="date-send" style="text-align: center;font-size: 12px; font-family: Helvetica, Arial, sans-serif;">' +
-      this.checkDate(date) +
-      '</div>' +
-      '</div>';
+  async showDate(date: string) {
+
+    console.log('this.dateTemp1: ' + (this.dateTemp == undefined));
+    console.log('date1: ' + date);
+    let d = '';
+    if (this.dateTemp == undefined) {
+      // this.$chatHistory.append(this.showDate(m[2]));
+      console.log('date0-------------------------------: ' + date);
+      this.dateTemp = date.substring(0, 10).toString();
+      let d = await this.checkDate(date);
+    } else
+      d = '0';
     return d;
   }
   checkDate(date: string) {
@@ -352,9 +369,12 @@ export class MessageComponent implements OnInit {
     const scrollableDiv = document.getElementById('chatContainer')!;
     const scrollButton = document.getElementById('scrollToBottomButton')!;
     // Thêm sự kiện lắng nghe lướt cho thẻ div
+    // console.warn("Math.round(scrollableDiv.scrollTop): " + Math.round(scrollableDiv.scrollTop));
+    // console.warn("scrollableDiv.scrollHeight: " + scrollableDiv.scrollHeight);
+    // console.warn("scrollableDiv.clientHeight: " + scrollableDiv.clientHeight);
     scrollableDiv.addEventListener('scroll', () => {
       // Kiểm tra vị trí cuộn
-      if (Math.round(scrollableDiv.scrollTop) < scrollableDiv.scrollHeight - scrollableDiv.clientHeight) {
+      if ((scrollableDiv.scrollHeight - scrollableDiv.clientHeight - Math.round(scrollableDiv.scrollTop)) > 1) {
         // Hiển thị nút scroll khi cuộn đến vị trí cuối cùng (điều kiện kiểm tra lúc này có thể khác)
         scrollButton.style.display = 'block';
       } else {
@@ -370,4 +390,44 @@ export class MessageComponent implements OnInit {
     }
   }
 
+  onRightClick(event: MouseEvent, messageId: string) {
+    event.preventDefault();
+  
+    // Assuming the dropdown is a sibling of the right-clicked element
+    const dropdown = document.getElementById(`recall-menu-${messageId}`) as HTMLElement;
+  
+    if (dropdown) {
+      // Kiểm tra xem dropdown đang hiển thị hay không
+      const isDropdownVisible = dropdown.style.display === 'block';
+  
+      // Ẩn tất cả các dropdown trước khi hiển thị dropdown hiện tại
+      this.hideAllDropdowns();
+  
+      // Nếu dropdown đang hiển thị, ẩn nó; nếu không, hiển thị nó
+      dropdown.style.display = isDropdownVisible ? 'none' : 'block';
+  
+      // Chỉ thêm sự kiện click nếu dropdown đang hiển thị
+      if (isDropdownVisible) {
+        // Listen for a click outside the dropdown to hide it
+        const clickListener = (clickEvent: MouseEvent) => {
+          // Check if the click is outside the dropdown
+          if (!dropdown.contains(clickEvent.target as Node)) {
+            dropdown.style.display = 'none';
+            document.removeEventListener('click', clickListener);
+          }
+        };
+  
+        // Add click event listener to the document
+        document.addEventListener('click', clickListener);
+      }
+    }
+  }
+  
+  hideAllDropdowns() {
+    // Ẩn tất cả các dropdown trên trang
+    const allDropdowns = document.querySelectorAll('.recall-menu') as NodeListOf<HTMLElement>;
+    allDropdowns.forEach(dropdown => (dropdown.style.display = 'none'));
+  }
+  
+  
 }

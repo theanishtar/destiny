@@ -29,9 +29,23 @@ public class MessagesServiceImpl implements MessagesService {
 	}
 
 	@Override
+	public Object[] findByIdMessage(int from_user, int to_user, int id) {
+		Object[] o = messagesDAO.findByIdMessage(from_user, to_user,id);
+		if (o == null)
+			return null;
+		return o;
+	}
+
+	@Override
 	public void updateStatusMessages(boolean st, int senden_id, int chat_id) {
 		messagesDAO.updateStatusMessages(st, senden_id, chat_id);
 	}
+	
+	@Override
+	public void updateRecallMessages(boolean st, int id) {
+		messagesDAO.updateRecallMessages(st, id);
+	}
+	
 
 	@Override
 	public void create(Messages messages) {

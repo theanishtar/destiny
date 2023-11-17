@@ -19,11 +19,12 @@ export class MessageService {
   private loadDataMess = environment.baseUrl + 'v1/user/chat/load/messages';
   private ChatWithStrangersUrl = environment.baseUrl + 'v1/user/inbox';
   private blockUrl = environment.baseUrl + 'v1/user/block/chat';
+  private messageRecallUrl = environment.baseUrl + 'v1/user/chat/recall/messages';
 
   private sender: any[] = [];
   private listFriends: any[] = [];
   private listMess: any[] = [];
-
+  public listMessages: any;
   isLoading = true;
 
   socket?: WebSocket;
@@ -122,6 +123,7 @@ export class MessageService {
       })
     );
   }
+  
 
   /* ============Connect socket============= */
   connectToChat(userId) {
@@ -156,6 +158,7 @@ export class MessageService {
       });
       this.stompClient!.subscribe('/topic/statusmessages/' + userId, (response) => {
         let data = JSON.parse(response.body);
+        this.listMessages = [...this.listMessages, ...data];
         if (data == true) {
           let type = false; // Thay đổi giá trị "your_type_value" bằng giá trị thực tế của biến "type"
           let to_user_id = this.selectedUser;
@@ -222,6 +225,24 @@ export class MessageService {
     this.isLoading = false;
   }
 
+  messageRecallApi(id: number, position: number, from: number, to: number) {
+    const url = `${this.messageRecallUrl}/${id}/${position}/${from}/${to}`
+    return this.http.get<any>(url).pipe(
+      tap(() => {
+        
+      })
+    );
+  }
+  
+  // async messageRecallApi(id: number, position: number, from: number, to: number): Promise<any> {
+  //   const url = `${this.messageRecallUrl}/${id}/${position}/${from}/${to}`
+  //   try {
+  //     let response = await this.http.get<any>(url).toPromise();
+  //     return response
+  //   } catch (error) {
+
+  //   }
+  // }
   logout() {
     this.stompClient!.send('/app/fetchAllUsers');
   }
