@@ -1,7 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { HttpClient, HttpParams} from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, Observable, of } from 'rxjs';
 import '../../../assets/toast/main.js';
@@ -44,6 +44,7 @@ export class MessageService {
   mapNotification = new Map<string, boolean>();
   checkConnected: boolean = false;
   isOriginal: boolean = true;
+  loaddingBall:boolean =false;
   public notif_mess: boolean = false;
 
   constructor(
@@ -116,14 +117,14 @@ export class MessageService {
     const params = new HttpParams()
       .set('to', data) // Chuyển số nguyên thành chuỗi
       .set('status', status)
-    return this.http.get<any>(this.blockUrl , { params }).pipe(
+    return this.http.get<any>(this.blockUrl, { params }).pipe(
       tap((res) => {
         this.listMess = JSON.parse(JSON.stringify(res));
         this.setListMess(this.listMess);
       })
     );
   }
-  
+
 
   /* ============Connect socket============= */
   connectToChat(userId) {
@@ -159,13 +160,26 @@ export class MessageService {
       this.stompClient!.subscribe('/topic/statusmessages/' + userId, (response) => {
         let data = JSON.parse(response.body);
         this.listMessages = [...this.listMessages, ...data];
-        if (data == true) {
+         this.loaddingBall=false;
+        if (data != null) {
           let type = false; // Thay đổi giá trị "your_type_value" bằng giá trị thực tế của biến "type"
           let to_user_id = this.selectedUser;
           this.stompClient!.send(`/app/reload/messages/${type}/${to_user_id}/${userId}`);
         }
-
+       
       })
+
+      this.stompClient!.subscribe('/topic/recall/messages/' + userId, (response) => {
+        let data = JSON.parse(response.body);
+        let type =false;
+        let to_user_id = this.selectedUser;
+        if (to_user_id== data[2]){
+          this.listMessages.splice( data[1], 1, ...data[0]);
+          type =true;
+        }
+        this.stompClient!.send(`/app/reload/messages/${type}/${to_user_id}/${userId}`);
+      });
+
       this.stompClient!.subscribe('/topic/public', (response) => {
         let data = JSON.parse(response.body);
         this.setFriend([]);
@@ -187,7 +201,9 @@ export class MessageService {
                 messageUnRead: v.messageUnRead,
                 lastMessage: v.lastMessage,
                 online: this.customTime(v.online, 0),
-                isFriend: v.friend
+                isFriend: v.friend,
+                typeMessage: v.typeMessage,
+                recall: v.recall
               };
               // Thêm người dùng vào danh sách của key trong map
               this.newMapUser.set(v.user_id, user);
@@ -225,24 +241,16 @@ export class MessageService {
     this.isLoading = false;
   }
 
-  messageRecallApi(id: number, position: number, from: number, to: number) {
+  async messageRecallApi(id: number, position: number, from: number, to: number): Promise<any> {
     const url = `${this.messageRecallUrl}/${id}/${position}/${from}/${to}`
-    return this.http.get<any>(url).pipe(
-      tap(() => {
-        
-      })
-    );
+    try {
+      let response = await this.http.get<any>(url).toPromise();
+      return response
+    } catch (error) {
+      console.log("error: " + error);
+      throw error;
+    }
   }
-  
-  // async messageRecallApi(id: number, position: number, from: number, to: number): Promise<any> {
-  //   const url = `${this.messageRecallUrl}/${id}/${position}/${from}/${to}`
-  //   try {
-  //     let response = await this.http.get<any>(url).toPromise();
-  //     return response
-  //   } catch (error) {
-
-  //   }
-  // }
   logout() {
     this.stompClient!.send('/app/fetchAllUsers');
   }
@@ -254,14 +262,16 @@ export class MessageService {
     this.dataUpdated.emit();
   }
 
-  sendMsg(from, text, img) {
+  sendMsg(from, text, img,typeMessage) {
+    this.loaddingBall=true;
     this.stompClient!.send(
       '/app/chat/' + this.selectedUser,
       {},
       JSON.stringify({
         fromLogin: from,
         message: text,
-        avatar: img
+        avatar: img,
+        typeMessage:typeMessage
       })
     );
     let textLastMess = document.getElementById(
@@ -365,14 +375,6 @@ export class MessageService {
       } else {
         return hours + 'h trước';
       }
-      // let regex = /(\d{2}:\d{2})/;
-      // let match = time.match(regex);
-      // if (match) {
-      //   let extractedTime = match[1]; // Extracted "15:43"
-      //   return extractedTime;
-      // } else {
-      //   return null;
-      // }
     }
   }
 

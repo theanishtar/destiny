@@ -68,6 +68,8 @@ public class MessageController {
 		messages.setUser(user);
 		messages.setChats(chats);
 		messages.setSend_Status(false);
+		if (!"".equals(message.getTypeMessage()))
+			messages.setType(message.getTypeMessage());
 		messagesService.create(messages);
 		Object[] o = messagesService.findByIdMessage(message.getFromLogin(), to, messages.getId());
 		simpMessagingTemplate.convertAndSend("/topic/statusmessages/" + message.getFromLogin(), o);
@@ -76,8 +78,8 @@ public class MessageController {
 			simpMessagingTemplate.convertAndSend("/topic/messages/" + to, message);
 
 		}
-		System.out.println("messages id: "+messages.getId());
-		
+		System.out.println("messages id: " + messages.getId());
+
 	}
 
 	@PostMapping("/v1/user/chat/load/messages")
@@ -85,19 +87,22 @@ public class MessageController {
 		try {
 			String email = jwtTokenUtil.getEmailFromHeader(request);
 			User user = userService.findByEmail(email);
-			List<Object[]> list = messagesService.findListMessage(user.getUser_id(),to);
+			List<Object[]> list = messagesService.findListMessage(user.getUser_id(), to);
 			return ResponseEntity.ok().body(list);
 		} catch (Exception e) {
 			System.out.println("Error loadMessages in MessagesController: " + e);
 			return ResponseEntity.badRequest().build();
 		}
 	}
+
 	@GetMapping("/v1/user/chat/recall/messages/{id}/{position}/{from}/{to}")
-	public ResponseEntity<Object[]> updateRecallMessage(@PathVariable int id,@PathVariable int position, @PathVariable int from,
-			@PathVariable int to) {
+	public ResponseEntity<Object[]> updateRecallMessage(@PathVariable int id, @PathVariable int position,
+			@PathVariable int from, @PathVariable int to) {
 		messagesService.updateRecallMessages(true, id);
 		Object[] o = messagesService.findByIdMessage(from, to, id);
-		simpMessagingTemplate.convertAndSend("/topic/recall/messages/" + to, o);
+		Object[] recall = new Object[] { o, position, from };
+		System.out.println("to: " + to);
+		simpMessagingTemplate.convertAndSend("/topic/recall/messages/" + to, recall);
 		return ResponseEntity.ok().body(o);
 	}
 

@@ -44,8 +44,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @RestController
-//@CrossOrigin("*")
-@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+@CrossOrigin("*")
+//@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 @Component
 public class UserChatController {
 	@Autowired
@@ -128,6 +128,8 @@ public class UserChatController {
 						model.setLastMessage(ob[7] + "");
 						model.setOnline(ob[8] + "");
 						model.setFriend(Boolean.valueOf(ob[9].toString()));
+						model.setTypeMessage(ob[10] + "");
+						model.setRecall(Boolean.valueOf(ob[11].toString()));
 						listModel.add(model);
 
 					}
