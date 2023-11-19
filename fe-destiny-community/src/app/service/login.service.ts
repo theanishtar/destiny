@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 //Xử lí bất đồng bộ
 import { Observable, throwError } from 'rxjs';
 import { of } from 'rxjs';
@@ -167,43 +168,27 @@ export class LoginService {
 					});
 				})
 			}
-			// else {
-			// 	new toast({
-			// 		title: 'Lỗi!',
-			// 		message: 'Vui lòng chờ',
-			// 		type: 'warning',
-			// 		duration: 2000,
-			// 	});
-			// }
-
-			// });
 		});
 	}
+
+	private logoutSubject = new BehaviorSubject<boolean>(false);
+
+	get logoutObservable() {
+	  return this.logoutSubject.asObservable();
+	}
+  
+	performLogout() {
+	  // Thực hiện các bước đăng xuất ở đây
+	  this.http.get<any>(this.userLogout).subscribe(() => {
+		this.cookieService.deleteAll();
+		localStorage.clear();
+		this.messageService.logout();
+	})
+	  this.logoutSubject.next(true);
+	}
+
+
 	private refreshTokenUrl = environment.baseUrl + 'v1/jwt/get';
-	// refreshToken(): Observable<any> {
-	// 	return this.http.get<any>(this.refreshTokenUrl)
-	// 		.pipe(
-	// 			tap((res) => {
-	// 				console.log('New token:', res);
-	// 				localStorage.setItem(
-	// 					'token',
-	// 					res.token
-	// 				);
-	// 				localStorage.setItem(
-	// 					'refreshToken',
-	// 					res.refreshToken
-	// 				);
-	// 				this.cookieService.set('full_name', res.name);
-	// 				this.cookieService.set('avatar', res.avatar);
-	// 				this.cookieService.set('id', res.id);
-	// 				this.cookieService.set('role', res.roles[0].authority);
-	// 			}),
-	// 			catchError((error) => {
-	// 				console.error('Error refreshing token:', error);
-	// 				return throwError(error);
-	// 			})
-	// 		);
-	// }
 	refreshToken(): Observable<any> {
 		console.log('hello');
 		const headers = new HttpHeaders({

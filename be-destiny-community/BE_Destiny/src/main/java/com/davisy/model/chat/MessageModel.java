@@ -12,10 +12,11 @@ public class MessageModel {
 	private int fromLogin;
 	private String avatar;
 	private String typeMessage;
+	private String[] linkImages;
 
 	@Override
 	public String toString() {
 		return "MessageModel{" + "message='" + message + '\'' + ", fromLogin='" + fromLogin + '\'' + ", avatar='"
-				+ avatar + ", typeMessage='"+ typeMessage +'\'' + '}';
+				+ avatar + '\'' + ", typeMessage='" + typeMessage + '\'' + ", linkImages='" + linkImages + '\'' + '}';
 	}
 }

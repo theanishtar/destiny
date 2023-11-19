@@ -25,6 +25,7 @@ import org.springframework.scheduling.annotation.Async;
 
 import com.davisy.config.JwtTokenUtil;
 import com.davisy.entity.Chats;
+import com.davisy.entity.MessageImages;
 import com.davisy.entity.Messages;
 import com.davisy.entity.User;
 import com.davisy.model.chat.MessageModel;
@@ -32,6 +33,7 @@ import com.davisy.model.chat.UserModel;
 import com.davisy.model.chat.UserModel.MessageType;
 import com.davisy.service.ChatsService;
 import com.davisy.service.FollowService;
+import com.davisy.service.MessageImagesService;
 import com.davisy.service.MessagesService;
 import com.davisy.service.UserService;
 import com.davisy.storage.chat.UserChatStorage;
@@ -53,6 +55,8 @@ public class MessageController {
 	@Autowired
 	MessagesService messagesService;
 	@Autowired
+	MessageImagesService messageImagesService;
+	@Autowired
 	ChatsService chatsService;
 	@Autowired
 	FollowService followService;
@@ -71,7 +75,17 @@ public class MessageController {
 		if (!"".equals(message.getTypeMessage()))
 			messages.setType(message.getTypeMessage());
 		messagesService.create(messages);
-		Object[] o = messagesService.findByIdMessage(message.getFromLogin(), to, messages.getId());
+		if(message.getLinkImages().length>0) {
+			for(String s : message.getLinkImages()) {
+				MessageImages images  = new MessageImages();
+				images.setMessages(messages);
+				images.setLinkImages(s);
+				messageImagesService.create(images);
+			}
+		}
+		Object[] messageOb = messagesService.findByIdMessage(message.getFromLogin(), to, messages.getId());
+		List<String>images = messageImagesService.findAllImagesMessage(messages.getId());
+		Object[]o = new Object[] {messageOb,images};
 		simpMessagingTemplate.convertAndSend("/topic/statusmessages/" + message.getFromLogin(), o);
 		boolean isExists = UserChatStorage.getInstance().getUsers().containsKey(to);
 		if (isExists) {
@@ -83,12 +97,20 @@ public class MessageController {
 	}
 
 	@PostMapping("/v1/user/chat/load/messages")
-	public ResponseEntity<List<Object[]>> loadMessages(HttpServletRequest request, @RequestBody int to) {
+	public ResponseEntity<Object[]> loadMessages(HttpServletRequest request, @RequestBody int to) {
 		try {
 			String email = jwtTokenUtil.getEmailFromHeader(request);
 			User user = userService.findByEmail(email);
 			List<Object[]> list = messagesService.findListMessage(user.getUser_id(), to);
-			return ResponseEntity.ok().body(list);
+			List<String> images = new ArrayList<>();
+			for (Object[] l : list) {
+				if (!"text".equals(l[7] + "")) {
+					int id = Integer.valueOf(l[0].toString());
+					images = messageImagesService.findAllImagesMessage(id);
+				}
+			}
+			Object[] o = new Object[] {list,images};
+			return ResponseEntity.ok().body(o);
 		} catch (Exception e) {
 			System.out.println("Error loadMessages in MessagesController: " + e);
 			return ResponseEntity.badRequest().build();

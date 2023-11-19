@@ -323,12 +323,6 @@ export class CreatePostComponent {
     });
   }
 
-  // chooseFile(event: any) {
-  //   this.file = event.target.files[0];
-  //   console.log(this.file)
-  //   // this.addData();
-  // }
-
   /* ============Template============= */
   // Next/previous controls
   plusSlides(n: number) {

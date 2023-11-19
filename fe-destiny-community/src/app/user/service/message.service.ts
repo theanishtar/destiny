@@ -46,6 +46,7 @@ export class MessageService {
   isOriginal: boolean = true;
   loaddingBall:boolean =false;
   public notif_mess: boolean = false;
+  checkScroll: number = 1;
 
   constructor(
     private http: HttpClient,
@@ -159,6 +160,7 @@ export class MessageService {
       });
       this.stompClient!.subscribe('/topic/statusmessages/' + userId, (response) => {
         let data = JSON.parse(response.body);
+        
         this.listMessages = [...this.listMessages, ...data];
          this.loaddingBall=false;
         if (data != null) {
@@ -166,6 +168,8 @@ export class MessageService {
           let to_user_id = this.selectedUser;
           this.stompClient!.send(`/app/reload/messages/${type}/${to_user_id}/${userId}`);
         }
+        this.$chatHistory = $('.chat-widget-conversation')!;
+    this.$chatHistory.scrollTop(this.$chatHistory[0]!.scrollHeight);
        
       })
 
@@ -262,7 +266,7 @@ export class MessageService {
     this.dataUpdated.emit();
   }
 
-  sendMsg(from, text, img,typeMessage) {
+  sendMsg(from, text, img,typeMessage,images) {
     this.loaddingBall=true;
     this.stompClient!.send(
       '/app/chat/' + this.selectedUser,
@@ -271,7 +275,8 @@ export class MessageService {
         fromLogin: from,
         message: text,
         avatar: img,
-        typeMessage:typeMessage
+        typeMessage:typeMessage,
+        linkImages:images
       })
     );
     let textLastMess = document.getElementById(

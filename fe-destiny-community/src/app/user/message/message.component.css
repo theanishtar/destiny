@@ -448,26 +448,81 @@ i.fa-solid.fa-circle-exclamation {
   color: #3e3f5e;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-.chat-widget-speaker{
+.chat-widget-speaker.right {
+  position: relative;
+  cursor: pointer;
+}
+.mess-temp {
   position: relative;
 }
-.simple-dropdown.widget-box-post-settings-dropdown.recall-menu {
+.recall-menu {
+  position: absolute;
+  display: none;
   border-radius: 4px;
   z-index: 9999;
   box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
   border: 1px solid #d6dbe1;
   background: white;
+  width: 100px;
+  padding: 10px;
+  right: 5%;
 }
-.simple-dropdown.widget-box-post-settings-dropdown.recall-menu.right {
-  right: 15%;
-  top: 40%;
+p.simple-dropdown-link:hover{
+  color: red;
 }
 
+p.chat-widget-speaker-message.img {
+  background: none !important;
+  /* display: flex; */
+  /* flex-wrap: wrap; */
+}
+img.mess-img {
+  width: 100px;
+  height: 100px;
+  margin: 5px;
+  object-fit: cover;
+}
 
-
-
-
-
+.no-results{
+  text-align: center;
+  margin-top: 3rem;
+  font-size: 17px;
+  color: #3e3f5e;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.review-img {
+  position: absolute;
+    bottom: 21%;
+    background: white;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+    border: 1px solid #d6dbe1;
+    max-width: 100%;
+    max-height: 130px;
+    width: 440px;
+    overflow-x: auto;
+    white-space: nowrap;
+    display: flex;
+}
+.review-img::-webkit-scrollbar {
+  width: 0 !important;
+  display: none;
+}
+img.slider-item, .slider-content {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  display: inline-block; /* Để các hình ảnh hiển thị trên cùng một dòng */
+  margin-right: 20px; /* Khoảng cách giữa các hình ảnh */
+}
+span.delete-img {
+  position: absolute;
+  cursor: pointer;
+}
+i.fa-solid.fa-file-circle-plus {
+  font-size: 24px;
+  margin: 2rem;
+}
+/* Loading send mess */
 .LoaderBalls {
   width: 50px;
   height: 25px;
@@ -501,16 +556,4 @@ i.fa-solid.fa-circle-exclamation {
   100% {
     transform: translate3d(0, -5px, 0) scale(0.9, 1.1);
   }
-}
-
-p.chat-widget-speaker-message.img {
-  background: none !important;
-  /* display: flex; */
-  /* flex-wrap: wrap; */
-}
-img.mess-img {
-  width: 100px;
-  height: 100px;
-  margin: 5px;
-  object-fit: cover;
 }

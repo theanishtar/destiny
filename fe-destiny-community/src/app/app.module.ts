@@ -64,6 +64,7 @@ import { APP_INITIALIZER } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from './user/service/message.service';
 import { ProfileService } from './user/service/profile.service';
+import { CustomTimePipe } from './custom-time.pipe';
 
 // import { AngularFireModule } from '@angular/fire/compat';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
@@ -158,7 +159,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ChangeConfirmComponent,
     SuggestAfterRegisterComponent,
     ArticleDetailsComponent,
-    ReportComponent
+    ReportComponent,
+    CustomTimePipe
   ],
   imports: [
     BrowserModule,
@@ -194,7 +196,8 @@ export function HttpLoaderFactory(http: HttpClient) {
       deps: [CookieService, MessageService, ProfileService,ModalService],
       multi: true,
     },
-    DatePipe
+    DatePipe,
+    CustomTimePipe
   ],
   bootstrap: [AppComponent],
 })
