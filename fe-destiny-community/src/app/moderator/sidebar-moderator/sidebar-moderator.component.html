@@ -15,18 +15,14 @@
     <li class="ml-4 2" [class.active]="activeMenuItem === 'post-report'">
       <a routerLink="/moderator/post-report" class="2"><i class='bx bx-list-ul'></i>Danh sách</a>
     </li>
-    <li class="ml-4 3" [class.active]="activeMenuItem === 'post-report-detail'">
-      <a routerLink="/moderator/post-report-detail" class="3"><i class="bx bx-comment-error"></i>Chi tiết</a>
-    </li>
+
     <li>
       <div class="analys"><i class="bx bx-group"></i>Người dùng</div>
     </li>
     <li class="ml-4 4" [class.active]="activeMenuItem === 'user-report'">
       <a routerLink="/moderator/user-report" class="4"><i class='bx bx-list-ul'></i>Danh sách</a>
     </li>
-    <li class="ml-4 5" [class.active]="activeMenuItem === 'user-report-detail'">
-      <a routerLink="/moderator/user-report-detail" class="5"><i class="bx bx-comment-error"></i>Chi tiết</a>
-    </li>
+
     <li (click)="openNav()">
       <a class="clickSetting"><i class="bx bx-cog"></i>Cài đặt</a>
     </li>

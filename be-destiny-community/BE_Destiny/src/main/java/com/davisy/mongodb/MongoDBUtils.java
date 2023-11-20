@@ -146,6 +146,7 @@ public class MongoDBUtils {
 
 			if (list.isEmpty()) {
 				System.out.println("Không tìm thấy bất kỳ tài liệu nào trong MongoDB.");
+				return list;
 			} else {
 				return list;
 			}

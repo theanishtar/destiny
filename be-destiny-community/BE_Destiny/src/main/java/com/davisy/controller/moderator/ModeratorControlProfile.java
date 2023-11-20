@@ -1,7 +1,11 @@
 package com.davisy.controller.moderator;
 
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,7 +14,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.davisy.config.JwtTokenUtil;
+import com.davisy.constant.Cache;
+import com.davisy.controller.ProfileContronller;
 import com.davisy.dto.Admin;
 import com.davisy.dto.AdminPassword;
 import com.davisy.entity.Districts;
@@ -27,12 +35,13 @@ import com.davisy.entity.Gender;
 import com.davisy.entity.Provinces;
 import com.davisy.entity.User;
 import com.davisy.entity.Wards;
+import com.davisy.service.CacheService;
 import com.davisy.service.DistrictService;
+import com.davisy.service.EmailService;
 import com.davisy.service.GenderService;
 import com.davisy.service.ProvinceService;
 import com.davisy.service.UserService;
 import com.davisy.service.WardService;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
@@ -56,40 +65,97 @@ public class ModeratorControlProfile {
 
 	String provinceCode;
 	String districtCode;
+	
+	@Autowired
+	CacheService cacheService;
+	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+
+	@Autowired
+	SimpMessagingTemplate simpMessagingTemplate;
+
+	@Autowired
+	ObjectMapper mapper;
+
+	@Autowired
+	EmailService emailService;
+	
+	String randCodeAuth = "";
+	@Value("${davisy.client.change-email.confirm}")
+	String confirmEmail;
 
 	// update lastest 9-10
-	@GetMapping("/v1/mod/checkAdminLog")
-	public ResponseEntity<Admin> checkAdminLog(HttpServletRequest request) {
+	@PostMapping("/v1/moderator/profile/change/email")
+	public ResponseEntity<String> changeEmail(@RequestBody EmailChange change, HttpServletRequest request)
+			throws MessagingException {
+
+		String email = jwtTokenUtil.getEmailFromHeader(request);
+		User currentUser = userService.findByEmail(email);
+
+		if (!passwordEncoder.matches(change.getPassword(), currentUser.getPassword())) {
+			return ResponseEntity.status(300).body(null); // "Mật khẩu xác nhận không đúng"
+		}
+
+		if (currentUser.getEmail().equalsIgnoreCase(change.getNewEmail())) {
+			return ResponseEntity.status(301).body(null); // "Email mới trùng với email cũ"
+		}
+
+		// currentUser.setEmail(change.getNewEmail());
+
+		// userServiceImpl.update(currentUser);
+		this.randCodeAuth = ProfileContronller.random();
+
+		EmailConfirm eConfirm = new EmailConfirm(currentUser.getEmail(), change.newEmail, change.getPassword());
+
+		// {key: "change:email", value: "newMail", time 5m}
+		cacheService.writeCacheAtTime("changemail:" + this.randCodeAuth, eConfirm, 5, Cache.TimeUnit_MINUTE);
+
+		// Gửi mail
+		/*
+		 * 
+		 * BUTTON click :
+		 * http://localhost:4200/chang-email-confirm?code=this.randCodeAuth => call api
+		 * GET: /v1/user/profile/change/email?code=this.randCodeAuth
+		 * 
+		 */
+		emailService.sendHtmlEmail(confirmEmail + "?code=" + this.randCodeAuth, change.newEmail);
+		return ResponseEntity.status(200).body(this.randCodeAuth); // "OK"
+	}
+	
+
+	// update lastest 9-10
+	@GetMapping("/v1/moderator/checkModeratorLog")
+	public ResponseEntity<Admin> checkModeratorLog(HttpServletRequest request) {
 
 		String email = jwtTokenUtil.getEmailFromHeader(request);
 		User user = userService.findByEmail(email);
-		Admin admin = new Admin();
-		admin.setAvatar(user.getAvatar());
+		Admin moderator = new Admin();
+		moderator.setAvatar(user.getAvatar());
 
-		return ResponseEntity.status(200).body(admin);
+		return ResponseEntity.status(200).body(moderator);
 	}
 
 	// 22-9-2023 -Thông tin chi tiết của admin
 	// update lastest 10-10
-	@GetMapping("/v1/mod/profile")
+	@GetMapping("/v1/moderator/profile")
 	public ResponseEntity<Admin> adminProfile(HttpServletRequest request) {
 
 		String email = jwtTokenUtil.getEmailFromHeader(request);
 		User user = userService.findByEmail(email);
-		Admin admin = new Admin();
+		Admin moderator = new Admin();
 
-		admin.setUsername(user.getUsername());
+		moderator.setUsername(user.getUsername());
 
 		String auth = String.valueOf(user.getAuthorities());
 		String authName = auth.substring(6, auth.length() - 1).toLowerCase();
 		char capitalFirstLetter = Character.toUpperCase(authName.charAt(0));
 		String authNameUp1Char = authName.replace(authName.charAt(0), capitalFirstLetter);
 
-		admin.setAuthorities(authNameUp1Char);
+		moderator.setAuthorities(authNameUp1Char);
 
-		admin.setFullname(user.getFullname());
-		admin.setEmail(user.getEmail());
-		admin.setIntro(user.getIntro());
+		moderator.setFullname(user.getFullname());
+		moderator.setEmail(user.getEmail());
+		moderator.setIntro(user.getIntro());
 
 		Calendar birthday = user.getBirthday();
 
@@ -99,22 +165,22 @@ public class ModeratorControlProfile {
 		String formatted = format.format(birthday.getTime());
 		String formattedVN = formatVN.format(birthday.getTime());
 
-		admin.setBirthday(formatted);
-		admin.setBirthdayFormat(formattedVN);
+		moderator.setBirthday(formatted);
+		moderator.setBirthdayFormat(formattedVN);
 
-		admin.setProvince_name(user.getProvinces().getFull_name());
-		admin.setDistrict_name(user.getDistricts().getFull_name());
-		admin.setWard_name(user.getWards().getFull_name());
+		moderator.setProvince_name(user.getProvinces().getFull_name());
+		moderator.setDistrict_name(user.getDistricts().getFull_name());
+		moderator.setWard_name(user.getWards().getFull_name());
 
-		admin.setGender_name(user.getGender().getGender_name());
-		admin.setAvatar(user.getAvatar());
-		admin.setThumb(user.getThumb());
+		moderator.setGender_name(user.getGender().getGender_name());
+		moderator.setAvatar(user.getAvatar());
+		moderator.setThumb(user.getThumb());
 
-		return ResponseEntity.status(200).body(admin);
+		return ResponseEntity.status(200).body(moderator);
 	}
 
 	// update lastest 11-10
-	@GetMapping("/v1/mod/getAllGender")
+	@GetMapping("/v1/moderator/getAllGender")
 	public ResponseEntity<List<String>> getAllGender() {
 		try {
 			List<Object[]> list = genderService.getAllGenderName();
@@ -126,13 +192,13 @@ public class ModeratorControlProfile {
 			}
 			return ResponseEntity.status(200).body(listGender);
 		} catch (Exception e) {
-			System.out.println("Error at admin/getAllGenders: " + e);
+			System.out.println("Error at moderator/getAllGenders: " + e);
 			return ResponseEntity.status(403).body(null);
 		}
 	}
 
 	// update lastest 11-10
-	@GetMapping("/v1/mod/getAllProvinceName")
+	@GetMapping("/v1/moderator/getAllProvinceName")
 	public ResponseEntity<List<String>> getAllProvinceName() {
 		try {
 			List<Object[]> list = provinceService.getAllProvinceName();
@@ -144,13 +210,13 @@ public class ModeratorControlProfile {
 			}
 			return ResponseEntity.status(200).body(listProvince);
 		} catch (Exception e) {
-			System.out.println("Error at admin/getAllProvinceName: " + e);
+			System.out.println("Error at moderator/getAllProvinceName: " + e);
 			return ResponseEntity.status(403).body(null);
 		}
 	}
 
 	// update lastest 11-10
-	@GetMapping("/v1/mod/getAllDistrictName/{provinceName}")
+	@GetMapping("/v1/moderator/getAllDistrictName/{provinceName}")
 	public ResponseEntity<List<String>> getAllDistrictName(@PathVariable String provinceName) {
 		try {
 			provinceCode = provinceService.provinceCode(provinceName);
@@ -169,13 +235,13 @@ public class ModeratorControlProfile {
 			}
 			return ResponseEntity.status(200).body(listDistrict);
 		} catch (Exception e) {
-			System.out.println("Error at admin/getAllDistrictName: " + e);
+			System.out.println("Error at moderator/getAllDistrictName: " + e);
 			return ResponseEntity.status(403).body(null);
 		}
 	}
 
 	// update lastest 11-10
-	@GetMapping("/v1/mod/getAllWardName/{districtName}")
+	@GetMapping("/v1/moderator/getAllWardName/{districtName}")
 	public ResponseEntity<List<String>> getAllWardName(@PathVariable String districtName) {
 		try {
 			districtCode = districtService.districtCode(districtName, provinceCode);
@@ -194,94 +260,115 @@ public class ModeratorControlProfile {
 			}
 			return ResponseEntity.status(200).body(listDistrict);
 		} catch (Exception e) {
-			System.out.println("Error at admin/getAllDistrictName: " + e);
+			System.out.println("Error at moderator/getAllDistrictName: " + e);
 			return ResponseEntity.status(403).body(null);
 		}
 	}
 
 	// 22-9-2023 Cập nhật thông tin tài khoản admin
 	// 12-10-2023 lastest update
-	@PostMapping("/v1/mod/updateProfile")
+	@PostMapping("/v1/moderator/updateProfile")
 	public ResponseEntity<User> updateProfileAdmin(@RequestBody Admin adminRequestUpdate, HttpServletRequest request) throws Exception {
 		try {
 			String email = jwtTokenUtil.getEmailFromHeader(request);
-			User admin = userService.findByEmail(email);
+			User moderator =userService.findByEmail(email);
 
-			admin.setUsername(adminRequestUpdate.getUsername());
-			admin.setFullname(adminRequestUpdate.getFullname());	
-			admin.setIntro(adminRequestUpdate.getIntro());
-					
+			moderator.setUsername(adminRequestUpdate.getUsername());
+			moderator.setFullname(adminRequestUpdate.getFullname());	
+			moderator.setIntro(adminRequestUpdate.getIntro());
+			
+			moderator.setAvatar(adminRequestUpdate.getAvatar());
+			
+			moderator.setThumb(adminRequestUpdate.getThumb());
+			
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			Date date = sdf.parse(adminRequestUpdate.getBirthday());
 			Calendar birthday = Calendar.getInstance();
 			birthday.setTime(date);
 			
-			admin.setBirthday(birthday);
+			moderator.setBirthday(birthday);
 			
 			int genderID = genderService.findIDGenderByName(adminRequestUpdate.getGender_name());
 			Gender gender = genderService.findGenderByID(genderID);
-			admin.setGender(gender);
+			moderator.setGender(gender);
 			
 			String provinceCode = provinceService.provinceCode(adminRequestUpdate.getProvince_name());			
 			Provinces province = provinceService.findProvinceByID(provinceCode);
-			admin.setProvinces(province);
+			moderator.setProvinces(province);
 			
 			String districtCode = districtService.districtCode(adminRequestUpdate.getDistrict_name(), provinceCode);
 			Districts district = districtService.findDistrictByID(districtCode);
-			admin.setDistricts(district);
+			moderator.setDistricts(district);
 			
 			String wardCode = wardService.wardCode(adminRequestUpdate.getWard_name(), districtCode);
 			Wards ward = wardService.findWardByID(wardCode);
-			admin.setWards(ward);
+			moderator.setWards(ward);
 
-			userService.update(admin);
+			userService.update(moderator);
 
-			return ResponseEntity.status(200).body(admin);
+			return ResponseEntity.status(200).body(moderator);
 		} catch (Exception e) {
-			System.out.println("Lỗi nè admin/update profile: " + e);
+			System.out.println("Lỗi nè moderator/update profile: " + e);
 			throw e;
 		}
 	}
 
 	// 22-9-2023 Kiểm tra mật khẩu khớp với mật khẩu cũ
 	// 14-10-2023 lastest update
-	@PostMapping("/v1/mod/checkPassword")
+	@PostMapping("/v1/moderator/checkPassword")
 	public int checkPassword(@RequestBody AdminPassword userRequestChangePasswrod,
 			HttpServletRequest request) throws Exception {
 		try {
 			int status;
 			String email = jwtTokenUtil.getEmailFromHeader(request);
-			User admin = userService.findByEmail(email);
+			User moderator =userService.findByEmail(email);
 			String passwordRequest = userRequestChangePasswrod.getOldPassword();
 
-			if (passwordEncoder.matches(passwordRequest, admin.getPassword())) {
+			if (passwordEncoder.matches(passwordRequest, moderator.getPassword())) {
 				status = 1;
 			} else {
 				status = 0;
 			}
 			return status;
 		} catch (Exception e) {
-			System.out.println("Lỗi nè admin/checkPassword: " + e);
+			System.out.println("Lỗi nè moderator/checkPassword: " + e);
 			throw e;
 		}
 	}
 
 	// 22-9-2023 Cập nhật mật khẩu mới
 	// 14-10-2023 lastest update
-	@PostMapping("/v1/mod/changePassword")
+	@PostMapping("/v1/moderator/changePassword")
 	public void changePassword(@RequestBody AdminPassword adminRequestChangePasswrod,
 			HttpServletRequest request) throws Exception {
 		try {
 			System.out.println(adminRequestChangePasswrod.getNewPassword());
 			String email = jwtTokenUtil.getEmailFromHeader(request);
-			User admin = userService.findByEmail(email);
+			User moderator =userService.findByEmail(email);
 			String newPassword = adminRequestChangePasswrod.getNewPassword();
-			admin.setPassword(passwordEncoder.encode(newPassword));
+			moderator.setPassword(passwordEncoder.encode(newPassword));
 
-			userService.update(admin);
+			userService.update(moderator);
 		} catch (Exception e) {
-			System.out.println("Lỗi nè admin/changePassword: " + e);
+			System.out.println("Lỗi nè moderator/changePassword: " + e);
 		}
 	}
 
+}
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+class EmailChange {
+	String newEmail;
+	String password;
+}
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+class EmailConfirm {
+	String oldEmail;
+	String newEmail;
+	String currentPassword;
 }

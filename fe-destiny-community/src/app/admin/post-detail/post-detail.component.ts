@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AdminPostdetailService } from '../service/admin-postdetail.service';
 import { Router } from '@angular/router';
 import { AuthInstances } from '@angular/fire/auth';
+declare var toast: any;
 
 @Component({
   selector: 'app-post-detail',
@@ -33,8 +34,26 @@ export class PostDetailComponent implements OnInit {
   }
 
   actionOnPost(id: string): void {
-    this.adminPostdetailService.actionOnPost(id).subscribe(() => {
-    })
+    if (this.postDetail.ban == false) {
+      this.adminPostdetailService.actionOnPost(id).subscribe(() => { })
+      new toast({
+        title: 'Thành công!',
+        message: 'Vô hiệu hóa thành công!',
+        type: 'success',
+        duration: 1500,
+      })
+    } else {
+      this.adminPostdetailService.actionOnPost(id).subscribe(() => { })
+      new toast({
+        title: 'Thành công!',
+        message: 'Kích hoạt thành công!',
+        type: 'success',
+        duration: 1500,
+      })
+    }
+    setTimeout(() => {
+      window.location.reload();
+    }, 600);
   }
   loadPostDetail() {
 

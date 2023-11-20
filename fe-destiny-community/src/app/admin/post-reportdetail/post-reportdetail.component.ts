@@ -38,8 +38,6 @@ export class PostReportdetailComponent implements OnInit {
   totalPostByYear: number;
   percentPostByYearIncrease: number;
 
-
-
   constructor(
     private el: ElementRef,
     private renderer: Renderer2,
@@ -79,7 +77,7 @@ export class PostReportdetailComponent implements OnInit {
   }
 
   getTime() {
-    this.day = new Date().getDay();
+    this.day = new Date().getDate();
     this.month = new Date().getMonth() + 1;
     this.year = new Date().getFullYear();
   }

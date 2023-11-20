@@ -259,8 +259,11 @@
                 <div class="text-pie">
                   <a href="#"
                     class="btn bg-gradient-endless text-white d-flex align-items-center justify-content-center" href="#"
-                    data-toggle="modal" data-target="#disableModal">
+                    data-toggle="modal" data-target="#disableModal" *ngIf="postDetail.ban == false">
                     <i class="bx bxs-error mr-1"></i>Vô hiệu hóa</a>
+                  <a href="#" class="btn bg-gradient-green text-white d-flex align-items-center justify-content-center"
+                    data-toggle="modal" data-target="#disableModal" *ngIf="postDetail.ban == true">
+                    <i class="bx bx-check mr-1"></i>Kích hoạt</a>
                 </div>
               </div>
             </div>
@@ -272,8 +275,13 @@
                 width: 80%;
                 margin: 0 10%;">
                   <div class="modal-header ml-3 mr-3">
-                    <h5 class="modal-title text-pink font-weight-bold" id="exampleModalLabel">
+                    <h5 class="modal-title text-pink font-weight-bold" id="exampleModalLabel"
+                      *ngIf="postDetail.ban == false">
                       Vô hiệu hóa bài viết của người dùng {{postDetail.user_fullname}}?
+                    </h5>
+                    <h5 class="modal-title text-pink font-weight-bold" id="exampleModalLabel"
+                      *ngIf="postDetail.ban == true">
+                      Kích hoạt bài viết của người dùng {{postDetail.user_fullname}}?
                     </h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close"
                       style="padding-top: 1.2rem">

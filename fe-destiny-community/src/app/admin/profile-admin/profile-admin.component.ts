@@ -2,7 +2,6 @@ import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/co
 import { AdminProfileService } from '../service/admin-profile.service';
 declare var toast: any;
 
-
 import {
   FormGroup,
   FormBuilder,
@@ -16,7 +15,6 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from '@angular/fire/storage';
-import { NavbarAdminComponent } from '../navbar-admin/navbar-admin.component';
 
 
 @Component({

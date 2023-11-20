@@ -1,5 +1,6 @@
 package com.davisy.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -34,7 +35,7 @@ public class ModeratorPostReportedServiceImpl implements ModeratorPostReportedSe
 	
 	@Override
 	public List<ModeratorPostReported> findAll() {
-		
+	
 		return dbUtils.findAll(ModeratorPostReported.class, collectionPostReported);
 	}
 	

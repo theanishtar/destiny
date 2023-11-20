@@ -12,7 +12,7 @@ import { ModProfileService } from '../service/mod-profile.service';
 export class NavbarModeratorComponent {
   @ViewChild('themeToggle') themeToggle: ElementRef | undefined;
 
-  adminAvatar: any = {};
+  moderatorAvatar: any = {};
 
   constructor(
     private renderer: Renderer2,
@@ -22,15 +22,15 @@ export class NavbarModeratorComponent {
 
   ngAfterViewInit() {
 
-    this.loadAdminAvartar();
+    this.loadModeratorAvartar();
     this.setDark();
   }
 
-  loadAdminAvartar() {
+  loadModeratorAvartar() {
     const getAvatar = "getAvatar";
-    this.modProfileService.loadAdminData(getAvatar).subscribe(() => {
-      this.adminAvatar = {};
-      this.adminAvatar = this.modProfileService.getAdmin();
+    this.modProfileService.loadModeratorData(getAvatar).subscribe(() => {
+      this.moderatorAvatar = {};
+      this.moderatorAvatar = this.modProfileService.getModerator();
     })
   }
 

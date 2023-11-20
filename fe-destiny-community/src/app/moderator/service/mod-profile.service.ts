@@ -2,25 +2,29 @@ import { Injectable } from '@angular/core';
 import { tap, catchError } from 'rxjs/operators';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { Observable } from 'rxjs';
 import { of } from 'rxjs';
+import Swal from 'sweetalert2';
+declare var toast: any;
+import { Observable, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ModProfileService {
-  private getAdminAvartarAPI = environment.baseUrl + 'v1/mod/checkAdminLog';
-  private getAdminProfileAPI = environment.baseUrl + 'v1/mod/profile';
-  private getAllGenderAPI = environment.baseUrl + 'v1/mod/getAllGender';
-  private getAllProvinceNameAPI = environment.baseUrl + 'v1/mod/getAllProvinceName';
-  private getAllDistrictNameAPI = environment.baseUrl + 'v1/mod/getAllDistrictName/';
-  private getAllWardNameAPI = environment.baseUrl + 'v1/mod/getAllWardName/';
+  private getModeratorAvartarAPI = environment.baseUrl + 'v1/moderator/checkModeratorLog';
+  private getModeratorProfileAPI = environment.baseUrl + 'v1/moderator/profile';
+  private getAllGenderAPI = environment.baseUrl + 'v1/moderator/getAllGender';
+  private getAllProvinceNameAPI = environment.baseUrl + 'v1/moderator/getAllProvinceName';
+  private getAllDistrictNameAPI = environment.baseUrl + 'v1/moderator/getAllDistrictName/';
+  private getAllWardNameAPI = environment.baseUrl + 'v1/moderator/getAllWardName/';
 
-  private updateProfileAPI = environment.baseUrl + 'v1/mod/updateProfile';
-  private checkPasswordAPI = environment.baseUrl + 'v1/mod/checkPassword';
-  private changePasswordAPI = environment.baseUrl + 'v1/mod/changePassword';
+  private updateProfileAPI = environment.baseUrl + 'v1/moderator/updateProfile';
+  private checkPasswordAPI = environment.baseUrl + 'v1/moderator/checkPassword';
+  private changePasswordAPI = environment.baseUrl + 'v1/moderator/changePassword';
 
-  private admin: any;
+  private changeMailAPI = environment.baseUrl + 'v1/moderator/profile/change/email';
+
+  private moderator: any;
   private api: string;
   private genders: any[];
   private provinces: any[];
@@ -33,17 +37,77 @@ export class ModProfileService {
 
   ) { }
 
-  loadAdminData(action: string) {
+  changeMail(data: any) {
+    return this.http.post<any>(this.changeMailAPI, data).pipe(
+      tap((resp) => {
+        let timerInterval;
+        Swal.fire({
+          title: 'Thông báo!',
+          html: 'Quá trình sẽ diễn ra trong vài giây!',
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+          willClose: () => {
+            clearInterval(timerInterval);
+          },
+        }).then((result) => {
+          if (result.dismiss === Swal.DismissReason.timer) {
+            new toast({
+              title: 'Thông báo!',
+              message: 'Vui lòng kiểm tra Email',
+              type: 'success',
+              duration: 3000,
+            })
+          }
+        });
+
+      }),
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 300) {
+          return throwError(
+            new toast({
+              title: 'Thất bại!',
+              message: 'Mật khẩu không đúng',
+              type: 'error',
+              duration: 1500,
+            }),
+          );
+        } else if (error.status === 301) {
+          return throwError(
+            new toast({
+              title: 'Thất bại!',
+              message: 'Emai mới trùng với email cũ',
+              type: 'error',
+              duration: 1500,
+            }),
+          );
+        } else {
+          return throwError(
+            new toast({
+              title: 'Server hiện không hoạt động!',
+              message: 'Vui lòng quay lại sau, DaviTickets chân thành xin lỗi vì bất tiện này!',
+              type: 'warning',
+              duration: 1500,
+            })
+          );
+        }
+      })
+    );
+  }
+
+  loadModeratorData(action: string) {
     if (action.match("getAvatar")) {
-      this.api = this.getAdminAvartarAPI;
+      this.api = this.getModeratorAvartarAPI;
     } else {
-      this.api = this.getAdminProfileAPI;
+      this.api = this.getModeratorProfileAPI;
     }
 
     return this.http.get<any>(this.api).pipe(
       tap((response) => {
-        this.admin = JSON.parse(JSON.stringify(response));
-        this.setAdmin(this.admin);
+        this.moderator = JSON.parse(JSON.stringify(response));
+        this.setModerator(this.moderator);
       }),
     )
   }
@@ -105,8 +169,8 @@ export class ModProfileService {
   }
 
   //getter
-  getAdmin(): any {
-    return this.admin;
+  getModerator(): any {
+    return this.moderator;
   }
 
   getAllGender(): any[] {
@@ -130,8 +194,8 @@ export class ModProfileService {
   }
 
   //   Setter
-  setAdmin(data: any): void {
-    this.admin = data;
+  setModerator(data: any): void {
+    this.moderator = data;
   }
 
   setAllGender(data: any[]): void {
@@ -153,4 +217,5 @@ export class ModProfileService {
   setResultCheckPassword(data: number): void {
     this.resultCheckPassword = data;
   }
+
 }

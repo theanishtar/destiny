@@ -52,7 +52,6 @@ export class UserReportdetailComponent implements OnInit {
 
   ngAfterViewInit() {
     this.carousel();
-    this.carousel();
     this.loadListUserReportedByDay();
     this.loadListUserReportedByYear();
     this.loadTotalUserByDay();
@@ -78,7 +77,7 @@ export class UserReportdetailComponent implements OnInit {
   }
 
   getTime() {
-    this.day = new Date().getDay();
+    this.day = new Date().getDate();
     this.month = new Date().getMonth() + 1;
     this.year = new Date().getFullYear();
   }

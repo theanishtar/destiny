@@ -50,8 +50,11 @@
               class="col-xl-2 offset-xl-0 col-lg-3 offset-lg-0 col-md-6 offset-md-3 col-sm-6 offset-sm-3 mt-5 name-user-detail">
               <div class="text-pie">
                 <a class="btn bg-gradient-endless text-white d-flex align-items-center justify-content-center" href="#"
-                  data-toggle="modal" data-target="#disableModal">
+                  data-toggle="modal" data-target="#disableModal" *ngIf="userDetail.ban == false">
                   <i class="bx bxs-user-x mr-1"></i>Vô hiệu hóa</a>
+                <a href="#" class="btn bg-gradient-green text-white d-flex align-items-center justify-content-center"
+                  data-toggle="modal" data-target="#disableModal" *ngIf="userDetail.ban == true">
+                  <i class="bx bx-check mr-1"></i>Kích hoạt</a>
               </div>
             </div>
           </div>
@@ -62,8 +65,13 @@
           <div class="modal-dialog" role="document">
             <div class="modal-content card-modal">
               <div class="modal-header ml-3 mr-3">
-                <h5 class="modal-title text-pink font-weight-bold" id="exampleModalLabel">
+                <h5 class="modal-title text-pink font-weight-bold" id="exampleModalLabel"
+                  *ngIf="userDetail.ban == false">
                   Vô hiệu hóa người dùng {{userDetail.fullname}}?
+                </h5>
+                <h5 class="modal-title text-pink font-weight-bold" id="exampleModalLabel"
+                  *ngIf="userDetail.ban == true">
+                  Kích hoạt người dùng {{userDetail.fullname}}?
                 </h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close" style="padding-top: 1.2rem">
                   <span aria-hidden="true">×</span>
