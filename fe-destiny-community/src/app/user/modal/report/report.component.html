@@ -1,0 +1,155 @@
+<main class="overlay" *ngIf="reportService.isOpenReportPost$ | async">
+  <div id="favDialog_seemore" class="modal fade favDialog_seemore">
+    <div class="container">
+      <form
+        [formGroup]="reportPostForm"
+        (ngSubmit)="reportPost()"
+        action=""
+        novalidate
+      >
+        <div class="modal">
+          <div class="modal__header">
+            <span class="modal__title">Báo cáo</span>
+            <button
+              class="button button--icon"
+              (click)="reportService.closeReportPost()"
+            >
+              <svg
+                width="24"
+                viewBox="0 0 24 24"
+                height="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path fill="none" d="M0 0h24v24H0V0z"></path>
+                <path
+                  d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <div class="modal__body">
+            <div class="input">
+              <!-- <label class="input__label title">Hãy nhập vấn đề</label> -->
+              <p class="input__description">
+                Nếu bạn nhận thấy sự lừa đảo, quấy rồi, thông tin sai sự thật,
+                ngôn ngữ vi phạm nguyên tắc cộng đồng,... hãy báo cáo ngay để
+                góp phần xây dựng một diễn đàn lành mạnh!
+              </p>
+            </div>
+            <div class="input">
+              <label class="input__label">Nội dung báo cáo</label>
+              <textarea
+                class="input__field input__field--textarea"
+                formControlName="content_report"
+                required
+              ></textarea>
+              <p
+                class="input__description error"
+                *ngIf="
+                  reportPostForm.get('content_report')?.invalid &&
+                  reportPostForm.get('content_report')?.touched
+                "
+              >
+                Vui lòng nhập nội dung báo cáo!
+              </p>
+            </div>
+          </div>
+          <div class="modal__footer">
+            <div *ngIf="isLoadingReportPost">
+              <div class="loader-bars">
+                <div class="loader-bar"></div>
+                <div class="loader-bar"></div>
+                <div class="loader-bar"></div>
+                <div class="loader-bar"></div>
+                <div class="loader-bar"></div>
+                <div class="loader-bar"></div>
+                <div class="loader-bar"></div>
+                <div class="loader-bar"></div>
+              </div>
+              <div class="loading">Báo cáo của bạn đang được xử lý</div>
+            </div>
+            <button *ngIf="!isLoadingReportPost" class="button button--primary" type="submit">Gửi</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+
+<main class="overlay" *ngIf="reportService.isOpenReportAccount$ | async">
+  <div id="favDialog_seemore" class="modal fade favDialog_seemore">
+    <div class="container">
+      <form
+        [formGroup]="reportAccountForm"
+        (ngSubmit)="reportAccount()"
+        action=""
+        novalidate
+      >
+        <div class="modal">
+          <div class="modal__header">
+            <span class="modal__title">Báo cáo</span>
+            <button
+              class="button button--icon"
+              (click)="reportService.closeReportAccount()"
+            >
+              <svg
+                width="24"
+                viewBox="0 0 24 24"
+                height="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path fill="none" d="M0 0h24v24H0V0z"></path>
+                <path
+                  d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <div class="modal__body">
+            <div class="input">
+              <!-- <label class="input__label title">Hãy nhập vấn đề</label> -->
+              <p class="input__description">
+                Nếu bạn nhận thấy sự lừa đảo, quấy rồi, thông tin sai sự thật,
+                ngôn ngữ vi phạm nguyên tắc cộng đồng,... hãy báo cáo ngay để
+                góp phần xây dựng một diễn đàn lành mạnh!
+              </p>
+            </div>
+            <div class="input">
+              <label class="input__label">Nội dung báo cáo</label>
+              <textarea
+                class="input__field input__field--textarea"
+                formControlName="content_report"
+                required
+              ></textarea>
+              <p
+                class="input__description error"
+                *ngIf="
+                  reportAccountForm.get('content_report')?.invalid &&
+                  reportAccountForm.get('content_report')?.touched
+                "
+              >
+                Vui lòng nhập nội dung báo cáo!
+              </p>
+            </div>
+          </div>
+          <div class="modal__footer">
+            <div *ngIf="isLoadingReportUser">
+              <div class="loader-bars">
+                <div class="loader-bar"></div>
+                <div class="loader-bar"></div>
+                <div class="loader-bar"></div>
+                <div class="loader-bar"></div>
+                <div class="loader-bar"></div>
+                <div class="loader-bar"></div>
+                <div class="loader-bar"></div>
+                <div class="loader-bar"></div>
+              </div>
+              <div class="loading">Báo cáo của bạn đang được xử lý</div>
+            </div>
+            <button *ngIf="!isLoadingReportUser" class="button button--primary" type="submit">Gửi</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>

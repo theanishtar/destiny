@@ -1,0 +1,111 @@
+<main class="overlay" *ngIf="modalService.isOpenSuggest$ | async">
+  <div id="favDialog_seemore" class="modal fade favDialog_seemore">
+    <!-- <app-loading *ngIf="isLoading"></app-loading> -->
+    <div class="widget-box">
+      <!-- <button
+        (click)="modalService.closeModalSuggest()"
+        class="btnClose-seemore-img"
+      >
+        <i class="fa-solid fa-xmark"></i>
+      </button> -->
+      <p class="widget-box-title">Đề xuất cho bạn</p>
+      <div class="loader-bars" *ngIf="checkLoadingdata">
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+      </div>
+      <div *ngIf="!checkLoadingdata">
+        <div class="list-suggest">
+          <div class="widget-box-content" *ngFor="let item of listSuggested">
+            <div class="user-status-list">
+              <div class="user-status">
+                <div class="info">
+                  <div
+                  >
+                    <a
+                      class="user-avatar small user-status-avatar no-border no-outline"
+                    >
+                      <div class="hexagon-container">
+                        <div class="hexagon user-avatar-content">
+                          <div
+                            class="hexagon-image"
+                            style="background-image: url('{{ item.avatar }}')"
+                          ></div>
+                        </div>
+                        <div class="hexagon user-avatar-border">
+                          <div class="hexagon-border"></div>
+                        </div>
+                        <div class="hexagon user-avatar-progress-border">
+                          <div class="user-avatar-progress"></div>
+                        </div>
+                      </div>
+                    </a>
+                    <div class="user-status-title">
+                      <a class="bold top-user">{{ item.fullname }}</a>
+                      <span class="bp-verified-badge"></span>
+                    </div>
+                  </div>
+  
+                  <!-- <a class="user-status-text small" (click)="addFollow(item.user_id)">Theo dõi</a> -->
+                  <a class="user-status-text small suggested"> Theo dõi </a>
+                </div>
+  
+                <div class="checkbox">
+                  <label for="cbx-{{ item.user_id }}" class="cbx">
+                    <div class="checkmark">
+                      <input
+                        type="checkbox"
+                        id="cbx-{{ item.user_id }}"
+                        class="input-check"
+                        [attr.data-user-id]="item.user_id"
+                      />
+                      <div class="flip">
+                        <div class="front"></div>
+                        <div class="back">
+                          <svg viewBox="0 0 16 14" height="14" width="16">
+                            <path d="M2 8.5L6 12.5L14 1.5"></path>
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="btns" id="btns">
+          <button
+            class="add-follow"
+            id="addButton"
+            (click)="addFollow()"
+          >
+            Thêm
+          </button>
+          <button
+            class="reload-follow"
+            id="reloadButton"
+            (click)="loadDataSuggest()"
+          >
+            Tải lại
+          </button>
+        </div>
+        <div class="loader-bars" *ngIf="checkAdd">
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
+          <div class="loader-bar"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

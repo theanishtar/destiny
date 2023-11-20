@@ -1,0 +1,209 @@
+<div class="body-admin">
+
+    <app-sidebar-moderator></app-sidebar-moderator>
+    <div class="content">
+      <!-- Navbar -->
+      <app-navbar-moderator></app-navbar-moderator>
+  
+      <!-- End of Navbar -->
+  
+      <main>
+        <div class="header">
+          <div class="left">
+            <h1>Bài đăng</h1>
+            <ul class="breadcrumbD">
+              /
+              <li><a href="#" class="active">Báo cáo</a></li>
+            </ul>
+          </div>
+        </div>
+  
+        <div class="row justify-content-center container-post-report">
+          <!-- New user (Monthly) Card Example -->
+          <div class="col-xl-4 mb-3">
+            <div class="card border-left-danger shadow">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="font-weight-bold text-danger text-uppercase mb-2">
+                      <div>TỔNG SỐ BÀI VIẾT BỊ BÁO CÁO (HÔM NAY)</div>
+                    </div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                      <div>
+                        100 <span class="text-success text-sm ml-2">+15%</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-auto">
+                    <i class="fas fa-calendar-day fa-2x"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- New user (Monthly) Card Example -->
+          <div class="col-xl-4 mb-3">
+            <div class="card border-left-warning shadow">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="font-weight-bold text-warning text-uppercase mb-2">
+                      <div>TỔNG SỐ BÀI VIẾT BỊ BÁO CÁO (THÁNG NÀY)</div>
+                    </div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                      <div>
+                        100 <span class="text-success text-sm ml-2">+15%</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-auto">
+                    <i class="fas fa-calendar-week fa-2x"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-4 mb-3">
+            <div class="card border-left-shine shadow">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="font-weight-bold text-pie text-uppercase mb-2">
+                      <div>TỔNG SỐ BÀI VIẾT BỊ BÁO CÁO (TRONG NĂM)</div>
+                    </div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                      <div>
+                        100 <span class="text-success text-sm ml-2">+15%</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-auto">
+                    <i class="fas fa-calendar fa-2x"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-4">
+          <div class="col-lg-12 profile-logo-heart">
+            <img src="../assets/images/logo-euphoria.png" alt="" />
+          </div>
+          <div class="col-lg-12 profile-title mt-3">
+            <div class="logo" style="height: 0 !important">
+              <h2 class="logo-name"><span>DES</span>TINY</h2>
+            </div>
+          </div>
+        </div>
+  
+        <div class="" id="table-post-report">
+          <div class="d-flex justify-content-between mt-2 pl-1 container-post-report text-pink">
+            <h4>Danh sách tất cả các bài viết bị tốt cáo</h4>
+            <!-- <i class="bx bx-card text-pink text-md pr-1" (click)="openTable()" role="button"></i> -->
+          </div>
+          <div class="container-post-report">
+            <div class="card shadow mb-5 mt-0">
+              <div class="card-body">
+                <h5 class="ml-1 mt-2 mb-3 font-weight-bold">Danh sách</h5>
+                <div class="table-responsive ml-1">
+                  <table class="table rwd-table" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                        <th>Hình ảnh</th>
+                        <th>Người dùng</th>
+                        <th>Nội dung</th>
+                        <th>Số lượng tố cáo</th>
+                        <th>Ngày đăng</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tfoot>
+                      <tr>
+                        <th>Hình ảnh</th>
+                        <th>Người dùng</th>
+                        <th>Nội dung</th>
+                        <th>Số lượng tố cáo</th>
+                        <th>Ngày đăng</th>
+                        <th></th>
+                      </tr>
+                    </tfoot>
+                    <tbody>
+                      <tr>
+                        <td data-th="Hình ảnh">
+                          <img class="w-100 img-post-report" src="../assets/images/img/home-decor-1.jpg" />
+                        </td>
+                        <td data-th="Người dùng">Phùng Quốc Vinh</td>
+                        <td class="text-substring" data-th="Nội dung">
+                          Tui có mấy món đồ không sài nữa muốn tặng cho bạn nào cần
+                          nè, Ai quan tâm ib tui nha!!!
+                        </td>
+                        <td data-th="Số lượng báo cáo" class="pl-5">
+                          <span class="status pending">3</span>
+                        </td>
+                        <td data-th="Ngày đăng">6-8-2023</td>
+                        <td data-th="Xem thêm">
+                          <a href="/moderator/post-report-detail">Xem chi tiết</a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td data-th="Hình ảnh">
+                          <img class="w-100 img-post-report" src="../assets/images/img/home-decor-2.jpg" />
+                        </td>
+                        <td data-th="Người dùng">Đoàn Hiệp Sỹ</td>
+                        <td class="text-substring" data-th="Nội dung">
+                          Tui có mấy món đồ không sài nữa muốn tặng cho bạn nào cần
+                          nè, Ai quan tâm ib tui nha!!!
+                        </td>
+                        <td data-th="Số lượng báo cáo" class="pl-5">
+                          <span class="status completed">2</span>
+                        </td>
+                        <td data-th="Ngày đăng">6-8-2023</td>
+                        <td data-th="Xem thêm">
+                          <a href="/moderator/post-report-detail">Xem chi tiết</a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td data-th="Hình ảnh">
+                          <img class="w-100 img-post-report" src="../assets/images/img/home-decor-3.jpg" />
+                        </td>
+                        <td data-th="Người dùng">Lê Bích Vi</td>
+                        <td class="text-substring" data-th="Nội dung">
+                          Tui có mấy món đồ không sài nữa muốn tặng cho bạn nào cần
+                          nè, Ai quan tâm ib tui nha!!!
+                        </td>
+                        <td data-th="Số lượng báo cáo" class="pl-5">
+                          <span class="status process">4</span>
+                        </td>
+                        <td data-th="Ngày đăng">6-8-2023</td>
+                        <td data-th="Xem thêm">
+                          <a href="/moderator/post-report-detail">Xem chi tiết</a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td data-th="Hình ảnh">
+                          <img class="w-100 img-post-report" src="../assets/images/img/home-decor-3.jpg" />
+                        </td>
+                        <td data-th="Người dùng">Nguyễn Khánh Đan</td>
+                        <td class="text-substring" data-th="Nội dung">
+                          Tui có mấy món đồ không sài nữa muốn tặng cho bạn nào cần
+                          nè, Ai quan tâm ib tui nha!!!
+                        </td>
+                        <td data-th="Số lượng báo cáo" class="pl-5">
+                          <span class="status process">4</span>
+                        </td>
+                        <td data-th="Ngày đăng">6-8-2023</td>
+                        <td data-th="Xem thêm">
+                          <a href="/moderator/post-report-detail">Xem chi tiết</a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  
+  </div>

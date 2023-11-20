@@ -1,0 +1,31 @@
+<main class="overlay" *ngIf="modalService.isOpenSeeMoreImg$ | async">
+  <div id="favDialog_seemore" class="modal fade favDialog_seemore">
+    <button (click)="closeModalSeeMoreImg()" class="btnClose-seemore-img">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="post-container-img">
+      
+    <app-loading *ngIf="modalService.checkImg"></app-loading>
+      <div class="post" *ngIf="!modalService.checkImg">
+        <!-- Slideshow container -->
+        <div class="img-product">
+          <div class="slideshow-container">
+            <!-- Full-width images with number and caption text -->
+            <div class="mySlides fade" *ngFor="let img of modalService.imagesSeeMore">
+              <img [src]="img" style="width: 100%" />
+            </div>
+            <!-- Next and previous buttons -->
+            <div class="btn-slide-shows">
+              <a class="prev-img" (click)="plusSlides(-1)">&#10094;</a>
+              <a class="next-img" (click)="plusSlides(1)">&#10095;</a>
+            </div>
+          </div>
+
+          <div class="numbertext">
+            <span id="numbertext">1 </span>/ <b>{{ modalService.imagesSeeMore.length }}</b>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

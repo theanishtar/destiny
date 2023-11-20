@@ -1,0 +1,689 @@
+<app-navigation></app-navigation>
+
+<!-- CONTENT GRID -->
+<div class="content-grid">
+  <!-- SECTION BANNER -->
+  <div class="section-banner">
+    <!-- SECTION BANNER ICON -->
+    <img
+      class="section-banner-icon"
+      src="../../assets/images/banner/accounthub-icon.png"
+      alt="accounthub-icon"
+    />
+    <!-- /SECTION BANNER ICON -->
+
+    <!-- SECTION BANNER TITLE -->
+    <p class="section-banner-title">Nhắn tin</p>
+    <!-- /SECTION BANNER TITLE -->
+
+    <!-- SECTION BANNER TEXT -->
+    <p class="section-banner-text">
+      Giao lưu, trao đổi và trò chuyện cùng bạn bè!
+    </p>
+    <!-- /SECTION BANNER TEXT -->
+  </div>
+  <!-- /SECTION BANNER -->
+  <app-loading *ngIf="messageService.isLoading"></app-loading>
+  <!-- GRID -->
+  <!-- Message -->
+  <div
+    class="account-hub-content"
+    *ngIf="!messageService.isLoading"
+  >
+    <!-- SECTION HEADER -->
+    <div class="section-header">
+      <!-- SECTION HEADER INFO -->
+      <div class="section-header-info">
+        <!-- SECTION PRETITLE -->
+        <!-- <p class="section-pretitle">My Profile</p> -->
+        <!-- /SECTION PRETITLE -->
+
+        <!-- SECTION TITLE -->
+        <h2 class="section-title">Nhắn tin</h2>
+        <!-- /SECTION TITLE -->
+      </div>
+      <!-- /SECTION HEADER INFO -->
+
+      <!-- SECTION HEADER ACTIONS -->
+      <div class="section-header-actions">
+        <!-- SECTION HEADER ACTION -->
+        <!-- <p class="section-header-action">Mark all as Read</p> -->
+        <!-- /SECTION HEADER ACTION -->
+
+        <!-- SECTION HEADER ACTION -->
+        <!-- <p class="section-header-action">Settings</p> -->
+        <!-- /SECTION HEADER ACTION -->
+      </div>
+      <!-- /SECTION HEADER ACTIONS -->
+    </div>
+    <!-- /SECTION HEADER -->
+
+    <!-- CHAT WIDGET WRAP -->
+    <div class="chat-widget-wrap">
+      <!-- CHAT WIDGET -->
+      <div class="chat-widget static">
+        <!-- CHAT WIDGET MESSAGES -->
+        <div class="chat-widget-messages" data-simplebar>
+          <div class="wrapper">
+            <div class="tabs">
+              <div class="tab">
+                <input
+                  type="radio"
+                  name="css-tabs"
+                  id="tab-1"
+                  [checked]="messageService.showMessagesTab"
+                  (click)="messageService.switchToMessagesTab()"
+                  class="tab-switch"
+                />
+                <label for="tab-1" class="tab-label main-message"
+                  >Tin nhắn</label
+                >
+                <div class="tab-content" id="tab-message">
+                  <div *ngIf="noResults" class="no-results">
+                    Không có kết quả
+                  </div>
+                  <div *ngFor="let key of (searchTerm ? searchResult : data)">
+                      <!-- <div *ngIf="searchResult.length === 0">Không tìm thấy</div> -->
+                      <!-- <div class="a">{{key.value.fullname}}</div> -->
+                      <ng-container *ngIf="key.isFriend">
+                        <!-- CHAT WIDGET MESSAGE -->
+                        <div
+                          class="chat-widget-message"
+                          id="chat-widget-message-{{ key.user_id }}"
+                          (click)="selectedUser(key.user_id)"
+                        >
+                          <!-- USER STATUS -->
+                          <div class="user-status" id="p-count-mess-{{key.user_id}}">
+                            <!-- USER STATUS AVATAR -->
+                            <div class="user-status-avatar">
+                              <div
+                                class="user-avatar small no-outline"
+                                [ngClass]="
+                                  key.type == 'JOIN' ? 'online' : 'away'
+                                "
+                              ></div>
+                              <!-- USER AVATAR -->
+                              <a
+                                class="user-avatar small user-status-avatar no-border no-outline"
+                                href="profile"
+                              >
+                                <div class="hexagon-container">
+                                  <div class="hexagon user-avatar-content">
+                                    <div
+                                      class="hexagon-image"
+                                      style="background-image: url('{{key.avatar}}')"
+                                    ></div>
+                                  </div>
+                                  <div class="hexagon user-avatar-border">
+                                    <div class="hexagon-border"></div>
+                                  </div>
+                                  <div
+                                    class="hexagon user-avatar-progress-border"
+                                  >
+                                    <div class="user-avatar-progress"></div>
+                                  </div>
+                                </div>
+                              </a>
+                              <!-- /USER AVATAR -->
+                            </div>
+                            <!-- /USER STATUS AVATAR -->
+  
+                            <!-- USER STATUS TITLE -->
+                            <p class="user-status-title">
+                              <span class="bold">{{ key.fullname }}</span>
+                            </p>
+                            <!-- /USER STATUS TITLE -->
+  
+                            <!-- USER STATUS TEXT -->
+                            <p
+                              class="user-status-text"
+                              id="last-message-{{ key.user_id }}"
+                            >
+                            {{(key.typeMessage=='text' || key.typeMessage=='')?key.lastMessage:'Đã gửi ảnh cho bạn'}}
+                            </p>
+                            <!-- /USER STATUS TEXT -->
+  
+                            <!-- USER STATUS TIMESTAMP -->
+                            <p class="user-status-timestamp floaty" id="floaty-{{key.user_id}}">
+                              {{ key.online }}
+                            </p>
+                            <!-- /USER STATUS TIMESTAMP -->
+                            <p class="user-status-timestamp count-mess"  id="count-mess-{{key.user_id}}" *ngIf="key.messageUnRead > 0">
+                              <span>{{key.messageUnRead}}</span>
+                            </p>
+                            <!-- <p class="user-status-timestamp count-mess" id="p-count-mess-{{key.value.user_id}}"
+                            style="position: absolute;top: 32%;right: 5%;padding: 3px 8px;background: red;border-radius: 50%;margin-top: 10px;color: #8f91ac;font-size: 0.75rem;font-weight: 500;line-height: 1em;">
+                              <span id="count-mess-{{key.value.user_id}}" *ngIf="key.value.messageUnRead > 0"
+                                style="color: white;font-family: Helvetica,Arial,sans-serif;font-size: 9px;" >{{key.value.messageUnRead}}</span>
+                            </p> -->
+                          </div>
+                          <!-- /USER STATUS -->
+                        </div>
+                        <!-- /CHAT WIDGET MESSAGE -->
+                      </ng-container>
+                  </div>
+                </div>
+              </div>
+              <div class="tab">
+                <input
+                  type="radio"
+                  name="css-tabs"
+                  id="tab-2"
+                  class="tab-switch"
+                  [checked]="messageService.showWaitMessagesTab"
+                  (click)="messageService.switchToWaitMessagesTab()"
+                />
+                <label for="tab-2" class="tab-label wait-message"
+                  >Tin nhắn chờ</label
+                >
+                <div class="tab-content" id="tab-message">
+                  <div *ngIf="noResults" class="no-results">
+                    Không có kết quả
+                  </div>
+                  <div *ngFor="let key of (searchTerm ? searchResult : data)">
+                    <!-- <div class="a">{{key.value.fullname}}</div> -->
+                    <ng-container *ngIf="!key.isFriend">
+                      <!-- CHAT WIDGET MESSAGE -->
+                      <div
+                        class="chat-widget-message"
+                        id="chat-widget-message-{{ key.user_id }}"
+                        (click)="selectedUser(key.user_id)"
+                      >
+                        <!-- USER STATUS -->
+                        <div class="user-status" id="p-count-mess-{{key.user_id}}">
+                          <!-- USER STATUS AVATAR -->
+                          <div class="user-status-avatar">
+                            <div
+                              class="user-avatar small no-outline"
+                              [ngClass]="
+                                key.type == 'JOIN' ? 'online' : 'away'
+                              "
+                            ></div>
+                            <!-- USER AVATAR -->
+                            <a
+                              class="user-avatar small user-status-avatar no-border no-outline"
+                              href="profile"
+                            >
+                              <div class="hexagon-container">
+                                <div class="hexagon user-avatar-content">
+                                  <div
+                                    class="hexagon-image"
+                                    style="background-image: url('{{key.avatar}}')"
+                                  ></div>
+                                </div>
+                                <div class="hexagon user-avatar-border">
+                                  <div class="hexagon-border"></div>
+                                </div>
+                                <div
+                                  class="hexagon user-avatar-progress-border"
+                                >
+                                  <div class="user-avatar-progress"></div>
+                                </div>
+                              </div>
+                            </a>
+                            <!-- /USER AVATAR -->
+                          </div>
+                          <!-- /USER STATUS AVATAR -->
+
+                          <!-- USER STATUS TITLE -->
+                          <p class="user-status-title">
+                            <span class="bold">{{ key.fullname }}</span>
+                          </p>
+                          <!-- /USER STATUS TITLE -->
+
+                          <!-- USER STATUS TEXT -->
+                          <p
+                            class="user-status-text"
+                            id="last-message-{{ key.user_id }}"
+                          >
+                          {{(key.typeMessage=='text' || key.typeMessage=='')?key.lastMessage:'Đã gửi ảnh cho bạn'}}
+                          </p>
+                          <!-- /USER STATUS TEXT -->
+
+                          <!-- USER STATUS TIMESTAMP -->
+                          <p class="user-status-timestamp floaty" id="floaty-{{key.user_id}}">
+                            {{ key.online }}
+                          </p>
+                          <!-- /USER STATUS TIMESTAMP -->
+                          <p class="user-status-timestamp count-mess"  id="count-mess-{{key.user_id}}" *ngIf="key.messageUnRead > 0">
+                            <span>{{key.messageUnRead}}</span>
+                          </p>
+                          <!-- <p class="user-status-timestamp count-mess" id="p-count-mess-{{key.value.user_id}}"
+                          style="position: absolute;top: 32%;right: 5%;padding: 3px 8px;background: red;border-radius: 50%;margin-top: 10px;color: #8f91ac;font-size: 0.75rem;font-weight: 500;line-height: 1em;">
+                            <span id="count-mess-{{key.value.user_id}}" *ngIf="key.value.messageUnRead > 0"
+                              style="color: white;font-family: Helvetica,Arial,sans-serif;font-size: 9px;" >{{key.value.messageUnRead}}</span>
+                          </p> -->
+                        </div>
+                        <!-- /USER STATUS -->
+                      </div>
+                      <!-- /CHAT WIDGET MESSAGE -->
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /CHAT WIDGET MESSAGES -->
+
+        <!-- CHAT WIDGET FORM -->
+        <form class="chat-widget-form">
+          <!-- INTERACTIVE INPUT -->
+          <div class="interactive-input small">
+            <input
+              type="text"
+              id="chat-widget-search-2"
+              name="chat_widget_search_2"
+              [(ngModel)]="searchTerm" (input)="search()"
+              placeholder="Tìm kiếm theo tên"
+            />
+            <!-- INTERACTIVE INPUT ICON WRAP -->
+            <div class="interactive-input-icon-wrap">
+              <!-- INTERACTIVE INPUT ICON -->
+              <svg class="interactive-input-icon icon-magnifying-glass">
+                <use xlink:href="#svg-magnifying-glass"></use>
+              </svg>
+              <!-- /INTERACTIVE INPUT ICON -->
+            </div>
+            <!-- /INTERACTIVE INPUT ICON WRAP -->
+
+            <!-- INTERACTIVE INPUT ACTION -->
+            <div class="interactive-input-action">
+              <!-- INTERACTIVE INPUT ACTION ICON -->
+              <svg class="interactive-input-action-icon icon-cross-thin">
+                <use xlink:href="#svg-cross-thin"></use>
+              </svg>
+              <!-- /INTERACTIVE INPUT ACTION ICON -->
+            </div>
+            <!-- /INTERACTIVE INPUT ACTION -->
+          </div>
+          <!-- /INTERACTIVE INPUT -->
+        </form>
+        <!-- /CHAT WIDGET FORM -->
+      </div>
+      <!-- /CHAT WIDGET -->
+
+      <!-- CHAT WIDGET -->
+          <div
+        class="chat-widget chat-widget-chat"
+        *ngIf="!messageService.isOriginal"
+        [ngClass]="{ active: !messageService.isOriginal }"
+      >
+        <!-- CHAT WIDGET HEADER -->
+        <div class="chat-widget-header">
+          <!-- CHAT WIDGET SETTINGS -->
+          <div class="chat-widget-settings">
+            <!-- POST SETTINGS WRAP -->
+            <div class="post-settings-wrap">
+              <!-- POST SETTINGS -->
+              <div
+                class="post-settings widget-box-post-settings-dropdown-trigger"
+              >
+                <!-- POST SETTINGS ICON -->
+                <svg class="post-settings-icon icon-more-dots">
+                  <use xlink:href="#svg-more-dots"></use>
+                </svg>
+                <!-- /POST SETTINGS ICON -->
+              </div>
+              <!-- /POST SETTINGS -->
+
+              <!-- SIMPLE DROPDOWN -->
+              <div class="simple-dropdown widget-box-post-settings-dropdown">
+                <!-- SIMPLE DROPDOWN LINK -->
+                <p class="simple-dropdown-link">Báo cáo</p>
+                <!-- /SIMPLE DROPDOWN LINK -->
+
+                <!-- SIMPLE DROPDOWN LINK -->
+                <p class="simple-dropdown-link" *ngIf="!checkBlock" (click)="block()">Chặn</p>
+                <!-- /SIMPLE DROPDOWN LINK -->
+              </div>
+              <!-- /SIMPLE DROPDOWN -->
+            </div>
+            <!-- /POST SETTINGS WRAP -->
+          </div>
+          <!-- CHAT WIDGET SETTINGS -->
+          <div class="chat-widget-call">
+            <svg
+              width="800px"
+              height="800px"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M2 12.5V11.5C2 8.21252 2 6.56878 2.90796 5.46243C3.07418 5.25989 3.25989 5.07418 3.46243 4.90796C4.56878 4 6.21252 4 9.5 4C12.7875 4 14.4312 4 15.5376 4.90796C15.7401 5.07418 15.9258 5.25989 16.092 5.46243C16.7936 6.3173 16.9531 7.49303 16.9893 9.50002L17.6584 9.17082C19.6042 8.19788 20.5772 7.7114 21.2886 8.15107C22 8.59075 22 9.67853 22 11.8541V12.1459C22 14.3215 22 15.4093 21.2886 15.8489C20.5772 16.2886 19.6042 15.8021 17.6584 14.8292L16.9893 14.5C16.9531 16.507 16.7936 17.6827 16.092 18.5376C15.9258 18.7401 15.7401 18.9258 15.5376 19.092C14.4312 20 12.7875 20 9.5 20C6.21252 20 4.56878 20 3.46243 19.092C3.25989 18.9258 3.07418 18.7401 2.90796 18.5376C2 17.4312 2 15.7875 2 12.5ZM13.5607 9.56066C14.1464 8.97487 14.1464 8.02513 13.5607 7.43934C12.9749 6.85355 12.0251 6.85355 11.4393 7.43934C10.8536 8.02513 10.8536 8.97487 11.4393 9.56066C12.0251 10.1464 12.9749 10.1464 13.5607 9.56066Z"
+                fill="#1C274C"
+              />
+            </svg>
+          </div>
+          <!-- USER STATUS -->
+          <div class="user-status">
+            <!-- USER STATUS AVATAR -->
+            <div class="user-status-avatar">
+              <!-- USER AVATAR -->
+              <a
+                class="user-avatar small user-status-avatar no-border no-outline"
+                href="profile"
+              >
+                <div class="hexagon-container">
+                  <div class="hexagon user-avatar-content">
+                    <div
+                      class="hexagon-image"
+                      style="background-image: url('{{ image }}')"
+                    ></div>
+                  </div>
+                  <div class="hexagon user-avatar-border">
+                    <div class="hexagon-border"></div>
+                  </div>
+                  <div class="hexagon user-avatar-progress-border">
+                    <div class="user-avatar-progress"></div>
+                  </div>
+                </div>
+              </a>
+              <!-- /USER AVATAR -->
+            </div>
+            <!-- /USER STATUS AVATAR -->
+
+            <!-- USER STATUS TITLE -->
+            <p class="user-status-title">
+              <span class="bold">{{ fullname }}</span>
+            </p>
+            <!-- /USER STATUS TITLE -->
+
+            <!-- USER STATUS TAG -->
+            <p
+              class="user-status-tag"
+              style="top: 0; font-size: 8px"
+              [ngClass]="checkIsOnline ? 'online' : 'offline'"
+            >
+              {{ isOnline }}
+            </p>
+            <!-- /USER STATUS TAG -->
+          </div>
+          <!-- /USER STATUS -->
+        </div>
+        <div *ngIf="checkLoadingdata">
+          <div class="loader-bars">
+            <div class="loader-bar"></div>
+            <div class="loader-bar"></div>
+            <div class="loader-bar"></div>
+            <div class="loader-bar"></div>
+            <div class="loader-bar"></div>
+            <div class="loader-bar"></div>
+            <div class="loader-bar"></div>
+            <div class="loader-bar"></div>
+          </div>
+          <div class="loading">Đang tải</div>
+        </div>
+        <!-- /CHAT WIDGET HEADER -->
+        <div>
+          <!-- CHAT WIDGET CONVERSATION -->
+        <div class="chat-widget-conversation" id="chatContainer" (scroll)="checkScrollPosition()" data-simplebar>
+          <!-- Khung chat -->
+          <div class="message-content" *ngFor="let m of messageService.listMessages;let i =index; trackBy: trackByFn">
+            <div *ngIf="m && m[0]">
+              <div *ngIf="m[0]&&m[0][6] !== null" class="time-date" style="color: black; padding: 16px 20px; text-align: center;">
+                <div class="date-send" style="text-align: center; font-size: 12px; font-family: Helvetica, Arial, sans-serif;">
+                  {{ m[0][6] | customDateTime: 'date' }}
+                </div>
+              </div>
+            
+
+              <!-- left mess -->
+              <div *ngIf="m[0][3] == id && m[0][7] === 'text'" class="chat-widget-speaker left" style="padding: 0 26px 0 36px; display: flex; flex-flow: column; position: relative; margin-bottom: 1rem !important;">
+              <a class="user-avatar small user-status-avatar no-border no-outline avatar-mess" href="profile" style="position: absolute;left: -10px;top: -8px; width: 40px;height: 44px; display: block;">
+              <div class="hexagon-container" style="width: 35px; height: 38px; position: relative; margin: 0 auto;background: white;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); ">
+              <div class="hexagon user-avatar-content" style="top: 6px;left: 5px;position: absolute;z-index: 3;width: 40px;height: 44px;overflow: hidden;">
+              <div class="hexagon-image" 
+              style="background-image: url({{m[0][4]}}); width: 20px; height: 23px;position: relative; z-index: 3;background-size: cover;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);left: 4%;top: 2%;"></div>
+              </div>
+              <div class="hexagon user-avatar-border" style="position: absolute;top: 0;left: 0;z-index: 1;">
+              <div style="position: absolute; top: 0; left: 0; z-index: 1; content: \'\'; width: 32px; height: 36px; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); left: 1px; top: 0px; background-image: linear-gradient(to right, #41efff, #615dfa); display: block;"></div>
+              <div class="hexagon-border"></div>
+              </div>
+              <div class="hexagon user-avatar-progress-border" style="margin-left: 11%;margin-top: 10.3%; width: 26px;height: 29px;top: 0;left: 0;z-index: 2;position: absolute;background: white;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">
+                <div class="user-avatar-progress" style="top: 0;left: 0;z-index: 3;position: absolute;"></div>
+              </div>
+              </div>
+              </a>
+              <p *ngIf="m[0][8] === false" class="chat-widget-speaker-message" style="border-top-left-radius: 0; display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600; line-height: 1.1428571429em;width: fit-content; max-width: 250px; word-wrap: break-word; white-space: normal; color: #3e3f5e;font-family: Helvetica, Arial, sans-serif;margin: 0;">
+                {{m[0][1]}}
+              </p>
+              <p *ngIf="m[0][8] === true" class="chat-widget-speaker-message" style="border-top-left-radius: 0; display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600; line-height: 1.1428571429em;width: fit-content; max-width: 250px; word-wrap: break-word; white-space: normal; color: #babcbe;font-family: Helvetica, Arial, sans-serif;margin: 0;">
+                Tin nhắn đã bị thu hồi
+              </p>
+              <p class="chat-widget-speaker-timestamp" style="margin-top: 12px !important;color: #adafca;font-size: 0.75rem;font-weight: 500;font-family: Helvetica, Arial, sans-serif;line-height: 1em;margin: 0;">
+                 {{ m[0][2] | customDateTime: 'time' }} </p>
+              </div>
+              
+              <div *ngIf="m[0][3] == id && m[0][7] === 'image'" class="chat-widget-speaker left" style="padding: 0 26px 0 36px; display: flex; flex-flow: column; position: relative; margin-bottom: 1rem !important;">
+                <a class="user-avatar small user-status-avatar no-border no-outline avatar-mess" href="profile" style="position: absolute;left: -10px;top: -8px; width: 40px;height: 44px; display: block;">
+                <div class="hexagon-container" style="width: 35px; height: 38px; position: relative; margin: 0 auto;background: white;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); ">
+                <div class="hexagon user-avatar-content" style="top: 6px;left: 5px;position: absolute;z-index: 3;width: 40px;height: 44px;overflow: hidden;">
+                <div class="hexagon-image" 
+                style="background-image: url({{m[0][4]}}); width: 20px; height: 23px;position: relative; z-index: 3;background-size: cover;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);left: 4%;top: 2%;"></div>
+                </div>
+                <div class="hexagon user-avatar-border" style="position: absolute;top: 0;left: 0;z-index: 1;">
+                <div style="position: absolute; top: 0; left: 0; z-index: 1; content: \'\'; width: 32px; height: 36px; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); left: 1px; top: 0px; background-image: linear-gradient(to right, #41efff, #615dfa); display: block;"></div>
+                <div class="hexagon-border"></div>
+                </div>
+                <div class="hexagon user-avatar-progress-border" style="margin-left: 11%;margin-top: 10.3%; width: 26px;height: 29px;top: 0;left: 0;z-index: 2;position: absolute;background: white;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">
+                  <div class="user-avatar-progress" style="top: 0;left: 0;z-index: 3;position: absolute;"></div>
+                </div>
+                </div>
+                </a>
+                
+                <p class="chat-widget-speaker-message img" *ngFor="let imgSrc of m[1]" style="border-top-left-radius: 0; display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600; line-height: 1.1428571429em;width: fit-content; max-width: 250px; word-wrap: break-word; white-space: normal; color: #3e3f5e;font-family: Helvetica, Arial, sans-serif;margin: 0;">
+                  <img *ngIf="m[1]" class="mess-img" [src]="imgSrc" alt="">
+                </p>
+                <p *ngIf="m[0][8] === false" class="chat-widget-speaker-message" style="border-top-left-radius: 0; display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600; line-height: 1.1428571429em;width: fit-content; max-width: 250px; word-wrap: break-word; white-space: normal; color: #3e3f5e;font-family: Helvetica, Arial, sans-serif;margin: 0;">
+                  {{m[0][1]}}
+                </p>
+                <p *ngIf="m[0][8] === true" class="chat-widget-speaker-message" style="border-top-left-radius: 0; display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600; line-height: 1.1428571429em;width: fit-content; max-width: 250px; word-wrap: break-word; white-space: normal; color: #babcbe;font-family: Helvetica, Arial, sans-serif;margin: 0;">
+                  Tin nhắn đã bị thu hồi
+                </p>
+                <p class="chat-widget-speaker-timestamp" style="margin-top: 12px !important;color: #adafca;font-size: 0.75rem;font-weight: 500;font-family: Helvetica, Arial, sans-serif;line-height: 1em;margin: 0;">
+                   {{ m[0][2] | customDateTime: 'time' }} </p>
+              </div>
+              <!-- end left mess -->
+
+              <!-- right mess -->
+              <div *ngIf="m[0][3] != id && m[0][7] === 'text'" class="chat-widget-speaker right" style=" padding-left: 64px; align-items: flex-end; display: flex; flex-flow: column; position: relative;">
+               
+              <div class="mess-temp">
+                <p *ngIf="m[0][8] === false" (contextmenu)="onRightClick($event, m[0][0])" class="chat-widget-speaker-message" style="border-top-right-radius: 0; background-color: #615dfa !important; font-family: Helvetica, Arial, sans-serif !important; margin-bottom: 0 !important; color: #fff;display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600;line-height: 1.1428571429em;width: auto; max-width: 250px; word-wrap: break-word; white-space: normal;">
+                {{m[0][1]}}
+              </p>
+              <!-- SIMPLE DROPDOWN -->
+              <div
+              class="recall-menu"
+              [attr.id]="'recall-menu-' + m[0][0]"
+              >
+              <!-- SIMPLE DROPDOWN LINK -->
+              <p class="simple-dropdown-link" (click)="messageRecall(m[0][0], i)">
+                <i class="fa-solid fa-rotate-right"></i>
+                Thu hồi
+              </p>
+              <!-- /SIMPLE DROPDOWN LINK -->
+            </div>
+            <!-- /SIMPLE DROPDOWN -->
+              </div>
+              <p *ngIf="m[0][8] === true" class="chat-widget-speaker-message" style="border-top-right-radius: 0; background-color: #615dfa !important; font-family: Helvetica, Arial, sans-serif !important; margin-bottom: 0 !important; color: #fff;display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600;line-height: 1.1428571429em;width: auto; max-width: 250px; word-wrap: break-word; white-space: normal; cursor: no-drop; color: #babcbe !important">
+                Tin nhắn bị thu hồi
+              </p> 
+              <p class="chat-widget-speaker-timestamp" style="margin-top: 12px; margin-bottom: 12px !important; color: #adafca;font-size: 0.75rem;font-weight: 500; font-family: Helvetica, Arial, sans-serif !important;line-height: 1em;">
+                 {{ m[0][2] | customDateTime: 'time' }}
+              </p>
+              </div>
+
+              <div *ngIf="m[0][3] != id && m[0][7] === 'image'" class="chat-widget-speaker right" style=" padding-left: 64px; align-items: flex-end; display: flex; flex-flow: column; position: relative;">
+                <p (contextmenu)="onRightClick($event, m[0][0])" *ngFor="let imgSrc of m[1]" class="chat-widget-speaker-message img" style="border-top-right-radius: 0; background-color: #615dfa !important; font-family: Helvetica, Arial, sans-serif !important; margin-bottom: 0 !important; color: #fff;display: inline-block;padding: 12px;border-radius: 10px;background-color: #f5f5fa;font-size: 0.875rem;font-weight: 600;line-height: 1.1428571429em;width: auto; max-width: 250px; word-wrap: break-word; white-space: normal;">
+                  <img *ngIf="m[1]" class="mess-img" [src]="imgSrc" alt="">
+               </p>
+               <p>{{m[1]}}</p>
+               <p class="chat-widget-speaker-timestamp" style="margin-top: 12px; margin-bottom: 12px !important; color: #adafca;font-size: 0.75rem;font-weight: 500; font-family: Helvetica, Arial, sans-serif !important;line-height: 1em;">
+                  {{ m[0][2] | customDateTime: 'time' }}
+               </p>
+               <!-- SIMPLE DROPDOWN -->
+               <div
+               class="simple-dropdown widget-box-post-settings-dropdown recall-menu right"
+               [attr.id]="'recall-menu-' + m[0][0]"
+             >
+               <!-- SIMPLE DROPDOWN LINK -->
+               <p  class="simple-dropdown-link" (click)="messageRecall(m[0][0], i)">Thu hồi</p>
+               <!-- /SIMPLE DROPDOWN LINK -->
+             </div>
+             <!-- /SIMPLE DROPDOWN -->
+              </div>
+              <!-- end right mess -->
+            <div *ngIf="messageService.checkUserBlock === true" class="noftify-block">Người này đã chặn bạn!</div>
+          </div>
+          </div>
+          <!-- Khung chat -->
+          
+          <div class="scrollToBottomButton" id="scrollToBottomButton" (click)="scrollToBottom()" style="display: none;">
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <div *ngIf="messageService.loaddingBall" class="LoaderBalls">
+            <div class="LoaderBalls__item"></div>
+            <div class="LoaderBalls__item"></div>
+            <div class="LoaderBalls__item"></div>
+        </div>
+        </div>
+        <!-- /CHAT WIDGET CONVERSATION -->
+        <!-- CHAT WIDGET FORM -->
+       
+        <form class="chat-widget-form" *ngIf="!checkLoadingdata">
+          <div class="form-row split" *ngIf="!checkBlock">
+            <!-- FORM ITEM -->
+            <div class="review-img" *ngIf="imageSources.length > 0">
+              <div class="add-img">
+                <label for="">
+                  <input
+                type="file"
+                accept="image/*"
+                name="image_file"
+                multiple
+                style="opacity: 0;position: absolute;z-index: 1;left: -30%;bottom: 5%;"
+                />
+                <i class="fa-solid fa-file-circle-plus"></i>
+                </label>
+              </div>
+              <div class="slider-content" *ngFor="let imgSrc of imageSources; let i = index">
+                <span class="delete-img" (click)="deleteImg($event, i)" ><i class="fa-solid fa-xmark"></i></span>
+                <img class="slider-item" #uploadPreview id="uploadPreview" 
+                [src]="imgSrc">
+              </div>
+            </div>
+            <div class="form-item">
+              <!-- INTERACTIVE INPUT -->
+              <div class="interactive-input small">
+                <input
+                  type="text"
+                  id="chat-widget-message-text-2"
+                  name="chat_widget_message_text_2"
+                  placeholder="Nhập tin nhắn"
+                  (keyup)="checkEnter($event)"
+                />
+                <!-- INTERACTIVE INPUT ICON WRAP -->
+                <div class="interactive-input-icon-wrap actionable">
+                  <!-- TOOLTIP WRAP -->
+                  <label for="">
+                    <input
+                  id="ip_images"
+                  type="file"
+                  accept="image/*"
+                  name="image_file"
+                  (change)="uploadImg($event)"
+                  multiple
+                  class="absolute inset-0 z-50 m-0 h-full w-full cursor-pointer p-0 opacity-0 outline-none"
+                  style="opacity: 0;position: absolute;z-index: 1;left: -30%;bottom: 5%;"
+                />
+                  <div
+                    class="tooltip-wrap text-tooltip-tft"
+                    data-title="Send Photo"
+                  >
+                    <!-- INTERACTIVE INPUT ICON -->
+                    <svg class="interactive-input-icon icon-camera">
+                      <use xlink:href="#svg-camera"></use>
+                    </svg>
+                    <!-- /INTERACTIVE INPUT ICON -->
+                  </div>
+                  </label>
+                  <!-- /TOOLTIP WRAP -->
+                </div>
+                <!-- /INTERACTIVE INPUT ICON WRAP -->
+
+                <!-- INTERACTIVE INPUT ACTION -->
+                <div class="interactive-input-action">
+                  <!-- INTERACTIVE INPUT ACTION ICON -->
+                  <svg class="interactive-input-action-icon icon-cross-thin">
+                    <use xlink:href="#svg-cross-thin"></use>
+                  </svg>
+                  <!-- /INTERACTIVE INPUT ACTION ICON -->
+                </div>
+                <!-- /INTERACTIVE INPUT ACTION -->
+              </div>
+              <!-- /INTERACTIVE INPUT -->
+            </div>
+            <!-- /FORM ITEM -->
+
+            <!-- FORM ITEM -->
+            <div
+              class="form-item auto-width"
+              id="sendBtn"
+              (click)="addMessage()"
+            >
+              <!-- BUTTON -->
+              <p class="button primary padded">
+                <!-- BUTTON ICON -->
+                <svg class="button-icon no-space icon-send-message">
+                  <use xlink:href="#svg-send-message"></use>
+                </svg>
+                <!-- /BUTTON ICON -->
+              </p>
+              <!-- /BUTTON -->
+            </div>
+            <!-- /FORM ITEM -->
+          </div>
+          <div class="form-row split block" *ngIf="checkBlock">
+            <!-- FORM ITEM -->
+            <div class="form-item block">
+              <span><i class="fa-solid fa-circle-exclamation"></i></span>
+              Bỏ chặn để nhắn tin với người này
+              <span class="remove-block" (click)="unBlock()">Bỏ chặn</span>
+            </div>
+            <!-- /FORM ITEM -->
+          </div>
+        </form>
+        <!-- /CHAT WIDGET FORM -->
+        </div>
+        
+      </div>
+     
+      <!-- /CHAT WIDGET -->
+      <div
+        class="chat-widget chat-widget-chat-orgin"
+        *ngIf="messageService.isOriginal"
+      >
+        <div class="conten-wellcome">
+          <div class="content-text">
+            <h3>
+              Chào mừng đến với <br />
+              khung trò chuyện của Destiny!
+            </h3>
+            <p>Nơi bạn có thể kết bạn, trò chuyện, giao lưu với mọi người</p>
+          </div>
+          <div class="img-chat">
+            <img src="../../../assets/images//landing/chat-origin.png" alt="" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /CHAT WIDGET WRAP -->
+  </div>
+  <!-- /GRID -->
+</div>
+<!-- /CONTENT GRID -->

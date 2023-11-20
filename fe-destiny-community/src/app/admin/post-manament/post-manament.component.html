@@ -1,0 +1,193 @@
+<div class="body-admin">
+  <app-sidebar-admin></app-sidebar-admin>
+  <div class="content">
+    <!-- Navbar -->
+    <app-navbar-admin></app-navbar-admin>
+    <!-- End of Navbar -->
+    <main>
+      <div class="header">
+        <div class="left">
+          <h1>Thống kê</h1>
+          <ul class="breadcrumbD">
+            <li><a href="#"> Thống kê </a></li>
+            /
+            <li><a href="#" class="active">Bài đăng</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="row col-lg-10 offset-lg-1">
+          <div class="col-xl-4 mb-3">
+            <div class="card border-left-pink shadow">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="font-weight-bold text-pink text-uppercase mb-2">
+                      <div>TỔNG SỐ BÀI VIẾT TRONG<br>(NGÀY {{day}}/{{month}}/{{year}})</div>
+                    </div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                      <div>
+                        {{totalPostByDay}} <span class="text-success text-sm ml-2">+{{percentPostByDayIncrease}}%</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-auto">
+                    <i class="fas fa-calendar-day fa-2x"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-4 mb-3">
+            <div class="card border-left-warning shadow">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="font-weight-bold text-warning text-uppercase mb-2">
+                      <div>TỔNG SỐ BÀI VIẾT TRONG <br>(THÁNG {{month}})</div>
+                    </div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                      <div>
+                        {{totalPostByMonth}} <span
+                          class="text-success text-sm ml-2">+{{percentPostByMonthIncrease}}%</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-auto">
+                    <i class="fas fa-calendar-week fa-2x"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-4 mb-3">
+            <div class="card border-left-shine shadow">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="font-weight-bold text-pie text-uppercase mb-2">
+                      <div>TỔNG SỐ BÀI VIẾT TRONG<br>(NĂM {{year}})</div>
+                    </div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                      <div>
+                        {{totalPostByYear}} <span
+                          class="text-success text-sm ml-2">+{{percentPostByYearIncrease}}%</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-auto">
+                    <i class="fas fa-calendar fa-2x"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12 profile-logo-heart">
+          <img src="../assets/images/logo-euphoria.png" alt="" />
+        </div>
+        <div class="col-lg-12 profile-title mt-3 mb-4">
+          <div class="logo" style="height: 0 !important">
+            <h2 class="logo-name"><span>DES</span>TINY</h2>
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <div class="card mb-4 shadow">
+            <div class="card-body p-4">
+              <div class="row">
+                <div class="col-xl-3 col-md-6 mb-xl-0 mb-4" *ngFor="let post of listTOP4Post">
+                  <div class="card card-blog card-plain">
+                    <div class="position-relative border-radius-lg ">
+                      <a (click)="selectPost(post.post_id)">
+                        <div class="picture-collage">
+                          <div class="picture-collage-row medium">
+                            <div class="picture-collage-item" style="width: 100% !important;">
+                              <div class="photo-preview-wrap">
+                                <div class="photo-preview">
+                                  <div class="photo-preview-image" style="
+                                    background: url('{{post.listPostImages[0].link_image}}')
+                                      center center / cover no-repeat;
+                                  "></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                    <div class="card-body px-1 pb-0">
+                      <p class="text-gradient text-dark mb-2 text-sm">{{post.product}}</p>
+                      <a (click)="selectUser(post.user_email)" type="button" class="text-pink">
+                        <h5>{{post.user_fullname}}</h5>
+                      </a>
+                      <p class="mb-4 text-sm" style="min-height: 110px;">
+                        {{post.content}}
+                      </p>
+                      <div class="d-flex align-items-center justify-content-between">
+                        <a (click)="selectPost(post.post_id)" type="button" class="btn btn-outline-primary">Xem chi
+                          tiết</a>
+                        <div class="avatar-group mt-2">
+                          <a (click)="selectUser(post.user_email)" type="button"
+                            class="avatar avatar-xs rounded-circle">
+                            <img alt=" Image placeholder" src="{{post.user_avartar}}" />
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-3 pb-5">
+        <!-- Area Chart -->
+        <div class="col-lg-8">
+          <div class="card shadow mb-4">
+            <!-- Card Body -->
+            <div class="card-body pt-1">
+              <div class="header-chart">
+                <h6 class="ml-2 mt-2 font-weight-bold">Biểu đồ tổng bài đăng theo từng tháng</h6>
+                <div class="">
+                  <img src="../assets/images/logo-euphoria.png" />
+                </div>
+              </div>
+              <div class="bg-gradient-dark border-radius-lg m-1">
+                <div class="chart-area p-1">
+                  <canvas #myAreaChart></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <!-- Pie Chart -->
+          <div class="mt-4">
+            <!-- Card Body -->
+            <div class="">
+              <div class="chart-pie">
+                <canvas #myPieChart></canvas>
+              </div>
+              <div class="mt-4 text-center small text-pie">
+                <span class="mr-2">
+                  <i class="fas fa-circle text-pink"></i> {{ listNameTOP3Product[0] }}
+                </span>
+                <span class="mr-2">
+                  <i class="fas fa-circle text-primary"></i> {{ listNameTOP3Product[1] }}
+                </span>
+                <span class="mr-2">
+                  <i class="fas fa-circle text-success"></i> {{ listNameTOP3Product[2] }}
+                </span>
+              </div>
+            </div>
+            <h5 class="mt-4 mb-3 font-weight-bold text-center text-pie">Top 3</h5>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
