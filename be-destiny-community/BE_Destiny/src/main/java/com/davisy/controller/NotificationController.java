@@ -31,6 +31,7 @@ import com.davisy.entity.Share;
 import com.davisy.entity.User;
 import com.davisy.entity.ChatParticipants.Primary;
 import com.davisy.model.NotificationModel;
+import com.davisy.service.BadWordService;
 import com.davisy.service.ChatParticipantsService;
 import com.davisy.service.ChatsService;
 import com.davisy.service.CommentService;
@@ -41,6 +42,7 @@ import com.davisy.service.NotifyService;
 import com.davisy.service.PostService;
 import com.davisy.service.ShareService;
 import com.davisy.service.UserService;
+import com.davisy.service.impl.BadWordServiceImpl;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -84,10 +86,20 @@ public class NotificationController {
 	@Autowired
 	NotifyService notifyService;
 
+	@Autowired
+	BadWordService badWordService;
+
 	@Async
 	@MessageMapping("/notify/{to}")
 	public void sendNotification(@DestinationVariable int to, NotificationModel model) {
 		try {
+			System.err.println("model.getContent(): "+ model.getContent());
+			if (badWordService.checkBadword(model.getContent())) {
+				System.out.println("badWordService.checkBadword(model.getContent()): " + badWordService.checkBadword(model.getContent()));
+				simpMessagingTemplate.convertAndSend("/topic/error-notification/" + model.getFromUserId(), true);
+				return;
+			}
+			System.err.println("badWordService.checkBadword(model.getContent()): " + badWordService.checkBadword(model.getContent()));
 			User user = userService.findById(model.getFromUserId());
 			Post post = new Post();
 			if (model.getPostId() > 0)
@@ -178,7 +190,7 @@ public class NotificationController {
 			followService.create(follower);
 			insert(model, arr[i]);
 			simpMessagingTemplate.convertAndSend("/topic/notification/" + arr[i],
-					model(notifyService.findAllByName("idUserReceive",  arr[i] + "")));
+					model(notifyService.findAllByName("idUserReceive", arr[i] + "")));
 		}
 		System.out.println("model.getFromUserId(): " + model.getFromUserId());
 		simpMessagingTemplate.convertAndSend("/topic/loaddata/suggest-post/" + model.getFromUserId(), "success");
@@ -246,7 +258,8 @@ public class NotificationController {
 			} else {
 				model.setType(MessageType.SHARE);
 			}
-			boolean checkFriend = followService.checkFriend(Integer.valueOf(n.getIdUserSend()), Integer.valueOf(n.getIdUserReceive()));
+			boolean checkFriend = followService.checkFriend(Integer.valueOf(n.getIdUserSend()),
+					Integer.valueOf(n.getIdUserReceive()));
 			model.setFollowing_status(checkFriend);
 			lisModels.add(model);
 		}

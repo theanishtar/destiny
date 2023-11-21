@@ -26,7 +26,8 @@ export class MessageService {
   private listFriends: any[] = [];
   private listMess: any[] = [];
   public listMessages: any[] = [];
-  listMessagesTemp: any[] = [];
+  public listImages:any[] = [];
+  listMessagesTemp :any[]=[];
   isLoading = true;
 
   socket?: WebSocket;
@@ -138,15 +139,15 @@ export class MessageService {
     this.stompClient.connect({}, (frame) => {
       // console.log('connected to: ' + frame);
       this.stompClient!.subscribe('/topic/messages/' + userId, (response) => {
-        let data = JSON.parse(response.body);
+        let data = JSON.parse(response.body)
         let type = false; // Thay đổi giá trị "your_type_value" bằng giá trị thực tế của biến "type"
-        let from_user_id = data.fromLogin;
+        let from_user_id = data.user_id;
         let to_user_id = localStorage.getItem('chatUserId');
-        if (this.mapTime.has(data.fromLogin)) {
-          this.mapTime.set(data.fromLogin, new Date().toISOString());
+        if (this.mapTime.has(from_user_id)) {
+          this.mapTime.set(from_user_id, new Date().toISOString());
         }
-        if (this.selectedUser == data.fromLogin && this.isOriginal == false) {
-          this.render(data.message, data.fromLogin, data.avatar);
+        if (this.selectedUser == from_user_id && this.isOriginal == false) {
+          this.listMessages = [...this.listMessages, ... JSON.parse('['+response.body+']')];
           type = true;
         } else {
           type = false;
@@ -154,27 +155,12 @@ export class MessageService {
           audio.src = '../../../assets/js/sound/notify.mp3';
           audio.play();
           this.notif_mess = true;
-          this.newMessage.set(data.fromLogin, {
-            message: data.message,
-            avatar: data.avatar,
-          });
         }
         this.stompClient!.send(`/app/reload/messages/${type}/${from_user_id}/${to_user_id}`);
       });
       this.stompClient!.subscribe('/topic/status/messages/' + userId, (response) => {
-        // let data1 = JSON.parse(JSON.stringify(response));
-        let data = JSON.parse(response.body);
-        let imagesArray = data[1] ? data[1][0] : [];
-        console.log('data: ' + data)
-        console.log('data[1]: ' + data?.[1])
-        console.log('images: ' + imagesArray)
-        console.log('data[0]: ' + data?.[0])
-        // let temp =[data,imagesArray];
-        // this.listMessages = [...this.listMessages, ...temp];
-        let temp = [ data, imagesArray ];
+        let data = JSON.parse('['+response.body+']');
         this.listMessages = [...this.listMessages, ...data];
-        console.log('this.listMessages: ' + this.listMessages.length)
-        // this.listMessages+=response;
         this.loaddingBall = false;
         if (data != null) {
           let type = false; // Thay đổi giá trị "your_type_value" bằng giá trị thực tế của biến "type"
@@ -182,7 +168,6 @@ export class MessageService {
           this.stompClient!.send(`/app/reload/messages/${type}/${to_user_id}/${userId}`);
         }
         this.$chatHistory = $('.chat-widget-conversation')!;
-        // this.updateDataMessages();
         this.$chatHistory.scrollTop(this.$chatHistory[0]!.scrollHeight);
 
       })
@@ -193,7 +178,6 @@ export class MessageService {
         let to_user_id = this.selectedUser;
         if (to_user_id == data[2]) {
           this.listMessages.splice(data[1], 1, ...data[0]);
-          // this.listMessages[data[1]]=data[0];
           type = true;
         }
         this.stompClient!.send(`/app/reload/messages/${type}/${to_user_id}/${userId}`);
@@ -287,39 +271,11 @@ export class MessageService {
     this.dataUpdatedMessages.emit();
   }
 
-  // sendMsg(from, text, img, typeMessage, images) {
-
-  //   this.stompClient!.send(
-  //     '/app/chat/' + this.selectedUser,
-  //     {},
-  //     JSON.stringify({
-  //       fromLogin: from,
-  //       message: text,
-  //       avatar: img,
-  //       typeMessage: typeMessage,
-  //       linkImages: images
-  //     })
-  //   );
-  //   let textLastMess = document.getElementById(
-  //     'last-message-' + this.selectedUser
-  //   );
-  //   if (textLastMess) textLastMess!.innerText = text;
-  //   let time = document.getElementById('floaty-' + this.selectedUser);
-  //   if (time) {
-  //     time!.innerText = 'Vài giây';
-  //   }
-  //   this.mapTime.set(this.selectedUser + '', new Date().toISOString() + '');
-
-  // }
-
-  
   sendMsg(from, text, img, typeMessage, images) {
 
     this.stompClient!.send(
       '/app/chat/' + this.selectedUser,
-     (res)=> {
-      console.log("res:")
-     },
+      {},
       JSON.stringify({
         fromLogin: from,
         message: text,
@@ -339,6 +295,8 @@ export class MessageService {
     this.mapTime.set(this.selectedUser + '', new Date().toISOString() + '');
 
   }
+
+
 
  
 
@@ -406,27 +364,19 @@ export class MessageService {
     let month = date2.getMonth() + 1; // Lấy tháng (0-11), nên cộng thêm 1
     let year = date2.getFullYear();
     let date3 = new Date(year + '-' + month + '-' + day);
-    if (date1 < date3) {
+    let time1 = date2.getTime();
+    let time2 = date1.getTime();
+    let timeDifference = Math.abs(time1 - time2);
+    let milliseconds = timeDifference % 1000;
+    let minutes = Math.floor((timeDifference / (1000 * 60)) % 60);
+    let hours = Math.floor(timeDifference / (1000 * 60 * 60));
+
+    if (date1 < date3 && hours>24) {
       dateTime = this.getDayOfWeek(time, check);
       return dateTime;
-    } else if (date1 > date2) {
+    } else if (date1 > date2&& hours>24) {
       return '';
     } else {
-      let date = new Date();
-      let date1 = new Date(time);
-
-      // Lấy thời gian ở dạng milliseconds từ epoch (1/1/1970)
-      let time1 = date.getTime();
-      let time2 = date1.getTime();
-
-      // Tính toán khoảng thời gian (đơn vị milliseconds)
-      let timeDifference = Math.abs(time1 - time2); // Lấy giá trị tuyệt đối để đảm bảo giá trị luôn là dương
-
-      // Chuyển khoảng thời gian thành giờ, phút, giây, và mili giây (tùy ý)
-      let milliseconds = timeDifference % 1000;
-      // let seconds = Math.floor((timeDifference / 1000) % 60);
-      let minutes = Math.floor((timeDifference / (1000 * 60)) % 60);
-      let hours = Math.floor(timeDifference / (1000 * 60 * 60));
       if (hours == 0) {
         return minutes + 'p trước';
       } else {

@@ -27,6 +27,7 @@ import com.davisy.config.JwtTokenUtil;
 import com.davisy.entity.Chats;
 import com.davisy.entity.MessageImages;
 import com.davisy.entity.Messages;
+import com.davisy.entity.MessagesEntity;
 import com.davisy.entity.User;
 import com.davisy.model.chat.MessageModel;
 import com.davisy.model.chat.UserModel;
@@ -61,13 +62,13 @@ public class MessageController {
 	@Autowired
 	FollowService followService;
 
-//	@Async
+	@Async
 	@MessageMapping("/chat/{to}")
-	public ResponseEntity<Object[]> sendMessage(@DestinationVariable int to, MessageModel message) {
+	public void sendMessage(@DestinationVariable int to, MessageModel message) {
 		User user = userService.findById(message.getFromLogin());
 		User toUser = userService.findById(to);
 		Chats chats = chatsService.findChatNames(user.getUsername(), toUser.getUsername());
-		List<String>images =new ArrayList<>();
+		List<String> images = new ArrayList<>();
 		Messages messages = new Messages();
 		messages.setContent(message.getMessage());
 		messages.setUser(user);
@@ -86,38 +87,27 @@ public class MessageController {
 			}
 		}
 		Object[] messageOb = messagesService.findByIdMessage(message.getFromLogin(), to, messages.getId());
-//		List<String> images = messageImagesService.findAllImagesMessage(messages.getId());
-		Object[] o = new Object[] { messageOb, images };
-		System.out.println("size: "+images.size());
-//		List<Object[]> o = new ArrayList<>();
-//		o.add(new Object[] { messageOb, images });
-		simpMessagingTemplate.convertAndSend("/topic/status/messages/" + message.getFromLogin(), o);
+		MessagesEntity entity = new MessagesEntity();
+		entity = entity(messageOb);
+		simpMessagingTemplate.convertAndSend("/topic/status/messages/" + message.getFromLogin(), entity);
 		boolean isExists = UserChatStorage.getInstance().getUsers().containsKey(to);
 		if (isExists) {
 			simpMessagingTemplate.convertAndSend("/topic/messages/" + to, message);
 
 		}
-		return ResponseEntity.ok().body(o);
-
 	}
 
 	@PostMapping("/v1/user/chat/load/messages")
-	public ResponseEntity<List<Object[]>> loadMessages(HttpServletRequest request, @RequestBody int to) {
+	public ResponseEntity<List<MessagesEntity>> loadMessages(HttpServletRequest request, @RequestBody int to) {
 		try {
 			String email = jwtTokenUtil.getEmailFromHeader(request);
 			User user = userService.findByEmail(email);
 			List<Object[]> list = messagesService.findListMessage(user.getUser_id(), to);
-			List<Object[]> newList = new ArrayList<>();
+			List<MessagesEntity> lisMessagesEntities = new ArrayList<>();
 			for (Object[] l : list) {
-				List<String> images = new ArrayList<>();
-				if (!"text".equals(l[7] + "") && Boolean.valueOf(l[8].toString())==false) {
-					int id = Integer.valueOf(l[0].toString());
-					images = messageImagesService.findAllImagesMessage(id);
-				}
-				Object[] ob = new Object[] { l, images };
-				newList.add(ob);
+				lisMessagesEntities.add(listEntity(l));
 			}
-			return ResponseEntity.ok().body(newList);
+			return ResponseEntity.ok().body(lisMessagesEntities);
 		} catch (Exception e) {
 			System.out.println("Error loadMessages in MessagesController: " + e);
 			return ResponseEntity.badRequest().build();
@@ -125,20 +115,58 @@ public class MessageController {
 	}
 
 	@GetMapping("/v1/user/chat/recall/messages/{id}/{position}/{from}/{to}")
-	public ResponseEntity<Object[]> updateRecallMessage(@PathVariable int id, @PathVariable int position,
+	public ResponseEntity<MessagesEntity> updateRecallMessage(@PathVariable int id, @PathVariable int position,
 			@PathVariable int from, @PathVariable int to) {
 		messagesService.updateRecallMessages(true, id);
 		Object[] message = messagesService.findByIdMessage(from, to, id);
-		List<String> images= new ArrayList<>();
-//		if(!"text".equals(((Object[]) message[0])[2])) {
-//			images=messageImagesService.findAllImagesMessage(id);
-//		}
-		Object[] o =new Object[] {message,images};
-		Object[] recall = new Object[] { o, position, from };
+		MessagesEntity entity = new MessagesEntity();
+		entity = entity(message);
+		Object[] recall = new Object[] { entity, position, from };
 		simpMessagingTemplate.convertAndSend("/topic/recall/messages/" + to, recall);
-		return ResponseEntity.ok().body(o);
+		return ResponseEntity.ok().body(entity);
 	}
 
+	public MessagesEntity listEntity(Object[] l) {
+		MessagesEntity entity = new MessagesEntity();
+		entity.setId(Integer.valueOf(l[0].toString()));
+		entity.setContent(l[1] + "");
+		entity.setSend_time(l[2] + "");
+		entity.setUser_id(Integer.valueOf(l[3].toString()));
+		entity.setAvatar(l[4] + "");
+		entity.setChat_parcipants_status(Boolean.valueOf(l[5].toString()));
+		if (l[6] != null)
+			entity.setDay(l[6] + "");
+		else
+			entity.setDay(null);
+		entity.setType(l[7] + "");
+		entity.setRecall(Boolean.valueOf(l[8].toString()));
+		if (!entity.getType().equalsIgnoreCase("text") && !entity.isRecall()) {
+			entity.setImages(messageImagesService.findAllImagesMessage(entity.getId()));
+		}
+		return entity;
+	}
+	
+	public MessagesEntity entity (Object[] o) {
+		MessagesEntity entity = new MessagesEntity();
+		entity.setId(Integer.valueOf(((Object[]) o[0])[0].toString()));
+		entity.setContent(((Object[]) o[0])[1] + "");
+		entity.setSend_time(((Object[]) o[0])[2] + "");
+		entity.setUser_id(Integer.valueOf(((Object[]) o[0])[3].toString()));
+		entity.setAvatar(((Object[]) o[0])[4] + "");
+		entity.setChat_parcipants_status(Boolean.valueOf(((Object[]) o[0])[5].toString()));
+		if (((Object[]) o[0])[6] != null)
+			entity.setDay(((Object[]) o[0])[6] + "");
+		else
+			entity.setDay(null);
+		entity.setType(((Object[]) o[0])[7] + "");
+		entity.setRecall(Boolean.valueOf(((Object[]) o[0])[8].toString()));
+		if (!entity.getType().equalsIgnoreCase("text") && !entity.isRecall()) {
+			entity.setImages(messageImagesService.findAllImagesMessage(entity.getId()));
+		}
+		return entity;
+	}
+	
+	
 //	@PostMapping("/v1/user/chat/load/messages")
 //	public ResponseEntity<List<Object[]>> loadMessages(HttpServletRequest request, @RequestBody int to) {
 //		try {

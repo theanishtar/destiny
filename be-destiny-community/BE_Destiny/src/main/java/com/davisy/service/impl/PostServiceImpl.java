@@ -132,8 +132,8 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public List<Object[]> findAllPostShare(int user_id, int page) {
-		return postDao.findAllPostShare(user_id, (page - 1) * 5);
+	public List<Object[]> findAllPostShare(int user_id) {
+		return postDao.findAllPostShare(user_id);
 	}
 
 	@Override
@@ -163,8 +163,8 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public List<Object[]> getPostProfileShare(int user_id, int user_guest_id, int page) {
-		return postDao.getPostProfileShare(user_id,user_guest_id, (page - 1) * 5);
+	public List<Object[]> getPostProfileShare(int user_id, int user_guest_id) {
+		return postDao.getPostProfileShare(user_id,user_guest_id);
 	}
 	@Override
 	public Object[] findByIdPost(int id, int current_page, int post_id) {

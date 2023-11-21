@@ -143,6 +143,8 @@ export class NavigationComponent implements OnInit {
     // Add your custom logic here
   }
 
-
+  reloadPage(){
+    location.reload();
+  }
 
 }

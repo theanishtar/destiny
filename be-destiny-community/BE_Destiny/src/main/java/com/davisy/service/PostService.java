@@ -12,7 +12,7 @@ public interface PostService {
 	// Lấy tất cả bài post có quan hệ bạn bè hoặc follow
 	public List<Object[]> findAllPost(int id, int current_page);
 
-	public List<Object[]> findAllPostShare(int id, int current_page);
+	public List<Object[]> findAllPostShare(int id);
 
 	public Object[] findByIdPost(int id, int current_page, int post_id);
 
@@ -64,7 +64,7 @@ public interface PostService {
 
 	public List<Object[]> getPostProfile(int user_id, int user_guest_id, int page);
 
-	public List<Object[]> getPostProfileShare(int user_id, int user_guest_id, int page);
+	public List<Object[]> getPostProfileShare(int user_id, int user_guest_id);
 
 	public void create(Post post);
 

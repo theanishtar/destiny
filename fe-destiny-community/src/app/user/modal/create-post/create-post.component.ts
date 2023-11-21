@@ -111,23 +111,38 @@ export class CreatePostComponent {
         type: 'warning',
         duration: 3000,
       });
-      
+
     }
     console.warn("data: " + JSON.stringify(data));
     if (this.createPostForm.valid) {
       this.postService.uploadPost(data).subscribe((res) => {
-        new toast({
-          title: 'Thành công!',
-          message: 'Đăng bài thành công',
-          type: 'success',
-          duration: 1500,
-        });
-        this.listPosts = res;
-        this.createPostForm.reset();
-        this.listImg = [];
-        this.file = {};
-        this.closeModalCreatePost();
-        this.isLoading = false;
+        console.warn("res1: " + JSON.stringify(res));
+        if (res != null) {
+          new toast({
+            title: 'Thành công!',
+            message: 'Đăng bài thành công',
+            type: 'success',
+            duration: 1500,
+          });
+          this.listPosts = res;
+          this.createPostForm.reset();
+          this.listImg = [];
+          this.file = {};
+          this.closeModalCreatePost();
+          this.isLoading = false;
+        } else {
+          new toast({
+            title: 'Thông báo!',
+            message: 'Từ ngữ của bạn đã vi phạm nguyên tắc cộng đồng!',
+            type: 'warning',
+            duration: 4000,
+          })
+          this.isLoading = false;
+          if (body && !this.isLoading) {
+            body.style.opacity = '1';
+          }
+          return;
+        }
       });
     }
   }

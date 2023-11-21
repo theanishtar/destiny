@@ -204,7 +204,7 @@
     <!-- /USER SHORT DESCRIPTION AVATAR -->
 
     <!-- USER SHORT DESCRIPTION TITLE -->
-    <p class="user-short-description-title">
+    <p class="user-short-description-title" style="padding-top: 50px">
       <a>{{userDisplayName}}</a>
     </p>
     <!-- /USER SHORT DESCRIPTION TITLE -->
@@ -256,7 +256,7 @@
     <!-- MENU ITEM -->
     <li [class.menu-item]="true" [class.active]="activeMenuItem === 'newsfeed'">
       <!-- MENU ITEM LINK -->
-      <a class="menu-item-link" (click)="handleLinkClick($event)" routerLink="/newsfeed">
+      <a class="menu-item-link" (click)="handleLinkClick($event)" routerLink="/newsfeed" (click)="reloadPage()">
         <!-- MENU ITEM LINK ICON -->
         <div class="menu-item-link-icon icon-newsfeed">
           <i class="fa-solid fa-house"></i>

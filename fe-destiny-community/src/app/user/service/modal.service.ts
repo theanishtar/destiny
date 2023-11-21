@@ -26,6 +26,7 @@ export class ModalService {
   private loadDataReplyUrl = environment.baseUrl + 'v1/user/load/comment/reply';
   private searchUrl = environment.baseUrl + 'v1/user/find/user';
   private searchPostUrl = environment.baseUrl + 'v1/user/frind/post';
+  private redis = environment.baseUrl + 'v1/moderator/sendDataRedis';
 
   public listComment: any;
   public images: string[];
@@ -34,6 +35,7 @@ export class ModalService {
   public listReplyComment: any;
   public listReplyCmt: string[];
   public imagesSeeMore: string[] = [];
+  public imagesSeeAll: string[] = [];
   public listSearch: any[] = [];
 
   listPosts: any;
@@ -173,6 +175,17 @@ export class ModalService {
       this.stompClient?.subscribe("/topic/success-notification", (response) => {
         let id = JSON.parse(response.body);
         this.callApiLoadCmt(id);
+      });
+      this.stompClient?.subscribe("/topic/error-notification/" + userId, (response) => {
+        let status = JSON.parse(response.body);
+        if(status){
+          new toast({
+            title: 'Thông báo!',
+            message: 'Từ ngữ của bạn đã vi phạm nguyên tắc cộng đồng!',
+            type: 'warning',
+            duration: 4000,
+          })
+        }
       });
       this.stompClient?.subscribe("/topic/loaddata/suggest-post/" + userId, (response) => {
         this.updateDataPost();
@@ -364,11 +377,34 @@ export class ModalService {
 
   /* ============Images============= */
   checkImg: boolean = true
+  checkImgSeeAll: boolean = true
   openModalSeeMoreImg(list: any) {
     this.isOpenSeeMoreImg.next(true);
     this.imagesSeeMore = list;
     this.checkImg = false;
   }
+
+  async openModalSeeAllImg() {
+    this.isOpenSeeAllImg.next(true);
+    // Chờ đợi đến khi có dữ liệu
+    while (this.messageService.listMessages.length === 0) {
+      // Chờ 100ms trước khi kiểm tra lại
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    for (let m of this.messageService.listMessages) {
+      if (Array.isArray(m.images)) {
+        for (let imagePath of m.images) {
+          this.imagesSeeAll.push(imagePath);
+        }
+      }
+    }
+    this.checkImgSeeAll = false;
+  }
+  
+  
+
+
+
 
   /* ============Search============= */
   async searchApi(id: number, fullname: string): Promise<any> {
@@ -422,6 +458,18 @@ export class ModalService {
   closeModalSeeMoreImg() {
     this.checkImg = true;
     this.isOpenSeeMoreImg.next(false);
+  }
+
+  private isOpenSeeAllImg = new BehaviorSubject<boolean>(false);
+  isOpenSeeAllImg$ = this.isOpenSeeAllImg.asObservable();
+
+  closeModalSeeAllImg() {
+    this.checkImgSeeAll = true;
+    // this.imagesSeeAll.splice(0, this.imagesSeeAll.length);
+    // this.messageService.listMessages.splice(0, this.messageService.listMessages.length);
+    // console.log("Processing complete. Length3:", this.imagesSeeAll.length);
+    // console.log("Processing complete. Length4:", this.messageService.listMessages.length);
+    this.isOpenSeeAllImg.next(false);
   }
 
   private isOpenSuggest = new BehaviorSubject<boolean>(false);

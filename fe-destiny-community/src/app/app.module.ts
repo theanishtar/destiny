@@ -83,6 +83,7 @@ import { ChangeConfirmComponent } from './user/modal/change-email/change-confirm
 import { SuggestAfterRegisterComponent } from './user/modal/suggest-after-register/suggest-after-register.component';
 import { ArticleDetailsComponent } from './user/article-details/article-details.component';
 import { ReportComponent } from './user/modal/report/report.component';
+import { ImagesMessageComponent } from './user/modal/images-message/images-message.component';
 
 export function appInitializer(cookieService: CookieService, messageService: MessageService, sender: any,modalService:ModalService, profileService: ProfileService, dataProfileTimeline: any) {
   return () => {
@@ -94,11 +95,6 @@ export function appInitializer(cookieService: CookieService, messageService: Mes
         messageService.connectToChat(sender.user_id);
       
       });
-      // setTimeout(() => {
-      //   profileService.loadCheckPost(1).subscribe((res) => {
-          
-      //   });
-      // }, 1);
     }
   };
 }
@@ -160,7 +156,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     SuggestAfterRegisterComponent,
     ArticleDetailsComponent,
     ReportComponent,
-    CustomTimePipe
+    CustomTimePipe,
+    ImagesMessageComponent
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, Input, Renderer2, HostListener,ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ElementRef, Input, Renderer2, HostListener, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
 import { liquid } from "../../../assets/js/utils/liquidify.js";
 import { avatarHexagons } from '../../../assets/js/global/global.hexagons.js';
@@ -20,6 +20,8 @@ import { ModalService } from '../service/modal.service';
 import { MessageService } from '../service/message.service';
 import { environment } from '../../../environments/environment'
 import { UserModel } from '../Model/UserModel.js';
+import { ReportService } from '../service/report.service';
+
 // import { CustomTimePipe } from '@app/custom-time.pipe';
 @Component({
   selector: 'app-message',
@@ -64,7 +66,7 @@ export class MessageComponent implements OnInit {
   listMessages: any[] = [];
 
   ngOnInit() {
-    
+
     this.messageService.isOriginal = true;
     this.isLoading = this.messageService.isLoading;
 
@@ -93,7 +95,7 @@ export class MessageComponent implements OnInit {
     if (this.messageService.checkSelected != '') {
       this.selectedUser(this.messageService.checkSelected);
     }
-    
+
     liquid.liquid();
     avatarHexagons.avatarHexagons();
     tooltips.tooltips();
@@ -104,7 +106,7 @@ export class MessageComponent implements OnInit {
     content.contentTab();
     form.formInput();
     // this.checkScrollPosition();
-    
+
   }
 
   constructor(
@@ -114,6 +116,7 @@ export class MessageComponent implements OnInit {
     private renderer: Renderer2,
     public storage: Storage,
     private cdr: ChangeDetectorRef,
+    public reportService: ReportService
     // public customTimePipe: CustomTimePipe
   ) {
   }
@@ -159,7 +162,7 @@ export class MessageComponent implements OnInit {
     if (this.id != '') {
       this.renderer.removeClass(this.el.nativeElement.querySelector('#chat-widget-message-' + this.id), 'active');
     }
-    
+    this.messageService.listMessages.splice(0, this.messageService.listMessages.length);
     this.messageService.mapNotification.set(userid, false);
     let mapEntries = Array.from(this.messageService.mapNotification.entries());
     let hasTrueValue = mapEntries.some(([key, value]) => value === true);
@@ -195,19 +198,19 @@ export class MessageComponent implements OnInit {
       countMessage.parentNode?.removeChild(countMessage);
     }
     this.messageService.loadMessage(this.id).subscribe((res) => {
-      if (this.count > 0 && this.checkClick==false) {
+      if (this.count > 0 && this.checkClick == false) {
         document.querySelectorAll(".chat-widget-speaker, .time-date, .br, .notify-block,.review-img").forEach((e) => {
           e.remove();
         });
         this.count = 0;
-        this.checkClick=false;
+        this.checkClick = false;
       }
       this.count++;
       this.$chatHistory = $('.chat-widget-conversation');
       this.messageService.listMessages = JSON.parse(JSON.stringify(res));
       this.messageService.checkScroll = 1;
       this.checkLoadingdata = false;
-      this.checkClick=true;
+      this.checkClick = true;
       this.cdr.markForCheck();
       if (chatContainer && !this.checkLoadingdata) {
         chatContainer.style.opacity = '1';
@@ -229,7 +232,7 @@ export class MessageComponent implements OnInit {
 
   addMessage() {
     this.$textarea = $('#chat-widget-message-text-2');
-    if (this.$textarea.val().trim() !== '' || this.file.length>0) {
+    if (this.$textarea.val().trim() !== '' || this.file.length > 0) {
       this.sendMessage(this.$textarea.val());
     }
   }
@@ -244,24 +247,25 @@ export class MessageComponent implements OnInit {
     let avatar = this.sender.avatar;
     this.$chatHistory = $('.chat-widget-conversation');
     this.$textarea = $('#chat-widget-message-text-2');
-  
+
 
     if (message.trim() !== '' || this.file.length > 0) {
       let type = '';
       let images: string[] = [];
-      this.messageService.loaddingBall=true;
+      this.messageService.loaddingBall = true;
+      this.messageService.listImages = this.listImg;
       if (this.file.length > 0) {
+        this.imageSources = [];
         type = 'image';
         for (let img of this.file) {
           await this.addData(img);
         }
-        images=this.listImg;
+        images = this.listImg;
+        this.listImg = [];
       }
       if (this.messageService.checkUserBlock === false) {
         this.messageService.sendMsg(username, message, avatar, type, images);
-        
-        this.file={};
-        this.imageSources=[];
+        this.file = {};
         this.scrollToBottom();
       } else {
         this.$chatHistory.append(
@@ -274,67 +278,13 @@ export class MessageComponent implements OnInit {
     }
   }
 
-  // getCurrentTime() {
-  //   let date = new Date();
-  //   let hours = (date.getHours() < 10) ? '0' + (date.getHours()) : (date.getHours());
-  //   let minutes = (date.getMinutes() < 10) ? '0' + (date.getMinutes()) : (date.getMinutes());
-  //   let newTime = hours + ':' + minutes;
-  //   return newTime;
-  // }
-  // getCustomTime(time) {
-  //   console.warn("length: "+this.messageService.listMessages.length);
-    
-  //   if (this.checkScroll === this.messageService.listMessages.length) {
-  //     this.scrollToBottom();
-  //   }
-  //   console.warn("this.checkScroll: "+this.checkScroll);
-  //   this.checkScroll++;
-  //   let date = new Date(time);
-  //   let hours = (date.getHours() < 10) ? '0' + (date.getHours()) : (date.getHours());
-  //   let minutes = (date.getMinutes() < 10) ? '0' + (date.getMinutes()) : (date.getMinutes());
-  //   let newTime = hours + ':' + minutes;
-  //   return newTime;
-  // }
-
-  // customTime(time) {
-  //   let regex = /(\d{2}:\d{2})/;
-  //   let match = time.match(regex);
-  //   if (match) {
-  //     let extractedTime = match[1]; // Extracted "15:43"
-  //     return extractedTime;
-  //   } else {
-  //     return null;
-  //   }
-  // }
-
-  // checkDate(date: string) {
-  //   let date1 = new Date(date.substring(0, 10));
-  //   let d = new Date();
-  //   let day = d.getDate(); // Lấy ngày trong tháng (1-31)
-  //   let month = d.getMonth() + 1; // Lấy tháng (0-11), nên cộng thêm 1
-  //   let year = d.getFullYear();
-  //   let date2 = new Date(year + '-' + month + '-' + day);
-  //   // console.log("date1: "+date1);
-  //   // console.log("date2: "+date2);
-  //   // console.log('date1 < date2: '+(date1 < date2));
-  //   if (date1 < date2 && (date2.getDate() - 1) == date1.getDate()) {
-  //     return "Hôm qua";
-  //   } else if (date1 < date2 && (date2.getDate() - 1) > parseInt(date.substring(8, 10))) {
-  //     let year = (date1.getFullYear() < date2.getFullYear()) ? '-' + date1.getFullYear() : '';
-  //     let month = (date1.getMonth() + 1 < 10) ? '0' + (date1.getMonth() + 1) : (date1.getMonth() + 1);
-  //     let day = (date1.getDate() < 10) ? '0' + date1.getDate() : date1.getDate();
-  //     return day + '-' + month + year;
-  //   } else {
-  //     return "Hôm nay";
-  //   }
-  // }
-
   /* ===================Thu hồi tin nhắn================================= */
   async messageRecall(id: number, position) {
     let from = parseInt(localStorage.getItem("chatUserId") + '');
     let to = parseInt(this.messageService.selectedUser + '');
     const newListMessage = await this.messageService.messageRecallApi(id, position, from, to);
-    this.messageService.listMessages.splice(position, 1, ...newListMessage);
+    console.log('newListMessage: ' + JSON.stringify(newListMessage));
+    this.messageService.listMessages.splice(position, 1, ...JSON.parse('[' + JSON.stringify(newListMessage) + ']'));
     let textLastMess = document.getElementById('last-message-' + this.selectedUser);
     if (textLastMess) textLastMess!.innerText = 'Bạn đã thu hồi tin nhắn';
     this.cdr.markForCheck();
@@ -344,24 +294,27 @@ export class MessageComponent implements OnInit {
   /* ============send image============= */
   listImg: any[] = [];
   imageSources: string[] = [];
-  public file: any = {};
+  file: any = {};
 
   uploadImg(event: any) {
-    this.file = event.target.files;
+    let newFiles = event.target.files;
+    if (this.imageSources.length <= 0) {
+      this.file = newFiles;
+    } else {
+      this.file = [...this.file, ...newFiles];
+    }
+
     const blobs = this.toBlob(this.file);
     this.imageSources = blobs.map(blob => URL.createObjectURL(blob));
-    console.warn("this.imageSources: " + this.imageSources);
   }
 
-  // 
-  toBlob(files: FileList) {
+  toBlob(files: File[]): Blob[] {
     const blobs: Blob[] = [];
 
-    for (let i = 0; i < files.length; i++) {
-      const file = files.item(i)!;
-      const blob = new Blob([file], { type: file.type });
-      blobs.push(blob);
+    for (const file of files) {
+      blobs.push(file);
     }
+
     return blobs;
   }
   createFileList(array) {

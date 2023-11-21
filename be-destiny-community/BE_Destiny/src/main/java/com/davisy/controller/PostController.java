@@ -13,6 +13,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +38,7 @@ import com.davisy.entity.Provinces;
 import com.davisy.entity.UploadPostEntity;
 import com.davisy.entity.User;
 import com.davisy.entity.Wards;
+import com.davisy.service.BadWordService;
 import com.davisy.service.CommentService;
 import com.davisy.service.DistrictService;
 import com.davisy.service.FollowService;
@@ -95,6 +97,9 @@ public class PostController {
 	@Autowired
 	private WardService wardService;
 
+	@Autowired
+	BadWordService badWordService;
+	
 	List<PostEntity> listPost = new ArrayList<>();
 
 	Object[] commObjects = new Object[] {};
@@ -112,7 +117,7 @@ public class PostController {
 			User user = userService.findByEmail(email);
 			int id = user.getUser_id();
 			List<Object[]> post = postService.findAllPost(id, page);
-			List<Object[]> postShare = postService.findAllPostShare(id, page);
+			List<Object[]> postShare = postService.findAllPostShare(id);
 			return ResponseEntity.ok().body(postEntity(post, postShare));
 		} catch (Exception e) {
 			System.out.println("error loadPost: " + e);
@@ -145,7 +150,7 @@ public class PostController {
 			User user = userService.findByEmail(email);
 			int id = user.getUser_id();
 			Object[] post = postService.findByIdPost(id, page, post_id);
-			List<Object[]> postShare = postService.findAllPostShare(id, page);
+			List<Object[]> postShare = postService.findAllPostShare(id);
 			PostEntity entity = new PostEntity();
 			if (null != ((Object[]) post[0])[2]) {
 				int idPostShare = Integer.valueOf(((Object[]) post[0])[2].toString());
@@ -186,7 +191,8 @@ public class PostController {
 		return ResponseEntity.ok().body(null);
 		
 	}
-
+	@Autowired
+	SimpMessagingTemplate simpMessagingTemplate;
 	@PostMapping("/v1/user/upload/post")
 	public ResponseEntity<List<PostEntity>> createPost(HttpServletRequest request,
 			@RequestBody UploadPostEntity uploadPostEntity) {
@@ -194,6 +200,10 @@ public class PostController {
 			String email = jwtTokenUtil.getEmailFromHeader(request);
 			User user = userService.findByEmail(email);
 			int id = user.getUser_id();
+			if (badWordService.checkBadword(uploadPostEntity.getContent())) {
+//				simpMessagingTemplate.convertAndSend("/topic/error-notification/" + id, true);
+				return ResponseEntity.ok().body(null);
+			}
 			List<PostImages> listPostImages = new ArrayList<>();
 			Post post = new Post();
 			post.setUser(user);
@@ -372,7 +382,7 @@ public class PostController {
 //				}
 //			}
 			List<Object[]> postProfile = postService.getPostProfile(id, id, 1);
-			List<Object[]> postShare = postService.getPostProfileShare(id, id, 1);
+			List<Object[]> postShare = postService.getPostProfileShare(id, id);
 			return ResponseEntity.ok().body(postEntity(postProfile, postShare));
 		} catch (Exception e) {
 			System.out.println("Lỗi nè: " + e);
@@ -468,6 +478,7 @@ public class PostController {
 
 	public PostEntity postEntityProfile(Object[] ob, PostEntity entityProfile, int check) {
 		try {
+			System.err.println("entityProfile: " + entityProfile);
 			PostEntity profile = new PostEntity();
 			profile.setPost_id(Integer.valueOf(ob[0].toString()));
 			profile.setUser_id(Integer.valueOf(ob[1].toString()));
@@ -514,9 +525,9 @@ public class PostController {
 			profile.setDistrict_fullname_en(ob[19] + "");
 			profile.setWard_fullname_en(ob[20] + "");
 
-			if (entityProfile != null) {
+//			if (entityProfile != null) {
 				profile.setPostEntityProfile(entityProfile);
-			}
+//			}
 
 			return profile;
 		} catch (NumberFormatException e) {

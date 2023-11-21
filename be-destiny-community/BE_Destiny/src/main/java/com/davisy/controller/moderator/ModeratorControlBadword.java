@@ -14,6 +14,7 @@ import com.davisy.mongodb.MongoDBUtils;
 import com.davisy.mongodb.documents.BadWord;
 import com.davisy.service.BadWordService;
 import com.davisy.service.CacheService;
+import com.davisy.service.impl.BadWordServiceImpl;
 
 @RestController
 public class ModeratorControlBadword {
@@ -22,7 +23,7 @@ public class ModeratorControlBadword {
 	private String collectionBadWord;
 	
 	@Autowired
-	private BadWordService badWordService;
+	private BadWordServiceImpl badWordService;
 	
 	@Autowired
 	private CacheService cacheService;
@@ -47,8 +48,9 @@ public class ModeratorControlBadword {
 	@GetMapping("/v1/moderator/checkBadword")
 	public String checkBadword() {
 		try {
-			badWordService.checkBadword("alo chó nè");
-			return "Successfully";
+			boolean check = badWordService.checkBadword("xàm");
+			System.err.println();
+			return String.valueOf(check);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "ERROR" + e;

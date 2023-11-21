@@ -80,8 +80,11 @@ public interface PostDAO extends JpaRepository<Post, Integer> {
 	@Query(value = "SELECT * FROM get_friend_posts(:id) LIMIT 5 OFFSET :current_page", nativeQuery = true)
 	public List<Object[]> findAllPost(int id, int current_page);
 
-	@Query(value = "select *from get_friend_posts_share(:id) LIMIT 5 OFFSET :current_page", nativeQuery = true)
-	public List<Object[]> findAllPostShare(int id, int current_page);
+//	@Query(value = "select *from get_friend_posts_share(:id) LIMIT 5 OFFSET :current_page", nativeQuery = true)
+//	public List<Object[]> findAllPostShare(int id, int current_page);
+	
+	@Query(value = "select *from get_friend_posts_share(:id)", nativeQuery = true)
+	public List<Object[]> findAllPostShare(int id);
 
 	@Query(value = "SELECT * FROM get_friend_posts(:id) where post_id =:post_id LIMIT 5 OFFSET :current_page", nativeQuery = true)
 	public Object[] findByIdPost(int id,int current_page , int post_id);
@@ -113,8 +116,8 @@ public interface PostDAO extends JpaRepository<Post, Integer> {
 	@Query(value = "select *from get_profile_posts(:user_id,:user_guest_id)  LIMIT 5 OFFSET :page", nativeQuery = true)
 	public List<Object[]> getPostProfile(int user_id,int user_guest_id, int page);
 
-	@Query(value = "select *from get_profile_posts_shares(:user_id,:user_guest_id) LIMIT 5 OFFSET :page", nativeQuery = true)
-	public List<Object[]> getPostProfileShare(int user_id,int user_guest_id, int page);
+	@Query(value = "select *from get_profile_posts_shares(:user_id,:user_guest_id)", nativeQuery = true)
+	public List<Object[]> getPostProfileShare(int user_id,int user_guest_id);
 	
 	@Query(value = "select *from get_posts_id(:post_id)",nativeQuery = true)
 	public Object[] get_posts_id(int post_id);

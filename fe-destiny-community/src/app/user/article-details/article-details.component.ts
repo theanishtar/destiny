@@ -21,6 +21,7 @@ import { LoadingService } from '../service/loading.service';
 import { PostService } from '../service/post.service';
 import { MessageService } from '@app/user/service/message.service';
 import { ProfileService } from '../service/profile.service';
+import { ReportService } from '../service/report.service';
 import '../../../assets/toast/main.js';
 declare var toast: any;
 @Component({
@@ -75,6 +76,7 @@ export class ArticleDetailsComponent {
     private el: ElementRef,
     private renderer: Renderer2,
     private route: ActivatedRoute,
+    public reportService: ReportService
   ) {
   }
 

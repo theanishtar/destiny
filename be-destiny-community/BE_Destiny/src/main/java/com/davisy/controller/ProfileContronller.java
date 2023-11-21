@@ -326,7 +326,7 @@ public class ProfileContronller {
 		User user = userService.findByEmail(email);
 		int user_id = user.getUser_id();
 		List<Object[]> postProfile = postService.getPostProfile(entityProfile.getToProfile(),user_id, entityProfile.getPage());
-		List<Object[]> postProfileShare = postService.getPostProfileShare(entityProfile.getToProfile(),user_id, entityProfile.getPage());
+		List<Object[]> postProfileShare = postService.getPostProfileShare(entityProfile.getToProfile(),user_id);
 		List<PostEntity> postEntityProfile = new ArrayList<>();
 
 		for (Object[] ob : postProfile) {
