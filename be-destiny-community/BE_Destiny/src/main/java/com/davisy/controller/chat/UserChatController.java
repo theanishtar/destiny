@@ -99,7 +99,7 @@ public class UserChatController {
 			userService.update(user);
 			async(user, false);
 			UserChatStorage.getInstance().remove(id);
-			System.err.println("đăng xuất");
+//			System.err.println("đăng xuất");
 			return ResponseEntity.ok().build();
 		} catch (Exception e) {
 			System.out.println("Error logout in userchatcontroller: " + e);
@@ -169,15 +169,21 @@ public class UserChatController {
 	@SendTo("/topic/public")
 	public HashMap<Integer, List<UserModel>> reload(@DestinationVariable boolean type, @DestinationVariable int id,
 			@DestinationVariable int toid) {
-		User user = userService.findById(toid);
-		if (type == true) {
-			User toUser = userService.findById(id);
-			Chats chats = chatsService.findChatNames(user.getUsername(), toUser.getUsername());
-			if (chats != null)
-				messagesService.updateStatusMessages(true, id, chats.getId());
+		try {
+//			System.err.println("type: " + type);
+			User user = userService.findById(toid);
+			if (type == true) {
+				User toUser = userService.findById(id);
+				Chats chats = chatsService.findChatNames(user.getUsername(), toUser.getUsername());
+				if (chats != null)
+					messagesService.updateStatusMessages(true, id, chats.getId());
+			}
+			async(user, true);
+			return UserChatStorage.getInstance().getUsers();
+		} catch (Exception e) {
+			System.out.println("Error reload: " + e);
+			return null;
 		}
-		async(user, true);
-		return UserChatStorage.getInstance().getUsers();
 	}
 
 	@MessageMapping("/fetchAllUsers")

@@ -143,16 +143,20 @@ export class MessageService {
     this.stompClient.connect({}, (frame) => {
       // console.log('connected to: ' + frame);
       this.stompClient!.subscribe('/topic/messages/' + userId, (response) => {
-        let data = JSON.parse(response.body)
+        let data = JSON.parse(response.body);
+        console.warn("data: " + response.body);
+        console.warn("data2: " + data.user_id);
         let type = false; // Thay đổi giá trị "your_type_value" bằng giá trị thực tế của biến "type"
-        let from_user_id = data.user_id;
+        let from_user_id = data[0].user_id;
         let to_user_id = localStorage.getItem('chatUserId');
         if (this.mapTime.has(from_user_id)) {
           this.mapTime.set(from_user_id, new Date().toISOString());
         }
         if (this.selectedUser == from_user_id && this.isOriginal == false) {
-          this.listMessages = [...this.listMessages, ... JSON.parse('['+response.body+']')];
+          this.listMessages.push(data[0]);
+          // this.updateDataMessages();
           type = true;
+          
         } else {
           type = false;
           let audio = new Audio();
@@ -162,6 +166,21 @@ export class MessageService {
         }
         this.stompClient!.send(`/app/reload/messages/${type}/${from_user_id}/${to_user_id}`);
       });
+      this.stompClient!.subscribe('/topic/status/messages/' + userId, (response) => {
+        // let data1 = JSON.parse(JSON.stringify(response));
+        let data = JSON.parse(response.body);
+       this.listMessages = [...this.listMessages, ... JSON.parse('['+JSON.stringify(response)+']')];
+       this.loaddingBall = false;
+        if (data != null) {
+          let type = false; // Thay đổi giá trị "your_type_value" bằng giá trị thực tế của biến "type"
+          let to_user_id = this.selectedUser;
+          this.stompClient!.send(`/app/reload/messages/${type}/${to_user_id}/${userId}`);
+        }
+        this.$chatHistory = $('.chat-widget-conversation')!;
+        this.$chatHistory.scrollTop(this.$chatHistory[0]!.scrollHeight);
+
+      })
+      
       this.stompClient!.subscribe('/topic/status/messages/' + userId, (response) => {
         let data = JSON.parse('['+response.body+']');
         this.listMessages = [...this.listMessages, ...data];
@@ -181,7 +200,8 @@ export class MessageService {
         let type = false;
         let to_user_id = this.selectedUser;
         if (to_user_id == data[2]) {
-          this.listMessages.splice(data[1], 1, ...data[0]);
+          // this.listMessages.splice(data[1], 1, ...data[0]);
+          this.listMessages[data[1]]=data[0];
           type = true;
         }
         this.stompClient!.send(`/app/reload/messages/${type}/${to_user_id}/${userId}`);
@@ -299,6 +319,11 @@ export class MessageService {
     this.mapTime.set(this.selectedUser + '', new Date().toISOString() + '');
 
   }
+
+
+
+ 
+
 
   render(message, userName, img) {
     setTimeout(() => {

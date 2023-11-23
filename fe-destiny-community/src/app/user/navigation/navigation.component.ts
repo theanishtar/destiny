@@ -72,8 +72,6 @@ export class NavigationComponent implements OnInit {
   }
 
   logout() {
-    // const navigationWidget = document.getElementById('navigation-widget-mobile');
-    // navigationWidget!.classList.toggle('hidden');
     return this.loginService.logout();
   }
   checkType(type: any) {

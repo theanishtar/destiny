@@ -42,13 +42,17 @@ export class SettingComponent implements OnInit {
     content.contentTab();
     form.formInput();
     // this.profileService.openModalChangeMail();
+    // this.autoCheck();
   }
 
   constructor(
     public modalService: ModalService,
     private translateService: TranslateService,
     public profileService: ProfileService
-  ) { }
+  ) { 
+    
+  }
+
   public selectLg(event: any) {
     this.translateService.use(event.target.value);
   }
@@ -77,5 +81,48 @@ export class SettingComponent implements OnInit {
       type: 'success',
       duration: 3000,
     });
+  }
+
+  /* ========================change mode================================ */
+  autoCheck() {
+    let mode = localStorage.getItem("modeByThean");
+    let checkbox = document.getElementById("dn") as HTMLInputElement;
+    if (mode === "dark") {
+      checkbox.checked = true; 
+    } else {
+      checkbox.checked = false;
+    }
+    // Gọi hàm first()
+    this.first();
+  }
+  
+  first() {
+    var element = document.body;
+    let checkbox = document.getElementById("dn") as HTMLInputElement;
+    var e = checkbox.checked;
+    console.log("element span darkmode: " + e);
+    if (e == true) {
+      element.classList.add("dark-mode");
+      element.classList.remove("light-mode");
+    } else {
+      element.classList.add("light-mode");
+      element.classList.remove("dark-mode");
+    }
+    this.setMode();
+  }
+
+
+  setMode() {
+    let darkMode = document.getElementsByClassName("dark-mode");
+    //alert(darkMode.length)
+    // 
+    if (darkMode.length == 0) {
+      // alert("dark mode -> light mode")
+      localStorage.setItem("modeByThean", "light")
+    } else {
+      // alert("light mode -> dark mode")
+      localStorage.setItem("modeByThean", "dark")
+    }
+    //changeGiscusTheme();
   }
 }

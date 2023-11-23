@@ -40,6 +40,8 @@ export class CustomTimePipe implements PipeTransform {
         }
     }
     public checkDate(date: string): string {
+        if(date =='' || date==null)
+        return '';
         let date1 = new Date(date.substring(0, 10));
 
         let d = new Date();

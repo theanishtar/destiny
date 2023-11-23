@@ -72,17 +72,21 @@ public class BadWordServiceImpl implements BadWordService {
 		String[] words = badword.split(" ");
 		boolean result = false;
 		String line = cacheService.getByKey(badword);
-//		if (line != null) {
-//			if(!line.equals(""))
-//				return true;
-//		}
+		if (line != null) {
+			if(!line.equals("")) {
+				BadWord badWord = findByName("name", badword);
+				badWord.setSeverityLevel(badWord.getSeverityLevel() + 1);
+				update("name", badword, badWord);
+				return true;
+			}
+		}
 		for (String word : words) {
 			String resultWord = cacheService.getByKey(word);
 			if (resultWord != null) {
 				result = true;
-//				BadWord badWord = findByName("name", word);
-//				badWord.setSeverityLevel(badWord.getSeverityLevel() + 1);
-//				update("name", word, badWord);
+				BadWord badWord = findByName("name", word);
+				badWord.setSeverityLevel(badWord.getSeverityLevel() + 1);
+				update("name", word, badWord);
 				return result;
 			}
 		}

@@ -84,6 +84,10 @@ export class MessageComponent implements OnInit {
       this.cdr.markForCheck();
 
     });
+    this.messageService.dataUpdatedMessages.subscribe(()=>{
+      // this.messageService.listMessages=this.messageService.listMessages;
+      this.cdr.markForCheck();
+    })
 
     if (this.messageService.checkSelected != '') {
       this.selectedUser(this.messageService.checkSelected);
@@ -210,7 +214,7 @@ export class MessageComponent implements OnInit {
       this.messageService.checkScroll = 1;
       this.checkLoadingdata = false;
       this.checkClick = true;
-      this.cdr.markForCheck();
+      // this.cdr.markForCheck();
       if (chatContainer && !this.checkLoadingdata) {
         chatContainer.style.opacity = '1';
       }
@@ -283,7 +287,7 @@ export class MessageComponent implements OnInit {
     let from = parseInt(localStorage.getItem("chatUserId") + '');
     let to = parseInt(this.messageService.selectedUser + '');
     const newListMessage = await this.messageService.messageRecallApi(id, position, from, to);
-    console.log('newListMessage: ' + JSON.stringify(newListMessage));
+    // console.log('newListMessage: ' + JSON.stringify(newListMessage));
     this.messageService.listMessages.splice(position, 1, ...JSON.parse('[' + JSON.stringify(newListMessage) + ']'));
     let textLastMess = document.getElementById('last-message-' + this.selectedUser);
     if (textLastMess) textLastMess!.innerText = 'Bạn đã thu hồi tin nhắn';
@@ -370,40 +374,6 @@ export class MessageComponent implements OnInit {
     // alert(this.$chatHistory[0]!.scrollHeight);
   }
 
-  // async checkScrollPosition() {
-  //   const scrollableDiv = document.getElementById('chatContainer')!;
-  //   const scrollButton = document.getElementById('scrollToBottomButton')!;
-  //   // console.warn("scrollableDiv.scrollHeight: " + scrollableDiv.scrollHeight);
-  //   // console.warn("scrollableDiv.clientHeight: " + scrollableDiv.clientHeight);
-  //   console.warn("scrollableDiv.scrollTop: " + scrollableDiv.scrollTop);
-  //   // Thêm sự kiện lắng nghe lướt cho thẻ div
-  //   scrollableDiv.addEventListener('scroll', async () => {
-  //     this.hideAllDropdowns();
-  //     // Kiểm tra vị trí cuộn
-  //     if ((scrollableDiv.scrollHeight - scrollableDiv.clientHeight - scrollableDiv.scrollTop) > 1) {
-  //       // Hiển thị nút scroll khi cuộn đến vị trí cuối cùng (điều kiện kiểm tra lúc này có thể khác)
-  //       scrollButton.style.display = 'block';
-  //     } else {
-  //       // Ẩn nút scroll nếu không cuộn xuống
-  //       scrollButton.style.display = 'none';
-  //     }
-  //     if(scrollableDiv.scrollTop === 0 && this.checkCountPosts){
-  //       this.checkLoadingWait = true;
-  //       try {
-  //         this.currentPage++;
-  //         const data = await this.messageService.loadMessage(this.idSelected, this.currentPage);
-  //         this.messageService.listMessages = [...data, ...this.messageService.listMessages];
-  //         this.checkLoadingdata = false;
-  //         if (data.length < 50) {
-  //           this.checkCountPosts = false;
-  //           this.checkLoadingWait = false;
-  //         }
-  //         console.warn("this.currentPage: " + this.currentPage)
-  //       } catch (error) {
-  //       }
-  //     }
-  //   });
-  // }
   async checkScrollPosition() {
     const scrollableDiv = document.getElementById('chatContainer')!;
     const scrollButton = document.getElementById('scrollToBottomButton')!;
@@ -432,7 +402,6 @@ export class MessageComponent implements OnInit {
             this.checkLoadingWait = false;
           }
   
-          console.warn("this.currentPage: " + this.currentPage)
         } catch (error) {
           // Handle error
         }
