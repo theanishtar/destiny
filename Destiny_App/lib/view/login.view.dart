@@ -76,6 +76,7 @@ class _LoginViewState extends State<LoginView> {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString('token', token);
           await prefs.setInt('id', id);
+          await prefs.setBool('isLoggedIn', true);
           var headers = {
             'Authorization': 'Bearer $token',
             'Content-Type':
@@ -87,7 +88,7 @@ class _LoginViewState extends State<LoginView> {
           Map<String, dynamic> registrationchat =
               jsonDecode(Utf8Decoder().convert(res.bodyBytes));
           manager.connectWebSocket();
-        
+
           print(data);
           runApp(GetMaterialApp(
             home: BottomNavBar(),

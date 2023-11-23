@@ -37,9 +37,20 @@ class _ActiveChatState extends State<ActiveChat> {
                           offset: Offset(0, 3),
                         )
                       ]),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(35),
-                    child: Image.network(listUser[i].avatar),
+                  child: Stack(
+                    alignment: Alignment.bottomRight,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(35),
+                        child: Image.network(listUser[i].avatar),
+                      ),
+                      CircleAvatar(
+                        radius: 7,
+                        backgroundColor: (listUser[i]!.type == 'LEAVE')
+                            ? Colors.grey
+                            : Colors.green,
+                      ),
+                    ],
                   ),
                 ),
               )

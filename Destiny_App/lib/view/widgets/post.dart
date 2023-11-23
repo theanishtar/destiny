@@ -24,14 +24,6 @@ int? countFollower;
 int? countImg;
 List? listPost;
 
-List<String> imagesList = [
-  "https://static.wikia.nocookie.net/doraemon/images/8/8d/Doraemon_%282017_Remake%29.png/revision/latest?cb=20230908064228&path-prefix=en",
-  "https://i.pinimg.com/736x/0f/4d/a8/0f4da8a2e550bd047de21ab679cfa8fa.jpg",
-  "https://kenh14cdn.com/203336854389633024/2022/11/15/photo-6-16684998819951103587151.jpg",
-  "https://i.pinimg.com/originals/d4/0e/07/d40e07b9c3e106922860500dca917cad.jpg",
-  "https://kenh14cdn.com/thumb_w/600/2019/9/1/chaien-15672732658971052114509-crop-1567273272747169033775.png",
-];
-
 class _PostState extends State<Post> {
   @override
   void initState() {
@@ -76,7 +68,9 @@ class _PostState extends State<Post> {
             Expanded(
               child: ListView(
                 children: <Widget>[
-                  for (int i = 0; i < listPost!.length; i++)
+                  for (int i = 0;
+                      listPost?.length != null && i < listPost!.length;
+                      i++)
                     Container(
                       color: Colors.white,
                       padding: EdgeInsets.only(

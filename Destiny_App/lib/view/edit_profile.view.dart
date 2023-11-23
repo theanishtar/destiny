@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:login_signup/utils/api.dart';
 import 'package:login_signup/utils/gobal.colors.dart';
+import 'package:login_signup/view/bottomnavbar.dart';
 import 'package:login_signup/view/screens/profile.view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,12 +24,24 @@ String? province;
 String? ward;
 
 class _EditProfileState extends State<EditProfile> {
-  TextEditingController fname = TextEditingController();
+  TextEditingController fnameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController birthdayController = TextEditingController();
+  TextEditingController genderController = TextEditingController();
+  List<String> _provinces = [];
+  String? _selectedProvince;
+  // List<String> _provinces = ['Hà Nội', 'Hồ Chí Minh', 'Đà Nẵng', 'Cần Thơ'];
 
+  String? _selectedDistrict;
+  List<String> _districts = [];
+
+  String? _selectedWard;
+  List<String> _wards = [];
   @override
   void initState() {
     super.initState();
     this.getData();
+    this.loadProvinces();
   }
 
   Future getData() async {
@@ -56,14 +69,22 @@ class _EditProfileState extends State<EditProfile> {
         fullname = data['fullname'];
         email = data['email'];
         birthday = data['birthday'];
+        print(birthday);
         gender = data['gender_name'];
         city = data['district_name'];
         province = data['province_name'];
         ward = data['ward_name'];
+        fnameController.text = fullname!;
+        emailController.text = email!;
+        birthdayController.text = birthday!;
+        genderController.text = gender!;
+        // _selectedProvince = city;
+        // _selectedDistrict = province;
+        // _selectedWard = ward;
         // textfname = fname.text;
         // textfname = name;
       });
-      print(fname);
+      // print(fname);
       // Sử dụng dữ liệu này theo nhu cầu của bạn
       // print('Name: $name');
       // print('Avatar: $avatar');
@@ -72,11 +93,110 @@ class _EditProfileState extends State<EditProfile> {
     }
   }
 
+  Future<List<String>> fetchProvinces() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var value = await prefs.getString('token');
+    var headers = {
+      'Authorization': 'Bearer $value',
+      'Content-Type': 'application/json',
+    };
+    final res = await http.get(
+      Uri.parse(ApiEndPoints.baseUrl + "v1/user/getAllProvinceName"),
+      headers: headers,
+    );
+
+    if (res.statusCode == 200) {
+      // Kiểm tra dữ liệu trả về từ API
+      List<dynamic> decodedData =
+          jsonDecode(Utf8Decoder().convert(res.bodyBytes));
+
+      // Chuyển đổi thành danh sách chuỗi (List<String>)
+      List<String> provinces =
+          decodedData.map((item) => item.toString()).toList();
+
+      print("Tỉnh: ");
+      print(provinces);
+      return provinces;
+    } else {
+      throw Exception('Failed to load provinces');
+    }
+  }
+
+  void fetchDistricts(String selectedProvince) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var value = await prefs.getString('token');
+    var headers = {
+      'Authorization': 'Bearer $value',
+      'Content-Type': 'application/json',
+    };
+    final res = await http.get(
+      Uri.parse(ApiEndPoints.baseUrl +
+          "v1/user/getAllDistrictName/" +
+          selectedProvince),
+      headers: headers,
+    );
+
+    if (res.statusCode == 200) {
+      // Kiểm tra dữ liệu trả về từ API
+      List<dynamic> decodedData =
+          jsonDecode(Utf8Decoder().convert(res.bodyBytes));
+
+      // Chuyển đổi thành danh sách chuỗi (List<String>)
+      List<String> districts =
+          decodedData.map((item) => item.toString()).toList();
+      setState(() {
+        _districts = districts;
+        _selectedDistrict =
+            null; // Đặt giá trị đã chọn về null để xóa lựa chọn trước đó (nếu cần)
+      });
+    }
+  }
+
+  void fetchWards(String selectedDistrict) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var value = await prefs.getString('token');
+    var headers = {
+      'Authorization': 'Bearer $value',
+      'Content-Type': 'application/json',
+    };
+    final res = await http.get(
+      Uri.parse(
+          ApiEndPoints.baseUrl + "v1/user/getAllWardName/" + selectedDistrict),
+      headers: headers,
+    );
+
+    if (res.statusCode == 200) {
+      // Kiểm tra dữ liệu trả về từ API
+      List<dynamic> decodedData =
+          jsonDecode(Utf8Decoder().convert(res.bodyBytes));
+
+      // Chuyển đổi thành danh sách chuỗi (List<String>)
+      List<String> wards = decodedData.map((item) => item.toString()).toList();
+      setState(() {
+        _wards = wards;
+        _selectedWard =
+            null; // Đặt giá trị đã chọn về null để xóa lựa chọn trước đó (nếu cần)
+      });
+    }
+  }
+
+  void loadProvinces() async {
+    List<String> fetchedProvinces = await fetchProvinces();
+    setState(() {
+      _provinces = fetchedProvinces;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
+          leading: BackButton(onPressed: () {
+            runApp(GetMaterialApp(
+              home: BottomNavBar(),
+            ));
+          }),
           title: Text("Chỉnh sửa trang cá nhân"),
         ),
         body: Container(
@@ -104,7 +224,7 @@ class _EditProfileState extends State<EditProfile> {
                             shape: BoxShape.circle,
                             image: DecorationImage(
                                 fit: BoxFit.cover,
-                                image: NetworkImage(avatar!))),
+                                image: NetworkImage(avatar ?? ''))),
                       ),
                       Positioned(
                         bottom: 0,
@@ -134,13 +254,13 @@ class _EditProfileState extends State<EditProfile> {
                 Padding(
                   padding: EdgeInsets.only(bottom: 30),
                   child: TextField(
-                    // controller: textfname.,
+                    controller: fnameController,
                     obscureText: false,
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.only(bottom: 5),
                         labelText: "Họ và tên",
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        hintText: fullname,
+                        // hintText: fullname,
                         hintStyle: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -150,12 +270,13 @@ class _EditProfileState extends State<EditProfile> {
                 Padding(
                   padding: EdgeInsets.only(bottom: 30),
                   child: TextFormField(
+                    controller: emailController,
                     obscureText: false,
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.only(bottom: 5),
                         labelText: "Email",
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        hintText: email,
+                        // hintText: email,
                         hintStyle: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -165,10 +286,27 @@ class _EditProfileState extends State<EditProfile> {
                 Padding(
                   padding: EdgeInsets.only(bottom: 30),
                   child: TextFormField(
+                    controller: birthdayController,
                     obscureText: false,
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.only(bottom: 5),
                         labelText: "Ngày sinh",
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        // hintText: birthday,
+                        hintStyle: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey)),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 30),
+                  child: TextFormField(
+                    controller: genderController,
+                    obscureText: false,
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.only(bottom: 5),
+                        labelText: "Giới tính",
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         hintText: birthday,
                         hintStyle: TextStyle(
@@ -177,70 +315,78 @@ class _EditProfileState extends State<EditProfile> {
                             color: Colors.grey)),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 30),
-                  child: TextFormField(
-                    obscureText: false,
-                    decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(bottom: 5),
-                        labelText: "Giới tính",
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        hintText: gender,
-                        hintStyle: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey)),
-                  ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: DropdownButton<String>(
+                        hint: Text('Tỉnh/Thành phố'),
+                        value: _selectedProvince,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _selectedProvince = newValue;
+                            // Gọi hàm để load dữ liệu Quận/Huyện tương ứng với tỉnh/thành phố đã chọn
+                            fetchDistricts(
+                                newValue!); // Gọi hàm fetchDistricts với tham số là tỉnh/thành phố đã chọn
+                          });
+                        },
+                        items: _provinces.map((String province) {
+                          return DropdownMenuItem<String>(
+                            value: province,
+                            child: Text(province),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 30),
-                  child: TextFormField(
-                    obscureText: false,
-                    decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(bottom: 5),
-                        labelText: "Thành phố",
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        hintText: city,
-                        hintStyle: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey)),
-                  ),
+                SizedBox(height: 16.0),
+                Row(
+                  children: [
+                    Expanded(
+                      child: DropdownButton<String>(
+                        hint: Text('Quận/Huyện'),
+                        value: _selectedDistrict,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _selectedDistrict = newValue;
+                            // Gọi hàm để load dữ liệu Phường/Xã tương ứng với Quận/Huyện đã chọn
+                            fetchWards(
+                                newValue!); // Gọi hàm fetchWards với tham số là Quận/Huyện đã chọn
+                          });
+                        },
+                        items: _districts.map((String district) {
+                          return DropdownMenuItem<String>(
+                            value: district,
+                            child: Text(district),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 30),
-                  child: TextFormField(
-                    obscureText: false,
-                    decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(bottom: 5),
-                        labelText: "Tỉnh",
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        hintText: province,
-                        hintStyle: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey)),
-                  ),
+                SizedBox(height: 16.0),
+                Row(
+                  children: [
+                    Expanded(
+                      child: DropdownButton<String>(
+                        hint: Text('Phường/Xã'),
+                        value: _selectedWard,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _selectedWard = newValue;
+                          });
+                        },
+                        items: _wards.map((String ward) {
+                          return DropdownMenuItem<String>(
+                            value: ward,
+                            child: Text(ward),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 30),
-                  child: TextFormField(
-                    obscureText: false,
-                    decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(bottom: 5),
-                        labelText: "Phường",
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        hintText: ward,
-                        hintStyle: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey)),
-                  ),
-                ),
-                // buildTextField("Ngày sinh", "Nhập ngày sinh...", false),
-                SizedBox(
-                  height: 10,
-                ),
+                SizedBox(height: 16.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

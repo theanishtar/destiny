@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,15 +17,20 @@ class RecentCharts extends StatefulWidget {
 }
 
 class _RecentChartsState extends State<RecentCharts> {
-  
   late SocketManager socketManager = SocketManager();
-  late List<UserModel> listUser = socketManager.mapUser.values.toList();
+  // late List<UserModel> listUser = socketManager.mapUser.values.toList();
+  late List<UserModel> listUser = [];
   @override
   void initState() {
     super.initState();
     if (!SocketManager().isConnected) {
       SocketManager().connectWebSocket();
     }
+    listUser = socketManager.mapUser.values.toList();
+    Timer.periodic(Duration(minutes: 1), (timer) {
+      socketManager.updateMapTime();
+      //  setState(() {});
+    });
   }
 
   @override
@@ -48,25 +54,38 @@ class _RecentChartsState extends State<RecentCharts> {
         for (int i = 0; i < listUser.length; i++)
           Padding(
             padding: EdgeInsets.symmetric(vertical: 15),
-            child: InkWell (
-              onTap: ()async {
+            child: InkWell(
+              onTap: () async {
                 // SharedPreferences prefs = await SharedPreferences.getInstance();
                 // String jsonUser = json.encode(listUser[i]);
                 // await prefs.setString('myListUser',jsonUser);
-                socketManager.userChatPage = listUser[i] ;
-               runApp(GetMaterialApp(home:ChatPage(),));
+                socketManager.userChatPage = listUser[i];
+                runApp(GetMaterialApp(
+                  home: ChatPage(),
+                ));
               },
               child: Container(
                 height: 65,
                 child: Row(
                   children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(35),
-                      child: Image.network(
-                        listUser[i]!.avatar,
-                        height: 65,
-                        width: 65,
-                      ),
+                    Stack(
+                      alignment: Alignment.bottomRight,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(35),
+                          child: Image.network(
+                            listUser[i]!.avatar,
+                            height: 65,
+                            width: 65,
+                          ),
+                        ),
+                        CircleAvatar(
+                          radius: 7,
+                          backgroundColor: (listUser[i]!.type == 'LEAVE')
+                              ? Colors.grey
+                              : Colors.green,
+                        ),
+                      ],
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20),
@@ -81,11 +100,16 @@ class _RecentChartsState extends State<RecentCharts> {
                                 fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: 10),
-                          Text(
-                            listUser[i]!.lastMessage,
-                            style:
-                                TextStyle(fontSize: 16, color: Colors.black54),
-                          )
+                          Container(
+                            constraints: BoxConstraints(maxWidth: 100),
+                            child: Text(
+                              listUser[i]!.lastMessage,
+                              style: TextStyle(
+                                  fontSize: 16, color: Colors.black54),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
                         ],
                       ),
                     ),
