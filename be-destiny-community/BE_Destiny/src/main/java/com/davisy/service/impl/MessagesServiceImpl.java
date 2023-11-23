@@ -21,8 +21,9 @@ public class MessagesServiceImpl implements MessagesService {
 	}
 
 	@Override
-	public List<Object[]> findListMessage(int from_user, int to_user) {
-		List<Object[]> list = messagesDAO.findListMessage(from_user, to_user);
+	public List<Object[]> findListMessage(int from_user, int to_user,int page) {
+		int curent_page = (page-1)*50;
+		List<Object[]> list = messagesDAO.findListMessage(from_user, to_user,curent_page);
 		if (list == null)
 			return null;
 		return list;

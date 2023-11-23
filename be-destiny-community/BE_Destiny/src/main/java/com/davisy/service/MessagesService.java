@@ -7,7 +7,7 @@ import com.davisy.entity.Messages;
 public interface MessagesService {
 	public int countMessageUnread(int id);
 
-	public List<Object[]> findListMessage(int from_user, int to_user);
+	public List<Object[]> findListMessage(int from_user, int to_user,int page);
 
 	public Object[] findByIdMessage(int from_user, int to_user, int id);
 

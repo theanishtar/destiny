@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { ModalService } from '@app/user/service/modal.service';
 import { PostService } from '@app/user/service/post.service';
 import { FollowsService } from '@app/user/service/follows.service';
+import { ProfileService } from '@app/user/service/profile.service';
 
 @Component({
   selector: 'app-comment',
@@ -18,35 +19,76 @@ export class CommentComponent {
   filteredItems: any[] = [];
   listFriend: any[];
   listFriendTemp: any[];
-  
+  nameReply: any;
+
   constructor(
     public modalService: ModalService,
     public postService: PostService,
-    public followsService: FollowsService
+    public followsService: FollowsService,
+    public profileService: ProfileService
   ) { }
 
   ngOnInit() {
     this.showSlides(1);
     this.loadFriend();
+    this.checkScroll();
   }
 
+  checkCountPosts: boolean = true;
+  checkLoadingdata: boolean = true;
+  currentPage: number = 1;
+  async checkScroll() {
+    const scrollableDiv = document.getElementById('scrollableDiv')!;
+
+    scrollableDiv.addEventListener('scroll', async () => {
+      let epsilon = '0';
+      if (scrollableDiv.scrollTop.toString().indexOf('.') > 0) {
+        epsilon = '0' + scrollableDiv.scrollTop.toString().substring(scrollableDiv.scrollTop.toString().indexOf('.'));
+      }
+      if (
+        scrollableDiv.scrollHeight - scrollableDiv.clientHeight - (scrollableDiv.scrollTop - parseFloat(epsilon)) <= 1 &&
+        this.checkCountPosts
+      ) {
+        this.checkLoadingdata = true;
+        try {
+          this.currentPage++;
+          // const data: any = await this.postService.loadPostNewsFeed(this.currentPage).toPromise();
+          // this.listPosts = [...this.listPosts, ...data];
+          this.checkLoadingdata = false;
+          // if (data.length < 5) {
+          //   this.checkCountPosts = false;
+          //   this.checkLoadingdata = false;
+          // }
+          // console.log("data.length: " + data.length);
+        } catch (error) {
+          // console.error("Error loading data:", error);
+        }
+
+        console.log("hết nè: ");
+
+      }
+    });
+  }
   /* ============Add comment============= */
   $contentCommnet: any;
-  idPost: any
-  idUser: any
+  idPost: any;
+  idUser: any;
+
   comment_input: string = '';
   addComment() {
     this.$contentCommnet = $('#comment-input');
     this.idPost = this.modalService.idPostCmt;
     this.idUser = this.modalService.idUser;
     if (this.$contentCommnet.val() != null) {
-      let type = (this.modalService.repCmtId>0)?'REPCOMMENT':'COMMENT';
-      this.modalService.sendNotify(this.$contentCommnet.val(), this.idPost, this.idUser, type,this.modalService.repCmtId);
+      // this.comment_input = this.modalService.getContent(item.fullname, this.comment_input)
+      let type = (this.modalService.repCmtId > 0) ? 'REPCOMMENT' : 'COMMENT';
+      this.modalService.sendNotify(this.$contentCommnet.val(), this.idPost, this.idUser, type, this.modalService.repCmtId);
     }
     this.comment_input = '';
   }
 
-
+  
+  
   /* ============template============= */
   removeSeeMoreCmt(idCmt) {
     document.querySelectorAll(".rep-" + idCmt).forEach((e) => {
@@ -91,31 +133,41 @@ export class CommentComponent {
 
   reply(idCmt: any, name: string) {
     this.comment_input = `${name}`;
-    this.modalService.repCmtId=idCmt;
+    this.modalService.repCmtId = idCmt;
+    this.nameReply = name;
     const input = document.getElementById("comment-input");
-    // console.log("this.repCmtId: " + this.repCmtId);
     if (input) {
       input.focus();
     }
   }
 
-  async loadFriend(){
+  async loadFriend() {
     this.listFriend = await this.followsService.loadDataFriends();
     this.listFriendTemp = JSON.parse(JSON.stringify(this.listFriend))
-    // if (Array.isArray(this.listFriend) && this.listFriend.length === 0) {
-    //   this.checkData3 = true;
-    // }
   }
 
   showDropdown: boolean = false;
   onInput(event: any) {
-    // Kiểm tra nếu nội dung của trường input trống, đặt repCmtId thành 0
+    // Kiểm tra nếu nội dung của trường input trống, đặt repCmtId và idMention thành 0
     if (this.comment_input === '') {
       this.modalService.repCmtId = 0;
-      // console.log("this.repCmtId: " + this.repCmtId);
+      this.modalService.mapMention.clear();
+    } else {
+      for (let [key, value] of this.modalService.mapMention) {
+        if (!this.comment_input.includes(value)) {
+          this.modalService.mapMention.delete(key);
+          // console.warn("length: " + this.modalService.mapMention.size);
+        }
+      }
     }
+
+    if(!this.comment_input.includes(this.nameReply)){
+      this.modalService.repCmtId = 0;
+      this.nameReply = null;
+    }
+
     // Kiểm tra nếu nội dung trường input chứa ký tự "@" hoặc dropdown đã hiển thị
-    if (this.comment_input.includes('@') || this.showDropdown ){
+    if (this.comment_input.includes('@') || this.showDropdown) {
       this.showDropdown = true;
       this.filterDropdown();
     } else {
@@ -131,11 +183,18 @@ export class CommentComponent {
     } else {
       this.comment_input = `${item.fullname} `;
     }
+    this.modalService.mapMention.set(item.user_id, item.fullname);
+    this.showDropdown = false;
+    const input = document.getElementById("comment-input");
+    if (input) {
+      input.focus();
+    }
+    
   }
-  
+
   filterDropdown() {
     const searchTerm = this.comment_input.toLowerCase().trim();
-  
+
     if (searchTerm.includes('@') && searchTerm.length > 0) {
       const searchQuery = searchTerm.substring(searchTerm.indexOf('@') + 1);
       this.filteredItems = this.listFriendTemp.filter(item =>

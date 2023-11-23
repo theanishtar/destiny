@@ -690,3 +690,32 @@ i.fa-solid.fa-file-circle-plus {
     transform: translate3d(0, -5px, 0) scale(0.9, 1.1);
   }
 }
+
+/* loading wait mess */
+.load-wait-mess {
+  text-align: center;
+}
+.load-wait-mess.loader-content{
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #3e3f5e;
+  font-size: 12px;
+}
+.loader {
+  width: 23px;
+  height: 23px;
+  border: 5px solid #BBBDD3;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+  }
+
+  @keyframes rotation {
+  0% {
+      transform: rotate(0deg);
+  }
+  100% {
+      transform: rotate(360deg);
+  }
+  } 

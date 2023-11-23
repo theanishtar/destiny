@@ -68,14 +68,18 @@ export class MessageService {
     );
   }
 
-  loadMessage(data: string) {
-    return this.http.post<string>(this.loadDataMess, data).pipe(
-      tap((res) => {
-        this.listMess = JSON.parse(JSON.stringify(res));
-        this.setListMess(this.listMess);
-      }),
-      catchError((err) => of([]))
-    );
+  async loadMessage(to: number, page: number) {
+    const params = new HttpParams()
+    .set('to', to.toString())  // Convert 'to' to a string
+    .set('page', page.toString());
+    try {
+      this.listMess = await this.http.post<any>(this.loadDataMess, null, { params }).toPromise();
+      // this.setDataPostNf(response);
+      return this.listMess;
+    } catch (error) {
+      console.log("error: " + error);
+      throw error;
+    }
   }
   // ChatWithStrangersUrl
   createChatWithStrangersApi(data: string) {
@@ -295,11 +299,6 @@ export class MessageService {
     this.mapTime.set(this.selectedUser + '', new Date().toISOString() + '');
 
   }
-
-
-
- 
-
 
   render(message, userName, img) {
     setTimeout(() => {

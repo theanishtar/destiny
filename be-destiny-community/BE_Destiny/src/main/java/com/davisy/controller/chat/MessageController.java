@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -98,11 +99,11 @@ public class MessageController {
 	}
 
 	@PostMapping("/v1/user/chat/load/messages")
-	public ResponseEntity<List<MessagesEntity>> loadMessages(HttpServletRequest request, @RequestBody int to) {
+	public ResponseEntity<List<MessagesEntity>> loadMessages(HttpServletRequest request,@RequestParam("to") int to,@RequestParam("page")int page) {
 		try {
 			String email = jwtTokenUtil.getEmailFromHeader(request);
 			User user = userService.findByEmail(email);
-			List<Object[]> list = messagesService.findListMessage(user.getUser_id(), to);
+			List<Object[]> list = messagesService.findListMessage(user.getUser_id(), to,page);
 			List<MessagesEntity> lisMessagesEntities = new ArrayList<>();
 			for (Object[] l : list) {
 				lisMessagesEntities.add(listEntity(l));

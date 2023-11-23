@@ -248,9 +248,25 @@ button.btnClose-create-post {
   -ms-overflow-style: none;
 }
 
-.full-boxer::-webkit-scrollbar {
+/* .full-boxer::-webkit-scrollbar {
   width: 0 !important;
   display: none;
+} */
+
+.full-boxer::-webkit-scrollbar {
+  border-top-right-radius: 15px;
+  width: 10px !important;
+  /* display: none; */
+}
+
+/* Track */
+.full-boxer::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+.full-boxer::-webkit-scrollbar-thumb {
+  background: #D6D6D6;
 }
 
 .comment__card p {
@@ -269,6 +285,7 @@ button.btnClose-create-post {
   gap: 30px;
   justify-content: flex-end;
   align-items: center;
+  margin-top: 10px;
 }
 
 .reply-form {

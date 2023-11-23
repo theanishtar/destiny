@@ -6,7 +6,7 @@ import {
 	HttpInterceptor,
 	HttpErrorResponse
 } from '@angular/common/http';
-
+import { CookieService } from 'ngx-cookie-service';
 import { Observable, throwError } from 'rxjs';
 // import { AuthService } from './auth.service';
 import { catchError, switchMap } from 'rxjs/operators';
@@ -14,8 +14,11 @@ import { LoginService } from './service/login.service';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
+	idUser: any = this.cookieService.get('id');
+
 	constructor(
-		private loginService: LoginService
+		private loginService: LoginService,
+		private cookieService: CookieService,
 	) { }
 
 	intercept(
@@ -36,10 +39,10 @@ export class TokenInterceptor implements HttpInterceptor {
 		if (request.url.includes('/v1/jwt/get')) {
 			return next.handle(request);
 		}
-		// v1/user/profile/update
-		// if (request.url.includes('/v1/user/profile/update')) {
-		// 	return next.handle(request);
-		// }
+		
+		if (request.url.includes('/v1/user/logout/chat/' + this.idUser)) {
+			return next.handle(request);
+		}
 		// Lấy token từ AuthService
 		const token = localStorage.getItem('token') || null;
 

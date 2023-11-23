@@ -11,20 +11,35 @@ export class CustomTimePipe implements PipeTransform {
         private messageService: MessageService
     ) { }
 
-    transform(value: string, type: 'date' | 'time'): string {
+    transform(value: string, type?: 'date' | 'time'): string | any[] {
         if (type === 'date') {
             return this.checkDate(value);
         } else if (type === 'time') {
             return this.getCustomTime(value);
         } else {
-            return ''; // Xử lý khi kiểu không hợp lệ
+            return this.parseJsonArray(value);
+            // return '';
         }
     }
-
+    parseJsonArray(jsonString: string): any[] {
+        try {
+            return JSON.parse('[' + jsonString.replace(/}{/g, '},{') + ']');
+        } catch (error) {
+            console.error('Error parsing JSON array:', error);
+            return [];
+        }
+    }
+    checkUser(value: string): any[] {
+        try {
+            let jsonArray = JSON.parse("[" + value + "]")
+            console.warn("jsonArray: " + jsonArray);
+            return jsonArray;
+        } catch (error) {
+            console.error('Error parsing JSON array:', error);
+            return [];
+        }
+    }
     public checkDate(date: string): string {
-//         if(date==null){
-// return '';
-//         }
         let date1 = new Date(date.substring(0, 10));
 
         let d = new Date();

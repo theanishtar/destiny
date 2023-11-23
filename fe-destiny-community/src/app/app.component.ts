@@ -13,6 +13,15 @@ export class AppComponent {
   title = 'FE_Destiny';
   sender: any;
   ngOnInit() {
+    // // Bắt sự kiện thoát trang
+    // window.addEventListener('beforeunload', (event) => {
+    //   // Thực hiện các xử lý trước khi trang thoát
+    //   // Ví dụ: Lưu dữ liệu, xác nhận thoát, v.v.
+    //   this.loginService.triggerExitEvent();
+      
+    //   // Hủy bỏ sự kiện thoát nếu cần thiết
+    //   // event.returnValue = true;
+    // });
   }
 
   constructor(
@@ -26,19 +35,6 @@ export class AppComponent {
 
   public selectLg(event: any) {
     this.translateService.use(event.target.value);
-  }
-
-  // loadDataSender() {
-  //   this.messageService.loadDataSender().subscribe(() => {
-  //     this.sender = JSON.parse(JSON.stringify(this.messageService.getSender()));
-  //     this.messageService.connectToChat(this.sender.user_id);
-
-  //   });
-  // }
-  @HostListener('window:unload', ['$event'])
-  unloadHandler(event: any): void {
-    // Gọi hàm đăng xuất khi thoát khỏi trang web
-    this.loginService.performLogout();
   }
 
   // Check internet

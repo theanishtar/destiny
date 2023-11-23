@@ -460,6 +460,10 @@
             data-simplebar
           >
             <!-- Khung chat -->
+            <div class="load-wait-mess" *ngIf="checkLoadingWait">
+              <span class="loader"></span>
+              <p class="loader-content">Đang tải tin nhắn</p>
+            </div>
             <div
               class="message-content"
               *ngFor="

@@ -59,6 +59,9 @@ export class NotificationsComponent implements OnInit {
     if (type == 'REPCOMMENT') {
       return 'REPCOMMENT';
     }
+    if (type == 'MENTION') {
+      return 'MENTION';
+    }
     return null;
   }
 

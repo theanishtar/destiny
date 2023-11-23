@@ -31,7 +31,7 @@
         <!-- ../../assets/images/cover/03.jpg -->
         <div class="post-detail">
           <div class="cmt-body">
-            <div class="full-boxer">
+            <div class="full-boxer" id="scrollableDiv">
               <div *ngFor="let cmt of modalService.listCmt; let i = index">
                 <div class="comment__container opened">
                   <div class="comment__card">
@@ -67,11 +67,31 @@
                       </div>
                     </div>
                     <p>
+                      <span *ngIf="cmt[10] != null">
+                        <ng-container
+                          *ngIf="modalService.getCheckedUsers(cmt[10])"
+                        >
+                          <a
+                            *ngFor="let item of modalService.checkedUsers"
+                            href="profile"
+                            (click)="
+                              this.profileService.loadDataProfileTimeline(
+                                item.mentioned_user_id)"
+                            style="
+                              text-decoration: none;
+                              color: black;
+                              font-weight: bolder;
+                            "
+                          >
+                            {{ item.fullname }}
+                          </a>
+                        </ng-container>
+                      </span>
                       {{ cmt[5] }}
                     </p>
                     <div class="comment__card-footer">
                       <div class="replies" (click)="reply(cmt[0], cmt[7])">
-                        {{ cmt[11] }} Trả lời
+                        {{ cmt[12] }} Trả lời
                       </div>
                       <div
                         class="show-replies"
@@ -121,7 +141,12 @@
                   <!-- <li>Item 1</li>
                   <li>Item 2</li>
                   <li>Item 3</li> -->
-                  <li *ngFor="let item of filteredItems" (click)="selectItem(item)">{{ item.fullname }}</li>
+                  <li
+                    *ngFor="let item of filteredItems"
+                    (click)="selectItem(item)"
+                  >
+                    {{ item.fullname }}
+                  </li>
                 </ul>
               </div>
             </form>

@@ -270,14 +270,6 @@ export class ProfileTimelineComponent implements OnInit {
     });
   }
 
-  // toggleLike() {
-  //   this.interactPostsService.toggleLike(this.postId);
-  // }
-
-  // isLiked(postId: string) {
-  //   return this.interactPostsService.isLiked(postId);
-  // }
-
   openModalComment(idPost) {
     this.modalService.openModalComment(49);
   }

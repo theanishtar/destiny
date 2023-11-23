@@ -478,7 +478,6 @@ public class PostController {
 
 	public PostEntity postEntityProfile(Object[] ob, PostEntity entityProfile, int check) {
 		try {
-			System.err.println("entityProfile: " + entityProfile);
 			PostEntity profile = new PostEntity();
 			profile.setPost_id(Integer.valueOf(ob[0].toString()));
 			profile.setUser_id(Integer.valueOf(ob[1].toString()));

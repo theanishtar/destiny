@@ -13,17 +13,18 @@ import { MessageService } from '@app/user/service/message.service';
 import Swal from 'sweetalert2';
 import '../../assets/toast/main.js';
 declare var toast: any;
-
+import { Subject } from 'rxjs';
 @Injectable({
 	providedIn: 'root'
 })
 export class LoginService {
 	private userURL = environment.baseUrl + 'v1/oauth/login';
 	private userLoginAuth = environment.baseUrl + 'v1/oauth/login/oauh2';
-	private userLogout = environment.baseUrl + 'v1/user/logoutchat';
+	private userLogout = environment.baseUrl + 'v1/user/logout/chat/';
 
 	private userLogined: any[] = [];
 	userLogGG: any[] = [];
+	idUser: any = this.cookieService.get('id');
 
 	loginUser(data: any): Observable<any> {
 		return this.http.post<any>(this.userURL, data)
@@ -155,36 +156,59 @@ export class LoginService {
 			cancelButtonText: 'No',
 		}).then((result) => {
 			if (result.value) {
-				this.http.get<any>(this.userLogout).subscribe(() => {
-					this.router.navigate(['home']);
+				this.http.get<any>(this.userLogout + this.idUser).subscribe(() => {
+					// this.router.navigate(['home']);
+					window.location.href = environment.baseUrlFe + 'home';
 					this.cookieService.deleteAll();
 					localStorage.clear();
 					this.messageService.logout();
-					new toast({
-						title: 'Đã đăng xuất!',
-						message: 'Hẹn gặp lại',
-						type: 'warning',
-						duration: 2000,
-					});
+					// new toast({
+					// 	title: 'Đã đăng xuất!',
+					// 	message: 'Hẹn gặp lại',
+					// 	type: 'warning',
+					// 	duration: 2000,
+					// });
 				})
 			}
 		});
 	}
+	private exitEventSubject = new Subject<void>();
 
-	private logoutSubject = new BehaviorSubject<boolean>(false);
-
-	get logoutObservable() {
-	  return this.logoutSubject.asObservable();
+	get exitEvent$() {
+		return this.exitEventSubject.asObservable();
 	}
-  
-	performLogout() {
-	  // Thực hiện các bước đăng xuất ở đây
-	  this.http.get<any>(this.userLogout).subscribe(() => {
-		this.cookieService.deleteAll();
-		localStorage.clear();
-		this.messageService.logout();
-	})
-	  this.logoutSubject.next(true);
+
+	triggerExitEvent() {
+		Swal.fire({
+			title: 'Bạn muốn đăng xuất?',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#d33',
+			cancelButtonColor: '#3085d6',
+			confirmButtonText: 'Yes',
+			cancelButtonText: 'No',
+		}).then((result) => {
+			if (result.value) {
+				this.http.get<any>(this.userLogout + this.idUser).subscribe(() => {
+					// this.router.navigate(['home']);
+					window.location.href = environment.baseUrlFe + 'home';
+					this.cookieService.deleteAll();
+					localStorage.clear();
+					this.messageService.logout();
+					this.exitEventSubject.next();
+				})
+			} else {
+
+				this.exitEventSubject.next();
+			}
+		});
+	}
+	autoLogout() {
+		this.http.get<any>(this.userLogout + this.idUser).subscribe(() => {
+			localStorage.removeItem('token');
+			localStorage.removeItem('refreshToken');
+			this.messageService.logout();
+		})
 	}
 
 
@@ -194,33 +218,33 @@ export class LoginService {
 		const headers = new HttpHeaders({
 			'Content-Type': 'application/json',
 			'Authorization': `Bearer ${localStorage.getItem("refreshToken")}`
-		  });
-	
+		});
+
 		const options = { headers: headers };
-	
+
 		return this.http.get<any>(this.refreshTokenUrl, options)
-		.pipe(
-			tap((res) => {
-				console.log('New token:', res);
-				localStorage.setItem(
-					'token',
-					res.token
-				);
-				localStorage.setItem(
-					'refreshToken',
-					res.refreshToken
-				);
-				this.cookieService.set('full_name', res.name);
-				this.cookieService.set('avatar', res.avatar);
-				this.cookieService.set('id', res.id);
-				this.cookieService.set('role', res.roles[0].authority);
-			}),
-			catchError((error) => {
-				console.error('Error refreshing token:', error);
-				return throwError(error);
-			})
-		);
-	  }
+			.pipe(
+				tap((res) => {
+					console.log('New token:', res);
+					localStorage.setItem(
+						'token',
+						res.token
+					);
+					localStorage.setItem(
+						'refreshToken',
+						res.refreshToken
+					);
+					this.cookieService.set('full_name', res.name);
+					this.cookieService.set('avatar', res.avatar);
+					this.cookieService.set('id', res.id);
+					this.cookieService.set('role', res.roles[0].authority);
+				}),
+				catchError((error) => {
+					console.error('Error refreshing token:', error);
+					return throwError(error);
+				})
+			);
+	}
 	// Getter
 	getUserLog(): any[] {
 		return this.userLogined;

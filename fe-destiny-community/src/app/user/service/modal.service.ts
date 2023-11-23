@@ -56,6 +56,10 @@ export class ModalService {
   count: number = 1; //gia tri key
   checkHideSeeMore = new Map<string, Boolean>();
   currentPage: number = 1;
+  checkedUsers: any[];
+  checkedUsersRep: any[];
+  checkUserCalled: boolean = false;
+  mapMention = new Map<number, string>();
 
   dataUpdatedPost = new EventEmitter<void>();
 
@@ -96,7 +100,6 @@ export class ModalService {
   }
 
   /* ============Comment============= */
-
   imgShare(images: any) {
     this.imagesTemp = images;
   }
@@ -117,7 +120,7 @@ export class ModalService {
     this.callApiLoadCmt(idPost);
   }
   callApiLoadCmt(idPost) {
-    this.isLoadingCmt = true;
+    // this.isLoadingCmt = true;
     // console.log("id: " + idPost)
     this.openModalComment(idPost).subscribe(() => {
       this.listComment = this.getDataCmt();
@@ -178,7 +181,7 @@ export class ModalService {
       });
       this.stompClient?.subscribe("/topic/error-notification/" + userId, (response) => {
         let status = JSON.parse(response.body);
-        if(status){
+        if (status) {
           new toast({
             title: 'Thông báo!',
             message: 'Từ ngữ của bạn đã vi phạm nguyên tắc cộng đồng!',
@@ -257,6 +260,7 @@ export class ModalService {
     let avatar = this.cookieService.get("avatar");
     let fullname = this.cookieService.get("full_name");
     let fromUserId = localStorage.getItem("chatUserId");
+    console.warn("this.idMention2: " + this.mapMention.size);
     this.stompClient?.send("/app/notify/" + toUserId, {}, JSON.stringify({
       avatar: avatar,
       fullname: fullname,
@@ -266,7 +270,13 @@ export class ModalService {
       replyId: idCmt,
       time: 'Vừa xong',
       type: type,
+      mapMention: Object.fromEntries(this.mapMention.entries()) //Chuyển đổi một mảng các cặp key-value thành một đối tượng.
     }));
+    // this.idMention = [];
+    // this.nameMention = [];
+    // this.mapMention.clear();
+
+    // cập nhật số liệu cmt và share
     let comment = document.getElementById("cmt-" + post_id);
     let share = document.getElementById("share-" + post_id);
     if (type == 'COMMENT' && comment) {
@@ -325,15 +335,29 @@ export class ModalService {
       this.listReplyComment = this.getDataReplyCmt();
       this.listReplyCmt = this.listReplyComment.list_comment;
       this.$reply = $('#first-reply-' + cmtId);
+      let temp = '';
+      let nameRep = '';
       if (this.$reply) {
         for (let rep of this.listReplyCmt) {
+          if (rep[10] != null) {
+            let user = JSON.parse(rep[11]);
+            let list = this.getCheckedUsers(rep[10]);
+            nameRep = '<a href="profile?id=' + user[0].mentioned_user_id + '" style="text-decoration: none;color: black;font-weight: bolder;">' +
+              user[0].fullname + '</a>'
+
+            let i = 0;
+            for (let k of list) {
+              temp += '<a href="profile?id=' + k.mentioned_user_id + '" style="text-decoration: none;color: black;font-weight: bolder;">' +
+                k.fullname + '</a>'
+              i++;
+            }
+          }
           this.$reply.append('<div class="comment__container oppen rep-' + cmtId + '"' +
             ' dataset="first-comment" style="display: block; position: relative; margin-bottom: 1rem;margin-top: 1rem;padding-left: 3rem;"> ' +
             '<div class="comment__card" style="padding: 0px;min-width: 100%;"> ' +
             '<div class="box-top" style="display: flex;justify-content: space-between;align-items: center;"> ' +
             ' <div class="Profile" style="display: flex;align-items: center;"> ' +
             '<div class="profile-image" style="width: 40px;height: 40px;overflow: hidden;border-radius: 50%;margin-right: 10px;"> ' +
-            // '<img src="' + rep[9] + '" style="width: 100%;height: 100%;object-fit: cover;object-position: center;display: block;vertical-align: middle;"/> ' +
             '<a class="user-avatar small user-status-avatar no-border no-outline avatar-mess" href="profile"> ' +
             '<div class="hexagon-container" style="width: 35px; height: 38px; position: relative; margin: 0 auto;background: white;clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); "> ' +
             '<div class="hexagon user-avatar-content" style="top: 6px;left: 5px;position: absolute;z-index: 3;width: 40px;height: 44px;overflow: hidden;">  ' +
@@ -359,8 +383,8 @@ export class ModalService {
             '</div>' +
             '</div>' +
             '<p style="font-size: 15px;margin-bottom: 1rem;line-height: 2.4;padding-left: 3.9rem;margin: 0;font-family: Helvetica, Arial, sans-serif">' +
-            '<a href="#" style="text-decoration: none;color: black;font-weight: bolder;">' +
-            rep[10] + '</a>' + ' ' + this.getContent(rep[10], rep[5]) +
+            '<span>' + nameRep + ' ' + temp + '</span>'
+            + rep[5] +
             '</p>' +
             '</div>' +
             '</div>'
@@ -370,9 +394,39 @@ export class ModalService {
       }
     })
   }
-
+  // this.getContent(rep[10], rep[5])
   getContent(fullname: any, content: any) {
     return content.substring(fullname.length, content.length).trim();
+  }
+
+  getCheckedUsers(value: string) {
+    if (!this.checkedUsers) {
+      this.checkedUsers = this.convertToJson(value);
+    }
+    return this.checkedUsers;
+  }
+  // getCheckedUsersRep(value: string) {
+  //   if (!this.checkedUsersRep) {
+  //     this.checkedUsersRep = this.convertToJson(value);
+  //   }
+  //   return this.checkedUsersRep;
+  // }
+
+  convertToJson(value: string): any[] {
+    try {
+      if (!this.checkUserCalled) {
+        const jsonArray = JSON.parse(value);
+        this.checkUserCalled = true;
+        return jsonArray;
+      } else {
+        console.warn("jsonArray has already been parsed.");
+        this.checkUserCalled = false;
+      }
+    } catch (error) {
+      console.error('Error parsing JSON array:', error);
+    }
+    // Trả về một mảng rỗng mặc định nếu có lỗi hoặc nếu hàm đã được gọi trước đó
+    return [];
   }
 
   /* ============Images============= */
@@ -400,11 +454,6 @@ export class ModalService {
     }
     this.checkImgSeeAll = false;
   }
-  
-  
-
-
-
 
   /* ============Search============= */
   async searchApi(id: number, fullname: string): Promise<any> {
@@ -465,10 +514,6 @@ export class ModalService {
 
   closeModalSeeAllImg() {
     this.checkImgSeeAll = true;
-    // this.imagesSeeAll.splice(0, this.imagesSeeAll.length);
-    // this.messageService.listMessages.splice(0, this.messageService.listMessages.length);
-    // console.log("Processing complete. Length3:", this.imagesSeeAll.length);
-    // console.log("Processing complete. Length4:", this.messageService.listMessages.length);
     this.isOpenSeeAllImg.next(false);
   }
 

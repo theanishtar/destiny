@@ -17,8 +17,11 @@ public interface MessagesDAO extends JpaRepository<Messages, Integer> {
 	@Query(value = "SELECT COUNT(messages.id) FROM messages WHERE send_status =false and  sender_id =:id", nativeQuery = true)
 	public int countMessageUnread(int id);
 
-	@Query(value = "select *from get_messages(:from_user,:to_user)", nativeQuery = true)
-	public List<Object[]> findListMessage(int from_user, int to_user);
+//	@Query(value = "select *from get_messages(:from_user,:to_user)", nativeQuery = true)
+//	public List<Object[]> findListMessage(int from_user, int to_user);
+	
+	@Query(value = "SELECT * FROM (SELECT * FROM get_messages(:from_user,:to_user) ORDER BY id desc LIMIT 50 offset :page) AS messages ORDER BY id asc", nativeQuery = true)
+	public List<Object[]> findListMessage(int from_user, int to_user,int page);
 
 	@Query(value = "select *from get_messages(:from_user,:to_user) where id=:id", nativeQuery = true)
 	public Object[] findByIdMessage(int from_user, int to_user,int id);

@@ -16,6 +16,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -89,14 +90,16 @@ public class UserChatController {
 
 	}
 
-	@GetMapping("/v1/user/logoutchat")
-	public ResponseEntity<Void> logout(HttpServletRequest request) {
+	@GetMapping("/v1/user/logout/chat/{id}")
+	public ResponseEntity<Void> logout(@PathVariable int id) {
 		try {
-			String email = jwtTokenUtil.getEmailFromHeader(request);
-			User user = userService.findByEmail(email);
+//			String email = jwtTokenUtil.getEmailFromHeader(request);
+			User user = userService.findById(id);
 			user.setOnline_last_date(GregorianCalendar.getInstance());
 			userService.update(user);
 			async(user, false);
+			UserChatStorage.getInstance().remove(id);
+			System.err.println("đăng xuất");
 			return ResponseEntity.ok().build();
 		} catch (Exception e) {
 			System.out.println("Error logout in userchatcontroller: " + e);
