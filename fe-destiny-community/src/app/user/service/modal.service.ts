@@ -56,10 +56,10 @@ export class ModalService {
   count: number = 1; //gia tri key
   checkHideSeeMore = new Map<string, Boolean>();
   currentPage: number = 1;
-  checkedUsers: any[];
-  checkedUsersRep: any[];
+  checkedUsers: any[] = []; 
   checkUserCalled: boolean = false;
   mapMention = new Map<number, string>();
+  checkBadword: boolean = false;
 
   dataUpdatedPost = new EventEmitter<void>();
 
@@ -145,12 +145,10 @@ export class ModalService {
     this.socket = new SockJS(environment.baseUrl + 'notify');
     this.stompClient = Stomp.over(this.socket!);
     this.stompClient.connect({}, (frame) => {
+      // Nhận thông báo được gửi qua
       this.stompClient?.subscribe("/topic/notification/" + userId, (response) => {
         let data = JSON.parse(response.body);
         this.checkNotify = true;
-        // this.listNotify.set(this.count, data);
-        // this.mapTime.set(this.count, new Date().toISOString());
-        // this.count++;
 
         //Đẩy lại thông báo lên lại
         this.listNotify.clear();
@@ -165,8 +163,10 @@ export class ModalService {
             postId: k!.postId,
             time: this.messageService.customTime(k!.time, 1),
             type: k!.type,
-            following_status: k!.following_status
+            following_status: k!.following_status,
+            status:k!.status
           }
+          // console.warn("k!.type: " + k!.type);
           this.listNotify.set(this.count, notify);
           this.mapTime.set(this.count, k!.time);
           this.count++;
@@ -175,24 +175,36 @@ export class ModalService {
         if (this.repCmtId > 0)
           this.callApiLoadCmt(data.postId);
       });
+       
+      // Gửi thông báo thành công
       this.stompClient?.subscribe("/topic/success-notification", (response) => {
         let id = JSON.parse(response.body);
         this.callApiLoadCmt(id);
       });
+
+      // Gửi thông báo lỗi
       this.stompClient?.subscribe("/topic/error-notification/" + userId, (response) => {
         let status = JSON.parse(response.body);
         if (status) {
-          new toast({
-            title: 'Thông báo!',
-            message: 'Từ ngữ của bạn đã vi phạm nguyên tắc cộng đồng!',
-            type: 'warning',
-            duration: 4000,
-          })
-        }
+          // new toast({
+          //   title: 'Thông báo!',
+          //   message: 'Từ ngữ của bạn đã vi phạm nguyên tắc cộng đồng!',
+          //   type: 'warning',
+          //   duration: 4000,
+          // })
+          this.checkBadword = true;
+          setTimeout(() => {
+            this.checkBadword = false;
+          }, 4000);
+       }
       });
+
+      // Kênh gợi ý theo dõi khi đăng ký
       this.stompClient?.subscribe("/topic/loaddata/suggest-post/" + userId, (response) => {
         this.updateDataPost();
       });
+
+      // Kênh load thông báo
       this.stompClient?.subscribe("/topic/loaddata/notification/" + userId, (response) => {
         let data = JSON.parse(response.body);
         for (let k of data) {
@@ -204,8 +216,12 @@ export class ModalService {
             postId: k!.postId,
             time: this.messageService.customTime(k!.time, 1),
             type: k!.type,
-            following_status: k!.following_status
+            following_status: k!.following_status,
+            status:k!.status
           }
+          if(k!.status==false)
+          this.checkNotify=true;
+          // console.warn("k!.type: " + k!.type);
           this.listNotify.set(this.count, notify);
           this.mapTime.set(this.count, k!.time);
           this.count++;
@@ -215,6 +231,7 @@ export class ModalService {
         this.isLoading = false;
       })
 
+       // Kênh đổi token khi đổi email
       this.stompClient?.subscribe("/topic/changetoken/" + userId, (response) => {
         let data = JSON.parse(response.body);
         localStorage.setItem('token', data.token);
@@ -244,6 +261,7 @@ export class ModalService {
               time: this.messageService.customTime(value, 1),
               type: v!.type,
               following_status: v!.following_status,
+              status:v!.status
             }
             this.listNotify.set(key, notify);
           }
@@ -260,7 +278,6 @@ export class ModalService {
     let avatar = this.cookieService.get("avatar");
     let fullname = this.cookieService.get("full_name");
     let fromUserId = localStorage.getItem("chatUserId");
-    console.warn("this.idMention2: " + this.mapMention.size);
     this.stompClient?.send("/app/notify/" + toUserId, {}, JSON.stringify({
       avatar: avatar,
       fullname: fullname,
@@ -272,9 +289,6 @@ export class ModalService {
       type: type,
       mapMention: Object.fromEntries(this.mapMention.entries()) //Chuyển đổi một mảng các cặp key-value thành một đối tượng.
     }));
-    // this.idMention = [];
-    // this.nameMention = [];
-    // this.mapMention.clear();
 
     // cập nhật số liệu cmt và share
     let comment = document.getElementById("cmt-" + post_id);
@@ -400,17 +414,15 @@ export class ModalService {
   }
 
   getCheckedUsers(value: string) {
-    if (!this.checkedUsers) {
-      this.checkedUsers = this.convertToJson(value);
+    try {
+      const jsonArray = JSON.parse(value);
+      // console.warn("jsonArray: ", jsonArray);
+      return jsonArray;
+    } catch (error) {
+      console.error('Error parsing JSON array:', error);
+      return [];
     }
-    return this.checkedUsers;
   }
-  // getCheckedUsersRep(value: string) {
-  //   if (!this.checkedUsersRep) {
-  //     this.checkedUsersRep = this.convertToJson(value);
-  //   }
-  //   return this.checkedUsersRep;
-  // }
 
   convertToJson(value: string): any[] {
     try {
@@ -438,20 +450,9 @@ export class ModalService {
     this.checkImg = false;
   }
 
-  async openModalSeeAllImg() {
+  async openModalSeeAllImg(list: any[]) {
     this.isOpenSeeAllImg.next(true);
-    // Chờ đợi đến khi có dữ liệu
-    while (this.messageService.listMessages.length === 0) {
-      // Chờ 100ms trước khi kiểm tra lại
-      await new Promise(resolve => setTimeout(resolve, 100));
-    }
-    for (let m of this.messageService.listMessages) {
-      if (Array.isArray(m.images)) {
-        for (let imagePath of m.images) {
-          this.imagesSeeAll.push(imagePath);
-        }
-      }
-    }
+    this.imagesSeeAll = list;
     this.checkImgSeeAll = false;
   }
 
@@ -483,6 +484,12 @@ export class ModalService {
   }
 
   /* ============Template============= */
+  delay(ms: number) {
+    return new Promise(function (resolve) {
+      setTimeout(resolve, ms);
+    });
+  }
+
   private isOpenCreatePost = new BehaviorSubject<boolean>(false);
   isOpenCreatePost$ = this.isOpenCreatePost.asObservable();
 

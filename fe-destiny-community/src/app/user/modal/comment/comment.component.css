@@ -572,6 +572,19 @@ button.btnClose-create-post {
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
 }
 
+.valid-badword {
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 4px;
+  position: absolute;
+  top: -32px;
+  /* left: 6%; */
+  z-index: 2;
+}
+
 @media screen and (max-width: 480px) {
   button.btnClose-create-post {
     right: 39% !important;

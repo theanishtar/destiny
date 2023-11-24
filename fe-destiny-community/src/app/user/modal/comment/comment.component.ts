@@ -84,6 +84,7 @@ export class CommentComponent {
       let type = (this.modalService.repCmtId > 0) ? 'REPCOMMENT' : 'COMMENT';
       this.modalService.sendNotify(this.$contentCommnet.val(), this.idPost, this.idUser, type, this.modalService.repCmtId);
     }
+
     this.comment_input = '';
   }
 

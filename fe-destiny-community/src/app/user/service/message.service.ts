@@ -21,12 +21,14 @@ export class MessageService {
   private ChatWithStrangersUrl = environment.baseUrl + 'v1/user/inbox';
   private blockUrl = environment.baseUrl + 'v1/user/block/chat';
   private messageRecallUrl = environment.baseUrl + 'v1/user/chat/recall/messages';
+  private loadImages = environment.baseUrl + 'v1/user/messages/load/images';
 
   private sender: any[] = [];
   private listFriends: any[] = [];
   private listMess: any[] = [];
   public listMessages: any[] = [];
   public listImages:any[] = [];
+  public listImagesSeeAll:any[] = [];
   listMessagesTemp :any[]=[];
   isLoading = true;
 
@@ -66,6 +68,19 @@ export class MessageService {
         this.setSender(this.sender);
       })
     );
+  }
+
+  async loadMessageImg(to: number) {
+    const params = new HttpParams()
+    .set('to', to.toString())  // Convert 'to' to a string
+    try {
+      this.listImagesSeeAll = await this.http.post<any>(this.loadImages, null, { params }).toPromise();
+      // this.setDataPostNf(response);
+      return this.listImagesSeeAll;
+    } catch (error) {
+      console.log("error: " + error);
+      throw error;
+    }
   }
 
   async loadMessage(to: number, page: number) {

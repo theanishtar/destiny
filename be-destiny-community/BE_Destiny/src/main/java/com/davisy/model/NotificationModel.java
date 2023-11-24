@@ -27,7 +27,7 @@ public class NotificationModel {
 //	int[] userIdMention;
 //	 @JsonProperty("mapMention")
 	HashMap<Integer, String> mapMention ;
-	boolean isMention = false;
+	boolean status = false;
 
 	public enum MessageType {
 		COMMENT, REPCOMMENT, INTERESTED, FOLLOW, MENTION, SHARE, JOIN
@@ -39,6 +39,6 @@ public class NotificationModel {
 				+ fromUserId + '\'' + ",content='" + content + '\'' + ", postId='" + postId + '\'' + ",replyId='"
 				+ replyId + '\'' + ", time='" + time + '\'' + ",type='" + type + '\'' + ",following_status='"
 				+ following_status + '\'' + ",follow_id='" + follow_id + '\'' + ",mapMention='" + mapMention
-				+ '\'' + ",isMention='" + isMention + '\'' + "}]";
+				+ '\'' + ",status='" + status + '\'' + "}]";
 	}
 }

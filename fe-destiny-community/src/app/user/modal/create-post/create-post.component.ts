@@ -45,6 +45,7 @@ export class CreatePostComponent {
   dataEditProfile: any
   isLoading: boolean = false;
   checkBtn: boolean = false;
+  checkBadWord: boolean = false;
 
   constructor(
     public modalService: ModalService,
@@ -131,13 +132,17 @@ export class CreatePostComponent {
           this.closeModalCreatePost();
           this.isLoading = false;
         } else {
-          new toast({
-            title: 'Thông báo!',
-            message: 'Từ ngữ của bạn đã vi phạm nguyên tắc cộng đồng!',
-            type: 'warning',
-            duration: 4000,
-          })
+          // new toast({
+          //   title: 'Thông báo!',
+          //   message: 'Từ ngữ của bạn đã vi phạm nguyên tắc cộng đồng!',
+          //   type: 'warning',
+          //   duration: 4000,
+          // })
+          this.checkBadWord = true;
           this.isLoading = false;
+          setTimeout(() => {
+            this.checkBadWord = false;
+          }, 4000);
           if (body && !this.isLoading) {
             body.style.opacity = '1';
           }

@@ -987,6 +987,60 @@
               <!-- /USER STATUS -->
             </div>
             <!-- Comment -->
+             <!-- Comment mention-->
+             <div class="dropdown-box-list-item"
+             *ngIf="checkType(notif.value.type) === 'MENTION'"
+             >
+               <!-- USER STATUS -->
+               <div class="user-status notification">
+                 <!-- USER STATUS AVATAR -->
+                 <a
+                   class="user-avatar small user-status-avatar no-border no-outline"
+                   (click)="handleLinkClick($event)"
+                 >
+                   <div class="hexagon-container">
+                     <div class="hexagon user-avatar-content">
+                       <div
+                         class="hexagon-image"
+                         style="background-image: url('{{notif.value.avatar}}')"
+                       ></div>
+                     </div>
+                     <div class="hexagon user-avatar-border">
+                       <div class="hexagon-border"></div>
+                     </div>
+                     <div class="hexagon user-avatar-progress-border">
+                       <div class="user-avatar-progress"></div>
+                     </div>
+                     <p class="user-avatar-badge-text">1</p>
+                   </div>
+                 </a>
+                 <!-- /USER STATUS AVATAR -->
+ 
+                 <!-- USER STATUS TITLE -->
+                 <p class="user-status-title">
+                   <a class="bold" href="profile" (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)">{{ notif.value.fullname }}</a>
+                   đã nhắc đến bạn trong
+                   <a class="highlighted" href="detail-post?id={{notif.value.postId}}">bài đăng</a>
+                 </p>
+                 <!-- /USER STATUS TITLE -->
+ 
+                 <!-- USER STATUS TIMESTAMP -->
+                 <p class="user-status-timestamp">{{ notif.value.time }}</p>
+                 <!-- /USER STATUS TIMESTAMP -->
+ 
+                 <!-- USER STATUS ICON -->
+                 <div class="user-status-icon">
+                   <!-- ICON COMMENT -->
+                   <svg class="icon-comment">
+                     <use xlink:href="#svg-comment"></use>
+                   </svg>
+                   <!-- /ICON COMMENT -->
+                 </div>
+                 <!-- /USER STATUS ICON -->
+               </div>
+               <!-- /USER STATUS -->
+             </div>
+             <!-- Comment mention-->
             <!-- Rep Comment -->
             <div class="dropdown-box-list-item"
             *ngIf="checkType(notif.value.type) === 'REPCOMMENT'"
@@ -1200,6 +1254,7 @@
               <!-- /USER STATUS -->
             </div>
             <!-- follow -->
+            
             <!-- interested -->
             </div>
             

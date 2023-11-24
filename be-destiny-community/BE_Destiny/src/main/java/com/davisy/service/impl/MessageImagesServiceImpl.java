@@ -35,4 +35,9 @@ public class MessageImagesServiceImpl implements MessageImagesService {
 		return list;
 	}
 
+	@Override
+	public List<String> loadAllImages(int from ,int to) {
+		return messageImagesDAO.loadImages(from, to);
+	}
+
 }

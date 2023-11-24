@@ -46,6 +46,7 @@
         <p class="no-intify">Không có thông báo</p>
       </div>
       <div class="notification-box-list" *ngFor="let notif of modalService.listNotify | keyvalue">
+        <h5 style="z-index: 999999;">type: {{notif.value.type}}</h5>
         <!-- NOTIFICATION BOX -->
         <div class="notification-box" *ngIf="checkType(notif.value.type) === 'COMMENT'">
           <!-- USER STATUS -->

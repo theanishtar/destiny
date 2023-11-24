@@ -1,5 +1,19 @@
-<!-- LANDING -->
+
 <div class="landing">
+  <!-- LANDING -->
+<div *ngIf="loginService.checkLog" class="overlay" id="loadingOverlay">
+  <div class="loader-bars">
+    <div class="loader-bar"></div>
+    <div class="loader-bar"></div>
+    <div class="loader-bar"></div>
+    <div class="loader-bar"></div>
+    <div class="loader-bar"></div>
+    <div class="loader-bar"></div>
+    <div class="loader-bar"></div>
+    <div class="loader-bar"></div>
+  </div>
+  <div class="loading">Đang tải</div>
+</div>
   <!-- LANDING DECORATION -->
   <div class="landing-decoration"></div>
   <!-- /LANDING DECORATION -->

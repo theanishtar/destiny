@@ -200,6 +200,13 @@
                           formControlName="content"
                         >
                         </textarea>
+                        <span
+                          *ngIf="checkBadWord"
+                        >
+                          <div style="color: red" class="noftify-error">
+                            Từ ngữ của bạn đã vi phạm nguyên tắc cộng đồng!
+                          </div>
+                        </span>
                       </div>
                     </div>
                     <div class="address">

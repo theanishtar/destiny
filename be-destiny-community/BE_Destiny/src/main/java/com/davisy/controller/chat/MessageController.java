@@ -66,44 +66,45 @@ public class MessageController {
 	@Async
 	@MessageMapping("/chat/{to}")
 	public void sendMessage(@DestinationVariable int to, MessageModel message) {
-			User user = userService.findById(message.getFromLogin());
-			User toUser = userService.findById(to);
-			Chats chats = chatsService.findChatNames(user.getUsername(), toUser.getUsername());
-			List<String> images = new ArrayList<>();
-			Messages messages = new Messages();
-			messages.setContent(message.getMessage());
-			messages.setUser(user);
-			messages.setChats(chats);
-			messages.setSend_Status(false);
-			if (!"".equals(message.getTypeMessage()))
-				messages.setType(message.getTypeMessage());
-			messagesService.create(messages);
-			if (message.getLinkImages().length > 0) {
-				for (String s : message.getLinkImages()) {
-					MessageImages image = new MessageImages();
-					image.setMessages(messages);
-					image.setLink_image(s);
-					images.add(s);
-					messageImagesService.create(image);
-				}
+		User user = userService.findById(message.getFromLogin());
+		User toUser = userService.findById(to);
+		Chats chats = chatsService.findChatNames(user.getUsername(), toUser.getUsername());
+		List<String> images = new ArrayList<>();
+		Messages messages = new Messages();
+		messages.setContent(message.getMessage());
+		messages.setUser(user);
+		messages.setChats(chats);
+		messages.setSend_Status(false);
+		if (!"".equals(message.getTypeMessage()))
+			messages.setType(message.getTypeMessage());
+		messagesService.create(messages);
+		if (message.getLinkImages().length > 0) {
+			for (String s : message.getLinkImages()) {
+				MessageImages image = new MessageImages();
+				image.setMessages(messages);
+				image.setLink_image(s);
+				images.add(s);
+				messageImagesService.create(image);
 			}
-			Object[] messageOb = messagesService.findByIdMessage(message.getFromLogin(), to, messages.getId());
-			MessagesEntity entity = new MessagesEntity();
-			entity = entity(messageOb);
-			simpMessagingTemplate.convertAndSend("/topic/status/messages/" + message.getFromLogin(), entity);
-			boolean isExists = UserChatStorage.getInstance().getUsers().containsKey(to);
-			if (isExists) {
-				simpMessagingTemplate.convertAndSend("/topic/messages/" + to, new Object[] { entity });
+		}
+		Object[] messageOb = messagesService.findByIdMessage(message.getFromLogin(), to, messages.getId());
+		MessagesEntity entity = new MessagesEntity();
+		entity = entity(messageOb);
+		simpMessagingTemplate.convertAndSend("/topic/status/messages/" + message.getFromLogin(), entity);
+		boolean isExists = UserChatStorage.getInstance().getUsers().containsKey(to);
+		if (isExists) {
+			simpMessagingTemplate.convertAndSend("/topic/messages/" + to, new Object[] { entity });
 
-			}
+		}
 	}
 
 	@PostMapping("/v1/user/chat/load/messages")
-	public ResponseEntity<List<MessagesEntity>> loadMessages(HttpServletRequest request,@RequestParam("to") int to,@RequestParam("page")int page) {
+	public ResponseEntity<List<MessagesEntity>> loadMessages(HttpServletRequest request, @RequestParam("to") int to,
+			@RequestParam("page") int page) {
 		try {
 			String email = jwtTokenUtil.getEmailFromHeader(request);
 			User user = userService.findByEmail(email);
-			List<Object[]> list = messagesService.findListMessage(user.getUser_id(), to,page);
+			List<Object[]> list = messagesService.findListMessage(user.getUser_id(), to, page);
 			List<MessagesEntity> lisMessagesEntities = new ArrayList<>();
 			for (Object[] l : list) {
 				lisMessagesEntities.add(listEntity(l));
@@ -127,6 +128,14 @@ public class MessageController {
 		return ResponseEntity.ok().body(entity);
 	}
 
+	@PostMapping("/v1/user/messages/load/images")
+	public ResponseEntity<List<String>> loadImages(HttpServletRequest request, @RequestParam("to") int to) {
+		String email = jwtTokenUtil.getEmailFromHeader(request);
+		User user = userService.findByEmail(email);
+		List<String> images = messageImagesService.loadAllImages(user.getUser_id(), to);
+		return ResponseEntity.ok().body(images);
+	}
+
 	public MessagesEntity listEntity(Object[] l) {
 		MessagesEntity entity = new MessagesEntity();
 		entity.setId(Integer.valueOf(l[0].toString()));
@@ -146,8 +155,8 @@ public class MessageController {
 		}
 		return entity;
 	}
-	
-	public MessagesEntity entity (Object[] o) {
+
+	public MessagesEntity entity(Object[] o) {
 		MessagesEntity entity = new MessagesEntity();
 		entity.setId(Integer.valueOf(((Object[]) o[0])[0].toString()));
 		entity.setContent(((Object[]) o[0])[1] + "");
@@ -166,8 +175,7 @@ public class MessageController {
 		}
 		return entity;
 	}
-	
-	
+
 //	@PostMapping("/v1/user/chat/load/messages")
 //	public ResponseEntity<List<Object[]>> loadMessages(HttpServletRequest request, @RequestBody int to) {
 //		try {

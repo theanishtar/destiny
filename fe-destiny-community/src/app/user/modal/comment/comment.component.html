@@ -72,7 +72,7 @@
                           *ngIf="modalService.getCheckedUsers(cmt[10])"
                         >
                           <a
-                            *ngFor="let item of modalService.checkedUsers"
+                            *ngFor="let item of modalService.getCheckedUsers(cmt[10])"
                             href="profile"
                             (click)="
                               this.profileService.loadDataProfileTimeline(
@@ -132,6 +132,7 @@
                   placeholder="Bình luận"
                   autocomplete="off"
                 />
+                <div *ngIf="modalService.checkBadword" class="valid-badword">Từ ngữ của bạn đã vi phạm nguyên tắc cộng đồng!</div>
                 <button class="add-comment-btn" (click)="addComment()">
                   <i class="fa-regular fa-comment"></i>
                 </button>

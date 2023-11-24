@@ -134,12 +134,12 @@ export class RegisterService {
           // localStorage.setItem('chatUserId', res.id);
           delay(500).then((res) => {
             window.location.href = environment.baseUrlFe + 'newsfeed';
-            new toast({
-              title: 'Thành công!',
-              message: 'Đăng nhập thành công',
-              type: 'success',
-              duration: 2000,
-            });
+            // new toast({
+            //   title: 'Thành công!',
+            //   message: 'Đăng nhập thành công',
+            //   type: 'success',
+            //   duration: 2000,
+            // });
           });
         });
       });

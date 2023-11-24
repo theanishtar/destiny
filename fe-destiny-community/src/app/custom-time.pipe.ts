@@ -6,6 +6,9 @@ import { MessageService } from './user/service/message.service';
 export class CustomTimePipe implements PipeTransform {
 
     $chatHistory: any;
+    checkedUsers: any[];
+    checkedUsersRep: any[];
+    checkUserCalled: boolean = false;
 
     constructor(
         private messageService: MessageService
@@ -17,28 +20,11 @@ export class CustomTimePipe implements PipeTransform {
         } else if (type === 'time') {
             return this.getCustomTime(value);
         } else {
-            return this.parseJsonArray(value);
-            // return '';
+            // return this.getCheckedUsers(value);
+            return '';
         }
     }
-    parseJsonArray(jsonString: string): any[] {
-        try {
-            return JSON.parse('[' + jsonString.replace(/}{/g, '},{') + ']');
-        } catch (error) {
-            console.error('Error parsing JSON array:', error);
-            return [];
-        }
-    }
-    checkUser(value: string): any[] {
-        try {
-            let jsonArray = JSON.parse("[" + value + "]")
-            console.warn("jsonArray: " + jsonArray);
-            return jsonArray;
-        } catch (error) {
-            console.error('Error parsing JSON array:', error);
-            return [];
-        }
-    }
+
     public checkDate(date: string): string {
         if(date =='' || date==null)
         return '';

@@ -25,6 +25,7 @@ export class LoginService {
 	private userLogined: any[] = [];
 	userLogGG: any[] = [];
 	idUser: any = this.cookieService.get('id');
+	checkLog: boolean = false;
 
 	loginUser(data: any): Observable<any> {
 		return this.http.post<any>(this.userURL, data)
@@ -49,8 +50,10 @@ export class LoginService {
 				catchError((error: HttpErrorResponse) => {
 					console.log("error.status: " + error.status)
 					if (error.status === 200) {
+						this.checkLog = false;
 						return [];
 					} else if (error.status === 404) {
+						this.checkLog = false;
 						return throwError(
 							new toast({
 								title: 'Thất bại!',
@@ -60,6 +63,7 @@ export class LoginService {
 							})
 						);
 					} else if (error.status === 403) {
+						this.checkLog = false;
 						return throwError(
 							new toast({
 								title: 'Tài khoản của bạn đã bị khóa!',
@@ -69,6 +73,7 @@ export class LoginService {
 							})
 						);
 					} else if (error.status === 429) {
+						this.checkLog = false;
 						return throwError(
 							new toast({
 								title: 'Vui lòng quay lại sau 1 phút nữa!',
@@ -78,6 +83,7 @@ export class LoginService {
 							})
 						);
 					} else if (error.status === 401) {
+						this.checkLog = false;
 						return throwError(
 							new toast({
 								title: 'Thất bại!',

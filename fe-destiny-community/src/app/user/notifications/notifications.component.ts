@@ -43,7 +43,6 @@ export class NotificationsComponent implements OnInit {
   ) { }
 
   checkType(type: any) {
-
     if (type == 'COMMENT') {
       return 'COMMENT';
     }

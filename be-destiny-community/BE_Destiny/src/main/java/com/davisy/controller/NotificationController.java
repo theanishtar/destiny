@@ -221,7 +221,7 @@ public class NotificationController {
 					Comment comment2 = commentService.findById(model.getReplyId());
 					User u = userService.findById(comment2.getUser().getUser_id());
 					comment.setCommentParent(comment2);
-					content = model.getContent().substring(u.getFullname().length(),content.length());
+					content = model.getContent().substring(u.getFullname().length(),content.length()).trim();
 				}
 				if (model.getMapMention().size()>0) {
 //					mapMention=model.getMapMention();
@@ -232,13 +232,10 @@ public class NotificationController {
 //						map.remove(entry.getKey());
 //					}
 					mapMention = model.getMapMention();
-					System.err.println("mapMention12: " + mapMention.size());
 					HashMap<Integer, String>map =  model.getMapMention();
 				    Iterator<Map.Entry<Integer, String>> iterator = map.entrySet().iterator();
 				    while (iterator.hasNext()) {
 				        Map.Entry<Integer, String> entry = iterator.next();
-				        System.err.println("mapMentionk: " + entry.getKey());
-				        System.err.println("value: " + entry.getValue());
 				        content = content.substring(entry.getValue().length()).trim();
 //				        iterator.remove(); // Sử dụng Iterator để xóa phần tử mà không gây lỗi ConcurrentModificationException
 				    }
@@ -246,10 +243,7 @@ public class NotificationController {
 				}
 				comment.setContent(content);
 				commentService.create(comment);
-				System.err.println("mapMention14: " + model.getMapMention().size());
 				if (mapMention.size()>0) {
-					model.setMention(true);
-					System.err.println("mapMention13: " + mapMention.size());
 					Iterator<Map.Entry<Integer, String>> iterator = mapMention.entrySet().iterator();
 				    while (iterator.hasNext()) {
 				    	 Map.Entry<Integer, String> entry = iterator.next();
@@ -260,6 +254,9 @@ public class NotificationController {
 						pk.setMentioned_user_id(entry.getKey());
 						mention.setPk(pk);
 						commentUserMentionService.create(mention);
+						NotificationModel notificationModel = model;
+						notificationModel.setType(MessageType.MENTION);
+						insert(notificationModel, entry.getKey());
 				    }
 //					for (Map.Entry<Integer, String> entry : mapMention.entrySet()) {
 //						CommentUserMention mention = new CommentUserMention();
@@ -312,7 +309,7 @@ public class NotificationController {
 					chatsService.update(chats);
 				}
 			}
-//			insert(model, to);
+			insert(model, to);
 			simpMessagingTemplate.convertAndSend("/topic/notification/" + to,
 					model(notifyService.findAllByName("idUserReceive", to + "")));
 			if (model.getReplyId() != 0) {
@@ -321,15 +318,12 @@ public class NotificationController {
 						model(notifyService.findAllByName("idUserReceive", to + "")));
 			}
 			if (model.getMapMention().size()>0) {
-//				for (Map.Entry<Integer, String> entry : mapMention.entrySet()) {
-//					simpMessagingTemplate.convertAndSend("/topic/notification/" +entry.getKey(),
-//							model(notifyService.findAllByName("idUserReceive", to + "")));
-//				}
 				Iterator<Map.Entry<Integer, String>> iterator = mapMention.entrySet().iterator();
 			    while (iterator.hasNext()) {
 			    	 Map.Entry<Integer, String> entry = iterator.next();
-			    	 simpMessagingTemplate.convertAndSend("/topic/notification/" +entry.getKey(),
-								model(notifyService.findAllByName("idUserReceive", to + "")));
+			    	 System.err.println("entry.getKey(): " + entry.getKey());
+			    	 simpMessagingTemplate.convertAndSend("/topic/notification/" + entry.getKey(),
+								model(notifyService.findAllByName("idUserReceive", entry.getKey() + "")));
 			    }
 				
 			}
@@ -388,7 +382,6 @@ public class NotificationController {
 	@MessageMapping("/load/notification/{to}")
 	public void loadNotidication(@DestinationVariable int to) {
 		try {
-//			List<Object[]> noti = messagesService.loadNotification(to);
 			List<Notification> noti = notifyService.findAllByName("idUserReceive", to + "");
 			simpMessagingTemplate.convertAndSend("/topic/loaddata/notification/" + to, model(noti));
 		} catch (Exception e) {
@@ -408,7 +401,6 @@ public class NotificationController {
 			if (!"".equals(n.getPostId()))
 				model.setPostId(Integer.valueOf(n.getPostId()));
 			model.setTime(n.getDateNotification());
-
 			if ((n.getTypeNotification()).equalsIgnoreCase("COMMENT")) {
 				model.setType(MessageType.COMMENT);
 			} else if (n.getTypeNotification().equalsIgnoreCase("REPCOMMENT")) {
@@ -425,6 +417,7 @@ public class NotificationController {
 			boolean checkFriend = followService.checkFriend(Integer.valueOf(n.getIdUserSend()),
 					Integer.valueOf(n.getIdUserReceive()));
 			model.setFollowing_status(checkFriend);
+			model.setStatus(n.isStatus());
 			lisModels.add(model);
 		}
 		return lisModels;

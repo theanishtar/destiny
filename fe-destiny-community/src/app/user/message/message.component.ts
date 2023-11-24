@@ -64,6 +64,9 @@ export class MessageComponent implements OnInit {
   checkBlock: boolean = false;
   checkClick: boolean = true;
   listMessages: any[] = [];
+  currentPage: number = 1;
+  idSelected: number;
+  listImgSeeAll: any[] = [];
 
   ngOnInit() {
 
@@ -147,9 +150,9 @@ export class MessageComponent implements OnInit {
       this.selectedUser(this.id);
     })
   }
-  currentPage: number = 1;
-  idSelected: number;
+  
   async selectedUser(userid) {
+    this.listImgSeeAll = await this.messageService.loadMessageImg(userid);
     this.currentPage = 1;
     this.checkBlock = false;
     this.messageService.checkUserBlock = false;

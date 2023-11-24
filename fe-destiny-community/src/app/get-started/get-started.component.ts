@@ -51,6 +51,7 @@ export class GetStartedComponent implements OnInit {
 	// userLogGG: any[] = [];
 	userGG: any;
 	loggedIn: any;
+	
 
 	constructor(
 		private formbuilder: FormBuilder,
@@ -93,12 +94,12 @@ export class GetStartedComponent implements OnInit {
 				} else {
 					// this.router.navigate(['newsfeed']);
 					window.location.href = environment.baseUrlFe + 'newsfeed';
-					new toast({
-						title: 'Thành công!',
-						message: 'Đăng nhập thành công!',
-						type: 'success',
-						duration: 2000,
-					});
+					// new toast({
+					// 	title: 'Thành công!',
+					// 	message: 'Đăng nhập thành công!',
+					// 	type: 'success',
+					// 	duration: 2000,
+					// });
 				}
 				// }
 			}, (error) => {
@@ -130,6 +131,7 @@ export class GetStartedComponent implements OnInit {
 
 	loginWithEmailAndPassword() {
 		setTimeout(() => {
+			this.loginService.checkLog = true;
 			this.submitted = true;
 			this.loginService.loginUser(this.loginForm.value).subscribe((response) => {
 
@@ -157,12 +159,12 @@ export class GetStartedComponent implements OnInit {
 						this.loginForm.reset();
 						// this.router.navigate(['newsfeed']);
 						window.location.href = environment.baseUrlFe + 'newsfeed';
-						new toast({
-							title: 'Thành công!',
-							message: 'Đăng nhập thành công',
-							type: 'success',
-							duration: 1500,
-						});
+						// new toast({
+						// 	title: 'Thành công!',
+						// 	message: 'Đăng nhập thành công',
+						// 	type: 'success',
+						// 	duration: 1500,
+						// });
 
 						// delay(100).then((res) => {
 						// 	location.reload();
