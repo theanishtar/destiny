@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css?family=Titillium+Web:400,900&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Rajdhani:400,500,600,700&display=swap');
+
+.dark .error-section .error-section-title {
+    color: #ff0000;
+    font-family: 'Titillium Web', sans-serif;
+    font-size: 15.8125rem;
+    font-weight: 900;
+    position: absolute;
+    top: 280px;
+    left: 220px;
+}
+
+.dark .error-section .error-section-info {
+    width: 420px;
+    position: absolute;
+    top: 400px;
+    right: 270px;
+}
+
+.dark .error-section .error-section-subtitle {
+    color: #302f45;
+    font-size: 6.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.dark .error-section .error-section-subtitle+.error-section-text {
+    margin-top: 30px;
+}
+
+.dark .error-section .error-section-text {
+    margin-top: 20px;
+    font-size: 1.125rem;
+    font-weight: 500;
+    line-height: 1.7777777778em;
+}
+
+.dark .error-section .button {
+    width: 160px;
+    margin-top: 50px;
+}
+
+/*-------------------- MEDIA QUERIES --------------------*/
+@media screen and (min-width: 2560px) {
+    .dark .error-section .error-section-title {
+        top: 35%;
+        left: 15%;
+    }
+
+    .dark .error-section .error-section-info {
+        top: 45%;
+        right: 20%;
+    }
+}
+
+@media screen and (max-width: 1366px) {
+    .dark .error-section .error-section-title {
+        top: 185px;
+        left: 145px;
+    }
+
+    .dark .error-section .error-section-info {
+        top: 270px;
+        right: 140px;
+    }
+}
+
+@media screen and (max-width: 1365px) {
+    .dark .error-section {
+        background: #fff;
+        background-size: auto;
+        padding: 120px 0;
+        position: static;
+    }
+
+    .dark .error-section .error-section-title {
+        color: #3e3f5e;
+        font-size: 3.75rem;
+        position: static;
+        text-align: center;
+    }
+
+    .dark .error-section .error-section-info {
+        width: 90%;
+        margin: 0 auto;
+        position: static;
+        text-align: center;
+    }
+
+    .dark .error-section .error-section-subtitle {
+        margin-top: 60px;
+        font-size: 2.25rem;
+    }
+
+    .dark .error-section .button {
+        margin: 50px auto 0;
+    }
+}
