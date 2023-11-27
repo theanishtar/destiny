@@ -49,6 +49,7 @@ import com.davisy.service.PostService;
 import com.davisy.service.ShareService;
 import com.davisy.service.UserService;
 import com.davisy.service.impl.BadWordServiceImpl;
+import com.davisy.service.impl.NotifyServiceImpl;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -93,7 +94,7 @@ public class NotificationController {
 	SimpMessagingTemplate simpMessagingTemplate;
 
 	@Autowired
-	NotifyService notifyService;
+	NotifyServiceImpl notifyService;
 
 	@Autowired
 	BadWordService badWordService;
@@ -443,6 +444,11 @@ public class NotificationController {
 			}
 		}
 
+	}
+	
+	@GetMapping("/v1/notification/update/status")
+	public ResponseEntity<Long> updateNo(){
+		return ResponseEntity.status(200).body((notifyService.updateStatus(true)));
 	}
 
 }

@@ -93,7 +93,7 @@ public class MessageController {
 		simpMessagingTemplate.convertAndSend("/topic/status/messages/" + message.getFromLogin(), entity);
 		boolean isExists = UserChatStorage.getInstance().getUsers().containsKey(to);
 		if (isExists) {
-			simpMessagingTemplate.convertAndSend("/topic/messages/" + to, new Object[] { entity });
+			simpMessagingTemplate.convertAndSend("/topic/messages/" + to, new Object[] { entity,0 });
 
 		}
 	}
