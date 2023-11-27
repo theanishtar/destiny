@@ -39,16 +39,25 @@ public class ModeratorControlBadword {
 	private CacheService cacheService;
 	
 	
-	
 	@GetMapping("/v1/moderator/sendDataRedis")
 	public List<BadWord> sendToRedis() {
-		
 		List<BadWord> badWordsList = listBadWords();
-		for(BadWord badWord: badWordsList) {
-			cacheService.writeCache(badWord.getName(), badWord);
+		try {
+			System.out.println("send data nè ");
+			
+			for(BadWord badWord: badWordsList) {
+				cacheService.writeCache(badWord.getName(), badWord);
+			}
+			
+			System.out.println("send data xong ời nè ");
+			
+			return badWordsList;
+		} catch (Exception e) {
+			System.out.println(e + " moderator/sendDataRedis");
+			return badWordsList;
 		}
-		return badWordsList;
 	}
+
 
 	@GetMapping("/v1/moderator/badwords")
 	public List<BadWord> listBadWords() {

@@ -97,6 +97,7 @@ export class IndexAdminComponent {
     this.adminIndexService.loadPercentPostIncrease().subscribe(() => {
       this.percentPostIncrease = 0;
       this.percentPostIncrease = this.adminIndexService.getPercentPostIncrease();
+      this.percentPostIncrease = Number(this.percentPostIncrease.toFixed(2));
     })
   }
 
@@ -104,6 +105,7 @@ export class IndexAdminComponent {
     this.adminIndexService.loadPercentUserIncrease().subscribe(() => {
       this.percentUserIncrease = 0;
       this.percentUserIncrease = this.adminIndexService.getPercentUserIncrease();
+      this.percentUserIncrease = Number(this.percentUserIncrease.toFixed(2));
     })
   }
 
@@ -112,6 +114,7 @@ export class IndexAdminComponent {
     this.adminIndexService.loadPercentPostReportedIncrease().subscribe(() => {
       this.percentPostReportedIncrease = 0;
       this.percentPostReportedIncrease = this.adminIndexService.getPercentPostReportedIncrease();
+      this.percentPostReportedIncrease = Number(this.percentPostReportedIncrease.toFixed(2));
     })
   }
 
@@ -120,6 +123,7 @@ export class IndexAdminComponent {
     this.adminIndexService.loadPercentUserReportedIncrease().subscribe(() => {
       this.percentUserReportedIncrease = 0;
       this.percentUserReportedIncrease = this.adminIndexService.getPercentUserReportedIncrease();
+      this.percentUserReportedIncrease = Number(this.percentUserReportedIncrease.toFixed(2));
     })
   }
 
@@ -160,7 +164,7 @@ export class IndexAdminComponent {
     this.adminIndexService.loadPercentUserInteractionIncrease().subscribe(() => {
       this.percentUserInteractionIncrease = 0;
       this.percentUserInteractionIncrease = this.adminIndexService.getPercentUserInteraction();
-
+      this.percentUserInteractionIncrease = Number(this.percentUserInteractionIncrease.toFixed(2));
     })
   }
 

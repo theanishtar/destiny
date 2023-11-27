@@ -247,6 +247,7 @@ public class ModeratorControlUser {
 			if(moderatorUserReportedService.checkExistReport(user_reported_id, user_send_report_id) == false) {
 				moderatorUserReportedService.insert(userReported);
 			}
+			
 			return "Successfully";
 		} catch (Exception e) {
 			e.printStackTrace();

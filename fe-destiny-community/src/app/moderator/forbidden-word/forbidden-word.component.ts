@@ -71,6 +71,18 @@ export class ForbiddenWordComponent implements OnInit {
     private fileSaver: FileSaverService,
   ) { }
 
+  sendDataRedis() {
+    this.isLoading = true;
+    try {
+      this.forbiddenService.sendDataRedis().subscribe(() => {
+
+        this.isLoading = false;
+      })
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
   downloadExcel() {
     const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
     const EXCEL_EXTENSION = '.xlsx';
@@ -221,10 +233,11 @@ export class ForbiddenWordComponent implements OnInit {
   }
 
   getTime() {
-    this.day = new Date().getDay();
+    this.day = new Date().getDate();
     this.month = new Date().getMonth() + 1;
     this.year = new Date().getFullYear();
   }
+
   createBadwordForm() {
     this.newBadwordForm = this.formbuilder.group({
       newWord: ['', Validators.required],
@@ -300,7 +313,7 @@ export class ForbiddenWordComponent implements OnInit {
 
   loadBadWord() {
     try {
-      this.forbiddenService.loadDataBadWordApi().subscribe(() => {
+      this.forbiddenService.loadDataBadWord().subscribe(() => {
 
         this.listBadWord = this.forbiddenService.getDataBadWord();
         this.isLoading = false;

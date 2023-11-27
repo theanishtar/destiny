@@ -16,7 +16,7 @@ export class ForbiddenService {
   private addBadWordsAPI = environment.baseUrl + 'v1/moderator/addBadwords';
   private updateBadWordAPI = environment.baseUrl + 'v1/moderator/updateBadword';
   private removeBadWordAPI = environment.baseUrl + 'v1/moderator/removeBadword';
-
+  private sendDataRedisAPI = environment.baseUrl + 'v1/moderator/sendDataRedis';
 
   private listBadWord: any[] = [];
 
@@ -24,6 +24,21 @@ export class ForbiddenService {
     private http: HttpClient,
   ) { }
 
+  sendDataRedis() {
+    return this.http.get<any>(this.sendDataRedisAPI).pipe(
+      tap((response) => {
+        new toast({
+          title: 'Thành công!',
+          message: 'Dữ liệu Redis đã được cập nhật',
+          type: 'success',
+          duration: 1500,
+        })
+        // this.listBadWord = JSON.parse(JSON.stringify(response));
+        // this.setDataBadWord(this.listBadWord);
+        // console.log("this.listBadWord: " + this.listBadWord)
+      })
+    );
+  }
 
   addBadwords(data: any[]): Observable<any[]> {
     return this.http.post<any>(this.addBadWordsAPI, data).pipe(
@@ -151,7 +166,7 @@ export class ForbiddenService {
     );
   }
 
-  loadDataBadWordApi() {
+  loadDataBadWord() {
     return this.http.get<any>(this.loadDataBadWordAPI).pipe(
       tap((response) => {
         this.listBadWord = JSON.parse(JSON.stringify(response));

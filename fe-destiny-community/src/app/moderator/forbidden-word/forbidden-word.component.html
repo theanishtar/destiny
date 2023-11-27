@@ -16,7 +16,7 @@
             <li><a href="#" class="active">Danh sách</a></li>
           </ul>
         </div>
-        <label class="report" style="z-index: 100; cursor: pointer;">
+        <label class="report text-white" style="z-index: 100; cursor: pointer;">
           <input type="file" style="display: none;" (change)="readExcel($event)">
           <i class="bx bx-cloud-upload"></i>
           <span>Tải lên file Excel</span>
@@ -31,12 +31,12 @@
           </div>
         </div> -->
         <div class="left" (click)="downloadExcel()" style="z-index: 100; cursor: pointer;">
-          <div class="report">
+          <div class="report text-white">
             <i class="bx bx-cloud-download"></i>
             <span>Tải xuống file Excel</span>
           </div>
         </div>
-        <label class="report" style="z-index: 100; cursor: pointer;">
+        <label class="report text-white" style="z-index: 100; cursor: pointer;">
           <input type="file" style="display: none;" (change)="readJson($event)">
           <i class='bx bxs-file-json'></i>
           <span>Tải lên file Json</span>
@@ -55,10 +55,20 @@
       </div>
 
       <div class="">
-        <div class="text-pink text-center text-uppercase font-weight-bold mb-3">
+        <div class="text-pink text-center text-uppercase font-weight-bold mb-4">
           <h2>Danh sách từ ngữ bị cấm sử dụng</h2>
         </div>
         <app-loading *ngIf="isLoading"></app-loading>
+        <div class="row">
+          <div class="card col-lg-8 offset-lg-2 mb-4 data-redis border-primaryx shadow">
+            <div class="card-body" style="width: 50%;">
+              Có 1000 từ chưa được cập nhật vào Redis
+            </div>
+            <button class="btn text-white bg-gradient-endless border-radius-50 btn-data-redis"
+              (click)="sendDataRedis()">Cập nhật Redis <i class="fas fa-download"></i></button>
+          </div>
+
+        </div>
         <div class="container-post-report">
           <div class="card shadow mb-5 mt-0">
             <div class="card-body">

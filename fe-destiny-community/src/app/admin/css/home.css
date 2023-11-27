@@ -1530,3 +1530,13 @@ ul {
   position: absolute;
   top: 150px;
 }
+
+.data-redis {
+  position: relative;
+}
+
+.btn-data-redis {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+}

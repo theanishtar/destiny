@@ -31,6 +31,7 @@ import com.davisy.entity.PostReported;
 import com.davisy.entity.User;
 import com.davisy.entity.UserReported;
 import com.davisy.service.CommentService;
+import com.davisy.service.EmailService;
 import com.davisy.service.FollowService;
 import com.davisy.service.InterestedService;
 import com.davisy.service.PostImagesService;
@@ -62,6 +63,8 @@ public class AdminControl {
 	private PostReportedService postReportedService;
 	@Autowired
 	private UserReportedService userReportedService;
+	@Autowired
+	private EmailService emailService;
 
 	// 23-9-2023 -xem chi tiết bài đăng
 	// update lastest 7-10
@@ -109,6 +112,9 @@ public class AdminControl {
 		try {
 			User user = userService.findByEmail(email);
 			userService.disable(user);
+			
+			emailService.sendHtmlEmailToUserIsBan(email);
+			
 		} catch (Exception e) {
 			System.out.println("Error at admin/actionOnUser: " + e);
 		}
