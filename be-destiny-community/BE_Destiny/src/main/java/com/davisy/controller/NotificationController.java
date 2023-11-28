@@ -54,7 +54,7 @@ import com.davisy.service.impl.NotifyServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
-@CrossOrigin
+@CrossOrigin("*")
 public class NotificationController {
 
 	@Autowired

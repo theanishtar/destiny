@@ -15,7 +15,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @RestController
-@CrossOrigin
+@CrossOrigin("*")
 public class ContactController {
 	@Autowired
 	EmailService mailService;
