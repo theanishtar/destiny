@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -6,6 +7,8 @@ import 'package:login_signup/models/SocketManager%20.dart';
 import 'package:login_signup/models/UserModel.dart';
 import 'package:login_signup/utils/gobal.colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart' as Path;
 
 class ChatBottomSheet extends StatefulWidget {
   const ChatBottomSheet({Key? key});
@@ -18,14 +21,22 @@ class _ChatBottomSheetState extends State<ChatBottomSheet> {
   final TextEditingController textValue = TextEditingController();
   late SocketManager socketManager = SocketManager();
   late UserModel userModel = socketManager.userChatPage;
-  List<File> _pickedImages = []; // Danh sách hình ảnh đã chọn
+  List<File> pickedImages = []; // Danh sách hình ảnh đã chọn
 
-  void sendMessage(String message) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    int id_user = await prefs.getInt('id') ?? 0;
-    List<String> images = [];
-    socketManager.sendMessage(
-        id_user, message, '', userModel.user_id, '', images);
+  Future<List<String>> uploadImages(List<File> images) async {
+    List<String> imageUrls = [];
+
+    for (var imageFile in images) {
+      String fileName = Path.basename(imageFile.path);
+      Reference firebaseStorageRef =
+          FirebaseStorage.instance.ref().child('message-image/$fileName');
+      UploadTask uploadTask = firebaseStorageRef.putFile(imageFile);
+      TaskSnapshot taskSnapshot = await uploadTask;
+      String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+      imageUrls.add(downloadUrl);
+    }
+    print("aaaaaaaaaa" + imageUrls.toString());
+    return imageUrls;
   }
 
   Future<void> pickImages() async {
@@ -39,14 +50,29 @@ class _ChatBottomSheetState extends State<ChatBottomSheet> {
       }
 
       setState(() {
-        _pickedImages.addAll(tempImages);
+        this.pickedImages.addAll(tempImages);
+        print("zzzz " + this.pickedImages.toString());
       });
     }
   }
 
+  void sendMessage(String message) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int id_user = await prefs.getInt('id') ?? 0;
+    List<String> images = [];
+    String type = '';
+
+    if (this.pickedImages.length > 0) {
+      type = "image";
+      images = await uploadImages(this.pickedImages);
+    }
+    socketManager.sendMessage(
+        id_user, message, '', userModel.user_id, type, images);
+  }
+
   void removeImage(int index) {
     setState(() {
-      _pickedImages.removeAt(index);
+      this.pickedImages.removeAt(index);
     });
   }
 
@@ -84,13 +110,13 @@ class _ChatBottomSheetState extends State<ChatBottomSheet> {
                 alignment: WrapAlignment.end,
                 children: [
                   // Hiển thị các hình ảnh đã chọn và biểu tượng "x"
-                  for (var index = 0; index < _pickedImages.length; index++)
+                  for (var index = 0; index < pickedImages.length; index++)
                     Stack(
                       children: [
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 4.0),
                           child: Image.file(
-                            _pickedImages[index],
+                            pickedImages[index],
                             width: 50,
                             height: 50,
                             fit: BoxFit.cover,
@@ -139,7 +165,18 @@ class _ChatBottomSheetState extends State<ChatBottomSheet> {
             child: InkWell(
               onTap: () {
                 sendMessage(textValue.text.toString());
+
+                socketManager.scrollController
+                    .addListener(socketManager.scrollToBottom);
+
+                // Tạo một Timer để xóa listener sau 10 giây
+                Timer(Duration(seconds: 5), () {
+                  socketManager.scrollController
+                      .removeListener(socketManager.scrollToBottom);
+                });
+
                 textValue.clear();
+                // pickedImages.clear();
               },
               child: Icon(
                 Icons.send,

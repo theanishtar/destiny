@@ -13,7 +13,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: GlobalColors.mainColor,
+      backgroundColor: Colors.white,
       body: SafeArea(
           child: Center(
         child: Column(
@@ -32,21 +32,52 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: 250,
                   ),
                 ),
-                ButtonCustom(
-                  customCorlor: Colors.white.withOpacity(0.7),
-                  text: "Đăng nhập",
+                GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, "loginView");
                   },
+                  child: Container(
+                    width: 300,
+                    height: 60,
+                    margin: EdgeInsets.symmetric(horizontal: 25),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: Colors.blueAccent,
+                    ),
+                    child: Center(
+                      child: Text(
+                        "Đăng nhập",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
                 ),
                 SizedBox(height: 15),
-                ButtonCustom(
-                  customCorlor:
-                      Color.fromARGB(255, 93, 166, 226).withOpacity(0.7),
-                  text: "Tạo tài khoản",
+                GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, "signupView");
                   },
+                  child: Container(
+                    width: 300,
+                    height: 60,
+                    margin: EdgeInsets.symmetric(horizontal: 25),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: Colors.blueAccent,
+                    ),
+                    child: Center(
+                      child: Text(
+                        "Tạo tài khoản",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),

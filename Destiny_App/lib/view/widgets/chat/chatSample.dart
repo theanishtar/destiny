@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:custom_clippers/custom_clippers.dart';
 import 'package:flutter/material.dart';
 import 'package:login_signup/models/SocketManager%20.dart';
 import 'package:login_signup/models/UserModel.dart';
+import 'package:login_signup/models/MessagesModel.dart';
 import 'package:login_signup/utils/api.dart';
 import 'package:login_signup/utils/gobal.colors.dart';
 import 'package:http/http.dart' as http;
@@ -19,278 +21,334 @@ class ChatSample extends StatefulWidget {
 
 class _ChatSampleState extends State<ChatSample> {
   late SocketManager socketManager = SocketManager();
+  int currentPage = 1;
   bool isLoading = false;
-  UserModel userModel = new UserModel();
-  final ScrollController _scrollController = ScrollController();
-  final GlobalKey _scrollKey = GlobalKey();
 
+  UserModel userModel = new UserModel();
+  // late ScrollController _scrollController = ScrollController();
+
+  // late ScrollController _scrollController;
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_scrollListener); // Thêm listener nếu cần
+    // _scrollController = ScrollController();
+    socketManager.updateListMessages([]);
     loadData();
+    // socketManager.scrollController.addListener(socketManager.scrollToBottom);
   }
 
-  @override
-  void dispose() {
-    _scrollController.removeListener(
-        _scrollListener); // Loại bỏ listener khi widget bị dispose
-    _scrollController.dispose();
-    super.dispose();
-  }
+  Future<void> loadEarlierMessages() async {
+    setState(() {
+      isLoading = true;
+    });
+    this.currentPage++;
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var value = await prefs.getString('token');
+      var headers = {
+        'Authorization': 'Bearer $value',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      };
 
-  void _scrollListener() {
-    if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {
-      // Đây là cuộn đến cuối danh sách
-      // Bạn có thể thực hiện logic tải thêm dữ liệu ở đây nếu cần
+      final res = await http.post(
+        Uri.parse(ApiEndPoints.baseUrl + "v1/user/chat/load/messages"),
+        headers: headers,
+        body: {
+          'to': userModel.user_id.toString(),
+          'page':
+              this.currentPage.toString(), // Sử dụng currentPage cho phân trang
+        },
+      );
+
+      List<dynamic> data = jsonDecode(Utf8Decoder().convert(res.bodyBytes));
+
+      List<MessagesModel> listModel = [];
+      for (var o in data) {
+        listModel.add(socketManager.messagesModel(o));
+      }
+
+      // Chèn các tin nhắn mới tải vào đầu danh sách hiện có
+      socketManager.listMessages.insertAll(0, listModel);
+      print(socketManager.listMessages.length);
+      socketManager.updateListMessages(socketManager.listMessages);
+      // Tăng số trang cho lần tải tiếp theo
+
+      setState(() {
+        isLoading = false;
+      });
+    } catch (error) {
+      print('Error loading earlier messages: $error');
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
   Future<void> loadData() async {
-    userModel = socketManager.userChatPage;
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var value = await prefs.getString('token');
-    var headers = {
-      'Authorization': 'Bearer $value',
-      'Content-Type': 'application/json',
-    };
-    setState(() {
-      isLoading = true; // Hiển thị loading indicator khi bắt đầu tải dữ liệu
-    });
-    final res = await http.post(
-      Uri.parse(ApiEndPoints.baseUrl + "v1/user/chat/load/messages"),
-      headers: headers,
-      body: userModel.user_id.toString(),
-    );
-    List<dynamic> data = jsonDecode(Utf8Decoder().convert(res.bodyBytes));
-    socketManager.listMessages = data;
+    try {
+      userModel = socketManager.userChatPage!;
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var value = await prefs.getString('token');
+      var headers = {
+        'Authorization': 'Bearer $value',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      };
 
-    Future.delayed(Duration(seconds: 2), () {
+      final res = await http.post(
+          Uri.parse(ApiEndPoints.baseUrl + "v1/user/chat/load/messages"),
+          headers: headers,
+          body: {
+            'to': userModel.user_id.toString(),
+            'page': this.currentPage.toString()
+          });
+
+      List<dynamic> data = jsonDecode(Utf8Decoder().convert(res.bodyBytes));
+
+      // print("bbbbbbbbbb " + data.toString());
+      List<MessagesModel> listModel = [];
+      for (var o in data) {
+        // print('data: ' + o['id'].toString());
+        listModel.add(socketManager.messagesModel(o));
+      }
+      print("size: " + listModel.length.toString());
+      socketManager.listMessages = listModel;
+      socketManager.updateListMessages(socketManager.listMessages);
+
+      print("aaaaaaaaaaaa" + socketManager.listMessages.length.toString());
+      // return socketManager.listMessages;
       setState(() {
-        isLoading = false;
-        _scrollToBottom();
-        // Ẩn loading indicator sau khi dữ liệu đã được tải
+        socketManager.scrollController
+            .addListener(socketManager.scrollToBottom);
+        Timer(Duration(seconds: 5), () {
+          socketManager.scrollController
+              .removeListener(socketManager.scrollToBottom);
+        });
       });
-    });
-  }
-
-  void _scrollToBottom() {
-    final RenderBox renderBox =
-        _scrollKey.currentContext!.findRenderObject() as RenderBox;
-    _scrollController.animateTo(
-      renderBox.size.height,
-      duration: Duration(milliseconds: 100),
-      curve: Curves.easeOut,
-    );
+    } catch (error) {
+      // Print or log the error for debugging purposes
+      print('Error loading data: $error');
+      throw error; // Rethrow the error to be caught by the FutureBuilder
+    } finally {}
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        SingleChildScrollView(
-          key: _scrollKey,
-          controller: _scrollController,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              for (var m in socketManager.listMessages)
-                Column(
-                  children: [
-                    if (m["day"] != null)
-                      Center(
-                        child: Text(
-                          '${socketManager.checkDate(m["day"])}',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ),
-                    if (m['user_id'] == userModel.user_id)
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(right: 10),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(30),
-                              child: Image.network(
-                                userModel.avatar,
-                                height: 45,
-                                width: 45,
-                                fit: BoxFit.cover,
+    return Stack(children: [
+      Container(
+        height: 500,
+        width: MediaQuery.of(context).size.width - 40,
+        child: StreamBuilder<List<MessagesModel>>(
+          stream: socketManager.messagesStream,
+          builder: (BuildContext context,
+              AsyncSnapshot<List<MessagesModel>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snapshot.hasData) {
+              return ListView.builder(
+                  controller: socketManager.scrollController,
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    MessagesModel m = snapshot.data![index];
+
+                    return Column(
+                      children: [
+                        if (m.day != '')
+                          Center(
+                            child: Text(
+                              m.day,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey,
                               ),
                             ),
                           ),
-                          Flexible(
+                        if (m.user_id == userModel.user_id)
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(right: 10),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(30),
+                                  child: Image.network(
+                                    userModel.avatar,
+                                    height: 45,
+                                    width: 45,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                child: Padding(
+                                  padding: EdgeInsets.only(top: 20, right: 110),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      ClipPath(
+                                        clipper: UpperNipMessageClipper(
+                                            MessageType.receive),
+                                        child: Container(
+                                          padding: m.type == 'image' &&
+                                                  m.images != null &&
+                                                  m.images is List<dynamic>
+                                              ? EdgeInsets.only(
+                                                  left: 15,
+                                                  top: 20,
+                                                  bottom: 10,
+                                                  right: 30,
+                                                )
+                                              : EdgeInsets.only(
+                                                  left: 20,
+                                                  top: 20,
+                                                  bottom: 10,
+                                                  right: 20),
+                                          decoration: BoxDecoration(
+                                            color: m.type == 'image' &&
+                                                    m.images != null &&
+                                                    m.images is List<dynamic>
+                                                ? GlobalColors.loadColor
+                                                : Color(0xFFE1E1E2),
+                                            boxShadow: [],
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              if (m.type == 'image' &&
+                                                  m.images != null &&
+                                                  m.images is List<dynamic>)
+                                                for (var imageUrl in m.images)
+                                                  // Kiểm tra nếu là loại hình ảnh thì hiển thị hình ảnh
+                                                  ImageMessageWidget(
+                                                      imageUrl: imageUrl)
+                                              else if (m.type == 'text')
+                                                Text(
+                                                  m.content,
+                                                  style:
+                                                      TextStyle(fontSize: 16),
+                                                ),
+                                              SizedBox(
+                                                height: 5,
+                                              ),
+                                              Text(
+                                                m.send_time,
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        else
+                          Container(
+                            alignment: Alignment.centerRight,
                             child: Padding(
-                              padding: EdgeInsets.only(top: 20, right: 110),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              padding: EdgeInsets.only(top: 20, left: 140),
+                              child: Stack(
                                 children: [
-                                  ClipPath(
-                                    clipper: UpperNipMessageClipper(
-                                        MessageType.receive),
-                                    child: Container(
-                                      padding: m['type'] == 'image' &&
-                                              m['images'] != null &&
-                                              m['images'] is List<dynamic>
-                                          ? EdgeInsets.only(
-                                              left: 15,
-                                              top: 20,
-                                              bottom: 10,
-                                              right: 30,
-                                            )
-                                          : EdgeInsets.only(
-                                              left: 20,
-                                              top: 20,
-                                              bottom: 10,
-                                              right: 20),
-                                      decoration: BoxDecoration(
-                                        color: m['type'] == 'image' &&
-                                                m['images'] != null &&
-                                                m['images'] is List<dynamic>
-                                            ? GlobalColors.loadColor
-                                            : Color(0xFFE1E1E2),
-                                        boxShadow: [],
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          if (m['type'] == 'image' &&
-                                              m['images'] != null &&
-                                              m['images'] is List<dynamic>)
-                                            for (var imageUrl in m['images'])
-                                              // Kiểm tra nếu là loại hình ảnh thì hiển thị hình ảnh
-                                              ImageMessageWidget(
-                                                  imageUrl: imageUrl)
-                                          else if (m['type'] == 'text')
-                                            Text(
-                                              m['content'],
-                                              style: TextStyle(fontSize: 16),
+                                  Container(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        ClipPath(
+                                          clipper: LowerNipMessageClipper(
+                                              MessageType.send),
+                                          child: Container(
+                                            padding: m.type == 'image' &&
+                                                    m.images != null &&
+                                                    m.images is List<dynamic>
+                                                ? EdgeInsets.only(
+                                                    left: 60,
+                                                    top: 10,
+                                                    bottom: 20,
+                                                    right: 10,
+                                                  )
+                                                : EdgeInsets.only(
+                                                    left: 20,
+                                                    top: 10,
+                                                    bottom: 20,
+                                                    right: 20,
+                                                  ),
+                                            decoration: BoxDecoration(
+                                              color: m.type == 'image' &&
+                                                      m.images != null &&
+                                                      m.images is List<dynamic>
+                                                  ? GlobalColors.loadColor
+                                                  : GlobalColors.mainColor,
+                                              boxShadow: [],
                                             ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            '${socketManager.getCustomTime(m["send_time"])}',
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.grey,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                if (m.type == 'image' &&
+                                                    m.images != null &&
+                                                    m.images is List<dynamic>)
+                                                  // Kiểm tra nếu là loại hình ảnh thì hiển thị hình ảnh
+                                                  for (var imageUrl in m.images)
+                                                    // Kiểm tra nếu là loại hình ảnh thì hiển thị hình ảnh
+                                                    ImageMessageWidget(
+                                                        imageUrl: imageUrl)
+                                                else if (m.type == 'text')
+                                                  Text(
+                                                    m.content,
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        color: Colors.white),
+                                                  ),
+                                                SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Text(
+                                                  m.send_time,
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: Colors.grey,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
                             ),
                           ),
-                        ],
-                      )
-                    else
-                      Container(
-                        alignment: Alignment.centerRight,
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 20, left: 140),
-                          child: Stack(
-                            children: [
-                              Flexible(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    ClipPath(
-                                      clipper: LowerNipMessageClipper(
-                                          MessageType.send),
-                                      child: Container(
-                                        padding: m['type'] == 'image' &&
-                                                m['images'] != null &&
-                                                m['images'] is List<dynamic>
-                                            ? EdgeInsets.only(
-                                                left: 60,
-                                                top: 10,
-                                                bottom: 20,
-                                                right: 10,
-                                              )
-                                            : EdgeInsets.only(
-                                                left: 20,
-                                                top: 10,
-                                                bottom: 20,
-                                                right: 20,
-                                              ),
-                                        decoration: BoxDecoration(
-                                          color: m['type'] == 'image' &&
-                                                  m['images'] != null &&
-                                                  m['images'] is List<dynamic>
-                                              ? GlobalColors.loadColor
-                                              : GlobalColors.mainColor,
-                                          boxShadow: [],
-                                        ),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            if (m['type'] == 'image' &&
-                                                m['images'] != null &&
-                                                m['images'] is List<dynamic>)
-                                              // Kiểm tra nếu là loại hình ảnh thì hiển thị hình ảnh
-                                              for (var imageUrl in m['images'])
-                                                // Kiểm tra nếu là loại hình ảnh thì hiển thị hình ảnh
-                                                ImageMessageWidget(
-                                                    imageUrl: imageUrl)
-                                            else if (m['type'] == 'text')
-                                              Text(
-                                                m['content'],
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    color: Colors.white),
-                                              ),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Text(
-                                              '${socketManager.getCustomTime(m["send_time"])}',
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                color: Colors.grey,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-            ],
-          ),
+                      ],
+                    );
+                  });
+            } else if (snapshot.hasError) {
+              // Xử lý khi có lỗi xảy ra
+              return Center(
+                child: Text('Error loading data: ${snapshot.error}'),
+              );
+            } else {
+              // Trả về một widget trống hoặc thông báo khi không có dữ liệu nào
+              return Center(
+                child: Text('No data available'),
+              );
+            }
+          },
         ),
-        if (isLoading)
-          Container(
-            color: GlobalColors.loadColor,
-            child: Center(
-              child: SpinKitWave(
-                color: Colors.grey,
-                size: 50.0,
-              ),
-            ),
-          )
-        else
-          SizedBox(),
-      ],
-    );
+      ),
+    ]);
   }
 }
 
@@ -355,6 +413,11 @@ class ImageMessageWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8.0),
                 child: Image.network(
                   imageUrl,
+                  errorBuilder: (BuildContext context, Object exception,
+                      StackTrace? stackTrace) {
+                    // Hiển thị dòng văn bản 'Ảnh lỗi' khi hình ảnh không thể tải
+                    return Text('Ảnh lỗi');
+                  },
                   fit: BoxFit.cover,
                 ),
               ),
@@ -365,25 +428,3 @@ class ImageMessageWidget extends StatelessWidget {
     );
   }
 }
-
-
-// class ImageListWidget extends StatelessWidget {
-//   final List<dynamic> imageList;
-
-//   const ImageListWidget({Key? key, required this.imageList}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return ListView.builder(
-//       itemCount: imageList.length,
-//       itemBuilder: (context, index) {
-//         return Image.network(
-//           imageList[index],
-//           height: 100, // Thiết lập kích thước hình ảnh tùy ý
-//           width: 100, // Thiết lập kích thước hình ảnh tùy ý
-//           fit: BoxFit.cover, // Chỉ định cách thức hiển thị hình ảnh
-//         );
-//       },
-//     );
-//   }
-// }

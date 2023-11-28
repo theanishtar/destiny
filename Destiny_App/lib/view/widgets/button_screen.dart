@@ -16,7 +16,7 @@ class ButtonCustom extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        height: 60,
+        height: 50,
         margin: EdgeInsets.symmetric(horizontal: 25),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
@@ -26,7 +26,7 @@ class ButtonCustom extends StatelessWidget {
           child: Text(
             text,
             style: TextStyle(
-                color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ),
       ),

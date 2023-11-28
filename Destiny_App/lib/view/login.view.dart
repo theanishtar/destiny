@@ -43,7 +43,7 @@ class _LoginViewState extends State<LoginView> {
     QuickAlert.show(
         context: context,
         title: "Cảnh báo",
-        text: "Bạn không có quyền truy cập !",
+        text: "Giao diện không tương thích với quyền của bạn!",
         type: QuickAlertType.error);
   }
 
@@ -73,10 +73,15 @@ class _LoginViewState extends State<LoginView> {
         if (data['roles'][0]['authority'] == "ROLE_USER") {
           String token = data['token'];
           int id = data['id'];
+          // String fullname = data['fullname'];
+          // String avatar = data['avatar'];
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString('token', token);
           await prefs.setInt('id', id);
+          // await prefs.setString('fullname', fullname);
+          // await prefs.setString('avatar', avatar);
           await prefs.setBool('isLoggedIn', true);
+          await prefs.setInt('user', 1);
           var headers = {
             'Authorization': 'Bearer $token',
             'Content-Type':

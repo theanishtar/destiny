@@ -7,6 +7,7 @@ import 'package:login_signup/models/UserModel.dart';
 import 'package:login_signup/utils/gobal.colors.dart';
 import 'package:login_signup/view/login_signup_screen.dart';
 import 'package:login_signup/view/screens/message.view.dart';
+import 'package:login_signup/view/widgets/chat/chat.dart';
 import 'package:login_signup/view/widgets/chat/chatSample.dart';
 import 'package:login_signup/view/widgets/chat/chatBottomSheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,6 +48,7 @@ class _ChatPageState extends State<ChatPage> {
           child: AppBar(
             leading: BackButton(
               onPressed: () {
+                socketManager.userChatPage = new UserModel();
                 runApp(GetMaterialApp(
                   home: MessageView(),
                 ));

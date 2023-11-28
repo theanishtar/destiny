@@ -6,6 +6,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:login_signup/models/ApiManager.dart';
+import 'package:login_signup/models/SocketManager%20.dart';
 
 import 'package:login_signup/utils/gobal.colors.dart';
 import 'package:login_signup/view/screens/profile.view.dart';
@@ -25,6 +27,9 @@ class Screen1 extends StatefulWidget {
 }
 
 class _Screen1State extends State<Screen1> {
+  late SocketManager socketManager = SocketManager();
+  late ApiManager apiManager = ApiManager();
+  TextEditingController commentController = TextEditingController();
   ScrollController _scrollController = ScrollController();
   bool isLoading = false;
   List? listUser;
@@ -116,6 +121,8 @@ class _Screen1State extends State<Screen1> {
   }
 
   void _showCommentDialog(int postId, int userId) {
+    apiManager.fetchComments(postId);
+    int tempCommentId;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -128,8 +135,9 @@ class _Screen1State extends State<Screen1> {
               child: Column(
                 children: [
                   Expanded(
-                    child: FutureBuilder<List>(
-                      future: _fetchComments(postId),
+                    child: StreamBuilder<List<dynamic>>(
+                      stream: socketManager.commentStream,
+                      // future: _fetchComments(postId),
                       builder:
                           (BuildContext context, AsyncSnapshot<List> snapshot) {
                         if (snapshot.connectionState ==
@@ -142,6 +150,7 @@ class _Screen1State extends State<Screen1> {
                             itemCount: snapshot.data!.length,
                             itemBuilder: (BuildContext context, int index) {
                               var comment = snapshot.data![index];
+                              tempCommentId = comment[0];
                               bool hasReplies = true;
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,10 +168,12 @@ class _Screen1State extends State<Screen1> {
                                     children: [
                                       TextButton(
                                         onPressed: () {
-                                          // Logic để xử lý khi nhấn trả lời
+                                          socketManager.repCmtId = comment[0];
                                         },
-                                        child: Text(comment[11].toString() +
-                                            ' Trả lời'),
+                                        child: Text(comment[11] != null
+                                            ? comment[11].toString() +
+                                                ' Trả lời'
+                                            : 0.toString() + ' Trả lời'),
                                       ),
                                       if (hasReplies)
                                         TextButton(
@@ -193,6 +204,7 @@ class _Screen1State extends State<Screen1> {
                       children: [
                         Expanded(
                           child: TextField(
+                            controller: commentController,
                             decoration: InputDecoration(
                               hintText: 'Nhập bình luận của bạn...',
                               // border: OutlineInputBorder(),
@@ -203,7 +215,10 @@ class _Screen1State extends State<Screen1> {
                         SizedBox(width: 10),
                         ElevatedButton(
                           onPressed: () {
-                            // Logic để xử lý việc gửi bình luận
+                            // tempCommentId = comment[0];
+                            addComment(commentController.text.toString(),
+                                postId, userId, socketManager.repCmtId);
+                            commentController.clear();
                           },
                           child: Text('Gửi'),
                         ),
@@ -290,6 +305,14 @@ class _Screen1State extends State<Screen1> {
     );
   }
 
+  void addComment(String content, int post_id, int toUser, int idCmt) async {
+    if (context != null) {
+      var type = socketManager.repCmtId > 0 ? 'REPCOMMENT' : 'COMMENT';
+      print("OK");
+      socketManager.sendNotify(content, post_id, toUser, type, idCmt);
+    }
+  }
+
   Future<List> _fetchReplies(int postId, int idComment) async {
     print(postId);
     print(idComment);
@@ -317,7 +340,7 @@ class _Screen1State extends State<Screen1> {
     }
   }
 
-  Future<List> _fetchComments(int postId) async {
+  Future<void> _fetchComments(int postId) async {
     print(postId);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var value = await prefs.getString('token');
@@ -337,7 +360,8 @@ class _Screen1State extends State<Screen1> {
       Map<String, dynamic> data =
           jsonDecode(Utf8Decoder().convert(response.bodyBytes));
 
-      return data['list_comment'];
+      // return data['list_comment'];
+      socketManager.updateListComment(data['list_comment']);
     } else {
       throw Exception('Failed to load comments');
     }
@@ -401,6 +425,7 @@ class _Screen1State extends State<Screen1> {
                                                   .getInstance();
                                           await prefs.setInt(
                                               'id', listPost![i]['user_id']);
+                                          await prefs.setInt('user', 0);
                                           runApp(GetMaterialApp(
                                             home: ProfileView(),
                                           ));
@@ -784,13 +809,8 @@ class _Screen1State extends State<Screen1> {
                                             alignment: Alignment.center,
                                             width: 20,
                                             child: Text(listPost![i]
-                                                            ['countComment']
-                                                        .toString() !=
-                                                    null
-                                                ? listPost![i]
-                                                        ['countInterested']
-                                                    .toString()
-                                                : 0.toString()),
+                                                    ['countCommnet']
+                                                .toString()),
                                           ),
                                         ],
                                       ),

@@ -28,7 +28,7 @@ class _RecentChartsState extends State<RecentCharts> {
     }
     listUser = socketManager.mapUser.values.toList();
     Timer.periodic(Duration(minutes: 1), (timer) {
-      socketManager.updateMapTime();
+      // socketManager.updateMapTime();
       //  setState(() {});
     });
   }

@@ -28,13 +28,33 @@ int? countPost;
 int? countFollower;
 int? countImg;
 Map? listPost;
+bool user = false;
 
 class _ProfileViewState extends State<ProfileView> {
   bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
+    this.checkUser();
     this.getData();
+  }
+
+  void checkUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int check = await int.parse(prefs.getInt('user').toString());
+    print(check);
+    if (check == 1) {
+      setState(() {
+        print(check == 1);
+        user = true;
+        print(user);
+      });
+    } else {
+      setState(() {
+        user = false;
+      });
+    }
   }
 
   Future getData() async {
@@ -49,6 +69,7 @@ class _ProfileViewState extends State<ProfileView> {
     String requestBody = id_user.toString();
 
     http.Response response;
+
     setState(() {
       isLoading = true; // Hiển thị loading indicator khi bắt đầu tải dữ liệu
     });
@@ -219,10 +240,16 @@ class _ProfileViewState extends State<ProfileView> {
                         SizedBox(
                           height: 20,
                         ),
-                        ButtonCustom(
-                            customCorlor: GlobalColors.mainColor,
-                            text: "Follow",
-                            onTap: () {}),
+                        user == true
+                            ? SizedBox(
+                                height: 10,
+                              )
+                            : ButtonCustom(
+                                customCorlor: GlobalColors.mainColor,
+                                text: listPost?['checkFollow'] == true
+                                    ? "Bỏ theo dõi"
+                                    : "Theo dõi",
+                                onTap: () {}),
                         SizedBox(
                           height: 10,
                         )

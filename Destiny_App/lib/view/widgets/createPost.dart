@@ -147,25 +147,13 @@ class _CreatePostState extends State<CreatePost> {
     });
   }
 
-  // Future pickImage() async {
-  //   final pickedFile =
-  //       await ImagePicker().pickImage(source: ImageSource.gallery);
-
-  //   setState(() {
-  //     if (pickedFile != null) {
-  //       _image = File(pickedFile.path);
-  //     } else {
-  //       print('Không chọn ảnh');
-  //     }
-  //   });
-  // }
   Future<List<String>> uploadImages(List<File> images) async {
     List<String> imageUrls = [];
 
     for (var imageFile in images) {
       String fileName = Path.basename(imageFile.path);
       Reference firebaseStorageRef =
-          FirebaseStorage.instance.ref().child('mobile/$fileName');
+          FirebaseStorage.instance.ref().child('postsImg/$fileName');
       UploadTask uploadTask = firebaseStorageRef.putFile(imageFile);
       TaskSnapshot taskSnapshot = await uploadTask;
       String downloadUrl = await taskSnapshot.ref.getDownloadURL();
