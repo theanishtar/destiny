@@ -15,7 +15,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin
 public class ContactController {
 	@Autowired
 	EmailService mailService;
@@ -23,7 +23,7 @@ public class ContactController {
 @PostMapping("/v1/user/contact")
 public ResponseEntity<Void> sendMailContact(HttpServletRequest request,@RequestBody UserSendMail user) {
 	try {
-		System.out.println("user: " + user);
+//		System.out.println("user: " + user);
 		mailService.sendHtmlEmailContact(user.getFullname(), user.getEmail(), user.getSubject(), user.getDescription());
 		return ResponseEntity.ok().build();
 	} catch (Exception e) {

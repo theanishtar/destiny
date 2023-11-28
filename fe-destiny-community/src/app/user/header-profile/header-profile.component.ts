@@ -13,6 +13,7 @@ declare var toast: any;
   styleUrls: [
     `../../css/vendor/bootstrap.min.css`,
     `../../css/styles.min.css`,
+    `../../css/dark/dark.min.css`,
     `../../css/vendor/simplebar.css`,
     `../../css/vendor/tiny-slider.css`,
     './header-profile.component.css'
@@ -33,6 +34,7 @@ export class HeaderProfileComponent implements OnInit {
     this.chatUserId = parseInt((localStorage.getItem("chatUserId") + '')?.trim());
     this.profileService.loadDataProfileHeader(this.idLocal);
     this.checkScreenSize();
+    this.updateActiveMenuItem();
   }
 
   constructor(

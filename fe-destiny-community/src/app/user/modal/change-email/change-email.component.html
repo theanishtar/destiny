@@ -11,12 +11,12 @@
         novalidate
         class="form change-mail"
       >
-        <button
+        <div
           (click)="profileService.closeModalChangeMail()"
           class="btnClose-change-email"
         >
           <i class="fa-solid fa-xmark"></i>
-        </button>
+        </div>
         <h1 class="text-center">Thay đổi email</h1>
         <!-- Progress bar -->
         <div class="progressbar">
@@ -65,11 +65,6 @@
               type="submit"
               >Xác nhận</button
             >
-          </div>
-
-          <div class="back-login">
-            Quay lại
-            <a href="/get-started">đăng nhập</a>
           </div>
         </div>
         <div class="form-step">

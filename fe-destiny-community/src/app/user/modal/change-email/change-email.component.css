@@ -12,13 +12,14 @@ main.overlay {
     padding-top: 0;
 }
 
-button.btnClose-change-email {
+div.btnClose-change-email {
     position: absolute;
     right: 13px;
     top: 8px;
     border: none;
     background: #fff;
     width: auto;
+    cursor: pointer;
 }
 
 form.form.change-mail {

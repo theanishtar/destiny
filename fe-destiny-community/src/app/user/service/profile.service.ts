@@ -425,13 +425,6 @@ export class ProfileService {
     loadCheckPost(data: any) {
         return this.http.post<any>(this.getCheckPotsApi, data).pipe(
             tap((response) => {
-                // if(response == undefined){
-
-                // }
-                // else{
-                //   console.warn("reponse2: " + response);
-                // }
-
             }),
         );
     }

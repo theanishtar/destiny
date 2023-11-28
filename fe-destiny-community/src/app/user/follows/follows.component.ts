@@ -25,6 +25,7 @@ import { ProfileService } from '../service/profile.service';
   styleUrls: [
     `../../css/vendor/bootstrap.min.css`,
     `../../css/styles.min.css`,
+    `../../css/dark/dark.min.css`,
     `../../css/vendor/simplebar.css`,
     `../../css/vendor/tiny-slider.css`,
     './follows.component.css',

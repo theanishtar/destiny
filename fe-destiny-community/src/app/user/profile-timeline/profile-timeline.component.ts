@@ -19,12 +19,14 @@ import { ProfileService } from '../service/profile.service';
 import { FollowsService } from '../service/follows.service';
 import { PostService } from '../service/post.service';
 import { CookieService } from 'ngx-cookie-service';
+import {UIServiveService} from '../../user/service/ui-servive.service';
 @Component({
   selector: 'app-profile-timeline',
   templateUrl: './profile-timeline.component.html',
   styleUrls: [
     `../../css/vendor/bootstrap.min.css`,
     `../../css/styles.min.css`,
+    `../../css/dark/dark.min.css`,
     `../../css/vendor/simplebar.css`,
     `../../css/vendor/tiny-slider.css`,
     './profile-timeline.component.css'
@@ -75,6 +77,7 @@ export class ProfileTimelineComponent implements OnInit {
     headers.headers();
     sidebars.sidebars();
     form.formInput();
+    this.uiServiveService.loadMode();
 
   }
   dataFollows: any
@@ -92,6 +95,7 @@ export class ProfileTimelineComponent implements OnInit {
     private el: ElementRef,
     private renderer: Renderer2,
     private route: ActivatedRoute,
+    private uiServiveService: UIServiveService
   ) {
     this.idLocal = parseInt((localStorage.getItem("idSelected") + '')?.trim());
     this.chatUserId = parseInt((localStorage.getItem("chatUserId") + '')?.trim());

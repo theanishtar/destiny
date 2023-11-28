@@ -8,6 +8,7 @@ import { MessageService } from '../service/message.service';
 import { ProfileService } from '../service/profile.service';
 import { ModalService } from '../service/modal.service';
 import { MessageType } from '../Model/NotifyModel';
+import { UIServiveService } from '../service/ui-servive.service';
 import '../../../assets/toast/main.js';
 declare var toast: any;
 @Component({
@@ -16,6 +17,7 @@ declare var toast: any;
   styleUrls: [
     `../../css/vendor/bootstrap.min.css`,
     `../../css/styles.min.css`,
+    // `../../css/dark/dark.min.css`,
     `../../css/vendor/simplebar.css`,
     `../../css/vendor/tiny-slider.css`,
     './navigation.component.css'
@@ -35,6 +37,8 @@ export class NavigationComponent implements OnInit {
     this.userDisplayName = this.cookieService.get('full_name');
     this.avatar = this.cookieService.get("avatar");
     this.chatUserId = parseInt((localStorage.getItem("chatUserId") + '')?.trim());
+    this.uiServiveService.loadMode();
+    this.updateActiveMenuItem();
   }
 
   constructor(
@@ -46,6 +50,7 @@ export class NavigationComponent implements OnInit {
     public modalService: ModalService,
     private el: ElementRef,
     private renderer: Renderer2,
+    private uiServiveService: UIServiveService
   ) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -106,6 +111,7 @@ export class NavigationComponent implements OnInit {
     });
   }
   updateActiveMenuItem() {
+    // console.warn("this.activeMenuItem: " + this.activeMenuItem)
     const currentUrl = this.router.url;
     // Xác định menu item active dựa trên URL hiện tại
     // Ví dụ: nếu có '/home' trong URL, đặt activeMenuItem thành 'home'

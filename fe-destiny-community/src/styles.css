@@ -1,35 +1,37 @@
 body {
     margin: 0;
-}
-
-body {
+  }
+  
+  body {
     font-size: 16px;
-    /* background-color: #f8f8fb; */
+    background-color: #f8f8fb;
     overflow-x: hidden;
-}
-
-/* ================================================================== */
-/* ======= Toast message ======== */
-@media (max-width: 46.1875em) {
+  }
+  /* div#body-edit, div#profile_timeline {
+    transform: translate(167.5px, 0px) !important;
+  } */
+  /* ================================================================== */
+  /* ======= Toast message ======== */
+  @media (max-width: 46.1875em) {
     #toast {
-        margin-right: -35px;
-        min-width: 350px;
-        max-width: 400px;
+      margin-right: -35px;
+      min-width: 350px;
+      max-width: 400px;
     }
-}
-
-.toast:not(.show) {
+  }
+  
+  .toast:not(.show) {
     display: block;
-}
-
-#toast {
+  }
+  
+  #toast {
     position: fixed;
     top: 60px;
     right: 32px;
     z-index: 999999;
-}
-
-.toast {
+  }
+  
+  .toast {
     display: flex !important;
     align-items: center;
     background-color: #fff;
@@ -42,293 +44,271 @@ body {
     box-shadow: 0 5px 8px rgba(0, 0, 0, 0.08);
     transition: all linear 0.3s;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-.dark-mode .toast {
+  }
+  
+  .dark .toast {
     background-color: rgb(60, 60, 60);
     box-shadow: 0 5px 8px rgba(255, 255, 255, 0.08);
-}
-
-@keyframes slideInLeft {
+  }
+  
+  @keyframes slideInLeft {
     from {
-        opacity: 0;
-        transform: translateX(calc(100% + 32px));
+      opacity: 0;
+      transform: translateX(calc(100% + 32px));
     }
-
+  
     to {
-        opacity: 1;
-        transform: translateX(0);
+      opacity: 1;
+      transform: translateX(0);
     }
-}
-
-@keyframes fadeOut {
+  }
+  
+  @keyframes fadeOut {
     to {
-        opacity: 0;
+      opacity: 0;
     }
-}
-
-.toast--success {
+  }
+  
+  .toast--success {
     border-color: #47d864;
-}
-
-.toast--success .toast__icon {
+  }
+  
+  .toast--success .toast__icon {
     color: #47d864;
-}
-
-.toast--info {
+  }
+  
+  .toast--info {
     border-color: #2f86eb;
-}
-
-.toast--info .toast__icon {
+  }
+  
+  .toast--info .toast__icon {
     color: #2f86eb;
-}
-
-.toast--warning {
+  }
+  
+  .toast--warning {
     border-color: #ffc021;
-}
-
-.toast--warning .toast__icon {
+  }
+  
+  .toast--warning .toast__icon {
     color: #ffc021;
-}
-
-.toast--error {
+  }
+  
+  .toast--error {
     border-color: #ff623d;
-}
-
-.toast--error .toast__icon {
+  }
+  
+  .toast--error .toast__icon {
     color: #ff623d;
-}
-
-.toast+.toast {
+  }
+  
+  .toast+.toast {
     margin-top: 24px;
-}
-
-.toast__icon {
+  }
+  
+  .toast__icon {
     font-size: 24px;
-}
-
-.toast__icon,
-.toast__close {
+  }
+  
+  .toast__icon,
+  .toast__close {
     padding: 0 16px;
-}
-
-.toast__body {
+  }
+  
+  .toast__body {
     flex-grow: 1;
-}
-
-.toast__title {
+  }
+  
+  .toast__title {
     font-size: 16px;
     font-weight: 600;
     color: #333;
-}
-
-.dark-mode .toast__title {
+  }
+  
+  .dark .toast__title {
     color: rgb(255, 255, 255);
-}
-
-.toast__msg {
+  }
+  
+  .toast__msg {
     font-size: 14px;
     color: #888;
     /* color: white; */
     margin-top: 6px;
     line-height: 1.5;
-}
-
-.dark-mode .toast__msg {
+  }
+  
+  .dark .toast__msg {
     color: rgb(173, 173, 173);
-}
-
-.toast__close {
+  }
+  
+  .toast__close {
     font-size: 20px;
     color: rgba(0, 0, 0, 0.3);
     cursor: pointer;
-}
-
-.dark-mode .toast__close {
+  }
+  
+  .dark .toast__close {
     color: rgba(255, 255, 255, 0.3);
-}
-
-@media screen and (max-width: 480px) {
+  }
+  @media screen and (max-width: 480px) {
     .toast {
-        padding: 0 !important;
-        margin: 0 !important;
-        min-width: 325px !important;
-        max-width: 370px !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      min-width: 325px !important;
+      max-width: 370px !important;
     }
-}
-
-/*  */
-i.fa-solid.fa-chevron-down {
+  }
+  
+  /*  */
+  i.fa-solid.fa-chevron-down {
     font-size: 12px;
-}
-
-h2.text-white.mb-lg-0 {
+  }
+  
+  h2.text-white.mb-lg-0 {
     font-size: 25px;
-}
-
-h5.site-footer-title.mb-3,
-a.nav-link.click-scroll.site-footer-link {
+  }
+  
+  h5.site-footer-title.mb-3,
+  a.nav-link.click-scroll.site-footer-link {
     font-size: 18px;
-}
-
-/* swal */
-.swal2-popup.swal2-modal.swal2-icon-warning.swal2-show {
-    width: auto;
-    height: auto;
-}
-
-.swal2-icon-content {
-    font-size: 26px !important;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-.swal2-icon.swal2-warning.swal2-icon-show {
-    width: 50px;
-    height: 50px;
-}
-
-h2#swal2-title {
-    font-size: 26px;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-button.swal2-confirm.swal2-styled.swal2-default-outline,
-button.swal2-cancel.swal2-styled.swal2-default-outline {
-    padding: 10px 20px;
-    font-size: 16px;
-}
-
-.swal2-actions {
-    margin: 0;
-}
-
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap");
-
-/* @import url("app/admin/css/home.css"); */
-
-/* table */
-@import url("app/admin/css/datatables/dataTables.bootstrap4.min.css");
-
-/* coboboxsearch */
-@import "~@ng-select/ng-select/themes/material.theme.css";
-
-.body-admin .ng-select .ng-select-container {
+  }
+  /* swal */
+    .swal2-popup.swal2-modal.swal2-icon-warning.swal2-show {
+      width: auto;
+      height: auto;
+  }
+    .swal2-icon-content {
+      font-size: 26px !important;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    .swal2-icon.swal2-warning.swal2-icon-show {
+      width: 50px;
+      height: 50px;
+    }
+    h2#swal2-title {
+      font-size: 26px;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    button.swal2-confirm.swal2-styled.swal2-default-outline, button.swal2-cancel.swal2-styled.swal2-default-outline {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+    .swal2-actions {
+      margin: 0;
+    }
+  
+  @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap");
+  
+  /* @import url("app/admin/css/home.css"); */
+  
+  /* table */
+  @import url("app/admin/css/datatables/dataTables.bootstrap4.min.css");
+  
+  /* coboboxsearch */
+  @import "~@ng-select/ng-select/themes/material.theme.css";
+  
+  .body-admin .ng-select .ng-select-container {
     color: unset !important;
     min-height: unset !important;
-}
-
-.body-admin .ng-select.ng-select-single .ng-select-container .ng-clear-wrapper {
+  }
+  
+  .body-admin .ng-select.ng-select-single .ng-select-container .ng-clear-wrapper {
     align-self: flex-end;
     bottom: 0px !important;
-}
-
-.body-admin .ng-select.ng-select-single .ng-select-container .ng-arrow-wrapper {
+  }
+  
+  .body-admin .ng-select.ng-select-single .ng-select-container .ng-arrow-wrapper {
     align-self: flex-end;
     bottom: 4px !important;
-}
-
-.body-admin .ng-dropdown-panel.ng-select-bottom {
+  }
+  
+  .body-admin .ng-dropdown-panel.ng-select-bottom {
     top: calc(100% - 0.3em) !important;
     border: 2px solid #fff;
     border-bottom-left-radius: 0.9rem;
     border-bottom-right-radius: 0.9rem;
     padding-bottom: 10px;
-}
-
-.body-admin .ng-select .ng-select-container .ng-value-container {
+  }
+  
+  .body-admin .ng-select .ng-select-container .ng-value-container {
     padding: unset !important;
     border-top: unset !important;
-}
-
-.body-admin .ng-select .ng-select-container:after {
+  }
+  
+  .body-admin .ng-select .ng-select-container:after {
     border-bottom: unset;
     position: unset;
-}
-
-.body-admin .ng-select .ng-select-container .ng-value-container .ng-input {
+  }
+  
+  .body-admin .ng-select .ng-select-container .ng-value-container .ng-input {
     bottom: unset;
-}
-
-.body-admin .ng-select.ng-select-single .ng-select-container .ng-arrow-wrapper {
+  }
+  
+  .body-admin .ng-select.ng-select-single .ng-select-container .ng-arrow-wrapper {
     align-self: flex-end;
     bottom: 9px;
-}
-
-.body-admin .ng-select .ng-select-container .ng-value-container .ng-input>input {
+  }
+  
+  .body-admin .ng-select .ng-select-container .ng-value-container .ng-input>input {
     color: var(--primary-admin);
-}
-
-.ng-select .ng-select-container:after {
+  }
+  .ng-select .ng-select-container:after {
     border-bottom: none;
-}
-
-/* css modal create post */
-.modal-create-post span.ng-arrow-wrapper {
+  }
+  
+  /* css modal create post */
+  .modal-create-post span.ng-arrow-wrapper {
     position: absolute !important;
     left: 82% !important;
     top: -63% !important;
-}
-
-.modal-create-post .ng-select-container.ng-has-value {
+  }
+  .modal-create-post .ng-select-container.ng-has-value {
     height: 42.4px !important;
     position: absolute !important;
     top: -26% !important;
-}
-
-.modal-create-post .ng-select-container.ng-has-value {
+  }
+  .modal-create-post .ng-select-container.ng-has-value {
     height: 42.4px !important;
-}
-
-.modal-create-post .pr-4\.5 {
+  }
+  .modal-create-post .pr-4\.5 {
     padding-right: 1.125rem;
-}
-
-.modal-create-post .pl-11\.5 {
+  }
+  .modal-create-post .pl-11\.5 {
     padding-left: 2.875rem;
-}
-
-.modal-create-post .py-3 {
+  }
+  .modal-create-post .py-3 {
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
-}
-
-.modal-create-post .bg-gray {
+  }
+  .modal-create-post .bg-gray {
     --tw-bg-opacity: 1;
     background-color: rgb(239 244 251 / var(--tw-bg-opacity));
-}
-
-.modal-create-post .border-stroke {
+  }
+  .modal-create-post .border-stroke {
     --tw-border-opacity: 1;
     border-color: rgb(226 232 240 / var(--tw-border-opacity));
-}
-
-.modal-create-post .border {
+  }
+  .modal-create-post .border {
     border-width: 1px;
-}
-
-.modal-create-post .rounded {
+  }
+  .modal-create-post .rounded {
     border-radius: 0.25rem;
-}
-
-.modal-create-post .w-full {
+  }
+  .modal-create-post .w-full {
     width: 100%;
-}
-
-/* No internet */
-.internet-status {
+  }
+  
+  /* No internet */
+  .internet-status {
     text-align: center;
     margin-top: 15%;
-}
-
-.internet-status svg {
+  }
+  .internet-status svg {
     width: 10%;
     height: 10%;
-}
-
-.internet-status h1,
-#internetStatus {
+  }
+  .internet-status h1, #internetStatus{
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
+  }
 
-
-@import url('./app/css/dark/styles.min.css');
+  /* @import url('./app/css/styles.min.css');*/
+  /* @import url('./app/css/dark/dark.min.css');  */

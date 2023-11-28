@@ -12,7 +12,7 @@ main.overlay {
   padding-top: 0;
 }
 
-button.btnClose-create-post {
+div.btnClose-create-post {
   position: absolute;
   right: 1%;
   top: 2%;
@@ -129,7 +129,7 @@ button.btnClose-create-post {
     width: 500px !important;
   }
 
-  button.btnClose-create-post {
+  div.btnClose-create-post {
     right: 31% !important;
   }
 
@@ -586,7 +586,7 @@ button.btnClose-create-post {
 }
 
 @media screen and (max-width: 480px) {
-  button.btnClose-create-post {
+  div.btnClose-create-post {
     right: 39% !important;
     /* color: white; */
   }

@@ -24,7 +24,7 @@ import com.davisy.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin
 public class HistoryController {
 	@Autowired
 	JwtTokenUtil jwtTokenUtil;

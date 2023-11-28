@@ -29,10 +29,10 @@ export class RegisterService {
     return this.http.post<any>(this.userURL, data).pipe(
       tap((response) => {
         this.email = response.email;
-        console.log(`receivedUser = ${JSON.stringify(response)}`);
+        // console.log(`receivedUser = ${JSON.stringify(response)}`);
       }),
       catchError((error: HttpErrorResponse) => {
-        console.log("error.status 2: " + JSON.stringify(error))
+        // console.log("error.status 2: " + JSON.stringify(error))
         if (error.status === 200) {
           this.router.navigate(['wait-confirm']);
           // console.log("this.email: " + this.email);
@@ -71,7 +71,7 @@ export class RegisterService {
   checkCodeMail() {
     return this.http.get<any>(this.userCheckCodeMail+this.registerCode).pipe(
       tap((response) => {
-        console.log(`đăng ký = ${JSON.stringify(response)}`);
+        // console.log(`đăng ký = ${JSON.stringify(response)}`);
         if(response === null){
           new toast({
             title: 'Mã xác nhận đã hết hạn!',
@@ -83,7 +83,7 @@ export class RegisterService {
         }
       }),
       catchError((error: HttpErrorResponse) => {
-        console.log("error.status 2: " + JSON.stringify(error.error.text))
+        // console.log("error.status 2: " + JSON.stringify(error.error.text))
         if (error.status === 202) {
           this.router.navigate(['get-started']);
           return throwError(
@@ -115,7 +115,6 @@ export class RegisterService {
       console.warn("frame: " + frame);
       this.stompClient?.subscribe("/topic/autologin/" + email, (response) => {
         let data = JSON.parse(response.body);
-        console.log("this.registerCode: " + this.registerCode);
         const userLogin = environment.baseUrl + `v1/oauth/login/authcode/${data.code}/${data.email}`;
         this.http.get<any>(userLogin).subscribe((res) => {
           function delay(ms: number) {
@@ -131,15 +130,8 @@ export class RegisterService {
           this.cookieService.set('avatar', res.avatar);
           this.cookieService.set('id', res.id);
           this.cookieService.set('role', res.roles[0].authority);
-          // localStorage.setItem('chatUserId', res.id);
           delay(500).then((res) => {
             window.location.href = environment.baseUrlFe + 'newsfeed';
-            // new toast({
-            //   title: 'Thành công!',
-            //   message: 'Đăng nhập thành công',
-            //   type: 'success',
-            //   duration: 2000,
-            // });
           });
         });
       });

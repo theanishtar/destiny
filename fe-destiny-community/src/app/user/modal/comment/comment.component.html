@@ -1,13 +1,13 @@
 <main class="overlay" *ngIf="modalService.isOpenComment$ | async">
   <div id="favDialog_updatePost" class="modal fade favDialog_updatePost">
     <app-loading *ngIf="modalService.isLoadingCmt"></app-loading>
-    <button
+    <div
       (click)="closeModalComment()"
       class="btnClose-create-post"
       *ngIf="!modalService.isLoadingCmt"
     >
       <i class="fa-solid fa-xmark"></i>
-    </button>
+    </div>
     <div class="post-container-update" *ngIf="!modalService.isLoadingCmt">
       <div class="post">
         <!-- Slideshow container -->

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { liquid } from '../../../assets/js/utils/liquidify.js';
 // import { tns } from '../../../assets/js/vendor/ti';
@@ -15,6 +15,7 @@ declare var toast: any;
 //
 import { ModalService } from '../service/modal.service';
 import { ProfileService } from '../service/profile.service';
+import { UIServiveService } from '../service/ui-servive.service';
 import { environment } from '../../../environments/environment'
 @Component({
     selector: 'app-setting',
@@ -22,6 +23,7 @@ import { environment } from '../../../environments/environment'
     styleUrls: [
         `../../css/vendor/bootstrap.min.css`,
         `../../css/styles.min.css`,
+        // `../../css/dark/dark.min.css`,
         `../../css/vendor/simplebar.css`,
         './setting.component.css',
     ],
@@ -29,7 +31,6 @@ import { environment } from '../../../environments/environment'
 export class SettingComponent implements OnInit {
     user_id: any = localStorage.getItem('chatUserId');
     public linkProfile: any = environment.baseUrlFe + 'profile?id=' + this.user_id;
-
 
     ngOnInit() {
         liquid.liquid();
@@ -41,20 +42,21 @@ export class SettingComponent implements OnInit {
         sidebars.sidebars();
         content.contentTab();
         form.formInput();
-
-        // Load mode
-        this.setDarkMode(null);
         // this.profileService.openModalChangeMail();
         // this.autoCheck();
+        this.mode();
+        
     }
 
     constructor(
         public modalService: ModalService,
         private translateService: TranslateService,
-        public profileService: ProfileService
-    ) {
-
+        public profileService: ProfileService,
+        private renderer: Renderer2,
+        public uiServiveService: UIServiveService
+    ) { 
     }
+    
 
     public selectLg(event: any) {
         this.translateService.use(event.target.value);
@@ -87,92 +89,41 @@ export class SettingComponent implements OnInit {
     }
 
     /* ========================change mode================================ */
-    setDarkMode(darkMode: boolean | null): void {
+    
+
+    setDarkMode(): void {
         const body = document.body;
-
-        if (darkMode === null) {
-            // Nếu dữ liệu đầu vào là null, lấy từ local storage
-            const savedDarkMode = localStorage.getItem('dark-mode');
-            let checkbox = document.getElementById("dn") as HTMLInputElement;
-            let eActive = document.querySelector('.form-switch');
-            if (savedDarkMode === 'true') {
-                body.classList.add('dark');
-                eActive?.classList.add('active');
-                checkbox.checked = false;
-            } else {
-                body.classList.remove('dark');
-                eActive?.classList.remove('active');
-                checkbox.checked = true;
-            }
-        } else {
-            // Nếu dữ liệu đầu vào không phải null
-            if (darkMode) {
-                // Nếu là true, thêm class 'dark' vào body
-                body.classList.add('dark');
-            } else {
-                // Nếu là false, xóa class 'dark' khỏi body
-                body.classList.remove('dark');
-            }
-
-            // Lưu trạng thái dark mode vào local storage
-            localStorage.setItem('dark-mode', darkMode.toString());
+        // Nếu dữ liệu đầu vào là null, lấy từ local storage
+        const savedDarkMode = localStorage.getItem('dark-mode');
+        // let checkbox = document.getElementById("dn") as HTMLInputElement;
+        let eActive = document.querySelector('.form-switch');
+        if(savedDarkMode==='true'){
+            body.classList.remove('dark');
+            eActive?.classList.add('active')
+            localStorage.setItem('dark-mode','false');
+            this.uiServiveService.toggleDarkStyle(false);
+        } else{
+            body.classList.add('dark');
+            eActive?.classList.remove('active');
+            localStorage.setItem('dark-mode','true');
+            this.uiServiveService.toggleDarkStyle(true);
         }
-    }
+      }
 
-    mode() {
-        let checkbox = document.getElementById("dn") as HTMLInputElement;
-        var e = !checkbox.checked;
-        this.setDarkMode(e);
-    }
-
-    // Sử dụng hàm:
-    // Nếu muốn lấy từ local storage:
-    // setDarkMode(null);
-    // Nếu muốn thiết lập dark mode là true:
-    // setDarkMode(true);
-    // Nếu muốn thiết lập dark mode là false:
-    // setDarkMode(false);
-
-    // autoCheck() {
-    //     let mode = localStorage.getItem("modeByThean");
-    //     let checkbox = document.getElementById("dn") as HTMLInputElement;
-    //     if (mode === "dark") {
-    //         checkbox.checked = true;
-    //     } else {
-    //         checkbox.checked = false;
-    //     }
-    //     // Gọi hàm first()
-    //     this.first();
-    // }
-
-    // first() {
-    //     var element = document.body;
-    //     let checkbox = document.getElementById("dn") as HTMLInputElement;
-    //     var e = checkbox.checked;
-    //     console.log("element span darkmode: " + e);
-    //     if (e == true) {
-    //         element.classList.add("dark-mode");
-    //         element.classList.remove("light-mode");
-    //     } else {
-    //         element.classList.add("light-mode");
-    //         element.classList.remove("dark-mode");
-    //     }
-    //     this.setMode();
-    // }
-
-
-
-    setMode() {
-        let darkMode = document.getElementsByClassName("dark-mode");
-        //alert(darkMode.length)
-        // 
-        if (darkMode.length == 0) {
-            // alert("dark mode -> light mode")
-            localStorage.setItem("modeByThean", "light")
-        } else {
-            // alert("light mode -> dark mode")
-            localStorage.setItem("modeByThean", "dark")
+      mode(): void {
+        const body = document.body;
+        // Nếu dữ liệu đầu vào là null, lấy từ local storage
+        const savedDarkMode = localStorage.getItem('dark-mode');
+        // let checkbox = document.getElementById("dn") as HTMLInputElement;
+        let eActive = document.querySelector('.form-switch');
+        if(savedDarkMode==='true'){
+            body.classList.add('dark');
+            eActive?.classList.add('active');
+            this.uiServiveService.toggleDarkStyle(true);
+        } else{
+            body.classList.remove('dark');
+            eActive?.classList.remove('active');
+            this.uiServiveService.toggleDarkStyle(false);
         }
-        //changeGiscusTheme();
-    }
+      }
 }

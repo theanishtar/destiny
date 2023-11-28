@@ -4,7 +4,7 @@
 <!-- <button (click)="loadData()">Load Data</button> -->
 
 <!-- CONTENT GRID -->
-<div class="content-grid">
+<div class="dark content-grid">
   <!-- SECTION BANNER -->
   <div class="section-banner">
     <!-- SECTION BANNER ICON -->
@@ -12,6 +12,13 @@
       class="section-banner-icon"
       src="../../../assets/images/banner/newsfeed-icon.png"
       alt="newsfeed-icon"
+      *ngIf="!uiServiveService.dark"
+    />
+    <img
+      class="section-banner-icon"
+      src="https://firebasestorage.googleapis.com/v0/b/destiny-davisy.appspot.com/o/template%2Fbanner%2Fdark%2Fnewsfeed-icon.png?alt=media&token=94a954b6-5d44-46d1-87c3-fd5c60f97cfd"
+      alt="newsfeed-icon"
+      *ngIf="uiServiveService.dark"
     />
     <!-- /SECTION BANNER ICON -->
 

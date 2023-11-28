@@ -55,7 +55,7 @@ button.flex.justify-center.rounded.bg-primary.py-2.px-6.font-medium.text-gray.ho
     .btn-create-post{
         right: 14% !important;
     }
-    button.btnClose-create-post{
+    div.btnClose-create-post{
         right: 50px !important;
     }
     .noftify-error {

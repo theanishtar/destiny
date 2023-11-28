@@ -1,8 +1,8 @@
 <main class="overlay" *ngIf="modalService.isOpenCreatePost$ | async">
   <div class="modal-create-post">
-    <button (click)="closeModalCreatePost()" class="btnClose-create-post">
+    <div (click)="closeModalCreatePost()" class="btnClose-create-post">
       <i class="fa-solid fa-xmark"></i>
-    </button>
+    </div>
     <app-loading *ngIf="isLoading"></app-loading>
     <div class="modal-body" id="body-create-post">
       <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
@@ -23,7 +23,7 @@
             <div class="main-form">
               <div class="col-span-5">
                 <div
-                  class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark"
+                  class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark main-create"
                 >
                   <div
                     class="border-b border-stroke py-4 px-7 dark:border-strokedark"
@@ -287,7 +287,7 @@
 
               <div class="col-span-5">
                 <div
-                  class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark"
+                  class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark main-create"
                 >
                   <div
                     class="border-b border-stroke py-4 px-7 dark:border-strokedark"

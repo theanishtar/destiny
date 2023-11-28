@@ -63,7 +63,7 @@ label.tab-label.wait-message {
 }
 
 .tab-switch {
-  display: none;
+  display: none !important;
 }
 
 .tab-label {

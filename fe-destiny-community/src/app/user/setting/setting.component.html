@@ -1,4 +1,4 @@
-<body>
+<!-- <body> -->
     <app-navigation></app-navigation>
 
     <!-- CONTENT GRID -->
@@ -68,9 +68,9 @@
                                     {{ "user_description_chedotoi" | translate }}
                                 </p>
                                 <!-- /SWITCH OPTION TEXT -->
-
+<!-- <img src="../../css/dark/dark.min.css" alt=""> -->
                                 <!-- FORM SWITCH -->
-                                <div class="form-switch active" (click)="mode()">
+                                <div class="form-switch" id="dark-setting" (click)="setDarkMode()">
                                     <!-- FORM SWITCH BUTTON -->
                                     <input type="checkbox" class="dn" id="dn" style="opacity: 0; z-index: 1;" />
                                     <div class="form-switch-button"></div>
@@ -269,4 +269,4 @@
     <!-- /CONTENT GRID -->
     <app-change-password></app-change-password>
     <app-change-email></app-change-email>
-</body>
+<!-- </body> -->

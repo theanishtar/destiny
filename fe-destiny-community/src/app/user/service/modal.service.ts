@@ -60,7 +60,7 @@ export class ModalService {
   checkUserCalled: boolean = false;
   mapMention = new Map<number, string>();
   checkBadword: boolean = false;
-
+  public darkMode: any;
   dataUpdatedPost = new EventEmitter<void>();
 
   constructor(
@@ -71,6 +71,7 @@ export class ModalService {
     private profileService: ProfileService,
     private followsService: FollowsService
   ) {
+    // console.warn("dark: " + this.darkMode)
   }
 
   copyLink(id_post: any): void {

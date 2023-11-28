@@ -25,7 +25,7 @@ import { LoginService } from '../service/login.service';
 import { RegisterService } from '@app/service/register.service';
 import { FollowsService } from '@app/user/service/follows.service';
 import { MessageService } from '@app/user/service/message.service';
-
+import { UIServiveService } from '@app/user/service/ui-servive.service';
 import { environment } from 'src/environments/environment';
 @Component({
 	selector: 'app-get-started',
@@ -62,7 +62,8 @@ export class GetStartedComponent implements OnInit {
 		private route: ActivatedRoute,
 		public registerService: RegisterService,
 		public followsService: FollowsService,
-		public messageService: MessageService
+		public messageService: MessageService,
+		private uiServiveService: UIServiveService
 	) {
 		this.createFormLogin();
 		this.createFormRegister();
@@ -74,9 +75,9 @@ export class GetStartedComponent implements OnInit {
 	ngOnInit() {
 		this.loginWithGG();
 		// Giao diện
-		// Lấy giá trị của tham số "token" từ URL
 		tabs.tabs();
 		form.formInput();
+		this.uiServiveService.loadMode();
 	}
 
 	/*===========Login with google===============*/

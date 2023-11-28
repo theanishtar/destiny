@@ -55,10 +55,11 @@ input {
     margin: 0 1rem;
 }
 
-button.btnClose-create-post {
+div.btnClose-create-post {
     position: absolute;
     right: 20px;
     top: 10px;
+    cursor: pointer;
 }
 
 i.fa-solid.fa-xmark {
@@ -178,7 +179,7 @@ i.fa-solid.fa-xmark {
 }
 
 @media screen and (max-width: 900px) {
-    button.btnClose-create-post {
+    div.btnClose-create-post {
         right: 40px;
     }
 }

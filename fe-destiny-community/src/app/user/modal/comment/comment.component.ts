@@ -4,6 +4,7 @@ import { ModalService } from '@app/user/service/modal.service';
 import { PostService } from '@app/user/service/post.service';
 import { FollowsService } from '@app/user/service/follows.service';
 import { ProfileService } from '@app/user/service/profile.service';
+import { UIServiveService } from '@app/user/service/ui-servive.service';
 
 @Component({
   selector: 'app-comment',
@@ -25,13 +26,15 @@ export class CommentComponent {
     public modalService: ModalService,
     public postService: PostService,
     public followsService: FollowsService,
-    public profileService: ProfileService
+    public profileService: ProfileService,
+    private uiServiveService: UIServiveService
   ) { }
 
   ngOnInit() {
     this.showSlides(1);
     this.loadFriend();
     this.checkScroll();
+    this.uiServiveService.loadMode();
   }
 
   checkCountPosts: boolean = true;
@@ -64,7 +67,7 @@ export class CommentComponent {
           // console.error("Error loading data:", error);
         }
 
-        console.log("hết nè: ");
+        // console.log("hết nè: ");
 
       }
     });

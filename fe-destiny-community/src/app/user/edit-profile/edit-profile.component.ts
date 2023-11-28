@@ -42,6 +42,7 @@ declare var toast: any;
   styleUrls: [
     `../../css/vendor/bootstrap.min.css`,
     `../../css/styles.min.css`,
+    `../../css/dark/dark.min.css`,
     `../../css/vendor/simplebar.css`,
     './edit-profile.component.css'
   ]

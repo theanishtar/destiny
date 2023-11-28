@@ -64,7 +64,7 @@ class RepCommentModel {
 }
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin
 public class PostController {
 	@Autowired
 	JwtTokenUtil jwtTokenUtil;

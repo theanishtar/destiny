@@ -29,6 +29,7 @@ import { ReportService } from '../service/report.service';
   styleUrls: [
     `../../css/vendor/bootstrap.min.css`,
     `../../css/styles.min.css`,
+    `../../css/dark/dark.min.css`,
     `../../css/vendor/simplebar.css`,
     './message.component.css'
   ],

@@ -268,3 +268,8 @@ span.bold{
   display: -webkit-box;
   -webkit-box-orient: vertical;
 }
+
+/* ==============================dark============================= */
+.dark li.menu-item:not(.active) a.menu-item-link.text-tooltip-tfr:hover i.fa-solid {
+  color: #40d04f !important;
+}

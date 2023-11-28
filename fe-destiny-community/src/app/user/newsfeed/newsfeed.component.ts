@@ -26,15 +26,18 @@ import { ProfileService } from '../service/profile.service';
 import { ReportService } from '../service/report.service';
 import { DatePipe } from '@angular/common';
 import '../../../assets/toast/main.js';
+import { UIServiveService } from '../service/ui-servive.service';
 import { forEach } from 'angular';
 import { async } from 'rxjs';
 declare var toast: any;
+
 @Component({
   selector: 'app-newsfeed',
   templateUrl: './newsfeed.component.html',
   styleUrls: [
     `../../css/vendor/bootstrap.min.css`,
     `../../css/styles.min.css`,
+    // `../../css/dark/dark.min.css`,
     `../../css/vendor/simplebar.css`,
     `../../css/vendor/tiny-slider.css`,
     './newsfeed.component.css',
@@ -89,7 +92,7 @@ export class NewsfeedComponent implements OnInit {
     // content.contentTab();
     form.formInput();
 
-    // this.modalService.openModalCreatePost();
+    this.uiServiveService.loadMode();
   }
 
   constructor(
@@ -106,7 +109,8 @@ export class NewsfeedComponent implements OnInit {
     public profileService: ProfileService,
     private el: ElementRef,
     private renderer: Renderer2,
-    public reportService: ReportService
+    public reportService: ReportService,
+    public uiServiveService: UIServiveService
   ) {
   }
   checkLoad() {

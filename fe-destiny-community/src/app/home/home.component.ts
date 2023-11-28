@@ -1,28 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { FormsModule } from '@angular/forms';
-import {
-	FormGroup,
-	FormBuilder,
-	Validators,
-	FormControl,
-} from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { Location } from '@angular/common';
-import { delay, catchError, tap } from 'rxjs/operators';
-import { CookieService } from 'ngx-cookie-service';
-
-//Xử lí bất đồng bộ
-import { Observable } from 'rxjs';
-import { of } from 'rxjs';
-import Swal from 'sweetalert2';
-import '../../assets/toast/main.js';
-// import { SocialAuthService } from '@abacritt/angularx-social-login';
-import { ActivatedRoute } from '@angular/router';
-declare var toast: any;
-
-import { LoginService } from '../service/login.service';
+import { UIServiveService } from '@app/user/service/ui-servive.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -36,9 +14,15 @@ import { LoginService } from '../service/login.service';
 export class HomeComponent implements OnInit{
   slideIndex: number = 1;
   slidesLength: string;
-  ngOnInit() {
 
+  ngOnInit() {
+    this.uiServiveService.loadMode();
   }
+  
+  constructor(
+    public uiServiveService: UIServiveService
+  ){}
+  
   // Next/previous controls
   plusSlides(n: number) {
     this.showSlides(this.slideIndex += n);
