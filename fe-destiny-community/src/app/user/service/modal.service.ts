@@ -24,10 +24,9 @@ declare var toast: any;
 export class ModalService {
   private loadDataComment = environment.baseUrl + 'v1/user/load/comment';
   private loadDataReplyUrl = environment.baseUrl + 'v1/user/load/comment/reply';
+  private removeComment = environment.baseUrl + 'v1/user/comment/remove';
   private searchUrl = environment.baseUrl + 'v1/user/find/user';
   private searchPostUrl = environment.baseUrl + 'v1/user/frind/post';
-  private redis = environment.baseUrl + 'v1/moderator/sendDataRedis';
-
   public listComment: any;
   public images: string[];
   public imagesTemp: string[] = [];
@@ -56,12 +55,13 @@ export class ModalService {
   count: number = 1; //gia tri key
   checkHideSeeMore = new Map<string, Boolean>();
   currentPage: number = 1;
-  checkedUsers: any[] = []; 
+  checkedUsers: any[] = [];
   checkUserCalled: boolean = false;
   mapMention = new Map<number, string>();
   checkBadword: boolean = false;
   public darkMode: any;
   dataUpdatedPost = new EventEmitter<void>();
+  
 
   constructor(
     private http: HttpClient,
@@ -71,7 +71,7 @@ export class ModalService {
     private profileService: ProfileService,
     private followsService: FollowsService
   ) {
-    // console.warn("dark: " + this.darkMode)
+    
   }
 
   copyLink(id_post: any): void {
@@ -115,6 +115,7 @@ export class ModalService {
   }
 
   loadComment(idPost, idUser) {
+    this.isLoadingCmt = true;
     this.isOpenComment.next(true);
     this.idPostCmt = idPost;
     this.idUser = idUser
@@ -165,7 +166,7 @@ export class ModalService {
             time: this.messageService.customTime(k!.time, 1),
             type: k!.type,
             following_status: k!.following_status,
-            status:k!.status
+            status: k!.status
           }
           // console.warn("k!.type: " + k!.type);
           this.listNotify.set(this.count, notify);
@@ -176,28 +177,48 @@ export class ModalService {
         if (this.repCmtId > 0)
           this.callApiLoadCmt(data.postId);
       });
-       
+
       // Gửi thông báo thành công
       this.stompClient?.subscribe("/topic/success-notification", (response) => {
-        let id = JSON.parse(response.body);
-        this.callApiLoadCmt(id);
+        let data = JSON.parse(response.body);
+        if (data[1] == 'COMMENT' || data[1] == 'MENTION') {
+          console.warn("===========");
+          this.listCmt = [...data[0], ...this.listCmt];
+        } else {
+          for (let i = 0; i < this.listCmt.length; i++) {
+            if (this.listCmt[i][0] == data[2]) {
+              this.listCmt.splice(i, 1, ...data[0]);
+              // this.listCmt.splice(i,1);
+              // this.listCmt[i] = data[0];
+              break;
+            }
+          }
+          this.loadDataReply(data[3], data[2]);
+        }
+      });
+
+      this.stompClient?.subscribe("/topic/remove/comment", (response) => {
+        let data = JSON.parse(response.body);
+        for (let i = 0; i < this.listCmt.length; i++) {
+          if (this.listCmt[i][0] == data) {
+            this.listCmt.splice(i, 1);
+            document.querySelectorAll(".rep-" + data).forEach((e) => {
+              e.remove();
+            });
+            break;
+          }
+        }
       });
 
       // Gửi thông báo lỗi
       this.stompClient?.subscribe("/topic/error-notification/" + userId, (response) => {
         let status = JSON.parse(response.body);
         if (status) {
-          // new toast({
-          //   title: 'Thông báo!',
-          //   message: 'Từ ngữ của bạn đã vi phạm nguyên tắc cộng đồng!',
-          //   type: 'warning',
-          //   duration: 4000,
-          // })
           this.checkBadword = true;
           setTimeout(() => {
             this.checkBadword = false;
           }, 4000);
-       }
+        }
       });
 
       // Kênh gợi ý theo dõi khi đăng ký
@@ -218,10 +239,10 @@ export class ModalService {
             time: this.messageService.customTime(k!.time, 1),
             type: k!.type,
             following_status: k!.following_status,
-            status:k!.status
+            status: k!.status
           }
-          if(k!.status==false)
-          this.checkNotify=true;
+          if (k!.status == false)
+            this.checkNotify = true;
           // console.warn("k!.type: " + k!.type);
           this.listNotify.set(this.count, notify);
           this.mapTime.set(this.count, k!.time);
@@ -232,7 +253,7 @@ export class ModalService {
         this.isLoading = false;
       })
 
-       // Kênh đổi token khi đổi email
+      // Kênh đổi token khi đổi email
       this.stompClient?.subscribe("/topic/changetoken/" + userId, (response) => {
         let data = JSON.parse(response.body);
         localStorage.setItem('token', data.token);
@@ -262,7 +283,7 @@ export class ModalService {
               time: this.messageService.customTime(value, 1),
               type: v!.type,
               following_status: v!.following_status,
-              status:v!.status
+              status: v!.status
             }
             this.listNotify.set(key, notify);
           }
@@ -290,7 +311,7 @@ export class ModalService {
       type: type,
       mapMention: Object.fromEntries(this.mapMention.entries()) //Chuyển đổi một mảng các cặp key-value thành một đối tượng.
     }));
-
+    this.mapMention.clear();
     // cập nhật số liệu cmt và share
     let comment = document.getElementById("cmt-" + post_id);
     let share = document.getElementById("share-" + post_id);
@@ -341,7 +362,8 @@ export class ModalService {
   }
 
   loadDataReply(idPost, cmtId) {
-    this.isOpenComment.next(true);
+    this.checkHideSeeMore.set(cmtId, false);
+    // this.isOpenComment.next(true);
     var data = {
       idPost: idPost,
       cmtId: cmtId
@@ -354,6 +376,7 @@ export class ModalService {
       let nameRep = '';
       if (this.$reply) {
         for (let rep of this.listReplyCmt) {
+
           if (rep[10] != null) {
             let user = JSON.parse(rep[11]);
             let list = this.getCheckedUsers(rep[10]);
@@ -361,11 +384,23 @@ export class ModalService {
               user[0].fullname + '</a>'
 
             let i = 0;
+            temp = '';
             for (let k of list) {
-              temp += '<a href="profile?id=' + k.mentioned_user_id + '" style="text-decoration: none;color: black;font-weight: bolder;">' +
-                k.fullname + '</a>'
+              if (list.length > 1) {
+                temp += '<a href="profile?id=' + k.mentioned_user_id + '" style="text-decoration: none;color: black;font-weight: bolder;">' +
+                  k.fullname + '</a> '
+              } else {
+                temp = '<a href="profile?id=' + k.mentioned_user_id + '" style="text-decoration: none;color: black;font-weight: bolder;">' +
+                  k.fullname + '</a>'
+              }
               i++;
             }
+          } else {
+            let user = JSON.parse(rep[11]);
+            nameRep = '<a href="profile?id=' + user[0].mentioned_user_id + '" style="text-decoration: none;color: black;font-weight: bolder;">' +
+              user[0].fullname + '</a>'
+
+            temp = '';
           }
           this.$reply.append('<div class="comment__container oppen rep-' + cmtId + '"' +
             ' dataset="first-comment" style="display: block; position: relative; margin-bottom: 1rem;margin-top: 1rem;padding-left: 3rem;"> ' +
@@ -399,13 +434,13 @@ export class ModalService {
             '</div>' +
             '<p style="font-size: 15px;margin-bottom: 1rem;line-height: 2.4;padding-left: 3.9rem;margin: 0;font-family: Helvetica, Arial, sans-serif">' +
             '<span>' + nameRep + ' ' + temp + '</span>'
-            + rep[5] +
+            + ' ' + rep[5] +
             '</p>' +
             '</div>' +
             '</div>'
           )
         }
-        this.checkHideSeeMore.set(cmtId, false);
+        // this.checkHideSeeMore.set(cmtId, false);
       }
     })
   }
@@ -442,6 +477,16 @@ export class ModalService {
     return [];
   }
 
+  /* ============remove comment============= */
+  removeCmtApi(commentId: any): Observable<any> {
+    const params = new HttpParams().set('commentId', commentId.toString());
+    return this.http.post(this.removeComment, params);
+  }
+
+  removeCmt(idCmt) {
+    let id = parseInt(idCmt, 10);
+    this.removeCmtApi(id).subscribe();
+  }
   /* ============Images============= */
   checkImg: boolean = true
   checkImgSeeAll: boolean = true

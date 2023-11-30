@@ -65,6 +65,15 @@
                           <span>&#64;{{ cmt[8] }}</span>
                         </div>
                       </div>
+                      <div class="dropdown">
+                        <div class="dropbtn" (click)="toggleDropdown(cmt[0])">
+                          <i class="fa-solid fa-ellipsis"></i>
+                        </div>
+                        <div id="myDropdown-{{cmt[0]}}" class="dropdown-menu-cmt dropdown-menu-right dropdown-menu-arrow">
+                          <a class="dropdown-item" (click)="reportService.openReportAccount(cmt[1])">Báo cáo</a>
+                          <a class="dropdown-item" *ngIf="cmt[1] == idUserCmt" (click)="modalService.removeCmt(cmt[0])">Xóa bình luận {{cmt[0]}}</a>
+                        </div>
+                      </div>
                     </div>
                     <p>
                       <span *ngIf="cmt[10] != null">
@@ -96,8 +105,8 @@
                       <div
                         class="show-replies"
                         *ngIf="
-                          modalService.checkHideSeeMore.get(cmt[0]) == null ||
-                          modalService.checkHideSeeMore.get(cmt[0])
+                          (modalService.checkHideSeeMore.get(cmt[0]) == null ||
+                          modalService.checkHideSeeMore.get(cmt[0])) && cmt[12] != '0'
                         "
                         (click)="modalService.loadDataReply(cmt[3], cmt[0])"
                       >
@@ -106,8 +115,8 @@
                       <div
                         class="show-replies"
                         *ngIf="
-                          modalService.checkHideSeeMore.get(cmt[0]) != null &&
-                          !modalService.checkHideSeeMore.get(cmt[0])
+                         ( modalService.checkHideSeeMore.get(cmt[0]) != null &&
+                          !modalService.checkHideSeeMore.get(cmt[0]))  && cmt[12] != '0'
                         "
                         (click)="removeSeeMoreCmt(cmt[0])"
                       >
@@ -133,6 +142,7 @@
                   autocomplete="off"
                 />
                 <div *ngIf="modalService.checkBadword" class="valid-badword">Từ ngữ của bạn đã vi phạm nguyên tắc cộng đồng!</div>
+                <!-- <div *ngIf="checkNullCmt" class="valid-badword">Bạn quên nhập nội dung rồi nè!</div> -->
                 <button class="add-comment-btn" (click)="addComment()">
                   <i class="fa-regular fa-comment"></i>
                 </button>

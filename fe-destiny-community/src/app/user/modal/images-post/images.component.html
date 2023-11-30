@@ -1,8 +1,8 @@
 <main class="overlay" *ngIf="modalService.isOpenSeeMoreImg$ | async">
   <div id="favDialog_seemore" class="modal fade favDialog_seemore">
-    <button (click)="closeModalSeeMoreImg()" class="btnClose-seemore-img">
+    <div (click)="closeModalSeeMoreImg()" class="btnClose-seemore-img">
       <i class="fa-solid fa-xmark"></i>
-    </button>
+    </div>
     <div class="post-container-img">
       
     <app-loading *ngIf="modalService.checkImg"></app-loading>

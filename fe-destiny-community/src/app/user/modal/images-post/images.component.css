@@ -54,7 +54,7 @@ input {
     margin: 0 1rem;
 }
 
-button.btnClose-seemore-img {
+div.btnClose-seemore-img {
     position: absolute;
     right: 20px;
     top: 10px;

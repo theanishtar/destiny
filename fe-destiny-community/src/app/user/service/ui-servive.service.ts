@@ -14322,7 +14322,7 @@ export class UIServiveService {
         }
 
         .dark #comment-input{
-            height: 45px !important;
+            height: 25px !important;
             outline: 1px solid #3f485f !important;
         }
 
@@ -14334,6 +14334,14 @@ export class UIServiveService {
 
         .dark .comment__container.opened{
             border-bottom: 1px solid #3d3d3d !important;
+        }
+
+        .dark .dropdown-menu-cmt{
+            background-color: #161B28 !important;
+        }
+
+        .dark .dropdown-menu-cmt:hover{
+            color: #40D04F !important;
         }
 
         /* ==============create-post============= */
@@ -14415,6 +14423,34 @@ export class UIServiveService {
         .dark section.elementor-section.elementor-top-section.elementor-element.elementor-element-79f0ecf2.elementor-section-full_width.elementor-section-height-min-height.elementor-section-height-default.elementor-section-items-middle {
             background: #161B28 !important;
         }
+
+        .dark .modal {
+            background: #161B28 !IMPORTANT;
+        }
+
+        .dark span.modal__title {
+            color: white;
+        }
+
+        .dark .btnClose-seemore-img {
+            background: #161B28 !important;
+            color: white !important;
+        }
+
+        .dark .img-product {
+            background: #161B28 !important;
+        }
+
+        .dark .numbertext, .dark .date-send {
+            color: white;
+        }
+
+        .dark .review-img {
+            background: #161B28 !important;
+        }
+
+        ,dark path {
+            fill: white !important;
         `;
 
     // Thêm các thuộc tính cho thẻ link

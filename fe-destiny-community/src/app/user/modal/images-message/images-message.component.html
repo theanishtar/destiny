@@ -1,12 +1,12 @@
 <main class="overlay" *ngIf="modalService.isOpenSeeAllImg$ | async">
   <app-loading *ngIf="modalService.checkImgSeeAll"></app-loading>
     <div *ngIf="!modalService.checkImgSeeAll" id="favDialog_updatePost" class="modal fade favDialog_updatePost">
-      <button
+      <div
         (click)="modalService.closeModalSeeAllImg()"
         class="btnClose-create-post"
       >
         <i class="fa-solid fa-xmark"></i>
-      </button>
+      </div>
       <div class="post-container-update">
         <div class="post">
           <!-- Slideshow container -->

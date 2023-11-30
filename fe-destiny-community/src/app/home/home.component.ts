@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { UIServiveService } from '@app/user/service/ui-servive.service';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -17,12 +18,20 @@ export class HomeComponent implements OnInit{
 
   ngOnInit() {
     this.uiServiveService.loadMode();
+    this.autoLogin();
   }
   
   constructor(
     public uiServiveService: UIServiveService
   ){}
   
+  autoLogin(){
+    let token = localStorage.getItem('token');
+    if(token !== null){
+      window.location.href = environment.baseUrlFe + 'newsfeed';
+    }
+  }
+
   // Next/previous controls
   plusSlides(n: number) {
     this.showSlides(this.slideIndex += n);

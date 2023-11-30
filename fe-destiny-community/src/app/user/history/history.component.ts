@@ -130,10 +130,21 @@ export class HistoryComponent implements OnInit {
   }
 
   toggleDropdown(id, menuType) {
+    this.closeAllDropdowns();
     const dropdown = document.getElementById(`myDropdown-${menuType}-${id}`);
     if (dropdown) {
       dropdown.classList.toggle("show");
     }
+  }
+
+  closeAllDropdowns() {
+    // Lấy tất cả các menu và đóng chúng
+    const allDropdowns = document.querySelectorAll(".dropdown-menu-arrow");
+    allDropdowns.forEach((dropdown) => {
+      if (dropdown.classList.contains("show")) {
+        dropdown.classList.remove("show");
+      }
+    });
   }
 
 }

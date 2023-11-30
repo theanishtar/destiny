@@ -58,26 +58,26 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
 		// Lấy tất cả các header từ yêu cầu
-        Map<String, String> headers = new HashMap<>();
-        Enumeration<String> headerNames = request.getHeaderNames();
-        
-        while (headerNames.hasMoreElements()) {
-            String headerName = headerNames.nextElement();
-            Enumeration<String> headerValues = request.getHeaders(headerName);
-
-            StringBuilder concatenatedValues = new StringBuilder();
-            while (headerValues.hasMoreElements()) {
-                if (concatenatedValues.length() > 0) {
-                    concatenatedValues.append(", ");
-                }
-                concatenatedValues.append(headerValues.nextElement());
-            }
-
-            headers.put(headerName, concatenatedValues.toString());
-        }
-
-        // In ra console để xem toàn bộ header
-        headers.forEach((key, value) -> System.out.println(key + ": " + value));
+//        Map<String, String> headers = new HashMap<>();
+//        Enumeration<String> headerNames = request.getHeaderNames();
+//        
+//        while (headerNames.hasMoreElements()) {
+//            String headerName = headerNames.nextElement();
+//            Enumeration<String> headerValues = request.getHeaders(headerName);
+//
+//            StringBuilder concatenatedValues = new StringBuilder();
+//            while (headerValues.hasMoreElements()) {
+//                if (concatenatedValues.length() > 0) {
+//                    concatenatedValues.append(", ");
+//                }
+//                concatenatedValues.append(headerValues.nextElement());
+//            }
+//
+//            headers.put(headerName, concatenatedValues.toString());
+//        }
+//
+//        // In ra console để xem toàn bộ header
+//        headers.forEach((key, value) -> System.out.println(key + ": " + value));
 
 		// return nếu đã xác thực
 //		if (SecurityContextHolder.getContext().getAuthentication().getAuthorities() != null) {

@@ -660,6 +660,9 @@ i.fa-solid.fa-file-circle-plus {
   justify-content: space-between;
   align-items: center;
   float: right;
+  position: absolute;
+    bottom: 0;
+    right: 5%;
 }
 
 .LoaderBalls__item {

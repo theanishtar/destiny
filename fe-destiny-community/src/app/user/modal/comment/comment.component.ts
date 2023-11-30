@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, Renderer2, HostListener } from '@angular/core';
 
 import { ModalService } from '@app/user/service/modal.service';
 import { PostService } from '@app/user/service/post.service';
 import { FollowsService } from '@app/user/service/follows.service';
 import { ProfileService } from '@app/user/service/profile.service';
 import { UIServiveService } from '@app/user/service/ui-servive.service';
+import { ReportService } from '@app/user/service/report.service';
 
 @Component({
   selector: 'app-comment',
@@ -21,20 +22,35 @@ export class CommentComponent {
   listFriend: any[];
   listFriendTemp: any[];
   nameReply: any;
+  idUserCmt: any;
 
   constructor(
     public modalService: ModalService,
     public postService: PostService,
     public followsService: FollowsService,
     public profileService: ProfileService,
-    private uiServiveService: UIServiveService
-  ) { }
+    private uiServiveService: UIServiveService,
+    public reportService: ReportService,
+    private el: ElementRef, 
+    private renderer: Renderer2
+  ) {
+    document.addEventListener('click', (event) => {
+      const targetElement = event.target as HTMLElement;
+    
+      // Kiểm tra nếu phần tử được nhấp không thuộc menu dropdown
+      if (!targetElement.closest('.dropdown')) {
+        // Đóng tất cả menu dropdown
+        this.closeAllDropdowns();
+      }
+    });
+   }
 
   ngOnInit() {
     this.showSlides(1);
     this.loadFriend();
     this.checkScroll();
     this.uiServiveService.loadMode();
+    this.idUserCmt = localStorage.getItem('chatUserId');
   }
 
   checkCountPosts: boolean = true;
@@ -76,18 +92,20 @@ export class CommentComponent {
   $contentCommnet: any;
   idPost: any;
   idUser: any;
-
+  checkNullCmt: boolean = false;
   comment_input: string = '';
   addComment() {
     this.$contentCommnet = $('#comment-input');
     this.idPost = this.modalService.idPostCmt;
     this.idUser = this.modalService.idUser;
-    if (this.$contentCommnet.val() != null) {
+    if (this.$contentCommnet.val() != null && this.comment_input != '') {
       // this.comment_input = this.modalService.getContent(item.fullname, this.comment_input)
       let type = (this.modalService.repCmtId > 0) ? 'REPCOMMENT' : 'COMMENT';
       this.modalService.sendNotify(this.$contentCommnet.val(), this.idPost, this.idUser, type, this.modalService.repCmtId);
     }
-
+    // if(this.comment_input != ''){
+    //   this.checkNullCmt = true;
+    // }
     this.comment_input = '';
   }
 
@@ -95,10 +113,10 @@ export class CommentComponent {
   
   /* ============template============= */
   removeSeeMoreCmt(idCmt) {
+    this.modalService.checkHideSeeMore.set(idCmt, true);
     document.querySelectorAll(".rep-" + idCmt).forEach((e) => {
       e.remove();
     });
-    this.modalService.checkHideSeeMore.set(idCmt, true);
   }
 
   plusSlides(n: number) {
@@ -209,6 +227,36 @@ export class CommentComponent {
       this.showDropdown = false;
     }
   }
+
+  toggleDropdown(id) {
+    this.closeAllDropdowns();
+    const dropdown = document.getElementById(`myDropdown-${id}`);
+    if (dropdown) {
+      dropdown.classList.toggle("show");
+    }
+  }
+
+  closeAllDropdowns() {
+    // Lấy tất cả các menu và đóng chúng
+    const allDropdowns = document.querySelectorAll(".dropdown-menu-arrow");
+    allDropdowns.forEach((dropdown) => {
+      if (dropdown.classList.contains("show")) {
+        dropdown.classList.remove("show");
+      }
+    });
+  }
+
+  // handleDocumentClick(event: Event) {
+  //   if (!this.isDropdownOpen) {
+  //     return;
+  //   }
+
+  //   const isClickInsideDropdown = (event.target as HTMLElement).closest('.dropdown-menu-arrow');
+
+  //   if (!isClickInsideDropdown) {
+  //     this.closeAllDropdowns();
+  //   }
+  // }
 }
 
 
