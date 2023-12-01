@@ -58,7 +58,7 @@ export class AdminPostmanagementService {
     return this.http.get<number>(this.getTotalPostByMonthAPI).pipe(
       tap((response) => {
         this.totalPostByMonth = response;
-        this.setTotalPostByYear(this.totalPostByMonth);
+        this.setTotalPostByMonth(this.totalPostByMonth);
       }),
     )
   }

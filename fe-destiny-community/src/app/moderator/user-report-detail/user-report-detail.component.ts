@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AdminUserdetailService } from '@app/admin/service/admin-userdetail.service';
 import { Router } from '@angular/router';
+declare var toast: any;
+
+import { UserReportedDetailService } from '../service/user-reported-detail.service';
 
 @Component({
   selector: 'app-user-report-detail',
@@ -16,32 +18,56 @@ export class UserReportModeratorDetailComponent {
 
   emailUser: string | null;
 
+  totalReport: number;
+
+  userMail: string | null;
+
+  idUserSend: string | null;
+
+  isLoading = true;
+
   constructor(
-    private adminUserdetailService: AdminUserdetailService,
+    private userReportedDetailService: UserReportedDetailService,
     private routers: Router,
-  ){}
+  ) { }
 
   ngOnInit() {
     this.loadUserDetail();
   }
 
-  selectUser(email: string): void{
-    localStorage.setItem("userDetailEmail", email);
-    setTimeout(() => {
-      window.location.reload();
-    }, 200);
-    this.routers.navigate(['/admin/userdetail']);
+  sendToAdmin(): void {
+    this.userMail = localStorage.getItem("userDetailEmail");
+    this.idUserSend = localStorage.getItem("userSendId");
+
+    if (this.userMail == null || this.idUserSend == null) {
+      this.routers.navigate(['/moderator/user-report']);
+    } else {
+
+      this.userReportedDetailService.sendToAdmin(this.userMail, this.idUserSend).subscribe(() => {
+        new toast({
+          title: 'Thành công!',
+          message: 'Báo cáo đã được gửi đến quản trị viên!',
+          type: 'success',
+          duration: 1500,
+        })
+        localStorage.removeItem("userDetailEmail");
+        this.routers.navigate(['/moderator/user-report']);
+      })
+    }
   }
 
-  loadUserDetail(){
+  loadUserDetail() {
 
     this.emailUser = localStorage.getItem("userDetailEmail");
 
-    if(this.emailUser == null){
-      // this.routers.navigate(['/admin/usermanament']);
-    }else{
-      this.adminUserdetailService.loadPostDetail(this.emailUser).subscribe(() => {
-        this.userDetail = this.adminUserdetailService.getUserDetail();
+    if (this.emailUser == null) {
+      this.routers.navigate(['/moderator/user-report']);
+    } else {
+      this.userReportedDetailService.loadUserDetail(this.emailUser).subscribe(() => {
+        this.userDetail = this.userReportedDetailService.getUserDetail();
+        this.totalReport = 0;
+        this.totalReport = this.userDetail.listUserSendReports.length;
+        this.isLoading = false;
       })
     }
 

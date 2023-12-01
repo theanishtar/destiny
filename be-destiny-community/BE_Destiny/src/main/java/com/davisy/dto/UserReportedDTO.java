@@ -17,6 +17,8 @@ public class UserReportedDTO {
 	String avatar;
 	String content_report;
 	String date_report;
+	String email;
+	String id_user_send;
 	
 	int totalPost;
 }

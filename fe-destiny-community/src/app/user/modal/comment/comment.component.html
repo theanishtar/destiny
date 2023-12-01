@@ -71,7 +71,7 @@
                         </div>
                         <div id="myDropdown-{{cmt[0]}}" class="dropdown-menu-cmt dropdown-menu-right dropdown-menu-arrow">
                           <a class="dropdown-item" (click)="reportService.openReportAccount(cmt[1])">Báo cáo</a>
-                          <a class="dropdown-item" *ngIf="cmt[1] == idUserCmt" (click)="modalService.removeCmt(cmt[0])">Xóa bình luận {{cmt[0]}}</a>
+                          <a class="dropdown-item" *ngIf="cmt[1] == idUserCmt" (click)="modalService.removeCmt(cmt[0])">Xóa bình luận {{modalService.idUser}} {{idUserCmt}}</a>
                         </div>
                       </div>
                     </div>

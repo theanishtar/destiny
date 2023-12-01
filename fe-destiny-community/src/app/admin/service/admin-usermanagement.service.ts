@@ -56,7 +56,7 @@ export class AdminUsermanagementService {
     return this.http.get<number>(this.getTotalUserByMonthAPI).pipe(
       tap((response) => {
         this.totalUserByMonth = response;
-        this.setTotalUserByYear(this.totalUserByMonth);
+        this.setTotalUserByMonth(this.totalUserByMonth);
       }),
     )
   }

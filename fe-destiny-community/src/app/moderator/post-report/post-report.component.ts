@@ -3,8 +3,13 @@ import 'datatables.net';
 import '../../../assets/js/admin/database/datatables/jquery.dataTables.min.js'
 import '../../../assets/js/admin/database/datatables/dataTables.bootstrap4.js'
 import * as $x from 'jquery';
+import { Router } from '@angular/router';
 
 declare var $: any;
+
+
+import { PostReportedService } from '../service/post-reported.service';
+
 
 @Component({
   selector: 'app-post-report',
@@ -15,36 +20,111 @@ declare var $: any;
   ]
 })
 export class PostReportComponent {
-  pagiPostReport!: HTMLElement;
-  tablePostReport!: HTMLElement;
 
-  constructor(private el: ElementRef, private renderer: Renderer2) {}
+  day: any;
+  month: any;
+  year: any;
+
+  listPostReported: any[] = [];
+
+  totalPostByDay: number;
+  percentPostByDayIncrease: number;
+
+  totalPostByMonth: number;
+  percentPostByMonthIncrease: number;
+
+  totalPostByYear: number;
+  percentPostByYearIncrease: number;
+
+  constructor(
+    private el: ElementRef,
+    private renderer: Renderer2,
+    private postReportedService: PostReportedService,
+    private routers: Router,
+
+  ) { }
+
+  ngOnInit(): void {
+    this.getTime();
+  }
 
   ngAfterViewInit() {
-    $x(document).ready(function () {
-      $x('#dataTable').DataTable();
-    });
-
-
-    this.truncateText(".text-substring", 50);
-    this.pagiPostReport = this.el.nativeElement.querySelector("#pagi-post-report");
-    this.tablePostReport = this.el.nativeElement.querySelector("#table-post-report");
+    this.loadListPostReported();
+    this.loadTotalPostByDay();
+    this.loadTotalPostByMonth();
+    this.loadTotalPostByYear();
+    this.loadPercentPostByDayIncrease();
+    this.loadPercentPostByMonthIncrease();
+    this.loadPercentPostByYearIncrease();
 
   }
 
-  private truncateText(selector: string, maxLength: number) {
-    const elements = this.el.nativeElement.querySelectorAll(selector);
+  selectPost(id: string, userSendId: string): void {
+    localStorage.setItem("postDetailId", id);
+    localStorage.setItem("userSendId", userSendId);
+    this.routers.navigate(['/moderator/post-report-detail']);
+  }
 
-    elements.forEach((element: HTMLElement) => {
-      const originalText = element.textContent;
+  getTime() {
+    this.day = new Date().getDate();
+    this.month = new Date().getMonth() + 1;
+    this.year = new Date().getFullYear();
+  }
 
-      if ((originalText as any).length > maxLength) {
-        this.renderer.setProperty(
-          element,
-          'textContent',
-          (originalText as any).substring(0, maxLength - 3) + '...'
-        );
-      }
+  loadListPostReported() {
+    this.postReportedService.loadListPostReported().subscribe(() => {
+      this.listPostReported = [];
+      this.listPostReported = this.postReportedService.getListPostReported();
+
+      $x(document).ready(function () {
+        $x('#dataTable').DataTable();
+      });
+
+
     });
   }
+
+  loadTotalPostByDay() {
+    this.postReportedService.loadTotalPostReportedByDay().subscribe(() => {
+      this.totalPostByDay = 0;
+      this.totalPostByDay = this.postReportedService.getTotalPostReportedByDay();
+    })
+  }
+
+  loadPercentPostByDayIncrease() {
+    this.postReportedService.loadPercentPostReportedByDayIncrease().subscribe(() => {
+      this.percentPostByDayIncrease = 0;
+      this.percentPostByDayIncrease = this.postReportedService.getPercentPostReportedByDayIncrease();
+    })
+  }
+
+  loadTotalPostByMonth() {
+    this.postReportedService.loadTotalPostReportedByMonth().subscribe(() => {
+      this.totalPostByMonth = 0;
+      this.totalPostByMonth = this.postReportedService.getTotalPostReportedByMonth();
+    })
+  }
+
+  loadPercentPostByMonthIncrease() {
+    this.postReportedService.loadPercentPostReportedByMonthIncrease().subscribe(() => {
+      this.percentPostByMonthIncrease = 0;
+      this.percentPostByMonthIncrease = this.postReportedService.getPercentPostReportedByMonthIncrease();
+    })
+  }
+
+  loadTotalPostByYear() {
+    this.postReportedService.loadTotalPostReportedByYear().subscribe(() => {
+      this.totalPostByYear = 0;
+      this.totalPostByYear = this.postReportedService.getTotalPostReportedByYear();
+    })
+  }
+
+  loadPercentPostByYearIncrease() {
+    this.postReportedService.loadPercentPostReportedByYearIncrease().subscribe(() => {
+      this.percentPostByYearIncrease = 0;
+      this.percentPostByYearIncrease = this.postReportedService.getPercentPostReportedByYearIncrease();
+    })
+  }
+
+
 }

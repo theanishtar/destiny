@@ -49,6 +49,10 @@ import { LoadingComponent } from './user/loading/loading.component';
 import { VideoCallComponent } from './user/video-call/video-call.component';
 //admin / comboboxsearch
 //npm install --save @ng-select/ng-select
+//npm install xlsx
+//npm install jspdf --save
+//npm install jspdf jspdf-autotable
+//npm install file-saver ngx-filesaver --save
 import { NgSelectModule } from '@ng-select/ng-select';
 import { SidebarModeratorComponent } from './moderator/sidebar-moderator/sidebar-moderator.component';
 import { NavbarModeratorComponent } from './moderator/navbar-moderator/navbar-moderator.component';

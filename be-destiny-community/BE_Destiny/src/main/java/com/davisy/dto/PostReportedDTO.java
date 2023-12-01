@@ -22,5 +22,6 @@ public class PostReportedDTO {
 	String postImage;
 	String content_report;
 	String date_report;
+	String id_user_send;
 
 }

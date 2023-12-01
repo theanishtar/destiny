@@ -2,16 +2,14 @@ import { Injectable } from '@angular/core';
 import { tap, catchError } from 'rxjs/operators';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment'
-import { Observable } from 'rxjs';
-import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AdminUserdetailService {
+export class UserReportedDetailService {
 
-  private getDetailUserAPI = environment.baseUrl + 'v1/admin/detailUser';
-  private actionOnUserAPI = environment.baseUrl + 'v1/admin/actionOnUser';
+  private getDetailUserAPI = environment.baseUrl + 'v1/moderator/detailUser';
+  private sendUserReportedAPI = environment.baseUrl + 'v1/moderator/sendUserReported';
 
   private userDetail: any[] = [];
 
@@ -29,10 +27,9 @@ export class AdminUserdetailService {
     )
   }
 
-  actionOnUser(email: string) {
-    return this.http.get(this.actionOnUserAPI + "/" + email);
+  sendToAdmin(idUser: string, idUserSend: string) {
+    return this.http.delete(this.sendUserReportedAPI + "/" + idUser + "/" + idUserSend);
   }
-
 
   //getter
   getUserDetail(): any {
@@ -43,4 +40,5 @@ export class AdminUserdetailService {
   setUserDetail(data: any): void {
     this.userDetail = data;
   }
+
 }

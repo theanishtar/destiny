@@ -49,7 +49,7 @@ export class ChangePasswordComponent {
 		this.submitted = true;
 		if (this.changePasswordForm.get("newPassword")!.value == this.changePasswordForm.get("renewPassword")!.value && this.changePasswordForm.valid) {
 			this.profileService.updatePassword(this.changePasswordForm.value).subscribe((res) => {
-				
+				this.changePasswordForm.reset();
 			})
 		} else {
 			new toast({

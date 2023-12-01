@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild  } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Chart } from '../../../assets/js/admin/chart.js/chart.min.js';
 import { AdminPostmanagementService } from '../service/admin-postmanagement.service';
 import { AdminIndexService } from '../service/admin-index.service';
@@ -9,16 +9,16 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-post-manament',
   templateUrl: './post-manament.component.html',
-  styleUrls: [ `../css/sb-admin-2.min.css`,`../css/home.css`],
+  styleUrls: [`../css/sb-admin-2.min.css`, `../css/home.css`],
 })
-export class PostManamentComponent  {
+export class PostManamentComponent implements OnInit {
 
   @ViewChild('myAreaChart') chartLine: ElementRef | undefined;
   @ViewChild('myPieChart') chartPie: ElementRef | undefined;
 
-  day: number;
-  month: number;
-  year: number;
+  day: any;
+  month: any;
+  year: any;
 
   listTOP4Post: any[] = [];
   listTotalPostEveryMonth: number[];
@@ -38,21 +38,23 @@ export class PostManamentComponent  {
 
   totalPostByYear: number;
   percentPostByYearIncrease: number;
+  isLoading = true;
 
   constructor(
     private adminPostmanagementService: AdminPostmanagementService,
     private adminIndexService: AdminIndexService,
     private routers: Router,
-  )
-  {}
+  ) { }
+
+  ngOnInit(): void {
+    this.getTime();
+  }
 
   ngAfterViewInit() {
 
     this.loadTOP4Post();
     this.loadListTotalPostEveryMonth();
     this.loadTOP3Product();
-
-    this.getTime();
 
     this.loadTotalPostByDay();
     this.loadTotalPostByMonth();
@@ -64,60 +66,60 @@ export class PostManamentComponent  {
 
   }
 
-  getTime(){
-    this.day = new Date().getDay();
-    this.month = new Date().getMonth();
+  getTime() {
+    this.day = new Date().getDate();
+    this.month = new Date().getMonth() + 1;
     this.year = new Date().getFullYear();
   }
 
-  loadTotalPostByDay(){
-    this.adminPostmanagementService.loadTotalPostByDay().subscribe(() =>{
+  loadTotalPostByDay() {
+    this.adminPostmanagementService.loadTotalPostByDay().subscribe(() => {
       this.totalPostByDay = 0;
       this.totalPostByDay = this.adminPostmanagementService.getTotalPostByDay();
     })
   }
 
-  loadPercentPostByDayIncrease(){
-    this.adminPostmanagementService.loadPercentPostByDayIncrease().subscribe(() =>{
+  loadPercentPostByDayIncrease() {
+    this.adminPostmanagementService.loadPercentPostByDayIncrease().subscribe(() => {
       this.percentPostByDayIncrease = 0;
       this.percentPostByDayIncrease = this.adminPostmanagementService.getPercentPostByDayIncrease();
     })
   }
 
-  loadTotalPostByMonth(){
-    this.adminPostmanagementService.loadTotalPostByMonth().subscribe(() =>{
+  loadTotalPostByMonth() {
+    this.adminPostmanagementService.loadTotalPostByMonth().subscribe(() => {
       this.totalPostByMonth = 0;
       this.totalPostByMonth = this.adminPostmanagementService.getTotalPostByMonth();
     })
   }
 
-  loadPercentPostByMonthIncrease(){
-    this.adminPostmanagementService.loadPercentPostByMonthIncrease().subscribe(() =>{
+  loadPercentPostByMonthIncrease() {
+    this.adminPostmanagementService.loadPercentPostByMonthIncrease().subscribe(() => {
       this.percentPostByMonthIncrease = 0;
       this.percentPostByMonthIncrease = this.adminPostmanagementService.getPercentPostByMonthIncrease();
     })
   }
 
-  loadTotalPostByYear(){
-    this.adminPostmanagementService.loadTotalPostByYear().subscribe(() =>{
+  loadTotalPostByYear() {
+    this.adminPostmanagementService.loadTotalPostByYear().subscribe(() => {
       this.totalPostByYear = 0;
       this.totalPostByYear = this.adminPostmanagementService.getTotalPostByYear();
     })
   }
 
-  loadPercentPostByYearIncrease(){
-    this.adminPostmanagementService.loadPercentPostByYearIncrease().subscribe(() =>{
+  loadPercentPostByYearIncrease() {
+    this.adminPostmanagementService.loadPercentPostByYearIncrease().subscribe(() => {
       this.percentPostByYearIncrease = 0;
       this.percentPostByYearIncrease = this.adminPostmanagementService.getPercentPostByYearIncrease();
     })
   }
 
-  selectPost(id: string): void{
+  selectPost(id: string): void {
     localStorage.setItem("postDetailId", id);
     this.routers.navigate(['/admin/postdetail']);
   }
 
-  selectUser(email: string): void{
+  selectUser(email: string): void {
     localStorage.setItem("userDetailEmail", email);
     this.routers.navigate(['/admin/userdetail']);
   }
@@ -126,11 +128,12 @@ export class PostManamentComponent  {
     this.adminPostmanagementService.loadTOP4Post().subscribe(() => {
       this.listTOP4Post = [];
       this.listTOP4Post = this.adminPostmanagementService.getTOP4Post();
+      this.isLoading = false;
     });
   }
 
-  loadListTotalPostEveryMonth(){
-    this.adminIndexService.loadTotalPostEveryMonth().subscribe(() =>{
+  loadListTotalPostEveryMonth() {
+    this.adminIndexService.loadTotalPostEveryMonth().subscribe(() => {
       this.listTotalPostEveryMonth = [];
       this.listTotalPostEveryMonth = this.adminIndexService.getListTotalPostEveryMonth();
 
@@ -138,7 +141,7 @@ export class PostManamentComponent  {
     })
   }
 
-  loadTOP3Product(){
+  loadTOP3Product() {
     this.adminPostmanagementService.loadTOP3Product().subscribe(() => {
       this.listTOP3Product = [];
       this.listNameTOP3Product = [];
@@ -155,7 +158,7 @@ export class PostManamentComponent  {
   }
 
 
-  createChartLine(){
+  createChartLine() {
     function number_format(number, decimals, dec_point, thousands_sep): string {
       number = (number + "").replace(",", "").replace(" ", "");
       const n = !isFinite(+number) ? 0 : +number;
@@ -203,7 +206,7 @@ export class PostManamentComponent  {
       var myLineChart = new Chart(ctx, {
         type: "line",
         data: {
-          labels: ["Jan", "Feb","Mar", "Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
           datasets: [
             {
               label: "Tổng ",
@@ -298,9 +301,9 @@ export class PostManamentComponent  {
     }
   }
 
-  createChartPie(){
+  createChartPie() {
     //pie chart
-    if(this.chartPie){
+    if (this.chartPie) {
       var ctx = this.chartPie.nativeElement.getContext('2d');
       var myPieChart = new Chart(ctx, {
         type: "doughnut",

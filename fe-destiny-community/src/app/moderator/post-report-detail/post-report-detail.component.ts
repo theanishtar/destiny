@@ -1,6 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { AdminPostdetailService } from '@app/admin/service/admin-postdetail.service';
+import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
+import 'datatables.net';
+import '../../../assets/js/admin/database/datatables/jquery.dataTables.min.js'
+import '../../../assets/js/admin/database/datatables/dataTables.bootstrap4.js'
 import { Router } from '@angular/router';
+
+import { PostReportedDetailService } from '../service/post-reported-detail.service';
+
+declare var toast: any;
 
 @Component({
   selector: 'app-post-report-detail',
@@ -11,63 +17,69 @@ import { Router } from '@angular/router';
   ]
 })
 export class PostReportDetailModeratorComponent {
+  totalReport: number;
+  totalImages: number;
+  totalComment: number;
 
-  postDetail: any = {
-    "post_id": 0,
-    "user_fullname": "",
-    "user_avartar": "",
-    "content": "",
-    "date_Post": "",
-    "product": "",
-    "totalInterested": 0,
-    "totalShare": 0,
-    "totalComment": 0,
-    "listPostImages": [
-      {
-        "link_image": ""
-      },
-      {
-        "link_image": ""
-      },
-      {
-        "link_image": ""
-      },
-      {
-        "link_image": "https://firebasestorage.googleapis.com/v0/b/destiny-davisy.appspot.com/o/08.jpg?alt=media&token=1027fbbb-43ee-4046-8e13-5640153356ea&_gl=1*17e3a7c*_ga*MTcxMDU3NTczOS4xNjc2OTc2NjE1*_ga_CW55HF8NVT*MTY5NjUwMzgxNi44LjEuMTY5NjUwNTg5Ny42MC4wLjA."
-      },
-      {
-        "link_image": "https://firebasestorage.googleapis.com/v0/b/destiny-davisy.appspot.com/o/08.jpg?alt=media&token=1027fbbb-43ee-4046-8e13-5640153356ea&_gl=1*17e3a7c*_ga*MTcxMDU3NTczOS4xNjc2OTc2NjE1*_ga_CW55HF8NVT*MTY5NjUwMzgxNi44LjEuMTY5NjUwNTg5Ny42MC4wLjA."
-      }
-    ],
-    "listComments": []
-  };
+  postDetail: any = {};
   idPost: string | null;
 
+  idUserSend: string | null;
+
+  isLoading = true;
+
   constructor(
-    private adminPostdetailService: AdminPostdetailService,
+    private postReportedDetailService: PostReportedDetailService,
     private routers: Router,
-  ){}
+  ) { }
 
   ngOnInit() {
     this.loadPostDetail();
   }
 
-  selectUser(email: string): void{
-    localStorage.setItem("userDetailEmail", email);
-    this.routers.navigate(['/admin/userdetail']);
+  sendToAdmin(): void {
+    this.idPost = localStorage.getItem("postDetailId");
+    this.idUserSend = localStorage.getItem("userSendId");
+
+    if (this.idPost == null || this.idUserSend == null) {
+      this.routers.navigate(['/moderator/post-report']);
+    } else {
+
+      this.postReportedDetailService.sendToAdmin(this.idPost, this.idUserSend).subscribe(() => {
+        new toast({
+          title: 'Thành công!',
+          message: 'Báo cáo đã được gửi đến quản trị viên!',
+          type: 'success',
+          duration: 1500,
+        })
+        localStorage.removeItem("postDetailId");
+        this.routers.navigate(['/moderator/post-report']);
+      })
+    }
   }
 
-  loadPostDetail(){
+  loadPostDetail() {
 
     this.idPost = localStorage.getItem("postDetailId");
 
-    if(this.idPost == null){
-      this.routers.navigate(['moderator/post-report-detail']);
-    }else{
-      this.adminPostdetailService.loadPostDetail(this.idPost).subscribe(() => {
-        this.postDetail = this.adminPostdetailService.getPostDetail();
+    if (this.idPost == null) {
+      this.routers.navigate(['/admin/postmanament']);
+    } else {
+      this.postReportedDetailService.loadPostDetail(this.idPost).subscribe(() => {
+        this.postDetail = this.postReportedDetailService.getPostDetail();
+        this.totalImages = 0;
+        this.totalImages = this.postDetail.listPostImages.length;
+
+        this.totalComment = 0;
+        this.totalComment = this.postDetail.listComments.length;
+
+        this.totalReport = 0;
+        this.totalReport = this.postDetail.listUserSendReports.length;
+
+        this.isLoading = false;
       })
     }
 
   }
+
 }

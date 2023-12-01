@@ -1,4 +1,4 @@
-import { Component, HostListener, Renderer2, ElementRef, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnInit, HostListener, Renderer2, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { LoginService } from '@app/service/login.service';
 @Component({
@@ -9,7 +9,7 @@ import { LoginService } from '@app/service/login.service';
     `../../admin/css/home.css`
   ]
 })
-export class SidebarModeratorComponent {
+export class SidebarModeratorComponent implements OnInit{
   activeMenuItem: string = '';
 
   constructor(
@@ -27,6 +27,10 @@ export class SidebarModeratorComponent {
 
   @ViewChildren('mainColorLink')
   mainColorLinks!: QueryList<ElementRef>;
+
+  ngOnInit(): void {
+    this.updateActiveMenuItem();
+  }
 
   ngAfterViewInit(): void {
     const bodyElement = document.querySelector('.body-admin');

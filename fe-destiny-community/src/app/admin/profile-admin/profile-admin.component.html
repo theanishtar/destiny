@@ -6,13 +6,13 @@
     <app-navbar-admin></app-navbar-admin>
 
     <!-- End of Navbar -->
-
+    <app-loading *ngIf="isLoading"></app-loading>
     <main>
       <div class="pb-5">
         <label class="d-block">
-          <input type="file" style="display: none;">
-          <div class="page-header min-height-300 border-radius-xl mt-1"
-            style="background-image: url('{{admin.thumb}}')">
+          <input type="file" style="display: none;" (change)="chooseFileThumb($event)">
+          <div class="page-header min-height-300 border-radius-xl mt-1" style="background-image: url('{{admin.thumb}}')"
+            #uploadPreviewThumb>
             <span class="mask bg-gradient-dark opacity-6"></span>
           </div>
         </label>
@@ -22,8 +22,9 @@
             <div class="col-lg-1 col-md-6 col-sm-3">
               <div class="avatar">
                 <label>
-                  <input type="file" style="display: none;">
-                  <img src="{{admin.avartar}}" alt="profile_image" class="border-radius-lg shadow-sm img-fluid" />
+                  <input type="file" style="display: none;" (change)="chooseFile($event)">
+                  <img src="{{admin.avatar}}" alt="" class="border-radius-lg shadow-sm img-fluid"
+                    #uploadPreviewAvatar />
                 </label>
               </div>
             </div>
@@ -48,6 +49,7 @@
                     Chỉnh sửa
                   </div>
                   <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#changeEmailModal">Đổi Email</a>
                   <a class="dropdown-item" href="#" data-toggle="modal" data-target="#changePassModal">Đổi mật khẩu</a>
                 </div>
               </div>
@@ -117,7 +119,7 @@
                   <label for="username">Tên đăng nhập</label>
                   <div class="mb-3">
                     <input type="text" class="form-controlP" formControlName="usernameF" [ngModel]="admin.username"
-                      id="username" required />
+                      id="usernameF" required />
                   </div>
                 </div>
                 <div class="col-lg-6 col-sm-12 pr-0">
@@ -131,7 +133,7 @@
                   <label for="email">Email</label>
                   <div class="mb-3">
                     <input type="email" class="form-controlP" formControlName="emailF" [ngModel]="admin.email"
-                      id="email" readonly />
+                      id="emailF" readonly />
                   </div>
                 </div>
                 <div class="col-lg-6 col-sm-12 pr-0">
@@ -197,11 +199,21 @@
             <div class="modal-dialog">
               <div class="row" style="pointer-events: auto">
                 <div
-                  class="col-xl-5 offset-xl-1 col-lg-5 offset-lg-1 col-md-5 offset-md-1 col-sm-5 offset-sm-1 img-about pr-0 pl-0">
-                  <div class="thumb">
+                  class="col-xl-5 offset-xl-1 col-lg-5 offset-lg-1 col-md-5 offset-md-1 col-sm-5 offset-sm-1 img-about pr-0 pl-0 ">
+                  <div class="thumb img-left-fr">
                     <img class="shadow border-form-forgotpass-right"
                       src="https://odindesignthemes.com/vikinger-theme/wp-content/themes/vikinger/img/login/background.jpg"
                       alt="" />
+                    <div class="img-left-fr-child">
+                      <div class="col-lg-12 profile-logo-heart">
+                        <img src="../assets/images/logo-euphoria.png" alt="" style="width: 40%; margin: 0 30%;" />
+                      </div>
+                      <div class="col-lg-12 profile-title mt-3">
+                        <div class="logo" style="height: 0 !important">
+                          <h1 class="logo-name"><span>DES</span>TINY</h1>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div
@@ -220,7 +232,7 @@
                     <div class="progress-step progress-step-active" data-title=""></div>
                     <div class="progress-step" data-title=""></div>
                   </div>
-                  <form [formGroup]="passwordForm" ngNativeValidate>
+                  <form [formGroup]="passwordForm" ngNativeValidate (ngSubmit)="forgotPasswordCheck()">
                     <div class="form-step form-step-active col-lg-8 offset-lg-2 mb-4">
                       <label for="oldPassword">Mật khẩu cũ</label>
                       <div class="input-group mt-2 mb-5">
@@ -228,12 +240,13 @@
                           required />
                       </div>
                       <div class="text-center col-lg-6 offset-lg-3 col-md-6 offset-md-3 col-sm-6 offset-sm-3 mt-5">
-                        <button class="btn btn-next text-white form-controlP bg-gradient-endless" type="submit">Xác nhận
+                        <button type="submit" class="btn btn-next text-white form-controlP bg-gradient-endless"
+                          type="submit">Xác nhận
                         </button>
                       </div>
                     </div>
                   </form>
-                  <form [formGroup]="newPasswordForm" ngNativeValidate>
+                  <form [formGroup]="newPasswordForm" ngNativeValidate (ngSubmit)="forgotPasswordCheck()">
                     <div class="form-step col-lg-8 offset-lg-2 mb-4">
                       <label for="newpassword">Mật khẩu mới</label>
                       <div class="input-group mt-2 mb-4">
@@ -246,7 +259,8 @@
                           formControlName="reNewPassword" (input)="onInput($event)" required />
                       </div>
                       <div class="text-center col-lg-6 offset-lg-3 col-md-6 offset-md-3 col-sm-6 offset-sm-3 mt-5">
-                        <button class="btn btn-next text-white form-controlP bg-gradient-endless">Xác nhận</button>
+                        <button type="submit" class="btn btn-next text-white form-controlP bg-gradient-endless">Xác
+                          nhận</button>
                       </div>
                     </div>
                   </form>
@@ -254,8 +268,70 @@
               </div>
             </div>
           </div>
+          <!-- forgot dialog -->
+          <!-- email dialog -->
+          <div class="modal fade" id="changeEmailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="row" style="pointer-events: auto">
+                <div
+                  class="col-xl-5 offset-xl-1 col-lg-5 offset-lg-1 col-md-5 offset-md-1 col-sm-5 offset-sm-1 img-about pr-0 pl-0 ">
+                  <div class="thumb img-left-fr">
+                    <img class="shadow border-form-forgotpass-right"
+                      src="https://odindesignthemes.com/vikinger-theme/wp-content/themes/vikinger/img/login/background.jpg"
+                      alt="" />
+                    <div class="img-left-fr-child">
+                      <div class="col-lg-12 profile-logo-heart">
+                        <img src="../assets/images/logo-euphoria.png" alt="" style="width: 40%; margin: 0 30%;" />
+                      </div>
+                      <div class="col-lg-12 profile-title mt-3">
+                        <div class="logo" style="height: 0 !important">
+                          <h1 class="logo-name"><span>DES</span>TINY</h1>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="col-xl-5 col-lg-5 col-md-5 col-sm-5 card bg-gradient-dark text-white border-form-forgotpass-left">
+                  <button class="close text-white text-right pt-2 pr-1" type="button" data-dismiss="modal"
+                    aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+
+                  <h2 class="text-center text-white text-uppercase font-weight-bold" style="margin-top: 50px">
+                    Cập nhật Email
+                  </h2>
+                  <!-- Progress bar -->
+                  <div class="progressbar">
+                    <div class="progressF" id="progress"></div>
+                    <div class="progress-step progress-step-active" data-title=""></div>
+                  </div>
+
+                  <form [formGroup]="changeEmailForm" ngNativeValidate (ngSubmit)="changeEmailCheck()">
+                    <div class="form-step-active col-lg-8 offset-lg-2 mb-4">
+                      <label for="newEmail">Email mới</label>
+                      <div class="input-group mt-2 mb-4">
+                        <input class="form-controlP" type="text" name="newEmail" id="newEmail"
+                          formControlName="newEmail" required (input)="onInput($event)" />
+                      </div>
+                      <label for="oldPasswordEmail">Xác nhận mật khẩu</label>
+                      <div class="input-group mt-2 mb-4">
+                        <input class="form-controlP" type="text" name="oldPasswordEmail" id="oldPasswordEmail"
+                          formControlName="oldPasswordEmail" (input)="onInput($event)" required />
+                      </div>
+                      <div class="text-center col-lg-6 offset-lg-3 col-md-6 offset-md-3 col-sm-6 offset-sm-3 mt-5">
+                        <button type="submit" class="btn text-white form-controlP bg-gradient-endless">Cập
+                          nhật</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- email dialog -->
         </div>
-        <!-- forgot dialog -->
       </div>
     </main>
   </div>

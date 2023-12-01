@@ -293,6 +293,8 @@ export class MessageService {
       throw error;
     }
   }
+
+  // Load lại trạng thái off cho nhắn tin
   logout() {
     this.stompClient!.send('/app/fetchAllUsers');
   }

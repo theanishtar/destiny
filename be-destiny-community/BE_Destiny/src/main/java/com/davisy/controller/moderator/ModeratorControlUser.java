@@ -18,8 +18,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.davisy.controller.admin.AdminControl;
+import com.davisy.dto.AdminPostDetail;
+import com.davisy.dto.AdminUserProfile;
 import com.davisy.dto.PostReportedDTO;
 import com.davisy.dto.UserReportedDTO;
+import com.davisy.entity.Post;
 import com.davisy.entity.User;
 import com.davisy.entity.UserReported;
 import com.davisy.mongodb.documents.ModeratorPostReported;
@@ -195,7 +199,9 @@ public class ModeratorControlUser {
 		Calendar time = new GregorianCalendar();
 		time.setTime(reported.getDate_report());
 		userReportedDTO.setDate_report(formatDate(time));
-		userReportedDTO.setTotalPost(userTotalPost(user.getUser_id()));;
+		userReportedDTO.setTotalPost(userTotalPost(user.getUser_id()));
+		userReportedDTO.setEmail(user.getEmail());
+		userReportedDTO.setId_user_send(reported.getUser_send_report_id());
 		
 		return userReportedDTO;
 	}
@@ -241,6 +247,7 @@ public class ModeratorControlUser {
 			if(moderatorUserReportedService.checkExistReport(user_reported_id, user_send_report_id) == false) {
 				moderatorUserReportedService.insert(userReported);
 			}
+			
 			return "Successfully";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -263,12 +270,13 @@ public class ModeratorControlUser {
 		}
 	}
 	
-	@DeleteMapping("/v1/moderator/sendUserReported/{}")
-	public ResponseEntity<String> sendUserToAdmin(@PathVariable ObjectId id) {
+	@DeleteMapping("/v1/moderator/sendUserReported/{email}/{userSendId}")
+	public ResponseEntity<String> sendUserToAdmin(@PathVariable String email, @PathVariable String userSendId) {
 		try {
 //			ObjectId id = new ObjectId("653214546912a178bfcc9bca");
-			ModeratorUserReported moderatorUserReported = moderatorUserReportedService.findById(id);
-			
+			User userMail = userService.findByEmail(email);
+			String userId = userMail.getUser_id().toString();
+			ModeratorUserReported moderatorUserReported = moderatorUserReportedService.findByTwoColumn("user_reported_id", userId, "user_send_report_id", userSendId);
 			UserReported UserReported = new UserReported();
 			
 			User userIsReported = userService.findById(Integer.valueOf(moderatorUserReported.getUser_reported_id()));

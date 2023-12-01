@@ -3,6 +3,9 @@ import 'datatables.net';
 import '../../../assets/js/admin/database/datatables/jquery.dataTables.min.js'
 import '../../../assets/js/admin/database/datatables/dataTables.bootstrap4.js'
 import * as $x from 'jquery';
+import { Router } from '@angular/router';
+
+import { AdminPostrepotedService } from '../service/admin-postrepoted.service';
 
 declare var $: any;
 
@@ -14,14 +17,134 @@ declare var $: any;
     `../css/home.css`
   ],
 })
-export class PostReportdetailComponent {
+export class PostReportdetailComponent implements OnInit {
+
   pagiPostReport!: HTMLElement;
   tablePostReport!: HTMLElement;
 
-  constructor(private el: ElementRef, private renderer: Renderer2) {}
+  day: any;
+  month: any;
+  year: any;
+
+  listPostReportedByDay: any[] = [];
+  listPostReportedByYear: any[] = [];
+
+  totalPostByDay: number;
+  percentPostByDayIncrease: number;
+
+  totalPostByMonth: number;
+  percentPostByMonthIncrease: number;
+
+  totalPostByYear: number;
+  percentPostByYearIncrease: number;
+
+  constructor(
+    private el: ElementRef,
+    private renderer: Renderer2,
+    private adminPostrepotedService: AdminPostrepotedService,
+    private routers: Router,
+
+  ) { }
+
+  ngOnInit(): void {
+    this.getTime();
+  }
 
   ngAfterViewInit() {
+    this.carousel();
+    this.loadListPostReportedByDay();
+    this.loadListPostReportedByYear();
+    this.loadTotalPostByDay();
+    this.loadTotalPostByMonth();
+    this.loadTotalPostByYear();
+    this.loadPercentPostByDayIncrease();
+    this.loadPercentPostByMonthIncrease();
+    this.loadPercentPostByYearIncrease();
 
+    this.pagiPostReport = this.el.nativeElement.querySelector("#pagi-post-report");
+    this.tablePostReport = this.el.nativeElement.querySelector("#table-post-report");
+
+  }
+
+  selectPost(id: string): void {
+    localStorage.setItem("postDetailId", id);
+    this.routers.navigate(['/admin/postdetail']);
+  }
+
+  selectUser(email: string): void {
+    localStorage.setItem("userDetailEmail", email);
+    this.routers.navigate(['/admin/userdetail']);
+  }
+
+  getTime() {
+    this.day = new Date().getDate();
+    this.month = new Date().getMonth() + 1;
+    this.year = new Date().getFullYear();
+  }
+
+  loadListPostReportedByDay() {
+    this.adminPostrepotedService.loadListPostReportedByDay().subscribe(() => {
+      this.listPostReportedByDay = [];
+      this.listPostReportedByDay = this.adminPostrepotedService.getListPostReportedByDay();
+    });
+  }
+
+  loadListPostReportedByYear() {
+    this.adminPostrepotedService.loadListPostReportedByYear().subscribe(() => {
+      this.listPostReportedByYear = [];
+      this.listPostReportedByYear = this.adminPostrepotedService.getListPostReportedByYear();
+
+      $x(document).ready(function () {
+        $x('#dataTable').DataTable();
+      });
+
+
+    });
+  }
+
+  loadTotalPostByDay() {
+    this.adminPostrepotedService.loadTotalPostReportedByDay().subscribe(() => {
+      this.totalPostByDay = 0;
+      this.totalPostByDay = this.adminPostrepotedService.getTotalPostReportedByDay();
+    })
+  }
+
+  loadPercentPostByDayIncrease() {
+    this.adminPostrepotedService.loadPercentPostReportedByDayIncrease().subscribe(() => {
+      this.percentPostByDayIncrease = 0;
+      this.percentPostByDayIncrease = this.adminPostrepotedService.getPercentPostReportedByDayIncrease();
+    })
+  }
+
+  loadTotalPostByMonth() {
+    this.adminPostrepotedService.loadTotalPostReportedByMonth().subscribe(() => {
+      this.totalPostByMonth = 0;
+      this.totalPostByMonth = this.adminPostrepotedService.getTotalPostReportedByMonth();
+    })
+  }
+
+  loadPercentPostByMonthIncrease() {
+    this.adminPostrepotedService.loadPercentPostReportedByMonthIncrease().subscribe(() => {
+      this.percentPostByMonthIncrease = 0;
+      this.percentPostByMonthIncrease = this.adminPostrepotedService.getPercentPostReportedByMonthIncrease();
+    })
+  }
+
+  loadTotalPostByYear() {
+    this.adminPostrepotedService.loadTotalPostReportedByYear().subscribe(() => {
+      this.totalPostByYear = 0;
+      this.totalPostByYear = this.adminPostrepotedService.getTotalPostReportedByYear();
+    })
+  }
+
+  loadPercentPostByYearIncrease() {
+    this.adminPostrepotedService.loadPercentPostReportedByYearIncrease().subscribe(() => {
+      this.percentPostByYearIncrease = 0;
+      this.percentPostByYearIncrease = this.adminPostrepotedService.getPercentPostReportedByYearIncrease();
+    })
+  }
+
+  carousel() {
     $("#myCarousel").on("slide.bs.carousel", function (e: { relatedTarget: any; direction: string; }) {
       var $e = $(e.relatedTarget);
       var idx = $e.index();
@@ -42,31 +165,6 @@ export class PostReportdetailComponent {
       }
     });
 
-    $x(document).ready(function () {
-      $x('#dataTable').DataTable();
-    });
-
-
-    this.truncateText(".text-substring", 50);
-    this.pagiPostReport = this.el.nativeElement.querySelector("#pagi-post-report");
-    this.tablePostReport = this.el.nativeElement.querySelector("#table-post-report");
-
-  }
-
-  private truncateText(selector: string, maxLength: number) {
-    const elements = this.el.nativeElement.querySelectorAll(selector);
-
-    elements.forEach((element: HTMLElement) => {
-      const originalText = element.textContent;
-
-      if ((originalText as any).length > maxLength) {
-        this.renderer.setProperty(
-          element,
-          'textContent',
-          (originalText as any).substring(0, maxLength - 3) + '...'
-        );
-      }
-    });
   }
 
   openTable() {

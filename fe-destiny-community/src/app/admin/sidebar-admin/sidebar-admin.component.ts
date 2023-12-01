@@ -1,4 +1,4 @@
-import { Component, HostListener, Renderer2, ElementRef, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnInit, HostListener, Renderer2, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { LoginService } from '@app/service/login.service';
 
@@ -7,26 +7,31 @@ import { LoginService } from '@app/service/login.service';
   templateUrl: './sidebar-admin.component.html',
   styleUrls: [`../css/sb-admin-2.min.css`, `../css/home.css`],
 })
-export class SidebarAdminComponent {
+export class SidebarAdminComponent implements OnInit{
   activeMenuItem: string = '';
 
   constructor(
     private renderer: Renderer2,
     private router: Router,
     private loginService: LoginService
-    ) {
-      this.router.events.subscribe((event) => {
-        if (event instanceof NavigationEnd) {
-          // Đã chuyển đến trang mới, thực hiện cập nhật menu active
-          this.updateActiveMenuItem();
-        }
-      });
-    }
+  ) {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        // Đã chuyển đến trang mới, thực hiện cập nhật menu active
+        this.updateActiveMenuItem();
+      }
+    });
+  }
 
   @ViewChildren('mainColorLink')
   mainColorLinks!: QueryList<ElementRef>;
 
+  ngOnInit(): void {
+    this.updateActiveMenuItem();
+  }
+
   ngAfterViewInit(): void {
+
     const bodyElement = document.querySelector('.body-admin');
     const sidebarElement = document.querySelector('.sidebarD');
     const colortheme = localStorage.getItem("colortheme");
@@ -34,29 +39,6 @@ export class SidebarAdminComponent {
       this.renderer.addClass(bodyElement, String(colortheme));
       this.renderer.addClass(sidebarElement, String(colortheme));
     }
-
-    const sideLinks: NodeListOf<HTMLElement> = document.querySelectorAll(
-      ".sidebarD .side-menu li a:not(.logout):not(.clickSetting)"
-    );
-
-    sideLinks.forEach((item: HTMLElement) => {
-      item.addEventListener("click", () => {
-        sideLinks.forEach((i: HTMLElement) => {
-          this.renderer.removeClass(i.parentElement, "active");
-        });
-        localStorage.setItem("sidebarActive", item.className);
-      });
-    });
-
-    // const sideBarItemActive = localStorage.getItem("sidebarActive");
-    // sideLinks.forEach((i: HTMLElement) => {
-    //   if(sideBarItemActive?.match(i.className)){
-    //     this.renderer.addClass(i.parentElement, "active");
-    //   }
-    //   else{
-    //     this.renderer.removeClass(i.parentElement, "active");
-    //   }
-    // });
 
     this.mainColorLinks.forEach((item: ElementRef) => {
       const li = item.nativeElement;
@@ -67,6 +49,8 @@ export class SidebarAdminComponent {
         li.classList.add('border-active');
       });
     });
+
+    
   }
 
   mainColor = ["pink", "blue", "green", "orange", "cyan"];
@@ -95,7 +79,7 @@ export class SidebarAdminComponent {
   openNav(): void {
     this.open++;
     this.isNavOpen = true;
-    if(this.open > 1){
+    if (this.open > 1) {
       this.closeNav();
       this.open = 0;
     }
@@ -121,11 +105,11 @@ export class SidebarAdminComponent {
     const contentClose = document.querySelector('.content');
     if (sideBar) {
       if (window.innerWidth < 1300) {
-          this.renderer.addClass(sideBar, 'closeD');
-          this.renderer.addClass(contentClose, 'contentCloseD');
+        this.renderer.addClass(sideBar, 'closeD');
+        this.renderer.addClass(contentClose, 'contentCloseD');
       } else {
-          this.renderer.removeClass(sideBar, 'closeD');
-          this.renderer.removeClass(contentClose, 'contentCloseD');
+        this.renderer.removeClass(sideBar, 'closeD');
+        this.renderer.removeClass(contentClose, 'contentCloseD');
       }
     }
   }
@@ -155,7 +139,7 @@ export class SidebarAdminComponent {
     }
   }
 
-  logout(){
+  logout() {
     return this.loginService.logout();
   }
 }

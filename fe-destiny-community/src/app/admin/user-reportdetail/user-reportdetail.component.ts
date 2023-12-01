@@ -4,6 +4,10 @@ import '../../../assets/js/admin/database/datatables/jquery.dataTables.min.js'
 import '../../../assets/js/admin/database/datatables/dataTables.bootstrap4.js'
 import $e from 'jquery';
 
+import { Router } from '@angular/router';
+
+import { AdminUserreportedService } from '../service/admin-userreported.service';
+
 declare var $: any;
 
 @Component({
@@ -14,15 +18,132 @@ declare var $: any;
     `../css/home.css`
   ],
 })
-export class UserReportdetailComponent {
-  pagiPostReport!: HTMLElement;
-  tablePostReport!: HTMLElement;
+export class UserReportdetailComponent implements OnInit {
+  pagiUserReport!: HTMLElement;
+  tableUserReport!: HTMLElement;
 
-  constructor(private el: ElementRef, private renderer: Renderer2) {}
+  day: any;
+  month: any;
+  year: any;
 
+  listUserReportedByDay: any[] = [];
+  listUserReportedByYear: any[] = [];
+
+  totalUserByDay: number;
+  percentUserByDayIncrease: number;
+
+  totalUserByMonth: number;
+  percentUserByMonthIncrease: number;
+
+  totalUserByYear: number;
+  percentUserByYearIncrease: number;
+
+  constructor(
+    private el: ElementRef,
+    private renderer: Renderer2,
+    private adminUserReportedService: AdminUserreportedService,
+    private routers: Router,
+
+  ) { }
+
+  ngOnInit(): void {
+    this.getTime();
+  }
 
   ngAfterViewInit() {
+    this.carousel();
+    this.loadListUserReportedByDay();
+    this.loadListUserReportedByYear();
+    this.loadTotalUserByDay();
+    this.loadTotalUserByMonth();
+    this.loadTotalUserByYear();
+    this.loadPercentUserByDayIncrease();
+    this.loadPercentUserByMonthIncrease();
+    this.loadPercentUserByYearIncrease();
 
+    this.pagiUserReport = this.el.nativeElement.querySelector("#pagi-user-report");
+    this.tableUserReport = this.el.nativeElement.querySelector("#table-user-report");
+
+  }
+
+  selectPost(id: string): void {
+    localStorage.setItem("PostDetailId", id);
+    this.routers.navigate(['/admin/Userdetail']);
+  }
+
+  selectUser(email: string): void {
+    localStorage.setItem("userDetailEmail", email);
+    this.routers.navigate(['/admin/userdetail']);
+  }
+
+  getTime() {
+    this.day = new Date().getDate();
+    this.month = new Date().getMonth() + 1;
+    this.year = new Date().getFullYear();
+  }
+
+  loadListUserReportedByDay() {
+    this.adminUserReportedService.loadListUserReportedByDay().subscribe(() => {
+      this.listUserReportedByDay = [];
+      this.listUserReportedByDay = this.adminUserReportedService.getListUserReportedByDay();
+    });
+  }
+
+  loadListUserReportedByYear() {
+    this.adminUserReportedService.loadListUserReportedByYear().subscribe(() => {
+      this.listUserReportedByYear = [];
+      this.listUserReportedByYear = this.adminUserReportedService.getListUserReportedByYear();
+
+      $e(document).ready(function () {
+        $e('#dataTable').DataTable();
+      });
+
+    });
+  }
+
+  loadTotalUserByDay() {
+    this.adminUserReportedService.loadTotalUserReportedByDay().subscribe(() => {
+      this.totalUserByDay = 0;
+      this.totalUserByDay = this.adminUserReportedService.getTotalUserReportedByDay();
+    })
+  }
+
+  loadPercentUserByDayIncrease() {
+    this.adminUserReportedService.loadPercentUserReportedByDayIncrease().subscribe(() => {
+      this.percentUserByDayIncrease = 0;
+      this.percentUserByDayIncrease = this.adminUserReportedService.getPercentUserReportedByDayIncrease();
+    })
+  }
+
+  loadTotalUserByMonth() {
+    this.adminUserReportedService.loadTotalUserReportedByMonth().subscribe(() => {
+      this.totalUserByMonth = 0;
+      this.totalUserByMonth = this.adminUserReportedService.getTotalUserReportedByMonth();
+    })
+  }
+
+  loadPercentUserByMonthIncrease() {
+    this.adminUserReportedService.loadPercentUserReportedByMonthIncrease().subscribe(() => {
+      this.percentUserByMonthIncrease = 0;
+      this.percentUserByMonthIncrease = this.adminUserReportedService.getPercentUserReportedByMonthIncrease();
+    })
+  }
+
+  loadTotalUserByYear() {
+    this.adminUserReportedService.loadTotalUserReportedByYear().subscribe(() => {
+      this.totalUserByYear = 0;
+      this.totalUserByYear = this.adminUserReportedService.getTotalUserReportedByYear();
+    })
+  }
+
+  loadPercentUserByYearIncrease() {
+    this.adminUserReportedService.loadPercentUserReportedByYearIncrease().subscribe(() => {
+      this.percentUserByYearIncrease = 0;
+      this.percentUserByYearIncrease = this.adminUserReportedService.getPercentUserReportedByYearIncrease();
+    })
+  }
+
+  carousel() {
     $(document).ready(function () {
       $("#myCarousel").on("slide.bs.carousel", function (e) {
         var $e = $(e.relatedTarget);
@@ -45,40 +166,15 @@ export class UserReportdetailComponent {
       });
     });
 
-    $e(document).ready(function () {
-      $e('#dataTable').DataTable();
-    });
-
-
-    this.truncateText(".text-substring", 50);
-    this.pagiPostReport = this.el.nativeElement.querySelector("#pagi-post-report");
-    this.tablePostReport = this.el.nativeElement.querySelector("#table-post-report");
-
-  }
-
-  private truncateText(selector: string, maxLength: number) {
-    const elements = this.el.nativeElement.querySelectorAll(selector);
-
-    elements.forEach((element: HTMLElement) => {
-      const originalText = element.textContent;
-
-      if ((originalText as any).length > maxLength) {
-        this.renderer.setProperty(
-          element,
-          'textContent',
-          (originalText as any).substring(0, maxLength - 3) + '...'
-        );
-      }
-    });
   }
 
   openTable() {
-    if (this.tablePostReport.classList.contains("hidden")) {
-      this.renderer.removeClass(this.tablePostReport, "hidden");
-      this.renderer.addClass(this.pagiPostReport, "hidden");
+    if (this.tableUserReport.classList.contains("hidden")) {
+      this.renderer.removeClass(this.tableUserReport, "hidden");
+      this.renderer.addClass(this.pagiUserReport, "hidden");
     } else {
-      this.renderer.removeClass(this.pagiPostReport, "hidden");
-      this.renderer.addClass(this.tablePostReport, "hidden");
+      this.renderer.removeClass(this.pagiUserReport, "hidden");
+      this.renderer.addClass(this.tableUserReport, "hidden");
     }
   }
 }

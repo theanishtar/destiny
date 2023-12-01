@@ -21,6 +21,8 @@ public class AdminPostDetail {
 	String content;
 	String date_Post;
 	String product;
+	
+	boolean ban;
 
 	int totalInterested;
 	int totalShare;

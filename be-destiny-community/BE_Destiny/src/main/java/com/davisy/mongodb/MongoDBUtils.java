@@ -123,6 +123,7 @@ public class MongoDBUtils {
 
 			if (list.size() == 0) {
 				System.out.println("Couldn't find any recipes containing " + column + " as an ingredient in MongoDB.");
+				return list;
 			} else {
 				return list;
 			}
@@ -149,6 +150,7 @@ public class MongoDBUtils {
 
 			if (list.isEmpty()) {
 				System.out.println("Không tìm thấy bất kỳ tài liệu nào trong MongoDB.");
+				return list;
 			} else {
 				return list;
 			}

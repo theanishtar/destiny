@@ -4,6 +4,10 @@ import '../../../assets/js/admin/database/datatables/jquery.dataTables.min.js'
 import '../../../assets/js/admin/database/datatables/dataTables.bootstrap4.js'
 import $e from 'jquery';
 
+import { Router } from '@angular/router';
+
+import { UserReportedService } from '../service/user-reported.service';
+
 declare var $: any;
 
 @Component({
@@ -18,34 +22,108 @@ export class UserReportComponent {
   pagiPostReport!: HTMLElement;
   tablePostReport!: HTMLElement;
 
-  constructor(private el: ElementRef, private renderer: Renderer2) {}
+  day: any;
+  month: any;
+  year: any;
 
+  listUserReported: any[] = [];
+
+  totalUserByDay: number;
+  percentUserByDayIncrease: number;
+
+  totalUserByMonth: number;
+  percentUserByMonthIncrease: number;
+
+  totalUserByYear: number;
+  percentUserByYearIncrease: number;
+
+  constructor(
+    private el: ElementRef,
+    private renderer: Renderer2,
+    private userReportedService: UserReportedService,
+    private routers: Router,
+
+  ) { }
+
+  ngOnInit(): void {
+    this.getTime();
+  }
 
   ngAfterViewInit() {
-    $e(document).ready(function () {
-      $e('#dataTable').DataTable();
-    });
+    this.loadListUserReported();
+    this.loadTotalUserByDay();
+    this.loadTotalUserByMonth();
+    this.loadTotalUserByYear();
+    this.loadPercentUserByDayIncrease();
+    this.loadPercentUserByMonthIncrease();
+    this.loadPercentUserByYearIncrease();
 
-
-    this.truncateText(".text-substring", 50);
-    this.pagiPostReport = this.el.nativeElement.querySelector("#pagi-post-report");
-    this.tablePostReport = this.el.nativeElement.querySelector("#table-post-report");
 
   }
 
-  private truncateText(selector: string, maxLength: number) {
-    const elements = this.el.nativeElement.querySelectorAll(selector);
+  selectUser(email: string, userSendId: string): void {
+    localStorage.setItem("userDetailEmail", email);
+    localStorage.setItem("userSendId", userSendId);
+    this.routers.navigate(['/moderator/user-report-detail']);
+  }
 
-    elements.forEach((element: HTMLElement) => {
-      const originalText = element.textContent;
+  getTime() {
+    this.day = new Date().getDate();
+    this.month = new Date().getMonth() + 1;
+    this.year = new Date().getFullYear();
+  }
 
-      if ((originalText as any).length > maxLength) {
-        this.renderer.setProperty(
-          element,
-          'textContent',
-          (originalText as any).substring(0, maxLength - 3) + '...'
-        );
-      }
+  loadListUserReported() {
+    this.userReportedService.loadListUserReported().subscribe(() => {
+      this.listUserReported = [];
+      this.listUserReported = this.userReportedService.getListUserReported();
+
+      $e(document).ready(function () {
+        $e('#dataTable').DataTable();
+      });
+
     });
+  }
+
+  loadTotalUserByDay() {
+    this.userReportedService.loadTotalUserReportedByDay().subscribe(() => {
+      this.totalUserByDay = 0;
+      this.totalUserByDay = this.userReportedService.getTotalUserReportedByDay();
+    })
+  }
+
+  loadPercentUserByDayIncrease() {
+    this.userReportedService.loadPercentUserReportedByDayIncrease().subscribe(() => {
+      this.percentUserByDayIncrease = 0;
+      this.percentUserByDayIncrease = this.userReportedService.getPercentUserReportedByDayIncrease();
+    })
+  }
+
+  loadTotalUserByMonth() {
+    this.userReportedService.loadTotalUserReportedByMonth().subscribe(() => {
+      this.totalUserByMonth = 0;
+      this.totalUserByMonth = this.userReportedService.getTotalUserReportedByMonth();
+    })
+  }
+
+  loadPercentUserByMonthIncrease() {
+    this.userReportedService.loadPercentUserReportedByMonthIncrease().subscribe(() => {
+      this.percentUserByMonthIncrease = 0;
+      this.percentUserByMonthIncrease = this.userReportedService.getPercentUserReportedByMonthIncrease();
+    })
+  }
+
+  loadTotalUserByYear() {
+    this.userReportedService.loadTotalUserReportedByYear().subscribe(() => {
+      this.totalUserByYear = 0;
+      this.totalUserByYear = this.userReportedService.getTotalUserReportedByYear();
+    })
+  }
+
+  loadPercentUserByYearIncrease() {
+    this.userReportedService.loadPercentUserReportedByYearIncrease().subscribe(() => {
+      this.percentUserByYearIncrease = 0;
+      this.percentUserByYearIncrease = this.userReportedService.getPercentUserReportedByYearIncrease();
+    })
   }
 }

@@ -46,6 +46,7 @@ export class HeaderProfileComponent implements OnInit {
     public modalService: ModalService
   ) {
     this.router.events.subscribe((event) => {
+      this.chatUserId = parseInt((localStorage.getItem("chatUserId") + '')?.trim());
       if (event instanceof NavigationEnd) {
         // Đã chuyển đến trang mới, thực hiện cập nhật menu active
         this.updateActiveMenuItem();

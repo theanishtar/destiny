@@ -31,6 +31,7 @@ import com.davisy.entity.PostReported;
 import com.davisy.entity.User;
 import com.davisy.entity.UserReported;
 import com.davisy.service.CommentService;
+import com.davisy.service.EmailService;
 import com.davisy.service.FollowService;
 import com.davisy.service.InterestedService;
 import com.davisy.service.PostImagesService;
@@ -62,6 +63,8 @@ public class AdminControl {
 	private PostReportedService postReportedService;
 	@Autowired
 	private UserReportedService userReportedService;
+	@Autowired
+	private EmailService emailService;
 
 	// 23-9-2023 -xem chi tiết bài đăng
 	// update lastest 7-10
@@ -87,7 +90,7 @@ public class AdminControl {
 
 			return ResponseEntity.status(200).body(setUserDetail(user));
 		} catch (Exception e) {
-			System.out.println("Error at admin/actionOnUser: " + e);
+			System.out.println("Error at admin/detailUser: " + e);
 			return ResponseEntity.status(403).body(null);
 		}
 	}
@@ -109,6 +112,12 @@ public class AdminControl {
 		try {
 			User user = userService.findByEmail(email);
 			userService.disable(user);
+			if(user.isBan() == true) {
+				emailService.sendHtmlEmailToUserIsBan(email);
+			}else {
+				emailService.sendHtmlEmailToUserIsUnBan(email);
+			}
+			
 		} catch (Exception e) {
 			System.out.println("Error at admin/actionOnUser: " + e);
 		}
@@ -133,6 +142,8 @@ public class AdminControl {
 		userProfile.setAvatar(user.getAvatar());
 		userProfile.setThumb(user.getThumb());
 		userProfile.setMark(user.getMark());
+		
+		userProfile.setBan(user.isBan());
 
 		userProfile.setTotalPost(userTotalPost(user.getUser_id()));
 
@@ -178,7 +189,9 @@ public class AdminControl {
 		postDTO.setDate_Post(timeCaculate(post.getDate_Post()));
 
 		postDTO.setProduct(post.getProduct());
-
+		
+		postDTO.setBan(post.isBan());
+		
 		postDTO.setTotalInterested(postTotalInterested(post.getPost_id()));
 
 		postDTO.setTotalShare(postTotalShare(post.getPost_id()));

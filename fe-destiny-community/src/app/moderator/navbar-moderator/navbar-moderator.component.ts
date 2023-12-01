@@ -1,4 +1,4 @@
-import { Component,  ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { ModProfileService } from '../service/mod-profile.service';
 
 @Component({
@@ -12,36 +12,36 @@ import { ModProfileService } from '../service/mod-profile.service';
 export class NavbarModeratorComponent {
   @ViewChild('themeToggle') themeToggle: ElementRef | undefined;
 
-  adminAvartar: any = {};
+  moderatorAvatar: any = {};
 
   constructor(
     private renderer: Renderer2,
     private modProfileService: ModProfileService
 
-  ) {}
+  ) { }
 
   ngAfterViewInit() {
 
-    this.loadAdminAvartar();
+    this.loadModeratorAvartar();
     this.setDark();
   }
 
-  loadAdminAvartar(){
-    const getAvartar = "getAvartar";
-    this.modProfileService.loadAdminData(getAvartar).subscribe(() =>{
-      this.adminAvartar = {};
-      this.adminAvartar = this.modProfileService.getAdmin();
+  loadModeratorAvartar() {
+    const getAvatar = "getAvatar";
+    this.modProfileService.loadModeratorData(getAvatar).subscribe(() => {
+      this.moderatorAvatar = {};
+      this.moderatorAvatar = this.modProfileService.getModerator();
     })
   }
 
-  setDark(){
+  setDark() {
     // get dark theme from local
     const darktheme = localStorage.getItem("darktheme");
-    if(darktheme?.match("true")){
+    if (darktheme?.match("true")) {
       this.setBodyClass('dark');
       const checkboxElement: HTMLInputElement = this.themeToggle?.nativeElement;
       checkboxElement.checked = true;
-    }else{
+    } else {
       this.setBodyClass('');
     }
 
@@ -62,13 +62,13 @@ export class NavbarModeratorComponent {
     const bodyElement = document.querySelector('.body-admin'); // Select the div with class 'body'
     const sideBarElement = document.querySelector('.sidebarD');
     const navElement = document.querySelector('.contentNav');
-    if(className.match('dark')){
+    if (className.match('dark')) {
       if (bodyElement) {
         this.renderer.addClass(bodyElement, className);
         this.renderer.addClass(sideBarElement, className);
         this.renderer.addClass(navElement, className);
       }
-    }else{
+    } else {
       if (bodyElement) {
         this.renderer.removeClass(bodyElement, 'dark');
         this.renderer.removeClass(sideBarElement, 'dark');
@@ -82,9 +82,9 @@ export class NavbarModeratorComponent {
     const sideBar = document.querySelector('.sidebarD');
     const contentClose = document.querySelector('.content');
     if (!this.temp) {
-        this.temp = true;
-        this.renderer.addClass(sideBar, 'closeD');
-        this.renderer.addClass(contentClose, 'contentCloseD');
+      this.temp = true;
+      this.renderer.addClass(sideBar, 'closeD');
+      this.renderer.addClass(contentClose, 'contentCloseD');
     } else {
       this.temp = false;
       this.renderer.removeClass(sideBar, 'closeD');

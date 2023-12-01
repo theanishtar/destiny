@@ -1,12 +1,20 @@
-import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { ModProfileService } from '../service/mod-profile.service';
+declare var toast: any;
+
 import {
   FormGroup,
   FormBuilder,
   Validators,
   FormControl,
 } from '@angular/forms';
-declare var toast: any;
+
+import {
+  Storage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from '@angular/fire/storage';
 
 
 @Component({
@@ -17,11 +25,16 @@ declare var toast: any;
     `../../admin/css/home.css`
   ]
 })
+
 export class ProfileComponent {
+  @ViewChild('uploadPreviewThumb') uploadPreviewThumb: ElementRef;
+  @ViewChild('uploadPreviewAvatar') uploadPreviewAvatar: ElementRef;
+
+
   iconProfile!: HTMLElement;
   imgThumbProfile!: HTMLElement;
 
-  admin: any = {};
+  moderator: any = {};
 
   genders: any[] = [];
   provinces: any[] = [];
@@ -30,17 +43,89 @@ export class ProfileComponent {
 
   result: number = 0;
 
-  isLoading = true;
+  public fileAvatar: any = {};
+  public fileThumb: any = {};
+
   public profileForm: FormGroup;
   public passwordForm: FormGroup;
   public newPasswordForm: FormGroup;
+  public changeEmailForm: FormGroup;
+
+  isLoading = true;
+
+  avatarTemp = '';
+  thumbTemp = '';
+
+  initalAvatar: string;
+  initalThumb: string;
+
+  checkAvatar: boolean = false;
+  checkThumb: boolean = false;
 
   constructor(
     private el: ElementRef,
     private renderer: Renderer2,
     private modProfileService: ModProfileService,
     private formbuilder: FormBuilder,
-  ) {}
+    public storage: Storage,
+  ) { }
+
+  ngOnInit() {
+    this.createFormProfile();
+
+    this.loadModeratorData();
+    this.loadAllGender();
+    this.loadAllProvince();
+
+  }
+
+
+  async addDataAvatar() {
+    return new Promise<void>((resolve) => {
+      const storageRef = ref(this.storage, 'avatars/' + this.fileAvatar.name);
+      const uploadTast = uploadBytesResumable(storageRef, this.fileAvatar);
+      uploadTast.on(
+        'state_changed',
+        (snapshot) => { },
+        (error) => {
+          console.log(error.message);
+          resolve();
+        },
+        () => {
+          getDownloadURL(uploadTast.snapshot.ref).then((downloadURL) => {
+            // console.log('Upload file : ', downloadURL);
+            this.avatarTemp = downloadURL;
+            // console.log('this.avatarTemp : ', this.avatarTemp);
+            resolve();
+          });
+        }
+      );
+    })
+  }
+
+  async addDataThumb() {
+    return new Promise<void>((resolve) => {
+      const storageRef = ref(this.storage, 'thumb/' + this.fileThumb.name);
+      const uploadTast = uploadBytesResumable(storageRef, this.fileThumb);
+      uploadTast.on(
+        'state_changed',
+        (snapshot) => { },
+        (error) => {
+          console.log(error.message);
+          resolve();
+        },
+        () => {
+          getDownloadURL(uploadTast.snapshot.ref).then((downloadURL) => {
+            // console.log('Upload file : ', downloadURL);
+            this.thumbTemp = downloadURL;
+            // console.log('this.thumbTemp : ', this.thumbTemp);
+            resolve();
+          });
+        }
+      );
+    })
+
+  }
 
   createFormProfile() {
     this.profileForm = this.formbuilder.group({
@@ -63,89 +148,147 @@ export class ProfileComponent {
       newPassword: ['', Validators.required],
       reNewPassword: ['', Validators.required],
     });
+
+    this.changeEmailForm = this.formbuilder.group({
+      oldPasswordEmail: ['', Validators.required],
+      newEmail: ['', Validators.required]
+    });
   }
 
-  ngOnInit() {
-    this.createFormProfile();
-    this.forgotPasswordDialog();
-
-    this.loadAdminData();
-    this.loadAllGender();
-    this.loadAllProvince();
-
+  chooseFile(event: any) {
+    this.fileAvatar = event.target.files[0];
+    this.checkAvatar = true;
+    this.chooseFileChange(event, this.uploadPreviewAvatar);
+    // this.addData();
   }
 
-  loadAdminData(){
+  chooseFileThumb(event: any) {
+    this.fileThumb = event.target.files[0];
+    this.checkThumb = true;
+
+    this.chooseFileChange(event, this.uploadPreviewThumb);
+    // this.addData();
+  }
+
+  chooseFileChange(event: any, preview: ElementRef): void {
+    const fileInput = event.target;
+    const selectedFile = fileInput.files[0];
+
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const imageSrc = e.target.result;
+        preview.nativeElement.src = imageSrc;
+        preview.nativeElement.style.display = 'block';
+        preview.nativeElement.style.backgroundImage = 'url(' + imageSrc + ')';
+      };
+      reader.readAsDataURL(selectedFile);
+    }
+  }
+
+  loadModeratorData() {
     const getProfile = "getProfile";
-    this.modProfileService.loadAdminData(getProfile).subscribe(() =>{
-      this.admin = {};
-      this.admin = this.modProfileService.getAdmin();
+    this.modProfileService.loadModeratorData(getProfile).subscribe(() => {
+      this.moderator = {};
+      this.moderator = this.modProfileService.getModerator();
+      this.initalAvatar = this.moderator.avatar;
+      this.initalThumb = this.moderator.thumb;
       this.isLoading = false;
     })
   }
 
-  loadAllGender(){
-    this.modProfileService.loadAllGender().subscribe(() =>{
+  loadAllGender() {
+    this.modProfileService.loadAllGender().subscribe(() => {
       this.genders = [];
       this.genders = this.modProfileService.getAllGender();
     })
   }
 
-  loadAllProvince(){
-    this.modProfileService.loadAllProvince().subscribe(() =>{
+  loadAllProvince() {
+    this.modProfileService.loadAllProvince().subscribe(() => {
       this.provinces = [];
       this.provinces = this.modProfileService.getAllProvince();
 
-      const province = this.profileForm.get('province_nameF')?.value;
-      this.modProfileService.loadAllDistrict(province).subscribe(() =>{
-        this.districts = [];
-        this.districts = this.modProfileService.getAllDistrict();
+      const getProfile = "getProfile";
+      this.modProfileService.loadModeratorData(getProfile).subscribe(() => {
+        this.moderator = {};
+        this.moderator = this.modProfileService.getModerator();
 
-        const district = this.profileForm.get('district_nameF')?.value;
-        this.modProfileService.loadAllWard(district).subscribe(() =>{
-          this.wards = [];
-          this.wards = this.modProfileService.getAllWard();
+        const province = this.moderator.province_name;
+        this.modProfileService.loadAllDistrict(province).subscribe(() => {
+          this.districts = [];
+          this.districts = this.modProfileService.getAllDistrict();
 
+          const district = this.profileForm.get('district_nameF')?.value;
+          this.modProfileService.loadAllWard(district).subscribe(() => {
+            this.wards = [];
+            this.wards = this.modProfileService.getAllWard();
+
+          })
         })
       })
     })
+
   }
 
-  getProvinceName(){
+  getProvinceName() {
     const province = this.profileForm.get('province_nameF')?.value;
     this.loadAllDistrict(province);
 
   }
 
-  loadAllDistrict(province: string){
-    this.modProfileService.loadAllDistrict(province).subscribe(() =>{
+  loadAllDistrict(province: string) {
+    this.modProfileService.loadAllDistrict(province).subscribe(() => {
       this.districts = [];
       this.districts = this.modProfileService.getAllDistrict();
-      this.admin.district_name = this.districts[0];
+      this.moderator.district_name = this.districts[0];
 
-      this.loadAllWard(this.admin.district_name);
+      this.loadAllWard(this.moderator.district_name);
 
     })
   }
 
-  getDistrictName(){
+  getDistrictName() {
     const district = this.profileForm.get('district_nameF')?.value;
     this.loadAllWard(district);
   }
 
-  loadAllWard(district: string){
-    this.modProfileService.loadAllWard(district).subscribe(() =>{
+  loadAllWard(district: string) {
+    this.modProfileService.loadAllWard(district).subscribe(() => {
       this.wards = [];
       this.wards = this.modProfileService.getAllWard();
-      this.admin.ward_name = this.wards[0];
+      this.moderator.ward_name = this.wards[0];
     })
   }
 
-  updateProfile() {
+  async updateProfile() {
+    try {
+      if (this.checkThumb === true) {
+        await this.addDataThumb();
+      } else {
+        this.thumbTemp = this.initalThumb;
+      }
+    } catch (error) {
+      console.error('Error uploading thumb:', error);
+    }
+
+    try {
+      if (this.checkAvatar === true) {
+        await this.addDataAvatar();
+      } else {
+        this.avatarTemp = this.initalAvatar;
+      }
+    } catch (error) {
+      console.error('Error uploading avatar:', error);
+    }
+
     if (this.profileForm.valid) {
       const data = {
         username: this.profileForm.get('usernameF')?.value,
         fullname: this.profileForm.get('fullnameF')?.value,
+        // email: this.profileForm.get('emailF')?.value,
+        avatar: this.avatarTemp,
+        thumb: this.thumbTemp,
         intro: this.profileForm.get('introF')?.value,
         birthday: this.profileForm.get('birthdayF')?.value,
         province_name: this.profileForm.get('province_nameF')?.value,
@@ -155,15 +298,15 @@ export class ProfileComponent {
       };
       this.modProfileService.updateProfile(data).subscribe((res) => {
         this.createToast("Thành công!", "Cập nhật thành công", "success");
-        this.loadAdminData();
+        window.location.reload();
       });
     }
-    else{
-      this.createToast("Thất bại!", "Cập nhật thất bại" , "error");
+    else {
+      this.createToast("Thất bại!", "Cập nhật thất bại", "error");
     }
   }
 
-  createToast(action: string, content: string, type: string){
+  createToast(action: string, content: string, type: string) {
     new toast({
       title: action,
       message: content,
@@ -185,7 +328,7 @@ export class ProfileComponent {
     const splitFrom = formattedToday.split('-');
     const splitTo = daychose.split('-');
     // Create Date objects from the arrays
-    const toDay = new Date( parseInt(splitFrom[0]), parseInt(splitFrom[1]) - 1, parseInt(splitFrom[2]));
+    const toDay = new Date(parseInt(splitFrom[0]), parseInt(splitFrom[1]) - 1, parseInt(splitFrom[2]));
     const dayChoose = new Date(splitTo[0], splitTo[1] - 1, splitTo[2]);
     // Perform the comparison
     if (dayChoose > toDay) {
@@ -197,9 +340,20 @@ export class ProfileComponent {
     event.target.setCustomValidity('');
   }
 
-  forgotPasswordDialog(){
-    const prevBtns = document.querySelectorAll<HTMLElement>(".btn-prev");
-    const nextBtns = document.querySelectorAll<HTMLElement>(".btn-next");
+  onInputCheckPassWorkValid(event: any) {
+    const passwordPattern = /^(?=.*[!@#$%^&*]+)[a-z0-9.!@#$%^&*]{4,20}$/;
+    const inputValue = event.target.value;
+
+    if (!passwordPattern.test(inputValue)) {
+      event.target.setCustomValidity('Mật khẩu phải có độ dài từ 4-20 ký tự và có ít nhất một ký tự đặc biệt!');
+    } else {
+      event.target.setCustomValidity('');
+    }
+  }
+
+  stepsNum: number = 0;
+  forgotPasswordCheck() {
+
     const progress = document.getElementById("progress") as HTMLElement;
     const formSteps = document.querySelectorAll<HTMLElement>(".form-step");
     const progressSteps = document.querySelectorAll<HTMLElement>(".progress-step");
@@ -207,57 +361,47 @@ export class ProfileComponent {
     const reNewPassword = this.el.nativeElement.querySelector("#renewpassword");
     const changePassModal = this.el.nativeElement.querySelector("#changePassModal");
 
-    let formStepsNum = 0;
+    let formStepsNum = this.stepsNum;
 
-    nextBtns.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        if(formStepsNum == Number(0) && this.passwordForm.valid){
-          const data = {
-            oldPassword: this.passwordForm.get('oldPassword')?.value
-          };
-          this.modProfileService.checkPassword(data).subscribe(() => {
-            this.result = this.modProfileService.getResultCheckPassword();
-            if(this.result == 1){
-              this.createToast("Thành công!", "Mật khẩu đã đúng!", "success");
-              formStepsNum++;
-              updateFormSteps();
-              updateProgressbar();
-            }else{
-              this.createToast("Thất bại!", "Sai mật khẩu!", "error");
-            }
-          });
-        }
-        if(formStepsNum == Number(1) && this.newPasswordForm.valid){
-          const data = {
-            newPassword: this.newPasswordForm.get('newPassword')?.value,
-            reNewPassword: this.newPasswordForm.get('reNewPassword')?.value
-          };
-          if(data.newPassword == data.reNewPassword){
-            this.modProfileService.changePassword(data).subscribe();
-            this.createToast("Thành công!", "Thay đổi mật khẩu thành công!", "success");
-            setTimeout(() => {
-              changePassModal.style.display = 'none';
-              location.reload();
-            }, 600);
-          }else{
-            reNewPassword.setCustomValidity('Mật khẩu không giống nhau!');
-          }
+
+    if (formStepsNum == Number(0) && this.passwordForm.valid) {
+      const data = {
+        oldPassword: this.passwordForm.get('oldPassword')?.value
+      };
+      this.modProfileService.checkPassword(data).subscribe(() => {
+        this.result = this.modProfileService.getResultCheckPassword();
+        if (this.result == 1) {
+          this.createToast("Thành công!", "Mật khẩu đã đúng!", "success");
+          this.stepsNum++;
+          formStepsNum++;
+          updateFormSteps();
+          updateProgressbar();
+        } else {
+          this.createToast("Thất bại!", "Sai mật khẩu!", "error");
         }
       });
-    });
-
-    prevBtns.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        formStepsNum--;
-        updateFormSteps();
-        updateProgressbar();
-      });
-    });
+    }
+    if (formStepsNum == Number(1) && this.newPasswordForm.valid) {
+      const data = {
+        newPassword: this.newPasswordForm.get('newPassword')?.value,
+        reNewPassword: this.newPasswordForm.get('reNewPassword')?.value
+      };
+      if (data.newPassword == data.reNewPassword) {
+        this.modProfileService.changePassword(data).subscribe();
+        this.createToast("Thành công!", "Thay đổi mật khẩu thành công!", "success");
+        setTimeout(() => {
+          changePassModal.style.display = 'none';
+          location.reload();
+        }, 600);
+      } else {
+        reNewPassword.setCustomValidity('Mật khẩu không giống nhau!');
+      }
+    }
 
     function updateFormSteps() {
       formSteps.forEach((formStep) => {
         formStep.classList.contains("form-step-active") &&
-        formStep.classList.remove("form-step-active");
+          formStep.classList.remove("form-step-active");
       });
       // display none tắt modal đi
       formSteps[formStepsNum].classList.add("form-step-active");
@@ -277,6 +421,24 @@ export class ProfileComponent {
       );
 
       progress.style.width = ((progressActive.length - 1) / (progressSteps.length - 1)) * 100 + "%";
+    }
+  }
+
+  changeEmailCheck() {
+
+    const changePassModal = this.el.nativeElement.querySelector("#changePassModal");
+
+    if (this.changeEmailForm.valid) {
+      const data = {
+        newEmail: this.changeEmailForm.get('newEmail')?.value,
+        password: this.changeEmailForm.get('oldPasswordEmail')?.value
+      };
+      this.modProfileService.changeMail(data).subscribe(() => {
+        setTimeout(() => {
+          changePassModal.style.display = 'none';
+          location.reload();
+        }, 600);
+      });
     }
   }
 

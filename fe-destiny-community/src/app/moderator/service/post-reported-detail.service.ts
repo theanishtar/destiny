@@ -7,10 +7,11 @@ import { environment } from '../../../environments/environment'
 @Injectable({
   providedIn: 'root'
 })
-export class AdminPostdetailService {
+export class PostReportedDetailService {
 
-  private getDetailPostAPI = environment.baseUrl + 'v1/admin/detailPost';
-  private actionOnPostAPI = environment.baseUrl + 'v1/admin/actionOnPost';
+
+  private getDetailPostAPI = environment.baseUrl + 'v1/moderator/detailPost';
+  private sendPostReportedAPI = environment.baseUrl + 'v1/moderator/sendPostReported';
 
   private postDetail: any[] = [];
 
@@ -28,9 +29,8 @@ export class AdminPostdetailService {
     )
   }
 
-  actionOnPost(id: string) {
-    return this.http.get(this.actionOnPostAPI + "/" + id);
-
+  sendToAdmin(idPost: string, idUserSend: string) {
+    return this.http.delete(this.sendPostReportedAPI + "/" + idPost + "/" + idUserSend);
   }
 
   //getter
@@ -44,3 +44,4 @@ export class AdminPostdetailService {
   }
 
 }
+

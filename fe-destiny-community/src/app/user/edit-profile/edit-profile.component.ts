@@ -168,6 +168,7 @@ export class EditProfileComponent implements OnInit {
     }
 
     this.submitted = true;
+    console.warn("check: " + this.profileForm.valid)
     if (this.profileForm.valid) {
       var data = {
         username: this.profileForm.get('username')!.value,
@@ -182,7 +183,7 @@ export class EditProfileComponent implements OnInit {
         ward_name: this.profileForm.get('idWard')!.value,
         district_name: this.profileForm.get('idDistrict')!.value,
       };
-      // console.warn("data: " + JSON.stringify(data))
+      console.warn("data: " + JSON.stringify(data))
       this.profileService.updateProfile(data).subscribe(() => {
         new toast({
           title: 'Thành công!',
