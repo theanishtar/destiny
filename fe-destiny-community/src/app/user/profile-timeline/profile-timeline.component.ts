@@ -106,7 +106,11 @@ export class ProfileTimelineComponent implements OnInit {
       this.id_user = parseInt((params.get('id') + '')?.trim());
     });
     if (this.id_user) {
-      this.profileService.loadDataProfileTimeline(this.id_user);
+      if(this.id_user > 6){
+        this.profileService.loadDataProfileTimeline(this.id_user);
+      }else{
+        this.location.back();
+      }
     } else {
       this.profileService.loadDataProfileTimeline(this.idLocal);
     }
