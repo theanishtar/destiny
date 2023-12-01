@@ -56,8 +56,6 @@ class _LoginViewState extends State<LoginView> {
   }
 
   void login(String email, password) async {
-    print(email);
-    print(password);
     try {
       final data = {'email': email, 'password': password};
       final response =
@@ -78,6 +76,8 @@ class _LoginViewState extends State<LoginView> {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString('token', token);
           await prefs.setInt('id', id);
+          await prefs.setString('email', email);
+          await prefs.setString('password', password);
           // await prefs.setString('fullname', fullname);
           // await prefs.setString('avatar', avatar);
           await prefs.setBool('isLoggedIn', true);
@@ -94,7 +94,6 @@ class _LoginViewState extends State<LoginView> {
               jsonDecode(Utf8Decoder().convert(res.bodyBytes));
           manager.connectWebSocket();
 
-          print(data);
           runApp(GetMaterialApp(
             home: BottomNavBar(),
           ));

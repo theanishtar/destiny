@@ -151,7 +151,6 @@ class _ChatSampleState extends State<ChatSample> {
                   itemCount: snapshot.data!.length,
                   itemBuilder: (BuildContext context, int index) {
                     MessagesModel m = snapshot.data![index];
-
                     return Column(
                       children: [
                         if (m.day != '')

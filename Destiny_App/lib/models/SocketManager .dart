@@ -34,6 +34,7 @@ class SocketManager {
 
   late stomp.StompClient stompClientMessages;
   late stomp.StompClient stompClientNotification;
+  late stomp.StompClient stompClientRegister;
   late ApiManager apiManager = ApiManager();
   final StreamController<String> _streamController = StreamController<String>();
   var user_id = 0;
@@ -43,6 +44,7 @@ class SocketManager {
   bool checkNotify = false;
   bool checkScroll = false;
   int repCmtId = 0;
+  String emailRegister = "";
 
   Map<String, UserModel> mapUser = new Map<String, UserModel>();
   Map<int, NotifyModel> mapNotifycation = new Map<int, NotifyModel>();
@@ -72,7 +74,54 @@ class SocketManager {
     _commentStreamController.add(comment);
   }
 
-  void connectWebSocket() {
+  StreamController<List<NotifyModel>> _notifyStreamController =
+      StreamController<List<NotifyModel>>.broadcast();
+
+  Stream<List<NotifyModel>> get notifyStream => _notifyStreamController.stream;
+
+  // Thêm phương thức để cập nhật dữ liệu vào stream
+  void updateListNotify(List<NotifyModel> notify) {
+    _notifyStreamController.add(notify);
+  }
+
+  StreamController<List<UserModel>> _userStreamController =
+      StreamController<List<UserModel>>.broadcast();
+
+  Stream<List<UserModel>> get userStream => _userStreamController.stream;
+
+  // Thêm phương thức để cập nhật dữ liệu vào stream
+  void updateListUser(List<UserModel> user) {
+    _userStreamController.add(user);
+  }
+
+  void connectedRegister(String email) {
+    this.emailRegister = email;
+    stompClientRegister = stomp.StompClient(
+      config: StompConfig.sockJS(
+        url: ApiEndPoints.baseUrl + 'confirm-register',
+        onConnect: onConnectCallbackRegister,
+        onWebSocketError: (dynamic error) => print(error.toString()),
+      ),
+    );
+    if (stompClientRegister != null) {
+      stompClientRegister.activate();
+    }
+  }
+
+  void onConnectCallbackRegister(stomp.StompFrame frame) async {
+    String email = this.emailRegister;
+    stompClientRegister.subscribe(
+        destination: "/topic/autologin/$email",
+        callback: (stomp.StompFrame frame) {
+          String? data = frame.body;
+          Map<String, dynamic> dataJson = json.decode(data!);
+          apiManager.autoLogin(dataJson);
+        });
+  }
+
+  void connectWebSocket() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    user_id = await prefs.getInt('id') ?? 0;
     if (isConnected) {
       return; // Already connected, no need to reconnect
     }
@@ -113,10 +162,19 @@ class SocketManager {
           print('notifycation: ' + data.toString());
           List<dynamic> datajson = json.decode(data!);
           // Map<String, dynamic> datajson = json.decode(data!);
+          List<NotifyModel> list = [];
           for (var k in datajson) {
+            print("kkkkkkk: " + k.toString());
+            list.add(notifymodel(k));
+
             mapNotifycation[this.count_notify] = notifymodel(k);
             this.count_notify++;
           }
+
+          print("list: " + list.toString());
+          updateListNotify(list);
+
+          print("stream: " + notifyStream.length.toString());
           print('length notify: ' + mapNotifycation.length.toString());
         });
     stompClientNotification.subscribe(
@@ -135,10 +193,6 @@ class SocketManager {
 
   void onConnectCallback(stomp.StompFrame frame) async {
     isConnected = true;
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    user_id = await prefs.getInt('id') ?? 0;
-    var check = 26;
-
     stompClientMessages.subscribe(
       destination: '/topic/messages/$user_id',
       callback: (stomp.StompFrame frame) {
@@ -190,7 +244,7 @@ class SocketManager {
         String? data = frame.body;
 
         Map<String, dynamic> datajson = json.decode(data!);
-
+        List<UserModel> list = [];
         for (var key in datajson.keys) {
           if (key == user_id.toString()) {
             var value = datajson[key];
@@ -206,16 +260,21 @@ class SocketManager {
               model.lastMessage = v['lastMessage'];
               model.online = customTime(v['online'], 0);
               model.isFriend = bool.parse(v['friend'].toString());
+              list.add(model);
               mapUser[v['user_id'].toString()] = model;
               mapTime[v['user_id'].toString()] = model.online;
             }
           }
         }
-
-        _streamController.add(frame.body!);
+        this.updateListUser(list);
+        // _streamController.add(frame.body!);
       },
     );
+    logout();
+    // stompClientMessages.send(destination: '/app/fetchAllUsers');
+  }
 
+  void logout() {
     stompClientMessages.send(destination: '/app/fetchAllUsers');
   }
 

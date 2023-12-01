@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:login_signup/SplashScreen.dart';
 import 'package:login_signup/firebase_options.dart';
 import 'package:login_signup/view/bottomnavbar.dart';
 import 'package:login_signup/view/chatPage.view.dart';
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       routes: {
-        "/": (context) => HomeScreen(), // or whatever title you want
+        "/": (context) => SplashScreen(), // or whatever title you want
         "loginView": (context) => LoginView(),
         "signupView": (context) => SignupView(),
         "messageView": (context) => MessageView(),

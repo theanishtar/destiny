@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:login_signup/utils/gobal.colors.dart';
+import 'package:login_signup/view/signup.view.dart';
 import 'package:login_signup/view/widgets/button_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -58,7 +60,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 SizedBox(height: 15),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, "signupView");
+                    runApp(GetMaterialApp(
+                      home: SignupView(),
+                    ));
                   },
                   child: Container(
                     width: 300,

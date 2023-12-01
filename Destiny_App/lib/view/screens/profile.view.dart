@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:login_signup/models/SocketManager%20.dart';
 import 'package:login_signup/utils/api.dart';
 import 'package:login_signup/utils/gobal.colors.dart';
 import 'package:login_signup/view/edit_profile.view.dart';
@@ -22,6 +23,7 @@ class ProfileView extends StatefulWidget {
   State<ProfileView> createState() => _ProfileViewState();
 }
 
+late SocketManager socketManager = SocketManager();
 String? ava;
 String? fullname;
 int? countPost;
@@ -110,10 +112,28 @@ class _ProfileViewState extends State<ProfileView> {
               child: PopupMenuButton(
                 itemBuilder: (context) => [
                   PopupMenuItem(
-                      onTap: () {
-                        runApp(GetMaterialApp(
-                          home: HomeScreen(),
-                        ));
+                      onTap: () async {
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        var value = await prefs.getString('token');
+                        var id = await prefs.getInt('id');
+                        var headers = {
+                          'Authorization': 'Bearer $value',
+                          'Content-Type': 'application/json',
+                        };
+                        http.Response response;
+                        response = await http.get(
+                          Uri.parse(
+                              ApiEndPoints.baseUrl + "v1/user/logout/chat/$id"),
+                          headers: headers,
+                        );
+                        if (response.statusCode == 200) {
+                          socketManager.logout();
+                          await prefs.clear();
+                          runApp(GetMaterialApp(
+                            home: HomeScreen(),
+                          ));
+                        }
                       },
                       child: Row(
                         children: [

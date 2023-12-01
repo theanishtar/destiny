@@ -8,9 +8,9 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:login_signup/models/ApiManager.dart';
 import 'package:login_signup/models/SocketManager%20.dart';
-
 import 'package:login_signup/utils/gobal.colors.dart';
 import 'package:login_signup/view/screens/profile.view.dart';
+import 'package:login_signup/view/widgets/createPost.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:login_signup/utils/api.dart';
 import 'package:login_signup/view/widgets/myAppBar.dart';
@@ -34,6 +34,7 @@ class _Screen1State extends State<Screen1> {
   bool isLoading = false;
   List? listUser;
   List? listPost;
+  String? avatarUser;
   int currentPage = 1;
   Map<int, bool>? mapIntersted;
   @override
@@ -57,15 +58,12 @@ class _Screen1State extends State<Screen1> {
     });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var value = await prefs.getString('token');
+
     var headers = {
       'Authorization': 'Bearer $value',
       'Content-Type':
           'application/json', // Điều này phụ thuộc vào yêu cầu cụ thể của máy chủ
     };
-    // Gọi API để tải thêm bài post ở trang tiếp theo (currentPage + 1)
-    // Cần thay đổi logic lấy dữ liệu từ API dựa trên trang hiện tại (currentPage)
-
-    // Ví dụ:
     currentPage++; // Tăng số trang lên để load trang tiếp theo
     // Gọi API với trang mới và cập nhật danh sách bài post
     var response = await http.post(
@@ -89,6 +87,7 @@ class _Screen1State extends State<Screen1> {
   Future getData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var value = await prefs.getString('token');
+    var avataruser = await prefs.getString('avatar');
     var headers = {
       'Authorization': 'Bearer $value',
       'Content-Type':
@@ -105,10 +104,10 @@ class _Screen1State extends State<Screen1> {
     if (response.statusCode == 200) {
       setState(() {
         List data = jsonDecode(Utf8Decoder().convert(response.bodyBytes));
-        // listUser = data['user'];
 
+        avatarUser = avataruser;
         listPost = data;
-        print("1");
+
         print(data);
       });
     }
@@ -392,7 +391,126 @@ class _Screen1State extends State<Screen1> {
           Column(
             children: [
               MyAppBar(),
-              NewPost(),
+              Container(
+                padding: EdgeInsets.only(top: 0),
+                height: 90,
+                width: MediaQuery.of(context).size.width,
+                color: Colors.white,
+                child: Column(children: [
+                  Row(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(left: 10),
+                        child: CircleAvatar(
+                          backgroundImage: avatarUser != null
+                              ? NetworkImage(avatarUser!)
+                              : NetworkImage(
+                                  'https://firebasestorage.googleapis.com/v0/b/destiny-davisy.appspot.com/o/daviuser.png?alt=media&token=2d59b1a7-5ce8-4d5a-96f6-17b32a620b51&_gl=1*1g5m6wy*_ga*MTcxMDU3NTczOS4xNjc2OTc2NjE1*_ga_CW55HF8NVT*MTY5NjUwMzgxNi44LjEuMTY5NjUwNTk0MC4xNy4wLjA.'),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: 15),
+                        width: 300,
+                        child: TextField(
+                          decoration: InputDecoration(
+                              hintText: "Bạn đang nghĩ gì ?",
+                              border: InputBorder.none),
+                          onTap: () {
+                            runApp(GetMaterialApp(
+                              home: CreatePost(),
+                            ));
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                  // Text(stringResponse.toString()),
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(top: 0),
+                        alignment: Alignment.center,
+                        // color: Colors.black,
+                        height: 40,
+                        width: MediaQuery.of(context).size.width * 0.33,
+                        child: Container(
+                          width: 100,
+                          child: Row(
+                            children: [
+                              Container(
+                                alignment: Alignment.center,
+                                width: 30,
+                                child: Icon(
+                                  Icons.live_tv,
+                                  color: Colors.red,
+                                ),
+                              ),
+                              Container(
+                                  alignment: Alignment.center,
+                                  width: 60,
+                                  child: Text("Trực tiếp")),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 0),
+                        alignment: Alignment.center,
+                        // color: Colors.black,
+                        height: 40,
+                        width: MediaQuery.of(context).size.width * 0.33,
+                        child: Container(
+                          width: 100,
+                          child: Row(
+                            children: [
+                              Container(
+                                alignment: Alignment.center,
+                                width: 30,
+                                child: Icon(
+                                  Icons.photo,
+                                  color: Colors.green,
+                                ),
+                              ),
+                              Container(
+                                  alignment: Alignment.center,
+                                  width: 30,
+                                  child: Text("Ảnh")),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 0),
+                        alignment: Alignment.center,
+                        // color: Colors.black,
+                        height: 40,
+                        width: MediaQuery.of(context).size.width * 0.33,
+                        child: Container(
+                          width: 100,
+                          child: Row(
+                            children: [
+                              Container(
+                                alignment: Alignment.center,
+                                width: 30,
+                                child: Icon(
+                                  Icons.room,
+                                  color: const Color.fromARGB(255, 2, 124, 224),
+                                ),
+                              ),
+                              Container(
+                                  alignment: Alignment.center,
+                                  width: 30,
+                                  child: Text("Vị trí")),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ]),
+              ),
               Expanded(
                 child: ListView(
                   controller: _scrollController,

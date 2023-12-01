@@ -21,8 +21,6 @@ class SignupView extends StatelessWidget {
       TextEditingController();
   final _formfield = GlobalKey<FormState>();
   void signup(String email, fullname, password) async {
-    // String url = "http://192.168.137.1:8080/";
-
     print("aaaaaaaaa  " + email);
     print("bbbbbb  " + password);
 
