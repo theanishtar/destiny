@@ -41,17 +41,12 @@ public class BadWordServiceImpl implements BadWordService{
 	
 	@Override
 	public boolean checkBadword(String badword) {
-		try {
-			if(checkExistBadWord(badword) == true) {
-				System.out.println("tìm thấy từ ngữ vi phạm");
-				//thông báo
-				
-			}
+		if (checkExistBadWord(badword) == true) {
+			System.out.println("tìm thấy từ ngữ vi phạm");
 			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
 		}
+
+		return false;
 	}
 	
 	public boolean checkExistBadWord(String badword) {
