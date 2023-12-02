@@ -12,7 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.davisy.encrypt.AES;
+import com.davisy.encrypt.AESStringKey;
 import com.davisy.entity.Roles;
 import com.davisy.entity.User;
 import com.davisy.service.RolesService;
@@ -39,7 +39,7 @@ public class GGCloud {
 	
 
 	@Autowired
-	AES aes;
+	AESStringKey aes;
 
 	@Autowired
 	RolesService rolesService;

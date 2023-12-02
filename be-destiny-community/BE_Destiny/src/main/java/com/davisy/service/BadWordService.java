@@ -21,7 +21,4 @@ public interface BadWordService {
 	public long delete(String name, String data);
 	
 	public boolean checkBadword(String badword);
-	
-	public boolean checkTheSameBadword(String badword);
-	
 }

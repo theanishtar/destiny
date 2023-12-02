@@ -171,8 +171,9 @@ public class ProfileContronller {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		String formatted = "";
 		if (birthday != null) {
-			formatted = format.format(birthday.getTime());
+			format.format(birthday.getTime());
 		}
+
 		userP.setBirthday(formatted);
 
 		Calendar daycreate = user.getDay_create();
@@ -321,34 +322,29 @@ public class ProfileContronller {
 	@PostMapping("/v1/user/profile/post/timeline")
 	public ResponseEntity<List<PostEntity>> loadPostTimeLine(HttpServletRequest request,
 			@RequestBody Profile entityProfile) {
-		try {
-			String email = jwtTokenUtil.getEmailFromHeader(request);
-			User user = userService.findByEmail(email);
-			int user_id = user.getUser_id();
-			List<Object[]> postProfile = postService.getPostProfile(entityProfile.getToProfile(),user_id, entityProfile.getPage());
-			List<Object[]> postProfileShare = postService.getPostProfileShare(entityProfile.getToProfile(),user_id);
-			List<PostEntity> postEntityProfile = new ArrayList<>();
+		String email = jwtTokenUtil.getEmailFromHeader(request);
+		User user = userService.findByEmail(email);
+		int user_id = user.getUser_id();
+		List<Object[]> postProfile = postService.getPostProfile(entityProfile.getToProfile(),user_id, entityProfile.getPage());
+		List<Object[]> postProfileShare = postService.getPostProfileShare(entityProfile.getToProfile(),user_id);
+		List<PostEntity> postEntityProfile = new ArrayList<>();
 
-			for (Object[] ob : postProfile) {
-				if (null != ob[2]) {
-					int idPostShare = Integer.valueOf(ob[2].toString());
-					PostEntity profileTemp = new PostEntity();
-					for (Object[] ps : postProfileShare) {
-						if (Integer.valueOf(ps[0].toString()) == idPostShare) {
-							profileTemp = postEntityProfile(ps, null, 1);
-							postEntityProfile.add(postEntityProfile(ob, profileTemp, 0));
-							break;
-						}
+		for (Object[] ob : postProfile) {
+			if (null != ob[2]) {
+				int idPostShare = Integer.valueOf(ob[2].toString());
+				PostEntity profileTemp = new PostEntity();
+				for (Object[] ps : postProfileShare) {
+					if (Integer.valueOf(ps[0].toString()) == idPostShare) {
+						profileTemp = postEntityProfile(ps, null, 1);
+						postEntityProfile.add(postEntityProfile(ob, profileTemp, 0));
+						break;
 					}
-				} else {
-					postEntityProfile.add(postEntityProfile(ob, null, 0));
 				}
+			} else {
+				postEntityProfile.add(postEntityProfile(ob, null, 0));
 			}
-			return ResponseEntity.ok().body(postEntityProfile);
-		} catch (Exception e) {
-			System.out.println("post/timeline " + e);
-			return ResponseEntity.ok().body(null);
 		}
+		return ResponseEntity.ok().body(postEntityProfile);
 	}
 
 	public PostEntity postEntityProfile(Object[] ob, PostEntity entityProfile, int check) {

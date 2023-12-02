@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.davisy.encrypt.AES;
+import com.davisy.encrypt.AESStringKey;
 import com.davisy.entity.Roles;
 import com.davisy.entity.User;
 import com.davisy.service.RegisterService;
@@ -37,7 +37,7 @@ public class LoginFacebook {
 	RolesServiceImpl rolesServiceImpl;
 
 	@Autowired
-	AES aes;
+	AESStringKey aes;
 
 	@Autowired
 	RegisterService registerService;

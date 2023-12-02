@@ -20,6 +20,4 @@ public interface NotifyService {
 	public long delete(String name, String data);
 
 	public boolean checkNotification(String Notification);
-	
-	public long updateStatus(boolean newStatus);
 }

@@ -20,7 +20,7 @@ import com.davisy.SpamRrequestCheck;
 import com.davisy.auth.AuthenticationRequest;
 import com.davisy.auth.AuthenticationResponse;
 import com.davisy.config.JwtTokenUtil;
-import com.davisy.encrypt.AES;
+import com.davisy.encrypt.AESStringKey;
 import com.davisy.entity.User;
 import com.davisy.model.LoginResponse;
 import com.davisy.reponsitory.RoleCustomRepo;
@@ -45,7 +45,7 @@ public class Login {
 	private AuthenticationService authenticationService;
 
 	@Autowired
-	private AES aes;
+	private AESStringKey aes;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;

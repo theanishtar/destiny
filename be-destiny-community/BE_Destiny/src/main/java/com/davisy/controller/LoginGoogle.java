@@ -18,7 +18,7 @@ import com.davisy.auth.AuthenticationResponse;
 import com.davisy.auth.OAuthenticationRequest;
 import com.davisy.entity.User;
 import com.davisy.dao.UserDAO;
-import com.davisy.encrypt.AES;
+import com.davisy.encrypt.AESStringKey;
 import com.davisy.reponsitory.UsersReponsitory;
 import com.davisy.service.AuthenticationService;
 import com.davisy.service.JwtService;
@@ -34,7 +34,7 @@ public class LoginGoogle {
 	 * 
 	 * @Autowired AuthenticationService authenticationService;
 	 * 
-	 * @Autowired AES aes;
+	 * @Autowired AESStringKey aes;
 	 * 
 	 * @Autowired private PasswordEncoder passwordEncoder;
 	 * 

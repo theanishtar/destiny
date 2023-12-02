@@ -20,11 +20,9 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.FindOneAndReplaceOptions;
 import com.mongodb.client.model.ReturnDocument;
-import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertManyResult;
 import com.mongodb.client.result.InsertOneResult;
-import com.mongodb.client.result.UpdateResult;
 
 @Component
 public class MongoDBUtils {
@@ -123,7 +121,6 @@ public class MongoDBUtils {
 
 			if (list.size() == 0) {
 				System.out.println("Couldn't find any recipes containing " + column + " as an ingredient in MongoDB.");
-				return list;
 			} else {
 				return list;
 			}
@@ -150,7 +147,6 @@ public class MongoDBUtils {
 
 			if (list.isEmpty()) {
 				System.out.println("Không tìm thấy bất kỳ tài liệu nào trong MongoDB.");
-				return list;
 			} else {
 				return list;
 			}
@@ -225,57 +221,6 @@ public class MongoDBUtils {
 			}
 		} catch (MongoException me) {
 			return null;
-		}
-	}
-
-	public <T> long updateAllByColumn(Class<T> documentClass, String collectionName, String column, String dataColumn,
-			T newDocument) {
-		MongoDatabase database = client.getDatabase(dbName);
-		MongoCollection<T> collection = database.getCollection(collectionName, documentClass);
-
-		Bson filter = Filters.eq(column, dataColumn);
-		UpdateOptions options = new UpdateOptions().upsert(false);
-
-		// Your update fields and values
-		Document updateDocument = new Document("$set", newDocument);
-
-		try {
-			UpdateResult updateResult = collection.updateMany(filter, updateDocument, options);
-			return updateResult.getModifiedCount();
-		} catch (MongoException me) {
-			return 0;
-		}
-	}
-	
-	// update status cho notification
-	public <T> long updateStatusNotification(Class<T> documentClass, String collectionName, Boolean statusUpdate) {
-	    MongoDatabase database = client.getDatabase(dbName);
-	    MongoCollection<T> collection = database.getCollection(collectionName, documentClass);
-
-	    // Filter for documents where the status is false
-	    Document filter = new Document("status", !statusUpdate);
-
-	    // Update fields and values, setting status to true
-	    /*
-	     * upsert(false) (mặc định):
-
-			Khi upsert được đặt thành false, nghĩa là bạn không muốn thực hiện việc thêm mới (insert) bản ghi nếu không tìm thấy bản ghi nào khớp với điều kiện tìm kiếm.
-			Nếu không tìm thấy bản ghi nào khớp với điều kiện, thì không có thay đổi hoặc thêm mới sẽ xảy ra. Có nghĩa là nó chỉ cập nhật các bản ghi đã tồn tại.
-			upsert(true):
-			
-			Khi upsert được đặt thành true, nếu không tìm thấy bản ghi nào khớp với điều kiện tìm kiếm, MongoDB sẽ thêm mới một bản ghi dựa trên điều kiện tìm kiếm và các thông tin cập nhật bạn cung cấp.
-			Nếu không có bản ghi nào khớp, MongoDB sẽ chèn một bản ghi mới thay vì chỉ cập nhật các bản ghi đã tồn tại.
-	     */
-	    Document updateDocument = new Document("$set", new Document("status", statusUpdate));
-
-	    // Update all documents that match the filter
-	    UpdateOptions options = new UpdateOptions().upsert(false);
-	    
-	    try {
-			UpdateResult updateResult = collection.updateMany(filter, updateDocument, options);
-			return updateResult.getModifiedCount();
-		} catch (MongoException me) {
-			return 0;
 		}
 	}
 

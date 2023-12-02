@@ -28,8 +28,6 @@ public class AdminUserProfile {
 	String thumb;
 	int mark;
 	
-	boolean ban;
-	
 	int totalPost;
 	int totalInterested;
 	int totalFollower;
