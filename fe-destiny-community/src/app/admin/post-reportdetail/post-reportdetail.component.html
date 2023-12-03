@@ -1,0 +1,236 @@
+<div class="body-admin">
+
+  <app-sidebar-admin></app-sidebar-admin>
+  <div class="content">
+    <!-- Navbar -->
+    <app-navbar-admin></app-navbar-admin>
+
+    <!-- End of Navbar -->
+
+    <main>
+      <div class="header">
+        <div class="left">
+          <h1>Bài đăng</h1>
+          <ul class="breadcrumbD">
+            /
+            <li><a href="#" class="active">Báo cáo</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="row justify-content-center container-post-report">
+        <div class="col-xl-4 mb-3">
+          <div class="card border-left-danger shadow">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="font-weight-bold text-danger text-uppercase mb-2">
+                    <div>TỔNG SỐ BÀI VIẾT BỊ BÁO CÁO <br>(NGÀY {{day}}/{{month}}/{{year}})</div>
+                  </div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">
+                    <div>
+                      {{totalPostByDay}} <span class="text-success text-sm ml-2">+{{percentPostByDayIncrease}}%</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-calendar-day fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-4 mb-3">
+          <div class="card border-left-warning shadow">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="font-weight-bold text-warning text-uppercase mb-2">
+                    <div>TỔNG SỐ BÀI VIẾT BỊ BÁO CÁO (THÁNG {{month}})</div>
+                  </div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">
+                    <div>
+                      {{totalPostByMonth}} <span
+                        class="text-success text-sm ml-2">+{{percentPostByMonthIncrease}}%</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-calendar-week fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-4 mb-3">
+          <div class="card border-left-shine shadow">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="font-weight-bold text-pie text-uppercase mb-2">
+                    <div>TỔNG SỐ BÀI VIẾT BỊ BÁO CÁO (NĂM {{year}})</div>
+                  </div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">
+                    <div>
+                      {{totalPostByYear}} <span class="text-success text-sm ml-2">+{{percentPostByYearIncrease}}%</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-calendar fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-4">
+        <div class="col-lg-12 profile-logo-heart">
+          <img src="../assets/images/logo-euphoria.png" alt="" />
+        </div>
+        <div class="col-lg-12 profile-title mt-3">
+          <div class="logo" style="height: 0 !important">
+            <h2 class="logo-name"><span>DES</span>TINY</h2>
+          </div>
+        </div>
+      </div>
+      <div id="pagi-post-report">
+        <div class="d-flex justify-content-between mt-2 pl-1 container-post-report text-pink">
+          <h4 class="text-uppercase">Danh sách các bài viết bị báo cáo (Hôm nay)</h4>
+          <i class="bx bx-table text-pink text-md pr-1" (click)="openTable()" role="button"></i>
+        </div>
+        <div class="position-relative" *ngIf="listPostReportedByDay.length > 0">
+          <div id="myCarousel" class="carousel slide card shadow container-post-report mb-4" data-ride="carousel">
+            <div class="carousel-inner mt-3">
+
+              <div class="carousel-item col-md-4 mb-1 active card-postreport"
+                *ngFor="let post of listPostReportedByDay">
+                <div class="card p-3">
+                  <div class="border-radius-lg shadow-img">
+                    <a (click)="selectPost(post.post_id)" class="d-block">
+                      <img src="{{post.listPostImages[0].link_image}}" alt="img-blur-shadow"
+                        class="img-fluid border-radius-lg" />
+                    </a>
+                  </div>
+                  <div class="card-body px-1 pb-0">
+                    <p class="text-gradient text-dark mb-2 text-sm">{{post.product}}</p>
+                    <a (click)="selectUser(post.user_email)">
+                      <h5>{{post.user_fullname}}</h5>
+                    </a>
+                    <p class="mb-4 text-sm">
+                      {{post.content}}
+                    </p>
+                    <div class="d-flex align-items-center justify-content-between">
+                      <a (click)="selectPost(post.post_id)" type="button" class="btn btn-outline-primary">Xem chi
+                        tiết</a>
+                      <div class="avatar-group mt-2">
+                        <a (click)="selectUser(post.user_email)" class="avatar avatar-xs rounded-circle">
+                          <img alt=" Image placeholder" src="{{post.user_avatar}}" />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="d-flex justify-content-center button-reportdetail">
+            <a class="text-pink btn-previous-postreport" href="#myCarousel" role="button" data-slide="prev">
+              <span class="bx bx-chevron-left" aria-hidden="true" style="font-size: 3rem"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="text-pink btn-next-postreport" href="#myCarousel" role="button" data-slide="next">
+              <span class="bx bx-chevron-right" aria-hidden="true" style="font-size: 3rem"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+        </div>
+        <div class="position-relative" *ngIf="listPostReportedByDay.length == 0">
+          <div class="card shadow container-post-report mb-4">
+            <div class="card-body" style="min-height: 400px;">
+              <div class="row mb-4">
+                <div class="col-lg-12 profile-logo-heart">
+                  <img src="../assets/images/logo-euphoria.png" alt="" />
+                </div>
+                <div class="col-lg-12 profile-title mt-3 mb-5">
+                  <div class="logo" style="height: 0 !important">
+                    <h2 class="logo-name"><span>DES</span>TINY</h2>
+                  </div>
+                </div>
+                <div class="col-lg-10 offset-lg-1 text-center">
+                  <h2>KHÔNG CÓ BÀI VIẾT NÀO BỊ BÁO CÁO HÔM NAY CẢ </h2>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hidden" id="table-post-report">
+        <div class="d-flex justify-content-between mt-2 pl-1 container-post-report text-pink">
+          <h4 class="text-uppercase">Danh sách tất cả các bài viết bị báo cáo</h4>
+          <i class=" bx bx-card text-pink text-md pr-1" (click)="openTable()" role="button"></i>
+        </div>
+        <div class="container-post-report">
+          <div class="card shadow mb-5 mt-0">
+            <div class="card-body">
+              <h5 class="ml-1 mt-2 mb-3 font-weight-bold">Danh sách</h5>
+              <div class="table-responsive ml-1">
+                <table class="table rwd-table" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>Hình ảnh</th>
+                      <th>Người dùng</th>
+                      <th>Nội dung</th>
+                      <th>Số lượng tố cáo</th>
+                      <th>Ngày đăng</th>
+                      <th>
+                        <i class="fas fa-solid fa-arrow-right-to-bracket"></i>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <th>Hình ảnh</th>
+                      <th>Người dùng</th>
+                      <th>Nội dung</th>
+                      <th>Số lượng tố cáo</th>
+                      <th>Ngày đăng</th>
+                      <th>
+                        <i class="fas fa-solid fa-arrow-right-to-bracket"></i>
+                      </th>
+                    </tr>
+                  </tfoot>
+                  <tbody>
+                    <tr *ngFor="let post of listPostReportedByYear">
+                      <td data-th="Hình ảnh" class="h-100 text-center">
+                        <img class="img-post-report" src="{{post.listPostImages[0].link_image}}" />
+                      </td>
+                      <td data-th="Người dùng">{{post.user_fullname}}</td>
+                      <td class="text-substring" data-th="Nội dung">
+                        {{post.content}}
+                      </td>
+                      <td data-th="Số lượng báo cáo" class="">
+                        <span class="status green" *ngIf="post.total_report <= 2">{{post.total_report}}</span>
+                        <span class="status yellow"
+                          *ngIf="post.total_report > 2 && post.total_report < 5">{{post.total_report}}</span>
+                        <span class="status red" *ngIf="post.total_report >= 5">{{post.total_report}}</span>
+                      </td>
+                      <td data-th="Ngày đăng">{{post.date_post}}</td>
+                      <td data-th="Xem thêm">
+                        <a (click)="selectPost(post.post_id)" type="button" class="edit"><i
+                            class="fas fa-solid fa-arrow-right-to-bracket"></i></a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+</div>

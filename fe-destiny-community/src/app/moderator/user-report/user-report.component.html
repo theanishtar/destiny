@@ -1,0 +1,162 @@
+<div class="body-admin">
+
+  <app-sidebar-moderator></app-sidebar-moderator>
+  <div class="content">
+    <!-- Navbar -->
+    <app-navbar-moderator></app-navbar-moderator>
+
+    <!-- End of Navbar -->
+
+    <main>
+      <div class="header">
+        <div class="left">
+          <h1>Người Dùng</h1>
+          <ul class="breadcrumbD">
+            /
+            <li><a href="#" class="active">Báo cáo</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="row justify-content-center container-post-report">
+        <div class="col-xl-4 mb-3">
+          <div class="card border-left-primary shadow">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="font-weight-bold text-primary text-uppercase mb-2">
+                    <div>TỔNG NGƯỜI DÙNG BỊ BÁO CÁO <br>(NGÀY {{day}}/{{month}}/{{year}})</div>
+                  </div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">
+                    <div>
+                      {{totalUserByDay}} <span class="text-success text-sm ml-2">+{{percentUserByDayIncrease}}%</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-calendar-day fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-4 mb-3">
+          <div class="card border-left-info shadow">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="font-weight-bold text-info text-uppercase mb-2">
+                    <div>TỔNG NGƯỜI DÙNG BỊ BÁO CÁO (THÁNG {{month}})</div>
+                  </div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">
+                    <div>
+                      {{totalUserByMonth}} <span
+                        class="text-success text-sm ml-2">+{{percentUserByMonthIncrease}}%</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-calendar-week fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-4 mb-3">
+          <div class="card border-left-shine shadow">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="font-weight-bold text-pie text-uppercase mb-2">
+                    <div>TỔNG NGƯỜI DÙNG BỊ BÁO CÁO (NĂM {{year}})</div>
+                  </div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">
+                    <div>
+                      {{totalUserByYear}} <span class="text-success text-sm ml-2">+{{percentUserByYearIncrease}}%</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-calendar fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-4">
+        <div class="col-lg-12 profile-logo-heart">
+          <img src="../assets/images/logo-euphoria.png" alt="" />
+        </div>
+        <div class="col-lg-12 profile-title mt-3">
+          <div class="logo" style="height: 0 !important">
+            <h2 class="logo-name"><span>DES</span>TINY</h2>
+          </div>
+        </div>
+      </div>
+
+      <div class="" id="table-post-report">
+        <div class="d-flex justify-content-between mt-2 pl-1 container-post-report text-pink">
+          <h4 class="text-uppercase">Danh sách tất cả các người dùng bị báo cáo</h4>
+        </div>
+        <div class="container-post-report">
+          <div class="card shadow mb-5 mt-0">
+            <div class="card-body">
+              <h5 class="ml-1 mt-2 mb-3 font-weight-bold">Danh sách</h5>
+              <div class="table-responsive ml-1">
+                <table class="table rwd-table" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>Ảnh đại diện</th>
+                      <th>Người dùng</th>
+                      <th>Nội dung báo cáo</th>
+                      <th>Ngày báo cáo</th>
+                      <th class="text-center">Số lượng bài đăng</th>
+                      <th>
+                        <i class="fas fa-solid fa-arrow-right-to-bracket"></i>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <th>Ảnh đại diện</th>
+                      <th>Người dùng</th>
+                      <th>Nội dung báo cáo</th>
+                      <th>Ngày báo cáo</th>
+                      <th class="text-center">Số lượng bài đăng</th>
+                      <th>
+                        <i class="fas fa-solid fa-arrow-right-to-bracket"></i>
+                      </th>
+                    </tr>
+                  </tfoot>
+                  <tbody>
+                    <tr *ngFor="let user of listUserReported">
+                      <td data-th="Ảnh đại diện" class="ml-3 h-100 text-center">
+                        <img src="{{user.avatar}}" />
+                      </td>
+                      <td data-th="Người dùng">{{user.fullname}}</td>
+                      <td data-th="Nội dung">{{user.content_report}}</td>
+                      <td data-th="Ngày báo cáo">{{user.date_report}}</td>
+                      <td data-th="Số lượng bài viết" class="text-center">
+                        <span class=" status gray" *ngIf="user.totalPost <= 2">{{user.totalPost}}</span>
+                        <span class="status blue"
+                          *ngIf="user.totalPost > 2 && user.totalPost < 5">{{user.totalPost}}</span>
+                        <span class="status primary" *ngIf="user.totalPost >= 5">{{user.totalPost}}</span>
+                      </td>
+
+                      <td data-th="Xem thêm">
+                        <a (click)="selectUser(user.email, user.id_user_send)" type="button" class="edit"><i
+                            class="fas fa-solid fa-arrow-right-to-bracket"></i></a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+</div>

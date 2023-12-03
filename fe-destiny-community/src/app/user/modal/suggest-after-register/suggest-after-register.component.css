@@ -1,0 +1,216 @@
+main.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 10001;
+}
+
+.modal-body {
+    padding-top: 0;
+}
+
+main .widget-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #F1F5F9;
+    padding: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    z-index: 10002;
+    width: 385px;
+    height: 540px;
+    border-radius: 10px;
+    
+}
+.list-suggest {
+    height: 375px;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    overflow: auto;
+    overflow: -moz-scrollbars-none;
+    -ms-overflow-style: none;
+}
+.list-suggest::-webkit-scrollbar {
+    width: 0 !important;
+    display: none;
+  }
+
+.user-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+input[type="checkbox"] {
+    width: auto;
+}
+.user-status-list {
+    padding: 0 16px;
+}
+.btns {
+  display: flex;
+  align-items: end;
+  justify-content: end;
+}
+button#addButton {
+  padding: 10px 0px;
+  width: 30%;
+  background: #6062FA;
+  color: white;
+  margin-right: 10px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* cursor: pointer; */
+}
+button#reloadButton{
+  padding: 10px 0px;
+  width: 30%;
+  background: #6062FA;
+  color: white;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  cursor: pointer;
+}
+.disabled{
+  background-color: #D8DADF !important;
+  color: black;
+}
+/* avatar */
+.hexagon-container {
+    width: 45px;
+    height: 48px;
+    background-color: transparent;
+    position: relative;
+    margin: 0 auto;
+    background: white;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  }
+  
+  .hexagon {
+    position: absolute;
+  }
+  
+  .user-avatar-content {
+    width: 40px;
+    height: 44px;
+    overflow: hidden;
+    position: absolute;
+  }
+  
+  .hexagon-image {
+    width: 30px;
+    height: 33px;
+    position: relative;
+    z-index: 3;
+    background-size: cover;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    left: 4%;
+    top: 2%;
+  }
+  
+  .user-avatar-border:before {
+    width: 42px;
+    height: 46px;
+    z-index: 1;
+    content: "";
+    position: absolute;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    /* border-radius: 15px; */
+    left: 1px;
+    top: 0px;
+    background-image: linear-gradient(to right, #41efff, #615dfa);
+  }
+  
+  .hexagon.user-avatar-progress-border {
+    position: absolute;
+    z-index: 2;
+    margin-left: 9.6%;
+    margin-top: 8.3%;
+    width: 35px;
+    height: 39px;
+    background: white;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  }
+
+  /* checkbox */
+  .cbx {
+    -webkit-perspective: 20;
+    perspective: 20;
+    /* position: absolute;
+    top: 50%;
+    left: 50%; */
+    /* margin: -12px; */
+    border: 2px solid #e8e8eb;
+    background: #e8e8eb;
+    border-radius: 4px;
+    transform: translate3d(0, 0, 0);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .cbx:hover {
+    border-color: #0b76ef;
+  }
+  
+  .flip {
+    display: block;
+    transition: all 0.4s ease;
+    transform-style: preserve-3d;
+    position: relative;
+    width: 20px;
+    height: 20px;
+  }
+  
+  .input-check {
+    display: none;
+  }
+  
+  .input-check:checked + .cbx {
+    border-color: #0b76ef;
+  }
+  
+  .input-check:checked + .flip {
+    transform: rotateY(180deg);
+  }
+  
+  .front,
+  .back {
+    backface-visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 2px;
+  }
+  
+  .front {
+    background: #fff;
+    z-index: 1;
+  }
+  
+  .back {
+    transform: rotateY(180deg);
+    background: #0b76ef;
+    text-align: center;
+    color: #fff;
+    line-height: 20px;
+    box-shadow: 0 0 0 1px #0b76ef;
+  }
+  
+  .back svg {
+    margin-top: 3px;
+    fill: none;
+  }
+  
+  .back svg path {
+    stroke: #fff;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  
+  
+  

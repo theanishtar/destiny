@@ -1,0 +1,406 @@
+<app-navigation></app-navigation>
+
+<!-- CONTENT GRID -->
+<!-- <app-loading *ngIf="isLoading"></app-loading> -->
+<div class="content-grid" id="body-edit">
+  <app-header-profile></app-header-profile>
+
+  <!-- GRID -->
+  <form
+    [formGroup]="profileForm"
+    (ngSubmit)="updateProfile($event)"
+    action=""
+    novalidate
+  >
+    <div class="grid grid-3-9 medium-space">
+      <!-- GRID COLUMN -->
+      <div class="account-hub-sidebar">
+        <!-- SIDEBAR BOX -->
+        <div class="sidebar-box no-padding">
+          <label class="label-thumb">
+          <figure
+            class="user-preview-cover liquid"
+            style="
+              background: url('{{ dataEditProfile.thumb }}') center center /
+                cover no-repeat;
+            "
+          >
+           
+          <img src="{{ dataEditProfile.thumb }}"  alt="cover-04" style="display: none" #uploadPreviewThumb id="uploadPreviewThumb" />
+          <input type="file" class="file" formControlName="thumb" (change)="chooseFileThumb($event)" style="opacity: 0; position: absolute; z-index: 2; height: 130px;">
+          </figure>
+        </label>
+          <!-- USER SHORT DESCRIPTION AVATAR -->
+          <div class="change-avatar">
+            <a
+              class="user-short-description-avatar user-avatar big"
+              
+            >
+            <div class="hexagon-container">
+                <div class="hexagon user-avatar-content">
+                  <label class="upload-image">
+                    <input type="file" class="file" (change)="chooseFile($event)" style="display: none;position: absolute; z-index: 4; height: 130px;">
+                  <div
+                    class="hexagon-image"
+                    style="background-image: url('{{dataEditProfile.avatar}}')"></div>
+                  <input type="text" formControlName="avatar" [(ngModel)]="avatar" id="avatar" style="display: none;">
+                  <img src="{{ dataEditProfile.avatar }}" class="hexagon-image" alt="cover-04" style="display: none" #uploadPreviewAvatar id="uploadPreviewAvatar" />
+                </label>
+                </div>
+              
+                <div class="hexagon user-avatar-border">
+                  <div class="hexagon-border"></div>
+                </div>
+                <div class="hexagon user-avatar-progress-border">
+                  <div class="user-avatar-progress"></div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <!-- /USER SHORT DESCRIPTION AVATAR -->
+
+          <!-- FORM ITEM -->
+          <div class="form-item-bio">
+            <!-- FORM INPUT -->
+            <div class="form-input small">
+              <textarea
+                (input)="checkCharacterLimit()"
+                [readonly]="readonlyCondition"
+                (keydown)="onKeyDown($event)"
+                name="textAreaContent"
+                class="bio"
+                id="bio"
+                rows="7"
+                placeholder="Viết đôi lời giới thiệu về bạn..."
+                [(ngModel)]="dataEditProfile.intro"
+                formControlName="intro"
+              ></textarea>
+              <span class="count-characters"
+                ><span id="charCount">0</span><b>/180</b></span
+              >
+            </div>
+            <!-- /FORM INPUT -->
+          </div>
+          <!-- /FORM ITEM -->
+
+          <!-- SIDEBAR BOX FOOTER -->
+          <div class="sidebar-box-footer">
+            <!-- BUTTON -->
+            <button class="button primary" type="submit" [disabled]="!this.profileForm.valid">Lưu thay đổi</button>
+            <!-- /BUTTON -->
+           
+            <!-- BUTTON -->
+            <div class="btn-action">
+              <!-- <br> -->
+              <p class="button white cancel" (click)="cancelEdit()">Hủy</p>
+              <!-- <p class="button white small-space">Khóa tài khoản</p> -->
+            </div>
+            
+            <!-- /BUTTON -->
+          </div>
+          <!-- /SIDEBAR BOX FOOTER -->
+        </div>
+        <!-- /SIDEBAR BOX -->
+      </div>
+      <!-- /GRID COLUMN -->
+
+      <!-- GRID COLUMN -->
+      <div class="account-hub-content">
+        <!-- SECTION HEADER -->
+        <div class="section-header">
+          <!-- SECTION HEADER INFO -->
+          <div class="section-header-info">
+            <!-- SECTION PRETITLE -->
+            <p class="section-pretitle">Thông tin</p>
+            <!-- /SECTION PRETITLE -->
+
+            <!-- SECTION TITLE -->
+            <h2 class="section-title">Tài khoản</h2>
+            <!-- /SECTION TITLE -->
+          </div>
+          <!-- /SECTION HEADER INFO -->
+        </div>
+        <!-- /SECTION HEADER -->
+
+        <!-- GRID COLUMN -->
+        <div class="grid-column">
+          <!-- WIDGET BOX -->
+          <div class="widget-box">
+            <!-- WIDGET BOX TITLE -->
+            <p class="widget-box-title">Thông tin của bạn</p>
+            <!-- /WIDGET BOX TITLE -->
+
+            <!-- WIDGET BOX CONTENT -->
+            <div class="widget-box-content">
+              <!-- FORM ROW -->
+              <div class="form-row split">
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM INPUT -->
+                  <div class="form-input small active">
+                    <label for="profile-name">Họ tên</label>
+                    <input
+                      type="text"
+                      id="profile-name"
+                      name="profile_name"
+                      formControlName="fullname"
+                      [(ngModel)]="dataEditProfile.fullname"
+                    />
+                    <span
+                      *ngIf="
+                        profileForm.get('fullname')?.invalid &&
+                        profileForm.get('fullname')?.touched
+                      "
+                    >
+                      <div
+                        *ngIf="profileForm.get('fullname')?.errors"
+                        style="color: red"
+                      >
+                        <div
+                          *ngIf="
+                            profileForm.get('fullname')?.hasError('required')
+                          "
+                          style="color: red"
+                        >
+                          Vui lòng nhập họ tên!
+                        </div>
+                        <div
+                          *ngIf="
+                            profileForm.get('fullname')?.hasError('pattern')
+                          "
+                          style="color: red"
+                        >
+                          Họ tên không chứa ký tự đặc biệt!
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+                  <!-- /FORM INPUT -->
+                </div>
+                <!-- /FORM ITEM -->
+
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM INPUT -->
+                  <div class="form-input small active">
+                    <label for="profile-tagline">Tên người dùng</label>
+                    <input
+                      type="text"
+                      id="profile-tagline"
+                      name="profile_tagline"
+                      [(ngModel)]="dataEditProfile.username"
+                      formControlName="username"
+                      required
+                    />
+                  </div>
+                  <!-- /FORM INPUT -->
+                </div>
+                <!-- /FORM ITEM -->
+              </div>
+              <!-- /FORM ROW -->
+
+              <!-- FORM ROW -->
+              <div class="form-row split">
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM INPUT -->
+                  <div class="form-input small active">
+                    <label for="profile-name">Email</label>
+                    <input
+                      type="text"
+                      id="profile-name"
+                      name="profile_name"
+                      formControlName="email"
+                      [(ngModel)]="dataEditProfile.email"
+                      readonly
+                    />
+                    <span
+                      *ngIf="
+                        profileForm.get('email')?.invalid &&
+                        profileForm.get('email')?.touched
+                      "
+                    >
+                      <div style="color: red">Vui lòng kiểm tra email!</div>
+                    </span>
+                  </div>
+                  <!-- /FORM INPUT -->
+                </div>
+                <!-- /FORM ITEM -->
+
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM INPUT -->
+                  <div class="form-input small active">
+                    <label for="profile-tagline">Mật khẩu</label>
+                    <input
+                      type="password"
+                      id="profile-tagline"
+                      name="profile_tagline"
+                      formControlName="password"
+                      placeholder="******"
+                      readonly
+                    />
+                  </div>
+                  <!-- /FORM INPUT -->
+                </div>
+                <!-- /FORM ITEM -->
+              </div>
+              <!-- /FORM ROW -->
+
+              <!-- FORM ROW -->
+              <div class="form-row split">
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM INPUT DECORATED -->
+                  <div class="form-input-decorated">
+                    <!-- FORM INPUT -->
+                    <div class="form-input small active">
+                      <label for="profile-birthday">Ngày sinh</label>
+                      <input
+                        type="date"
+                        id="profile-birthday"
+                        name="profile_birthday"
+                        [(ngModel)]="dataEditProfile.birthday"
+                        formControlName="birthday"
+                        (change)="onDateChange($event)" required
+                        required
+                      />
+                      <span *ngIf="!checkValidDate">
+                        <div style="color: red">
+                          Vui lòng kiểm tra lại ngày sinh!
+                        </div>
+                      </span>
+                    </div>
+                    <!-- /FORM INPUT -->
+
+                    <!-- FORM INPUT ICON -->
+                    <!-- <svg class="form-input-icon icon-events">
+                      <use xlink:href="#svg-events"></use>
+                    </svg> -->
+                    <!-- /FORM INPUT ICON -->
+                  </div>
+                  <!-- /FORM INPUT DECORATED -->
+                </div>
+                <!-- /FORM ITEM -->
+
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM INPUT -->
+                  <div class="form-select">
+                    <label for="profile-country">Giới tính</label>
+                    <ng-select
+                      id="gender"
+                      [items]="genders"
+                      [clearable]="false"
+                      formControlName="gender"
+                      class="form-controlP"
+                      [ngModel]="dataEditProfile.gender_name"
+                      required
+                    ></ng-select>
+                  </div>
+                  <!-- /FORM INPUT -->
+                </div>
+                <!-- /FORM ITEM -->
+              </div>
+              <!-- /FORM ROW -->
+              <!-- FORM ROW -->
+
+              <div class="form-row split">
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM SELECT -->
+                  <div class="form-select">
+                    <label for="profile-country">Tỉnh/Thành phố</label>
+                    <ng-select
+                      id="province"
+                      [items]="provinces"
+                      [clearable]="false"
+                      formControlName="idProvince"
+                      [ngModel]="dataEditProfile?.province_name"
+                      (change)="getProvinceName()"
+                      required
+                    ></ng-select>
+                    <!-- /FORM SELECT ICON -->
+                  </div>
+                  <!-- /FORM SELECT -->
+                </div>
+                <!-- /FORM ITEM -->
+
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM SELECT -->
+                  <div class="form-select">
+                    <label for="profile-city">Quận/Huyện</label>
+                    <ng-select
+                      id="district"
+                      [items]="districts"
+                      [clearable]="false"
+                      formControlName="idDistrict"
+                      class="form-controlP"
+                      [ngModel]="dataEditProfile?.district_name"
+                      required
+                      (change)="getDistrictName()"
+                    ></ng-select>
+                    <!-- /FORM SELECT ICON -->
+                  </div>
+                  <!-- /FORM SELECT -->
+                </div>
+                <!-- /FORM ITEM -->
+              </div>
+              <!-- /FORM ROW -->
+
+              <!-- FORM ROW -->
+              <div class="form-row split">
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM SELECT -->
+                  <div class="form-select">
+                    <label for="profile-city">Phường/Xã</label>
+                    <ng-select
+                      id="ward"
+                      [items]="wards"
+                      [clearable]="false"
+                      formControlName="idWard"
+                      class="form-controlP"
+                      [ngModel]="dataEditProfile?.ward_name"
+                      required
+                    ></ng-select>
+                    <!-- /FORM SELECT ICON -->
+                  </div>
+                  <!-- /FORM SELECT -->
+                </div>
+                <!-- /FORM ITEM -->
+
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM INPUT -->
+                  <div class="form-input small active">
+                    <label for="profile-birthplace">Ngày gia nhập</label>
+                    <input
+                      type="date"
+                      id="profile-birthplace"
+                      name="profile_birthplace"
+                      value="{{ dataEditProfile.day_create }}"
+                      [readOnly]="true"
+                      formControlName="day_create"
+                    />
+                  </div>
+                  <!-- /FORM INPUT -->
+                </div>
+                <!-- /FORM ITEM -->
+              </div>
+              <!-- /FORM ROW -->
+            </div>
+            <!-- WIDGET BOX CONTENT -->
+          </div>
+          <!-- /WIDGET BOX -->
+        </div>
+        <!-- /GRID COLUMN -->
+      </div>
+      <!-- /GRID COLUMN -->
+    </div>
+  </form>
+
+  <!-- /GRID -->
+</div>
+<!-- /CONTENT GRID -->

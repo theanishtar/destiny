@@ -1,0 +1,46 @@
+<main class="overlay" *ngIf="modalService.isOpenSeeAllImg$ | async">
+  <app-loading *ngIf="modalService.checkImgSeeAll"></app-loading>
+    <div *ngIf="!modalService.checkImgSeeAll" id="favDialog_updatePost" class="modal fade favDialog_updatePost">
+      <div
+        (click)="modalService.closeModalSeeAllImg()"
+        class="btnClose-create-post"
+      >
+        <i class="fa-solid fa-xmark"></i>
+      </div>
+      <div class="post-container-update">
+        <div class="post">
+          <!-- Slideshow container -->
+          <div class="img-product">
+            <div class="slideshow-container">
+              <!-- Full-width images with number and caption text -->
+              <div class="mySlides fade" *ngFor="let img of modalService.imagesSeeAll">
+                <img [src]="img" style="width: 100%; height: 100%; object-fit: cover;" />
+              </div>
+              <!-- Next and previous buttons -->
+              <div class="btn-slide-show">
+                <a class="prev" (click)="plusSlides(-1)">&#10094;</a>
+                <a class="next" (click)="plusSlides(1)">&#10095;</a>
+              </div>
+            </div>
+            <div class="numbertext">
+              <span id="numbertext">1 </span>/
+              <b>{{ modalService.imagesSeeAll.length }}</b>
+            </div>
+          </div>
+          <!-- ../../assets/images/cover/03.jpg -->
+          <div class="post-detail">
+            <div class="cmt-body">
+              <div class="full-boxer">
+                <div class="body-all-images">
+                    <div class="all-image" *ngFor="let img of modalService.imagesSeeAll; let i = index" (click)="goToSlide(i)">
+                        <img [src]="img"/>
+                      </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  
