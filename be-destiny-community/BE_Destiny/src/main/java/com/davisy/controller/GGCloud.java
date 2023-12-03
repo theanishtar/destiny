@@ -36,11 +36,6 @@ public class GGCloud {
 	@Autowired
 	HttpServletRequest httpServletRequest;
 
-	
-
-	@Autowired
-	AES aes;
-
 	@Autowired
 	RolesService rolesService;
 

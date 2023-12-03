@@ -11,7 +11,7 @@ export interface NotifyModel {
   }
   
   export enum MessageType {
-    COMMENT, REPCOMMENT,MENTION , INTERESTED, FOLLOW, SHARE
+    COMMENT, REPCOMMENT,MENTION , INTERESTED, FOLLOW, SHARE,POST
   }
   // export enum MessageType {
   //   COMMENT = 'COMMENT', 

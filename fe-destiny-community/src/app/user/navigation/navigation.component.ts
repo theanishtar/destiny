@@ -53,6 +53,7 @@ export class NavigationComponent implements OnInit {
     private uiServiveService: UIServiveService
   ) {
     this.router.events.subscribe((event) => {
+      console
       this.chatUserId = parseInt((localStorage.getItem("chatUserId") + '')?.trim());
       if (event instanceof NavigationEnd) {
         // Đã chuyển đến trang mới, thực hiện cập nhật menu active
@@ -99,6 +100,9 @@ export class NavigationComponent implements OnInit {
     }
     if (type == 'MENTION') {
       return 'MENTION';
+    }
+    if (type == 'POST') {
+      return 'POST';
     }
     return null;
   }

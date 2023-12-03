@@ -127,6 +127,8 @@ export class CreatePostComponent {
             duration: 1500,
           });
           this.listPosts = res;
+          this.modalService.sendNotify(' ', 0, 0, 'POST', this.modalService.repCmtId);
+
           this.createPostForm.reset();
           this.listImg = [];
           this.file = {};

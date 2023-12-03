@@ -44,8 +44,6 @@ public class Login {
 	@Autowired
 	private AuthenticationService authenticationService;
 
-	@Autowired
-	private AES aes;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;

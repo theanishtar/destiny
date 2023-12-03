@@ -55,7 +55,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @RestController
-@CrossOrigin
+@CrossOrigin("*")
 public class ProfileContronller {
 	@Autowired
 	JwtTokenUtil jwtTokenUtil;

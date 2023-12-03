@@ -38,6 +38,7 @@ import com.davisy.service.impl.PostImagesServiceImpl;
 import com.davisy.service.impl.PostServiceImpl;
 import com.davisy.service.impl.UserServiceImpl;
 import com.davisy.storage.chat.UserChatStorage;
+import com.davisy.storage.chat.UserFollowerStorage;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -99,6 +100,7 @@ public class UserChatController {
 			userService.update(user);
 			async(user, false);
 			UserChatStorage.getInstance().remove(id);
+			UserFollowerStorage.getInstance().remove(id);
 //			System.err.println("đăng xuất");
 			return ResponseEntity.ok().build();
 		} catch (Exception e) {

@@ -152,6 +152,8 @@ export class CommentComponent {
   closeModalComment() {
     this.modalService.closeModalComment();
     this.modalService.repCmtId = 0;
+    this.modalService.mapMention.clear();
+
   }
 
   reply(idCmt: any, name: string) {

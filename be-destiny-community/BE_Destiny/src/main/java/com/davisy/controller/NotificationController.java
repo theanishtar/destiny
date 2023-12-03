@@ -52,6 +52,7 @@ import com.davisy.service.ShareService;
 import com.davisy.service.UserService;
 import com.davisy.service.impl.BadWordServiceImpl;
 import com.davisy.service.impl.NotifyServiceImpl;
+import com.davisy.storage.chat.UserFollowerStorage;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -284,6 +285,7 @@ public class NotificationController {
 				}
 			}
 			if (model.getType().toString().equalsIgnoreCase("FOLLOW")) {
+				List<Integer> listId = UserFollowerStorage.getInstance().getUsers().get(model.getFromUserId());
 				User toUser = userService.findById(to);
 				Follower follower = new Follower();
 				Follower.Pk pk = new Follower.Pk();
@@ -291,6 +293,8 @@ public class NotificationController {
 				pk.setUser_id(user.getUser_id());
 				follower.setPk(pk);
 				followService.create(follower);
+				listId.add(to);
+				UserFollowerStorage.getInstance().setUser(model.getFromUserId(), listId);
 				if (followService.checkFriend(user.getUser_id(), to)
 						&& chatsService.findChatNames(user.getUsername(), toUser.getUsername()) == null) {
 					createNewChat(user.getUsername(), toUser.getUsername(), user.getUser_id(), toUser.getUser_id());
@@ -302,8 +306,18 @@ public class NotificationController {
 				}
 			}
 			insert(model, to);
-			simpMessagingTemplate.convertAndSend("/topic/notification/" + to,
-					model(notifyService.findAllByName("idUserReceive", to + "")));
+			if (model.getType().toString().equalsIgnoreCase("POST")) {
+				List<Integer> listId = UserFollowerStorage.getInstance().getUsers().get(model.getFromUserId());
+				for (Integer i : listId) {
+					simpMessagingTemplate.convertAndSend("/topic/notification/" + i,
+							model(notifyService.findAllByName("idUserReceive", i + "")));
+				}
+
+			} else {
+				simpMessagingTemplate.convertAndSend("/topic/notification/" + to,
+						model(notifyService.findAllByName("idUserReceive", to + "")));
+			}
+
 			if (model.getReplyId() != 0) {
 				int id = commentService.findByIdtoUser(model.getReplyId());
 				simpMessagingTemplate.convertAndSend("/topic/notification/" + id,
@@ -346,11 +360,11 @@ public class NotificationController {
 	@PostMapping("/v1/user/comment/remove")
 	public void removeComment(@RequestParam("commentId") int commentId) {
 		List<CommentUserMention> mention = commentUserMentionService.findAllId(commentId);
-		if(mention.size()>0) {
+		if (mention.size() > 0) {
 //		try {
 			commentUserMentionService.deleteCommentMention(commentId);
 //		} catch (Exception e) {
-		}else {
+		} else {
 			List<Integer> list = commentService.get_parent_id(commentId);
 //			System.err.println("id: "+id);
 			for (Integer i : list) {
