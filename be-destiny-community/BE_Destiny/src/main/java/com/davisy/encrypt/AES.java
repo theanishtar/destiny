@@ -60,7 +60,7 @@ public class AES {
 	}
 
 	public static void main(String[] args) throws Exception {
-		int secretKey = 1;
+		int secretKey = 26;
 		String originalText = "Hello, World!";
 
 		// Mã hóa

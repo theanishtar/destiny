@@ -2,11 +2,9 @@ package com.davisy.controller;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.GregorianCalendar;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,16 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.davisy.SpamRrequestCheck;
 import com.davisy.auth.AuthenticationRequest;
 import com.davisy.auth.AuthenticationResponse;
-import com.davisy.config.JwtTokenUtil;
-import com.davisy.encrypt.AESStringKey;
-import com.davisy.entity.User;
 import com.davisy.model.LoginResponse;
 import com.davisy.reponsitory.RoleCustomRepo;
 import com.davisy.reponsitory.UsersReponsitory;
 import com.davisy.service.AuthenticationService;
 import com.davisy.service.JwtService;
 import com.davisy.service.UserService;
-import com.davisy.service.impl.UserServiceImpl;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -43,9 +37,6 @@ public class Login {
 
 	@Autowired
 	private AuthenticationService authenticationService;
-
-	@Autowired
-	private AESStringKey aes;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;

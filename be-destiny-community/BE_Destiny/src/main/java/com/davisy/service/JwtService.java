@@ -24,7 +24,6 @@ public class JwtService {
 	
 
 	public static final long    JWT_TOKEN_VALIDITY  =  5 * 60 * 60 * 1000; // 5 Giờ
-//	public static final long    JWT_TOKEN_VALIDITY  =  10 * 1000; // 5 Giờ
     public static final long    JWT_TOKEN_VALIDITY_REFRESH  = 5 * 7 *24* 60 *60 * 1000L; // 5 Tuần
 	
 	public String generateToken(User user, Collection<SimpleGrantedAuthority> authorities) {

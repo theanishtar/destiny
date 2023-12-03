@@ -9,14 +9,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.davisy.encrypt.AESStringKey;
 import com.davisy.entity.Roles;
 import com.davisy.entity.User;
 import com.davisy.service.RolesService;
-import com.davisy.service.UserService;
 import com.davisy.service.impl.RolesServiceImpl;
 import com.davisy.service.impl.UserServiceImpl;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -35,11 +32,6 @@ public class GGCloud {
 
 	@Autowired
 	HttpServletRequest httpServletRequest;
-
-	
-
-	@Autowired
-	AESStringKey aes;
 
 	@Autowired
 	RolesService rolesService;

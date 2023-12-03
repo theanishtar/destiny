@@ -21,6 +21,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.davisy.config.JwtTokenUtil;
@@ -49,11 +51,12 @@ import com.davisy.service.PostService;
 import com.davisy.service.ShareService;
 import com.davisy.service.UserService;
 import com.davisy.service.impl.BadWordServiceImpl;
+import com.davisy.service.impl.NotifyServiceImpl;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
-@CrossOrigin
+@CrossOrigin("*")
 public class NotificationController {
 
 	@Autowired
@@ -93,7 +96,7 @@ public class NotificationController {
 	SimpMessagingTemplate simpMessagingTemplate;
 
 	@Autowired
-	NotifyService notifyService;
+	NotifyServiceImpl notifyService;
 
 	@Autowired
 	BadWordService badWordService;
@@ -193,22 +196,18 @@ public class NotificationController {
 //			System.out.println("error sendNotification: " + e);
 //		}
 //	}
-	@Async
+
+//	@Async
 	@MessageMapping("/notify/{to}")
 	public void sendNotification(@DestinationVariable int to, NotificationModel model) {
 		try {
-//			System.err.println("model.getContent(): "+ model.getContent());
 			if (badWordService.checkBadword(model.getContent())) {
-//				System.out.println("badWordService.checkBadword(model.getContent()): " + badWordService.checkBadword(model.getContent()));
 				simpMessagingTemplate.convertAndSend("/topic/error-notification/" + model.getFromUserId(), true);
 				return;
 			}
-//			System.err.println("badWordService.checkBadword(model.getContent()): " + badWordService.checkBadword(model.getContent()));
 			User user = userService.findById(model.getFromUserId());
 			Post post = new Post();
-			System.err.println("mapMention: " + model.getMapMention().size());
-			HashMap<Integer, String>mapMention = new HashMap<Integer, String>();
-			
+			HashMap<Integer, String> mapMention = new HashMap<Integer, String>();
 			if (model.getPostId() > 0)
 				post = postService.findById(model.getPostId());
 			if (model.getType().toString().equalsIgnoreCase("COMMENT")
@@ -218,38 +217,28 @@ public class NotificationController {
 				comment.setUser(user);
 				comment.setPost(post);
 				if (model.getReplyId() != 0) {
-					Comment comment2 = commentService.findById(model.getReplyId());
-//					Comment comment2 = new Comment(to, user, comment, post, null, content, false);
-//					User u = userService.findById(comment2.getUser().getUser_id());
+					Object[] ob = commentService.findByIdComment(model.getReplyId());
+					Comment comment2 = comment(ob);
 					comment.setCommentParent(comment2);
-					content = model.getContent().substring(0,content.length()).trim();
+					content = model.getContent().trim().substring(user.getFullname().length(), content.length()).trim();
 				}
-				if (model.getMapMention().size()>0) {
-//					mapMention=model.getMapMention();
-//					HashMap<Integer, String>map = mapMention;
-////					User u = userService.findById(model.getUserIdMention());
-//					for (Map.Entry<Integer, String> entry : map.entrySet()) {
-//						content = model.getContent().substring(entry.getValue().length(), model.getContent().length());
-//						map.remove(entry.getKey());
-//					}
+				if (model.getMapMention().size() > 0) {
 					mapMention = model.getMapMention();
-					HashMap<Integer, String>map =  model.getMapMention();
-				    Iterator<Map.Entry<Integer, String>> iterator = map.entrySet().iterator();
-				    while (iterator.hasNext()) {
-				        Map.Entry<Integer, String> entry = iterator.next();
-				        content = content.substring(entry.getValue().length()).trim();
-//				        iterator.remove(); // Sử dụng Iterator để xóa phần tử mà không gây lỗi ConcurrentModificationException
-				    }
-					
+					HashMap<Integer, String> map = model.getMapMention();
+					Iterator<Map.Entry<Integer, String>> iterator = map.entrySet().iterator();
+					while (iterator.hasNext()) {
+						Map.Entry<Integer, String> entry = iterator.next();
+						content = content.replace(entry.getValue(), "").trim();
+					}
+
 				}
 				comment.setContent(content);
 				commentService.create(comment);
-				if (mapMention.size()>0) {
+				if (mapMention.size() > 0) {
 					Iterator<Map.Entry<Integer, String>> iterator = mapMention.entrySet().iterator();
-				    while (iterator.hasNext()) {
-				    	 Map.Entry<Integer, String> entry = iterator.next();
-				    	 System.err.println("entry: " + entry.getKey());
-				    	CommentUserMention mention = new CommentUserMention();
+					while (iterator.hasNext()) {
+						Map.Entry<Integer, String> entry = iterator.next();
+						CommentUserMention mention = new CommentUserMention();
 						CommentUserMention.PK pk = new CommentUserMention.PK();
 						pk.setComment_id(comment.getComment_id());
 						pk.setMentioned_user_id(entry.getKey());
@@ -258,18 +247,20 @@ public class NotificationController {
 						NotificationModel notificationModel = model;
 						notificationModel.setType(MessageType.MENTION);
 						insert(notificationModel, entry.getKey());
-				    }
-//					for (Map.Entry<Integer, String> entry : mapMention.entrySet()) {
-//						CommentUserMention mention = new CommentUserMention();
-//						CommentUserMention.PK pk = new CommentUserMention.PK();
-//						pk.setComment_id(comment.getComment_id());
-//						pk.setMentioned_user_id(entry.getKey());
-//						mention.setPk(pk);
-//						commentUserMentionService.create(mention);
-//					}
+					}
 
 				}
-				simpMessagingTemplate.convertAndSend("/topic/success-notification", model.getPostId());
+				Object[] cmt = new Object[] {};
+				String type = model.getType().toString();
+				if (model.getReplyId() > 0) {
+					cmt = commentService.findCommentId(model.getPostId(), 0, model.getReplyId());
+					type = MessageType.REPCOMMENT.toString();
+				} else {
+					cmt = commentService.findCommentId(model.getPostId(), 0, comment.getComment_id());
+				}
+				simpMessagingTemplate.convertAndSend("/topic/success-notification",
+						new Object[] { cmt, type, model.getReplyId(), post.getPost_id() });
+
 			}
 			if (model.getType().toString().equalsIgnoreCase("SHARE")) {
 				Share share = new Share();
@@ -318,17 +309,15 @@ public class NotificationController {
 				simpMessagingTemplate.convertAndSend("/topic/notification/" + id,
 						model(notifyService.findAllByName("idUserReceive", to + "")));
 			}
-			if (model.getMapMention().size()>0) {
+			if (model.getMapMention().size() > 0) {
 				Iterator<Map.Entry<Integer, String>> iterator = mapMention.entrySet().iterator();
-			    while (iterator.hasNext()) {
-			    	 Map.Entry<Integer, String> entry = iterator.next();
-			    	 System.err.println("entry.getKey(): " + entry.getKey());
-			    	 simpMessagingTemplate.convertAndSend("/topic/notification/" + entry.getKey(),
-								model(notifyService.findAllByName("idUserReceive", entry.getKey() + "")));
-			    }
-				
-			}
+				while (iterator.hasNext()) {
+					Map.Entry<Integer, String> entry = iterator.next();
+					simpMessagingTemplate.convertAndSend("/topic/notification/" + entry.getKey(),
+							model(notifyService.findAllByName("idUserReceive", entry.getKey() + "")));
+				}
 
+			}
 		} catch (Exception e) {
 			System.out.println("error sendNotification: " + e);
 		}
@@ -352,6 +341,33 @@ public class NotificationController {
 		}
 		simpMessagingTemplate.convertAndSend("/topic/loaddata/suggest-post/" + model.getFromUserId(), "success");
 
+	}
+
+	@PostMapping("/v1/user/comment/remove")
+	public void removeComment(@RequestParam("commentId") int commentId) {
+		List<CommentUserMention> mention = commentUserMentionService.findAllId(commentId);
+		if(mention.size()>0) {
+//		try {
+			commentUserMentionService.deleteCommentMention(commentId);
+//		} catch (Exception e) {
+		}else {
+			List<Integer> list = commentService.get_parent_id(commentId);
+//			System.err.println("id: "+id);
+			for (Integer i : list) {
+				commentUserMentionService.deleteCommentMention(i);
+			}
+		}
+
+//		else {
+//			List<Integer>list = commentService.get_parent_id(commentId);
+////			System.err.println("id: "+id);
+//			for(Integer i : list) {
+//				commentUserMentionService.deleteCommentMention(i);
+//			}
+//		}
+		commentService.remove_parent_comment(commentId);
+		commentService.removeComment(commentId);
+		simpMessagingTemplate.convertAndSend("/topic/remove/comment", commentId);
 	}
 
 	public void insert(NotificationModel model, int to) {
@@ -444,6 +460,23 @@ public class NotificationController {
 			}
 		}
 
+	}
+
+	@GetMapping("/v1/notification/update/status")
+	public ResponseEntity<Long> updateNo() {
+		return ResponseEntity.status(200).body((notifyService.updateStatus(true)));
+	}
+
+	public Comment comment(Object[] ob) {
+		Comment comment = new Comment();
+		comment.setComment_id(Integer.valueOf(((Object[]) ob[0])[0].toString()));
+		comment.setUser(null);
+		comment.setCommentParent(null);
+		comment.setPost(null);
+		comment.setDate_comment(null);
+		comment.setContent(null);
+		comment.setComment_status(true);
+		return comment;
 	}
 
 }

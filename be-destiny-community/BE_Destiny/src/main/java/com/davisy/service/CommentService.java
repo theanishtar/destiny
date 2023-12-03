@@ -22,13 +22,23 @@ public interface CommentService {
 
 	public Comment findById(int id);
 
+	public Object[] findByIdComment(int id);
+
 	public List<Comment> findAllByIdComment(int id);
 
 	public List<Object[]> findAllComment(int id, int check);
+
+	public Object[] findCommentId(int id, int check, int commentId);
 
 	public void create(Comment comment);
 
 	public void update(Comment comment);
 
 	public void delete(Comment comment);
+
+	public void remove_parent_comment(int id);
+
+	public void removeComment(int id);
+
+	public List<Integer> get_parent_id(int id);
 }

@@ -1,5 +1,7 @@
 package com.davisy.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,5 +27,16 @@ public class CommentUserMentionServiceImpl implements CommentUserMentionService 
 	public void delete(CommentUserMention commentUserMention) {
 		mentionDAO.delete(commentUserMention);
 	}
+
+	@Override
+	public void deleteCommentMention(int id) {
+		mentionDAO.deleteCommentMention(id);
+	}
+
+	@Override
+	public List<CommentUserMention> findAllId(int id) {
+		return mentionDAO.findAllId(id);
+	}
+
 
 }

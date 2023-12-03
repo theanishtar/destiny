@@ -42,7 +42,7 @@ public class DiffieHellman {
         }
     }
     
-    public int genPublicKey(int id){
+    public static int genPublicKey(int id){
         BigInteger G = BigInteger.valueOf(DIFFINE_HELLMAN_GROUP1);
         BigInteger P = BigInteger.valueOf(DIFFINE_HELLMAN_GROUP2);
         BigInteger privateK = BigInteger.valueOf(genPrivateKey(id));
@@ -58,7 +58,7 @@ public class DiffieHellman {
         }
     }
     
-    public int genSecretKey(int id, int resId){
+    public static int genSecretKey(int id, int resId){
         BigInteger P = BigInteger.valueOf(DIFFINE_HELLMAN_GROUP2);
         
         BigInteger privateK = BigInteger.valueOf(genPrivateKey(id));
@@ -66,6 +66,7 @@ public class DiffieHellman {
         BigInteger result = powerMod(publicK, privateK, P);
         
         try {
+        	System.out.println("Secrets Key: "+result);
             return result.intValueExact();
         } catch (ArithmeticException e) {
             // Handle the case where the BigInteger value is too large for an int
@@ -79,12 +80,13 @@ public class DiffieHellman {
         return base.modPow(exponent, modulus);
     }
     
+    
     public static void main(String[] args) {
     	DiffieHellman hellmanPrime = new DiffieHellman();
     	AES aes = new AES();
     	
-    	int u1 = 1234;
-    	int u2 = 7785;
+    	int u1 = 18;
+    	int u2 = 26;
     	String message = "Hello bạn, khỏe chứ?";
     	
     	// u1 send u2
@@ -95,11 +97,11 @@ public class DiffieHellman {
     	// -> keyU1 == keyU2 == SecretKey
     	
     	// Step2. Rar message
-    	String rarMess = "8KsiYTCWxiScbuqozCFSmJOwA2P7O/uLcCEe4Xh/puk=";
+    	String rarMess = "Sy3jW2SFD8be/Yj5nBct/qbsTGppK9Bf2Rym+wgNuabaHO7WaP/oAcPOzRF/wTm1";
 //    	String rarMess = aes.encrypt(message, keyU1);
     	
     	// Step3. Decode
-    	String deRarMess = aes.decrypt(rarMess, keyU1);
+    	String deRarMess = aes.decrypt(rarMess, keyU2);
     	
     	System.out.println(rarMess);
     	System.out.println(deRarMess);

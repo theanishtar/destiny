@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.davisy.config.JwtTokenUtil;
+import com.davisy.encrypt.AES;
+import com.davisy.encrypt.DiffieHellman;
 import com.davisy.entity.ChatParticipants;
 import com.davisy.entity.ChatParticipants.Primary;
 import com.davisy.entity.Chats;
@@ -110,25 +112,51 @@ public class UserChatController {
 
 	@Async
 	public void async(User user, boolean checkRequest) {
+		int from = user.getUser_id();
 		try {
 			if (checkRequest) {
 				synchronized (UserChatStorage.getInstance()) {
-					List<Object[]> listChatsRoom = chatsService.loadAllChatRoom(user.getUser_id());
+					List<Object[]> listChatsRoom = chatsService.loadAllChatRoom(from);
 					List<UserModel> listModel = new ArrayList<>();
 					for (Object[] ob : listChatsRoom) {
+						String content = ob[7] + "";
+						int to = Integer.valueOf(ob[1].toString());
 						UserModel model = new UserModel();
+						model.setLastMessage(content);
+						
+						if(content != "") {
+							if(content.startsWith("Bạn: ")) {
+								content = content.substring(5);
+							}
+							
+							
+							// giải mã nội dung tin nhắn
+							
+							// Step1. Get SecretKey from u1, u2
+					    	int key = DiffieHellman.genSecretKey(from, to);
+					    	
+					    	System.out.println("FROM: "+from+": "+to);
+					    	
+					    	// Step2. encode message
+					    	String originMess = AES.decrypt(content, key);
+							System.out.println(content+":"+originMess);
+							
+
+							model.setLastMessage(originMess);
+						}
+						
+						
 						if (ob[0].equals("JOIN")) {
 							model.setType(MessageType.JOIN);
 						} else {
 							model.setType(MessageType.LEAVE);
 						}
-						model.setUser_id(Integer.valueOf(ob[1].toString()));
+						model.setUser_id(to);
 						model.setUsername(ob[2].toString());
 						model.setFullname(ob[3].toString());
 						model.setEmail(ob[4].toString());
 						model.setAvatar(ob[5].toString());
 						model.setMessageUnRead(Integer.valueOf(ob[6].toString()));
-						model.setLastMessage(ob[7] + "");
 						model.setOnline(ob[8] + "");
 						model.setFriend(Boolean.valueOf(ob[9].toString()));
 						model.setTypeMessage(ob[10] + "");

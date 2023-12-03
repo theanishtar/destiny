@@ -84,9 +84,8 @@ public class AdminControlProfile {
 	EmailService emailService;
 	
 	String randCodeAuth = "";
-	
 	@Value("${davis.client.uri}")
-	String confirmEmail;
+	String client;
 	
 	//8-11
 	@PostMapping("/v1/admin/profile/change/email")
@@ -122,7 +121,7 @@ public class AdminControlProfile {
 		 * GET: /v1/user/profile/change/email?code=this.randCodeAuth
 		 * 
 		 */
-		emailService.sendHtmlEmail(confirmEmail + "?code=" + this.randCodeAuth, change.newEmail);
+		emailService.sendHtmlEmail(client + "/chang-email-confirm" + "?code=" + this.randCodeAuth, change.newEmail);
 		return ResponseEntity.status(200).body(this.randCodeAuth); // "OK"
 	}
 	
