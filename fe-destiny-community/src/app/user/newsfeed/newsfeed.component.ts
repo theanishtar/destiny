@@ -320,16 +320,19 @@ export class NewsfeedComponent implements OnInit {
       } else {
         scrollButton.style.display = 'none';
       }
+   
+      // console.log('this.setCurrentPage.has(this.currentPage): '+this.setCurrentPage.has(this.currentPage))
       let epsilon = '0';
       if (scrollableDiv.scrollTop.toString().indexOf('.') > 0) {
         epsilon = '0' + scrollableDiv.scrollTop.toString().substring(scrollableDiv.scrollTop.toString().indexOf('.'));
       }
 
-      console.warn("check:  " + (scrollableDiv.scrollHeight - scrollableDiv.clientHeight - (scrollableDiv.scrollTop - parseFloat(epsilon))))
+      // console.warn("check:  " + (scrollableDiv.scrollHeight - scrollableDiv.clientHeight - (scrollableDiv.scrollTop - parseFloat(epsilon))))
       if (
         (scrollableDiv.scrollHeight - scrollableDiv.clientHeight - (scrollableDiv.scrollTop - parseFloat(epsilon)) <= 1) &&
-        this.checkCountPosts
+        this.checkCountPosts && !this.setCurrentPage.has(this.currentPage)
       ) {
+        this.setCurrentPage.add(this.currentPage);
         this.checkLoadingdata = true;
 
         let data: any = await this.postService.loadPostNewsFeed(this.currentPage).toPromise();
@@ -349,6 +352,8 @@ export class NewsfeedComponent implements OnInit {
       }
     });
   }
+// setCurrentPage = new Map<number,boolean>();
+setCurrentPage = new  Set();
 
   isLogin() {
     return this.loginService.isLogin();

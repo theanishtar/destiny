@@ -126,8 +126,10 @@ export class CreatePostComponent {
             type: 'success',
             duration: 1500,
           });
-          this.listPosts = res;
-          this.modalService.sendNotify(' ', 0, 0, 'POST', this.modalService.repCmtId);
+          this.listPosts =res;
+          let id = res[0].post_id;
+          console.warn("id: " + id);
+          this.modalService.sendNotify(' ', id, 0, 'POST', this.modalService.repCmtId);
 
           this.createPostForm.reset();
           this.listImg = [];

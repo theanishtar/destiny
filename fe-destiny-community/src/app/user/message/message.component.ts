@@ -139,7 +139,7 @@ export class MessageComponent implements OnInit {
    block() {
     let id = parseInt(this.id)
     this.messageService.blockApi(id, false).subscribe(() => {
-      // this.selectedUser(this.id);
+      this.selectedUser(this.id);
       this.checkBlock = true;
     });
   }
@@ -147,7 +147,7 @@ export class MessageComponent implements OnInit {
   unBlock() {
     let id = parseInt(this.id)
     this.messageService.blockApi(id, true).subscribe(() => {
-      // this.selectedUser(this.id);
+      this.selectedUser(this.id);
       this.checkBlock = false;
     })
   }

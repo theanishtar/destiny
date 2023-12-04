@@ -236,7 +236,7 @@ export class MessageService {
         this.stompClient!.send(`/app/reload/messages/${type}/${to_user_id}/${userId}`);
       });
 
-      this.stompClient!.subscribe('"/topic/block/messages/' + userId, (response) => {
+      this.stompClient!.subscribe('/topic/block/messages/' + userId, (response) => {
         let data = JSON.parse(response.body);
         this.$chatHistory = $('.chat-widget-conversation');
         this.$chatHistory.append(

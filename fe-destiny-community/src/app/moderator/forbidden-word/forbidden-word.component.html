@@ -62,10 +62,12 @@
         <div class="row">
           <div class="card col-lg-8 offset-lg-2 mb-4 data-redis border-primaryx shadow">
             <div class="card-body" style="width: 50%;">
-              Có 1000 từ chưa được cập nhật vào Redis
+              Có {{checkWordCountRedis}} từ chưa được cập nhật vào Redis
             </div>
             <button class="btn text-white bg-gradient-endless border-radius-50 btn-data-redis"
-              (click)="sendDataRedis()">Cập nhật Redis <i class="fas fa-download"></i></button>
+              (click)="checkRedis()">Kiểm tra Redis</button>
+            <button class="btn text-white bg-gradient-endless border-radius-50 btn-data-redis"
+              (click)="sendDataRedis()" *ngIf="checkWordCountRedis > 0">Cập nhật Redis <i class="fas fa-download"></i></button>
           </div>
 
         </div>

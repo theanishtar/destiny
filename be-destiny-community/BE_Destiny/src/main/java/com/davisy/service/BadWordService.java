@@ -24,4 +24,6 @@ public interface BadWordService {
 	
 	public boolean checkTheSameBadword(String badword);
 	
+	public long missingWordsFromMongoDB();
+	
 }

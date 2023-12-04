@@ -101,7 +101,7 @@ public class MessageController {
 		}
 		Object[] messageOb = messagesService.findByIdMessage(message.getFromLogin(), to, messages.getId());
 		MessagesEntity entity = new MessagesEntity();
-		entity = entity(messageOb);
+		entity = entity(messageOb, to);
 		simpMessagingTemplate.convertAndSend("/topic/status/messages/" + message.getFromLogin(), entity);
 		boolean isExists = UserChatStorage.getInstance().getUsers().containsKey(to);
 		if (isExists) {
@@ -116,46 +116,7 @@ public class MessageController {
 		return ResponseEntity.ok().body(check);
 	}
 		
-	public MessagesEntity listEntity(Object[] l) {
-		MessagesEntity entity = new MessagesEntity();
-		entity.setId(Integer.valueOf(l[0].toString()));
-		entity.setContent(l[1] + "");
-		entity.setSend_time(l[2] + "");
-		entity.setUser_id(Integer.valueOf(l[3].toString()));
-		entity.setAvatar(l[4] + "");
-		entity.setChat_parcipants_status(Boolean.valueOf(l[5].toString()));
-		if (l[6] != null)
-			entity.setDay(l[6] + "");
-		else
-			entity.setDay(null);
-		entity.setType(l[7] + "");
-		entity.setRecall(Boolean.valueOf(l[8].toString()));
-		if (!entity.getType().equalsIgnoreCase("text") && !entity.isRecall()) {
-			entity.setImages(messageImagesService.findAllImagesMessage(entity.getId()));
-		}
-		return entity;
-	}
-
-	public MessagesEntity entity(Object[] o) {
-		MessagesEntity entity = new MessagesEntity();
-		entity.setId(Integer.valueOf(((Object[]) o[0])[0].toString()));
-		entity.setContent(((Object[]) o[0])[1] + "");
-		entity.setSend_time(((Object[]) o[0])[2] + "");
-		entity.setUser_id(Integer.valueOf(((Object[]) o[0])[3].toString()));
-		entity.setAvatar(((Object[]) o[0])[4] + "");
-		entity.setChat_parcipants_status(Boolean.valueOf(((Object[]) o[0])[5].toString()));
-		if (((Object[]) o[0])[6] != null)
-			entity.setDay(((Object[]) o[0])[6] + "");
-		else
-			entity.setDay(null);
-		entity.setType(((Object[]) o[0])[7] + "");
-		entity.setRecall(Boolean.valueOf(((Object[]) o[0])[8].toString()));
-		if (!entity.getType().equalsIgnoreCase("text") && !entity.isRecall()) {
-			entity.setImages(messageImagesService.findAllImagesMessage(entity.getId()));
-		}
-		return entity;
-	}
-
+	
 //	@PostMapping("/v1/user/chat/load/messages")
 //	public ResponseEntity<List<Object[]>> loadMessages(HttpServletRequest request, @RequestBody int to) {
 //		try {

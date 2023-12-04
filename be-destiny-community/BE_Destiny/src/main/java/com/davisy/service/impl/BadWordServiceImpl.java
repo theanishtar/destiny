@@ -111,4 +111,20 @@ public class BadWordServiceImpl implements BadWordService{
 		return dbUtils.deletesByColumn(BadWord.class, collectionBadWords, name, data);
 	}
 	
+
+	@Override
+	public long missingWordsFromMongoDB() {
+		System.out.println(cacheService.getByKey("xàm"));
+		long sizeMongo = dbUtils.lengthCollection(collectionBadWords);
+		long sizeRedis = cacheService.countAllKeys();
+
+		System.out.println("Mongo SZE: " + sizeMongo);
+		System.out.println("REDIS SZE: " + sizeRedis);
+		if (sizeRedis < sizeMongo) {
+			return sizeMongo - sizeRedis;
+		}
+		return 0;
+	}
+
+	
 }

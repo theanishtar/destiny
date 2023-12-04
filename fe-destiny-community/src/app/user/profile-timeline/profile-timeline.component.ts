@@ -234,7 +234,7 @@ export class ProfileTimelineComponent implements OnInit {
       this.elementToScroll.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
-
+  setCurrentPage = new  Set();
   checkLoadingdata: boolean = true;
   async checkScroll() {
     const scrollableDiv = document.getElementById('scrollableDiv')!;
@@ -252,30 +252,32 @@ export class ProfileTimelineComponent implements OnInit {
         epsilon = '0' + scrollableDiv.scrollTop.toString().substring(scrollableDiv.scrollTop.toString().indexOf('.'));
       }
 
+      console.warn("check:  " + (scrollableDiv.scrollHeight - scrollableDiv.clientHeight - (scrollableDiv.scrollTop - parseFloat(epsilon))))
       if (
-        scrollableDiv.scrollHeight - scrollableDiv.clientHeight - (scrollableDiv.scrollTop - parseFloat(epsilon)) <= 1 &&
-        this.checkCountPosts
+        (scrollableDiv.scrollHeight - scrollableDiv.clientHeight - (scrollableDiv.scrollTop - parseFloat(epsilon)) <= 1) &&
+        this.checkCountPosts && !this.setCurrentPage.has(this.currentPage)
       ) {
+        this.setCurrentPage.add(this.currentPage);
         this.checkLoadingdata = true;
-        try {
-          let dataPost = {
-            toProfile: localStorage.getItem("idSelected"),
-            page: this.currentPage
-          }
-          const data: any = await this.profileService.loadDataTimelinePost(dataPost);
-          this.listPostPr = [...this.listPostPr, ...data];
-          this.checkLoadingdata = false;
-          this.currentPage++;
-          if (data.length < 5) {
-            this.checkCountPosts = false;
-            this.checkLoadingdata = false;
-          }
-          // console.log("data.length: " + data.length);
-        } catch (error) {
-          // console.error("Error loading data:", error);
-        }
 
+        let dataPost = {
+          toProfile: localStorage.getItem("idSelected"),
+          page: this.currentPage
+        }
+        const data: any = await this.profileService.loadDataTimelinePost(dataPost);
+        this.listPostPr = [...this.listPostPr, ...data];
+        this.checkLoadingdata = false;
+        this.currentPage++;
+
+        if (data.length < 5) {
+          this.checkCountPosts = false;
+          this.checkLoadingdata = false;
+        }
+              
         // console.log("hết nè: " + this.currentPage);
+        console.log("this.currentPage: " + this.currentPage);
+        // console.log("data.length: " + data.length);
+        // console.log("this.checkCountPosts: " + this.checkCountPosts);
       }
     });
   }

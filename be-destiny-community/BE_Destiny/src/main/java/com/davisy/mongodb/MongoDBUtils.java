@@ -335,6 +335,14 @@ public class MongoDBUtils {
 		}
 		return -1;
 	}
+	
+	// Lấy độ dài 1 collection
+		public long lengthCollection(String collectionName) {
+			MongoDatabase database = client.getDatabase(dbName);
+			MongoCollection<Document> collection = database.getCollection(collectionName);
+			long collectionSize = collection.estimatedDocumentCount();
+			return collectionSize;
+		}
 
 	// tìm theo trường "post_reported_id"
 //	public <T> T findByPostReportedId(T document, Class<T> documentClass, String collectionName, int post_reported_id) {
