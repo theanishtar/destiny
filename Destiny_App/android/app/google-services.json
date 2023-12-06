@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "657490885713",
+    "project_id": "destiny-davisy",
+    "storage_bucket": "destiny-davisy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:657490885713:android:b0b85967f0ba978ae20c70",
+        "android_client_info": {
+          "package_name": "com.example.signuplogin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9TJHd9udWXWPcSMBxvNz2nV0E8Wg75F0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
