@@ -5,6 +5,7 @@ import 'package:get/get_navigation/get_navigation.dart';
 import 'package:login_signup/models/SocketManager%20.dart';
 import 'package:login_signup/models/UserModel.dart';
 import 'package:login_signup/utils/gobal.colors.dart';
+import 'package:login_signup/view/bottomnavbar.dart';
 import 'package:login_signup/view/login_signup_screen.dart';
 import 'package:login_signup/view/screens/message.view.dart';
 import 'package:login_signup/view/widgets/chat/chat.dart';
@@ -49,9 +50,7 @@ class _ChatPageState extends State<ChatPage> {
             leading: BackButton(
               onPressed: () {
                 socketManager.userChatPage = new UserModel();
-                runApp(GetMaterialApp(
-                  home: MessageView(),
-                ));
+                BottomNavBar.navKey.currentState?.setSelectedIndex(2);
               },
             ),
             leadingWidth: 30,

@@ -135,7 +135,7 @@ class _ChatSampleState extends State<ChatSample> {
   Widget build(BuildContext context) {
     return Stack(children: [
       Container(
-        height: 500,
+        // height: MediaQuery.of(context).size.height - 150,
         width: MediaQuery.of(context).size.width - 40,
         child: StreamBuilder<List<MessagesModel>>(
           stream: socketManager.messagesStream,
@@ -147,6 +147,7 @@ class _ChatSampleState extends State<ChatSample> {
               );
             } else if (snapshot.hasData) {
               return ListView.builder(
+                  shrinkWrap: true,
                   controller: socketManager.scrollController,
                   itemCount: snapshot.data!.length,
                   itemBuilder: (BuildContext context, int index) {
@@ -188,63 +189,76 @@ class _ChatSampleState extends State<ChatSample> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      ClipPath(
-                                        clipper: UpperNipMessageClipper(
-                                            MessageType.receive),
-                                        child: Container(
-                                          padding: m.type == 'image' &&
-                                                  m.images != null &&
-                                                  m.images is List<dynamic>
-                                              ? EdgeInsets.only(
-                                                  left: 15,
-                                                  top: 20,
-                                                  bottom: 10,
-                                                  right: 30,
-                                                )
-                                              : EdgeInsets.only(
-                                                  left: 20,
-                                                  top: 20,
-                                                  bottom: 10,
-                                                  right: 20),
-                                          decoration: BoxDecoration(
-                                            color: m.type == 'image' &&
-                                                    m.images != null &&
-                                                    m.images is List<dynamic>
-                                                ? GlobalColors.loadColor
-                                                : Color(0xFFE1E1E2),
-                                            boxShadow: [],
+                                      Container(
+                                          constraints: BoxConstraints(
+                                            maxWidth: MediaQuery.of(context)
+                                                    .size
+                                                    .width -
+                                                205, // Đặt maxWidth tùy theo nhu cầu
                                           ),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              if (m.type == 'image' &&
-                                                  m.images != null &&
-                                                  m.images is List<dynamic>)
-                                                for (var imageUrl in m.images)
-                                                  // Kiểm tra nếu là loại hình ảnh thì hiển thị hình ảnh
-                                                  ImageMessageWidget(
-                                                      imageUrl: imageUrl)
-                                              else if (m.type == 'text')
-                                                Text(
-                                                  m.content,
-                                                  style:
-                                                      TextStyle(fontSize: 16),
+                                          child: Expanded(
+                                            child: ClipPath(
+                                              clipper: UpperNipMessageClipper(
+                                                  MessageType.receive),
+                                              child: Container(
+                                                padding: m.type == 'image' &&
+                                                        m.images != null &&
+                                                        m.images
+                                                            is List<dynamic>
+                                                    ? EdgeInsets.only(
+                                                        left: 15,
+                                                        top: 20,
+                                                        bottom: 10,
+                                                        right: 30,
+                                                      )
+                                                    : EdgeInsets.only(
+                                                        left: 20,
+                                                        top: 20,
+                                                        bottom: 10,
+                                                        right: 20),
+                                                decoration: BoxDecoration(
+                                                  color: m.type == 'image' &&
+                                                          m.images != null &&
+                                                          m.images
+                                                              is List<dynamic>
+                                                      ? GlobalColors.loadColor
+                                                      : Color(0xFFE1E1E2),
+                                                  boxShadow: [],
                                                 ),
-                                              SizedBox(
-                                                height: 5,
-                                              ),
-                                              Text(
-                                                m.send_time,
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Colors.grey,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    if (m.type == 'image' &&
+                                                        m.images != null &&
+                                                        m.images
+                                                            is List<dynamic>)
+                                                      for (var imageUrl
+                                                          in m.images)
+                                                        // Kiểm tra nếu là loại hình ảnh thì hiển thị hình ảnh
+                                                        ImageMessageWidget(
+                                                            imageUrl: imageUrl)
+                                                    else if (m.type == 'text')
+                                                      Text(
+                                                        m.content,
+                                                        style: TextStyle(
+                                                            fontSize: 16),
+                                                      ),
+                                                    SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    Text(
+                                                      m.send_time,
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                        color: Colors.grey,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
+                                            ),
+                                          ))
                                     ],
                                   ),
                                 ),

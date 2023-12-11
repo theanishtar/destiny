@@ -193,9 +193,14 @@ class _EditProfileState extends State<EditProfile> {
         appBar: AppBar(
           centerTitle: true,
           leading: BackButton(onPressed: () {
-            runApp(GetMaterialApp(
-              home: BottomNavBar(),
-            ));
+            WidgetsBinding.instance!.addPostFrameCallback((_) {
+              if (BottomNavBar.navKey.currentState != null) {
+                print("OK");
+                BottomNavBar.navKey.currentState?.setSelectedIndex(4);
+              } else {
+                print("no ok");
+              }
+            });
           }),
           title: Text("Chỉnh sửa trang cá nhân"),
         ),
@@ -392,9 +397,7 @@ class _EditProfileState extends State<EditProfile> {
                   children: [
                     OutlinedButton(
                       onPressed: () {
-                        runApp(GetMaterialApp(
-                          home: ProfileView(),
-                        ));
+                        BottomNavBar.navKey.currentState?.setSelectedIndex(4);
                       },
                       child: Text(
                         "Hủy",

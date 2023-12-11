@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:login_signup/utils/gobal.colors.dart';
+import 'package:login_signup/view/login.view.dart';
 import 'package:login_signup/view/signup.view.dart';
 import 'package:login_signup/view/widgets/button_screen.dart';
 
@@ -36,7 +37,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, "loginView");
+                    runApp(GetMaterialApp(
+                      home: LoginView(),
+                    ));
                   },
                   child: Container(
                     width: 300,

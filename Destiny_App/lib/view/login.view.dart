@@ -100,6 +100,12 @@ class _LoginViewState extends State<LoginView> {
         } else {
           showAlert();
         }
+      } else if (response.statusCode == 402) {
+        QuickAlert.show(
+            context: context,
+            title: "Cảnh báo",
+            text: "Bạn đã hết thời gian đăng nhập !",
+            type: QuickAlertType.error);
       } else {
         showAlertError();
         print('API call failed with status code: ${response.statusCode}');
@@ -175,13 +181,7 @@ class _LoginViewState extends State<LoginView> {
                           hintStyle: TextStyle(height: 1)),
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return "Vui lòng nhập email ";
-                        }
-                        bool emailValid =
-                            RegExp(r"[a-z0-9]+@[a-z]+\.[a-z]{2,3}")
-                                .hasMatch(value);
-                        if (!emailValid) {
-                          return "Vui lòng nhập đúng định dạng email";
+                          return "Vui lòng nhập email hoặc username ";
                         }
                       },
                     ),

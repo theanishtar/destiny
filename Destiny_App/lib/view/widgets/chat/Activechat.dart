@@ -42,7 +42,8 @@ class _ActiveChatState extends State<ActiveChat> {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(35),
-                        child: Image.network(listUser[i].avatar),
+                        child: Image.network(listUser[i].avatar ??
+                            'http://pluspng.com/img-png/png-user-icon-person-icon-png-people-person-user-icon-2240.png'),
                       ),
                       CircleAvatar(
                         radius: 7,

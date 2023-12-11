@@ -8,7 +8,9 @@ import 'package:image/image.dart';
 import 'package:login_signup/models/ApiManager.dart';
 import 'package:login_signup/models/UserModel.dart';
 import 'package:login_signup/models/MessagesModel.dart';
+import 'package:login_signup/provider/UserProvider.dart';
 import 'package:login_signup/utils/api.dart';
+import 'package:login_signup/view/bottomnavbar.dart';
 import 'package:stomp_dart_client/stomp.dart' as stomp;
 import 'package:stomp_dart_client/stomp_frame.dart' as stomp;
 import 'package:stomp_dart_client/stomp_config.dart';
@@ -36,10 +38,12 @@ class SocketManager {
   late stomp.StompClient stompClientNotification;
   late stomp.StompClient stompClientRegister;
   late ApiManager apiManager = ApiManager();
+  late UserProvider userProvider = UserProvider();
+  late UserModel userChatPage = new UserModel();
   final StreamController<String> _streamController = StreamController<String>();
   var user_id = 0;
   int count_notify = 1;
-  late UserModel userChatPage = new UserModel();
+
   bool isConnected = false;
   bool checkNotify = false;
   bool checkScroll = false;
@@ -183,6 +187,13 @@ class SocketManager {
           String? data = frame.body;
           apiManager.fetchComments(int.parse(data.toString()));
         });
+    stompClientNotification.subscribe(
+        destination: "/topic/loaddata/suggest-post/$user_id",
+        callback: (stomp.StompFrame frame) {
+          return runApp(GetMaterialApp(
+            home: BottomNavBar(),
+          ));
+        });
     stompClientNotification.send(
       destination: '/app/load/notification/$user_id',
     );
@@ -266,7 +277,9 @@ class SocketManager {
             }
           }
         }
-        this.updateListUser(list);
+        userProvider.updateUserList(mapUser.values.toList());
+        // this.updateListUser(list);
+
         // _streamController.add(frame.body!);
       },
     );
@@ -340,6 +353,24 @@ class SocketManager {
         'avatar': img,
         'typeMessage': typeMessage,
         'linkImages': images
+      }),
+    );
+  }
+
+  void sendNotifyFollow(List<int> idUser) {
+    // Gửi tin nhắn STOMP
+    stompClientNotification.send(
+      destination: '/app/notifyfollowregister',
+      body: jsonEncode({
+        'avatar': '',
+        'fullname': '',
+        'fromUserId': user_id,
+        'content': ' ',
+        'postId': 0,
+        'replyId': 0,
+        'time': 'Vừa xong',
+        'type': 'FOLLOW',
+        'follow_id': idUser
       }),
     );
   }
@@ -501,33 +532,42 @@ class SocketManager {
   }
 
   String checkDate(String date) {
-    print('date: ' + date);
-    // print('date1: '+(date == 'null').toString());
-    // print('date2: '+(date == null).toString());
-    //  print('date3: '+(date == '').toString());
-    if (date == 'null') {
+    if (date == '' || date == null) {
       return '';
     }
 
     DateTime date1 = DateTime.parse(date.substring(0, 10));
 
     DateTime now = DateTime.now();
-    int day = now.day;
-    int month = now.month;
+    int day = now.day; // Lấy ngày trong tháng (1-31)
+    int month = now.month; // Lấy tháng (1-12)
     int year = now.year;
     DateTime date2 = DateTime(year, month, day);
+    DateTime dateTime = DateTime.parse(date);
+    String hour = (dateTime.hour < 10)
+        ? '0' + dateTime.hour.toString()
+        : dateTime.hour.toString();
+    String minute = (dateTime.minute < 10)
+        ? '0' + dateTime.minute.toString()
+        : dateTime.minute.toString();
+    String time = '$hour:$minute';
 
-    if (date1.isBefore(date2) && date2.day - 1 == date1.day) {
-      return 'Hôm qua';
+    if (date1.isBefore(date2) &&
+        (month >= date1.month || year >= date1.year) &&
+        date2.day - 1 == date1.day) {
+      return '$time Hôm qua';
     } else if (date1.isBefore(date2) &&
-        date2.day - 1 > int.parse(date.substring(8, 10))) {
+        (date2.day - 1 > date1.day ||
+            month > date1.month ||
+            year > date1.year)) {
       String yearString = date1.year < date2.year ? '-${date1.year}' : '';
       String monthString =
-          (date1.month + 1 < 10) ? '0${date1.month + 1}' : '${date1.month + 1}';
-      String dayString = (date1.day < 10) ? '0${date1.day}' : '${date1.day}';
-      return '$dayString-$monthString$yearString';
+          date1.month < 10 ? '0${date1.month}' : date1.month.toString();
+      String dayString =
+          date1.day < 10 ? '0${date1.day}' : date1.day.toString();
+      return '$time $dayString-$monthString$yearString';
     } else {
-      return 'Hôm nay';
+      return '$time Hôm nay';
     }
   }
 

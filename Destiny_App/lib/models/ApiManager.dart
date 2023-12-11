@@ -5,11 +5,13 @@ import 'package:get/get.dart';
 import 'package:login_signup/models/SocketManager%20.dart';
 import 'package:login_signup/utils/api.dart';
 import 'package:login_signup/view/bottomnavbar.dart';
+import 'package:login_signup/view/suggest.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class ApiManager {
   late SocketManager socketManager = SocketManager();
+
   Future<void> fetchComments(int postId) async {
     print(postId);
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -52,8 +54,9 @@ class ApiManager {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('token', token);
       await prefs.setInt('id', id);
+      socketManager.connectWebSocket();
       runApp(GetMaterialApp(
-        home: BottomNavBar(),
+        home: SuccessfulRegistrationDialog(),
       ));
     }
   }

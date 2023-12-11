@@ -370,8 +370,7 @@ class _CreatePostState extends State<CreatePost> {
                       };
 
                       var res = await http.post(
-                        Uri.parse(
-                            'http://192.168.137.1:8080/v1/user/upload/post'),
+                        Uri.parse(ApiEndPoints.baseUrl + 'v1/user/upload/post'),
                         headers: headers,
                         body: jsonEncode(requestBody),
                       );

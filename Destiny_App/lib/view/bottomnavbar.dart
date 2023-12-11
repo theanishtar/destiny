@@ -10,21 +10,29 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:login_signup/view/screens/profile.view.dart';
 
 class BottomNavBar extends StatefulWidget {
-  const BottomNavBar({super.key});
-
+  const BottomNavBar({Key? key}) : super(key: key);
+  static final GlobalKey<_BottomNavBarState> navKey =
+      GlobalKey<_BottomNavBarState>();
   @override
   State<BottomNavBar> createState() => _BottomNavBarState();
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
-  List Screens = [
+  int _selectedIndex = 0;
+  void setSelectedIndex(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  List<Widget> screens = [
     Screen1(),
     FollowView(),
     MessageView(),
     NotificationView(),
     ProfileView(),
   ];
-  int _selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +40,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
       backgroundColor: Colors.red,
       bottomNavigationBar: CurvedNavigationBar(
         index: _selectedIndex,
-        // buttonBackgroundColor: Colors.grey,
         backgroundColor: Colors.transparent,
         items: const [
           Icon(
@@ -67,7 +74,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
           });
         },
       ),
-      body: Screens[_selectedIndex],
+      body: screens[_selectedIndex],
     );
   }
 }

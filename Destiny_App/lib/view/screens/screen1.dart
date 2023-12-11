@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-
+import 'package:flutter/services.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
@@ -10,6 +12,7 @@ import 'package:login_signup/models/ApiManager.dart';
 import 'package:login_signup/models/SocketManager%20.dart';
 import 'package:login_signup/utils/gobal.colors.dart';
 import 'package:login_signup/view/screens/profile.view.dart';
+import 'package:login_signup/view/suggest.dart';
 import 'package:login_signup/view/widgets/createPost.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:login_signup/utils/api.dart';
@@ -18,6 +21,11 @@ import 'package:login_signup/view/widgets/newPost.dart';
 import 'package:login_signup/view/widgets/post.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/cupertino.dart';
+// import 'package:flutter/material.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:flutter/services.dart';
 
 class Screen1 extends StatefulWidget {
   const Screen1({super.key});
@@ -31,7 +39,10 @@ class _Screen1State extends State<Screen1> {
   late ApiManager apiManager = ApiManager();
   TextEditingController commentController = TextEditingController();
   ScrollController _scrollController = ScrollController();
+  TextEditingController textReportAccountController = TextEditingController();
+  TextEditingController textReportPostController = TextEditingController();
   bool isLoading = false;
+  bool isLoadingMorePost = false;
   List? listUser;
   List? listPost;
   String? avatarUser;
@@ -40,8 +51,59 @@ class _Screen1State extends State<Screen1> {
   @override
   void initState() {
     super.initState();
+    getConnectivity();
     this.getData();
+    this.checkPost();
     _scrollController.addListener(_onScroll);
+  }
+
+  late StreamSubscription subscription;
+  var isDeviceConnected = false;
+  bool isAlertSet = false;
+  bool isFavorite = false;
+  Future<void> getConnectivity() async {
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult event) async {
+      isDeviceConnected = await InternetConnectionChecker().hasConnection;
+      if (!isDeviceConnected && !isAlertSet) {
+        showDialogBox();
+        setState(() => isAlertSet = true);
+      } else if (isDeviceConnected && isAlertSet) {
+        setState(() => isAlertSet = false);
+      }
+    });
+  }
+
+  void showDialogBox() {
+    print("OK");
+    showCupertinoDialog<String>(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: const Text("Không có kết nối"),
+        content: const Text("Vui lòng kiểm tra kết nối internet"),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context, 'Cancel');
+              isDeviceConnected =
+                  await InternetConnectionChecker().hasConnection;
+              if (!isDeviceConnected) {
+                showDialogBox();
+                setState(() => isAlertSet = true);
+              }
+            },
+            child: const Text("OK"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
   }
 
   void _onScroll() {
@@ -52,13 +114,39 @@ class _Screen1State extends State<Screen1> {
     }
   }
 
-  void _loadMorePosts() async {
-    setState(() {
-      isLoading = true; // Hiển thị loading indicator
-    });
+  void checkPost() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var value = await prefs.getString('token');
 
+    var headers = {
+      'Authorization': 'Bearer $value',
+      'Content-Type':
+          'application/json', // Điều này phụ thuộc vào yêu cầu cụ thể của máy chủ
+    };
+
+    var response = await http.post(
+      Uri.parse(ApiEndPoints.baseUrl + "v1/user/load/checkpost"),
+      headers: headers,
+      body: "1", // Truyền số trang cần tải
+    );
+
+    if (response.statusCode == 200) {
+      if (response.statusCode == 200) {
+        var responseData = response.body;
+        if (responseData == 'success') {
+          SuccessfulRegistrationDialog(); // Hiển thị dialog
+        }
+      }
+    }
+  }
+
+  void _loadMorePosts() async {
+    setState(() {
+      isLoadingMorePost = true; // Hiển thị loading indicator
+    });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var value = await prefs.getString('token');
+    print(value);
     var headers = {
       'Authorization': 'Bearer $value',
       'Content-Type':
@@ -80,7 +168,7 @@ class _Screen1State extends State<Screen1> {
     }
 
     setState(() {
-      isLoading = false; // Ẩn loading indicator sau khi tải dữ liệu
+      isLoadingMorePost = false; // Ẩn loading indicator sau khi tải dữ liệu
     });
   }
 
@@ -307,9 +395,14 @@ class _Screen1State extends State<Screen1> {
   void addComment(String content, int post_id, int toUser, int idCmt) async {
     if (context != null) {
       var type = socketManager.repCmtId > 0 ? 'REPCOMMENT' : 'COMMENT';
-      print("OK");
       socketManager.sendNotify(content, post_id, toUser, type, idCmt);
     }
+  }
+
+  void sharePublic(int post_id, int toUser) {
+    print("Share rồi");
+    socketManager.sendNotify(
+        ' ', post_id, toUser, "SHARE", socketManager.repCmtId);
   }
 
   Future<List> _fetchReplies(int postId, int idComment) async {
@@ -376,11 +469,151 @@ class _Screen1State extends State<Screen1> {
     await Future.forEach(interested, (user) {
       if (user['user_id'] == currentUserId) {
         mapInterested[postId] = true;
-        return;
+        return true;
       }
+      return false;
     });
 
     return mapInterested[postId] ?? false;
+  }
+
+  void showDialogReportAccount(int user_id) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Báo cáo'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Nếu bạn nhận thấy sự lừa đảo, quấy rồi, thông tin sai sự thật,ngôn ngữ vi phạm nguyên tắc cộng đồng,... hãy báo cáo ngay để góp phần xây dựng một diễn đàn lành mạnh!',
+                style: TextStyle(
+                  color: Colors.grey,
+                ),
+              ),
+              TextField(
+                controller: textReportAccountController,
+                decoration: InputDecoration(hintText: 'Nhập nội dung ở đây...'),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                var value = await prefs.getString('token');
+                var headers = {
+                  'Authorization': 'Bearer $value',
+                  'Content-Type':
+                      'application/x-www-form-urlencoded', // Điều này phụ thuộc vào yêu cầu cụ thể của máy chủ
+                };
+                final data = {
+                  'postId': user_id.toString(),
+                  'content': textReportAccountController.text
+                };
+
+                final response = await http.post(
+                    Uri.parse(ApiEndPoints.baseUrl + "v1/user/report/user"),
+                    headers: headers,
+                    body: {
+                      'to': user_id.toString(),
+                      'content': textReportAccountController.text
+                    });
+                print(response.statusCode);
+                if (response.statusCode == 200) {
+                  print(response.statusCode);
+                  textReportAccountController.clear();
+                  Navigator.pop(context);
+                  QuickAlert.show(
+                      context: context,
+                      title: "Thành công",
+                      text: "Yêu cầu của bạn đã được gửi đến quản trị viên !",
+                      type: QuickAlertType.success);
+                }
+              },
+              child: Text('Gửi'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Hủy'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showDialogReportPost(int postId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Báo cáo'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Nếu bạn nhận thấy sự lừa đảo, quấy rồi, thông tin sai sự thật,ngôn ngữ vi phạm nguyên tắc cộng đồng,... hãy báo cáo ngay để góp phần xây dựng một diễn đàn lành mạnh!',
+                style: TextStyle(
+                  color: Colors.grey,
+                ),
+              ),
+              TextField(
+                controller: textReportPostController,
+                decoration: InputDecoration(hintText: 'Nhập nội dung ở đây...'),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                var value = await prefs.getString('token');
+                var headers = {
+                  'Authorization': 'Bearer $value',
+                  'Content-Type':
+                      'application/x-www-form-urlencoded', // Điều này phụ thuộc vào yêu cầu cụ thể của máy chủ
+                };
+                final data = {
+                  'postId': postId.toString(),
+                  'content': textReportPostController.text
+                };
+                print("id" + postId.toString());
+                final response = await http.post(
+                    Uri.parse(ApiEndPoints.baseUrl + "v1/user/report/post"),
+                    headers: headers,
+                    body: {
+                      'postId': postId.toString(),
+                      'content': textReportPostController.text
+                    });
+                print(response.statusCode);
+                if (response.statusCode == 200) {
+                  textReportPostController.clear();
+                  Navigator.pop(context);
+                  QuickAlert.show(
+                      context: context,
+                      title: "Thành công",
+                      text: "Yêu cầu của bạn đã được gửi đến quản trị viên !",
+                      type: QuickAlertType.success);
+                }
+              },
+              child: Text('Gửi'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Hủy'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -449,7 +682,7 @@ class _Screen1State extends State<Screen1> {
                               ),
                               Container(
                                   alignment: Alignment.center,
-                                  width: 60,
+                                  width: 70,
                                   child: Text("Trực tiếp")),
                             ],
                           ),
@@ -501,7 +734,7 @@ class _Screen1State extends State<Screen1> {
                               ),
                               Container(
                                   alignment: Alignment.center,
-                                  width: 30,
+                                  width: 45,
                                   child: Text("Vị trí")),
                             ],
                           ),
@@ -593,7 +826,8 @@ class _Screen1State extends State<Screen1> {
                                     itemBuilder: (context) => [
                                       PopupMenuItem(
                                         onTap: () {
-                                          Navigator.pushNamed(context, "/");
+                                          showDialogReportPost(listPost![i][
+                                              'post_id']); // Gọi hàm hiển thị dialog
                                         },
                                         child: Row(
                                           children: [
@@ -608,7 +842,8 @@ class _Screen1State extends State<Screen1> {
                                       ),
                                       PopupMenuItem(
                                         onTap: () {
-                                          Navigator.pushNamed(context, "/");
+                                          showDialogReportAccount(
+                                              listPost![i]['user_id']);
                                         },
                                         child: Row(
                                           children: [
@@ -751,8 +986,9 @@ class _Screen1State extends State<Screen1> {
                                                 itemBuilder: (context) => [
                                                   PopupMenuItem(
                                                     onTap: () {
-                                                      Navigator.pushNamed(
-                                                          context, "/");
+                                                      showDialogReportPost(
+                                                          listPost![i]
+                                                              ['post_id']);
                                                     },
                                                     child: Row(
                                                       children: [
@@ -769,8 +1005,9 @@ class _Screen1State extends State<Screen1> {
                                                   ),
                                                   PopupMenuItem(
                                                     onTap: () {
-                                                      Navigator.pushNamed(
-                                                          context, "/");
+                                                      showDialogReportAccount(
+                                                          listPost![i]
+                                                              ['user_id']);
                                                     },
                                                     child: Row(
                                                       children: [
@@ -881,13 +1118,31 @@ class _Screen1State extends State<Screen1> {
                                     child: Row(
                                       children: [
                                         Container(
-                                          alignment: Alignment.center,
-                                          width: 30,
-                                          child: Icon(
-                                            Icons.favorite_border,
-                                            color: Colors.red,
-                                          ),
-                                        ),
+                                            alignment: Alignment.center,
+                                            width: 30,
+                                            child: GestureDetector(
+                                              onTap: () {},
+                                              child: Container(
+                                                child: Icon(
+                                                  checkInterested(
+                                                              listPost![i]
+                                                                  ['post_id'],
+                                                              listPost![i][
+                                                                  'userInterested']) ==
+                                                          true
+                                                      ? Icons.favorite
+                                                      : Icons.favorite_border,
+                                                  color: checkInterested(
+                                                              listPost![i]
+                                                                  ['post_id'],
+                                                              listPost![i][
+                                                                  'userInterested']) ==
+                                                          true
+                                                      ? Colors.red
+                                                      : null,
+                                                ),
+                                              ),
+                                            )),
                                         Container(
                                             alignment: Alignment.center,
                                             width: 20,
@@ -917,7 +1172,7 @@ class _Screen1State extends State<Screen1> {
                                         children: [
                                           Container(
                                             alignment: Alignment.center,
-                                            width: 30,
+                                            width: 50,
                                             child: Icon(
                                               Icons.comment,
                                               color: Colors.green,
@@ -925,7 +1180,7 @@ class _Screen1State extends State<Screen1> {
                                           ),
                                           Container(
                                             alignment: Alignment.center,
-                                            width: 20,
+                                            width: 10,
                                             child: Text(listPost![i]
                                                     ['countCommnet']
                                                 .toString()),
@@ -940,24 +1195,64 @@ class _Screen1State extends State<Screen1> {
                                   alignment: Alignment.center,
                                   height: 50,
                                   width:
-                                      MediaQuery.of(context).size.width * 0.33,
+                                      MediaQuery.of(context).size.width * 0.26,
                                   child: Container(
-                                    width: 100,
+                                    width: 50,
                                     child: Row(
                                       children: [
-                                        Container(
-                                          alignment: Alignment.center,
-                                          width: 30,
-                                          child: Icon(
+                                        PopupMenuButton<String>(
+                                          icon: Icon(
                                             Icons.share,
                                             color: const Color.fromARGB(
                                                 255, 2, 124, 224),
                                           ),
+                                          onSelected: (String value) {
+                                            if (value == 'public') {
+                                              sharePublic(
+                                                listPost![i]['post_id'],
+                                                listPost![i]['user_id'],
+                                              );
+
+                                              QuickAlert.show(
+                                                  context: context,
+                                                  title: "Thành công",
+                                                  text: "Chia sẻ thành công !",
+                                                  type: QuickAlertType.success);
+                                            } else if (value == 'private') {
+                                              var linkToCopy =
+                                                  ApiEndPoints.baseUrl +
+                                                      'detail-post?id=' +
+                                                      (listPost![i]['user_id'])
+                                                          .toString();
+                                              Clipboard.setData(ClipboardData(
+                                                      text: linkToCopy))
+                                                  .then((_) => QuickAlert.show(
+                                                      context: context,
+                                                      // title: "Thành công",
+                                                      text:
+                                                          "Đã sao chép liên kết",
+                                                      type: QuickAlertType
+                                                          .success));
+                                            }
+                                          },
+                                          itemBuilder: (BuildContext context) =>
+                                              <PopupMenuEntry<String>>[
+                                            PopupMenuItem<String>(
+                                              value: 'public',
+                                              child: Text('Chia sẻ công khai'),
+                                            ),
+                                            PopupMenuItem<String>(
+                                              value: 'private',
+                                              child: Text('Chia sẻ liên kết'),
+                                            ),
+                                            // Thêm các mục menu khác nếu cần
+                                          ],
                                         ),
                                         Container(
                                           alignment: Alignment.center,
-                                          width: 50,
-                                          child: Text("Chia sẻ"),
+                                          width: 0,
+                                          child: Text(listPost![i]['countShare']
+                                              .toString()),
                                         ),
                                       ],
                                     ),
@@ -968,6 +1263,17 @@ class _Screen1State extends State<Screen1> {
                           ],
                         ),
                       ),
+                    isLoadingMorePost
+                        ? Container(
+                            color: GlobalColors.loadColors1,
+                            child: Center(
+                              child: SpinKitWave(
+                                color: Colors.white,
+                                size: 50.0,
+                              ),
+                            ),
+                          )
+                        : SizedBox(),
                   ],
                 ),
               ),

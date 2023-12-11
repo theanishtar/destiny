@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:login_signup/utils/api.dart';
 import 'package:login_signup/utils/gobal.colors.dart';
 import 'package:login_signup/view/edit_profile.view.dart';
@@ -9,6 +10,7 @@ import 'package:login_signup/view/screens/profile.view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:clipboard/clipboard.dart';
 
 class Post extends StatefulWidget {
   const Post({super.key});
@@ -30,6 +32,8 @@ class _PostState extends State<Post> {
     super.initState();
     this.getData();
   }
+
+  bool isFavorite = false;
 
   Future getData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -54,6 +58,11 @@ class _PostState extends State<Post> {
         print(listPost);
       });
     }
+  }
+
+  void sharePublic(int post_id, int toUser) {
+    socketManager.sendNotify(
+        ' ', post_id, toUser, "SHARE", socketManager.repCmtId);
   }
 
   @override
@@ -253,9 +262,22 @@ class _PostState extends State<Post> {
                                                 Container(
                                                   alignment: Alignment.center,
                                                   width: 30,
-                                                  child: Icon(
-                                                    Icons.favorite_border,
-                                                    color: Colors.red,
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        isFavorite =
+                                                            !isFavorite; // Đảo ngược trạng thái khi nhấp vào
+                                                      });
+                                                    },
+                                                    child: Icon(
+                                                      isFavorite
+                                                          ? Icons.favorite
+                                                          : Icons
+                                                              .favorite_border,
+                                                      color: isFavorite
+                                                          ? Colors.red
+                                                          : null,
+                                                    ),
                                                   ),
                                                 ),
                                                 Container(
@@ -277,12 +299,12 @@ class _PostState extends State<Post> {
                                                   .width *
                                               0.33,
                                           child: Container(
-                                            width: 100,
+                                            width: 90,
                                             child: Row(
                                               children: [
                                                 Container(
                                                   alignment: Alignment.center,
-                                                  width: 30,
+                                                  width: 50,
                                                   child: Icon(
                                                     Icons.comment,
                                                     color: Colors.green,
@@ -290,9 +312,11 @@ class _PostState extends State<Post> {
                                                 ),
                                                 Container(
                                                   alignment: Alignment.center,
-                                                  width: 60,
-                                                  child: Text("Bình luận"),
-                                                ),
+                                                  width: 10,
+                                                  child: Text(listPost![i]
+                                                          ['countCommnet']
+                                                      .toString()),
+                                                )
                                               ],
                                             ),
                                           ),
@@ -304,24 +328,59 @@ class _PostState extends State<Post> {
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width *
-                                              0.33,
+                                              0.26,
                                           child: Container(
-                                            width: 100,
+                                            width: 50,
                                             child: Row(
                                               children: [
-                                                Container(
-                                                  alignment: Alignment.center,
-                                                  width: 30,
-                                                  child: Icon(
+                                                PopupMenuButton<String>(
+                                                  icon: Icon(
                                                     Icons.share,
                                                     color: const Color.fromARGB(
                                                         255, 2, 124, 224),
                                                   ),
+                                                  onSelected: (String value) {
+                                                    if (value == 'public') {
+                                                      sharePublic(
+                                                        listPost![i]['post_id'],
+                                                        listPost![i]['user_id'],
+                                                      );
+                                                    } else if (value ==
+                                                        'private') {
+                                                      var linkToCopy =
+                                                          ApiEndPoints.baseUrl +
+                                                              'detail-post?id=' +
+                                                              (listPost![i][
+                                                                      'user_id'])
+                                                                  .toString();
+                                                      Clipboard.setData(
+                                                              ClipboardData(
+                                                                  text:
+                                                                      linkToCopy))
+                                                          .then((_) => print(
+                                                              'Đã sao chép đường link: $linkToCopy'));
+                                                    }
+                                                  },
+                                                  itemBuilder: (BuildContext
+                                                          context) =>
+                                                      <PopupMenuEntry<String>>[
+                                                    PopupMenuItem<String>(
+                                                      value: 'public',
+                                                      child: Text(
+                                                          'Chia sẻ công khai'),
+                                                    ),
+                                                    PopupMenuItem<String>(
+                                                      value: 'private',
+                                                      child: Text(
+                                                          'Chia sẻ liên kết'),
+                                                    ),
+                                                    // Thêm các mục menu khác nếu cần
+                                                  ],
                                                 ),
                                                 Container(
                                                   alignment: Alignment.center,
-                                                  width: 50,
-                                                  child: Text("Chia sẻ"),
+                                                  width: 0,
+                                                  child: Text("0"),
                                                 ),
                                               ],
                                             ),
@@ -514,7 +573,7 @@ class _PostState extends State<Post> {
                                                 width: MediaQuery.of(context)
                                                         .size
                                                         .width *
-                                                    0.33,
+                                                    0.26,
                                                 child: Container(
                                                   width: 100,
                                                   child: Row(
@@ -523,9 +582,22 @@ class _PostState extends State<Post> {
                                                         alignment:
                                                             Alignment.center,
                                                         width: 30,
-                                                        child: Icon(
-                                                          Icons.favorite_border,
-                                                          color: Colors.red,
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              isFavorite =
+                                                                  !isFavorite; // Đảo ngược trạng thái khi nhấp vào
+                                                            });
+                                                          },
+                                                          child: Icon(
+                                                            isFavorite
+                                                                ? Icons.favorite
+                                                                : Icons
+                                                                    .favorite_border,
+                                                            color: isFavorite
+                                                                ? Colors.red
+                                                                : null,
+                                                          ),
                                                         ),
                                                       ),
                                                       Container(
@@ -567,9 +639,10 @@ class _PostState extends State<Post> {
                                                       Container(
                                                         alignment:
                                                             Alignment.center,
-                                                        width: 60,
-                                                        child:
-                                                            Text("Bình luận"),
+                                                        width: 10,
+                                                        child: Text(listPost![i]
+                                                                ['countCommnet']
+                                                            .toString()),
                                                       ),
                                                     ],
                                                   ),
@@ -585,13 +658,13 @@ class _PostState extends State<Post> {
                                                         .width *
                                                     0.33,
                                                 child: Container(
-                                                  width: 100,
+                                                  width: 50,
                                                   child: Row(
                                                     children: [
                                                       Container(
                                                         alignment:
                                                             Alignment.center,
-                                                        width: 30,
+                                                        width: 40,
                                                         child: Icon(
                                                           Icons.share,
                                                           color: const Color
@@ -602,8 +675,8 @@ class _PostState extends State<Post> {
                                                       Container(
                                                         alignment:
                                                             Alignment.center,
-                                                        width: 50,
-                                                        child: Text("Chia sẻ"),
+                                                        width: 10,
+                                                        child: Text("0"),
                                                       ),
                                                     ],
                                                   ),

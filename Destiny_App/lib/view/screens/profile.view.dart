@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -15,6 +16,9 @@ import 'package:login_signup/view/widgets/button_screen.dart';
 import 'package:login_signup/view/widgets/post.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -30,7 +34,7 @@ int? countPost;
 int? countFollower;
 int? countImg;
 Map? listPost;
-bool user = false;
+int? user;
 
 class _ProfileViewState extends State<ProfileView> {
   bool isLoading = false;
@@ -38,25 +42,65 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   void initState() {
     super.initState();
+    getConnectivity();
     this.checkUser();
     this.getData();
   }
 
+  late StreamSubscription subscription;
+  var isDeviceConnected = false;
+  bool isAlertSet = false;
+
+  Future<void> getConnectivity() async {
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult event) async {
+      isDeviceConnected = await InternetConnectionChecker().hasConnection;
+      if (!isDeviceConnected && !isAlertSet) {
+        showDialogBox();
+        setState(() => isAlertSet = true);
+      } else if (isDeviceConnected && isAlertSet) {
+        setState(() => isAlertSet = false);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
+  void showDialogBox() {
+    showCupertinoDialog<String>(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: const Text("Không có kết nối"),
+        content: const Text("Vui lòng kiểm tra kết nối internet"),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context, 'Cancel');
+              isDeviceConnected =
+                  await InternetConnectionChecker().hasConnection;
+              if (!isDeviceConnected) {
+                showDialogBox();
+                setState(() => isAlertSet = true);
+              }
+            },
+            child: const Text("OK"),
+          ),
+        ],
+      ),
+    );
+  }
+
   void checkUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    int check = await int.parse(prefs.getInt('user').toString());
-    print(check);
-    if (check == 1) {
-      setState(() {
-        print(check == 1);
-        user = true;
-        print(user);
-      });
-    } else {
-      setState(() {
-        user = false;
-      });
-    }
+    var id = await prefs.getInt('id');
+    setState(() {
+      user = id;
+    });
   }
 
   Future getData() async {
@@ -260,7 +304,7 @@ class _ProfileViewState extends State<ProfileView> {
                         SizedBox(
                           height: 20,
                         ),
-                        user == true
+                        user == listPost?['user_id']
                             ? SizedBox(
                                 height: 10,
                               )

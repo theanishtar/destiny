@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:login_signup/models/SocketManager%20.dart';
 import 'package:login_signup/utils/api.dart';
 import 'package:login_signup/utils/gobal.colors.dart';
 import 'package:login_signup/view/bottomnavbar.dart';
@@ -20,25 +21,21 @@ class SignupView extends StatelessWidget {
   final TextEditingController confirmPasswordController =
       TextEditingController();
   final _formfield = GlobalKey<FormState>();
+  late SocketManager socketManager = SocketManager();
   void signup(String email, fullname, password) async {
-    print("aaaaaaaaa  " + email);
-    print("bbbbbb  " + password);
-
     try {
-      final data = {'email': email, 'fullname': fullname, 'password': password};
+// check nhập lại mật khẩu
+      print(fullname);
+      socketManager.connectedRegister(email);
+      final data = {'email': email, 'name': fullname, 'password': password};
       final response =
           await http.post(Uri.parse(ApiEndPoints.baseUrl + "v1/oauth/register"),
               headers: <String, String>{
                 'Content-Type': 'application/json; charset=UTF-8',
               },
               body: jsonEncode(data));
+      // print(data);
       if (response.statusCode == 200) {
-        // Successful API call
-        print("ok");
-        print('Response data: ${response.body}');
-        runApp(GetMaterialApp(
-          home: BottomNavBar(),
-        ));
       } else {
         // Handle API call errors
         print('API call failed with status code: ${response.statusCode}');

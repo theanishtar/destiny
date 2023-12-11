@@ -39,11 +39,9 @@ class _SplashScreenState extends State<SplashScreen> {
         // print('object');
         login(email, password);
       } else {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (BuildContext context) => const HomeScreen(),
-          ),
-        );
+        runApp(GetMaterialApp(
+          home: HomeScreen(),
+        ));
       }
     });
   }

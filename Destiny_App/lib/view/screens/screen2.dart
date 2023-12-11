@@ -1,9 +1,14 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:login_signup/view/screens/profile.view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:login_signup/utils/api.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 class FollowView extends StatefulWidget {
   const FollowView({Key? key}) : super(key: key);
@@ -23,10 +28,59 @@ class _FollowViewState extends State<FollowView> {
   @override
   void initState() {
     super.initState();
+    getConnectivity();
     following = [];
     follower = [];
     friends = [];
     this.getdata();
+  }
+
+  late StreamSubscription subscription;
+  var isDeviceConnected = false;
+  bool isAlertSet = false;
+
+  Future<void> getConnectivity() async {
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult event) async {
+      isDeviceConnected = await InternetConnectionChecker().hasConnection;
+      if (!isDeviceConnected && !isAlertSet) {
+        showDialogBox();
+        setState(() => isAlertSet = true);
+      } else if (isDeviceConnected && isAlertSet) {
+        setState(() => isAlertSet = false);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
+  void showDialogBox() {
+    showCupertinoDialog<String>(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: const Text("Không có kết nối"),
+        content: const Text("Vui lòng kiểm tra kết nối internet"),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context, 'Cancel');
+              isDeviceConnected =
+                  await InternetConnectionChecker().hasConnection;
+              if (!isDeviceConnected) {
+                showDialogBox();
+                setState(() => isAlertSet = true);
+              }
+            },
+            child: const Text("OK"),
+          ),
+        ],
+      ),
+    );
   }
 
   void getdata() {
@@ -39,6 +93,27 @@ class _FollowViewState extends State<FollowView> {
     setState(() {
       isLoading = false; // Ẩn loading indicator sau khi tải dữ liệu
     });
+  }
+
+  void unfollowing(int idUser) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var value = await prefs.getString('token');
+
+    var headers = {
+      'Authorization': 'Bearer $value',
+      'Content-Type':
+          'application/json', // Điều này phụ thuộc vào yêu cầu cụ thể của máy chủ
+    };
+
+    var response = await http.post(
+      Uri.parse(ApiEndPoints.baseUrl + "v1/user/following/delete"),
+      headers: headers,
+      body: idUser.toString(), // Truyền số trang cần tải
+    );
+
+    if (response.statusCode == 200) {
+      print("OK");
+    }
   }
 
   Future getDataFollowing() async {
@@ -208,6 +283,7 @@ class _FollowViewState extends State<FollowView> {
                                         ? Color(0xffeeeeee)
                                         : Color(0xffffff),
                                     onPressed: () {
+                                      unfollowing(friends![i]['user_id']);
                                       setState(() {
                                         friends![i]['checkFollow'] =
                                             !friends![i]['checkFollow'];
@@ -300,6 +376,7 @@ class _FollowViewState extends State<FollowView> {
                                         ? Color(0xffeeeeee)
                                         : Color(0xffffff),
                                     onPressed: () {
+                                      unfollowing(following![i]['user_id']);
                                       setState(() {
                                         following![i]['checkFollow'] =
                                             !following![i]['checkFollow'];
@@ -392,6 +469,13 @@ class _FollowViewState extends State<FollowView> {
                                         ? Color(0xffeeeeee)
                                         : Color(0xffffff),
                                     onPressed: () {
+                                      print("Đã theo dõi");
+                                      socketManager.sendNotify(
+                                          ' ',
+                                          0,
+                                          follower![i]['user_id'],
+                                          'FOLLOW',
+                                          socketManager.repCmtId);
                                       setState(() {
                                         follower![i]['checkFollow'] =
                                             !follower![i]['checkFollow'];
