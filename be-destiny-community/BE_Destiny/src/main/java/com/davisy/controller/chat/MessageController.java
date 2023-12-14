@@ -74,15 +74,16 @@ public class MessageController {
 		Chats chats = chatsService.findChatNames(user.getUsername(), toUser.getUsername());
 		List<String> images = new ArrayList<>();
 		Messages messages = new Messages();
+		String rarMess="";
+		if(!message.getMessage().equals("")) {
+			// mã hóa nội dung tin nhắn
 
-		// mã hóa nội dung tin nhắn
+			// Step1. Get SecretKey from u1, u2
+			int key = DiffieHellman.genSecretKey(from, to);
 
-		// Step1. Get SecretKey from u1, u2
-		int key = DiffieHellman.genSecretKey(from, to);
-
-		// Step2. encode message
-		String rarMess = AES.encrypt(message.getMessage(), key);
-
+			// Step2. encode message
+			 rarMess = AES.encrypt(message.getMessage(), key);
+		}
 		messages.setContent(rarMess);
 		messages.setUser(user);
 		messages.setChats(chats);
@@ -109,14 +110,13 @@ public class MessageController {
 
 		}
 	}
-	
+
 	@PostMapping("/v1/user/messages/check/block")
 	public ResponseEntity<Boolean> block(@RequestParam("from") int from, @RequestParam("to") int to) {
 		boolean check = participantsService.checkBlock(from, to);
 		return ResponseEntity.ok().body(check);
 	}
-		
-	
+
 //	@PostMapping("/v1/user/chat/load/messages")
 //	public ResponseEntity<List<Object[]>> loadMessages(HttpServletRequest request, @RequestBody int to) {
 //		try {
@@ -135,7 +135,26 @@ public class MessageController {
 //			return ResponseEntity.badRequest().build();
 //		}
 //	}
-	
+
+	@PostMapping("/v1/user/video-call/{fromUserId}/{toUserId}")
+	public void videoCall(@PathVariable("fromUserId") int fromUserId, @PathVariable("toUserId") int toUserId) {
+		User  user = userService.findById(fromUserId);
+		String avatar =user.getAvatar();
+		Object[] o = new Object[] { fromUserId, toUserId, avatar };
+		simpMessagingTemplate.convertAndSend("/topic/notify/video-call/" + toUserId, o);
+		
+	}
+
+	@MessageMapping("/refuse/video-call/{id}/{type}")
+	public void refuse_video_call(@DestinationVariable int id,@DestinationVariable String type) {
+		simpMessagingTemplate.convertAndSend("/topic/notify/refuse/video-call/" + id, type);
+	}
+
+	@MessageMapping("/recieve/video-call/{id}")
+	public void recieve_video_call(@DestinationVariable int id) {
+		simpMessagingTemplate.convertAndSend("/topic/notify/recieve/video-call/" + id, "recieve");
+	}
+
 	@PostMapping("/v1/user/chat/load/messages")
 	public ResponseEntity<List<MessagesEntity>> loadMessages(HttpServletRequest request, @RequestParam("to") int to,
 			@RequestParam("page") int page) {
@@ -180,20 +199,20 @@ public class MessageController {
 		// nội dung tin nhắn
 		String contentStr = l[1] + "";
 		int fromTemp = Integer.valueOf(l[3].toString());
-		
-		if(from != fromTemp)
+
+		if (from != fromTemp)
 			fromTemp = to;
 
 		// giải mã nội dung tin nhắn
-		
+
 		// Step1. Get SecretKey from u1, u2
-    	int key = DiffieHellman.genSecretKey(from, to);
-    	
-    	System.out.printf("GOC: %s - FROM: %d - TO: %d",contentStr, from, to);
-    	
-    	// Step2. encode message
-    	String originMess = AES.decrypt(contentStr, key);
-		
+		int key = DiffieHellman.genSecretKey(from, to);
+
+		System.out.printf("GOC: %s - FROM: %d - TO: %d", contentStr, from, to);
+
+		// Step2. encode message
+		String originMess = AES.decrypt(contentStr, key);
+
 		entity.setId(Integer.valueOf(l[0].toString()));
 		entity.setContent(originMess);
 		entity.setSend_time(l[2] + "");
@@ -216,21 +235,20 @@ public class MessageController {
 		MessagesEntity entity = new MessagesEntity();
 		int from = Integer.valueOf(((Object[]) o[0])[3].toString());
 		entity.setId(Integer.valueOf(((Object[]) o[0])[0].toString()));
-		
+
 		// nội dung tin nhắn
 		String contentStr = ((Object[]) o[0])[1] + "";
-		
+
 		// giải mã nội dung tin nhắn
-		
+
 		// Step1. Get SecretKey from u1, u2
-    	int key = DiffieHellman.genSecretKey(from, to);
-    	
-    	// Step2. encode message
-    	String originMess = AES.decrypt(contentStr, key);
-    	
-    	System.out.println(originMess +"ORIGIN");
-		
-		
+		int key = DiffieHellman.genSecretKey(from, to);
+
+		// Step2. encode message
+		String originMess = AES.decrypt(contentStr, key);
+
+		System.out.println(originMess + "ORIGIN");
+
 		entity.setContent(originMess);
 		entity.setSend_time(((Object[]) o[0])[2] + "");
 		entity.setUser_id(Integer.valueOf(((Object[]) o[0])[3].toString()));

@@ -6,19 +6,14 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import jakarta.annotation.security.RolesAllowed;
-import jakarta.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.davisy.config.JwtTokenUtil;
-import com.davisy.dto.Admin;
 import com.davisy.dto.AdminPostDetail;
 import com.davisy.dto.AdminUserProfile;
 import com.davisy.dto.CommentDetail;
@@ -30,6 +25,7 @@ import com.davisy.entity.PostImages;
 import com.davisy.entity.PostReported;
 import com.davisy.entity.User;
 import com.davisy.entity.UserReported;
+import com.davisy.mongodb.documents.UserInfoStatus;
 import com.davisy.service.CommentService;
 import com.davisy.service.EmailService;
 import com.davisy.service.FollowService;
@@ -38,8 +34,11 @@ import com.davisy.service.PostImagesService;
 import com.davisy.service.PostReportedService;
 import com.davisy.service.PostService;
 import com.davisy.service.ShareService;
+import com.davisy.service.UserInfoStatusService;
 import com.davisy.service.UserReportedService;
 import com.davisy.service.UserService;
+
+import jakarta.annotation.security.RolesAllowed;
 
 @RestController
 @CrossOrigin("*")
@@ -65,6 +64,10 @@ public class AdminControl {
 	private UserReportedService userReportedService;
 	@Autowired
 	private EmailService emailService;
+	@Autowired
+	private UserInfoStatusService infoStatusService;
+	@Autowired
+	SimpMessagingTemplate  simpMessagingTemplate;
 
 	// 23-9-2023 -xem chi tiết bài đăng
 	// update lastest 7-10
@@ -83,6 +86,7 @@ public class AdminControl {
 
 	// 23-9-2023 -xem chi tiết người dùng
 	// update lastest 7-10
+	// 9-12
 	@GetMapping("/v1/admin/detailUser/{email}")
 	public ResponseEntity<AdminUserProfile> detailUser(@PathVariable String email) {
 		try {
@@ -112,9 +116,10 @@ public class AdminControl {
 		try {
 			User user = userService.findByEmail(email);
 			userService.disable(user);
-			if(user.isBan() == true) {
+			if (user.isBan() == true) {
 				emailService.sendHtmlEmailToUserIsBan(email);
-			}else {
+				simpMessagingTemplate.convertAndSend("/topic/notify/user/ban/"+user.getUser_id(),"ban");
+			} else {
 				emailService.sendHtmlEmailToUserIsUnBan(email);
 			}
 			
@@ -123,6 +128,7 @@ public class AdminControl {
 		}
 	}
 
+	// 9 -12
 	public AdminUserProfile setUserDetail(User user) {
 
 		AdminUserProfile userProfile = new AdminUserProfile();
@@ -131,18 +137,40 @@ public class AdminControl {
 		userProfile.setEmail(user.getEmail());
 		userProfile.setIntro(user.getIntro());
 
-		userProfile.setBirthday(formatDate(user.getBirthday()));
+		UserInfoStatus infoStatus = infoStatusService.getStatusInfor(user.getUser_id().toString());
+		
+		if(infoStatus != null) {
+			// check birthday status
+			if (infoStatus.getBirthday()) {
+				userProfile.setBirthday(formatDate(user.getBirthday()));
+
+			}else {
+				userProfile.setBirthday("Người dùng không muốn tiết lộ");
+			}
+			// check gender
+			if (infoStatus.getGender()) {
+				userProfile.setGender_name(user.getGender().getGender_name());
+			}else {
+				userProfile.setGender_name("Người dùng không muốn tiết lộ");
+			}
+			
+			// check location
+			if(infoStatus.getLocation()) {
+				userProfile.setCity_name(user.getProvinces().getFull_name());
+			}else {
+				userProfile.setCity_name("Người dùng không muốn tiết lộ");
+			}
+			
+		}
 
 		userProfile.setDay_join(String.valueOf(user.getDay_create().get(Calendar.DAY_OF_MONTH)));
 		userProfile.setMonth_join(String.valueOf(user.getDay_create().get(Calendar.MONTH) + 1));
 		userProfile.setYear_join(String.valueOf(user.getDay_create().get(Calendar.YEAR)));
 
-		userProfile.setCity_name(user.getProvinces().getFull_name());
-		userProfile.setGender_name(user.getGender().getGender_name());
 		userProfile.setAvatar(user.getAvatar());
 		userProfile.setThumb(user.getThumb());
 		userProfile.setMark(user.getMark());
-		
+
 		userProfile.setBan(user.isBan());
 
 		userProfile.setTotalPost(userTotalPost(user.getUser_id()));
@@ -189,9 +217,9 @@ public class AdminControl {
 		postDTO.setDate_Post(timeCaculate(post.getDate_Post()));
 
 		postDTO.setProduct(post.getProduct());
-		
+
 		postDTO.setBan(post.isBan());
-		
+
 		postDTO.setTotalInterested(postTotalInterested(post.getPost_id()));
 
 		postDTO.setTotalShare(postTotalShare(post.getPost_id()));
@@ -295,10 +323,9 @@ public class AdminControl {
 			timeCaculate = String.valueOf(monthCaculate + " tháng trước");
 		} else {
 			int time = dayCaculate - totalDayInMonth;
-			if(time == 0) {
+			if (time == 0) {
 				timeCaculate = String.valueOf("Vài giờ trước");
-			}
-			else {
+			} else {
 				timeCaculate = String.valueOf(time + " ngày trước");
 			}
 		}
@@ -336,7 +363,7 @@ public class AdminControl {
 		List<PostImagesDetail> listImagesDetail = new ArrayList<>();
 		for (PostImages postImages : listImages) {
 			PostImagesDetail postImagesDetail = new PostImagesDetail();
-			if(postImages.getLink_image().equals("")) {
+			if (postImages.getLink_image().equals("")) {
 				postImages.setLink_image(img);
 			}
 			postImagesDetail.setLink_image(postImages.getLink_image());
@@ -359,7 +386,8 @@ public class AdminControl {
 				commentDetail.setUser_fullname(comment.getUser().getFullname());
 				commentDetail.setUser_avatar(comment.getUser().getAvatar());
 				commentDetail.setUser_email(comment.getUser().getEmail());
-				commentDetail.setTime_comment(timeCaculate(comment.getDate_comment()));;
+				commentDetail.setTime_comment(timeCaculate(comment.getDate_comment()));
+				;
 				List<Comment> listCommentReply = commentService.findAllByIdComment(comment.getComment_id());
 				commentDetail.setListCommentReply(setlistCommentDetail(listCommentReply));
 
@@ -381,7 +409,7 @@ public class AdminControl {
 			commentDetail.setUser_avatar(comment.getUser().getAvatar());
 			commentDetail.setUser_email(comment.getUser().getEmail());
 			commentDetail.setTime_comment(timeCaculate(comment.getDate_comment()));
-			
+
 			listCommentDetail.add(commentDetail);
 		}
 

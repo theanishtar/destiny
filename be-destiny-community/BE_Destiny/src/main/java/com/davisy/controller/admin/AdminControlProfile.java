@@ -68,11 +68,10 @@ public class AdminControlProfile {
 
 	String provinceCode;
 	String districtCode;
-	
+
 	@Autowired
 	CacheService cacheService;
 	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
 
 	@Autowired
 	SimpMessagingTemplate simpMessagingTemplate;
@@ -82,12 +81,12 @@ public class AdminControlProfile {
 
 	@Autowired
 	EmailService emailService;
-	
+
 	String randCodeAuth = "";
 	@Value("${davis.client.uri}")
 	String client;
-	
-	//8-11
+
+	// 8-11
 	@PostMapping("/v1/admin/profile/change/email")
 	public ResponseEntity<String> changeEmail(@RequestBody EmailChange change, HttpServletRequest request)
 			throws MessagingException {
@@ -124,7 +123,6 @@ public class AdminControlProfile {
 		emailService.sendHtmlEmail(client + "/chang-email-confirm" + "?code=" + this.randCodeAuth, change.newEmail);
 		return ResponseEntity.status(200).body(this.randCodeAuth); // "OK"
 	}
-	
 
 	// update lastest 9-10
 	@GetMapping("/v1/admin/checkAdminLog")
@@ -271,45 +269,60 @@ public class AdminControlProfile {
 	// 22-9-2023 Cập nhật thông tin tài khoản admin
 	// 12-10-2023 lastest update
 	@PostMapping("/v1/admin/updateProfile")
-	public ResponseEntity<User> updateProfileAdmin(@RequestBody Admin adminRequestUpdate, HttpServletRequest request) throws Exception {
+	public ResponseEntity<User> updateProfileAdmin(@RequestBody Admin adminRequestUpdate, HttpServletRequest request)
+			throws Exception {
 		try {
 			String email = jwtTokenUtil.getEmailFromHeader(request);
 			User admin = userService.findByEmail(email);
+			boolean existUsername = false;
+			List<User> userAll = userService.findAll();
+			for (User u : userAll) {
+				if (adminRequestUpdate.getUsername().equals(u.getUsername())) {
+					if (!adminRequestUpdate.getUsername().equals(admin.getUsername())) {
+						existUsername = true;// trùng tên dn
+					}
+				}
+			}
 
-			admin.setUsername(adminRequestUpdate.getUsername());
-			admin.setFullname(adminRequestUpdate.getFullname());	
-			admin.setIntro(adminRequestUpdate.getIntro());
-			
-			admin.setAvatar(adminRequestUpdate.getAvatar());
-			
-			admin.setThumb(adminRequestUpdate.getThumb());
-			
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			Date date = sdf.parse(adminRequestUpdate.getBirthday());
-			Calendar birthday = Calendar.getInstance();
-			birthday.setTime(date);
-			
-			admin.setBirthday(birthday);
-			
-			int genderID = genderService.findIDGenderByName(adminRequestUpdate.getGender_name());
-			Gender gender = genderService.findGenderByID(genderID);
-			admin.setGender(gender);
-			
-			String provinceCode = provinceService.provinceCode(adminRequestUpdate.getProvince_name());			
-			Provinces province = provinceService.findProvinceByID(provinceCode);
-			admin.setProvinces(province);
-			
-			String districtCode = districtService.districtCode(adminRequestUpdate.getDistrict_name(), provinceCode);
-			Districts district = districtService.findDistrictByID(districtCode);
-			admin.setDistricts(district);
-			
-			String wardCode = wardService.wardCode(adminRequestUpdate.getWard_name(), districtCode);
-			Wards ward = wardService.findWardByID(wardCode);
-			admin.setWards(ward);
+			if (existUsername == false) {
+				admin.setUsername(adminRequestUpdate.getUsername());
+				admin.setFullname(adminRequestUpdate.getFullname());
+				admin.setIntro(adminRequestUpdate.getIntro());
 
-			userService.update(admin);
+				admin.setAvatar(adminRequestUpdate.getAvatar());
 
-			return ResponseEntity.status(200).body(admin);
+				admin.setThumb(adminRequestUpdate.getThumb());
+
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				Date date = sdf.parse(adminRequestUpdate.getBirthday());
+				Calendar birthday = Calendar.getInstance();
+				birthday.setTime(date);
+
+				admin.setBirthday(birthday);
+
+				int genderID = genderService.findIDGenderByName(adminRequestUpdate.getGender_name());
+				Gender gender = genderService.findGenderByID(genderID);
+				admin.setGender(gender);
+
+				String provinceCode = provinceService.provinceCode(adminRequestUpdate.getProvince_name());
+				Provinces province = provinceService.findProvinceByID(provinceCode);
+				admin.setProvinces(province);
+
+				String districtCode = districtService.districtCode(adminRequestUpdate.getDistrict_name(), provinceCode);
+				Districts district = districtService.findDistrictByID(districtCode);
+				admin.setDistricts(district);
+
+				String wardCode = wardService.wardCode(adminRequestUpdate.getWard_name(), districtCode);
+				Wards ward = wardService.findWardByID(wardCode);
+				admin.setWards(ward);
+
+				userService.update(admin);
+
+				return ResponseEntity.status(200).body(admin);
+			}else {
+//				System.out.println("Trung ten dn roi ma");
+				return ResponseEntity.status(301).body(admin); 
+			}
 		} catch (Exception e) {
 			System.out.println("Lỗi nè admin/update profile: " + e);
 			throw e;
@@ -319,8 +332,8 @@ public class AdminControlProfile {
 	// 22-9-2023 Kiểm tra mật khẩu khớp với mật khẩu cũ
 	// 14-10-2023 lastest update
 	@PostMapping("/v1/admin/checkPassword")
-	public int checkPassword(@RequestBody AdminPassword userRequestChangePasswrod,
-			HttpServletRequest request) throws Exception {
+	public int checkPassword(@RequestBody AdminPassword userRequestChangePasswrod, HttpServletRequest request)
+			throws Exception {
 		try {
 			int status;
 			String email = jwtTokenUtil.getEmailFromHeader(request);
@@ -342,8 +355,8 @@ public class AdminControlProfile {
 	// 22-9-2023 Cập nhật mật khẩu mới
 	// 14-10-2023 lastest update
 	@PostMapping("/v1/admin/changePassword")
-	public void changePassword(@RequestBody AdminPassword adminRequestChangePasswrod,
-			HttpServletRequest request) throws Exception {
+	public void changePassword(@RequestBody AdminPassword adminRequestChangePasswrod, HttpServletRequest request)
+			throws Exception {
 		try {
 			System.out.println(adminRequestChangePasswrod.getNewPassword());
 			String email = jwtTokenUtil.getEmailFromHeader(request);

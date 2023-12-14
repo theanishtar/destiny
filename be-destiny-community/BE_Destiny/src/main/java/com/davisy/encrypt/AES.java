@@ -53,15 +53,15 @@ public class AES {
 			byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
 			return new String(decryptedBytes);
 		} catch (Exception e) {
-			System.err.println(e);
+//			System.err.println(e);
 			return null;
 		}
 
 	}
 
 	public static void main(String[] args) throws Exception {
-		int secretKey = 26;
-		String originalText = "Hello, World!";
+		int secretKey = 12;
+		String originalText = "";
 
 		// Mã hóa
 		String encryptedText = encrypt(originalText, secretKey);

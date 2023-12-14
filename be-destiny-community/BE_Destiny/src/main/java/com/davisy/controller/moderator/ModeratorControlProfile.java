@@ -46,7 +46,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @CrossOrigin("*")
-@RolesAllowed("ROLE_MODERATOR")
 public class ModeratorControlProfile {
 	@Autowired
 	private UserService userService;
@@ -65,11 +64,10 @@ public class ModeratorControlProfile {
 
 	String provinceCode;
 	String districtCode;
-	
+
 	@Autowired
 	CacheService cacheService;
 	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
 
 	@Autowired
 	SimpMessagingTemplate simpMessagingTemplate;
@@ -79,7 +77,7 @@ public class ModeratorControlProfile {
 
 	@Autowired
 	EmailService emailService;
-	
+
 	String randCodeAuth = "";
 	@Value("${davis.client.uri}")
 	String client;
@@ -121,7 +119,6 @@ public class ModeratorControlProfile {
 		emailService.sendHtmlEmail(client + "/chang-email-confirm" + "?code=" + this.randCodeAuth, change.newEmail);
 		return ResponseEntity.status(200).body(this.randCodeAuth); // "OK"
 	}
-	
 
 	// update lastest 9-10
 	@GetMapping("/v1/moderator/checkModeratorLog")
@@ -265,48 +262,67 @@ public class ModeratorControlProfile {
 		}
 	}
 
+	// 12-9
 	// 22-9-2023 Cập nhật thông tin tài khoản admin
 	// 12-10-2023 lastest update
 	@PostMapping("/v1/moderator/updateProfile")
-	public ResponseEntity<User> updateProfileAdmin(@RequestBody Admin adminRequestUpdate, HttpServletRequest request) throws Exception {
+	public ResponseEntity<User> updateProfileAdmin(@RequestBody Admin adminRequestUpdate, HttpServletRequest request)
+			throws Exception {
 		try {
 			String email = jwtTokenUtil.getEmailFromHeader(request);
-			User moderator =userService.findByEmail(email);
+			User moderator = userService.findByEmail(email);
 
-			moderator.setUsername(adminRequestUpdate.getUsername());
-			moderator.setFullname(adminRequestUpdate.getFullname());	
-			moderator.setIntro(adminRequestUpdate.getIntro());
-			
-			moderator.setAvatar(adminRequestUpdate.getAvatar());
-			
-			moderator.setThumb(adminRequestUpdate.getThumb());
-			
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			Date date = sdf.parse(adminRequestUpdate.getBirthday());
-			Calendar birthday = Calendar.getInstance();
-			birthday.setTime(date);
-			
-			moderator.setBirthday(birthday);
-			
-			int genderID = genderService.findIDGenderByName(adminRequestUpdate.getGender_name());
-			Gender gender = genderService.findGenderByID(genderID);
-			moderator.setGender(gender);
-			
-			String provinceCode = provinceService.provinceCode(adminRequestUpdate.getProvince_name());			
-			Provinces province = provinceService.findProvinceByID(provinceCode);
-			moderator.setProvinces(province);
-			
-			String districtCode = districtService.districtCode(adminRequestUpdate.getDistrict_name(), provinceCode);
-			Districts district = districtService.findDistrictByID(districtCode);
-			moderator.setDistricts(district);
-			
-			String wardCode = wardService.wardCode(adminRequestUpdate.getWard_name(), districtCode);
-			Wards ward = wardService.findWardByID(wardCode);
-			moderator.setWards(ward);
+			boolean existUsername = false;
+			List<User> userAll = userService.findAll();
+			for (User u : userAll) {
+				if (adminRequestUpdate.getUsername().equals(u.getUsername())) {
+					if (!adminRequestUpdate.getUsername().equals(moderator.getUsername())) {
+						existUsername = true;// trùng tên dn
+					}
+				}
+			}
 
-			userService.update(moderator);
+			if (existUsername == false) {
 
-			return ResponseEntity.status(200).body(moderator);
+				moderator.setUsername(adminRequestUpdate.getUsername());
+				moderator.setFullname(adminRequestUpdate.getFullname());
+				moderator.setIntro(adminRequestUpdate.getIntro());
+
+				moderator.setAvatar(adminRequestUpdate.getAvatar());
+
+				moderator.setThumb(adminRequestUpdate.getThumb());
+
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				Date date = sdf.parse(adminRequestUpdate.getBirthday());
+				Calendar birthday = Calendar.getInstance();
+				birthday.setTime(date);
+
+				moderator.setBirthday(birthday);
+
+				int genderID = genderService.findIDGenderByName(adminRequestUpdate.getGender_name());
+				Gender gender = genderService.findGenderByID(genderID);
+				moderator.setGender(gender);
+
+				String provinceCode = provinceService.provinceCode(adminRequestUpdate.getProvince_name());
+				Provinces province = provinceService.findProvinceByID(provinceCode);
+				moderator.setProvinces(province);
+
+				String districtCode = districtService.districtCode(adminRequestUpdate.getDistrict_name(), provinceCode);
+				Districts district = districtService.findDistrictByID(districtCode);
+				moderator.setDistricts(district);
+
+				String wardCode = wardService.wardCode(adminRequestUpdate.getWard_name(), districtCode);
+				Wards ward = wardService.findWardByID(wardCode);
+				moderator.setWards(ward);
+
+				userService.update(moderator);
+
+				return ResponseEntity.status(200).body(moderator);
+			} else {
+//				System.out.println("Trung ten dn roi ma");
+				return ResponseEntity.status(301).body(moderator);
+
+			}
 		} catch (Exception e) {
 			System.out.println("Lỗi nè moderator/update profile: " + e);
 			throw e;
@@ -316,12 +332,12 @@ public class ModeratorControlProfile {
 	// 22-9-2023 Kiểm tra mật khẩu khớp với mật khẩu cũ
 	// 14-10-2023 lastest update
 	@PostMapping("/v1/moderator/checkPassword")
-	public int checkPassword(@RequestBody AdminPassword userRequestChangePasswrod,
-			HttpServletRequest request) throws Exception {
+	public int checkPassword(@RequestBody AdminPassword userRequestChangePasswrod, HttpServletRequest request)
+			throws Exception {
 		try {
 			int status;
 			String email = jwtTokenUtil.getEmailFromHeader(request);
-			User moderator =userService.findByEmail(email);
+			User moderator = userService.findByEmail(email);
 			String passwordRequest = userRequestChangePasswrod.getOldPassword();
 
 			if (passwordEncoder.matches(passwordRequest, moderator.getPassword())) {
@@ -339,12 +355,12 @@ public class ModeratorControlProfile {
 	// 22-9-2023 Cập nhật mật khẩu mới
 	// 14-10-2023 lastest update
 	@PostMapping("/v1/moderator/changePassword")
-	public void changePassword(@RequestBody AdminPassword adminRequestChangePasswrod,
-			HttpServletRequest request) throws Exception {
+	public void changePassword(@RequestBody AdminPassword adminRequestChangePasswrod, HttpServletRequest request)
+			throws Exception {
 		try {
 			System.out.println(adminRequestChangePasswrod.getNewPassword());
 			String email = jwtTokenUtil.getEmailFromHeader(request);
-			User moderator =userService.findByEmail(email);
+			User moderator = userService.findByEmail(email);
 			String newPassword = adminRequestChangePasswrod.getNewPassword();
 			moderator.setPassword(passwordEncoder.encode(newPassword));
 

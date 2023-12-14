@@ -21,6 +21,7 @@ public class WebsocketConfiguration implements WebSocketMessageBrokerConfigurer 
 		registry.addEndpoint("/chat").setAllowedOrigins(client_uri).withSockJS();
 		registry.addEndpoint("/notify").setAllowedOrigins(client_uri).withSockJS();
 		registry.addEndpoint("/confirm-register").setAllowedOrigins(client_uri).withSockJS();
+		registry.addEndpoint("/login-qr").setAllowedOrigins(client_uri).withSockJS();
 	}
 
 	@Override

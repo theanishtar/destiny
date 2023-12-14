@@ -21,6 +21,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -305,6 +306,7 @@ public class NotificationController {
 					chatsService.update(chats);
 				}
 			}
+			System.err.println("model: " + model.getType());
 			insert(model, to);
 			if (model.getType().toString().equalsIgnoreCase("POST")) {
 				List<Integer> listId = UserFollowerStorage.getInstance().getUsers().get(model.getFromUserId());
@@ -412,11 +414,20 @@ public class NotificationController {
 
 	@MessageMapping("/load/notification/{to}")
 	public void loadNotidication(@DestinationVariable int to) {
+//		try {
+//			List<Notification> noti = notifyService.findAllByName("idUserReceive", to + "");
+//			System.err.println("size: " +noti.size());
+//			simpMessagingTemplate.convertAndSend("/topic/loaddata/notification/" + to, model(noti));
+//		} catch (Exception e) {
+//			System.out.println("error loadNotidication: " + e);
+//		}
+		
 		try {
 			List<Notification> noti = notifyService.findAllByName("idUserReceive", to + "");
-			simpMessagingTemplate.convertAndSend("/topic/loaddata/notification/" + to, model(noti));
+			List<NotificationModel> model = model(noti);
+			simpMessagingTemplate.convertAndSend("/topic/loaddata/notification/" + to,model);
 		} catch (Exception e) {
-			System.out.println("error loadNotidication: " + e);
+			System.out.println("error loadNotidication "+to+": " + e);
 		}
 	}
 
@@ -476,11 +487,11 @@ public class NotificationController {
 
 	}
 
-	@GetMapping("/v1/notification/update/status")
-	public ResponseEntity<Long> updateNo() {
-		return ResponseEntity.status(200).body((notifyService.updateStatus(true)));
+	@GetMapping("/v1/user/update/notify/{id}")
+	public void updateStatusNotify(@PathVariable String id) {
+		notifyService.updateStatus(true, id);
 	}
-
+	
 	public Comment comment(Object[] ob) {
 		Comment comment = new Comment();
 		comment.setComment_id(Integer.valueOf(((Object[]) ob[0])[0].toString()));

@@ -21,5 +21,5 @@ public interface NotifyService {
 
 	public boolean checkNotification(String Notification);
 	
-	public long updateStatus(boolean newStatus);
+	public long updateStatus(boolean newStatus, String id);
 }

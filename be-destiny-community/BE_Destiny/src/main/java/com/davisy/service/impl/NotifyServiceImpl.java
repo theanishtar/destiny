@@ -71,8 +71,8 @@ public class NotifyServiceImpl implements NotifyService {
 	}
 
 	@Override
-	public long updateStatus(boolean newStatus) {
-		return dbUtils.updateStatusNotification(Notification.class, collectionNotification, newStatus);
+	public long updateStatus(boolean newStatus, String id) {
+		return dbUtils.updateStatusNotification(Notification.class, collectionNotification, newStatus, id);
 	}
 
 }

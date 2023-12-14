@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.davisy.controller.admin.AdminControl;
 import com.davisy.dto.AdminPostDetail;
 import com.davisy.dto.AdminUserProfile;
 import com.davisy.dto.CommentDetail;
@@ -32,6 +31,7 @@ import com.davisy.entity.PostReported;
 import com.davisy.entity.User;
 import com.davisy.entity.UserReported;
 import com.davisy.mongodb.documents.ModeratorPostReported;
+import com.davisy.mongodb.documents.UserInfoStatus;
 import com.davisy.service.CommentService;
 import com.davisy.service.FollowService;
 import com.davisy.service.InterestedService;
@@ -40,6 +40,7 @@ import com.davisy.service.PostImagesService;
 import com.davisy.service.PostReportedService;
 import com.davisy.service.PostService;
 import com.davisy.service.ShareService;
+import com.davisy.service.UserInfoStatusService;
 import com.davisy.service.UserReportedService;
 import com.davisy.service.UserService;
 
@@ -73,16 +74,17 @@ public class ModeratorControlPost {
 	private CommentService commentService;
 	@Autowired
 	private FollowService followService;
-	
+
 	@Autowired
 	private UserReportedService userReportedService;
+	
+	@Autowired
+	private UserInfoStatusService infoStatusService;
 
 	Calendar now = Calendar.getInstance();
 	int month = now.get(Calendar.MONTH) + 1;
 	int year = now.get(Calendar.YEAR);
-	
 
-	
 	@GetMapping("/v1/moderator/detailUser/{email}")
 	public ResponseEntity<AdminUserProfile> detailUser(@PathVariable String email) {
 		try {
@@ -94,27 +96,49 @@ public class ModeratorControlPost {
 			return ResponseEntity.status(403).body(null);
 		}
 	}
-	
+
 	public AdminUserProfile setUserDetail(User user) {
 
 		AdminUserProfile userProfile = new AdminUserProfile();
 
+		UserInfoStatus infoStatus = infoStatusService.getStatusInfor(user.getUser_id().toString());
+
+		if(infoStatus != null) {
+			// check birthday status
+			if (infoStatus.getBirthday()) {
+				userProfile.setBirthday(formatDate(user.getBirthday()));
+
+			}else {
+				userProfile.setBirthday("Người dùng không muốn tiết lộ");
+			}
+			// check gender
+			if (infoStatus.getGender()) {
+				userProfile.setGender_name(user.getGender().getGender_name());
+			}else {
+				userProfile.setGender_name("Người dùng không muốn tiết lộ");
+			}
+			
+			// check location
+			if(infoStatus.getLocation()) {
+				userProfile.setCity_name(user.getProvinces().getFull_name());
+			}else {
+				userProfile.setCity_name("Người dùng không muốn tiết lộ");
+			}
+			
+		}
+		
 		userProfile.setFullname(user.getFullname());
 		userProfile.setEmail(user.getEmail());
 		userProfile.setIntro(user.getIntro());
-
-		userProfile.setBirthday(formatDate(user.getBirthday()));
 
 		userProfile.setDay_join(String.valueOf(user.getDay_create().get(Calendar.DAY_OF_MONTH)));
 		userProfile.setMonth_join(String.valueOf(user.getDay_create().get(Calendar.MONTH) + 1));
 		userProfile.setYear_join(String.valueOf(user.getDay_create().get(Calendar.YEAR)));
 
-		userProfile.setCity_name(user.getProvinces().getFull_name());
-		userProfile.setGender_name(user.getGender().getGender_name());
 		userProfile.setAvatar(user.getAvatar());
 		userProfile.setThumb(user.getThumb());
 		userProfile.setMark(user.getMark());
-		
+
 		userProfile.setBan(user.isBan());
 
 		userProfile.setTotalPost(userTotalPost(user.getUser_id()));
@@ -142,7 +166,7 @@ public class ModeratorControlPost {
 
 		return userProfile;
 	}
-	
+
 	public List<UserSendReport> listUserSendReportToUser(int userId) {
 
 		List<UserReported> userReporteds = userReportedService.getAllUserReportedById(userId);
@@ -159,7 +183,6 @@ public class ModeratorControlPost {
 
 		return listUserSendReport;
 	}
-
 
 	@GetMapping("/v1/moderator/detailPost/{postid}")
 	public ResponseEntity<AdminPostDetail> detailPost(@PathVariable int postid) {
@@ -192,7 +215,7 @@ public class ModeratorControlPost {
 		postDTO.setDate_Post(timeCaculate(post.getDate_Post()));
 
 		postDTO.setProduct(post.getProduct());
-		
+
 		postDTO.setBan(post.isBan());
 
 		postDTO.setTotalInterested(postTotalInterested(post.getPost_id()));
@@ -209,7 +232,6 @@ public class ModeratorControlPost {
 
 		return postDTO;
 	}
-
 
 	// update lastest 7-10
 	public int userTotalPost(int userId) {
@@ -521,19 +543,24 @@ public class ModeratorControlPost {
 	@GetMapping("/v1/moderator/postReporteds")
 	public List<PostReportedDTO> listReporteds() {
 		List<ModeratorPostReported> postReporteds = moderatorPostReportedService.findAll();
-		List<PostReportedDTO> listPostReported = new ArrayList<>();
-		if(postReporteds != null) {
-			for (ModeratorPostReported postReported : postReporteds) {
-				Calendar calendar = new GregorianCalendar();
-				calendar.setTime(postReported.getDate_report());
-				if (calendar.get(Calendar.YEAR) == year) {
-					PostReportedDTO pdto = setPostReported(postReported);
-					listPostReported.add(pdto);
+		try {
+			List<PostReportedDTO> listPostReported = new ArrayList<>();
+			if (postReporteds != null) {
+				for (ModeratorPostReported postReported : postReporteds) {
+					Calendar calendar = new GregorianCalendar();
+					calendar.setTime(postReported.getDate_report());
+					if (calendar.get(Calendar.YEAR) == year) {
+						PostReportedDTO pdto = setPostReported(postReported);
+						listPostReported.add(pdto);
+					}
 				}
 			}
-		}
 
-		return listPostReported;
+			return listPostReported;
+		} catch (Exception e) {
+			System.out.println("lỗi gì đó "+ e);
+			return null;
+		}
 	}
 
 	public PostReportedDTO setPostReported(ModeratorPostReported postReported) {
@@ -643,9 +670,9 @@ public class ModeratorControlPost {
 	public ResponseEntity<String> sendPostToAdmin(@PathVariable String postId, @PathVariable String userSendId) {
 		try {
 //			ObjectId id = new ObjectId("653212f46912a178bfcc9bc8");
-			ModeratorPostReported moderatorPostReported = moderatorPostReportedService.findByTwoColumn("post_reported_id",
-					postId, "user_send_report_id", userSendId);
-			
+			ModeratorPostReported moderatorPostReported = moderatorPostReportedService
+					.findByTwoColumn("post_reported_id", postId, "user_send_report_id", userSendId);
+
 			System.out.println(moderatorPostReported.getContent_report() + "sadasjdajs");
 
 			PostReported postReported = new PostReported();
