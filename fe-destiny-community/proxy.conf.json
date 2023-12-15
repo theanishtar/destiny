@@ -1,0 +1,14 @@
+{
+    "/v1": {
+      "target": "http://localhost:8080",
+      "secure": false
+    },
+    "/translate": {
+      "target": "https://translate.googleapis.com",
+      "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/translate": ""
+    }
+    }
+  }

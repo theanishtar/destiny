@@ -1,0 +1,468 @@
+<div class="landing">
+  <!-- LANDING -->
+  <div *ngIf="loginService.checkLog" class="overlay" id="loadingOverlay">
+    <div class="loader-bars">
+      <div class="loader-bar"></div>
+      <div class="loader-bar"></div>
+      <div class="loader-bar"></div>
+      <div class="loader-bar"></div>
+      <div class="loader-bar"></div>
+      <div class="loader-bar"></div>
+      <div class="loader-bar"></div>
+      <div class="loader-bar"></div>
+    </div>
+    <div class="loading">Vui lòng đợi trong giây lát</div>
+  </div>
+  <!-- LANDING DECORATION -->
+  <div class="landing-decoration"></div>
+  <!-- /LANDING DECORATION -->
+
+  <!-- LANDING INFO -->
+  <div class="landing-info">
+    <!-- LOGO -->
+    <div class="logo">
+      <!-- ICON LOGO VIKINGER -->
+      <img
+        src="../assets/images/logo-euphoria.png"
+        alt=""
+        class="icon-logo-vikinger"
+      />
+      <!-- /ICON LOGO VIKINGER -->
+    </div>
+    <!-- /LOGO -->
+
+    <!-- LANDING INFO PRETITLE -->
+    <h2 class="landing-info-pretitle">Chào mừng đến với</h2>
+    <!-- /LANDING INFO PRETITLE -->
+
+    <!-- LANDING INFO TITLE -->
+    <h1 class="landing-info-title">Destiny</h1>
+    <!-- /LANDING INFO TITLE -->
+
+    <!-- LANDING INFO TEXT -->
+    <p class="landing-info-text">
+      Diễn đàn là một cộng đồng trực tuyến nơi mọi người có thể tặng và nhận đồ
+      từ nhau một cách miễn phí. Diễn đàn này tạo ra một không gian trao đổi đồ
+      hoàn toàn phi thương mại và không có sự đòi hỏi trả lại.
+    </p>
+    <!-- /LANDING INFO TEXT -->
+
+    <!-- TAB SWITCH -->
+    <div class="tab-switch">
+      <!-- TAB SWITCH BUTTON -->
+      <p class="tab-switch-button login-register-form-trigger">Đăng nhập</p>
+      <!-- /TAB SWITCH BUTTON -->
+
+      <!-- TAB SWITCH BUTTON -->
+      <p class="tab-switch-button login-register-form-trigger">Đăng ký</p>
+      <!-- /TAB SWITCH BUTTON -->
+    </div>
+    <!-- /TAB SWITCH -->
+  </div>
+  <!-- /LANDING INFO -->
+
+  <!-- LANDING FORM -->
+  <div class="landing-form">
+    <!-- FORM BOX -->
+    <div class="form-box login-register-form-element">
+      <!-- FORM BOX DECORATION -->
+      <img
+        class="form-box-decoration overflowing"
+        src="../../assets/images/landing/rocket.png"
+        alt="rocket"
+      />
+      <!-- /FORM BOX DECORATION -->
+
+      <!-- FORM BOX TITLE -->
+      <h2 class="form-box-title">Đăng nhập</h2>
+      <!-- /FORM BOX TITLE -->
+
+      <!-- FORM -->
+      <form
+        class="form"
+        [formGroup]="loginForm"
+        (ngSubmit)="loginWithEmailAndPassword()"
+        novalidate
+      >
+        <!-- FORM ROW -->
+        <div class="form-row">
+          <!-- FORM ITEM -->
+          <div class="form-item">
+            <!-- FORM INPUT -->
+            <div class="form-input active">
+              <label for="login-email">Email hoặc tên đăng nhập</label>
+              <input
+                type="text"
+                id="login-email"
+                formControlName="email"
+                id="email"
+                required
+                (focus)="true"
+                (blur)="true"
+              />
+            </div>
+            <!-- /FORM INPUT -->
+          </div>
+          <!-- /FORM ITEM -->
+        </div>
+        <!-- /FORM ROW -->
+
+        <!-- FORM ROW -->
+        <div class="form-row">
+          <!-- FORM ITEM -->
+          <div class="form-item">
+            <!-- FORM INPUT -->
+            <div class="form-input">
+              <label for="login-password">Mật khẩu</label>
+              <input
+                type="password"
+                formControlName="password"
+                name="password"
+                id="passwordForm"
+                required
+              />
+              <span class="form-item-icon-eye hide-show-pass">
+                <i
+                  (click)="showHidePassLogin()"
+                  class="fa-regular fa-eye"
+                  id="eye"
+                ></i>
+              </span>
+            </div>
+            <!-- /FORM INPUT -->
+          </div>
+          <!-- /FORM ITEM -->
+        </div>
+        <!-- /FORM ROW -->
+
+        <!-- FORM ROW -->
+        <div class="form-row space-between">
+          <!-- FORM ITEM -->
+          <div class="form-item">
+            <!-- <div class="checkbox-wrap">
+              <input
+                type="checkbox"
+                id="login-remember"
+                name="login_remember"
+                (change)="bulk($event)"
+              />
+              <div class="checkbox-box">
+                <svg class="icon-cross">
+                  <use xlink:href="#svg-cross"></use>
+                </svg>
+              </div>
+              <label for="login-remember">Duy trì đăng nhập</label>
+            </div> -->
+            <!-- /CHECKBOX WRAP -->
+          </div>
+          <!-- /FORM ITEM -->
+
+          <!-- FORM ITEM -->
+          <div class="form-item">
+            <!-- FORM LINK -->
+            <a class="form-link" href="forgotpassword">Quên mật khẩu?</a>
+            <!-- /FORM LINK -->
+          </div>
+          <!-- /FORM ITEM -->
+        </div>
+        <!-- /FORM ROW -->
+
+        <!-- FORM ROW -->
+        <div class="form-row">
+          <!-- FORM ITEM -->
+          <div class="form-item">
+            <!-- BUTTON -->
+            <button type="submit" class="button medium secondary">
+              Đăng nhập
+            </button>
+            <!-- /BUTTON -->
+          </div>
+          <!-- /FORM ITEM -->
+        </div>
+        <!-- /FORM ROW -->
+      </form>
+
+      <!-- <div class="method-control">
+        <div id="g_id_onload" data-width="80"
+						  data-client_id="829042615252-9cgbgmdc55famceanr15b20dq3kns76m" data-ux_mode="redirect"
+						  data-callback="handleCredentialResponse"
+						  data-login_uri="http://localhost:8080/oauth/loginGG">
+						</div>
+						<div class="g_id_signin" data-type="standard"></div>
+      </div>  -->
+      <!-- /FORM -->
+
+      <!-- LINED TEXT -->
+      <p class="lined-text">Đăng nhập với tùy chọn khác</p>
+      <!-- /LINED TEXT -->
+
+      <!-- SOCIAL LINKS -->
+      <div class="social-links">
+        <!-- SOCIAL LINK -->
+        <a
+          class="social-link youtube"
+          href="https://accounts.google.com/gsi/select?client_id=829042615252-9cgbgmdc55famceanr15b20dq3kns76m&ux_mode=redirect&login_uri=http%3A%2F%2Flocalhost%3A8080%2Foauth%2FloginGG&ui_mode=card&as=QAjAdohsdVGioHnu7UQhHA&g_csrf_token=97f115633e89a9e0&origin=http%3A%2F%2Flocalhost%3A52993"
+        >
+          <!-- ICON FACEBOOK -->
+          <svg
+            class="icon-twitter"
+            xmlns="http://www.w3.org/2000/svg"
+            x="0px"
+            y="0px"
+            width="200"
+            height="200"
+            viewBox="0 0 64 64"
+          >
+            <path
+              d="M30.997,28.126l20.738,0.029C53.545,36.731,50.236,54,30.997,54C18.844,54,8.992,44.15,8.992,32s9.852-22,22.005-22	c5.708,0,10.907,2.173,14.817,5.736l-6.192,6.19c-2.321-1.988-5.329-3.196-8.625-3.196c-7.33,0-13.273,5.941-13.273,13.27	s5.942,13.27,13.273,13.27c6.156,0,10.412-3.644,11.978-8.738H30.997V28.126z"
+            ></path>
+          </svg>
+          <!-- /ICON FACEBOOK -->
+        </a>
+
+        <!-- sau deploy chạy demo lấy link thay cho href trên thẻ a -->
+
+        <!-- /SOCIAL LINK -->
+
+        <!-- SOCIAL LINK -->
+        <!-- <a class="social-link twitter" href="#">
+          <svg class="icon-twitter">
+            <use xlink:href="#svg-twitter"></use>
+          </svg>
+        </a> -->
+        <!-- /SOCIAL LINK -->
+
+        <!-- SOCIAL LINK -->
+        <a class="social-link facebook" (click)="loginFBClick()">
+          <!-- ICON FACEBOOK -->
+          <svg class="icon-facebook">
+            <use xlink:href="#svg-facebook"></use>
+          </svg>
+          <!-- /ICON FACEBOOK -->
+        </a>
+        <!-- /SOCIAL LINK -->
+
+        <!-- SOCIAL LINK -->
+        <a class="social-link twitter" (click)="loginService.openQR()">
+          <!-- ICON YOUTUBE -->
+          <svg class="icon-twitter" width="18px" height="18px" viewBox="0 0 24 24" fill="#ffff" xmlns="http://www.w3.org/2000/svg">
+            <path d="M23 4C23 2.34315 21.6569 1 20 1H16C15.4477 1 15 1.44772 15 2C15 2.55228 15.4477 3 16 3H20C20.5523 3 21 3.44772 21 4V8C21 8.55228 21.4477 9 22 9C22.5523 9 23 8.55228 23 8V4Z" fill="#ffff"/>
+            <path d="M23 16C23 15.4477 22.5523 15 22 15C21.4477 15 21 15.4477 21 16V20C21 20.5523 20.5523 21 20 21H16C15.4477 21 15 21.4477 15 22C15 22.5523 15.4477 23 16 23H20C21.6569 23 23 21.6569 23 20V16Z" fill="#ffff"/>
+            <path d="M4 21C3.44772 21 3 20.5523 3 20V16C3 15.4477 2.55228 15 2 15C1.44772 15 1 15.4477 1 16V20C1 21.6569 2.34315 23 4 23H8C8.55228 23 9 22.5523 9 22C9 21.4477 8.55228 21 8 21H4Z" fill="#ffff"/>
+            <path d="M1 8C1 8.55228 1.44772 9 2 9C2.55228 9 3 8.55228 3 8V4C3 3.44772 3.44772 3 4 3H8C8.55228 3 9 2.55228 9 2C9 1.44772 8.55228 1 8 1H4C2.34315 1 1 2.34315 1 4V8Z" fill="#ffff"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M11 6C11 5.44772 10.5523 5 10 5H6C5.44772 5 5 5.44772 5 6V10C5 10.5523 5.44772 11 6 11H10C10.5523 11 11 10.5523 11 10V6ZM9 7.5C9 7.22386 8.77614 7 8.5 7H7.5C7.22386 7 7 7.22386 7 7.5V8.5C7 8.77614 7.22386 9 7.5 9H8.5C8.77614 9 9 8.77614 9 8.5V7.5Z" fill="#ffff"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M18 13C18.5523 13 19 13.4477 19 14V18C19 18.5523 18.5523 19 18 19H14C13.4477 19 13 18.5523 13 18V14C13 13.4477 13.4477 13 14 13H18ZM15 15.5C15 15.2239 15.2239 15 15.5 15H16.5C16.7761 15 17 15.2239 17 15.5V16.5C17 16.7761 16.7761 17 16.5 17H15.5C15.2239 17 15 16.7761 15 16.5V15.5Z" fill="#ffff"/>
+            <path d="M14 5C13.4477 5 13 5.44772 13 6C13 6.55229 13.4477 7 14 7H16.5C16.7761 7 17 7.22386 17 7.5V10C17 10.5523 17.4477 11 18 11C18.5523 11 19 10.5523 19 10V6C19 5.44772 18.5523 5 18 5H14Z" fill="#ffff"/>
+            <path d="M14 8C13.4477 8 13 8.44771 13 9V10C13 10.5523 13.4477 11 14 11C14.5523 11 15 10.5523 15 10V9C15 8.44772 14.5523 8 14 8Z" fill="#ffff"/>
+            <path d="M6 13C5.44772 13 5 13.4477 5 14V16C5 16.5523 5.44772 17 6 17C6.55229 17 7 16.5523 7 16V15.5C7 15.2239 7.22386 15 7.5 15H10C10.5523 15 11 14.5523 11 14C11 13.4477 10.5523 13 10 13H6Z" fill="#ffff"/>
+            <path d="M10 17C9.44771 17 9 17.4477 9 18C9 18.5523 9.44771 19 10 19C10.5523 19 11 18.5523 11 18C11 17.4477 10.5523 17 10 17Z" fill="#ffff"/>
+            </svg>
+          <!-- /ICON YOUTUBE -->
+        </a>
+        <!-- /SOCIAL LINK -->
+      </div>
+      <!-- /SOCIAL LINKS -->
+    </div>
+    <!-- /FORM BOX -->
+
+    <!-- FORM BOX -->
+    <div class="form-box login-register-form-element">
+      <!-- FORM BOX DECORATION -->
+      <img
+        class="form-box-decoration"
+        src="../../assets/images/landing/rocket.png"
+        alt="rocket"
+      />
+      <!-- /FORM BOX DECORATION -->
+
+      <!-- FORM BOX TITLE -->
+      <h2 class="form-box-title">Tạo tài khoản!</h2>
+      <!-- /FORM BOX TITLE -->
+
+      <!-- FORM -->
+      <form
+        class="form"
+        id="registerForm"
+        [formGroup]="registerForm"
+        (ngSubmit)="register()"
+        action=""
+        novalidate
+      >
+        <!-- FORM ROW -->
+        <div class="form-row">
+          <!-- FORM ITEM -->
+          <div class="form-item">
+            <!-- FORM INPUT -->
+            <div class="form-input">
+              <label for="register-email">Email</label>
+              <input type="text" formControlName="email" id="email" required />
+            </div>
+            <!-- /FORM INPUT -->
+            <span
+              *ngIf="
+                (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) ||
+                (registerForm.get('email')?.invalid && submittedRegis)
+              "
+            >
+              <div style="color: red">Vui lòng kiểm tra email!</div>
+            </span>
+          </div>
+          <!-- /FORM ITEM -->
+        </div>
+        <!-- /FORM ROW -->
+        <!-- FORM ROW -->
+        <div class="form-row">
+          <!-- FORM ITEM -->
+          <div class="form-item">
+            <!-- FORM INPUT -->
+            <div class="form-input">
+              <label for="register-username">Họ tên</label>
+              <input type="text" formControlName="name" id="name" required />
+            </div>
+            <!-- /FORM INPUT -->
+          </div>
+          <!-- /FORM ITEM -->
+
+          <span
+            *ngIf="
+              registerForm.get('name')?.invalid &&
+              (registerForm.get('name')?.touched || submittedRegis)
+            "
+          >
+            <div
+              *ngIf="registerForm.get('name')?.errors"
+              style="color: red"
+            >
+              <div
+                *ngIf="registerForm.get('name')?.hasError('required')"
+                style="color: red"
+              >
+              {{ "vuilongnhaphoten" | translate }}
+              </div>
+              <div
+                *ngIf="registerForm.get('name')?.getError('pattern')"
+                style="color: red"
+              >
+              {{ "hotenkhongchuakitudatbiet" | translate }}
+              </div>
+            </div>
+          </span>
+        </div>
+        <!-- /FORM ROW -->
+        <!-- FORM ROW -->
+        <div class="form-row">
+          <!-- FORM ITEM -->
+          <div class="form-item">
+            <!-- FORM INPUT -->
+            <div class="form-input">
+              <label for="register-password">Mật khẩu</label>
+              <input
+                type="password"
+                formControlName="password"
+                id="password"
+                required
+              />
+              <span class="form-item-icon-eye hide-show-pass">
+                <i
+                  (click)="showHidePassRegister()"
+                  class="fa-regular fa-eye"
+                  id="eye2"
+                ></i>
+              </span>
+            </div>
+            <!-- /FORM INPUT -->
+
+            <span
+              *ngIf="
+                registerForm.get('password')?.invalid &&
+                (registerForm.get('password')?.touched || submittedRegis)
+              "
+            >
+              <div
+                *ngIf="registerForm.get('password')?.errors"
+                style="color: red"
+              >
+                <div
+                  *ngIf="registerForm.get('password')?.hasError('required')"
+                  style="color: red"
+                >
+                  Vui lòng nhập mật khẩu
+                </div>
+                <div
+                  *ngIf="registerForm.get('password')?.getError('pattern')"
+                  style="color: red"
+                >
+                  Mật khẩu có độ dài từ 4-20 ký tự và có ít nhất một ký tự đặc
+                  biệt: '!&#64;#\$%^&\*'
+                </div>
+              </div>
+            </span>
+          </div>
+          <!-- /FORM ITEM -->
+        </div>
+        <!-- /FORM ROW -->
+
+        <!-- FORM ROW -->
+        <div class="form-row">
+          <!-- FORM ITEM -->
+          <div class="form-item">
+            <!-- FORM INPUT -->
+            <div class="form-input">
+              <label for="register-rePassword">Xác nhận mật khẩu</label>
+              <input
+                type="password"
+                formControlName="rePassword"
+                id="rePassword"
+                required
+              />
+              <span class="form-item-icon-eye hide-show-pass">
+                <i
+                  (click)="showHidePassRegister()"
+                  class="fa-regular fa-eye"
+                  id="eye3"
+                ></i>
+              </span>
+            </div>
+            <span
+              *ngIf="
+                (registerForm.get('rePassword')?.invalid &&
+                  registerForm.get('rePassword')?.touched) ||
+                (registerForm.get('rePassword')?.invalid && submittedRegis)
+              "
+            >
+              <div style="color: red">Vui lòng nhập xác nhận mật khẩu!</div>
+            </span>
+            <!-- /FORM INPUT -->
+          </div>
+          <!-- /FORM ITEM -->
+        </div>
+        <!-- /FORM ROW -->
+
+        <!-- FORM ROW -->
+        <div class="form-row">
+          <!-- FORM ITEM -->
+          <div class="form-item">
+            <!-- BUTTON -->
+            <button class="button medium primary" type="submit">Đăng ký</button>
+            <!-- /BUTTON -->
+          </div>
+          <!-- /FORM ITEM -->
+        </div>
+        <!-- /FORM ROW -->
+      </form>
+      <!-- /FORM -->
+
+      <!-- FORM TEXT -->
+      <p class="form-text">
+        Nhập thông tin cần thiết và bấm vào <b>"Đăng ký"</b> sau đó vào kiểm tra
+        email xác nhận và hoàn thành việc đăng ký.
+      </p>
+      <!-- /FORM TEXT -->
+    </div>
+    <!-- /FORM BOX -->
+  </div>
+  <!-- /LANDING FORM -->
+</div>
+<!-- /LANDING -->
+
+<app-report></app-report>

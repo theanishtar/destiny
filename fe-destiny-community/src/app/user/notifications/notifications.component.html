@@ -1,0 +1,389 @@
+<app-navigation></app-navigation>
+
+<!-- CONTENT GRID -->
+<div class="content-grid" id="scrollableDiv">
+  <!-- SECTION BANNER -->
+  <div class="section-banner" #elementToScroll>
+    <!-- SECTION BANNER ICON -->
+    <img class="section-banner-icon" src="../../assets/images/banner/accounthub-icon.png" alt="accounthub-icon" />
+    <!-- /SECTION BANNER ICON -->
+
+    <!-- SECTION BANNER TITLE -->
+    <p class="section-banner-title">{{ "Notifications"
+      | translate }}</p>
+    <!-- /SECTION BANNER TITLE -->
+
+    <!-- SECTION BANNER TEXT -->
+    <p class="section-banner-text">
+      Bình luận, quan tâm, theo dõi!
+    </p>
+    <!-- /SECTION BANNER TEXT -->
+  </div>
+  <!-- /SECTION BANNER -->
+  <app-loading *ngIf="modalService.isLoading"></app-loading>
+  <!-- GRID -->
+  <!-- Notifications -->
+  
+  <div class="account-hub-content" *ngIf="!modalService.isLoading">
+    <!-- SECTION HEADER -->
+    <div class="section-header">
+      <!-- SECTION HEADER INFO -->
+      <div class="section-header-info">
+        <!-- SECTION PRETITLE -->
+        <!-- <p class="section-pretitle">My Profile</p> -->
+        <!-- /SECTION PRETITLE -->
+
+        <!-- SECTION TITLE -->
+        <h2 class="section-title">{{ "Notifications"
+          | translate }}</h2>
+        <!-- /SECTION TITLE -->
+      </div>
+      <!-- /SECTION HEADER INFO -->
+
+    </div>
+    <!-- /SECTION HEADER -->
+
+    <!-- NOTIFICATION BOX LIST -->
+    <!-- <div > -->
+    <div *ngIf="!modalService.listNotify || modalService.listNotify.size === 0">
+      <p class="no-intify">{{ "khongcothongbao"
+        | translate }}</p>
+    </div>
+    <div class="notification-box-list" *ngFor="let notif of modalService.listNotify | keyvalue">
+      <!-- NOTIFICATION BOX -->
+      <div class="notification-box" *ngIf="checkType(notif.value.type) === 'COMMENT'">
+        <!-- USER STATUS -->
+        <div class="user-status notification">
+          <!-- USER STATUS AVATAR -->
+          <a class="user-avatar small user-status-avatar no-border no-outline">
+            <div class="hexagon-container">
+              <div class="hexagon user-avatar-content">
+                <div class="hexagon-image" style="background-image: url('{{notif.value.avatar}}')"></div>
+              </div>
+              <div class="hexagon user-avatar-border">
+                <div class="hexagon-border"></div>
+              </div>
+              <div class="hexagon user-avatar-progress-border">
+                <div class="user-avatar-progress"></div>
+              </div>
+              <p class="user-avatar-badge-text">1</p>
+            </div>
+          </a>
+          <!-- /USER STATUS AVATAR -->
+
+          <!-- USER STATUS TITLE -->
+          <p class="user-status-title">
+            <a class="bold" href="profile"
+              (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)">{{ notif.value.fullname
+              }}</a>
+            {{ "dabinhluanvao"
+            | translate }}
+            <a class="highlighted" href="detail-post?id={{notif.value.postId}}">bài đăng</a> của bạn
+          </p>
+          <!-- /USER STATUS TITLE -->
+
+          <!-- USER STATUS TIMESTAMP -->
+          <p class="user-status-timestamp small-space">{{ notif.value.time }}</p>
+          <!-- /USER STATUS TIMESTAMP -->
+
+          <!-- USER STATUS ICON -->
+          <div class="user-status-icon">
+            <!-- ICON COMMENT -->
+            <svg class="icon-comment">
+              <use xlink:href="#svg-comment"></use>
+            </svg>
+            <!-- /ICON COMMENT -->
+          </div>
+          <!-- /USER STATUS ICON -->
+        </div>
+        <!-- /USER STATUS -->
+
+      </div>
+      <!-- /NOTIFICATION BOX -->
+      <!-- NOTIFICATION BOX -->
+      <div class="notification-box" *ngIf="checkType(notif.value.type) === 'REPCOMMENT'">
+        <!-- USER STATUS -->
+        <div class="user-status notification">
+          <!-- USER STATUS AVATAR -->
+          <a class="user-avatar small user-status-avatar no-border no-outline">
+            <div class="hexagon-container">
+              <div class="hexagon user-avatar-content">
+                <div class="hexagon-image" style="background-image: url('{{notif.value.avatar}}')"></div>
+              </div>
+              <div class="hexagon user-avatar-border">
+                <div class="hexagon-border"></div>
+              </div>
+              <div class="hexagon user-avatar-progress-border">
+                <div class="user-avatar-progress"></div>
+              </div>
+              <p class="user-avatar-badge-text">1</p>
+            </div>
+          </a>
+          <!-- /USER STATUS AVATAR -->
+
+          <!-- USER STATUS TITLE -->
+          <p class="user-status-title">
+            <a class="bold" href="profile"
+              (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)">{{ notif.value.fullname
+              }}</a>
+            {{ "datraloibinhluancuabano"
+            | translate }}
+            <a class="highlighted" href="detail-post?id={{notif.value.postId}}"> bài đăng</a>
+          </p>
+          <!-- /USER STATUS TITLE -->
+
+          <!-- USER STATUS TIMESTAMP -->
+          <p class="user-status-timestamp small-space">{{ notif.value.time }}</p>
+          <!-- /USER STATUS TIMESTAMP -->
+
+          <!-- USER STATUS ICON -->
+          <div class="user-status-icon">
+            <!-- ICON COMMENT -->
+            <svg class="icon-comment">
+              <use xlink:href="#svg-comment"></use>
+            </svg>
+            <!-- /ICON COMMENT -->
+          </div>
+          <!-- /USER STATUS ICON -->
+        </div>
+        <!-- /USER STATUS -->
+
+      </div>
+      <!-- /NOTIFICATION BOX -->
+      <!-- NOTIFICATION BOX -->
+      <div class="notification-box" *ngIf="checkType(notif.value.type) === 'MENTION'">
+        <!-- USER STATUS -->
+        <div class="user-status notification">
+          <!-- USER STATUS AVATAR -->
+          <a class="user-avatar small user-status-avatar no-border no-outline">
+            <div class="hexagon-container">
+              <div class="hexagon user-avatar-content">
+                <div class="hexagon-image" style="background-image: url('{{notif.value.avatar}}')"></div>
+              </div>
+              <div class="hexagon user-avatar-border">
+                <div class="hexagon-border"></div>
+              </div>
+              <div class="hexagon user-avatar-progress-border">
+                <div class="user-avatar-progress"></div>
+              </div>
+              <p class="user-avatar-badge-text">1</p>
+            </div>
+          </a>
+          <!-- /USER STATUS AVATAR -->
+
+          <!-- USER STATUS TITLE -->
+          <p class="user-status-title">
+            <a class="bold" href="profile"
+              (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)">{{ notif.value.fullname
+              }}</a>
+            {{ "danhacdenban"
+            | translate }}
+            <a class="highlighted" href="detail-post?id={{notif.value.postId}}"> bài đăng</a>
+          </p>
+          <!-- /USER STATUS TITLE -->
+
+          <!-- USER STATUS TIMESTAMP -->
+          <p class="user-status-timestamp small-space">{{ notif.value.time }}</p>
+          <!-- /USER STATUS TIMESTAMP -->
+
+          <!-- USER STATUS ICON -->
+          <div class="user-status-icon">
+            <!-- ICON COMMENT -->
+            <svg class="icon-comment">
+              <use xlink:href="#svg-comment"></use>
+            </svg>
+            <!-- /ICON COMMENT -->
+          </div>
+          <!-- /USER STATUS ICON -->
+        </div>
+        <!-- /USER STATUS -->
+
+      </div>
+      <!-- /NOTIFICATION BOX -->
+      <!-- NOTIFICATION BOX -->
+      <div class="notification-box unread" *ngIf="checkType(notif.value.type) === 'INTERESTED'">
+        <!-- USER STATUS -->
+        <div class="user-status notification">
+          <!-- USER STATUS AVATAR -->
+          <a class="user-avatar small user-status-avatar no-border no-outline">
+            <div class="hexagon-container">
+              <div class="hexagon user-avatar-content">
+                <div class="hexagon-image" style="background-image: url('{{notif.value.avatar}}')"></div>
+              </div>
+              <div class="hexagon user-avatar-border">
+                <div class="hexagon-border"></div>
+              </div>
+              <div class="hexagon user-avatar-progress-border">
+                <div class="user-avatar-progress"></div>
+              </div>
+              <p class="user-avatar-badge-text">1</p>
+            </div>
+          </a>
+          <!-- /USER STATUS AVATAR -->
+
+          <!-- USER STATUS TITLE -->
+          <p class="user-status-title">
+            <a class="bold" href="profile"
+              (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)">{{ notif.value.fullname
+              }}</a>
+            {{ "daquantam"
+            | translate }}
+            <a class="highlighted" href="detail-post?id={{notif.value.postId}}">bài đăng</a> của bạn
+          </p>
+          <!-- /USER STATUS TITLE -->
+
+          <!-- USER STATUS TIMESTAMP -->
+          <p class="user-status-timestamp small-space">{{ notif.value.time }}</p>
+          <!-- /USER STATUS TIMESTAMP -->
+
+          <!-- USER STATUS ICON -->
+          <div class="user-status-icon">
+            <!-- ICON THUMBS UP -->
+            <svg class="icon-thumbs-up">
+              <use xlink:href="#svg-thumbs-up"></use>
+            </svg>
+            <!-- /ICON THUMBS UP -->
+          </div>
+          <!-- /USER STATUS ICON -->
+        </div>
+        <!-- /USER STATUS -->
+
+      </div>
+      <!-- /NOTIFICATION BOX -->
+
+
+      <!-- NOTIFICATION BOX -->
+      <div class="notification-box" *ngIf="checkType(notif.value.type) === 'SHARE'">
+        <!-- USER STATUS -->
+        <div class="user-status notification">
+          <!-- USER STATUS AVATAR -->
+          <a class="user-avatar small user-status-avatar no-border no-outline">
+            <div class="hexagon-container">
+              <div class="hexagon user-avatar-content">
+                <div class="hexagon-image" style="background-image: url('{{notif.value.avatar}}')"></div>
+              </div>
+              <div class="hexagon user-avatar-border">
+                <div class="hexagon-border"></div>
+              </div>
+              <div class="hexagon user-avatar-progress-border">
+                <div class="user-avatar-progress"></div>
+              </div>
+              <p class="user-avatar-badge-text">1</p>
+            </div>
+          </a>
+          <!-- /USER STATUS AVATAR -->
+
+          <!-- USER STATUS TITLE -->
+          <p class="user-status-title">
+            <a class="bold" href="profile"
+              (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)">{{ notif.value.fullname
+              }}</a>
+            {{ "dachiase"
+            | translate }}
+            <a class="highlighted" href="detail-post?id={{notif.value.postId}}">bài đăng</a> của bạn
+          </p>
+          <!-- /USER STATUS TITLE -->
+
+          <!-- USER STATUS TIMESTAMP -->
+          <p class="user-status-timestamp small-space">{{ notif.value.time }}</p>
+          <!-- /USER STATUS TIMESTAMP -->
+
+          <!-- USER STATUS ICON -->
+          <div class="user-status-icon">
+            <!-- ICON SHARE -->
+            <svg class="icon-share">
+              <use xlink:href="#svg-share"></use>
+            </svg>
+            <!-- /ICON SHARE -->
+          </div>
+          <!-- /USER STATUS ICON -->
+        </div>
+        <!-- /USER STATUS -->
+
+      </div>
+      <!-- /NOTIFICATION BOX -->
+
+      <!-- NOTIFICATION BOX -->
+      <div class="notification-box" *ngIf="checkType(notif.value.type) === 'FOLLOW'">
+        <!-- USER STATUS -->
+        <div class="user-status notification">
+          <!-- USER STATUS AVATAR -->
+          <a class="user-avatar small user-status-avatar no-border no-outline" href="profile"
+            (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)">
+            <div class="hexagon-container">
+              <div class="hexagon user-avatar-content">
+                <div class="hexagon-image" style="background-image: url('{{notif.value.avatar}}')"></div>
+              </div>
+              <div class="hexagon user-avatar-border">
+                <div class="hexagon-border"></div>
+              </div>
+              <div class="hexagon user-avatar-progress-border">
+                <div class="user-avatar-progress"></div>
+              </div>
+              <p class="user-avatar-badge-text">1</p>
+            </div>
+          </a>
+          <!-- /USER STATUS AVATAR -->
+
+          <!-- USER STATUS TITLE -->
+          <p class="user-status-title" *ngIf="notif.value.following_status === false">
+            <a class="bold" href="profile"
+              (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)">{{ notif.value.fullname
+              }}</a>
+            {{ "datheodoi"
+            | translate }}
+          </p>
+          <p class="user-status-title" *ngIf="notif.value.following_status === true">
+            <a class="bold" href="profile"
+              (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)">{{ notif.value.fullname
+              }}</a>
+            {{ "vabandalabanbe"
+            | translate }}
+          </p>
+          <!-- /USER STATUS TITLE -->
+
+          <!-- USER STATUS TIMESTAMP -->
+          <p class="user-status-timestamp">{{ notif.value.time }}</p>
+          <!-- /USER STATUS TIMESTAMP -->
+
+          <!-- USER STATUS ICON -->
+          <div class="user-status-icon nofti">
+            <!-- ICON THUMBS UP -->
+            <!-- <div class="user-preview-actions"> -->
+            <!-- BUTTON -->
+            <p class="button re-fl" (click)="addFollow(notif.value.fromUserId)"
+              *ngIf="notif.value.following_status === false">{{ "theodoilai"
+              | translate }}</p>
+            <!-- /BUTTON -->
+            <!-- </div> -->
+            <!-- /ICON THUMBS UP -->
+          </div>
+          <!-- /USER STATUS ICON -->
+        </div>
+        <!-- /USER STATUS -->
+      </div>
+      <!-- /NOTIFICATION BOX -->
+    </div>
+    <!-- </div> -->
+    <!-- /NOTIFICATION BOX LIST -->
+
+    <!-- LOADER BARS -->
+    <!-- <div class="loader-bars">
+      <div class="loader-bar"></div>
+      <div class="loader-bar"></div>
+      <div class="loader-bar"></div>
+      <div class="loader-bar"></div>
+      <div class="loader-bar"></div>
+      <div class="loader-bar"></div>
+      <div class="loader-bar"></div>
+      <div class="loader-bar"></div>
+    </div> -->
+    <!-- /LOADER BARS -->
+  </div>
+  <!-- /GRID -->
+
+</div>
+<a class="scroll-to-top" (click)="scrollToTop()" id="scrollButton" style="display: none">
+  <i class="fas fa-angle-up"></i>
+</a>
+<!-- /CONTENT GRID -->

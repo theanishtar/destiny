@@ -1,0 +1,282 @@
+<div class="body-admin">
+
+  <app-sidebar-admin></app-sidebar-admin>
+  <div class="content">
+    <!-- Navbar -->
+    <app-navbar-admin></app-navbar-admin>
+
+    <!-- End of Navbar -->
+
+    <main>
+      <div class="header">
+        <div class="left">
+          <h1>Thống kê</h1>
+          <ul class="breadcrumbD">
+            <li><a href="#"> Thống kê </a></li>
+            /
+            <li><a href="#" class="active">Người dùng</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="row col-lg-10 offset-lg-1">
+          <div class="col-xl-4 mb-3">
+            <div class="card border-left-pink shadow">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="font-weight-bold text-pink text-uppercase mb-2">
+                      <div>TỔNG SỐ NGƯỜI DÙNG TRONG<br>(NGÀY {{day}}/{{month}}/{{year}})</div>
+                    </div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                      <div>
+                        {{totalUserByDay}} <span class="text-success text-sm ml-2">+{{percentUserByDayIncrease}}%</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-auto">
+                    <i class="fas fa-calendar-day fa-2x"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-4 mb-3">
+            <div class="card border-left-warning shadow">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="font-weight-bold text-warning text-uppercase mb-2">
+                      <div>TỔNG SỐ NGƯỜI DÙNG TRONG <br>(THÁNG {{month}})</div>
+                    </div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                      <div>
+                        {{totalUserByMonth}} <span
+                          class="text-success text-sm ml-2">+{{percentUserByMonthIncrease}}%</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-auto">
+                    <i class="fas fa-calendar-week fa-2x"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-4 mb-3">
+            <div class="card border-left-shine shadow">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="font-weight-bold text-pie text-uppercase mb-2">
+                      <div>TỔNG SỐ NGƯỜI DÙNG TRONG<br>(NĂM {{year}})</div>
+                    </div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                      <div>
+                        {{totalUserByYear}} <span
+                          class="text-success text-sm ml-2">+{{percentUserByYearIncrease}}%</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-auto">
+                    <i class="fas fa-calendar fa-2x"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12 profile-logo-heart">
+          <img src="../assets/images/logo-euphoria.png" alt="" />
+        </div>
+        <div class="col-lg-12 profile-title mt-3 mb-3">
+          <div class="logo" style="height: 0 !important">
+            <h2 class="logo-name"><span>DES</span>TINY</h2>
+          </div>
+        </div>
+        <div class="col-lg-12 ml-2">
+          <app-loading *ngIf="isLoading"></app-loading>
+        </div>
+        <div class="col-lg-4 mb-2" *ngIf="!isLoading">
+          <div class="card card-profile pb-2 shadow">
+            <img src="../assets/images/top1user.png" class="card-img-top" />
+            <div class="row justify-content-center">
+              <div class="col-6 col-lg-6 order-lg-2">
+                <div class="mt-n7 mt-lg-n6 mb-4 mb-lg-0">
+                  <a (click)="selectUser(listTOP4User[0].email)" type="button">
+                    <img src="{{ listTOP4User[0].avatar }}"
+                      class="rounded-circle img-fluid border border-2 border-white" alt="" />
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="card-body pt-0 mt-4" style="min-height: 195px !important;">
+              <div class="row">
+                <div class="col">
+                  <div class="d-flex justify-content-center">
+                    <div class="d-grid text-center">
+                      <span class="text-lg font-weight-bolder text-pink"> {{ listTOP4User[0].totalFollower }}</span>
+                      <span class="text-sm opacity-8">Người theo dõi</span>
+                    </div>
+                    <div class="d-grid text-center mx-4">
+                      <span class="text-lg font-weight-bolder text-pink"> {{ listTOP4User[0].totalPost }} </span>
+                      <span class="text-sm opacity-8">Bài đăng</span>
+                    </div>
+                    <div class="d-grid text-center">
+                      <span class="text-lg font-weight-bolder text-pink"> {{ listTOP4User[0].totalComment }} </span>
+                      <span class="text-sm opacity-8">Bình luận</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="text-center mt-4">
+                <h5 class="font-weight-bold">
+                  <a (click)="selectUser(listTOP4User[0].user_email)" type="button">{{ listTOP4User[0].fullname }}</a>
+                  <span class="font-weight-light">, {{ listTOP4User[0].age }} </span>
+                </h5>
+                <div class="h6 font-weight-bold">
+                  <i class="ni location_pin mr-2"></i> {{ listTOP4User[0].location }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-8" *ngIf="!isLoading">
+          <div class="card mb-4 shadow pt-3">
+            <div class="card-body">
+              <div class="row m-2 mb-0 list-user">
+                <div class="col-lg-3 col-md-6 mb-xl-0 mb-4">
+                  <h2 class="text-center font-weight-bold logo-name text-pink">
+                    TOP 2
+                  </h2>
+                  <div class="card card-blog card-plain mt-4">
+                    <div class="position-relative">
+                      <a (click)="selectUser(listTOP4User[1].email)" type="button" class="d-block user">
+                        <img src="{{ listTOP4User[1].avatar }}" class="img-fluid border-radius-lg shadow-img border" />
+                      </a>
+                    </div>
+                    <div class="text-center mt-4 text-pie">
+                      <a (click)="selectUser(listTOP4User[1].email)" type="button">
+                        <h5 class="font-weight-bold"> {{ listTOP4User[1].fullname }} </h5>
+                      </a>
+                      <h5 class="font-weight-light"> {{ listTOP4User[1].age }} </h5>
+                    </div>
+                    <div class="row mt-2 mb-4">
+                      <div class="col">
+                        <div class="d-flex justify-content-center">
+                          <div class="d-grid text-center mx-4">
+                            <span class="text-lg font-weight-bolder text-pink">{{ listTOP4User[1].totalPost }}</span>
+                            <span class="text-sm opacity-8 text-pie">Bài đăng</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-xl-0 mb-4">
+                  <h2 class="text-center font-weight-bold logo-name text-pink">
+                    TOP 3
+                  </h2>
+                  <div class="card card-blog card-plain mt-4">
+                    <div class="position-relative">
+                      <a (click)="selectUser(listTOP4User[2].email)" type="button" class="d-block user">
+                        <img src="{{ listTOP4User[2].avatar }}" class="img-fluid border-radius-lg shadow-img border" />
+                      </a>
+                    </div>
+                    <div class="text-center mt-4 text-pie">
+                      <a (click)="selectUser(listTOP4User[2].email)" type="button">
+                        <h5 class="font-weight-bold"> {{ listTOP4User[2].fullname }} </h5>
+                      </a>
+                      <h5 class="font-weight-light"> {{ listTOP4User[2].age }} </h5>
+                    </div>
+                    <div class="row mt-2 mb-4">
+                      <div class="col">
+                        <div class="d-flex justify-content-center">
+                          <div class="d-grid text-center mx-4">
+                            <span class="text-lg font-weight-bolder text-pink"> {{ listTOP4User[2].totalPost }} </span>
+                            <span class="text-sm opacity-8 text-pie">Bài đăng</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-xl-0 mb-4">
+                  <h2 class="text-center font-weight-bold logo-name text-pink">
+                    TOP 4
+                  </h2>
+                  <div class="card card-blog card-plain mt-4">
+                    <div class="position-relative">
+                      <a (click)="selectUser(listTOP4User[3].email)" type="button" class="d-block user">
+                        <img src="{{ listTOP4User[3].avatar }}" class="img-fluid border-radius-lg shadow-img border" />
+                      </a>
+                    </div>
+                    <div class="text-center mt-4 text-pie">
+                      <a (click)="selectUser(listTOP4User[3].email)" type="button">
+                        <h5 class="font-weight-bold"> {{ listTOP4User[3].fullname }} </h5>
+                      </a>
+                      <h5 class="font-weight-light"> {{ listTOP4User[3].age }} </h5>
+                    </div>
+                    <div class="row mt-2 mb-4">
+                      <div class="col">
+                        <div class="d-flex justify-content-center">
+                          <div class="d-grid text-center mx-4">
+                            <span class="text-lg font-weight-bolder text-pink"> {{ listTOP4User[3].totalPost }} </span>
+                            <span class="text-sm opacity-8 text-pie">Bài đăng</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-3 pb-5">
+        <!-- Area Chart -->
+        <div class="col-lg-8">
+          <div class="card shadow mb-4">
+            <!-- Card Body -->
+            <div class="card-body pt-1 pb-4">
+              <div class="header-chart pt-1">
+                <h6 class="ml-2 mt-2 font-weight-bold">Biểu đồ tổng người dùng từng tháng</h6>
+                <div class="">
+                  <img src="../assets/images/logo-euphoria.png" />
+                </div>
+              </div>
+              <div class="border-radius-lg m-1">
+                <div class="chart">
+                  <canvas #chartline class="chart-canvas" height="300"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="card card-profile pb-2 shadow img-about">
+            <img src="../assets/images/top1user.png" alt="Image placeholder" class="card-img-top" />
+            <div class="card-body pt-0 pb-0 mt-2">
+              <div class="text-center">
+                <h5 class="logo-namex text-uppercase">
+                  <div class="text-d-user"><span>Des</span>tiny</div>
+                </h5>
+                <div class="text-left">
+                  Diễn đàn Destiny là một cộng đồng trực tuyến nơi mọi người có
+                  thể tặng và nhận đồ từ nhau một cách miễn phí.
+                </div>
+              </div>
+            </div>
+            <div class="logo" style="height: 50px !important">
+              <img src="../assets/images/logo-euphoria.png" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+</div>

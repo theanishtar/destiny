@@ -1,0 +1,99 @@
+<div class="sidebarD">
+  <a class="logo">
+    <div class="bx">
+      <img src="../assets/images/logo-euphoria.png" />
+    </div>
+    <div class="logo-name"><span>DES</span>TINY</div>
+  </a>
+  <ul class="side-menu" id="accordionSidebar">
+    <li [class.active]="activeMenuItem === 'forbidden-word'">
+      <a routerLink="/moderator/forbidden-word" class="1"><i class="bx bxs-dashboard"></i>Từ ngữ</a>
+    </li>
+    <li>
+      <div class="analys"><i class="bx bx-window-alt"></i>Bài đăng</div>
+    </li>
+    <li class="ml-4 2" [class.active]="activeMenuItem === 'post-report'">
+      <a routerLink="/moderator/post-report" class="2"><i class='bx bx-list-ul'></i>Danh sách</a>
+    </li>
+
+    <li>
+      <div class="analys"><i class="bx bx-group"></i>Người dùng</div>
+    </li>
+    <li class="ml-4 4" [class.active]="activeMenuItem === 'user-report'">
+      <a routerLink="/moderator/user-report" class="4"><i class='bx bx-list-ul'></i>Danh sách</a>
+    </li>
+
+    <li (click)="openNav()">
+      <a class="clickSetting"><i class="bx bx-cog"></i>Cài đặt</a>
+    </li>
+  </ul>
+  <ul class="side-menu" style="cursor: pointer;">
+    <li>
+      <a (click)="logout()" class="logout">
+        <i class="bx bx-log-out-circle"></i>
+        Đăng xuất
+      </a>
+    </li>
+  </ul>
+  <ul class="side-menu mt-5" *ngIf="role == 'ROLE_ADMIN'">
+    <li class="pt-5">
+      <button class="btn text-white bg-gradient-endless border-radius-50 col-lg-9 ml-4" routerLink="/admin"><i
+          class="fas fa fa-user-gear pr-1"></i>
+        Quản lý </button>
+    </li>
+  </ul>
+  <!-- logout Modal-->
+
+  <!-- logout Modal -->
+  <div class="setting">
+    <div id="mySidenav" [style.width]="isNavOpen ? '270px' : '0px'" class="sidenav">
+      <a class="closebtn" (click)="closeNav()">&times;</a>
+      <a routerLink="/admin">
+        <img style="width: 80%; margin: 0 5%" src="../assets/images/logo-euphoria.png" alt="" />
+      </a>
+      <div class="logo justify-content-center ml-2 mt-n5">
+        <div class="logo-name"><span>DES</span>TINY</div>
+      </div>
+      <div class="ml-2">
+        <h6 class="text-pie ml-2 mb-4">Màu sắc chính</h6>
+        <div class="row ml-1 choosemain">
+          <div class="row col-lg-12">
+            <div (click)="setMainColor('pink');"
+              class="col-lg-1 col-sm-1 offset-1 bg-gradient-pink border-radius-50 border border-active" #mainColorLink>
+              <span class="d-inline-block"></span>
+            </div>
+            <div (click)="setMainColor('blue');"
+              class="col-lg-1 col-sm-1 offset-1 bg-gradient-blue border-radius-50 border" #mainColorLink>
+              <span class="d-inline-block"></span>
+            </div>
+            <div (click)="setMainColor('green');"
+              class="col-lg-1 col-sm-1 offset-1 bg-gradient-green border-radius-50 border" #mainColorLink>
+              <span class="d-inline-block"></span>
+            </div>
+            <div (click)="setMainColor('orange');"
+              class="col-lg-1 col-sm-1 offset-1 bg-gradient-orange border-radius-50 border" #mainColorLink>
+              <span class="d-inline-block"></span>
+            </div>
+            <div (click)="setMainColor('cyan');"
+              class="col-lg-1 col-sm-1 offset-1 bg-gradient-cyan border-radius-50 border" #mainColorLink>
+              <span class="d-inline-block"></span>
+            </div>
+          </div>
+        </div>
+        <!-- <h6 class="text-pie ml-2 mb-4 mt-4">Ngôn ngữ</h6>
+        <div class="row ml-1 mr-1">
+          <div class="col-lg-6">
+            <div class="bg-gradient-endless p-2 border-radius-xl text-center">
+              <a href="" class="text-white">Tiếng Việt</a>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="bg-gradient-dark p-2 border-radius-xl text-center">
+              <a href="" class="text-white">Tiếng anh</a>
+            </div>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</div>
