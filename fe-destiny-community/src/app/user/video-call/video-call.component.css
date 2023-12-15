@@ -242,3 +242,9 @@ padding: 0;
 stroke-dasharray: 550; /* this value is the pixel circumference of the circle */
 stroke-dashoffset: 550; transition: all 1s linear;
 }
+@media screen and (max-width: 480px) {
+  .modal{
+    transform: translate(10px, 100px) !important;
+    width: 370px !important;
+  }
+}

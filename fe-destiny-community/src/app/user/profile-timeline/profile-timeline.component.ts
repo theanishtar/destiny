@@ -183,39 +183,6 @@ export class ProfileTimelineComponent implements OnInit {
     return false;
   }
 
-  // Interested and uninterested in the post
-  // async interestedPost(post_id, toUser) {
-  //   let check = this.mapIntersted.get(post_id);
-  //   // console.log("check: " + check);
-  //   let element = this.el.nativeElement.querySelector('#interest-' + post_id);
-  //   if (check && this.checkRequest) {
-  //     try {
-  //       await this.interactPostsService.deleleInterestedApi(post_id);
-
-  //       console.log("Đã hủy quan tâm");
-  //       this.renderer.removeClass(element, 'active');
-  //       this.mapIntersted.set(post_id, false);
-  //       this.checkRequest = false;
-
-  //       // Set count interestedPost 
-  //       let interested = document.getElementById("interested-" + post_id);
-  //       if (interested) {
-  //         let count: string | undefined;
-  //         count = '' + interested.textContent?.trim();
-  //         let num = parseInt(count) - 1;
-  //         interested!.innerText = num + '';
-  //       }
-  //     } catch (error) {
-  //       console.log("Error:", error);
-  //     }
-  //   } else {
-  //     this.renderer.addClass(element, 'active');
-  //     this.interactPostsService.interestedPost(post_id, toUser);
-  //     this.mapIntersted.set(post_id, true);
-  //     this.checkRequest = true;
-  //   }
-  // }
-
   async interestedPost(post_id, toUser, positon) {
     if (this.checkRequesNum == 0) {
       this.checkRequesNum++;

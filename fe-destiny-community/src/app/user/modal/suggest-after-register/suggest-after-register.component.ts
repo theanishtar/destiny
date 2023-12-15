@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs'; //Theo dõi trạng thái của modal
-
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { CookieService } from 'ngx-cookie-service';
 import { ModalService } from '@app/user/service/modal.service';
 import { ProfileService } from '@app/user/service/profile.service';
 import { FollowsService } from '@app/user/service/follows.service';
@@ -19,18 +20,26 @@ export class SuggestAfterRegisterComponent implements OnInit {
   listSuggested: any[] = [];
   checkLoadingdata: boolean = true;
   idUserSelected: any[] = [];
+  updateStatusForm: FormGroup;
+  isLoadingStatus: boolean = false;
 
   ngOnInit() {
     this.loadDataSuggest();
-    // this.checkCheckBox()
+    this.profileService.getCheckData().then((result) => {
+      if (result) { }
+      this.createFormUpdateStatus();
+    });
   }
 
   constructor(
     public modalService: ModalService,
     public profileService: ProfileService,
-    public followsService: FollowsService
+    public followsService: FollowsService,
+    private cookieService: CookieService,
+    private fb: FormBuilder,
   ) {
-
+    
+    
   }
 
   async loadDataSuggest() {
@@ -100,5 +109,56 @@ export class SuggestAfterRegisterComponent implements OnInit {
         });
       });
     }
+  }
+
+  // update status info
+  createFormUpdateStatus() {
+    const genderValue = this.profileService.dataProfileTimeline?.gender !== '' ? true : false;
+    const locationValue = this.profileService.dataProfileTimeline?.address_fullname !== '' ? true : false;
+    const birthdayValue = this.profileService.dataProfileTimeline?.birthday !== '' ? true : false;
+  
+    this.updateStatusForm = this.fb.group({
+      user_id: [''],
+      gender: genderValue,
+      location: locationValue,
+      birthday: birthdayValue
+    });
+  }
+  
+
+  get statusFormControl() {
+    return this.updateStatusForm.controls;
+  }
+
+  updateStatus(){
+    this.isLoadingStatus = true;
+    var data = {
+      user_id: this.cookieService.get("id"),
+      gender: this.updateStatusForm.get('gender')!.value,
+      location: this.updateStatusForm.get('location')!.value,
+      birthday: this.updateStatusForm.get('birthday')!.value
+    }
+    // console.warn("data: " + JSON.stringify(data));
+    this.profileService.updateStatus(data).subscribe((res) => {
+      // console.warn("res: " + res);
+      if(res == true){
+        new toast({
+          title: 'Thành công!',
+          message: 'Cập nhật thành công',
+          type: 'success',
+          duration: 1500,
+        });
+        this.profileService.closeModalHideInfo();
+        this.isLoadingStatus = false;
+      }else{
+        new toast({
+          title: 'Thất bại!',
+          message: 'Cập nhật thất bại',
+          type: 'error',
+          duration: 1500,
+        });
+        this.isLoadingStatus = false;
+      }
+    })
   }
 }

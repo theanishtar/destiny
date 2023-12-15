@@ -54,7 +54,7 @@
           <!-- INFORMATION LINE LIST -->
           <div class="information-line-list">
             <!-- INFORMATION LINE -->
-          <div class="information-line">
+          <div class="information-line" *ngIf="profileService.dataProfileTimeline?.gender !== ''">
             <!-- INFORMATION LINE TITLE -->
             <p class="information-line-title">Giới tính</p>
             <!-- /INFORMATION LINE TITLE -->
@@ -67,7 +67,7 @@
           </div>
           <!-- /INFORMATION LINE -->
           <!-- INFORMATION LINE -->
-          <div class="information-line">
+          <div class="information-line" *ngIf="profileService.dataProfileTimeline?.birthday !== ''">
             <!-- INFORMATION LINE TITLE -->
             <p class="information-line-title">Ngày sinh</p>
             <!-- /INFORMATION LINE TITLE -->
@@ -81,7 +81,7 @@
           <!-- /INFORMATION LINE -->
 
             <!-- INFORMATION LINE -->
-            <div class="information-line">
+            <div class="information-line" *ngIf="profileService.dataProfileTimeline?.address_fullname !== ''">
               <!-- INFORMATION LINE TITLE -->
               <p class="information-line-title">{{
                 "thanhpho"
@@ -968,3 +968,4 @@
 <app-comment></app-comment>
 <app-images></app-images>
 <app-edit-post></app-edit-post>
+<app-suggest-after-register></app-suggest-after-register>

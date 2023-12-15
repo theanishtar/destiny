@@ -134,6 +134,7 @@ export class ReportService {
   closeQR() {
     this.checkLoadingdata = true;
     this.checkReQR = true;
+    clearInterval(this.interval);
     this.isOpenQR.next(false);
   }
 

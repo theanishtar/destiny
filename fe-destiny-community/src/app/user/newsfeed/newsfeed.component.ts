@@ -236,7 +236,6 @@ export class NewsfeedComponent implements OnInit {
       let fullname: any = this.cookieService.get('full_name');
       const data:any = [{ user_id: id_user, fullname: fullname }];
 
-
       if (check && this.checkRequest) {
         let interested = document.getElementById('interested-' + post_id);
         if (interested) {
@@ -343,8 +342,6 @@ export class NewsfeedComponent implements OnInit {
       } else {
         scrollButton.style.display = 'none';
       }
-
-      // console.log('this.setCurrentPage.has(this.currentPage): '+this.setCurrentPage.has(this.currentPage))
       let epsilon = '0';
       if (scrollableDiv.scrollTop.toString().indexOf('.') > 0) {
         epsilon =
@@ -353,8 +350,6 @@ export class NewsfeedComponent implements OnInit {
             .toString()
             .substring(scrollableDiv.scrollTop.toString().indexOf('.'));
       }
-
-      // console.warn("check:  " + (scrollableDiv.scrollHeight - scrollableDiv.clientHeight - (scrollableDiv.scrollTop - parseFloat(epsilon))))
       if (
         scrollableDiv.scrollHeight -
         scrollableDiv.clientHeight -
@@ -377,11 +372,6 @@ export class NewsfeedComponent implements OnInit {
           this.checkCountPosts = false;
           this.checkLoadingdata = false;
         }
-
-        // console.log("hết nè: " + this.currentPage);
-        // console.log('this.currentPage: ' + this.currentPage);
-        // console.log("data.length: " + data.length);
-        // console.log("this.checkCountPosts: " + this.checkCountPosts);
       }
     });
   }

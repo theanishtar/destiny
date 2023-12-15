@@ -90,7 +90,7 @@ export class NotificationsComponent implements OnInit {
     const scrollableDiv = document.getElementById('scrollableDiv')!;
     const scrollButton = document.getElementById('scrollButton')!;
     scrollableDiv.addEventListener('scroll', () => {
-      console.log("scrollableDiv.scrollTop: " + scrollableDiv.scrollTop)
+      // console.log("scrollableDiv.scrollTop: " + scrollableDiv.scrollTop)
       if (scrollableDiv.scrollTop > 100) {
         scrollButton.style.display = 'block';
       } else {

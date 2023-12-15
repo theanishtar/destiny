@@ -9,10 +9,10 @@ export const environment = {
       appId: "1:657490885713:web:1739dde38a29f027e20c70",
       measurementId: "G-2H8D03768X"
     },
-    baseUrl: 'http://localhost:8080/',
-    baseUrlFe: 'http://localhost:4200/',
-    // baseUrl: 'https://davisybe.hop.sh/',
-    // baseUrlFe: 'https://destiny-davisy.web.app/',
+    // baseUrl: 'http://localhost:8080/',
+    // baseUrlFe: 'http://localhost:4200/',
+    baseUrl: 'https://davisybe.hop.sh/',
+    baseUrlFe: 'https://destiny-davisy.web.app/',
 
     // Mở chặn dev tool bên app.component khi deploy
 };

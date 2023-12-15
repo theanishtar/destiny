@@ -33,6 +33,7 @@ export class ProfileService {
     private getAllWardNameAPI = environment.baseUrl + 'v1/user/getAllWardName/';
 
     private getCheckPotsApi = environment.baseUrl + 'v1/user/load/checkpost';
+    private updateStatusApi =  environment.baseUrl + 'v1/user/profile/update/status';
 
     public dataHeader: any[];
     public dataTimeLine: any;
@@ -48,7 +49,6 @@ export class ProfileService {
     constructor(
         private http: HttpClient,
         private router: Router,
-        private cookieService: CookieService,
         private datePipe: DatePipe, //Định dạng ngày
     ) {
     }
@@ -445,6 +445,13 @@ export class ProfileService {
         this.isOpenHideInfo.next(false);
     }
 
+    updateStatus(data: any): Observable<any> {
+        return this.http.post(this.updateStatusApi, data).pipe(
+            tap(() => {
+
+            }), 
+        );
+    }
 
     /* ============Getter - Setter============= */
     getdataTimeLine(): any[] {

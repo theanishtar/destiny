@@ -324,9 +324,9 @@ public class ProfileContronller {
 			
 			if(infoStatus != null) {
 				// check birthday status
-				System.out.println("infoStatus.isBirthday()"+infoStatus.getBirthday());
-				System.out.println("infoStatus.isGender()"+infoStatus.getGender());
-				System.out.println("infoStatus.isLocation())"+infoStatus.getLocation());
+//				System.out.println("infoStatus.isBirthday()"+infoStatus.getBirthday());
+//				System.out.println("infoStatus.isGender()"+infoStatus.getGender());
+//				System.out.println("infoStatus.isLocation())"+infoStatus.getLocation());
 				if (infoStatus.getBirthday()) {
 					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 					birthday = sdf.format(user.getBirthday().getTime());

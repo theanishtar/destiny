@@ -110,8 +110,7 @@ span.section-menu-item-icon.icon-setting-menu {
 .menu-hide-info i.fa-solid.fa-gear {
   font-size: 20px;
   fill: #adafca;
-  opacity: 0.6;
-  /* top: 30px;
-  left: 50%; */
+  opacity: 0.3;
   margin-left: -10px;
 }
+

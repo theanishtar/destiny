@@ -366,6 +366,7 @@ this.stompClient?.subscribe('/topic/login/qr-code/' + id, (res) => {
     closeQR() {
         this.checkLoadingdata = true;
         this.checkReQR = true;
+        clearInterval(this.interval);
         this.isOpenQRWeb.next(false);
     }
 

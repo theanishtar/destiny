@@ -4,7 +4,7 @@ main.overlay {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(21, 21, 31, 0.96);
     z-index: 10001;
 }
 
@@ -211,7 +211,6 @@ button#reloadButton{
     stroke-linejoin: round;
   }
   .widget-box.hide-info {
-    top: 24%;
     height: 370px !important;
     width: 310px !important;
 }
@@ -224,6 +223,24 @@ p.widget-box-description {
 }
 .icon-description i.fa-solid {
   font-size: 20px;
+}
+
+.info {
+  position: absolute;
+  left: 15%;
+}
+div i.fa-solid.fa-xmark {
+  position: absolute;
+  right: 6%;
+  top: 3%;
+  font-size: 17px;
+  cursor: pointer;
+}
+.loading {
+  text-align: center;
+  font-size: 17px;
+  color: #3e3f5e;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
   

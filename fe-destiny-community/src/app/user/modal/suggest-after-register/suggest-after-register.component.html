@@ -108,20 +108,9 @@
 </main>
 
 <main class="overlay" *ngIf="profileService.isOpenHideInfo$ | async">
-  <div id="favDialog_seemore" class="modal fade favDialog_seemore">
-    <!-- <app-loading *ngIf="isLoading"></app-loading> -->
-    <div class="widget-box hide-info">
-      <!-- <button
-        (click)="modalService.closeModalSuggest()"
-        class="btnClose-seemore-img"
-      >
-        <i class="fa-solid fa-xmark"></i>
-      </button> -->
-      <p class="widget-box-title">Chỉnh sửa phần giới thiệu</p>
-      <p class="widget-box-description">
-        Thông tin bạn chọn sẽ được hiển thị công khai
-      </p>
-      <div class="loader-bars" *ngIf="profileService.checkLoadingdata">
+  <div id="favDialog_seemore" class="modal fade favDialog_seemore"> 
+    <div *ngIf="isLoadingStatus">
+      <div class="loader-bars" style="margin-top: 5rem;">
         <div class="loader-bar"></div>
         <div class="loader-bar"></div>
         <div class="loader-bar"></div>
@@ -131,7 +120,21 @@
         <div class="loader-bar"></div>
         <div class="loader-bar"></div>
       </div>
-      <div *ngIf="!profileService.checkLoadingdata">
+      <div class="loading">Vui lòng đợi trong giây lát</div>
+    </div>
+    <div class="widget-box hide-info" *ngIf="!isLoadingStatus">
+      <div
+        (click)="profileService.closeModalHideInfo()"
+        class="btnClose-seemore-img"
+      >
+        <i class="fa-solid fa-xmark"></i>
+      </div>
+      <p class="widget-box-title">Chỉnh sửa phần giới thiệu</p>
+      <p class="widget-box-description">
+        Thông tin bạn chọn sẽ được hiển thị công khai
+      </p>
+      <ng-container *ngIf="!profileService.checkLoadingdata">
+        <form [formGroup]="updateStatusForm" (ngSubmit)="updateStatus()" action="" novalidate>
         <div class="list-info">
           <div class="widget-box-content">
             <div class="user-status-list">
@@ -141,7 +144,7 @@
                 </div>
                 <div class="info">
                   <div class="user-status-title">
-                    <a class="bold top-user">Tỉnh/Thành phố hiện tại</a>
+                    <a class="bold top-user">Tỉnh/Thành phố</a>
                     <span class="bp-verified-badge"></span>
                   </div>
                 </div>
@@ -153,6 +156,7 @@
                         type="checkbox"
                         id="cbx-location"
                         class="input-check"
+                        formControlName="location"
                       />
                       <div class="flip">
                         <div class="front"></div>
@@ -189,6 +193,7 @@
                         type="checkbox"
                         id="cbx-gender"
                         class="input-check"
+                        formControlName="gender"
                       />
                       <div class="flip">
                         <div class="front"></div>
@@ -225,6 +230,7 @@
                         type="checkbox"
                         id="cbx-birthday"
                         class="input-check"
+                        formControlName="birthday"
                       />
                       <div class="flip">
                         <div class="front"></div>
@@ -242,26 +248,13 @@
           </div>
         </div>
         <div class="btns" id="btns">
-          <button class="add-follow" id="addButton" (click)="addFollow()">
+          <button class="add-follow" id="addButton" type="submit" style="cursor: pointer;">
             Lưu
           </button>
-          <!-- <button class="reload-follow" id="reloadButton" (click)="loadDataSuggest()">
-            {{
-            "tailai"
-            | translate }}
-          </button> -->
         </div>
-        <!-- <div class="loader-bars" *ngIf="checkAdd">
-          <div class="loader-bar"></div>
-          <div class="loader-bar"></div>
-          <div class="loader-bar"></div>
-          <div class="loader-bar"></div>
-          <div class="loader-bar"></div>
-          <div class="loader-bar"></div>
-          <div class="loader-bar"></div>
-          <div class="loader-bar"></div>
-        </div> -->
-      </div>
+      </form>
+      </ng-container>
+
     </div>
   </div>
 </main>
