@@ -14329,7 +14329,7 @@ export class UIServiveService {
         .dark div.btnClose-create-post{
             background: none !important;
             color: white !important;
-            right: 5% !important;
+            // right: 5% !important;
         }
 
         .dark .comment__container.opened{
@@ -14424,10 +14424,6 @@ export class UIServiveService {
             background: #161B28 !important;
         }
 
-        .dark .modal {
-            background: #161B28 !IMPORTANT;
-        }
-
         .dark span.modal__title {
             color: white;
         }
@@ -14449,10 +14445,6 @@ export class UIServiveService {
             background: #161B28 !important;
         }
 
-        .dark path {
-            fill: white !important;
-        }
-
         .dark select{
             background-color: #1d2333 !important;
             border: 1px solid #3f485f !important;
@@ -14466,6 +14458,16 @@ export class UIServiveService {
         }
         .dark i.fa-solid.fa-xmark {
             color: white !important;
+        }
+        ,dark .menu-hide-info i.fa-solid.fa-gear {
+            font-size: 20px;
+            fill: #adafca !important;
+            opacity: 0.3;
+            margin-left: -10px;
+          }
+
+          .dark .comment-box {
+            background: #1d2333 !important;
         }
         `;
 

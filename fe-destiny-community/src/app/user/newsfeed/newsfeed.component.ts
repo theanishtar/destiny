@@ -86,6 +86,7 @@ export class NewsfeedComponent implements OnInit {
       // Chuyển dữ liệu từ Map thành một mảng.
       this.loadPosts();
       this.modalService.closeModalSuggest();
+      this.modalService.checkAddFollow = false;
     });
 
     this.checkScroll();

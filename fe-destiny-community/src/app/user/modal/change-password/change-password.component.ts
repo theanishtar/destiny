@@ -31,7 +31,7 @@ export class ChangePasswordComponent {
 
 
 	createFormChangePassword() {
-		const PASSWORD_PATTERN = /^(?=.*[!@#$%^&*]+)[a-z0-9!@#$%^&*]{4,20}$/;
+		const PASSWORD_PATTERN = /^(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\-])[\w!@#$%^&*()_+{}\[\]:;<>,.?~\\-]{4,20}$/;
 		this.changePasswordForm = this.formbuilder.group({
 			oldPassword: ['', Validators.required],
 			newPassword: ['',

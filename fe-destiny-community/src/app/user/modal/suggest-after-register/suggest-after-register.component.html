@@ -1,7 +1,21 @@
 <main class="overlay" *ngIf="modalService.isOpenSuggest$ | async">
   <div id="favDialog_seemore" class="modal fade favDialog_seemore">
-    <!-- <app-loading *ngIf="isLoading"></app-loading> -->
-    <div class="widget-box">
+    <div *ngIf="this.modalService.checkAddFollow">
+      <div class="loader-bars">
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+      </div>
+      <div class="loading">{{
+        "dangtai"
+        | translate }}</div>
+    </div>
+    <div class="widget-box" *ngIf="!this.modalService.checkAddFollow">
       <!-- <button
         (click)="modalService.closeModalSuggest()"
         class="btnClose-seemore-img"
@@ -92,16 +106,6 @@
             {{ "tailai" | translate }}
           </button>
         </div>
-        <div class="loader-bars" *ngIf="checkAdd">
-          <div class="loader-bar"></div>
-          <div class="loader-bar"></div>
-          <div class="loader-bar"></div>
-          <div class="loader-bar"></div>
-          <div class="loader-bar"></div>
-          <div class="loader-bar"></div>
-          <div class="loader-bar"></div>
-          <div class="loader-bar"></div>
-        </div>
       </div>
     </div>
   </div>
@@ -142,7 +146,7 @@
                 <div class="icon-description">
                   <i class="fa-solid fa-location-dot"></i>
                 </div>
-                <div class="info">
+                <div class="info-description">
                   <div class="user-status-title">
                     <a class="bold top-user">Tỉnh/Thành phố</a>
                     <span class="bp-verified-badge"></span>
@@ -179,7 +183,7 @@
                 <div class="icon-description">
                   <i class="fa-solid fa-venus-mars"></i>
                 </div>
-                <div class="info">
+                <div class="info-description">
                   <div class="user-status-title">
                     <a class="bold top-user">Giới tính</a>
                     <span class="bp-verified-badge"></span>
@@ -216,7 +220,7 @@
                 <div class="icon-description">
                   <i class="fa-solid fa-calendar"></i>
                 </div>
-                <div class="info">
+                <div class="info-description">
                   <div class="user-status-title">
                     <a class="bold top-user">Ngày sinh</a>
                     <span class="bp-verified-badge"></span>

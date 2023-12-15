@@ -238,3 +238,10 @@ button.re-create-qr {
  button.re-create-qr:active {
   transform: translate(0em, 0.2em);
  }
+
+ @media screen and (max-width: 480px) {
+  .container.qr {
+    left: 5%;
+    width: 90%;
+  }
+ }

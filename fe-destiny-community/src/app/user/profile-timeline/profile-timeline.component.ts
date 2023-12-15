@@ -62,7 +62,7 @@ export class ProfileTimelineComponent implements OnInit {
       this.isLoading = false;
       profile_timeline.style.display = 'grid';
       setTimeout(() => {
-        profile_timeline.style.setProperty('transform', 'translate(167.5px, 0px)', 'important');
+        profile_timeline.style.setProperty('transform', 'translate(167.5px, 0px)');
       }, 1);
 
       // this.zoom();
@@ -294,40 +294,42 @@ export class ProfileTimelineComponent implements OnInit {
     const scrollableDiv = document.getElementById('scrollableDiv')!;
     const scrollButton = document.getElementById('scrollButton')!;
 
-    scrollableDiv.addEventListener('scroll', async () => {
+    if(scrollableDiv){
+      scrollableDiv.addEventListener('scroll', async () => {
 
-      if (scrollableDiv.scrollTop > 100) {
-        scrollButton.style.display = 'block';
-      } else {
-        scrollButton.style.display = 'none';
-      }
-      let epsilon = '0';
-      if (scrollableDiv.scrollTop.toString().indexOf('.') > 0) {
-        epsilon = '0' + scrollableDiv.scrollTop.toString().substring(scrollableDiv.scrollTop.toString().indexOf('.'));
-      }
-
-      // console.warn("check:  " + (scrollableDiv.scrollHeight - scrollableDiv.clientHeight - (scrollableDiv.scrollTop - parseFloat(epsilon))))
-      if (
-        (scrollableDiv.scrollHeight - scrollableDiv.clientHeight - (scrollableDiv.scrollTop - parseFloat(epsilon)) <= 1) &&
-        this.checkCountPosts && !this.setCurrentPage.has(this.currentPage)
-      ) {
-        this.setCurrentPage.add(this.currentPage);
-        this.checkLoadingdata = true;
-
-        let dataPost = {
-          toProfile: localStorage.getItem("idSelected"),
-          page: this.currentPage
+        if (scrollableDiv.scrollTop > 100) {
+          scrollButton.style.display = 'block';
+        } else {
+          scrollButton.style.display = 'none';
         }
-        const data: any = await this.profileService.loadDataTimelinePost(dataPost);
-        this.listPostPr = [...this.listPostPr, ...data];
-        this.checkLoadingdata = false;
-        this.currentPage++;
-
-        if (data.length < 5) {
-          this.checkCountPosts = false;
+        let epsilon = '0';
+        if (scrollableDiv.scrollTop.toString().indexOf('.') > 0) {
+          epsilon = '0' + scrollableDiv.scrollTop.toString().substring(scrollableDiv.scrollTop.toString().indexOf('.'));
+        }
+  
+        // console.warn("check:  " + (scrollableDiv.scrollHeight - scrollableDiv.clientHeight - (scrollableDiv.scrollTop - parseFloat(epsilon))))
+        if (
+          (scrollableDiv.scrollHeight - scrollableDiv.clientHeight - (scrollableDiv.scrollTop - parseFloat(epsilon)) <= 1) &&
+          this.checkCountPosts && !this.setCurrentPage.has(this.currentPage)
+        ) {
+          this.setCurrentPage.add(this.currentPage);
+          this.checkLoadingdata = true;
+  
+          let dataPost = {
+            toProfile: localStorage.getItem("idSelected"),
+            page: this.currentPage
+          }
+          const data: any = await this.profileService.loadDataTimelinePost(dataPost);
+          this.listPostPr = [...this.listPostPr, ...data];
           this.checkLoadingdata = false;
-        }}
-    });
+          this.currentPage++;
+  
+          if (data.length < 5) {
+            this.checkCountPosts = false;
+            this.checkLoadingdata = false;
+          }}
+      });
+    }
   }
 
   openModalComment(idPost) {

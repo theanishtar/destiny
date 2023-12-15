@@ -241,3 +241,17 @@ app-loading {
   color: #3e3f5e;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+#profile-tagline {
+  max-width: 486.4px;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 1;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+@media screen and (max-width: 480px){
+  div#body-edit {
+    transform: none !important;
+  }
+}

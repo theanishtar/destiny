@@ -304,3 +304,9 @@ app-loading {
   color: #3e3f5e;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+
+@media screen and (max-width: 480px){
+  div#profile_timeline {
+    transform: none !important;
+  }
+}

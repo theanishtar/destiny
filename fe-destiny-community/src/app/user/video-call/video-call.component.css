@@ -52,7 +52,7 @@ border: none;
 padding:5px;
 }
 
-button{
+div.btn{
   margin: 3px;
   padding: 8px 0px;
   border-radius: 50%;

@@ -61,6 +61,7 @@ export class ModalService {
   checkUserCalled: boolean = false;
   mapMention = new Map<number, string>();
   checkBadword: boolean = false;
+  checkAddFollow: boolean = false;
   public darkMode: any;
   dataUpdatedPost = new EventEmitter<void>();
 

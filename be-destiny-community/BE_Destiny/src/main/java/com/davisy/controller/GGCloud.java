@@ -85,6 +85,7 @@ public class GGCloud {
 				user.setPassword(passwordEncoder.encode(usgc.get("sub").asText()));
 				user.setEmail(usgc.get("email").asText());
 				user.setAvatar(usgc.get("picture").asText());
+				user.setThumb("https://firebasestorage.googleapis.com/v0/b/destiny-davisy.appspot.com/o/08.jpg?alt=media&token=1027fbbb-43ee-4046-8e13-5640153356ea&_gl=1*17e3a7c*_ga*MTcxMDU3NTczOS4xNjc2OTc2NjE1*_ga_CW55HF8NVT*MTY5NjUwMzgxNi44LjEuMTY5NjUwNTg5Ny42MC4wLjA");
 				user.setUser_status(true);
 				user.setBan(false);
 

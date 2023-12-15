@@ -31,6 +31,7 @@ export class NavigationComponent implements OnInit {
   activeMenuItem: string = '';
   chatUserId: any;
   searchTerm: string = '';
+  searchTermMobile: string = '';
   listSearch: any[] = [];
   listSearchPost: any[] = [];
   listSearchHashTag: any[] = [];
@@ -44,7 +45,7 @@ export class NavigationComponent implements OnInit {
   }
 
   constructor(
-    private cookieService: CookieService,
+    public cookieService: CookieService,
     private loginService: LoginService,
     private router: Router,
     public messageService: MessageService,
@@ -65,25 +66,30 @@ export class NavigationComponent implements OnInit {
     });
   }
 
-  async search() {
+  // async searchMobile() {
+  //   let user_id: number | null = null;
+  
+  //   const storedUserId = localStorage.getItem('chatUserId');
+  //   if (storedUserId !== null) {
+  //     user_id = parseInt(storedUserId, 10);
+  //     this.listSearch = await this.modalService.searchApi(user_id, this.searchTermMobile);
+  //     this.listSearchPost = await this.modalService.searchPostApi(this.searchTermMobile, 'content');
+  //     this.listSearchHashTag = await this.modalService.searchPostApi(this.searchTermMobile, 'hashtag');
+  //   }
+  // }
+
+  async search(value) {
     let user_id: number | null = null;
   
     const storedUserId = localStorage.getItem('chatUserId');
     if (storedUserId !== null) {
       user_id = parseInt(storedUserId, 10);
-      this.listSearch = await this.modalService.searchApi(user_id, this.searchTerm);
-      this.listSearchPost = await this.modalService.searchPostApi(this.searchTerm, 'content');
-      this.listSearchHashTag = await this.modalService.searchPostApi(this.searchTerm, 'hashtag');
+      this.listSearch = await this.modalService.searchApi(user_id, value);
+      this.listSearchPost = await this.modalService.searchPostApi(value, 'content');
+      this.listSearchHashTag = await this.modalService.searchPostApi(value, 'hashtag');
     }
   }
 
-  // getNgModelValue(): string {
-  //   return this.searchTerm !== '' ? this.searchTerm : this.modalService.getSelectedHashtag();
-  // }
-
-  // updateNgModelValue(value: string): void {
-  //   this.searchTerm = value;
-  // }
 
   isLogin() {
     return this.loginService.isLogin();

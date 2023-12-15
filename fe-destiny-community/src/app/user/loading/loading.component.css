@@ -1,4 +1,6 @@
 /* loading-spinner.component.css */
+
+
 .lds-facebook {
   display: inline-block;
   position: relative;
@@ -54,5 +56,9 @@
 @media screen and (max-width: 480px) {
   .lds-facebook {
     margin-left: 38%;
+  }
+  .spinner {
+    position: relative;
+    margin-top: 50%;
   }
 }

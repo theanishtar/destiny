@@ -59,20 +59,15 @@ export class SuggestAfterRegisterComponent implements OnInit {
     }, 1);
   }
 
-  checkAdd: boolean = false;
   addFollow() {
+    this.modalService.checkAddFollow = true;
     this.modalService.sendNotifyFollow(this.idUserSelected);
-    new toast({
-      title: 'Thông báo!',
-      message: 'Đã theo dõi',
-      type: 'success',
-      duration: 3000,
-    });
-    let btn = document.getElementById('btns') as HTMLElement;
-    btn.style.display = 'none'
-    this.checkAdd = true
-    // this.modalService.closeModalSuggest();
-    // location.reload();
+    // new toast({
+    //   title: 'Thông báo!',
+    //   message: 'Đã theo dõi',
+    //   type: 'success',
+    //   duration: 3000,
+    // });
   }
 
   checkCheckBox() {

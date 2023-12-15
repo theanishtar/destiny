@@ -333,7 +333,7 @@ export class MessageService {
           }
         }
 
-        this.remainingTime = 6000;
+        this.remainingTime = 60;
         this.updateTimer();
         this.interval = setInterval(() => {
           this.updateTimer();

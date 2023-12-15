@@ -156,7 +156,7 @@
 
   <!-- USER SHORT DESCRIPTION -->
   <a class="user-short-description big" href="profile"
-    (click)="this.profileService.loadDataProfileTimeline(chatUserId)">
+    (click)="this.profileService.loadDataProfileTimeline(this.cookieService.get('id'))">
     <!-- USER SHORT DESCRIPTION AVATAR -->
     <a class="user-short-description-avatar user-avatar big">
       <div class="hexagon-container">
@@ -583,7 +583,7 @@
         <!-- /ICON LOGO VIKINGER -->
       </div>
       <!-- /LOGO -->
-
+      
       <!-- HEADER BRAND TEXT -->
       <h1 class="header-brand-text">Destiny</h1>
       <!-- /HEADER BRAND TEXT -->
@@ -591,6 +591,199 @@
     <!-- /HEADER BRAND -->
   </div>
   <!-- /HEADER ACTIONS -->
+
+  <div class="search-mobile">
+<!-- HEADER ACTIONS -->
+<div class="header-actions search-bar">
+  <!-- INTERACTIVE INPUT -->
+  <div class="interactive-input dark">
+    <input type="text" id="search-main" name="search_main" [(ngModel)]="searchTermMobile" [value]="modalService.getSelectedHashtag()" (input)="search(searchTermMobile)"
+      placeholder="{{ 'navbar_search' | translate }}" />
+    <!-- INTERACTIVE INPUT ICON WRAP -->
+    <div class="interactive-input-icon-wrap">
+      <!-- INTERACTIVE INPUT ICON -->
+      <svg class="interactive-input-icon icon-magnifying-glass">
+        <use xlink:href="#svg-magnifying-glass"></use>
+      </svg>
+      <!-- /INTERACTIVE INPUT ICON -->
+    </div>
+    <!-- /INTERACTIVE INPUT ICON WRAP -->
+
+    <!-- INTERACTIVE INPUT ACTION -->
+    <div class="interactive-input-action">
+      <!-- INTERACTIVE INPUT ACTION ICON -->
+      <svg class="interactive-input-action-icon icon-cross-thin">
+        <use xlink:href="#svg-cross-thin"></use>
+      </svg>
+      <!-- /INTERACTIVE INPUT ACTION ICON -->
+    </div>
+    <!-- /INTERACTIVE INPUT ACTION -->
+  </div>
+  <!-- /INTERACTIVE INPUT -->
+
+  <!-- DROPDOWN BOX -->
+  <div class="dropdown-box padding-bottom-small header-search-dropdown" *ngIf="this.searchTermMobile != ''">
+    <!-- DROPDOWN BOX CATEGORY -->
+    <div class="dropdown-box-category">
+      <p class="dropdown-box-category-title">Người dùng</p>
+    </div>
+    <!-- /DROPDOWN BOX CATEGORY -->
+
+    <!-- DROPDOWN BOX LIST -->
+    <div class="dropdown-box-list small no-scroll">
+      <!-- DROPDOWN BOX LIST ITEM -->
+      <div *ngIf="listSearch.length === 0" class="no-find">Không tìm thầy người dùng</div>
+      <div *ngFor="let u of listSearch">
+        <a class="dropdown-box-list-item" href="profile" (click)="this.profileService.loadDataProfileTimeline(u[0])">
+          <!-- USER STATUS -->
+          <div class="user-status notification">
+            <!-- USER STATUS AVATAR -->
+            <a class="user-avatar small user-status-avatar no-border no-outline">
+              <div class="hexagon-container">
+                <div class="hexagon user-avatar-content">
+                  <div class="hexagon-image" style="background-image: url('{{u[2]}}')"></div>
+                </div>
+                <div class="hexagon user-avatar-border">
+                  <div class="hexagon-border"></div>
+                </div>
+                <div class="hexagon user-avatar-progress-border">
+                  <div class="user-avatar-progress"></div>
+                </div>
+              </div>
+            </a>
+            <!-- /USER STATUS AVATAR -->
+
+            <!-- USER STATUS TITLE -->
+            <p class="user-status-title">
+              <span class="bold">{{u[1]}}</span>
+            </p>
+            <!-- /USER STATUS TITLE -->
+
+            <!-- USER STATUS TEXT -->
+            <p class="user-status-text">{{u[3] ? 'Bạn bè': 'Người lạ'}}</p>
+            <!-- /USER STATUS TEXT -->
+
+            <!-- USER STATUS ICON -->
+            <div class="user-status-icon">
+              <!-- ICON FRIEND -->
+              <svg class="icon-friend">
+                <use xlink:href="#svg-friend"></use>
+              </svg>
+              <!-- /ICON FRIEND -->
+            </div>
+            <!-- /USER STATUS ICON -->
+          </div>
+          <!-- /USER STATUS -->
+        </a>
+      </div>
+      <!-- /DROPDOWN BOX LIST ITEM -->
+    </div>
+    <!-- /DROPDOWN BOX LIST -->
+
+    <!-- DROPDOWN BOX CATEGORY -->
+    <div class="dropdown-box-category">
+      <p class="dropdown-box-category-title">Bài đăng</p>
+    </div>
+    <!-- /DROPDOWN BOX CATEGORY -->
+
+    <!-- DROPDOWN BOX LIST -->
+    <div class="dropdown-box-list small no-scroll">
+      <!-- DROPDOWN BOX LIST ITEM -->
+      <div *ngIf="listSearchPost.length === 0" class="no-find">Không tìm thầy bài đăng</div>
+      <div *ngFor="let u of listSearchPost">
+        <a class="dropdown-box-list-item" href="detail-post?id={{u[0]}}"
+          (click)="this.profileService.loadDataProfileTimeline(u[0])">
+          <!-- USER STATUS -->
+          <div class="user-status notification">
+            <div class="user-status-avatar">
+              <!-- PICTURE -->
+              <figure class="picture small round liquid">
+                <img src="{{u[3]}}" alt="item-07" />
+              </figure>
+              <!-- /PICTURE -->
+            </div>
+            <!-- USER STATUS TITLE -->
+            <p class="user-status-title">
+              <span class="bold">{{u[1]}}</span>
+            </p>
+            <!-- /USER STATUS TITLE -->
+
+            <!-- USER STATUS TEXT -->
+            <p class="user-status-text">{{u[2]}} lượt tương tác</p>
+            <!-- /USER STATUS TEXT -->
+
+            <!-- USER STATUS ICON -->
+            <div class="user-status-icon">
+              <!-- ICON FRIEND -->
+              <svg class="icon-friend">
+                <use xlink:href="#svg-status"></use>
+              </svg>
+              <!-- /ICON FRIEND -->
+            </div>
+            <!-- /USER STATUS ICON -->
+          </div>
+          <!-- /USER STATUS -->
+        </a>
+      </div>
+      <!-- /DROPDOWN BOX LIST ITEM -->
+    </div>
+    <!-- /DROPDOWN BOX LIST -->
+
+    <!-- DROPDOWN BOX CATEGORY -->
+    <div class="dropdown-box-category">
+      <p class="dropdown-box-category-title">Hashtag</p>
+    </div>
+    <!-- /DROPDOWN BOX CATEGORY -->
+
+    <!-- DROPDOWN BOX LIST -->
+    <div class="dropdown-box-list small no-scroll">
+      <!-- DROPDOWN BOX LIST ITEM -->
+      <div *ngIf="listSearchHashTag.length === 0" class="no-find">Không tìm thầy hashtag</div>
+      <div *ngFor="let u of listSearchHashTag">
+        <a class="dropdown-box-list-item" href="detail-post?id={{u[0]}}"
+          (click)="this.profileService.loadDataProfileTimeline(u[0])">
+          <!-- USER STATUS -->
+          <div class="user-status notification">
+            <div class="user-status-avatar">
+              <!-- PICTURE -->
+              <figure class="picture small round liquid">
+                <img src="{{u[3]}}" alt="item-07" />
+              </figure>
+              <!-- /PICTURE -->
+            </div>
+            <!-- USER STATUS TITLE -->
+            <p class="user-status-title">
+              <span class="bold">{{u[1]}}</span>
+            </p>
+            <!-- /USER STATUS TITLE -->
+
+            <!-- USER STATUS TEXT -->
+            <p class="user-status-text">{{u[2]}} lượt tương tác</p>
+            <!-- /USER STATUS TEXT -->
+
+            <!-- USER STATUS ICON -->
+            <div class="user-status-icon">
+              <!-- ICON FRIEND -->
+              <svg class="icon-friend" width="800px" height="800px" viewBox="0 0 24 24" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 4L7 20M17 4L14 20M5 8H20M4 16H19" stroke="#000000" stroke-width="2"
+                  stroke-linecap="round" />
+              </svg>
+              <!-- /ICON FRIEND -->
+            </div>
+            <!-- /USER STATUS ICON -->
+          </div>
+          <!-- /USER STATUS -->
+        </a>
+      </div>
+      <!-- /DROPDOWN BOX LIST ITEM -->
+    </div>
+    <!-- /DROPDOWN BOX LIST -->
+  </div>
+  <!-- /DROPDOWN BOX -->
+</div>
+<!-- /HEADER ACTIONS -->
+  </div>
 
   <!-- HEADER ACTIONS -->
   <div class="header-actions">
@@ -665,7 +858,7 @@
   <div class="header-actions search-bar">
     <!-- INTERACTIVE INPUT -->
     <div class="interactive-input dark">
-      <input type="text" id="search-main" name="search_main" [(ngModel)]="searchTerm" [value]="modalService.getSelectedHashtag()" (input)="search()"
+      <input type="text" id="search-main" name="search_main" [(ngModel)]="searchTerm" [value]="modalService.getSelectedHashtag()" (input)="search(searchTerm)"
         placeholder="{{ 'navbar_search' | translate }}" />
       <!-- INTERACTIVE INPUT ICON WRAP -->
       <div class="interactive-input-icon-wrap">

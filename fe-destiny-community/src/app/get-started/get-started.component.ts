@@ -53,7 +53,7 @@ export class GetStartedComponent implements OnInit {
 	// userLogGG: any[] = [];
 	userGG: any;
 	loggedIn: any;
-
+	public loginGGUrl = environment.googleLoginUrl
 
 	constructor(
 		private formbuilder: FormBuilder,
@@ -189,7 +189,7 @@ export class GetStartedComponent implements OnInit {
 	}
 	/*===========Register===============*/
 	createFormRegister() {
-		const PASSWORD_PATTERN = /^(?=.*[!@#$%^&*]+)[a-z0-9!@#$%^&*]{4,20}$/;
+		const PASSWORD_PATTERN = /^(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\-])[\w!@#$%^&*()_+{}\[\]:;<>,.?~\\-]{4,20}$/;
 		const NAME_PATTERN = /^[\p{L}\s]+$/u;
 		this.registerForm = this.formbuilder.group({
 			email: ['', [Validators.required, Validators.email]],

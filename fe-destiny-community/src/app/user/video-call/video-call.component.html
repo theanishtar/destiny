@@ -18,7 +18,7 @@
       <video id="local-video"></video>
 
       <div class="meet-controls-bar">
-        <button (click)="cancelCall('caller')" style="background: #ff3131">
+        <div class="btn" (click)="cancelCall('caller')" style="background: #ff3131">
           <svg
             height="800px"
             width="800px"
@@ -57,12 +57,12 @@
               />
             </g>
           </svg>
-        </button>
+        </div>
         <div
           class="meet-controls-bar-item"
           *ngIf="messageService.checkReceiveVideoCall"
         >
-          <button (click)="startScreenShare()" style="background: #ffffff">
+          <div class="btn" (click)="startScreenShare()" style="background: #ffffff">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -80,9 +80,10 @@
               <path d="M17 8l5-5" />
               <path d="M17 3h5v5" />
             </svg>
-          </button>
+          </div>
 
-          <button
+          <div
+            class="btn"
             (click)="turnOnCamera('caller')"
             id="on-camera-caller"
             style="background: #ffffff"
@@ -109,8 +110,9 @@
                 stroke-linejoin="round"
               />
             </svg>
-          </button>
-          <button
+          </div>
+          <div
+            class="btn"
             (click)="turnOffCamera('caller')"
             id="off-camera-caller"
             style="background: #ffffff"
@@ -130,9 +132,10 @@
                 stroke-linejoin="round"
               />
             </svg>
-          </button>
+          </div>
 
-          <button
+          <div
+          class="btn"
             (click)="turnOnMicro('caller')"
             id="on-mic-caller"
             style="background: #ffffff"
@@ -158,8 +161,9 @@
                 fill="#8E8E8E"
               />
             </svg>
-          </button>
-          <button
+          </div>
+          <div
+          class="btn"
             (click)="turnOffMicro('caller')"
             id="off-mic-caller"
             style="background: #ffffff"
@@ -176,7 +180,7 @@
                 fill="#8E8E8E"
               />
             </svg>
-          </button>
+          </div>
         </div>
       </div>
     </div>
@@ -249,7 +253,7 @@
       <!-- style="background-color: #398AFF;" -->
       <video id="local-video"></video>
       <div class="meet-controls-bar">
-        <button (click)="joinRoom()" id="btnJoin" style="background: #00c479">
+        <div class="btn" (click)="joinRoom()" id="btnJoin" style="background: #00c479">
           <svg
             width="800px"
             height="800px"
@@ -264,8 +268,9 @@
             />
             <!-- fill="#1C274C" -->
           </svg>
-        </button>
-        <button
+        </div>
+        <div
+        class="btn"
           (click)="
             messageService.checkRefuseCall(messageService.fromUser, 'refuse')
           "
@@ -310,10 +315,11 @@
               />
             </g>
           </svg>
-        </button>
+        </div>
 
         <div class="meet-controls-bar-item" *ngIf="checkHideBtn">
-          <button
+          <div
+          class="btn"
             (click)="cancelCall('calling')"
             id="btnCancelCaller"
             style="background: #ff3131"
@@ -356,8 +362,8 @@
                 />
               </g>
             </svg>
-          </button>
-          <button (click)="startScreenShare()" style="background: #ffffff">
+          </div>
+          <div class="btn" (click)="startScreenShare()" style="background: #ffffff">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -375,9 +381,10 @@
               <path d="M17 8l5-5" />
               <path d="M17 3h5v5" />
             </svg>
-          </button>
+          </div>
 
-          <button
+          <div
+          class="btn"
             (click)="turnOnCamera('calling')"
             id="on-camera-calling"
             style="background: #ffffff"
@@ -404,8 +411,9 @@
                 stroke-linejoin="round"
               />
             </svg>
-          </button>
-          <button
+          </div>
+          <div
+          class="btn"
             (click)="turnOffCamera('calling')"
             id="off-camera-calling"
             style="background: #ffffff"
@@ -425,9 +433,10 @@
                 stroke-linejoin="round"
               />
             </svg>
-          </button>
+          </div>
 
-          <button
+          <div
+          class="btn"
             (click)="turnOnMicro('calling')"
             id="on-mic-calling"
             style="background: #ffffff"
@@ -453,8 +462,9 @@
                 fill="#8E8E8E"
               />
             </svg>
-          </button>
-          <button
+          </div>
+          <div
+          class="btn"
             (click)="turnOffMicro('calling')"
             id="off-mic-calling"
             style="background: #ffffff"
@@ -471,7 +481,7 @@
                 fill="#8E8E8E"
               />
             </svg>
-          </button>
+          </div>
         </div>
       </div>
     </div>

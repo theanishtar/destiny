@@ -276,6 +276,7 @@ div.btnClose-create-post {
   font-size: 15px;
   font-family: Helvetica, Arial, sans-serif;
   margin: 0;
+  color: black !important;
 }
 
 .comment__card-footer {
@@ -338,7 +339,7 @@ div.btnClose-create-post {
 }
 
 .Name strong {
-  color: black;
+  color: black !important;
   font-size: 15px;
   font-family: Helvetica, Arial, sans-serif
 }
@@ -596,8 +597,11 @@ div.btnClose-create-post {
 .dropdown {
   position: relative;
   cursor: pointer;
+  color: black !important;
 }
-
+i.fa-solid.fa-ellipsis {
+  color: black;
+}
 .dropdown-menu-cmt.show {
   display: block;
 }

@@ -236,7 +236,7 @@ export class EditProfileComponent implements OnInit {
       this.isLoading = false;
       body_edit.style.display = 'grid';
       setTimeout(() => {
-        body_edit.style.setProperty('transform', 'translate(167.5px, 0px)', 'important');
+        body_edit.style.setProperty('transform', 'translate(167.5px, 0px)');
       }, 1);
     })
   }
