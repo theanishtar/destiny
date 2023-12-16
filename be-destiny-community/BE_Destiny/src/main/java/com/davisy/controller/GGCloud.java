@@ -47,7 +47,6 @@ public class GGCloud {
 
 	@PostMapping("oauth/loginGG")
 	public String login(Model m) {
-		System.out.println("Hello");
 		try {
 			System.out.println("s: " + httpServletRequest.getParameter("credential"));
 			String token = httpServletRequest.getParameter("credential");

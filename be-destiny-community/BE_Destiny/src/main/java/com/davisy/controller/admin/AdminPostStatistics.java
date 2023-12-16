@@ -121,7 +121,6 @@ public class AdminPostStatistics {
 	public ResponseEntity<List<AdminPostTOP4>> getTOP4User() {
 		try {
 			List<Object[]> listTOP4Post = postService.getTOP4Post();
-			;
 			List<AdminPostTOP4> newList = new ArrayList<>();
 			for (Object[] oj : listTOP4Post) {
 				Post post = postService.findPostByID(Integer.valueOf(String.valueOf(oj[0])));
