@@ -41,7 +41,11 @@ public interface UserService {
 	// 21-9-2023 -lấy tổng số người dùng theo tháng
 	// lastest update 14-10
 	public int getTotalUserByMonth(int month);
+	
+	public int getSizeUsers();
 
+	public List<User> getAllByRole(String roleName);
+	
 	// 1-11-2023 -lấy tổng số người dùng theo năm
 	public int getTotalUserByYear(int year);
 
@@ -75,5 +79,4 @@ public interface UserService {
 	public void disable(User user);
 
 	public void delete(User user);
-
 }

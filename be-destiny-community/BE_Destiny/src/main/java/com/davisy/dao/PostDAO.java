@@ -36,6 +36,9 @@ public interface PostDAO extends JpaRepository<Post, Integer> {
 	// 1-11-2023 -lấy tổng số bài đăng theo năm
 	@Query(value = "SELECT COUNT(post_id) FROM post WHERE EXTRACT(YEAR FROM date_post)=:year", nativeQuery = true)
 	public int getTotalPostByYear(int year);
+	
+	@Query(value = "SELECT COUNT(post_id) FROM post", nativeQuery = true)
+	public int getSizePosts();
 
 	// 21-9-2023 -Tổng phần trăm bài đăng có trạng thái là đã gửi
 	// 1-11

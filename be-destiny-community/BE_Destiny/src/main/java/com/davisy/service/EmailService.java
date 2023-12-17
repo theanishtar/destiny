@@ -1382,7 +1382,7 @@ public class EmailService {
 		// Set email properties
 		helper.setFrom(fromEmail);
 		helper.setTo(email);
-		helper.setSubject("Subject");
+		helper.setSubject("Mail xác nhận");
 
 		// Add the HTML body with the image attachment (embedded)
 		helper.setText(body, true);
@@ -1867,7 +1867,7 @@ public class EmailService {
 		// Set email properties
 		helper.setFrom(fromEmail);
 		helper.setTo(email);
-		helper.setSubject("Subject");
+		helper.setSubject("Mã xác nhận");
 
 		// Add the HTML body with the image attachment (embedded)
 		helper.setText(body, true);

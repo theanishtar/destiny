@@ -49,6 +49,9 @@ public interface UserDAO extends JpaRepository<User, Integer> {
 	// 1-11-2023 -lấy tổng số người dùng theo năm
 	@Query(value = "SELECT COUNT(user_id) FROM users WHERE EXTRACT(YEAR FROM day_create)=:year", nativeQuery = true)
 	public int getTotalUserByYear(int year);
+	
+	@Query(value = "SELECT COUNT(user_id) FROM users", nativeQuery = true)
+	public int getSizeUsers();
 
 	// 21-9-2023 -Tóng số lượng tương tác của người dùng theo từng tháng
 	// 1-11
@@ -177,7 +180,12 @@ public interface UserDAO extends JpaRepository<User, Integer> {
 			+ "    LIMIT 5;", nativeQuery = true)
 	public List<Object[]> get5PostByKeyword(String keyword);
 	
-	
+	@Query(value = "SELECT *\n"
+			+ "FROM users u\n"
+			+ "JOIN user_role ur ON u.user_id = ur.user_id\n"
+			+ "JOIN roles r ON ur.role_id = r.role_id\n"
+			+ "WHERE r.name =:roleName;",nativeQuery = true)
+	public List<User> getUserByRole(String roleName);
 	
 
 }

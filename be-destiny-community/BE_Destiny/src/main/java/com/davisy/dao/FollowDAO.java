@@ -34,7 +34,7 @@ public interface FollowDAO extends JpaRepository<Follower, String> {
 	public List<Follower> findALlFriend(int follower_id, int user_id);
 
 //	@Cacheable("follower")
-	@Query(value = "select  f.user_id from follower f where f.follower_id =:id", nativeQuery = true)
+	@Query(value = "select f.follower_id  from follower f  WHERE f.user_id=:id", nativeQuery = true)
 	public List<Integer> findAllFollowingUser(int id);
 
 //	@Cacheable("follower")

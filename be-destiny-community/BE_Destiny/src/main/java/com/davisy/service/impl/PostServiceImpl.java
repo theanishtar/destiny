@@ -49,6 +49,10 @@ public class PostServiceImpl implements PostService {
 	public int getTotalPostByYear(int year) {
 		return postDao.getTotalPostByYear(year);
 	}
+	
+	public int getSizePosts() {
+		return postDao.getSizePosts();
+	}
 
 	// 21-9-2023 -lấy phần trăm bài đăng có trạng thái đã gửi
 	@Override
