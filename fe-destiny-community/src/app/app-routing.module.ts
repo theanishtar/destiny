@@ -34,6 +34,7 @@ import { ProfileAdminComponent } from './admin/profile-admin/profile-admin.compo
 import { UserDetailComponent } from './admin/user-detail/user-detail.component';
 import { UserManamentComponent } from './admin/user-manament/user-manament.component';
 import { UserReportdetailComponent } from './admin/user-reportdetail/user-reportdetail.component';
+import { ModerManagementComponent } from './admin/moder-management/moder-management.component';
 
 // moderator
 import { PostReportComponent } from './moderator/post-report/post-report.component';
@@ -42,6 +43,8 @@ import { ProfileComponent } from './moderator/profile/profile.component';
 import { UserReportComponent } from './moderator/user-report/user-report.component';
 import { UserReportModeratorDetailComponent } from './moderator/user-report-detail/user-report-detail.component';
 import { ForbiddenWordComponent } from './moderator/forbidden-word/forbidden-word.component';
+// owner
+import { AdminManagementComponent } from './owner/admin-management/admin-management.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -49,11 +52,11 @@ const routes: Routes = [
   { path: 'login', component: GetStartedComponent },
   { path: 'forgotpassword', component: ForgotPasswordComponent },
   { path: 'wait-confirm', component: WaitForConfirmationComponent },
-  { path: 'regisauth', component: ConfirmSuccessComponent }, 
+  { path: 'regisauth', component: ConfirmSuccessComponent },
 
   // user
   // { path: 'newsfeed', component: NewsfeedComponent, canActivate: [authGuard]},
-  { path: 'newsfeed', component: NewsfeedComponent, canActivate: [authGuard]},
+  { path: 'newsfeed', component: NewsfeedComponent, canActivate: [authGuard] },
   { path: 'profile', component: ProfileTimelineComponent, canActivate: [authGuard] },
   { path: 'photos', component: PhotosComponent, canActivate: [authGuard] },
   { path: 'follow', component: FollowsComponent, canActivate: [authGuard] },
@@ -63,11 +66,11 @@ const routes: Routes = [
   { path: 'setting', component: SettingComponent, canActivate: [authGuard] },
   { path: 'contact', component: ContactComponent, canActivate: [authGuard] },
   { path: 'history', component: HistoryComponent, canActivate: [authGuard] },
-  { path: 'notifications', component: NotificationsComponent, canActivate: [authGuard]},
+  { path: 'notifications', component: NotificationsComponent, canActivate: [authGuard] },
   { path: 'video-call', component: VideoCallComponent, canActivate: [authGuard] },
   { path: 'chang-email-confirm', component: ChangeConfirmComponent, canActivate: [authGuard] },
   { path: 'detail-post', component: ArticleDetailsComponent, canActivate: [authGuard] },
-  
+
 
   { path: 'admin', component: IndexAdminComponent, canActivate: [authGuard] },
   { path: 'admin/postdetail', component: PostDetailComponent, canActivate: [authGuard] },
@@ -77,13 +80,18 @@ const routes: Routes = [
   { path: 'admin/userdetail', component: UserDetailComponent, canActivate: [authGuard] },
   { path: 'admin/usermanament', component: UserManamentComponent, canActivate: [authGuard] },
   { path: 'admin/userreportdetail', component: UserReportdetailComponent, canActivate: [authGuard] },
+  { path: 'admin/modermanagement', component: ModerManagementComponent, canActivate: [authGuard] },
 
-  { path: 'moderator/post-report', component: PostReportComponent, canActivate: [authGuard]},
-  { path: 'moderator/post-report-detail', component: PostReportDetailModeratorComponent, canActivate: [authGuard]},
-  { path: 'moderator/profile', component: ProfileComponent, canActivate: [authGuard]},
-  { path: 'moderator/user-report', component: UserReportComponent, canActivate: [authGuard]},
-  { path: 'moderator/user-report-detail', component: UserReportModeratorDetailComponent, canActivate: [authGuard]},
-  { path: 'moderator/forbidden-word', component: ForbiddenWordComponent, canActivate: [authGuard]},
+
+  { path: 'moderator/post-report', component: PostReportComponent, canActivate: [authGuard] },
+  { path: 'moderator/post-report-detail', component: PostReportDetailModeratorComponent, canActivate: [authGuard] },
+  { path: 'moderator/profile', component: ProfileComponent, canActivate: [authGuard] },
+  { path: 'moderator/user-report', component: UserReportComponent, canActivate: [authGuard] },
+  { path: 'moderator/user-report-detail', component: UserReportModeratorDetailComponent, canActivate: [authGuard] },
+  { path: 'moderator/forbidden-word', component: ForbiddenWordComponent, canActivate: [authGuard] },
+  { path: 'moderator/forbidden-word', component: ForbiddenWordComponent, canActivate: [authGuard] },
+
+  { path: 'owner', component: AdminManagementComponent, canActivate: [authGuard] },
 
 
   { path: '**', component: Error404Component },

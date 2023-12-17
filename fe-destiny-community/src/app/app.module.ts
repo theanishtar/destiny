@@ -88,6 +88,8 @@ import { SuggestAfterRegisterComponent } from './user/modal/suggest-after-regist
 import { ArticleDetailsComponent } from './user/article-details/article-details.component';
 import { ReportComponent } from './user/modal/report/report.component';
 import { ImagesMessageComponent } from './user/modal/images-message/images-message.component';
+import { ModerManagementComponent } from './admin/moder-management/moder-management.component';
+import { AdminManagementComponent } from './owner/admin-management/admin-management.component';
 
 export function appInitializer(cookieService: CookieService, messageService: MessageService, sender: any,modalService:ModalService, profileService: ProfileService, dataProfileTimeline: any) {
   return () => {
@@ -160,7 +162,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     ArticleDetailsComponent,
     ReportComponent,
     CustomTimePipe,
-    ImagesMessageComponent
+    ImagesMessageComponent,
+    ModerManagementComponent,
+    AdminManagementComponent
   ],
   imports: [
     BrowserModule,
