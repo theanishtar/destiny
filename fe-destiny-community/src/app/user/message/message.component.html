@@ -81,8 +81,7 @@
                             <div class="user-avatar small no-outline"
                               [ngClass]="key.type == 'JOIN' ? 'online' : 'away'"></div>
                             <!-- USER AVATAR -->
-                            <a class="user-avatar small user-status-avatar no-border no-outline" href="profile"
-                              (click)="this.profileService.loadDataProfileTimeline(idSelected)">
+                            <a class="user-avatar small user-status-avatar no-border no-outline" href="profile?id={{key.user_id}}">
                               <div class="hexagon-container">
                                 <div class="hexagon user-avatar-content">
                                   <div class="hexagon-image" style="background-image: url('{{key.avatar}}')"></div>
@@ -100,13 +99,13 @@
                           <!-- /USER STATUS AVATAR -->
 
                           <!-- USER STATUS TITLE -->
-                          <p class="user-status-title">
+                          <a class="user-status-title" href="profile?id={{key.user_id}}">
                             <span class="bold">{{ key.fullname }}</span>
-                          </p>
+                          </a>
                           <!-- /USER STATUS TITLE -->
 
                           <!-- USER STATUS TEXT -->
-                          <p class="user-status-text" id="last-message-{{ key.user_id }}">
+                          <p class="user-status-text last-mess" id="last-message-{{ key.user_id }}">
                             {{key.lastMessage }}
                           </p>
                           <!-- /USER STATUS TEXT -->
@@ -154,8 +153,7 @@
                             <div class="user-avatar small no-outline"
                               [ngClass]="key.type == 'JOIN' ? 'online' : 'away'"></div>
                             <!-- USER AVATAR -->
-                            <a class="user-avatar small user-status-avatar no-border no-outline" href="profile"
-                              (click)="this.profileService.loadDataProfileTimeline(idSelected)">
+                            <a class="user-avatar small user-status-avatar no-border no-outline" href="profile?id={{key.user_id}}">
                               <div class="hexagon-container">
                                 <div class="hexagon user-avatar-content">
                                   <div class="hexagon-image" style="background-image: url('{{key.avatar}}')"></div>
@@ -173,9 +171,9 @@
                           <!-- /USER STATUS AVATAR -->
 
                           <!-- USER STATUS TITLE -->
-                          <p class="user-status-title">
+                          <a class="user-status-title" href="profile?id={{key.user_id}}">
                             <span class="bold">{{ key.fullname }}</span>
-                          </p>
+                          </a>
                           <!-- /USER STATUS TITLE -->
 
                           <!-- USER STATUS TEXT -->
@@ -300,8 +298,7 @@
             <!-- USER STATUS AVATAR -->
             <div class="user-status-avatar">
               <!-- USER AVATAR -->
-              <a class="user-avatar small user-status-avatar no-border no-outline" href="profile"
-                (click)="this.profileService.loadDataProfileTimeline(idSelected)">
+              <a class="user-avatar small user-status-avatar no-border no-outline" href="profile?id={{idSelected}}">
                 <div class="hexagon-container">
                   <div class="hexagon user-avatar-content">
                     <div class="hexagon-image" style="background-image: url('{{ image }}')"></div>
@@ -319,12 +316,13 @@
             <!-- /USER STATUS AVATAR -->
 
             <!-- USER STATUS TITLE -->
-            <p class="user-status-title">
+            <a class="user-status-title" href="profile?id={{idSelected}}">
               <span class="bold">{{ messageService.fullname }}</span>
-            </p>
+            </a>
             <!-- /USER STATUS TITLE -->
 
             <!-- USER STATUS TAG -->
+            <br>
             <p class="user-status-tag" style="top: 0; font-size: 8px" [ngClass]="checkIsOnline ? 'online' : 'offline'">
               {{ isOnline }}
             </p>
@@ -373,8 +371,7 @@
 
                 <!-- left mess -->
                 <div *ngIf="m.user_id == id && m.type === 'text'" class="chat-widget-speaker left">
-                  <a class="user-avatar small user-status-avatar no-border no-outline avatar-mess" href="profile"
-                    (click)="this.profileService.loadDataProfileTimeline(idSelected)">
+                  <a class="user-avatar small user-status-avatar no-border no-outline avatar-mess" href="profile?id={{idSelected}}">
                     <div class="hexagon-container">
                       <div class="hexagon user-avatar-content">
                         <div class="hexagon-image" style="background-image: url('{{ m.avatar }}')"></div>
@@ -606,7 +603,7 @@
             <div class="form-row split block" *ngIf="!checkBlock">
               <!-- FORM ITEM -->
               <div class="form-item block">
-                <span><i class="fa-solid fa-circle-exclamation"></i></span>
+                <!-- <span><i class="fa-solid fa-circle-exclamation"></i></span> -->
                 {{ "bochandenhantinvoinguoinay" | translate }}
                 <span class="remove-block" (click)="unBlock()">{{ "bochan" | translate }}</span>
               </div>

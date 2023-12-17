@@ -26,7 +26,8 @@ export class authGuard implements CanActivate {
     if (isModRouteChangeMail) {
       return true;
     } else {
-      if (!this.isLogin()) {
+      // alert(localStorage.getItem('token') === null);
+      if (!this.loginService.isLogin()) {
         new toast({
           title: 'Thông báo!',
           message: 'Vui lòng đăng nhập!',
@@ -64,8 +65,9 @@ export class authGuard implements CanActivate {
         this.location.back();
         return false;
       }
+      return true;
     }
-    return true;
+    // return true;
   }
 
   constructor(

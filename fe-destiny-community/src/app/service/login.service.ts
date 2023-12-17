@@ -149,7 +149,7 @@ message: 'Tài khoản không tồn tại',
     ) { }
 
     isLogin(): boolean {
-        if (this.cookieService.get('full_name') == '') {
+        if (localStorage.getItem('token') === null) {
             return false;
         }
         return true;

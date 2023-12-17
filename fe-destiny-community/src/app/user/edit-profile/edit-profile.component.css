@@ -218,6 +218,7 @@ label.label-thumb {
 img#uploadPreviewAvatar {
   position: absolute;
   top: 0%;
+  object-fit: cover;
 }
 
 app-loading {

@@ -48,7 +48,7 @@ export class PostService {
       throw error;
     }
   }
-
+  
   async loadTop5Post(): Promise<any[]> {
     try {
       const response = await this.http.get<any>(this.loadDataTop5Post).toPromise();

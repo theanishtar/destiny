@@ -76,9 +76,6 @@ export class FollowsComponent implements OnInit {
   /* ============following============= */
   async deleteFling(id: number) {
     this.followsService.deleteFollowing(id).subscribe(() => {
-      ;
-      // this.loadDataFling();
-
       new toast({
         title: 'Thông báo!',
         message: 'Hủy thành công',
@@ -87,6 +84,10 @@ export class FollowsComponent implements OnInit {
       })
     });
     this.listFollowing = await this.followsService.loadDataFollowing();
+    let btn_fl = document.getElementById('deleteFriend-' + id);
+    if(btn_fl){
+      btn_fl.style.display = 'none';
+    }
   }
 
   /* ============follower============= */
@@ -99,7 +100,11 @@ export class FollowsComponent implements OnInit {
         message: 'Hủy thành công',
         type: 'success',
         duration: 3000,
-      })
+      });
+      let btn_fl = document.getElementById('deleteFler-' + id);
+      if(btn_fl){
+        btn_fl.style.display = 'none';
+      }
     });
   }
 
@@ -112,6 +117,10 @@ export class FollowsComponent implements OnInit {
       duration: 3000,
     });
     this.listFollower = await this.followsService.loadDataFollower();
+    let btn_fl = document.getElementById('follow-btn-' + id);
+    if(btn_fl){
+      btn_fl.style.display = 'none';
+    }
   }
   /* ============friend============= */
   async loadDataFriend() {

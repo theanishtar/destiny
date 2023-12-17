@@ -86,12 +86,14 @@ div#section-navigation-slider {
     margin-top: 2rem;
   }
 
-  div#section-navigation-slider{
+  div#section-navigation-slider {
     white-space: nowrap;
     overflow: scroll;
   }
 }
-img, a.user-short-description-avatar.user-avatar {
+
+img,
+a.user-short-description-avatar.user-avatar {
   cursor: no-drop;
 }
 
@@ -102,11 +104,14 @@ img, a.user-short-description-avatar.user-avatar {
   position: relative;
   cursor: pointer;
 }
+
 span.section-menu-item-icon.icon-setting-menu {
   position: absolute;
   top: 40%;
   right: 50%;
+  color: #adafca !important;
 }
+
 .menu-hide-info i.fa-solid.fa-gear {
   font-size: 20px;
   fill: #adafca;
@@ -114,3 +119,8 @@ span.section-menu-item-icon.icon-setting-menu {
   margin-left: -10px;
 }
 
+@media screen and (max-width: 480px) {
+  .dark .hide-text-mobile {
+    display: block !important;
+  }
+}

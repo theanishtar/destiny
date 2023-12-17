@@ -65,6 +65,10 @@ export class HeaderProfileComponent implements OnInit {
       type: 'success',
       duration: 3000,
     });
+    let btn_fl = document.getElementById('follow-btn');
+    if(btn_fl){
+      btn_fl.style.display = 'none';
+    }
   }
   /* ============template============= */
   updateActiveMenuItem() {

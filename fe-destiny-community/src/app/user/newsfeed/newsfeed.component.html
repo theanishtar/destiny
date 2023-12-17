@@ -38,7 +38,7 @@
         <div class="widget-box-content" *ngFor="let item of listTop5User; let i = index">
           <div class="user-status-list">
             <div class="user-status user-status-with-icon">
-              <a href="profile" (click)="this.profileService.loadDataProfileTimeline(item[3])">
+              <a href="profile?id={{item[3]}}">
                 <a class="user-avatar small user-status-avatar no-border no-outline">
                   <div class="hexagon-container">
                     <div class="hexagon user-avatar-content">
@@ -84,9 +84,7 @@
         <div class="widget-box-content" *ngFor="let item of listSuggested">
           <div class="user-status-list">
             <div class="user-status">
-              <a href="profile" (click)="
-                  this.profileService.loadDataProfileTimeline(item.user_id)
-                ">
+              <a href="profile?id={{item.user_id}}">
                 <a class="user-avatar small user-status-avatar no-border no-outline">
                   <div class="hexagon-container">
                     <div class="hexagon user-avatar-content">
@@ -288,10 +286,8 @@
               <!-- USER STATUS -->
               <div class="user-status">
                 <!-- USER STATUS AVATAR -->
-                <div (click)="
-                    this.profileService.loadDataProfileTimeline(p?.user_id)
-                  ">
-                  <a class="user-avatar small user-status-avatar no-border no-outline" href="profile">
+                <div>
+                  <a class="user-avatar small user-status-avatar no-border no-outline" href="profile?id={{p?.user_id}}">
                     <div class="hexagon-container">
                       <div class="hexagon user-avatar-content">
                         <div class="hexagon-image" style="background-image: url('{{ p?.avatar }}')"></div>
@@ -309,15 +305,11 @@
 
                   <!-- USER STATUS TITLE -->
                   <p class="user-status-title medium">
-                    <a class="bold" href="profile">{{ p.fullname }}</a>
+                    <a class="bold" href="profile?id={{p?.user_id}}">{{ p.fullname }}</a>
                     <span *ngIf="p.postEntityProfile != null">
                       {{ "dachiase" | translate }}
 
-                      <a class="bold" href="profile" (click)="
-                          this.profileService.loadDataProfileTimeline(
-                            p.postEntityProfile.user_id
-                          )
-                        ">{{ p.postEntityProfile.fullname }}</a>
+                      <a class="bold" href="profile?id={{ p.postEntityProfile.user_id}}">{{ p.postEntityProfile.fullname }}</a>
                     </span>
                   </p>
                 </div>
@@ -359,7 +351,7 @@
                     <!-- USER STATUS -->
                     <div class="user-status">
                       <!-- USER STATUS AVATAR -->
-                      <a class="user-avatar small user-status-avatar no-border no-outline">
+                      <a class="user-avatar small user-status-avatar no-border no-outline" href="profile?id={{p.postEntityProfile.user_id}}">
                         <div class="hexagon-container">
                           <div class="hexagon user-avatar-content">
                             <div class="hexagon-image" style="background-image: url('{{p.postEntityProfile.avatar}}')">
@@ -378,11 +370,7 @@
 
                       <!-- USER STATUS TITLE -->
                       <p class="user-status-title medium">
-                        <a class="bold" href="profile" (click)="
-                            this.profileService.loadDataProfileTimeline(
-                              p.postEntityProfile.user_id
-                            )
-                          ">{{ p.postEntityProfile.fullname }}</a>
+                        <a class="bold" href="profile?id={{p.postEntityProfile.user_id}}">{{ p.postEntityProfile.fullname }}</a>
                       </p>
                       <!-- /USER STATUS TITLE -->
 
@@ -910,9 +898,7 @@
 
                 <!-- QUEST PREVIEW TITLE -->
                 <p class="quest-preview-title">
-                  {{ "newsfeed_baivietcuaban" | translate }} <br /><a href="profile" (click)="
-                      this.profileService.loadDataProfileTimeline(item[4])
-                    ">{{ item[1] }}</a>
+                  {{ "newsfeed_baivietcuaban" | translate }} <br /><a href="profile?id={{item[4]}}">{{ item[1] }}</a>
                 </p>
                 <!-- /QUEST PREVIEW TITLE -->
 

@@ -11,34 +11,6 @@
     <div class="grid-column">
       <!-- WIDGET BOX -->
       <div class="widget-box">
-        <!-- WIDGET BOX SETTINGS -->
-        <div class="widget-box-settings">
-          <!-- POST SETTINGS WRAP -->
-          <div class="post-settings-wrap">
-            <!-- POST SETTINGS -->
-            <div class="post-settings widget-box-post-settings-dropdown-trigger">
-              <!-- POST SETTINGS ICON -->
-              <svg class="post-settings-icon icon-more-dots">
-                <use xlink:href="#svg-more-dots"></use>
-              </svg>
-              <!-- /POST SETTINGS ICON -->
-            </div>
-            <!-- /POST SETTINGS -->
-
-            <!-- SIMPLE DROPDOWN -->
-            <div class="simple-dropdown widget-box-post-settings-dropdown">
-              <!-- SIMPLE DROPDOWN LINK -->
-              <a class="simple-dropdown-link" routerLink="edit-profile">{{
-                "admin_capnhat"
-                | translate }}</a>
-              <!-- /SIMPLE DROPDOWN LINK -->
-            </div>
-            <!-- /SIMPLE DROPDOWN -->
-          </div>
-          <!-- /POST SETTINGS WRAP -->
-        </div>
-        <!-- /WIDGET BOX SETTINGS -->
-
         <!-- WIDGET BOX TITLE -->
         <p class="widget-box-title">{{
           "admin_gioithieu"
@@ -129,7 +101,7 @@
         <div class="widget-box-content" *ngFor="let item of listSuggested">
           <div class="user-status-list">
             <div class="user-status">
-              <a href="profile" (click)="this.profileService.loadDataProfileTimeline(item.user_id)">
+              <a href="profile?id={{item.user_id}}">
                 <a class="user-avatar small user-status-avatar no-border no-outline">
                   <div class="hexagon-container">
                     <div class="hexagon user-avatar-content">
@@ -241,7 +213,7 @@
                 <div class="user-status">
                   <!-- USER STATUS AVATAR -->
                   <div>
-                    <a class="user-avatar small user-status-avatar no-border no-outline">
+                    <a href="profile?id={{p?.user_id}}" class="user-avatar small user-status-avatar no-border no-outline">
                       <div class="hexagon-container">
                         <div class="hexagon user-avatar-content">
                           <div class="hexagon-image" style="background-image: url('{{ p?.avatar }}')"></div>
@@ -259,12 +231,11 @@
   
                     <!-- USER STATUS TITLE -->
                     <p class="user-status-title medium">
-                      <a class="bold">{{ p.fullname }}</a> <span *ngIf="p.postEntityProfile != null"> {{
+                      <a class="bold" href="profile?id={{p?.user_id}}">{{ p.fullname }}</a> <span *ngIf="p.postEntityProfile != null"> {{
                         "dachiase"
                         | translate }}
   
-                        <a class="bold" href="profile"
-                          (click)="this.profileService.loadDataProfileTimeline(p.postEntityProfile.user_id)">{{
+                        <a class="bold" href="profile?id={{p.postEntityProfile.user_id}}">{{
                           p.postEntityProfile.fullname }}</a>
                       </span>
                     </p>
@@ -328,9 +299,7 @@
   
                         <!-- USER STATUS TITLE -->
                         <p class="user-status-title medium">
-                          <a class="bold" href="profile"
-                            (click)="this.profileService.loadDataProfileTimeline(p.postEntityProfile.user_id)">{{
-                            p.postEntityProfile.fullname }}</a>
+                          <a class="bold" href="profile?id={{p.postEntityProfile.user_id}}">{{ p.postEntityProfile.fullname }}</a>
                         </p>
                         <!-- /USER STATUS TITLE -->
   

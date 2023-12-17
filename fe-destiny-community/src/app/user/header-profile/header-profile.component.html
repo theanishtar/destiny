@@ -4,8 +4,12 @@
   <div class="profile-header" *ngIf="checkHeaderEdit || checkWidthMedia">
     <!-- PROFILE HEADER COVER -->
     <figure class="profile-header-cover liquid"
-      style="background: url('{{profileService.header?.thumb}}') center center / cover no-repeat;">
-      <img src="{{ profileService.header?.thumb }}" alt="cover-01" />
+      style="background: url('{{profileService.header?.thumb}}') center center / cover no-repeat;" *ngIf="profileService.header?.thumb !== 'null'">
+      <img src="{{ profileService.header?.thumb }}"/>
+    </figure>
+    <figure class="profile-header-cover liquid"
+      style="background: url('https://firebasestorage.googleapis.com/v0/b/destiny-davisy.appspot.com/o/08.jpg?alt=media&token=1027fbbb-43ee-4046-8e13-5640153356ea&_gl=1*17e3a7c*_ga*MTcxMDU3NTczOS4xNjc2OTc2NjE1*_ga_CW55HF8NVT*MTY5NjUwMzgxNi44LjEuMTY5NjUwNTg5Ny42MC4wLjA') center center / cover no-repeat;" *ngIf="profileService.header?.thumb === 'null'">
+      <img src="https://firebasestorage.googleapis.com/v0/b/destiny-davisy.appspot.com/o/08.jpg?alt=media&token=1027fbbb-43ee-4046-8e13-5640153356ea&_gl=1*17e3a7c*_ga*MTcxMDU3NTczOS4xNjc2OTc2NjE1*_ga_CW55HF8NVT*MTY5NjUwMzgxNi44LjEuMTY5NjUwNTg5Ny42MC4wLjA"/>
     </figure>
     <!-- /PROFILE HEADER COVER -->
 
@@ -113,7 +117,7 @@
       <!-- PROFILE HEADER INFO ACTIONS -->
       <div class="profile-header-info-actions" *ngIf="idLocal != 0 && idLocal !== chatUserId">
         <!-- PROFILE HEADER INFO ACTION -->
-        <p class="profile-header-info-action button secondary" *ngIf="!profileService.header?.checkFollow"
+        <p class="profile-header-info-action button secondary" id="follow-btn" *ngIf="!profileService.header?.checkFollow"
           (click)="addFollow(profileService.header?.user_id)">
           <span class="hide-text-mobile">{{ "sidebar_follow"
             | translate }} +</span>

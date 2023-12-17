@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-
+import { Router } from '@angular/router';
 import { UIServiveService } from '@app/user/service/ui-servive.service';
+import { ProfileService } from '@app/user/service/profile.service';
+import { MessageService } from '@app/user/service/message.service';
 import { environment } from 'src/environments/environment';
+import '../../assets/toast/main.js';
+declare var toast: any;
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -18,17 +22,29 @@ export class HomeComponent implements OnInit{
 
   ngOnInit() {
     this.uiServiveService.loadMode();
-    // this.autoLogin();
+    this.autoLogin();
   }
   
   constructor(
-    public uiServiveService: UIServiveService
+    public uiServiveService: UIServiveService,
+    private profileService: ProfileService,
+    private messageService: MessageService,
+    private router: Router,
   ){}
   
   autoLogin(){
     let token = localStorage.getItem('token');
-    if(token !== null){
+    // console.warn("this.messageService.checkError: " + this.messageService.checkError);
+    if(token !== null && this.messageService.checkError){
       window.location.href = environment.baseUrlFe + 'newsfeed';
+    }else if(token !== null && !this.messageService.checkError){
+      this.router.navigate(['login']);
+      new toast({
+        title: 'Phiên đăng nhập của bạn đã hết hạn!',
+        message: 'Vui lòng đăng nhập lại',
+        type: 'warning',
+        duration: 3000,
+    });
     }
   }
 

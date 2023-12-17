@@ -1502,7 +1502,7 @@ export class UIServiveService {
         
         @media screen and (max-width:480px) {
             .dark .hide-text-mobile {
-                display: none
+                display: block
             }
         }
         
@@ -14468,6 +14468,12 @@ export class UIServiveService {
 
           .dark .comment-box {
             background: #1d2333 !important;
+        }
+        .dark .widget-box.hide-info {
+            background: #1D2333 !important;
+        }
+        .dark i.fa-solid.fa-location-dot, .dark i.fa-solid.fa-venus-mars, .dark i.fa-solid.fa-calendar {
+            color: white !important;
         }
         `;
 

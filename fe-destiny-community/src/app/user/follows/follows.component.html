@@ -128,8 +128,11 @@
           <!-- USER PREVIEW -->
           <div class="user-preview" *ngFor="let fling of (isSearching ? searchResults : listFollowing)">
             <!-- USER PREVIEW COVER -->
-            <figure class="user-preview-cover liquid">
-              <img src="{{fling.thumb}}" alt="cover-04">
+            <figure class="user-preview-cover liquid" *ngIf="fling.thumb !== 'null'">
+              <img src="{{fling.thumb}}">
+            </figure>
+            <figure class="user-preview-cover liquid" *ngIf="fling.thumb === 'null'">
+              <img src="https://firebasestorage.googleapis.com/v0/b/destiny-davisy.appspot.com/o/08.jpg?alt=media&token=1027fbbb-43ee-4046-8e13-5640153356ea&_gl=1*17e3a7c*_ga*MTcxMDU3NTczOS4xNjc2OTc2NjE1*_ga_CW55HF8NVT*MTY5NjUwMzgxNi44LjEuMTY5NjUwNTg5Ny42MC4wLjA" alt="">
             </figure>
             <!-- /USER PREVIEW COVER -->
             <!-- USER PREVIEW INFO -->
@@ -137,7 +140,7 @@
               <!-- USER SHORT DESCRIPTION -->
               <div class="user-short-description">
                 <!-- USER SHORT DESCRIPTION AVATAR -->
-                <a class="user-short-description-avatar user-avatar medium">
+                <a class="user-short-description-avatar user-avatar medium" href="profile?id={{fling.user_id}}"> 
                   <div class="hexagon-container">
                     <div class="hexagon user-avatar-content">
                       <div class="hexagon-image" style="background-image: url('{{fling.avatar}}')"></div>
@@ -153,12 +156,11 @@
                 <!-- /USER SHORT DESCRIPTION AVATAR -->
 
                 <!-- USER SHORT DESCRIPTION TITLE -->
-                <p class="user-short-description-title"><a href="profile"
-                    (click)="this.profileService.loadDataProfileTimeline(fling.user_id)">{{fling.fullname}}</a></p>
+                <p class="user-short-description-title"><a href="profile?id={{fling.user_id}}">{{fling.fullname}}</a></p>
                 <!-- /USER SHORT DESCRIPTION TITLE -->
 
                 <!-- USER SHORT DESCRIPTION TEXT -->
-                <p class="user-short-description-text"><a>{{fling.intro}}</a></p>
+                <p class="user-short-description-text" *ngIf="fling.intro !== 'null'"><a>{{fling.intro}}</a></p>
                 <!-- /USER SHORT DESCRIPTION TEXT -->
               </div>
               <!-- /USER SHORT DESCRIPTION -->
@@ -217,7 +219,7 @@
               <!-- USER PREVIEW ACTIONS -->
               <div class="user-preview-actions">
                 <!-- BUTTON -->
-                <p class="button secondary" (click)="deleteFling(fling.user_id)">{{ "cancel"
+                <p class="button secondary" id="deleteFriend-{{fling.user_id}}" (click)="deleteFling(fling.user_id)">{{ "cancel"
                   | translate }}</p>
                 <!-- /BUTTON -->
 
@@ -247,8 +249,11 @@
           <!-- USER PREVIEW -->
           <div class="user-preview" *ngFor="let fler of (isSearching ? searchResults : listFollower)">
             <!-- USER PREVIEW COVER -->
-            <figure class="user-preview-cover liquid">
+            <figure class="user-preview-cover liquid" *ngIf="fler.thumb !== 'null'">
               <img src="{{fler.thumb}}" alt="cover-04">
+            </figure>
+            <figure class="user-preview-cover liquid" *ngIf="fler.thumb === 'null'">
+              <img src="https://firebasestorage.googleapis.com/v0/b/destiny-davisy.appspot.com/o/08.jpg?alt=media&token=1027fbbb-43ee-4046-8e13-5640153356ea&_gl=1*17e3a7c*_ga*MTcxMDU3NTczOS4xNjc2OTc2NjE1*_ga_CW55HF8NVT*MTY5NjUwMzgxNi44LjEuMTY5NjUwNTg5Ny42MC4wLjA" alt="">
             </figure>
             <!-- /USER PREVIEW COVER -->
 
@@ -257,7 +262,7 @@
               <!-- USER SHORT DESCRIPTION -->
               <div class="user-short-description">
                 <!-- USER SHORT DESCRIPTION AVATAR -->
-                <a class="user-short-description-avatar user-avatar medium">
+                <a class="user-short-description-avatar user-avatar medium" href="profile?id={{fler.user_id}}">
                   <div class="hexagon-container">
                     <div class="hexagon user-avatar-content">
                       <div class="hexagon-image" style="background-image: url('{{fler.avatar}}')"></div>
@@ -273,12 +278,11 @@
                 <!-- /USER SHORT DESCRIPTION AVATAR -->
 
                 <!-- USER SHORT DESCRIPTION TITLE -->
-                <p class="user-short-description-title"><a href="profile"
-                    (click)="this.profileService.loadDataProfileTimeline(fler.user_id)">{{fler.fullname}}</a></p>
+                <p class="user-short-description-title"><a href="profile?id={{fler.user_id}}">{{fler.fullname}}</a></p>
                 <!-- /USER SHORT DESCRIPTION TITLE -->
 
                 <!-- USER SHORT DESCRIPTION TEXT -->
-                <p class="user-short-description-text"><a>{{fler.intro}}</a></p>
+                <p class="user-short-description-text" *ngIf="fler.intro !== 'null'"><a>{{fler.intro}}</a></p>
                 <!-- /USER SHORT DESCRIPTION TEXT -->
               </div>
               <!-- /USER SHORT DESCRIPTION -->
@@ -337,12 +341,12 @@
               <!-- USER PREVIEW ACTIONS -->
               <div class="user-preview-actions">
                 <!-- BUTTON -->
-                <p class="button secondary" (click)="deleteFler(fler.user_id)">{{ "xoa"
+                <p class="button secondary" id="deleteFler-{{fler.user_id}}" (click)="deleteFler(fler.user_id)">{{ "xoa"
                   | translate }}</p>
                 <!-- /BUTTON -->
 
                 <!-- BUTTON -->
-                <p class="button primary" (click)="addFollow(fler.user_id)">{{ "theodoilai"
+                <p class="button primary" id="follow-btn-{{fler.user_id}}" (click)="addFollow(fler.user_id)">{{ "theodoilai"
                   | translate }}</p>
                 <!-- /BUTTON -->
               </div>
@@ -367,9 +371,11 @@
           <!-- USER PREVIEW -->
           <div class="user-preview" *ngFor="let friend of (isSearching ? searchResults : listFriend)">
             <!-- USER PREVIEW COVER -->
-            <figure class="user-preview-cover liquid">
-              <img src="{{friend.thumb}}" alt="cover-04">
-              <!-- {{friend.thumb}} -->
+            <figure class="user-preview-cover liquid" *ngIf="friend.thumb !== 'null'">
+              <img src="{{friend.thumb}}">
+            </figure>
+            <figure class="user-preview-cover liquid" *ngIf="friend.thumb === 'null'">
+              <img src="https://firebasestorage.googleapis.com/v0/b/destiny-davisy.appspot.com/o/08.jpg?alt=media&token=1027fbbb-43ee-4046-8e13-5640153356ea&_gl=1*17e3a7c*_ga*MTcxMDU3NTczOS4xNjc2OTc2NjE1*_ga_CW55HF8NVT*MTY5NjUwMzgxNi44LjEuMTY5NjUwNTg5Ny42MC4wLjA" alt="">
             </figure>
             <!-- /USER PREVIEW COVER -->
 
@@ -378,7 +384,7 @@
               <!-- USER SHORT DESCRIPTION -->
               <div class="user-short-description">
                 <!-- USER SHORT DESCRIPTION AVATAR -->
-                <a class="user-short-description-avatar user-avatar medium">
+                <a class="user-short-description-avatar user-avatar medium" href="profile?id={{friend.user_id}}">
                   <div class="hexagon-container">
                     <div class="hexagon user-avatar-content">
                       <div class="hexagon-image" style="background-image: url('{{friend.avatar}}')"></div>
@@ -394,12 +400,11 @@
                 <!-- /USER SHORT DESCRIPTION AVATAR -->
 
                 <!-- USER SHORT DESCRIPTION TITLE -->
-                <p class="user-short-description-title"><a href="profile"
-                    (click)="this.profileService.loadDataProfileTimeline(friend.user_id)">{{friend.fullname}}</a></p>
+                <p class="user-short-description-title"><a href="profile?id={{friend.user_id}}">{{friend.fullname}}</a></p>
                 <!-- /USER SHORT DESCRIPTION TITLE -->
 
                 <!-- USER SHORT DESCRIPTION TEXT -->
-                <p class="user-short-description-text"><a>{{friend.intro}}</a></p>
+                <p class="user-short-description-text" *ngIf="friend.intro !== 'null'"><a>{{friend.intro}}</a></p>
                 <!-- /USER SHORT DESCRIPTION TEXT -->
               </div>
               <!-- /USER SHORT DESCRIPTION -->
@@ -458,7 +463,7 @@
               <!-- USER PREVIEW ACTIONS -->
               <div class="user-preview-actions">
                 <!-- BUTTON -->
-                <p class="button secondary" (click)="deleteFling(friend.user_id)">{{ "cancel"
+                <p class="button secondary" id="deleteFriend-{{friend.user_id}}" (click)="deleteFling(friend.user_id)">{{ "cancel"
                   | translate }}</p>
                 <!-- /BUTTON -->
 

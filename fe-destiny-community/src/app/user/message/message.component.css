@@ -722,3 +722,12 @@ i.fa-solid.fa-file-circle-plus {
       transform: rotate(360deg);
   }
   } 
+
+  .user-status-text.last-mess{
+    width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+  }

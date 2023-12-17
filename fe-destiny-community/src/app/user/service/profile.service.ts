@@ -33,7 +33,7 @@ export class ProfileService {
     private getAllWardNameAPI = environment.baseUrl + 'v1/user/getAllWardName/';
 
     private getCheckPotsApi = environment.baseUrl + 'v1/user/load/checkpost';
-    private updateStatusApi =  environment.baseUrl + 'v1/user/profile/update/status';
+    private updateStatusApi = environment.baseUrl + 'v1/user/profile/update/status';
 
     public dataHeader: any[];
     public dataTimeLine: any;
@@ -172,7 +172,7 @@ export class ProfileService {
                             duration: 1500,
                         })
                     );
-                }else if (error.status === 401) {
+                } else if (error.status === 401) {
                     this.checkLoading = false;
                     return throwError(
                         new toast({
@@ -425,10 +425,15 @@ export class ProfileService {
     }
 
     /* ============Check post after register============= */
+    checkError: boolean = true;
     loadCheckPost(data: any) {
         return this.http.post<any>(this.getCheckPotsApi, data).pipe(
             tap((response) => {
             }),
+            catchError((err) => {
+                this.checkError = false;
+                return of(err); // You may want to return a value or observable here
+            })
         );
     }
 
@@ -449,7 +454,7 @@ export class ProfileService {
         return this.http.post(this.updateStatusApi, data).pipe(
             tap(() => {
 
-            }), 
+            }),
         );
     }
 

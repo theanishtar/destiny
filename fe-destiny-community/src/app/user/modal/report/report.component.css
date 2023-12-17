@@ -52,7 +52,7 @@ main.overlay {
   background: #fff !important;
   top: 25%;
   left: 35%;
-  width: 35%;
+  width: 25%;
   height: 50%;
   border-radius: 10px
 }
@@ -193,7 +193,7 @@ button.button.button--icon {
     width: 88%;
   }
 
-  .container.qr[_ngcontent-ng-c46582615] {
+  .container.qr {
     left: 5%;
     width: 90%;
   }

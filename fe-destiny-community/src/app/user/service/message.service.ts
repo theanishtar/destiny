@@ -81,11 +81,16 @@ export class MessageService {
   ) { }
 
   /* ============API============= */
+  checkError: boolean = true;
   loadDataSender() {
     return this.http.get<any>(this.loadDataChat).pipe(
       tap((response) => {
         this.sender = JSON.parse(JSON.stringify(response));
         this.setSender(this.sender);
+      }),
+      catchError((err) => {
+        this.checkError = false;
+        return of(err); // You may want to return a value or observable here
       })
     );
   }
@@ -370,14 +375,14 @@ export class MessageService {
             duration: 3000,
           });
         }
-        else {
-          new toast({
-            title: 'Thông báo!',
-            message: 'Cuộc gọi đã kết thúc',
-            type: 'info',
-            duration: 3000,
-          });
-        }
+        // else {
+        //   new toast({
+        //     title: 'Thông báo!',
+        //     message: 'Cuộc gọi đã kết thúc',
+        //     type: 'info',
+        //     duration: 3000,
+        //   });
+        // }
       });
 
       // Kênh nhận thông báo nhận cuộc gọi
