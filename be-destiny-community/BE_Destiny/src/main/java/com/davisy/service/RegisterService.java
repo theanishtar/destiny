@@ -118,7 +118,7 @@ public class RegisterService {
 		us.setUsername(u.getUsername());
 		us.setPassword(u.getPassword());
 		us.setFullname(u.getFullname());
-		us.setEmail(u.getEmail());
+		us.setEmail(u.getEmail().toLowerCase());
 		us.setIntro("Xin chào!");
 		us.setBirthday(null);
 		us.setGender(gender);

@@ -13,7 +13,7 @@ public interface UserDAO extends JpaRepository<User, Integer> {
 	@Query(value = "SELECT *FROM users WHERE email:=email AND password:=password", nativeQuery = true)
 	public User findByEmailAndPassword(String email, String password);
 
-	@Query(value = "SELECT * FROM users WHERE email=:email ", nativeQuery = true)
+	@Query(value = "SELECT * FROM users u WHERE u.email=:email", nativeQuery = true)
 	public User findByEmail(String email);
 
 	@Query(value = "SELECT * FROM users WHERE email=:email Or username=:email", nativeQuery = true)

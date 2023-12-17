@@ -176,7 +176,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User findByEmailOrUsername(String email) {
-		return userDao.findByEmailOrUsername(email);
+		return userDao.findByEmailOrUsername(email.toLowerCase());
 	}
 
 	@Override

@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.davisy.encrypt.AES;
+import com.davisy.entity.Gender;
 import com.davisy.entity.Roles;
 import com.davisy.entity.User;
+import com.davisy.service.GenderService;
 import com.davisy.service.RolesService;
 import com.davisy.service.UserService;
 import com.davisy.service.impl.RolesServiceImpl;
@@ -44,6 +46,9 @@ public class GGCloud {
 
 	@Autowired
 	RolesServiceImpl rolesServiceImpl;
+	
+	@Autowired
+	GenderService genderService;
 
 	@PostMapping("oauth/loginGG")
 	public String login(Model m) {
@@ -64,7 +69,7 @@ public class GGCloud {
 			// UserGoogleCloud.class);
 			JsonNode usgc = mapper.readTree(payload);
 
-			// System.out.println(">> Name : " + usgc.get("email").asText());
+			System.out.println(">> Name : " + usgc.get("email").asText());
 			/*
 			 * usgc.iterator().forEachRemaining(u -> {
 			 * System.out.println(">> Name : "+u.get(0).asText()); });
@@ -72,6 +77,10 @@ public class GGCloud {
 
 			User checkUser = userService.findByEmail(usgc.get("email").asText());
 			if (checkUser != null) {
+				if(checkUser.getGg_id() == null) {
+					checkUser.setGg_id(usgc.get("sub").asText());
+					userService.update(checkUser);
+				}
 				m.addAttribute("token", checkUser.getGg_id());
 				m.addAttribute("type", "google");
 				m.addAttribute("uri", uri);
@@ -80,7 +89,8 @@ public class GGCloud {
 				String uname = usgc.get("email").asText();
 				user.setUsername(uname); // uname.substring(0, uname.indexOf("@"))
 				user.setFullname(usgc.get("name").asText());
-				user.setGender(null);
+				Gender gender = genderService.findGenderByID(3);
+				user.setGender(gender);
 				user.setPassword(passwordEncoder.encode(usgc.get("sub").asText()));
 				user.setEmail(usgc.get("email").asText());
 				user.setAvatar(usgc.get("picture").asText());

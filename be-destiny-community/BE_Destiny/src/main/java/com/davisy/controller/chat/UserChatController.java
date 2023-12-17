@@ -91,7 +91,7 @@ public class UserChatController {
 			UserTemp temp = new UserTemp();
 			temp.setUser_id(user.getUser_id());
 			temp.setAvatar(user.getAvatar());
-			time();
+//			time();
 			return ResponseEntity.ok().body(temp);
 		} catch (Exception e) {
 			System.out.println("Error register in userchatcontroller: " + e);

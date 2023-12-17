@@ -215,7 +215,7 @@ public class FollowController {
 			String email = jwtTokenUtil.getEmailFromHeader(request);
 			User user = userService.findByEmail(email);
 			User toUser = userService.findById(id);
-			followService.delete(id, user.getUser_id());
+			followService.delete(user.getUser_id(), id);
 			return ResponseEntity.status(200).body(reloadData(email));
 		} catch (Exception e) {
 			System.out.println("Error addfollow: " + e);

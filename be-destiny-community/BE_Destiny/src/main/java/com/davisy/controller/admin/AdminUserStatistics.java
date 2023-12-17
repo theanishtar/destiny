@@ -70,7 +70,8 @@ public class AdminUserStatistics {
 	@GetMapping("/v1/admin/getTotalUserByDay")
 	public int getTotalUserByDay() {
 		int day = now.get(Calendar.DAY_OF_MONTH);
-		int month = now.get(Calendar.MONTH);
+		int month = now.get(Calendar.MONTH)+1;
+		System.out.println(userService.getTotalUserByDay(day, month));
 		return userService.getTotalUserByDay(day, month);
 	}
 	
@@ -101,6 +102,7 @@ public class AdminUserStatistics {
 		int currentDay = now.get(Calendar.DAY_OF_MONTH);
 		int month = now.get(Calendar.MONTH) + 1;
 		int previousMonthValue = userService.getTotalUserByDay(previousDay, month);
+		System.out.println(previousMonthValue+"concac");
 		int currentMonthValue = userService.getTotalUserByDay(currentDay, month);
 
 		return caculatePercentIncrease(previousMonthValue, currentMonthValue);
