@@ -1,0 +1,80 @@
+nav.section-navigation {
+  margin-top: 25px;
+}
+
+div#section-navigation-slider {
+  position: absolute;
+  top: 0;
+}
+
+/* avatar */
+.hexagon-container {
+  width: 120px;
+  height: 132px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  background: white;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  border-radius: 15px;
+  top: 23%;
+}
+
+.hexagon {
+  position: absolute;
+}
+
+.user-avatar-content {
+  width: 100px;
+  height: 110px;
+  overflow: hidden;
+  position: absolute;
+}
+
+.hexagon-image {
+  width: 82px;
+  height: 87px;
+  position: relative;
+  z-index: 3;
+  background-size: cover;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  border-radius: 15px;
+}
+
+.user-avatar-border:before {
+  width: 110px;
+  height: 113px;
+  z-index: 1;
+  content: "";
+  position: absolute;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  border-radius: 15px;
+  left: 5px;
+    top: 7.5px;
+  background-image: linear-gradient(to right, #41efff, #615dfa);
+}
+
+.hexagon.user-avatar-progress-border {
+  position: absolute;
+  z-index: 2;
+  margin-left: 3.5%;
+  margin-top: 3.3%;
+  width: 94px;
+  height: 100px;
+  background: white;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  border-radius: 15px;
+}
+.user-avatar.big .user-avatar-progress,
+.user-avatar.big .user-avatar-progress-border {
+  top: 10.5px;
+    left: 9px;
+}
+.user-avatar.big.user-avatar-content{
+  top: 20px !important;
+  left: 21px !important;
+}
+
+div#section-navigation-slider {
+  width: auto;
+}

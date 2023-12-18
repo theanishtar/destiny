@@ -1,0 +1,243 @@
+.menu-item-link-icon {
+    font-size: 18px;
+  }
+  
+  li.menu-item.active i.fa-solid {
+    color: #fff;
+  }
+  
+  li.menu-item:not(.active) a.menu-item-link.text-tooltip-tfr:hover i.fa-solid {
+    color: #23d2e2;
+  }
+  
+  i.fa-solid {
+    color: #adafca;
+  }
+  
+  a.menu-main-item-link {
+    font-size: 15px !important;
+  }
+  
+  .logo,
+  h1.header-brand-text {
+    margin-left: 0 !important;
+  }
+  
+  h1.header-brand-text {
+    font-size: 25px !important;
+  }
+  
+  .icon-logo-vikinger.small {
+    width: 100px;
+    height: 75px;
+  }
+  p.fullname-logged {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 80px;
+    cursor: pointer;
+  }
+  .action-item.dark.header-settings-dropdown-trigger {
+    width: 250px;
+  }
+  .icon-logo-vikinger{
+    position: relative;
+  }
+  /* ========================= */
+  a .menu-item-link {
+    position: relative;
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 10px;
+  }
+  
+  a[data-title]:hover::after {
+    content: attr(data-title);
+    position: absolute;
+    margin-top: 2px;
+    margin-left: 42px;
+    z-index: 100;
+    width: 250px;
+    font-size: 15px;
+    transform: translate(10px, 0px);
+    transition: all 0.3s ease-in-out 0s;
+  }
+
+  a[data-title='Nhắn tin']:hover::after {
+    margin-top: -45px;
+  } 
+
+  .user-avatar.small.no-outline.online.notif-mess:before {
+    background: red;
+}
+.user-avatar.small.no-outline.online.notif-mess {
+  width: auto;
+  height: 0px;
+}
+
+p.button.re-fl, p.delete-fl {
+  font-size: 12px;
+  height: 30px;
+  line-height: 28px;
+  margin-right: 0.5rem;
+  padding: 0 9px;
+  box-shadow: none;
+  background: #4E4BCD;
+}
+p.button.re-fl:hover{
+  background: #3d3bbd;
+}
+p.delete-fl {
+  background:#848484
+}
+.user-preview-actions.nofti {
+  margin-top: 0.6rem;
+}
+/* avatar */
+.hexagon-container {
+  width: 45px;
+  height: 48px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  background: white;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.hexagon {
+  position: absolute;
+}
+
+.user-avatar-content {
+  width: 40px;
+  height: 44px;
+  overflow: hidden;
+  position: absolute;
+}
+
+.hexagon-image {
+  width: 30px;
+  height: 33px;
+  position: relative;
+  z-index: 3;
+  background-size: cover;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  left: 4%;
+  top: 2%;
+}
+
+.user-avatar-border:before {
+  width: 42px;
+  height: 46px;
+  z-index: 1;
+  content: "";
+  position: absolute;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  /* border-radius: 15px; */
+  left: 1px;
+  top: 0px;
+  background-image: linear-gradient(to right, #41efff, #615dfa);
+}
+
+.hexagon.user-avatar-progress-border {
+  position: absolute;
+  z-index: 2;
+  margin-left: 9.6%;
+  margin-top: 8.3%;
+  width: 35px;
+  height: 39px;
+  background: white;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+  
+a.user-avatar.small.user-status-avatar.no-border.no-outline {
+  cursor: pointer;
+}
+p.no-intify {
+  color: #3e3f5e;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 1em;
+  font-size: 16px;
+  text-align: center;
+}
+
+/* avatar */
+.big .hexagon-container {
+  width: 120px;
+  height: 132px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  background: white;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  border-radius: 15px;
+  top: 32%;
+}
+
+.big .hexagon {
+  position: absolute;
+}
+
+.big .user-avatar-content {
+  width: 100px;
+  height: 110px;
+  overflow: hidden;
+  position: absolute;
+  left: 15px;
+    top: 19px;
+}
+
+.big .hexagon-image {
+  width: 82px;
+  height: 87px;
+  position: relative;
+  z-index: 3;
+  background-size: cover;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  border-radius: 15px;
+}
+
+.big .user-avatar-border:before {
+  width: 110px;
+  height: 113px;
+  z-index: 1;
+  content: "";
+  position: absolute;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  border-radius: 15px;
+  left: 5px;
+    top: 7.5px;
+  background-image: linear-gradient(to right, #41efff, #615dfa);
+}
+
+.big .hexagon.user-avatar-progress-border {
+  position: absolute;
+  z-index: 2;
+  margin-left: 3.5%;
+  margin-top: 3.3%;
+  width: 94px;
+  height: 100px;
+  background: white;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  border-radius: 15px;
+}
+.big .user-avatar.big .user-avatar-progress,
+.big .user-avatar.big .user-avatar-progress-border {
+  top: 10.5px;
+    left: 9px;
+}
+.big .user-avatar.big.user-avatar-content{
+  top: 20px !important;
+  left: 21px !important;
+}
+
+p.user-short-description-title {
+  position: relative;
+  top: 17px;
+}
+
+nav#navigation-widget::-webkit-scrollbar {
+  width: 0 !important;
+  display: none;
+}

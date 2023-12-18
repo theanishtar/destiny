@@ -1,0 +1,1433 @@
+<!-- NAVIGATION WIDGET -->
+<nav
+  id="navigation-widget-small"
+  class="navigation-widget navigation-widget-desktop closed sidebar left delayed"
+>
+  <!-- USER AVATAR -->
+  <a
+    class="user-avatar small user-status-avatar no-border no-outline"
+    routerLink="/profile"
+    (click)="this.profileService.loadDataProfileTimeline(0)"
+  >
+    <div class="hexagon-container">
+      <div class="hexagon user-avatar-content">
+        <div
+          class="hexagon-image"
+          style="background-image: url('{{ avatar }}')"
+        ></div>
+      </div>
+      <div class="hexagon user-avatar-border">
+        <div class="hexagon-border"></div>
+      </div>
+      <div class="hexagon user-avatar-progress-border">
+        <div class="user-avatar-progress"></div>
+      </div>
+      <p class="user-avatar-badge-text">1</p>
+    </div>
+  </a>
+  <!-- /USER AVATAR -->
+
+  <!-- MENU -->
+  <div>
+    <ul class="menu small">
+      <!-- MENU ITEM -->
+      <li
+        [class.menu-item]="true"
+        [class.active]="activeMenuItem === 'newsfeed'"
+      >
+        <!-- MENU ITEM LINK -->
+        <a
+          [attr.data-title]="'navbar_home' | translate"
+          class="menu-item-link"
+          routerLink="/newsfeed"
+        >
+          <!-- MENU ITEM LINK ICON -->
+          <div class="menu-item-link-icon icon-newsfeed">
+            <i class="fa-solid fa-house"></i>
+          </div>
+          <!-- /MENU ITEM LINK ICON -->
+        </a>
+        <!-- /MENU ITEM LINK -->
+      </li>
+      <!-- /MENU ITEM -->
+
+      <!-- MENU ITEM -->
+      <li
+        [class.menu-item]="true"
+        [class.active]="activeMenuItem === 'follow'"
+        (click)="this.profileService.loadDataProfileHeader(0)"
+      >
+        <!-- MENU ITEM LINK -->
+        <a
+          [attr.data-title]="'sidebar_follow' | translate"
+          class="menu-item-link"
+          routerLink="/follow"
+        >
+          <!-- MENU ITEM LINK ICON -->
+          <div class="menu-item-link-icon icon-overview">
+            <i class="fa-solid fa-heart"></i>
+          </div>
+          <!-- /MENU ITEM LINK ICON -->
+        </a>
+        <!-- /MENU ITEM LINK -->
+      </li>
+      <!-- /MENU ITEM -->
+
+      <!-- MENU ITEM -->
+      <li
+        [class.menu-item]="true"
+        [class.active]="activeMenuItem === 'message'"
+      >
+        <!-- MENU ITEM LINK -->
+        <a
+          [attr.data-title]="'Nhantin' | translate"
+          class="menu-item-link"
+          routerLink="/message"
+        >
+          <!-- MENU ITEM LINK ICON -->
+          <div
+            class="user-avatar small no-outline"
+            [ngClass]="messageService.notif_mess ? 'online notif-mess' : ''"
+            style="margin-right: 1rem"
+          >
+            <div class="menu-item-link-icon icon-badges">
+              <i class="fa-solid fa-paper-plane"></i>
+            </div>
+          </div>
+
+          <!-- /MENU ITEM LINK ICON -->
+        </a>
+        <!-- /MENU ITEM LINK -->
+      </li>
+      <!-- /MENU ITEM -->
+
+      <!-- MENU ITEM -->
+      <li
+        [class.menu-item]="true"
+        [class.active]="activeMenuItem === 'history'"
+      >
+        <!-- MENU ITEM LINK -->
+        <a
+          [attr.data-title]="'sidebar_history' | translate"
+          class="menu-item-link"
+          routerLink="/history"
+        >
+          <!-- MENU ITEM LINK ICON -->
+          <div class="menu-item-link-icon icon-group">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+          </div>
+          <!-- /MENU ITEM LINK ICON -->
+        </a>
+        <!-- /MENU ITEM LINK -->
+      </li>
+      <!-- /MENU ITEM -->
+
+      <!-- MENU ITEM -->
+      <li
+        [class.menu-item]="true"
+        [class.active]="activeMenuItem === 'contact'"
+      >
+        <!-- MENU ITEM LINK -->
+        <a
+          [attr.data-title]="'navbar_contact' | translate"
+          class="menu-item-link"
+          routerLink="/contact"
+        >
+          <!-- MENU ITEM LINK ICON -->
+          <div class="menu-item-link-icon icon-members">
+            <i class="fa-solid fa-envelope"></i>
+          </div>
+          <!-- /MENU ITEM LINK ICON -->
+        </a>
+        <!-- /MENU ITEM LINK -->
+      </li>
+      <!-- /MENU ITEM -->
+
+      <!-- MENU ITEM -->
+      <li
+        [class.menu-item]="true"
+        [class.active]="activeMenuItem === 'setting'"
+      >
+        <!-- MENU ITEM LINK -->
+        <a
+          [attr.data-title]="'sidebar_setting' | translate"
+          class="menu-item-link"
+          routerLink="/setting"
+        >
+          <!-- MENU ITEM LINK ICON -->
+          <div class="menu-item-link-icon icon-badges">
+            <i class="fa-solid fa-gear"></i>
+          </div>
+          <!-- /MENU ITEM LINK ICON -->
+        </a>
+        <!-- /MENU ITEM LINK -->
+      </li>
+      <!-- /MENU ITEM -->
+    </ul>
+  </div>
+  <!-- /MENU -->
+</nav>
+<!-- /NAVIGATION WIDGET -->
+
+<!-- NAVIGATION WIDGET -->
+<nav
+  id="navigation-widget"
+  class="navigation-widget navigation-widget-desktop sidebar left hidden"
+  data-simplebar
+>
+  <!-- NAVIGATION WIDGET COVER -->
+  <figure class="navigation-widget-cover liquid">
+    <img src="../../../assets/images/cover/01.jpg" alt="cover-01" />
+  </figure>
+  <!-- /NAVIGATION WIDGET COVER -->
+
+  <!-- USER SHORT DESCRIPTION -->
+  <div class="user-short-description big">
+    <!-- USER SHORT DESCRIPTION AVATAR -->
+    <a class="user-short-description-avatar user-avatar big" href="profile">
+      <div class="hexagon-container">
+        <div class="hexagon user-avatar-content">
+          <div
+            class="hexagon-image"
+            style="background-image: url('{{avatar}}')"
+          ></div>
+        </div>
+        <div class="hexagon user-avatar-border">
+          <div class="hexagon-border"></div>
+        </div>
+        <div class="hexagon user-avatar-progress-border">
+          <div class="user-avatar-progress"></div>
+        </div>
+      </div>
+    </a>
+    <!-- /USER SHORT DESCRIPTION AVATAR -->
+
+    <!-- USER SHORT DESCRIPTION TITLE -->
+    <p class="user-short-description-title">
+      <a href="profile">{{userDisplayName}}</a>
+    </p>
+    <!-- /USER SHORT DESCRIPTION TITLE -->
+  </div>
+  <!-- /USER SHORT DESCRIPTION -->
+
+  <!-- USER STATS -->
+  <div class="user-stats">
+    <!-- USER STAT -->
+    <div class="user-stat">
+      <!-- USER STAT TITLE -->
+      <p class="user-stat-title"> {{ profileService.header?.countPost }}</p>
+      <!-- /USER STAT TITLE -->
+
+      <!-- USER STAT TEXT -->
+      <p class="user-stat-text">{{ "newsfeed_BaiDang" | translate }}</p>
+      <!-- /USER STAT TEXT -->
+    </div>
+    <!-- /USER STAT -->
+
+    <!-- USER STAT -->
+    <div class="user-stat">
+      <!-- USER STAT TITLE -->
+      <p class="user-stat-title">{{ profileService.header?.countFollower }}</p>
+      <!-- /USER STAT TITLE -->
+
+      <!-- USER STAT TEXT -->
+      <p class="user-stat-text">{{ "sidebar_follow" | translate }}</p>
+      <!-- /USER STAT TEXT -->
+    </div>
+    <!-- /USER STAT -->
+
+    <!-- USER STAT -->
+    <div class="user-stat">
+      <!-- USER STAT TITLE -->
+      <p class="user-stat-title"> {{ profileService.header?.countImg }}</p>
+      <!-- /USER STAT TITLE -->
+
+      <!-- USER STAT TEXT -->
+      <p class="user-stat-text">{{ "image" | translate }}</p>
+      <!-- /USER STAT TEXT -->
+    </div>
+    <!-- /USER STAT -->
+  </div>
+  <!-- /USER STATS -->
+
+  <!-- MENU -->
+  <ul class="menu">
+    <!-- MENU ITEM -->
+    <li [class.menu-item]="true" [class.active]="activeMenuItem === 'newsfeed'">
+      <!-- MENU ITEM LINK -->
+      <a class="menu-item-link" routerLink="/newsfeed">
+        <!-- MENU ITEM LINK ICON -->
+        <div class="menu-item-link-icon icon-newsfeed">
+          <i class="fa-solid fa-house"></i>
+        </div>
+        <!-- /MENU ITEM LINK ICON -->
+        {{ "navbar_home" | translate }}
+      </a>
+      <!-- /MENU ITEM LINK -->
+    </li>
+    <!-- /MENU ITEM -->
+
+    <!-- MENU ITEM -->
+    <li [class.menu-item]="true" [class.active]="activeMenuItem === 'message'">
+      <!-- MENU ITEM LINK -->
+      <a class="menu-item-link" routerLink="/message">
+        <!-- MENU ITEM LINK ICON -->
+        <div class="menu-item-link-icon icon-newsfeed">
+          <i class="fa-solid fa-paper-plane"></i>
+        </div>
+        <!-- /MENU ITEM LINK ICON -->
+        {{ "navbar_home" | translate }}
+      </a>
+      <!-- /MENU ITEM LINK -->
+    </li>
+    <!-- /MENU ITEM -->
+
+    <!-- MENU ITEM -->
+    <li [class.menu-item]="true" [class.active]="activeMenuItem === 'follow'">
+      <!-- MENU ITEM LINK -->
+      <a class="menu-item-link" routerLink="/follow">
+        <!-- MENU ITEM LINK ICON -->
+        <div class="menu-item-link-icon icon-overview">
+          <i class="fa-solid fa-heart"></i>
+        </div>
+        <!-- /MENU ITEM LINK ICON -->
+        {{ "sidebar_follow" | translate }}
+      </a>
+      <!-- /MENU ITEM LINK -->
+    </li>
+    <!-- /MENU ITEM -->
+
+    <!-- MENU ITEM -->
+    <li [class.menu-item]="true" [class.active]="activeMenuItem === 'history'">
+      <!-- MENU ITEM LINK -->
+      <a class="menu-item-link" routerLink="/history">
+        <!-- MENU ITEM LINK ICON -->
+        <div class="menu-item-link-icon icon-group">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+        </div>
+        <!-- /MENU ITEM LINK ICON -->
+        {{ "sidebar_history" | translate }}
+      </a>
+      <!-- /MENU ITEM LINK -->
+    </li>
+    <!-- /MENU ITEM -->
+
+    <!-- MENU ITEM -->
+    <li [class.menu-item]="true" [class.active]="activeMenuItem === 'contact'">
+      <!-- MENU ITEM LINK -->
+      <a class="menu-item-link" routerLink="/contact">
+        <!-- MENU ITEM LINK ICON -->
+        <div class="menu-item-link-icon icon-members">
+          <i class="fa-solid fa-envelope"></i>
+        </div>
+        <!-- /MENU ITEM LINK ICON -->
+        {{ "navbar_contact" | translate }}
+      </a>
+      <!-- /MENU ITEM LINK -->
+    </li>
+    <!-- /MENU ITEM -->
+
+    <!-- MENU ITEM -->
+    <li [class.menu-item]="true" [class.active]="activeMenuItem === 'setting'">
+      <!-- MENU ITEM LINK -->
+      <a class="menu-item-link" routerLink="setting">
+        <!-- MENU ITEM LINK ICON -->
+        <div class="menu-item-link-icon icon-badges">
+          <i class="fa-solid fa-gear"></i>
+        </div>
+        <!-- /MENU ITEM LINK ICON -->
+        {{ "sidebar_setting" | translate }}
+      </a>
+      <!-- /MENU ITEM LINK -->
+    </li>
+    <!-- /MENU ITEM -->
+  </ul>
+  <!-- /MENU -->
+</nav>
+<!-- /NAVIGATION WIDGET -->
+
+<!-- NAVIGATION WIDGET -->
+<nav
+  id="navigation-widget-mobile"
+  class="navigation-widget navigation-widget-mobile sidebar left hidden"
+  data-simplebar
+>
+  <!-- NAVIGATION WIDGET CLOSE BUTTON -->
+  <div class="navigation-widget-close-button">
+    <!-- NAVIGATION WIDGET CLOSE BUTTON ICON -->
+    <svg class="navigation-widget-close-button-icon icon-back-arrow">
+      <use xlink:href="#svg-back-arrow"></use>
+    </svg>
+    <!-- NAVIGATION WIDGET CLOSE BUTTON ICON -->
+  </div>
+  <!-- /NAVIGATION WIDGET CLOSE BUTTON -->
+
+  <!-- NAVIGATION WIDGET INFO WRAP -->
+  <div class="navigation-widget-info-wrap">
+    <!-- NAVIGATION WIDGET INFO -->
+    <div class="navigation-widget-info">
+      <!-- USER AVATAR -->
+      <a class="user-avatar small no-outline" href="profile">
+        <!-- USER AVATAR CONTENT -->
+        <div class="user-avatar-content">
+          <!-- HEXAGON -->
+          <div
+            class="hexagon-image-30-32"
+            data-src="../../../assets/images/avatar/01.jpg"
+          ></div>
+          <!-- /HEXAGON -->
+        </div>
+        <!-- /USER AVATAR CONTENT -->
+
+        <!-- USER AVATAR PROGRESS -->
+        <div class="user-avatar-progress">
+          <!-- HEXAGON -->
+          <div class="hexagon-progress-40-44"></div>
+          <!-- /HEXAGON -->
+        </div>
+        <!-- /USER AVATAR PROGRESS -->
+
+        <!-- USER AVATAR PROGRESS BORDER -->
+        <div class="user-avatar-progress-border">
+          <!-- HEXAGON -->
+          <div class="hexagon-border-40-44"></div>
+          <!-- /HEXAGON -->
+        </div>
+        <!-- /USER AVATAR PROGRESS BORDER -->
+      </a>
+      <!-- /USER AVATAR -->
+
+      <!-- NAVIGATION WIDGET INFO TITLE -->
+      <p class="navigation-widget-info-title">
+        <a href="profile">Marina Valentine</a>
+      </p>
+      <!-- /NAVIGATION WIDGET INFO TITLE -->
+    </div>
+    <!-- /NAVIGATION WIDGET INFO -->
+
+    <!-- NAVIGATION WIDGET BUTTON -->
+    <p
+      class="navigation-widget-info-button button small secondary"
+      (click)="logout()"
+    >
+      {{ "Logout" | translate }}
+    </p>
+    <!-- /NAVIGATION WIDGET BUTTON -->
+  </div>
+  <!-- /NAVIGATION WIDGET INFO WRAP -->
+
+  <!-- NAVIGATION WIDGET SECTION TITLE -->
+  <p class="navigation-widget-section-title">{{ "Chucnang" | translate }}</p>
+  <!-- /NAVIGATION WIDGET SECTION TITLE -->
+
+  <!-- MENU -->
+  <ul class="menu">
+    <!-- MENU ITEM -->
+    <li [class.menu-item]="true" [class.active]="activeMenuItem === 'newsfeed'">
+      <!-- MENU ITEM LINK -->
+      <a class="menu-item-link" routerLink="/newsfeed">
+        <!-- MENU ITEM LINK ICON -->
+        <div class="menu-item-link-icon icon-newsfeed">
+          <i class="fa-solid fa-house"></i>
+        </div>
+        <!-- /MENU ITEM LINK ICON -->
+        {{ "navbar_home" | translate }}
+      </a>
+      <!-- /MENU ITEM LINK -->
+    </li>
+    <!-- /MENU ITEM -->
+    <!-- MENU ITEM -->
+    <li [class.menu-item]="true" [class.active]="activeMenuItem === 'message'">
+      <!-- MENU ITEM LINK -->
+      <a class="menu-item-link" routerLink="/message">
+        <!-- MENU ITEM LINK ICON -->
+        <div class="menu-item-link-icon icon-newsfeed">
+          <i class="fa-solid fa-paper-plane"></i>
+        </div>
+        <!-- /MENU ITEM LINK ICON -->
+        {{ "navbar_home" | translate }}
+      </a>
+      <!-- /MENU ITEM LINK -->
+    </li>
+    <!-- /MENU ITEM -->
+    <!-- MENU ITEM -->
+    <li [class.menu-item]="true" [class.active]="activeMenuItem === 'follow'">
+      <!-- MENU ITEM LINK -->
+      <a class="menu-item-link" routerLink="/follow">
+        <!-- MENU ITEM LINK ICON -->
+        <div class="menu-item-link-icon icon-overview">
+          <i class="fa-solid fa-heart"></i>
+        </div>
+        <!-- /MENU ITEM LINK ICON -->
+        {{ "sidebar_follow" | translate }}
+      </a>
+      <!-- /MENU ITEM LINK -->
+    </li>
+    <!-- /MENU ITEM -->
+
+    <!-- MENU ITEM -->
+    <li [class.menu-item]="true" [class.active]="activeMenuItem === 'history'">
+      <!-- MENU ITEM LINK -->
+      <a class="menu-item-link" routerLink="/history">
+        <!-- MENU ITEM LINK ICON -->
+        <div class="menu-item-link-icon icon-group">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+        </div>
+        <!-- /MENU ITEM LINK ICON -->
+        {{ "sidebar_history" | translate }}
+      </a>
+      <!-- /MENU ITEM LINK -->
+    </li>
+    <!-- /MENU ITEM -->
+
+    <!-- MENU ITEM -->
+    <li [class.menu-item]="true" [class.active]="activeMenuItem === 'contact'">
+      <!-- MENU ITEM LINK -->
+      <a class="menu-item-link" routerLink="/contact">
+        <!-- MENU ITEM LINK ICON -->
+        <div class="menu-item-link-icon icon-members">
+          <i class="fa-solid fa-envelope"></i>
+        </div>
+        <!-- /MENU ITEM LINK ICON -->
+        {{ "navbar_contact" | translate }}
+      </a>
+      <!-- /MENU ITEM LINK -->
+    </li>
+    <!-- /MENU ITEM -->
+
+    <!-- MENU ITEM -->
+    <li [class.menu-item]="true" [class.active]="activeMenuItem === 'setting'">
+      <!-- MENU ITEM LINK -->
+      <a class="menu-item-link" routerLink="/setting">
+        <!-- MENU ITEM LINK ICON -->
+        <div class="menu-item-link-icon icon-badges">
+          <i class="fa-solid fa-gear"></i>
+        </div>
+        <!-- /MENU ITEM LINK ICON -->
+        {{ "sidebar_setting" | translate }}
+      </a>
+      <!-- /MENU ITEM LINK -->
+    </li>
+    <!-- /MENU ITEM -->
+  </ul>
+  <!-- /MENU -->
+
+  <!-- NAVIGATION WIDGET SECTION TITLE -->
+  <p class="navigation-widget-section-title">{{ userDisplayName }}</p>
+  <!-- /NAVIGATION WIDGET SECTION TITLE -->
+
+  <!-- NAVIGATION WIDGET SECTION LINK -->
+  <a
+    class="navigation-widget-section-link"
+    href="profile"
+    (click)="this.profileService.loadDataProfileTimeline(0)"
+    >{{ "Thông tin" | translate }}</a
+  >
+  <!-- /NAVIGATION WIDGET SECTION LINK -->
+
+  <!-- NAVIGATION WIDGET SECTION LINK -->
+  <a
+    class="navigation-widget-section-link"
+    href="edit-profile"
+    (click)="this.profileService.loadDataProfileHeader(0)"
+    >{{ "admin_capnhat" | translate }}</a
+  >
+  <!-- /NAVIGATION WIDGET SECTION LINK -->
+
+  <!-- NAVIGATION WIDGET SECTION LINK -->
+  <a class="navigation-widget-section-link" href="notifications">{{
+    "Notifications" | translate
+  }}</a>
+  <!-- /NAVIGATION WIDGET SECTION LINK -->
+
+  <!-- NAVIGATION WIDGET SECTION LINK -->
+  <a class="navigation-widget-section-link" href="messages">{{
+    "Nhantin" | translate
+  }}</a>
+  <!-- /NAVIGATION WIDGET SECTION LINK -->
+
+  <!-- NAVIGATION WIDGET SECTION LINK -->
+  <!-- <a class="navigation-widget-section-link" href="change-password">{{
+    "doimatkhau" | translate
+  }}</a> -->
+  <!-- /NAVIGATION WIDGET SECTION LINK -->
+  <!-- NAVIGATION WIDGET SECTION TITLE -->
+  <!-- <p class="navigation-widget-section-title">Về chúng tôi</p> -->
+  <!-- /NAVIGATION WIDGET SECTION TITLE -->
+
+  <!-- NAVIGATION WIDGET SECTION LINK -->
+  <a class="navigation-widget-section-link" href="newsfeed">{{
+    "navbar_home" | translate
+  }}</a>
+  <!-- /NAVIGATION WIDGET SECTION LINK -->
+
+  <!-- NAVIGATION WIDGET SECTION LINK -->
+  <a class="navigation-widget-section-link" href="">{{
+    "admin_gioithieu" | translate
+  }}</a>
+  <!-- /NAVIGATION WIDGET SECTION LINK -->
+</nav>
+<!-- /NAVIGATION WIDGET -->
+
+<!-- HEADER -->
+<header class="header">
+  <!-- HEADER ACTIONS -->
+  <div class="header-actions">
+    <!-- HEADER BRAND -->
+    <div class="header-brand">
+      <!-- LOGO -->
+      <div class="logo">
+        <!-- ICON LOGO VIKINGER -->
+        <img
+          class="icon-logo-vikinger small"
+          src="../../../assets/images/logo-euphoria.png"
+          alt=""
+        />
+        <!-- /ICON LOGO VIKINGER -->
+      </div>
+      <!-- /LOGO -->
+
+      <!-- HEADER BRAND TEXT -->
+      <h1 class="header-brand-text">Destiny</h1>
+      <!-- /HEADER BRAND TEXT -->
+    </div>
+    <!-- /HEADER BRAND -->
+  </div>
+  <!-- /HEADER ACTIONS -->
+
+  <!-- HEADER ACTIONS -->
+  <div class="header-actions">
+    <!-- SIDEMENU TRIGGER -->
+    <div class="sidemenu-trigger navigation-widget-trigger">
+      <!-- ICON GRID -->
+      <svg class="icon-grid">
+        <use xlink:href="#svg-grid"></use>
+      </svg>
+      <!-- /ICON GRID -->
+    </div>
+    <!-- /SIDEMENU TRIGGER -->
+
+    <!-- MOBILEMENU TRIGGER -->
+    <div class="mobilemenu-trigger navigation-widget-mobile-trigger">
+      <!-- BURGER ICON -->
+      <div class="burger-icon inverted">
+        <!-- BURGER ICON BAR -->
+        <div class="burger-icon-bar"></div>
+        <!-- /BURGER ICON BAR -->
+
+        <!-- BURGER ICON BAR -->
+        <div class="burger-icon-bar"></div>
+        <!-- /BURGER ICON BAR -->
+
+        <!-- BURGER ICON BAR -->
+        <div class="burger-icon-bar"></div>
+        <!-- /BURGER ICON BAR -->
+      </div>
+      <!-- /BURGER ICON -->
+    </div>
+    <!-- /MOBILEMENU TRIGGER -->
+
+    <!-- NAVIGATION -->
+    <nav class="navigation">
+      <!-- MENU MAIN -->
+      <ul class="menu-main">
+        <!-- MENU MAIN ITEM -->
+        <li class="menu-main-item">
+          <!-- MENU MAIN ITEM LINK -->
+          <a class="menu-main-item-link" href="newsfeed">{{
+            "navbar_home" | translate
+          }}</a>
+          <!-- /MENU MAIN ITEM LINK -->
+        </li>
+        <!-- /MENU MAIN ITEM -->
+
+        <!-- MENU MAIN ITEM -->
+        <li class="menu-main-item">
+          <!-- MENU MAIN ITEM LINK -->
+          <!-- <a class="menu-main-item-link" href="">Về chúng tôi</a> -->
+          <!-- /MENU MAIN ITEM LINK -->
+        </li>
+        <!-- /MENU MAIN ITEM -->
+
+        <!-- MENU MAIN ITEM -->
+        <li class="menu-main-item">
+          <!-- MENU MAIN ITEM LINK -->
+          <a class="menu-main-item-link" href="contact">
+            {{ "navbar_contact" | translate }}</a
+          >
+          <!-- /MENU MAIN ITEM LINK -->
+        </li>
+        <!-- /MENU MAIN ITEM -->
+      </ul>
+      <!-- /MENU MAIN -->
+    </nav>
+    <!-- /NAVIGATION -->
+  </div>
+  <!-- /HEADER ACTIONS -->
+
+  <!-- HEADER ACTIONS -->
+  <div class="header-actions search-bar">
+    <!-- INTERACTIVE INPUT -->
+    <div class="interactive-input dark">
+      <input
+        type="text"
+        id="search-main"
+        name="search_main"
+        placeholder="{{ 'navbar_search' | translate }}"
+      />
+      <!-- INTERACTIVE INPUT ICON WRAP -->
+      <div class="interactive-input-icon-wrap">
+        <!-- INTERACTIVE INPUT ICON -->
+        <svg class="interactive-input-icon icon-magnifying-glass">
+          <use xlink:href="#svg-magnifying-glass"></use>
+        </svg>
+        <!-- /INTERACTIVE INPUT ICON -->
+      </div>
+      <!-- /INTERACTIVE INPUT ICON WRAP -->
+
+      <!-- INTERACTIVE INPUT ACTION -->
+      <div class="interactive-input-action">
+        <!-- INTERACTIVE INPUT ACTION ICON -->
+        <svg class="interactive-input-action-icon icon-cross-thin">
+          <use xlink:href="#svg-cross-thin"></use>
+        </svg>
+        <!-- /INTERACTIVE INPUT ACTION ICON -->
+      </div>
+      <!-- /INTERACTIVE INPUT ACTION -->
+    </div>
+    <!-- /INTERACTIVE INPUT -->
+
+    <!-- DROPDOWN BOX -->
+    <div class="dropdown-box padding-bottom-small header-search-dropdown">
+      <!-- DROPDOWN BOX CATEGORY -->
+      <div class="dropdown-box-category">
+        <!-- DROPDOWN BOX CATEGORY TITLE -->
+        <p class="dropdown-box-category-title">Members</p>
+        <!-- /DROPDOWN BOX CATEGORY TITLE -->
+      </div>
+      <!-- /DROPDOWN BOX CATEGORY -->
+
+      <!-- DROPDOWN BOX LIST -->
+      <div class="dropdown-box-list small no-scroll">
+        <!-- DROPDOWN BOX LIST ITEM -->
+        <a class="dropdown-box-list-item" href="profile">
+          <!-- USER STATUS -->
+          <div class="user-status notification">
+            <!-- USER STATUS AVATAR -->
+            <div class="user-status-avatar">
+              <!-- USER AVATAR -->
+              <div class="user-avatar small no-outline">
+                <!-- USER AVATAR CONTENT -->
+                <div class="user-avatar-content">
+                  <!-- HEXAGON -->
+                  <div
+                    class="hexagon-image-30-32"
+                    data-src="../../../assets/images/avatar/05.jpg"
+                  ></div>
+                  <!-- /HEXAGON -->
+                </div>
+                <!-- /USER AVATAR CONTENT -->
+
+                <!-- USER AVATAR PROGRESS -->
+                <div class="user-avatar-progress">
+                  <!-- HEXAGON -->
+                  <div class="hexagon-progress-40-44"></div>
+                  <!-- /HEXAGON -->
+                </div>
+                <!-- /USER AVATAR PROGRESS -->
+
+                <!-- USER AVATAR PROGRESS BORDER -->
+                <div class="user-avatar-progress-border">
+                  <!-- HEXAGON -->
+                  <div class="hexagon-border-40-44"></div>
+                  <!-- /HEXAGON -->
+                </div>
+                <!-- /USER AVATAR PROGRESS BORDER -->
+              </div>
+              <!-- /USER AVATAR -->
+            </div>
+            <!-- /USER STATUS AVATAR -->
+
+            <!-- USER STATUS TITLE -->
+            <p class="user-status-title">
+              <span class="bold">Neko Bebop</span>
+            </p>
+            <!-- /USER STATUS TITLE -->
+
+            <!-- USER STATUS TEXT -->
+            <p class="user-status-text">1 friends in common</p>
+            <!-- /USER STATUS TEXT -->
+
+            <!-- USER STATUS ICON -->
+            <div class="user-status-icon">
+              <!-- ICON FRIEND -->
+              <svg class="icon-friend">
+                <use xlink:href="#svg-friend"></use>
+              </svg>
+              <!-- /ICON FRIEND -->
+            </div>
+            <!-- /USER STATUS ICON -->
+          </div>
+          <!-- /USER STATUS -->
+        </a>
+        <!-- /DROPDOWN BOX LIST ITEM -->
+
+        <!-- DROPDOWN BOX LIST ITEM -->
+        <a class="dropdown-box-list-item" href="profile">
+          <!-- USER STATUS -->
+          <div class="user-status notification">
+            <!-- USER STATUS AVATAR -->
+            <div class="user-status-avatar">
+              <!-- USER AVATAR -->
+              <div class="user-avatar small no-outline">
+                <!-- USER AVATAR CONTENT -->
+                <div class="user-avatar-content">
+                  <!-- HEXAGON -->
+                  <div
+                    class="hexagon-image-30-32"
+                    data-src="../../../assets/images/avatar/15.jpg"
+                  ></div>
+                  <!-- /HEXAGON -->
+                </div>
+                <!-- /USER AVATAR CONTENT -->
+
+                <!-- USER AVATAR PROGRESS -->
+                <div class="user-avatar-progress">
+                  <!-- HEXAGON -->
+                  <div class="hexagon-progress-40-44"></div>
+                  <!-- /HEXAGON -->
+                </div>
+                <!-- /USER AVATAR PROGRESS -->
+
+                <!-- USER AVATAR PROGRESS BORDER -->
+                <div class="user-avatar-progress-border">
+                  <!-- HEXAGON -->
+                  <div class="hexagon-border-40-44"></div>
+                  <!-- /HEXAGON -->
+                </div>
+                <!-- /USER AVATAR PROGRESS BORDER -->
+
+                <!-- USER AVATAR BADGE -->
+                <div class="user-avatar-badge">
+                  <!-- USER AVATAR BADGE BORDER -->
+                  <div class="user-avatar-badge-border">
+                    <!-- HEXAGON -->
+                    <div class="hexagon-22-24"></div>
+                    <!-- /HEXAGON -->
+                  </div>
+                  <!-- /USER AVATAR BADGE BORDER -->
+
+                  <!-- USER AVATAR BADGE CONTENT -->
+                  <div class="user-avatar-badge-content">
+                    <!-- HEXAGON -->
+                    <div class="hexagon-dark-16-18"></div>
+                    <!-- /HEXAGON -->
+                  </div>
+                  <!-- /USER AVATAR BADGE CONTENT -->
+
+                  <!-- USER AVATAR BADGE TEXT -->
+                  <p class="user-avatar-badge-text">7</p>
+                  <!-- /USER AVATAR BADGE TEXT -->
+                </div>
+                <!-- /USER AVATAR BADGE -->
+              </div>
+              <!-- /USER AVATAR -->
+            </div>
+            <!-- /USER STATUS AVATAR -->
+
+            <!-- USER STATUS TITLE -->
+            <p class="user-status-title">
+              <span class="bold">Tim Rogers</span>
+            </p>
+            <!-- /USER STATUS TITLE -->
+
+            <!-- USER STATUS TEXT -->
+            <p class="user-status-text">4 friends in common</p>
+            <!-- /USER STATUS TEXT -->
+
+            <!-- USER STATUS ICON -->
+            <div class="user-status-icon">
+              <!-- ICON FRIEND -->
+              <svg class="icon-friend">
+                <use xlink:href="#svg-friend"></use>
+              </svg>
+              <!-- /ICON FRIEND -->
+            </div>
+            <!-- /USER STATUS ICON -->
+          </div>
+          <!-- /USER STATUS -->
+        </a>
+        <!-- /DROPDOWN BOX LIST ITEM -->
+      </div>
+      <!-- /DROPDOWN BOX LIST -->
+
+      <!-- DROPDOWN BOX CATEGORY -->
+      <div class="dropdown-box-category">
+        <!-- DROPDOWN BOX CATEGORY TITLE -->
+        <p class="dropdown-box-category-title">Groups</p>
+        <!-- /DROPDOWN BOX CATEGORY TITLE -->
+      </div>
+      <!-- /DROPDOWN BOX CATEGORY -->
+
+      <!-- DROPDOWN BOX LIST -->
+      <div class="dropdown-box-list small no-scroll">
+        <!-- DROPDOWN BOX LIST ITEM -->
+        <a class="dropdown-box-list-item" href="">
+          <!-- USER STATUS -->
+          <div class="user-status notification">
+            <!-- USER STATUS AVATAR -->
+            <div class="user-status-avatar">
+              <!-- USER AVATAR -->
+              <div class="user-avatar small no-border">
+                <!-- USER AVATAR CONTENT -->
+                <div class="user-avatar-content">
+                  <!-- HEXAGON -->
+                  <div
+                    class="hexagon-image-40-44"
+                    data-src="../../../assets/images/avatar/24.jpg"
+                  ></div>
+                  <!-- /HEXAGON -->
+                </div>
+                <!-- /USER AVATAR CONTENT -->
+              </div>
+              <!-- /USER AVATAR -->
+            </div>
+            <!-- /USER STATUS AVATAR -->
+
+            <!-- USER STATUS TITLE -->
+            <p class="user-status-title">
+              <span class="bold">Cosplayers of the World</span>
+            </p>
+            <!-- /USER STATUS TITLE -->
+
+            <!-- USER STATUS TEXT -->
+            <p class="user-status-text">139 members</p>
+            <!-- /USER STATUS TEXT -->
+
+            <!-- USER STATUS ICON -->
+            <div class="user-status-icon">
+              <!-- ICON GROUP -->
+              <svg class="icon-group">
+                <use xlink:href="#svg-group"></use>
+              </svg>
+              <!-- /ICON GROUP -->
+            </div>
+            <!-- /USER STATUS ICON -->
+          </div>
+          <!-- /USER STATUS -->
+        </a>
+        <!-- /DROPDOWN BOX LIST ITEM -->
+      </div>
+      <!-- /DROPDOWN BOX LIST -->
+
+      <!-- DROPDOWN BOX CATEGORY -->
+      <div class="dropdown-box-category">
+        <!-- DROPDOWN BOX CATEGORY TITLE -->
+        <p class="dropdown-box-category-title">Marketplace</p>
+        <!-- /DROPDOWN BOX CATEGORY TITLE -->
+      </div>
+      <!-- /DROPDOWN BOX CATEGORY -->
+
+      <!-- DROPDOWN BOX LIST -->
+      <div class="dropdown-box-list small no-scroll">
+        <!-- DROPDOWN BOX LIST ITEM -->
+        <a class="dropdown-box-list-item" href="">
+          <!-- USER STATUS -->
+          <div class="user-status no-padding-top">
+            <!-- USER STATUS AVATAR -->
+            <div class="user-status-avatar">
+              <!-- PICTURE -->
+              <figure class="picture small round liquid">
+                <img
+                  src="../../../assets/images/marketplace/items/07.jpg"
+                  alt="item-07"
+                />
+              </figure>
+              <!-- /PICTURE -->
+            </div>
+            <!-- /USER STATUS AVATAR -->
+
+            <!-- USER STATUS TITLE -->
+            <p class="user-status-title">
+              <span class="bold">Mercenaries White Frame</span>
+            </p>
+            <!-- /USER STATUS TITLE -->
+
+            <!-- USER STATUS TEXT -->
+            <p class="user-status-text">By Neko Bebop</p>
+            <!-- /USER STATUS TEXT -->
+
+            <!-- USER STATUS ICON -->
+            <div class="user-status-icon">
+              <!-- ICON MARKETPLACE -->
+              <svg class="icon-marketplace">
+                <use xlink:href="#svg-marketplace"></use>
+              </svg>
+              <!-- /ICON MARKETPLACE -->
+            </div>
+            <!-- /USER STATUS ICON -->
+          </div>
+          <!-- /USER STATUS -->
+        </a>
+        <!-- /DROPDOWN BOX LIST ITEM -->
+      </div>
+      <!-- /DROPDOWN BOX LIST -->
+    </div>
+    <!-- /DROPDOWN BOX -->
+  </div>
+  <!-- /HEADER ACTIONS -->
+
+  <!-- HEADER ACTIONS -->
+  <div class="header-actions">
+    <!-- ACTION LIST -->
+    <div class="action-list dark">
+      <!-- ACTION LIST ITEM WRAP -->
+      <div class="action-list-item-wrap">
+        <!-- ACTION LIST ITEM -->
+        <div
+          class="action-list-item unread header-dropdown-trigger"
+          (click)="modalService.removeNotify()"
+        >
+          <div
+            *ngIf="modalService.checkNotify"
+            style="
+              content: '';
+              width: 4px;
+              height: 4px;
+              border-radius: 50%;
+              background-color: #41efff;
+              position: absolute;
+              top: 26px;
+              right: 10px;
+            "
+          ></div>
+          <!-- ACTION LIST ITEM ICON -->
+          <svg class="action-list-item-icon icon-notification">
+            <use xlink:href="#svg-notification"></use>
+          </svg>
+          <!-- /ACTION LIST ITEM ICON -->
+        </div>
+        <!-- /ACTION LIST ITEM -->
+
+        <!-- DROPDOWN BOX -->
+        <div class="dropdown-box header-dropdown">
+          <!-- DROPDOWN BOX HEADER -->
+          <div class="dropdown-box-header">
+            <!-- DROPDOWN BOX HEADER TITLE -->
+            <p class="dropdown-box-header-title">
+              {{ "Notifications" | translate }}
+            </p>
+            <!-- /DROPDOWN BOX HEADER TITLE -->
+
+            <!-- DROPDOWN BOX HEADER ACTIONS -->
+            <div class="dropdown-box-header-actions">
+              <!-- DROPDOWN BOX HEADER ACTION -->
+              <!-- <p class="dropdown-box-header-action">Mark all as Read</p> -->
+              <!-- /DROPDOWN BOX HEADER ACTION -->
+
+              <!-- DROPDOWN BOX HEADER ACTION -->
+              <!-- <p class="dropdown-box-header-action">Settings</p> -->
+              <!-- /DROPDOWN BOX HEADER ACTION -->
+            </div>
+            <!-- /DROPDOWN BOX HEADER ACTIONS -->
+          </div>
+          <!-- /DROPDOWN BOX HEADER -->
+
+          <!-- DROPDOWN BOX LIST -->
+          <div
+            class="dropdown-box-list"
+            data-simplebar
+           
+          >
+            <div *ngIf="!modalService.listNotify || modalService.listNotify.size === 0">
+              <p class="no-intify">Không có thông báo</p>
+            </div>
+            <div *ngFor="let notif of modalService.listNotify | keyvalue">
+            <!-- Comment -->
+            <div class="dropdown-box-list-item"
+            *ngIf="checkType(notif.value.type) === 'COMMENT'"
+            >
+              <!-- USER STATUS -->
+              <div class="user-status notification">
+                <!-- USER STATUS AVATAR -->
+                <a
+                  class="user-avatar small user-status-avatar no-border no-outline"
+                  routerLink="/profile"
+                  (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)"
+                >
+                  <div class="hexagon-container">
+                    <div class="hexagon user-avatar-content">
+                      <div
+                        class="hexagon-image"
+                        style="background-image: url('{{notif.value.avatar}}')"
+                      ></div>
+                    </div>
+                    <div class="hexagon user-avatar-border">
+                      <div class="hexagon-border"></div>
+                    </div>
+                    <div class="hexagon user-avatar-progress-border">
+                      <div class="user-avatar-progress"></div>
+                    </div>
+                    <p class="user-avatar-badge-text">1</p>
+                  </div>
+                </a>
+                <!-- /USER STATUS AVATAR -->
+
+                <!-- USER STATUS TITLE -->
+                <p class="user-status-title">
+                  <a class="bold" href="profile">{{ notif.value.fullname }}</a>
+                  đã bình luận vào
+                  <a class="highlighted" href="photos">bài đăng</a> của bạn
+                </p>
+                <!-- /USER STATUS TITLE -->
+
+                <!-- USER STATUS TIMESTAMP -->
+                <p class="user-status-timestamp">{{ notif.value.time }}</p>
+                <!-- /USER STATUS TIMESTAMP -->
+
+                <!-- USER STATUS ICON -->
+                <div class="user-status-icon">
+                  <!-- ICON COMMENT -->
+                  <svg class="icon-comment">
+                    <use xlink:href="#svg-comment"></use>
+                  </svg>
+                  <!-- /ICON COMMENT -->
+                </div>
+                <!-- /USER STATUS ICON -->
+              </div>
+              <!-- /USER STATUS -->
+            </div>
+            <!-- Comment -->
+            <!-- Rep Comment -->
+            <div class="dropdown-box-list-item"
+            *ngIf="checkType(notif.value.type) === 'REPCOMMENT'"
+            >
+              <!-- USER STATUS -->
+              <div class="user-status notification">
+                <!-- USER STATUS AVATAR -->
+                <a
+                  class="user-avatar small user-status-avatar no-border no-outline"
+                  routerLink="/profile"
+                  (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)"
+                >
+                  <div class="hexagon-container">
+                    <div class="hexagon user-avatar-content">
+                      <div
+                        class="hexagon-image"
+                        style="background-image: url('{{notif.value.avatar}}')"
+                      ></div>
+                    </div>
+                    <div class="hexagon user-avatar-border">
+                      <div class="hexagon-border"></div>
+                    </div>
+                    <div class="hexagon user-avatar-progress-border">
+                      <div class="user-avatar-progress"></div>
+                    </div>
+                    <p class="user-avatar-badge-text">1</p>
+                  </div>
+                </a>
+                <!-- /USER STATUS AVATAR -->
+
+                <!-- USER STATUS TITLE -->
+                <p class="user-status-title">
+                  <a class="bold" href="profile">{{ notif.value.fullname }}</a>
+                  đã trả lời bình luận của bạn 
+                  <!-- <a class="highlighted" href="photos">bài đăng</a>  -->
+                </p>
+                <!-- /USER STATUS TITLE -->
+
+                <!-- USER STATUS TIMESTAMP -->
+                <p class="user-status-timestamp">{{ notif.value.time }}</p>
+                <!-- /USER STATUS TIMESTAMP -->
+
+                <!-- USER STATUS ICON -->
+                <div class="user-status-icon">
+                  <!-- ICON COMMENT -->
+                  <svg class="icon-comment">
+                    <use xlink:href="#svg-comment"></use>
+                  </svg>
+                  <!-- /ICON COMMENT -->
+                </div>
+                <!-- /USER STATUS ICON -->
+              </div>
+              <!-- /USER STATUS -->
+            </div>
+            <!-- Comment -->
+            <!-- Share -->
+            <div class="dropdown-box-list-item"
+            *ngIf="checkType(notif.value.type) === 'SHARE'"
+            >
+               <!-- USER STATUS -->
+               <div class="user-status notification">
+                <!-- USER STATUS AVATAR -->
+                <a
+                  class="user-avatar small user-status-avatar no-border no-outline"
+                  routerLink="/profile"
+                  (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)"
+                >
+                  <div class="hexagon-container">
+                    <div class="hexagon user-avatar-content">
+                      <div
+                        class="hexagon-image"
+                        style="background-image: url('{{notif.value.avatar}}')"
+                      ></div>
+                    </div>
+                    <div class="hexagon user-avatar-border">
+                      <div class="hexagon-border"></div>
+                    </div>
+                    <div class="hexagon user-avatar-progress-border">
+                      <div class="user-avatar-progress"></div>
+                    </div>
+                    <p class="user-avatar-badge-text">1</p>
+                  </div>
+                </a>
+                <!-- /USER STATUS AVATAR -->
+
+                <!-- USER STATUS TITLE -->
+                <p class="user-status-title">
+                  <a class="bold" href="profile">{{ notif.value.fullname }}</a>
+                  đã chia sẻ
+                  <a class="highlighted" href="photos">bài đăng</a> của bạn
+                </p>
+                <!-- /USER STATUS TITLE -->
+
+                <!-- USER STATUS TIMESTAMP -->
+                <p class="user-status-timestamp">{{ notif.value.time }}</p>
+                <!-- /USER STATUS TIMESTAMP -->
+
+                <!-- USER STATUS ICON -->
+                <div class="user-status-icon">
+                  <!-- ICON COMMENT -->
+                  <svg class="icon-comment">
+                    <use xlink:href="#svg-comment"></use>
+                  </svg>
+                  <!-- /ICON COMMENT -->
+                </div>
+                <!-- /USER STATUS ICON -->
+              </div>
+              <!-- /USER STATUS -->
+            </div>
+            <!-- Share -->
+             <!-- interested -->
+             <div class="dropdown-box-list-item" 
+             *ngIf="checkType(notif.value.type) === 'INTERESTED'">
+              <!-- USER STATUS -->
+              <div class="user-status notification">
+                <!-- USER STATUS AVATAR -->
+                <a
+                  class="user-avatar small user-status-avatar no-border no-outline"
+                  routerLink="/profile"
+                  (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)"
+                >
+                  <div class="hexagon-container">
+                    <div class="hexagon user-avatar-content">
+                      <div
+                        class="hexagon-image"
+                        style="background-image: url('{{notif.value.avatar}}')"
+                      ></div>
+                    </div>
+                    <div class="hexagon user-avatar-border">
+                      <div class="hexagon-border"></div>
+                    </div>
+                    <div class="hexagon user-avatar-progress-border">
+                      <div class="user-avatar-progress"></div>
+                    </div>
+                    <p class="user-avatar-badge-text">1</p>
+                  </div>
+                </a>
+                <!-- /USER STATUS AVATAR -->
+
+                <!-- USER STATUS TITLE -->
+                <p class="user-status-title">
+                  <a class="bold" href="profile">{{ notif.value.fullname }}</a>
+                  đã quan tâm
+                  <a class="highlighted" href="photos">bài đăng</a> của bạn
+                </p>
+                <!-- /USER STATUS TITLE -->
+
+                <!-- USER STATUS TIMESTAMP -->
+                <p class="user-status-timestamp">{{ notif.value.time }}</p>
+                <!-- /USER STATUS TIMESTAMP -->
+
+                <!-- USER STATUS ICON -->
+                <div class="user-status-icon">
+                  <!-- ICON COMMENT -->
+                  <svg class="icon-thumbs-up">
+                    <use xlink:href="#svg-thumbs-up"></use>
+                  </svg>
+                  <!-- /ICON COMMENT -->
+                </div>
+                <!-- /USER STATUS ICON -->
+              </div>
+              <!-- /USER STATUS -->
+            </div>
+            <!-- interested -->
+             <!-- Follow -->
+              <!-- follow -->
+            <div class="dropdown-box-list-item"
+            *ngIf="checkType(notif.value.type) === 'FOLLOW'">
+              <!-- USER STATUS -->
+              <div class="user-status notification">
+                <!-- USER STATUS AVATAR -->
+                <a
+                  class="user-avatar small user-status-avatar no-border no-outline"
+                  routerLink="/profile"
+                  (click)="this.profileService.loadDataProfileTimeline(notif.value.fromUserId)"
+                >
+                  <div class="hexagon-container">
+                    <div class="hexagon user-avatar-content">
+                      <div
+                        class="hexagon-image"
+                        style="background-image: url('{{notif.value.avatar}}')"
+                      ></div>
+                    </div>
+                    <div class="hexagon user-avatar-border">
+                      <div class="hexagon-border"></div>
+                    </div>
+                    <div class="hexagon user-avatar-progress-border">
+                      <div class="user-avatar-progress"></div>
+                    </div>
+                    <p class="user-avatar-badge-text">1</p>
+                  </div>
+                </a>
+                <!-- /USER STATUS AVATAR -->
+
+                <!-- USER STATUS TITLE -->
+                <p class="user-status-title" *ngIf="notif.value.following_status === false">
+                  <a class="bold" href="profile">{{ notif.value.fullname }}</a>
+                  đã theo dõi bạn
+                </p>
+                <p class="user-status-title" *ngIf="notif.value.following_status === true">
+                  <a class="bold" href="profile">{{ notif.value.fullname }}</a>
+                  và bạn đã là bạn bè
+                </p>
+                <!-- /USER STATUS TITLE -->
+
+                <!-- USER STATUS TIMESTAMP -->
+                <p class="user-status-timestamp">{{ notif.value.time }}</p>
+                <!-- /USER STATUS TIMESTAMP -->
+                <div class="user-preview-actions nofti">
+                  <!-- BUTTON -->
+                  <p class="button re-fl" (click)="addFollow(notif.value.fromUserId)" *ngIf="notif.value.following_status === false">Theo dõi lại</p>
+                  <!-- /BUTTON -->
+                </div>
+              </div>
+              <!-- /USER STATUS -->
+            </div>
+            <!-- follow -->
+            <!-- interested -->
+            </div>
+            
+
+          </div>
+          <!-- /DROPDOWN BOX LIST -->
+
+          <!-- DROPDOWN BOX BUTTON -->
+          <a class="dropdown-box-button secondary" href="notifications">
+            {{ "newsfeed_xemtatca" | translate }}</a
+          >
+          <!-- /DROPDOWN BOX BUTTON -->
+        </div>
+        <!-- /DROPDOWN BOX -->
+      </div>
+      <!-- /ACTION LIST ITEM WRAP -->
+    </div>
+    <!-- /ACTION LIST -->
+
+    <!-- ACTION ITEM WRAP -->
+    <div class="action-item-wrap">
+      <!-- ACTION ITEM -->
+      <div class="action-item dark header-settings-dropdown-trigger">
+        <!-- ACTION ITEM ICON -->
+        <!-- <svg class="action-item-icon icon-settings">
+        <use xlink:href="#svg-settings"></use>
+      </svg> -->
+        <p class="fullname-logged">{{ userDisplayName }}</p>
+        <!-- /ACTION ITEM ICON -->
+      </div>
+      <!-- /ACTION ITEM -->
+
+      <!-- DROPDOWN NAVIGATION -->
+      <div class="dropdown-navigation header-settings-dropdown">
+        <!-- DROPDOWN NAVIGATION HEADER -->
+        <div class="dropdown-navigation-header">
+          <!-- USER STATUS -->
+          <div class="user-status">
+            <!-- USER STATUS AVATAR -->
+            <a
+              class="user-avatar small user-status-avatar no-border no-outline"
+              routerLink="/profile"
+              (click)="this.profileService.loadDataProfileTimeline(0)"
+            >
+              <div class="hexagon-container">
+                <div class="hexagon user-avatar-content">
+                  <div
+                    class="hexagon-image"
+                    style="background-image: url('{{ avatar }}')"
+                  ></div>
+                </div>
+                <div class="hexagon user-avatar-border">
+                  <div class="hexagon-border"></div>
+                </div>
+                <div class="hexagon user-avatar-progress-border">
+                  <div class="user-avatar-progress"></div>
+                </div>
+                <p class="user-avatar-badge-text">1</p>
+              </div>
+            </a>
+            <!-- /USER STATUS AVATAR -->
+
+            <!-- USER STATUS TITLE -->
+            <p class="user-status-title">
+              <span class="bold">{{ "xinchao" | translate }}</span>
+            </p>
+            <p class="user-status-title">
+              <span class="bold">{{ userDisplayName }}</span>
+            </p>
+            <!-- /USER STATUS TITLE -->
+          </div>
+          <!-- /USER STATUS -->
+        </div>
+        <!-- /DROPDOWN NAVIGATION HEADER -->
+
+        <!-- DROPDOWN NAVIGATION CATEGORY -->
+        <p class="dropdown-navigation-category">{{ userDisplayName }}</p>
+        <!-- /DROPDOWN NAVIGATION CATEGORY -->
+
+        <!-- DROPDOWN NAVIGATION LINK -->
+        <a
+          class="dropdown-navigation-link"
+          routerLink="/profile"
+          (click)="this.profileService.loadDataProfileTimeline(0)"
+          >Trang cá nhân</a
+        >
+        <!-- /DROPDOWN NAVIGATION LINK -->
+
+        <!-- DROPDOWN NAVIGATION LINK -->
+        <a class="dropdown-navigation-link" routerLink="/edit-profile">{{
+          "admin_capnhat" | translate
+        }}</a>
+        <!-- /DROPDOWN NAVIGATION LINK -->
+
+        <!-- DROPDOWN NAVIGATION LINK -->
+        <!-- <a class="dropdown-navigation-link" href="change-password">{{
+          "doimatkhau" | translate
+        }}</a> -->
+        <!-- /DROPDOWN NAVIGATION LINK -->
+
+        <!-- DROPDOWN NAVIGATION BUTTON -->
+        <p
+          class="dropdown-navigation-button button small secondary"
+          (click)="logout()"
+        >
+          {{ "Logout" | translate }}
+        </p>
+        <!-- /DROPDOWN NAVIGATION BUTTON -->
+      </div>
+      <!-- /DROPDOWN NAVIGATION -->
+    </div>
+    <!-- /ACTION ITEM WRAP -->
+  </div>
+  <!-- /HEADER ACTIONS -->
+</header>
+<!-- /HEADER -->

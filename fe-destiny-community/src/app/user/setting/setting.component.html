@@ -1,0 +1,220 @@
+<body>
+  <app-navigation></app-navigation>
+
+  <!-- CONTENT GRID -->
+  <div class="content-grid">
+    <!-- SECTION BANNER -->
+    <div class="section-banner">
+      <!-- SECTION BANNER ICON -->
+      <img
+        class="section-banner-icon"
+        src="../../assets/images/banner/accounthub-icon.png"
+        alt="accounthub-icon"
+      />
+      <!-- /SECTION BANNER ICON -->
+
+      <!-- SECTION BANNER TITLE -->
+      <p class="section-banner-title">{{ "sidebar_setting" | translate }}</p>
+      <!-- /SECTION BANNER TITLE -->
+
+      <!-- SECTION BANNER TEXT -->
+      <p class="section-banner-text">
+        {{ "setting_giaodien" | translate }},
+        {{ "setting_ngonngu" | translate }},...!
+      </p>
+      <!-- /SECTION BANNER TEXT -->
+    </div>
+    <!-- /SECTION BANNER -->
+
+    <!-- GRID -->
+    <!-- Setting -->
+    <div class="account-hub-content">
+      <!-- SECTION HEADER -->
+      <div class="section-header">
+        <!-- SECTION HEADER INFO -->
+        <div class="section-header-info">
+          <!-- SECTION PRETITLE -->
+          <!-- <p class="section-pretitle">Account</p> -->
+          <!-- /SECTION PRETITLE -->
+
+          <!-- SECTION TITLE -->
+          <h2 class="section-title">{{ "sidebar_setting" | translate }}</h2>
+          <!-- /SECTION TITLE -->
+        </div>
+        <!-- /SECTION HEADER INFO -->
+      </div>
+      <!-- /SECTION HEADER -->
+
+      <!-- GRID COLUMN -->
+      
+      <div class="grid-column">
+        <!-- WIDGET BOX -->
+        <div class="widget-box">
+          <!-- WIDGET BOX TITLE -->
+          <p class="widget-box-title">{{ "setting_giaodien" | translate }}</p>
+          <!-- /WIDGET BOX TITLE -->
+
+          <!-- WIDGET BOX CONTENT -->
+          <div class="widget-box-content">
+            <!-- SWITCH OPTION LIST -->
+            <div class="switch-option-list">
+              <!-- SWITCH OPTION -->
+              <div class="switch-option">
+                <!-- SWITCH OPTION TITLE -->
+                <p class="switch-option-title">
+                  {{ "user_chedotoi" | translate }}
+                </p>
+                <!-- /SWITCH OPTION TITLE -->
+
+                <!-- SWITCH OPTION TEXT -->
+                <p class="switch-option-text">
+                  {{ "user_description_chedotoi" | translate }}
+                </p>
+                <!-- /SWITCH OPTION TEXT -->
+
+                <!-- FORM SWITCH -->
+                <div class="form-switch active">
+                  <!-- FORM SWITCH BUTTON -->
+                  <div class="form-switch-button"></div>
+                  <!-- /FORM SWITCH BUTTON -->
+                </div>
+                <!-- /FORM SWITCH -->
+              </div>
+              <!-- /SWITCH OPTION -->
+            </div>
+            <!-- /SWITCH OPTION LIST -->
+          </div>
+          <!-- WIDGET BOX CONTENT -->
+        </div>
+        <!-- /WIDGET BOX -->
+
+        <!-- WIDGET BOX -->
+        <div class="widget-box" style="margin-top: 1rem;">
+          <!-- WIDGET BOX TITLE -->
+          <p class="widget-box-title">{{ "setting_ngonngu" | translate }}</p>
+          <!-- /WIDGET BOX TITLE -->
+
+          <!-- WIDGET BOX CONTENT -->
+          <div class="widget-box-content">
+            <!-- FORM -->
+            <form class="form">
+              <!-- FORM ROW -->
+              <div class="form-row split">
+                <!-- FORM ITEM -->
+                <div class="form-item centered">
+                  <label class="form-title" for="profile-privacy-visibility">{{
+                    "setting_chonngonngu" | translate
+                  }}</label>
+                </div>
+                <!-- /FORM ITEM -->
+
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM SELECT -->
+                  <div class="form-select">
+                    <select
+                      (change)="selectLg($event)"
+                      id="profile-privacy-visibility"
+                      name="profile_privacy_visibility"
+                    >
+                      <option value="en-US">
+                        {{ "setting_english" | translate }}
+                      </option>
+                      <option value="vi_VN" selected>
+                        {{ "setting_vietnam" | translate }}
+                      </option>
+                    </select>
+                    <!-- FORM SELECT ICON -->
+                    <svg class="form-select-icon icon-small-arrow">
+                      <use xlink:href="#svg-small-arrow"></use>
+                    </svg>
+                    <!-- /FORM SELECT ICON -->
+                  </div>
+                  <!-- /FORM SELECT -->
+                </div>
+                <!-- /FORM ITEM -->
+              </div>
+              <!-- /FORM ROW -->
+            </form>
+            <!-- /FORM -->
+          </div>
+          <!-- WIDGET BOX CONTENT -->
+        </div>
+        <!-- /WIDGET BOX -->
+
+        <!-- WIDGET BOX -->
+        <div class="widget-box" style="margin-top: 1rem;">
+          <!-- WIDGET BOX TITLE -->
+          <p class="widget-box-title">
+            Mật khẩu và bảo mật</p>
+          <!-- /WIDGET BOX TITLE -->
+
+          <!-- WIDGET BOX CONTENT -->
+          <div class="widget-box-content">
+            <!-- FORM -->
+            <form class="form">
+              <!-- FORM ROW -->
+              <div class="form-row split" (click)="profileService.openModalChangePass()">
+                <!-- FORM ITEM -->
+                <div class="form-item centered">
+                  <label class="form-title" for="profile-privacy-visibility">Đổi mật khẩu</label>
+                </div>
+                <!-- /FORM ITEM -->
+
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM SELECT -->
+                  <div class="form-select">
+                    
+                    <!-- FORM SELECT ICON -->
+                    <!-- <svg >
+                      <use xlink:href="#svg-small-arrow"></use>
+                    </svg> -->
+                    <svg class="form-select-icon icon-small-arrow" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" class="x1lliihq x1k90msu x2h7rmj x1qfuztq xcza8v6 xlup9mm x1kky2od"><path fill-rule="evenodd" clip-rule="evenodd" d="M7.247 4.341a1 1 0 0 1 1.412-.094l8 7a1 1 0 0 1 0 1.506l-8 7a1 1 0 0 1-1.318-1.506L14.482 12l-7.14-6.247a1 1 0 0 1-.094-1.412z"></path></svg>
+                    <!-- /FORM SELECT ICON -->
+                  </div>
+                  <!-- /FORM SELECT -->
+                </div>
+                <!-- /FORM ITEM -->
+              </div>
+              <!-- /FORM ROW -->
+              <!-- FORM ROW -->
+              <div class="form-row split" (click)="profileService.openModalChangeMail()">
+                <!-- FORM ITEM -->
+                <div class="form-item centered">
+                  <label class="form-title" for="profile-privacy-visibility">Đổi email</label>
+                </div>
+                <!-- /FORM ITEM -->
+
+                <!-- FORM ITEM -->
+                <div class="form-item">
+                  <!-- FORM SELECT -->
+                  <div class="form-select">
+                    
+                    <!-- FORM SELECT ICON -->
+                    <!-- <svg >
+                      <use xlink:href="#svg-small-arrow"></use>
+                    </svg> -->
+                    <svg class="form-select-icon icon-small-arrow" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" class="x1lliihq x1k90msu x2h7rmj x1qfuztq xcza8v6 xlup9mm x1kky2od"><path fill-rule="evenodd" clip-rule="evenodd" d="M7.247 4.341a1 1 0 0 1 1.412-.094l8 7a1 1 0 0 1 0 1.506l-8 7a1 1 0 0 1-1.318-1.506L14.482 12l-7.14-6.247a1 1 0 0 1-.094-1.412z"></path></svg>
+                    <!-- /FORM SELECT ICON -->
+                  </div>
+                  <!-- /FORM SELECT -->
+                </div>
+                <!-- /FORM ITEM -->
+              </div>
+              <!-- /FORM ROW -->
+            </form>
+            <!-- /FORM -->
+          </div>
+          <!-- WIDGET BOX CONTENT -->
+        </div>
+        <!-- /WIDGET BOX -->
+      </div>
+      <!-- /GRID COLUMN -->
+    </div>
+    <!-- /GRID -->
+  </div>
+  <!-- /CONTENT GRID -->
+<app-change-password></app-change-password>
+<app-change-email></app-change-email>
+</body>

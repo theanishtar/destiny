@@ -1,0 +1,51 @@
+<app-navigation></app-navigation>
+
+<!-- CONTENT GRID -->
+<div class="content-grid">
+
+  <app-header-profile></app-header-profile>
+
+  <!-- SECTION -->
+  <section class="section">
+    <!-- SECTION HEADER -->
+    <div class="section-header">
+      <!-- SECTION HEADER INFO -->
+      <div class="section-header-info">
+        <!-- SECTION PRETITLE -->
+        <!-- /SECTION PRETITLE -->
+
+        <!-- SECTION TITLE -->
+        <h2 class="section-title">Hình ảnh <span class="highlighted">{{profileService.dataProfileTimeline?.images.length}}</span></h2>
+        <!-- /SECTION TITLE -->
+      </div>
+      <!-- /SECTION HEADER INFO -->
+    </div>
+    <!-- /SECTION HEADER -->
+
+    <!-- GRID -->
+    <div class="grid grid-2-2-2-2-2-2 centered">
+      <!-- PHOTO PREVIEW -->
+      <div class="photo-preview small popup-picture-trigger" *ngFor="let img of profileService.dataProfileTimeline?.images">
+        <!-- PHOTO PREVIEW IMAGE -->
+        <figure class="photo-preview-image liquid">
+          <img [src]="img" alt="photo-preview-01">
+        </figure>
+        <!-- /PHOTO PREVIEW IMAGE -->
+
+        <!-- PHOTO PREVIEW INFO -->
+        <div class="photo-preview-info">
+          <!-- REACTION COUNT LIST -->
+
+          <!-- /REACTION COUNT LIST -->
+        </div>
+        <!-- /PHOTO PREVIEW INFO -->
+      </div>
+      <!-- /PHOTO PREVIEW -->
+
+     
+    </div>
+    <!-- /GRID -->
+  </section>
+  <!-- /SECTION -->
+</div>
+<!-- /CONTENT GRID -->

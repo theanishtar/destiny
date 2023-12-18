@@ -1,0 +1,1069 @@
+<app-navigation></app-navigation>
+
+<!-- CONTENT GRID -->
+<app-loading *ngIf="isLoading"></app-loading>
+<div class="content-grid" id="profile_timeline">
+  <!-- <app-loading *ngIf="isLoading"></app-loading> -->
+  <app-header-profile></app-header-profile>
+  <!-- GRID -->
+  <div class="grid grid-3-6-3 mobile-prefer-content">
+    <!-- GRID COLUMN -->
+    <div class="grid-column">
+      <!-- WIDGET BOX -->
+      <div class="widget-box">
+        <!-- WIDGET BOX SETTINGS -->
+        <div class="widget-box-settings">
+          <!-- POST SETTINGS WRAP -->
+          <div class="post-settings-wrap">
+            <!-- POST SETTINGS -->
+            <div
+              class="post-settings widget-box-post-settings-dropdown-trigger"
+            >
+              <!-- POST SETTINGS ICON -->
+              <svg class="post-settings-icon icon-more-dots">
+                <use xlink:href="#svg-more-dots"></use>
+              </svg>
+              <!-- /POST SETTINGS ICON -->
+            </div>
+            <!-- /POST SETTINGS -->
+
+            <!-- SIMPLE DROPDOWN -->
+            <div class="simple-dropdown widget-box-post-settings-dropdown">
+              <!-- SIMPLE DROPDOWN LINK -->
+              <a class="simple-dropdown-link" routerLink="edit-profile">Cập nhật</a>
+              <!-- /SIMPLE DROPDOWN LINK -->
+            </div>
+            <!-- /SIMPLE DROPDOWN -->
+          </div>
+          <!-- /POST SETTINGS WRAP -->
+        </div>
+        <!-- /WIDGET BOX SETTINGS -->
+
+        <!-- WIDGET BOX TITLE -->
+        <p class="widget-box-title">Giới thiệu</p>
+        <!-- /WIDGET BOX TITLE -->
+
+        <!-- WIDGET BOX CONTENT -->
+        <div class="widget-box-content">
+          <!-- PARAGRAPH -->
+          <p class="paragraph">{{ profileService.dataProfileTimeline?.intro }}</p>
+          <!-- /PARAGRAPH -->
+
+          <!-- INFORMATION LINE LIST -->
+          <div class="information-line-list">
+            <!-- INFORMATION LINE -->
+            <div class="information-line">
+              <!-- INFORMATION LINE TITLE -->
+              <p class="information-line-title">Tham gia</p>
+              <!-- /INFORMATION LINE TITLE -->
+
+              <!-- INFORMATION LINE TEXT -->
+              <p class="information-line-text">
+                {{ profileService.dateJoin! }}
+              </p>
+              <!-- /INFORMATION LINE TEXT -->
+            </div>
+            <!-- /INFORMATION LINE -->
+
+            <!-- INFORMATION LINE -->
+            <div class="information-line">
+              <!-- INFORMATION LINE TITLE -->
+              <p class="information-line-title">Thành phố</p>
+              <!-- /INFORMATION LINE TITLE -->
+
+              <!-- INFORMATION LINE TEXT -->
+              <p class="information-line-text">
+                {{ profileService.dataProfileTimeline?.address_fullname }}
+              </p>
+              <!-- /INFORMATION LINE TEXT -->
+            </div>
+            <!-- /INFORMATION LINE -->
+          </div>
+          <!-- /INFORMATION LINE LIST -->
+        </div>
+        <!-- /WIDGET BOX CONTENT -->
+      </div>
+      <!-- /WIDGET BOX -->
+
+      <!-- WIDGET BOX -->
+      <div class="widget-box">
+        <p class="widget-box-title">Đề xuất cho bạn</p>
+        <!-- <div *ngIf="checkData1" class="emty-message">Không có đề xuất</div> -->
+        <!-- <div class="lds-dual-ring" *ngIf="check"></div> -->
+
+        <div class="widget-box-content" *ngFor="let item of listSuggested">
+          <div class="user-status-list">
+            <div class="user-status">
+              <div (click)="this.profileService.loadDataProfileTimeline(item.user_id)">
+                <a
+                class="user-avatar small user-status-avatar no-border no-outline"
+              >
+                <div class="hexagon-container">
+                  <div class="hexagon user-avatar-content">
+                    <div
+                      class="hexagon-image"
+                      style="background-image: url('{{ item.avatar }}')"
+                    ></div>
+                  </div>
+                  <div class="hexagon user-avatar-border">
+                    <div class="hexagon-border"></div>
+                  </div>
+                  <div class="hexagon user-avatar-progress-border">
+                    <div class="user-avatar-progress"></div>
+                  </div>
+                </div>
+              </a>
+              <div class="user-status-title">
+                <a class="bold top-user" routerLink="/profile">{{
+                  item.fullname
+                }}</a>
+                <span class="bp-verified-badge"></span>
+              </div>
+              </div>
+              <!-- <a class="user-status-text small" (click)="addFollow(item.user_id)">Theo dõi</a> -->
+              <a
+                class="user-status-text small suggested"
+                (click)="addFollow(item.user_id)"
+              >
+                Theo dõi
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /WIDGET BOX -->
+    </div>
+    <!-- /GRID COLUMN -->
+
+    <!-- GRID COLUMN -->
+    <div class="grid-column" id="scrollableDiv">
+      <!-- SIMPLE TAB ITEMS -->
+      <div class="simple-tab-items" #elementToScroll>
+        <!-- FORM -->
+        <form class="form">
+          <!-- FORM SELECT -->
+          <div class="form-select">
+            <select
+              id="newsfeed-filter-category"
+              name="newsfeed_filter_category"
+            >
+              <option value="0">Bài đăng</option>
+            </select>
+            <!-- FORM SELECT ICON -->
+            <svg class="form-select-icon icon-small-arrow">
+              <use xlink:href="#svg-small-arrow"></use>
+            </svg>
+            <!-- /FORM SELECT ICON -->
+          </div>
+          <!-- /FORM SELECT -->
+        </form>
+        <!-- /FORM -->
+
+        <!-- SIMPLE TAB ITEM -->
+        <p class="simple-tab-item active">Bài đăng</p>
+        <!-- /SIMPLE TAB ITEM -->
+      </div>
+      <!-- /SIMPLE TAB ITEMS -->
+
+      <!-- WIDGET BOX -->
+      <!-- <div *ngFor="let p of profileService.listPostPr"> -->
+     
+      <!-- /WIDGET BOX -->
+      <div class="widget-box no-padding" *ngFor="let p of profileService.listPostPr">
+        <!-- WIDGET BOX SETTINGS -->
+        <div class="widget-box-settings">
+          <!-- POST SETTINGS WRAP -->
+          <div class="post-settings-wrap">
+            <!-- POST SETTINGS -->
+            <div
+              class="post-settings widget-box-post-settings-dropdown-trigger"
+            >
+              <svg
+                class="post-settings-icon icon-more-dots"
+                width="800px"
+                height="800px"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M7 12C7 13.1046 6.10457 14 5 14C3.89543 14 3 13.1046 3 12C3 10.8954 3.89543 10 5 10C6.10457 10 7 10.8954 7 12Z"
+                  fill="#1C274C"
+                />
+                <path
+                  d="M14 12C14 13.1046 13.1046 14 12 14C10.8954 14 10 13.1046 10 12C10 10.8954 10.8954 10 12 10C13.1046 10 14 10.8954 14 12Z"
+                  fill="#1C274C"
+                />
+                <path
+                  d="M21 12C21 13.1046 20.1046 14 19 14C17.8954 14 17 13.1046 17 12C17 10.8954 17.8954 10 19 10C20.1046 10 21 10.8954 21 12Z"
+                  fill="#1C274C"
+                />
+              </svg>
+              <!-- /POST SETTINGS ICON -->
+            </div>
+            <!-- /POST SETTINGS -->
+
+            <!-- SIMPLE DROPDOWN -->
+            <div class="simple-dropdown widget-box-post-settings-dropdown">
+              <!-- SIMPLE DROPDOWN LINK -->
+              <p class="simple-dropdown-link">Báo cáo bài viết</p>
+              <!-- /SIMPLE DROPDOWN LINK -->
+
+              <!-- SIMPLE DROPDOWN LINK -->
+              <p class="simple-dropdown-link">Báo cáo tài khoản</p>
+              <!-- /SIMPLE DROPDOWN LINK -->
+
+              <!-- SIMPLE DROPDOWN LINK -->
+              <p class="simple-dropdown-link" (click)="postService.openModalUpdatePost(p.post_id)">Chỉnh sửa bài viết</p>
+              <!-- /SIMPLE DROPDOWN LINK -->
+            </div>
+            <!-- /SIMPLE DROPDOWN -->
+          </div>
+          <!-- /POST SETTINGS WRAP -->
+        </div>
+        <!-- /WIDGET BOX SETTINGS -->
+
+        <!-- WIDGET BOX STATUS -->
+        <div class="widget-box-status">
+          <!-- WIDGET BOX STATUS CONTENT -->
+          <div class="widget-box-status-content">
+            <!-- USER STATUS -->
+            <div
+              class="user-status"
+            >
+              <!-- USER STATUS AVATAR -->
+              <div>
+                <a
+                class="user-avatar small user-status-avatar no-border no-outline"
+              >
+                <div class="hexagon-container">
+                  <div class="hexagon user-avatar-content">
+                    <div
+                      class="hexagon-image"
+                      style="background-image: url('{{ p.avatar }}')"
+                    ></div>
+                  </div>
+                  <div class="hexagon user-avatar-border">
+                    <div class="hexagon-border"></div>
+                  </div>
+                  <div class="hexagon user-avatar-progress-border">
+                    <div class="user-avatar-progress"></div>
+                  </div>
+                  <p class="user-avatar-badge-text">1</p>
+                </div>
+              </a>
+              <!-- /USER STATUS AVATAR -->
+
+              <!-- USER STATUS TITLE -->
+              <p class="user-status-title medium">
+                <a class="bold" >{{ p.fullname }}</a> <span *ngIf="p.postEntityProfile != null"> đã chia sẻ bài đăng của 
+                  <a class="bold" (click)="this.profileService.loadDataProfileTimeline(p.postEntityProfile.user_id)">{{ p.postEntityProfile.fullname }}</a> 
+                </span>
+              </p>
+              </div>
+              <!-- /USER STATUS TITLE -->
+
+              <!-- USER STATUS TEXT -->
+              <p class="user-status-text small post-time">
+                {{ p.date }}
+              </p>
+              <!-- /USER STATUS TEXT -->
+            </div>
+            <!-- /USER STATUS -->
+
+            <!-- WIDGET BOX STATUS TEXT -->
+            <div class="translation"*ngIf="p.content !== 'null'">
+              <div class="original-content">
+                <p class="widget-box-status-text">
+                  {{ p.content }}
+                </p>
+                <p class="translate-button">
+                  <i class="fa-solid fa-gear"></i> Dịch trang này
+                </p>
+              </div>
+              <div class="translated-content">
+                <p class="widget-box-status-text after-translate">
+                  {{ p.content }}
+                </p>
+                <p class="back-button">
+                  <i class="fa-solid fa-gear"></i> Xem bản gốc
+                </p>
+              </div>
+            </div>
+            <!-- /WIDGET BOX STATUS TEXT -->
+            <div class="widget-box-status-content" *ngIf="p.postEntityProfile != null">
+              <div class="widget-box no-padding">
+                <div class="widget-box-status">
+                  <!-- USER STATUS -->
+                  <div class="user-status">
+                    <!-- USER STATUS AVATAR -->
+                    <a
+                    class="user-avatar small user-status-avatar no-border no-outline"
+                  >
+                    <div class="hexagon-container">
+                      <div class="hexagon user-avatar-content">
+                        <div
+                          class="hexagon-image"
+                          style="background-image: url('{{ p.postEntityProfile.avatar }}')"
+                        ></div>
+                      </div>
+                      <div class="hexagon user-avatar-border">
+                        <div class="hexagon-border"></div>
+                      </div>
+                      <div class="hexagon user-avatar-progress-border">
+                        <div class="user-avatar-progress"></div>
+                      </div>
+                      <p class="user-avatar-badge-text">1</p>
+                    </div>
+                  </a>
+                    <!-- /USER STATUS AVATAR -->
+
+                    <!-- USER STATUS TITLE -->
+                    <p class="user-status-title medium">
+                      <a class="bold" (click)="this.profileService.loadDataProfileTimeline(p.postEntityProfile.user_id)">{{ p.postEntityProfile.fullname }}</a>
+                    </p>
+                    <!-- /USER STATUS TITLE -->
+
+                    <!-- USER STATUS TEXT -->
+                    <p class="user-status-text small">{{ p.postEntityProfile.date}}</p>
+                    <!-- /USER STATUS TEXT -->
+                  </div>
+                  <p class="widget-box-status-text">
+                    {{ p.postEntityProfile.content }}
+                  </p>
+                  <!-- /USER STATUS -->
+                  <div class="widget-box-status-content">
+                    <div class="picture-collage" *ngIf="p.postEntityProfile.images.length === 1">
+                      <div class="picture-collage-row medium" style="margin: 0 18%">
+                        <div
+                          class="picture-collage-item"
+                          style="width: 300px; height: 300px"
+                        >
+                          <div
+                            class="photo-preview-wrap"
+                            style="width: 100%; height: 100%"
+                          >
+                            <div class="photo-preview">
+                              <div
+                                (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
+                                class="photo-preview-image"
+                                style="
+                                    background: url('{{ p.postEntityProfile.images[0] }}')
+                                      center center / cover no-repeat;
+                                  "
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="picture-collage" *ngIf="p.postEntityProfile.images.length === 2">
+                      <div class="picture-collage-row medium">
+                        <div class="picture-collage-item">
+                          <div class="photo-preview-wrap">
+                            <div class="photo-preview">
+                              <div
+                                class="photo-preview-image"
+                                (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
+                                style="
+                                    background: url('{{ p.postEntityProfile.images[0] }}')
+                                      center center / cover no-repeat;
+                                  "
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="picture-collage-item">
+                          <div class="photo-preview-wrap">
+                            <div class="photo-preview">
+                              <div
+                                class="photo-preview-image"
+                                (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
+                                style="
+                                    background: url('{{  p.postEntityProfile.images[1] }}')
+                                      center center / cover no-repeat;
+                                  "
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="picture-collage" *ngIf=" p.postEntityProfile.images.length === 3">
+                      <div class="picture-collage-row medium">
+                        <div class="picture-collage-item">
+                          <div class="photo-preview-wrap">
+                            <div class="photo-preview">
+                              <div
+                                class="photo-preview-image"
+                                (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
+                                style="
+                                    background: url('{{ p.postEntityProfile.images[0] }}')
+                                      center center / cover no-repeat;
+                                  "
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="picture-collage-item">
+                          <div class="photo-preview-wrap">
+                            <div class="photo-preview">
+                              <div
+                                class="photo-preview-image"
+                                (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
+                                style="
+                                    background: url('{{ p.postEntityProfile.images[1] }}')
+                                      center center / cover no-repeat;
+                                  "
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="picture-collage-item">
+                          <div class="photo-preview-wrap">
+                            <div class="photo-preview">
+                              <div
+                                class="photo-preview-image"
+                                (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
+                                style="
+                                    background: url('{{ p.postEntityProfile.images[2] }}')
+                                      center center / cover no-repeat;
+                                  "
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="picture-collage" *ngIf=" p.postEntityProfile.images.length >= 4">
+                      <div class="picture-collage-row medium">
+                        <div class="picture-collage-item">
+                          <div class="photo-preview-wrap">
+                            <div class="photo-preview">
+                              <div
+                                class="photo-preview-image"
+                                (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
+                                style="
+                                    background: url('{{ p.postEntityProfile.images[0] }}')
+                                      center center / cover no-repeat;
+                                  "
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="picture-collage-item">
+                          <div class="photo-preview-wrap">
+                            <div class="photo-preview">
+                              <div
+                                class="photo-preview-image"
+                                (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
+                                style="
+                                    background: url('{{  p.postEntityProfile.images[1] }}')
+                                      center center / cover no-repeat;
+                                  "
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="picture-collage-row">
+                        <div class="picture-collage-item">
+                          <div class="photo-preview-wrap">
+                            <div class="photo-preview">
+                              <div
+                                class="photo-preview-image"
+                                (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
+                                style="
+                                    background: url('{{ p.postEntityProfile.images[2]}}') center
+                                      center / cover no-repeat;
+                                  "
+                              ></div>
+                            </div>
+                            <div></div>
+                          </div>
+                        </div>
+                        <div class="picture-collage-item">
+                          <div class="photo-preview-wrap">
+                            <div class="photo-preview">
+                              <div
+                                class="photo-preview-image"
+                                (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
+                                style="
+                                  background: url('{{  p.postEntityProfile.images[3] }}')
+                                    center center / cover no-repeat;
+                                "
+                              ></div>
+                            </div>
+                            <div></div>
+                          </div>
+                        </div>
+                        <div
+                          class="picture-collage-item"
+                          *ngIf="( p.postEntityProfile.images.length - 4) > 0"
+                          (click)="modalService.openModalSeeMoreImgPr(p.postEntityProfile.post_id)"
+                        >
+                          <a class="picture-collage-item-overlay seemore">
+                            <p class="picture-collage-item-overlay-text">
+                              +{{  p.postEntityProfile.images.length - 4 }}
+                            </p>
+                          </a>
+                        </div>
+                      </div>
+                      <!-- </div> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /WIDGET BOX STATUS CONTENT -->
+          <!-- {{post.post_img[0]}} -->
+          <!-- IFRAME WRAP -->
+          <!-- <div *ngFor="let img of p.postImages; let i = index"> -->
+        <div *ngIf="p.postEntityProfile == null">
+          <div class="picture-collage" *ngIf="p.images.length === 1">
+            <div class="picture-collage-row medium" style="margin: 0 18%">
+              <div
+                class="picture-collage-item"
+                style="width: 300px; height: 300px"
+              >
+                <div
+                  class="photo-preview-wrap"
+                  style="width: 100%; height: 100%"
+                >
+                  <div class="photo-preview">
+                    <div
+                      (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
+                      class="photo-preview-image"
+                      style="
+                          background: url('{{ p.images[0] }}')
+                            center center / cover no-repeat;
+                        "
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="picture-collage" *ngIf="p.images.length === 2">
+            <div class="picture-collage-row medium">
+              <div class="picture-collage-item">
+                <div class="photo-preview-wrap">
+                  <div class="photo-preview">
+                    <div
+                      class="photo-preview-image"
+                      (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
+                      style="
+                          background: url('{{ p.images[0] }}')
+                            center center / cover no-repeat;
+                        "
+                    ></div>
+                  </div>
+                </div>
+              </div>
+              <div class="picture-collage-item">
+                <div class="photo-preview-wrap">
+                  <div class="photo-preview">
+                    <div
+                      class="photo-preview-image"
+                      (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
+                      style="
+                          background: url('{{ p.images[1] }}')
+                            center center / cover no-repeat;
+                        "
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="picture-collage" *ngIf="p.images.length === 3">
+            <div class="picture-collage-row medium">
+              <div class="picture-collage-item">
+                <div class="photo-preview-wrap">
+                  <div class="photo-preview">
+                    <div
+                      class="photo-preview-image"
+                      (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
+                      style="
+                          background: url('{{ p.images[0] }}')
+                            center center / cover no-repeat;
+                        "
+                    ></div>
+                  </div>
+                </div>
+              </div>
+              <div class="picture-collage-item">
+                <div class="photo-preview-wrap">
+                  <div class="photo-preview">
+                    <div
+                      class="photo-preview-image"
+                      (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
+                      style="
+                          background: url('{{ p.images[1] }}')
+                            center center / cover no-repeat;
+                        "
+                    ></div>
+                  </div>
+                </div>
+              </div>
+              <div class="picture-collage-item">
+                <div class="photo-preview-wrap">
+                  <div class="photo-preview">
+                    <div
+                      class="photo-preview-image"
+                      (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
+                      style="
+                          background: url('{{ p.images[2] }}')
+                            center center / cover no-repeat;
+                        "
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="picture-collage" *ngIf="p.images.length >= 4">
+            <div class="picture-collage-row medium">
+              <div class="picture-collage-item">
+                <div class="photo-preview-wrap">
+                  <div class="photo-preview">
+                    <div
+                      class="photo-preview-image"
+                      (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
+                      style="
+                          background: url('{{ p.images[0] }}')
+                            center center / cover no-repeat;
+                        "
+                    ></div>
+                  </div>
+                </div>
+              </div>
+              <div class="picture-collage-item">
+                <div class="photo-preview-wrap">
+                  <div class="photo-preview">
+                    <div
+                      class="photo-preview-image"
+                      (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
+                      style="
+                          background: url('{{ p.images[1] }}')
+                            center center / cover no-repeat;
+                        "
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="picture-collage-row">
+              <div class="picture-collage-item">
+                <div class="photo-preview-wrap">
+                  <div class="photo-preview">
+                    <div
+                      class="photo-preview-image"
+                      (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
+                      style="
+                          background: url('{{p.images[2]}}') center
+                            center / cover no-repeat;
+                        "
+                    ></div>
+                  </div>
+                  <div></div>
+                </div>
+              </div>
+              <div class="picture-collage-item">
+                <div class="photo-preview-wrap">
+                  <div class="photo-preview">
+                    <div
+                      class="photo-preview-image"
+                      (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
+                      style="
+                        background: url('{{ p.images[3] }}')
+                          center center / cover no-repeat;
+                      "
+                    ></div>
+                  </div>
+                  <div></div>
+                </div>
+              </div>
+              <div
+                class="picture-collage-item"
+                *ngIf="(p.images.length - 4) > 0"
+                (click)="modalService.openModalSeeMoreImgPr(p.post_id)"
+              >
+                <a class="picture-collage-item-overlay seemore">
+                  <p class="picture-collage-item-overlay-text">
+                    +{{ p.images.length - 4 }}
+                  </p>
+                </a>
+              </div>
+            </div>
+            <!-- </div> -->
+          </div>
+        </div>
+          <!-- /IFRAME WRAP -->
+
+          <!-- WIDGET BOX STATUS CONTENT -->
+          <div class="widget-box-status-content">
+            <!-- TAG LIST -->
+            <div class="tag-list" *ngIf="p.list_Hash_Tag && p.list_Hash_Tag[0] !== 'null'">
+              <!-- TAG ITEM -->
+              <a class="tag-item secondary" *ngFor="let hashTag of p.list_Hash_Tag">{{
+                hashTag
+              }}</a>
+              <!-- /TAG ITEM -->
+            </div>
+            <!-- /TAG LIST -->
+
+            <!-- CONTENT ACTIONS -->
+            <div class="content-actions">
+              <!-- <div> -->
+              <!-- CONTENT ACTION -->
+              <div class="content-action">
+                <!-- META LINE -->
+                <div class="meta-line">
+                  <!-- META LINE LIST -->
+                  <div class="meta-line-list reaction-item-list">
+                    <!-- REACTION ITEM -->
+                    <div class="reaction-item">
+                      <!-- REACTION IMAGE -->
+                      <img
+                        class="reaction-image reaction-item-dropdown-trigger"
+                        src="../../../assets/images/reaction/love.png"
+                        alt="reaction-love"
+                      />
+                      <!-- /REACTION IMAGE -->
+
+                      <!-- SIMPLE DROPDOWN -->
+                      <div
+                        class="simple-dropdown padded reaction-item-dropdown"
+                      >
+                        <!-- <p class="simple-dropdown-text">
+                          <img
+                            class="reaction"
+                            src="../../../assets/images/reaction/love.png"
+                            alt="reaction-love"
+                          />
+                          <span class="bold">Love</span>
+                        </p> -->
+                        <!-- SIMPLE DROPDOWN TEXT -->
+                        <div *ngFor="let interesteds of p.userInterested">
+                          <!-- <div *ngIf="interesteds[2] == p.post_id"> -->
+                            <!-- /SIMPLE DROPDOWN TEXT -->
+
+                            <!-- SIMPLE DROPDOWN TEXT -->
+                            <p class="simple-dropdown-text">
+                              {{ interesteds.fullname }}
+                            </p>
+                            <!-- <p class="simple-dropdown-text">
+                              và {{listUser.length - 5}} người khác
+                            </p> -->
+                          <!-- </div> -->
+                        </div>
+                        <!-- /SIMPLE DROPDOWN TEXT -->
+                      </div>
+                      <!-- /SIMPLE DROPDOWN -->
+                    </div>
+                    <!-- /REACTION ITEM -->
+                  </div>
+                  <!-- /META LINE LIST -->
+
+                  <!-- META LINE TEXT -->
+                  <!-- <div *ngFor="let count of profileService.listCountPr"> -->
+                    <p class="meta-line-text">
+                      {{ p.countInterested }}
+                    </p>
+                  <!-- </div> -->
+
+                  <!-- /META LINE TEXT -->
+                </div>
+                <!-- /META LINE -->
+              </div>
+              <!-- /CONTENT ACTION -->
+
+              <!-- CONTENT ACTION -->
+              <div class="count-action">
+                <div class="content-action">
+                  <!-- META LINE -->
+                  <!-- <div> -->
+                  <div class="meta-line">
+                    <!-- META LINE LINK -->
+                    <p class="meta-line-link">{{p.countCommnet }} Bình luận</p>
+                    <!-- /META LINE LINK -->
+                  </div>
+                  <!-- /META LINE -->
+
+                  <!-- META LINE -->
+                  <div class="meta-line">
+                    <!-- META LINE TEXT -->
+                    <p class="meta-line-text">{{ p.countShare }} Chia sẻ</p>
+                    <!-- /META LINE TEXT -->
+                  </div>
+                  <!-- </div> -->
+                  <!-- /META LINE -->
+                </div>
+              </div>
+
+              <!-- /CONTENT ACTION -->
+              <!-- </div> -->
+            </div>
+            <!-- /CONTENT ACTIONS -->
+          </div>
+          <!-- /WIDGET BOX STATUS CONTENT -->
+        </div>
+        <!-- /WIDGET BOX STATUS -->
+
+        <!-- POST OPTIONS -->
+        <div class="post-options">
+          <!-- POST OPTION WRAP -->
+          <div class="post-option-wrap">
+            <!-- POST OPTION -->
+            <div
+              class="post-option reaction-options-dropdown-trigger"
+              id="interest-{{p.post_id}}"
+              [ngClass]="{active: checkInterested(p.post_id, p.userInterested)}"
+              (click)="interestedPost(p.post_id, p.user_id)"
+            >
+              <p class="post-option-text">Quan tâm</p>
+            </div>
+
+            <!-- <div
+              class="post-option reaction-options-dropdown-trigger"
+              (click)="testCheck(p.post_id)"
+              *ngIf="!checkInterested(p.post_id) || !mapIntersted.get(p.post_id)"
+            >
+            <p class="post-option-text">{{mapIntersted.get(p.post_id)}}</p>
+              <p class="post-option-text">Quan tâm</p>
+            </div> -->
+            <!-- /POST OPTION -->
+          </div>
+          <!-- /POST OPTION WRAP -->
+
+          <!-- POST OPTION -->
+          <div
+            class="post-option"
+            (click)="modalService.loadComment(p.post_id, p.user_id)"
+          >
+            <!-- POST OPTION ICON -->
+            <!-- <svg class="post-option-icon icon-comment">
+              <use xlink:routerLink="/#svg-comment"></use>
+            </svg> -->
+            <svg
+              class="post-option-icon icon-comment"
+              width="800px"
+              height="800px"
+              viewBox="0 0 32 32"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g
+                id="Page-1"
+                stroke="none"
+                stroke-width="1"
+                fill="none"
+                fill-rule="evenodd"
+                sketch:type="MSPage"
+              >
+                <g
+                  id="Icon-Set"
+                  sketch:type="MSLayerGroup"
+                  transform="translate(-204.000000, -255.000000)"
+                  fill="#adafca"
+                >
+                  <path
+                    d="M228,267 C226.896,267 226,267.896 226,269 C226,270.104 226.896,271 228,271 C229.104,271 230,270.104 230,269 C230,267.896 229.104,267 228,267 L228,267 Z M220,281 C218.832,281 217.704,280.864 216.62,280.633 L211.912,283.463 L211.975,278.824 C208.366,276.654 206,273.066 206,269 C206,262.373 212.268,257 220,257 C227.732,257 234,262.373 234,269 C234,275.628 227.732,281 220,281 L220,281 Z M220,255 C211.164,255 204,261.269 204,269 C204,273.419 206.345,277.354 210,279.919 L210,287 L217.009,282.747 C217.979,282.907 218.977,283 220,283 C228.836,283 236,276.732 236,269 C236,261.269 228.836,255 220,255 L220,255 Z M212,267 C210.896,267 210,267.896 210,269 C210,270.104 210.896,271 212,271 C213.104,271 214,270.104 214,269 C214,267.896 213.104,267 212,267 L212,267 Z M220,267 C218.896,267 218,267.896 218,269 C218,270.104 218.896,271 220,271 C221.104,271 222,270.104 222,269 C222,267.896 221.104,267 220,267 L220,267 Z"
+                    id="comment-3"
+                    sketch:type="MSShapeGroup"
+                  ></path>
+                </g>
+              </g>
+            </svg>
+            <!-- /POST OPTION ICON -->
+
+            <!-- POST OPTION TEXT -->
+            <p class="post-option-text">Bình luận</p>
+            <!-- /POST OPTION TEXT -->
+          </div>
+          <!-- /POST OPTION -->
+
+          <!-- POST OPTION -->
+          <div class="dropdown">
+          <div class="post-option">
+            <!-- POST OPTION ICON -->
+            <!-- <svg class="post-option-icon icon-share">
+              <use xlink:routerLink="/#svg-share"></use>
+            </svg> -->
+            <svg
+              class="post-option-icon icon-share"
+              width="800px"
+              height="800px"
+              viewBox="-0.5 0 25 25"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M13.47 4.13998C12.74 4.35998 12.28 5.96 12.09 7.91C6.77997 7.91 2 13.4802 2 20.0802C4.19 14.0802 8.99995 12.45 12.14 12.45C12.34 14.21 12.79 15.6202 13.47 15.8202C15.57 16.4302 22 12.4401 22 9.98006C22 7.52006 15.57 3.52998 13.47 4.13998Z"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            <!-- /POST OPTION ICON -->
+
+            <!-- POST OPTION TEXT -->
+            <p class="post-option-text">Chia sẻ</p>
+            <div class="dropdown-content">
+              <a (click)="interactPostsService.sharePost(p.post_id, p.user_id)"><i class="fa-solid fa-share"></i> Công khai</a>
+              <a href="#"><i class="fa-solid fa-envelope"></i> Qua email</a>
+            </div>
+            <!-- /POST OPTION TEXT -->
+          </div>
+        </div>
+          <!-- /POST OPTION -->
+        </div>
+        <!-- /POST OPTIONS -->
+      </div>
+      <!-- <div class="lds-dual-ring" *ngIf="checkLoadingdata"></div> -->
+      <div class="loader-bars" *ngIf="checkLoadingdata">
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+      </div>
+    </div>
+    <!-- /GRID COLUMN -->
+
+    <!-- GRID COLUMN -->
+    <div class="grid-column">
+      <!-- WIDGET BOX -->
+      <div class="widget-box">
+        <!-- WIDGET BOX SETTINGS -->
+        <div class="widget-box-settings">
+          <!-- POST SETTINGS WRAP -->
+          <div class="post-settings-wrap">
+            <!-- POST SETTINGS -->
+            <div
+              class="post-settings widget-box-post-settings-dropdown-trigger"
+            >
+              <!-- POST SETTINGS ICON -->
+              <svg class="post-settings-icon icon-more-dots">
+                <use xlink:href="#svg-more-dots"></use>
+              </svg>
+              <!-- /POST SETTINGS ICON -->
+            </div>
+            <!-- /POST SETTINGS -->
+
+            <!-- SIMPLE DROPDOWN -->
+            <div class="simple-dropdown widget-box-post-settings-dropdown">
+              <!-- SIMPLE DROPDOWN LINK -->
+              <a class="simple-dropdown-link" routerLink="photos">Xem tất cả</a>
+              <!-- /SIMPLE DROPDOWN LINK -->
+            </div>
+            <!-- /SIMPLE DROPDOWN -->
+          </div>
+          <!-- /POST SETTINGS WRAP -->
+        </div>
+        <!-- /WIDGET BOX SETTINGS -->
+
+        <!-- WIDGET BOX TITLE -->
+        <p class="widget-box-title">Ảnh <span class="highlighted">{{profileService.dataProfileTimeline?.images.length}}</span></p>
+        <!-- /WIDGET BOX TITLE -->
+
+        <!-- WIDGET BOX CONTENT -->
+        <div class="widget-box-content">
+          <!-- PICTURE ITEM LIST -->
+          <div class="picture-item-list small" >
+            <!-- PICTURE ITEM -->
+            <div class="picture-item" *ngFor="let img of profileService.dataProfileTimeline?.images.slice(0, 11)">
+              <!-- PICTURE -->
+              <figure class="picture round liquid">
+                <img [src]="img" alt="avatar-01" />
+              </figure>
+              <!-- /PICTURE -->
+            </div>
+            <!-- /PICTURE ITEM -->
+
+            <!-- PICTURE ITEM -->
+            <a class="picture-item" routerLink="photos" *ngIf="(profileService.dataProfileTimeline?.images.length - 11) > 0">
+              <!-- PICTURE -->
+              <figure class="picture round liquid">
+                <img src="" alt="avatar-17" />
+              </figure>
+              <!-- /PICTURE -->
+
+              <!-- PICTURE ITEM OVERLAY -->
+              <div class="picture-item-overlay round">
+                <!-- PICTURE ITEM OVERLAY TEXT -->
+                <p class="picture-item-overlay-text">+{{ profileService.dataProfileTimeline?.images.length - 11}}</p>
+                <!-- /PICTURE ITEM OVERLAY TEXT -->
+              </div>
+              <!-- /PICTURE ITEM OVERLAY -->
+            </a>
+            <!-- /PICTURE ITEM -->
+          </div>
+          <!-- /PICTURE ITEM LIST -->
+        </div>
+        <!-- /WIDGET BOX CONTENT -->
+      </div>
+      <!-- /WIDGET BOX -->
+
+      <!-- WIDGET BOX -->
+      <div class="widget-box">
+        <!-- WIDGET BOX TITLE -->
+        <p class="widget-box-title">Bài được quan tâm nhiều</p>
+        <!-- /WIDGET BOX TITLE -->
+
+        <!-- WIDGET BOX CONTENT -->
+        <div class="widget-box-content" *ngFor="let p of profileService.dataProfileTimeline?.listPostInterested">
+          <!-- POST PEEK LIST -->
+          <div class="post-peek-list">
+            <!-- POST PEEK -->
+            <div class="post-peek">
+              <!-- POST PEEK IMAGE -->
+              <a class="post-peek-image" href="">
+                <figure class="picture small round liquid">
+                  <img src="{{p[1]}}" alt="cover-19" />
+                </figure>
+              </a>
+              <!-- /POST PEEK IMAGE -->
+
+              <!-- POST PEEK TITLE -->
+              <p class="post-peek-title">
+                <a href="profile-post.html"
+                  >{{p[3]}}</a
+                >
+              </p>
+              <!-- /POST PEEK TITLE -->
+
+              <!-- POST PEEK TEXT -->
+              <p class="post-peek-text">6 days ago</p>
+              <!-- /POST PEEK TEXT -->
+            </div>
+            <!-- /POST PEEK -->
+          </div>
+          <!-- /POST PEEK LIST -->
+        </div>
+        <!-- /WIDGET BOX CONTENT -->
+      </div>
+      <!-- /WIDGET BOX -->
+    </div>
+    <!-- /GRID COLUMN -->
+  </div>
+  <!-- /GRID -->
+</div>
+<!-- /CONTENT GRID -->
+<a
+  class="scroll-to-top"
+  (click)="scrollToTop()"
+  id="scrollButton"
+  style="display: none"
+>
+  <i class="fas fa-angle-up"></i>
+</a>
+
+<app-comment></app-comment>
+<app-images></app-images>
+<app-edit-post></app-edit-post>

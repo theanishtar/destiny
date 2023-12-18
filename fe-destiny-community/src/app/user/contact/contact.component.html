@@ -1,0 +1,270 @@
+<body>
+  <app-navigation></app-navigation>
+
+  <!-- CONTENT GRID -->
+  <div class="content-grid">
+    <!-- SECTION BANNER -->
+    <div class="section-banner">
+      <!-- SECTION BANNER ICON -->
+      <img
+        class="section-banner-icon"
+        src="../../assets/images/banner/accounthub-icon.png"
+        alt="accounthub-icon"
+      />
+      <!-- /SECTION BANNER ICON -->
+
+      <!-- SECTION BANNER TITLE -->
+      <p class="section-banner-title">Account Hub</p>
+      <!-- /SECTION BANNER TITLE -->
+
+      <!-- SECTION BANNER TEXT -->
+      <p class="section-banner-text">
+        Profile info, messages, settings and much more!
+      </p>
+      <!-- /SECTION BANNER TEXT -->
+    </div>
+    <!-- /SECTION BANNER -->
+
+    <!-- GRID -->
+    <!-- Contact -->
+    <section class="ftco-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="dbox w-100 text-center">
+              <div
+                class="icon d-flex align-items-center justify-content-center"
+              >
+                <span class="fa fa-map-marker"></span>
+              </div>
+              <div class="text">
+                <p><span>Địa chỉ:</span> FPT Polytechnic Cần Thơ</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="dbox w-100 text-center">
+              <div
+                class="icon d-flex align-items-center justify-content-center"
+              >
+                <span class="fa fa-phone"></span>
+              </div>
+              <div class="text">
+                <p>
+                  <span>Điện thoại:</span>
+                  <a href="tel://1234567920"> + 1235 2355 98</a>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="dbox w-100 text-center">
+              <div
+                class="icon d-flex align-items-center justify-content-center"
+              >
+                <span class="fa fa-paper-plane"></span>
+              </div>
+              <div class="text">
+                <p>
+                  <span>Email:</span>
+                  <a href="mailto:destiny.davisy@gmail.com">
+                    destiny.davisy@gmail.com</a
+                  >
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="dbox w-100 text-center">
+              <div
+                class="icon d-flex align-items-center justify-content-center"
+              >
+                <span class="fa fa-globe"></span>
+              </div>
+              <div class="text">
+                <p><span>Website</span> <a href="#"> destiny.com</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-md-12">
+            <div class="wrapper">
+              <div class="row no-gutters mb-5">
+                <div class="col-md-7">
+                  <div class="contact-wrap w-100 p-md-5 p-4">
+                    <h3 class="mb-4">Liên hệ</h3>
+                    <div id="form-message-warning" class="mb-4"></div>
+                    <div id="form-message-success" class="mb-4">
+                      Your message was sent, thank you!
+                    </div>
+                    <form
+                      [formGroup]="contactForm"
+                      (ngSubmit)="sendContact()"
+                      action=""
+                      novalidate
+                      name="contactForm"
+                      class="contactForm"
+                    >
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label class="label" for="name">Họ tên</label>
+                            <input
+                              type="text"
+                              class="form-control"
+                              name="name"
+                              id="name"
+                              placeholder="Nguyễn Văn An"
+                              formControlName="fullname"
+                            />
+                          </div>
+                          <span
+                            *ngIf="
+                              contactForm.get('fullname')?.invalid &&
+                              contactForm.get('fullname')?.touched
+                            "
+                          >
+                            <div
+                              *ngIf="contactForm.get('fullname')?.errors"
+                              style="color: red"
+                            >
+                              <div
+                                *ngIf="
+                                  contactForm
+                                    .get('fullname')
+                                    ?.hasError('required')
+                                "
+                                style="color: red"
+                              >
+                                Vui lòng nhập họ tên!
+                              </div>
+                              <div
+                                *ngIf="
+                                  contactForm
+                                    .get('fullname')
+                                    ?.hasError('pattern')
+                                "
+                                style="color: red"
+                              >
+                                Họ tên không chứa ký tự đặc biệt!
+                              </div>
+                            </div>
+                          </span>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label class="label" for="email">Email</label>
+                            <input
+                              type="email"
+                              class="form-control"
+                              name="email"
+                              id="email"
+                              placeholder="an@gmail.com"
+                              formControlName="email"
+                            />
+                          </div>
+                          <span
+                            *ngIf="
+                              contactForm.get('email')?.invalid &&
+                              contactForm.get('email')?.touched
+                            "
+                          >
+                            <div style="color: red">
+                              Vui lòng kiểm tra email!
+                            </div>
+                          </span>
+                        </div>
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label class="label" for="subject">Tiêu đề</label>
+                            <input
+                              type="text"
+                              class="form-control"
+                              name="subject"
+                              id="subject"
+                              placeholder="Tiêu đề"
+                              formControlName="subject"
+                            />
+                          </div>
+                          <span
+                            *ngIf="
+                              contactForm.get('subject')?.invalid &&
+                              contactForm.get('subject')?.touched
+                            "
+                          >
+                            <div style="color: red">Vui lòng nhập tiêu đề!</div>
+                          </span>
+                        </div>
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label class="label" for="#">Nội dung</label>
+                            <textarea
+                              name="message"
+                              class="form-control"
+                              id="message"
+                              cols="30"
+                              rows="4"
+                              formControlName="description"
+                            ></textarea>
+                          </div>
+                          <span
+                            *ngIf="
+                              contactForm.get('description')?.invalid &&
+                              contactForm.get('description')?.touched
+                            "
+                          >
+                            <div style="color: red">
+                              Vui lòng nhập nội dung!
+                            </div>
+                          </span>
+                        </div>
+                        <div class="col-md-3">
+                          <button type="submit">
+                            <div class="svg-wrapper-1">
+                              <div class="svg-wrapper">
+                                <svg
+                                  height="24"
+                                  width="24"
+                                  viewBox="0 0 24 24"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path d="M0 0h24v24H0z" fill="none"></path>
+                                  <path
+                                    d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z"
+                                    fill="currentColor"
+                                  ></path>
+                                </svg>
+                              </div>
+                            </div>
+                            <span class="send">Gửi</span>
+                          </button>
+                          <!-- </div> -->
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+                <div class="col-md-5 d-flex align-items-stretch">
+                  <div id="map">
+                    <iframe
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3929.420494742025!2d105.75565247489655!3d9.982081490122408!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31a08906415c355f%3A0x416815a99ebd841e!2zRlBUIFBPTFlURUNITklDIEPhuqZOIFRIxqA!5e0!3m2!1svi!2s!4v1689173690383!5m2!1svi!2s"
+                      width="340px"
+                      height="590"
+                      style="border: 0"
+                      allowfullscreen=""
+                      loading="lazy"
+                      referrerpolicy="no-referrer-when-downgrade"
+                    ></iframe>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- /GRID -->
+  </div>
+  <!-- /CONTENT GRID -->
+</body>
