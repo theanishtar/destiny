@@ -1,9 +1,24 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import 'datatables.net';
 import '../../../assets/js/admin/database/datatables/jquery.dataTables.min.js'
 import '../../../assets/js/admin/database/datatables/dataTables.bootstrap4.js'
 import $e from 'jquery';
 import { Chart } from '../../../assets/js/admin/chart.js/chartjs.min.js';
+
+
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  FormControl,
+} from '@angular/forms';
+
+import {
+  Storage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from '@angular/fire/storage';
 
 @Component({
   selector: 'app-admin-management',
@@ -15,6 +30,34 @@ import { Chart } from '../../../assets/js/admin/chart.js/chartjs.min.js';
 })
 export class AdminManagementComponent {
   @ViewChild('chartLine') chartLine: ElementRef | undefined;
+  @ViewChild('uploadPreviewAvatar') uploadPreviewAvatar: ElementRef;
+
+  iconEdit!: HTMLElement;
+  buttonUpdate!: HTMLElement;
+  buttonCreate!: HTMLElement;
+  buttonDisabled!: HTMLElement;
+
+  username!: HTMLElement;
+  fullname!: HTMLElement;
+  birthday!: HTMLElement;
+  email!: HTMLElement;
+
+  usernameAdmin!: HTMLElement;
+  fullnameAdmin!: HTMLElement;
+  birthdayAdmin!: HTMLElement;
+  emailAdmin: HTMLElement;
+
+  fileAvatar: any = {};
+  avatarTemp = '';
+  initalAvatar: string;
+  checkAvatar: boolean = false;
+
+  constructor(
+    private el: ElementRef,
+    private renderer: Renderer2,
+    private formbuilder: FormBuilder,
+    public storage: Storage,
+  ) { }
 
   ngAfterViewInit() {
     $e(document).ready(function () {
@@ -22,6 +65,125 @@ export class AdminManagementComponent {
     });
 
     this.createChartLine();
+  }
+
+  editProfile() {
+    this.buttonUpdate = this.el.nativeElement.querySelector("#buttonUpdate");
+    this.username = this.el.nativeElement.querySelector("#username");
+    this.fullname = this.el.nativeElement.querySelector("#fullname");
+    this.birthday = this.el.nativeElement.querySelector("#birthday");
+    this.email = this.el.nativeElement.querySelector("#email");
+    if (this.buttonUpdate.classList.contains("d-none")) {
+      this.renderer.removeClass(this.buttonUpdate, "d-none");
+
+      this.setRemoveDisableForm(this.username);
+      this.setRemoveDisableForm(this.fullname);
+      this.setRemoveDisableForm(this.birthday);
+      this.setRemoveDisableForm(this.email);
+
+    } else {
+      this.renderer.addClass(this.buttonUpdate, "d-none");
+
+      this.setAddDisableForm(this.username);
+      this.setAddDisableForm(this.fullname);
+      this.setAddDisableForm(this.birthday);
+      this.setAddDisableForm(this.email);
+    }
+  }
+
+  createAdmin() {
+    this.buttonCreate = this.el.nativeElement.querySelector("#buttonCreate");
+    this.buttonDisabled = this.el.nativeElement.querySelector("#buttonDisabled");
+
+    this.usernameAdmin = this.el.nativeElement.querySelector("#admin-username");
+    this.fullnameAdmin = this.el.nativeElement.querySelector("#admin-fullname");
+    this.birthdayAdmin = this.el.nativeElement.querySelector("#admin-birthday");
+    this.emailAdmin = this.el.nativeElement.querySelector("#admin-email");
+
+    if (this.buttonCreate.classList.contains("d-none")) {
+
+      this.renderer.removeClass(this.buttonCreate, "d-none");
+      this.renderer.addClass(this.buttonDisabled, "d-none");
+
+      this.setRemoveDisableForm(this.usernameAdmin);
+      this.setRemoveDisableForm(this.fullnameAdmin);
+      this.setRemoveDisableForm(this.birthdayAdmin);
+      this.setRemoveDisableForm(this.emailAdmin);
+
+      this.setButtonValue(this.usernameAdmin, "");
+      this.setButtonValue(this.fullnameAdmin, "");
+      this.setButtonValue(this.birthdayAdmin, "");
+      this.setButtonValue(this.emailAdmin, "");
+
+    } else {
+
+      this.renderer.addClass(this.buttonCreate, "d-none");
+      this.renderer.removeClass(this.buttonDisabled, "d-none");
+
+      this.setAddDisableForm(this.usernameAdmin);
+      this.setAddDisableForm(this.fullnameAdmin);
+      this.setAddDisableForm(this.birthdayAdmin);
+      this.setAddDisableForm(this.emailAdmin);
+
+    }
+  }
+
+  setRemoveDisableForm(el: HTMLElement) {
+    this.renderer.removeAttribute(el, "disabled");
+  }
+
+  setAddDisableForm(el: HTMLElement) {
+    this.renderer.setAttribute(el, "disabled", "");;
+  }
+
+  setButtonValue(el: HTMLElement, newValue: string) {
+    this.renderer.setProperty(el, 'value', newValue);
+  }
+
+  chooseFile(event: any) {
+    this.fileAvatar = event.target.files[0];
+    this.checkAvatar = true;
+    this.chooseFileChange(event, this.uploadPreviewAvatar);
+    // this.addData();
+  }
+
+  chooseFileChange(event: any, preview: ElementRef): void {
+    const fileInput = event.target;
+    const selectedFile = fileInput.files[0];
+
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const imageSrc = e.target.result;
+        preview.nativeElement.src = imageSrc;
+        preview.nativeElement.style.display = 'block';
+        preview.nativeElement.style.backgroundImage = 'url(' + imageSrc + ')';
+      };
+      reader.readAsDataURL(selectedFile);
+    }
+  }
+
+  async addDataAvatar() {
+    return new Promise<void>((resolve) => {
+      const storageRef = ref(this.storage, 'avatars/' + this.fileAvatar.name);
+      const uploadTast = uploadBytesResumable(storageRef, this.fileAvatar);
+      uploadTast.on(
+        'state_changed',
+        (snapshot) => { },
+        (error) => {
+          console.log(error.message);
+          resolve();
+        },
+        () => {
+          getDownloadURL(uploadTast.snapshot.ref).then((downloadURL) => {
+            // console.log('Upload file : ', downloadURL);
+            this.avatarTemp = downloadURL;
+            // console.log('this.avatarTemp : ', this.avatarTemp);
+            resolve();
+          });
+        }
+      );
+    })
   }
 
   createChartLine() {

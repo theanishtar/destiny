@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&display=swap');
-
 :host {
   --color-body: #b6cbce;
   --color-heading: #eef3db;
@@ -17,13 +15,15 @@
   --warning: #f6c23e;
 }
 
-
+::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
 
 .body {
   background-color: var(--color-base2);
   color: var(--color-body);
   font-family: var(--font-base), sans-serif;
-  height: 2000px;
+  height: 3000px;
 }
 
 a {
@@ -96,6 +96,11 @@ img {
 
 }
 
+.avt-owner {
+  width: 80%;
+  margin: 0 10%;
+}
+
 .container-owner {
   width: 90%;
   padding: 0;
@@ -162,6 +167,11 @@ img {
 .chart-x {
   position: absolute;
   top: 550px;
+}
+
+.logo-heart img {
+  width: 20%;
+  margin: 0 40%;
 }
 
 .card-owner {
@@ -482,7 +492,7 @@ table tr td .status.pending {
 
 .table-owner {
   position: absolute;
-  top: 1100px;
+  top: 1065px;
 }
 
 .card-owner-container-table {
@@ -537,7 +547,24 @@ table tr td .status.pending {
   transition: color 1s ease-in-out;
 }
 
-.link:hover {
+.project-btn-new-admin {
+  position: relative;
+  /* top: 50%; */
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.link-new-admin {
+  position: relative;
+  /* margin-top: 50%; */
+  padding: 10px 20px;
+  background: #4775977d;
+  text-decoration: none;
+  letter-spacing: .10em;
+  transition: color 1s ease-in-out;
+}
+
+.link-new-admin:hover {
   background: rgba(59, 141, 217, 0.3);
   color: #FFFFFF;
   text-decoration: none;
@@ -582,6 +609,6 @@ table tr td .status.pending {
   }
 
   .body {
-    height: 1800px;
+    height: 2000px;
   }
 }
