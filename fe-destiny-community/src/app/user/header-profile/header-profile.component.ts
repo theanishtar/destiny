@@ -4,6 +4,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { ProfileService } from '../service/profile.service';
 import { MessageService } from '../service/message.service';
 import { FollowsService } from '../service/follows.service';
+import { ModalService } from '../service/modal.service';
 import '../../../assets/toast/main.js';
 declare var toast: any;
 @Component({
@@ -12,6 +13,7 @@ declare var toast: any;
   styleUrls: [
     `../../css/vendor/bootstrap.min.css`,
     `../../css/styles.min.css`,
+    `../../css/dark/dark.min.css`,
     `../../css/vendor/simplebar.css`,
     `../../css/vendor/tiny-slider.css`,
     './header-profile.component.css'
@@ -32,6 +34,7 @@ export class HeaderProfileComponent implements OnInit {
     this.chatUserId = parseInt((localStorage.getItem("chatUserId") + '')?.trim());
     this.profileService.loadDataProfileHeader(this.idLocal);
     this.checkScreenSize();
+    this.updateActiveMenuItem();
   }
 
   constructor(
@@ -39,9 +42,14 @@ export class HeaderProfileComponent implements OnInit {
     private router: Router,
     public profileService: ProfileService,
     public messageService: MessageService,
-    public followsService: FollowsService
+    public followsService: FollowsService,
+    public modalService: ModalService
   ) {
     this.router.events.subscribe((event) => {
+    this.idLocal = parseInt((localStorage.getItem("idSelected") + '')?.trim());
+    this.chatUserId = parseInt((localStorage.getItem("chatUserId") + '')?.trim());
+
+    this.profileService.loadDataProfileHeader(this.idLocal);
       if (event instanceof NavigationEnd) {
         // Đã chuyển đến trang mới, thực hiện cập nhật menu active
         this.updateActiveMenuItem();
@@ -50,15 +58,17 @@ export class HeaderProfileComponent implements OnInit {
 
   }
   addFollow(id: number) {
-    this.followsService.addFollowAPI(id).subscribe((res) => {
-      new toast({
-        title: 'Thông báo!',
-        message: 'Đã theo dõi',
-        type: 'success',
-        duration: 3000,
-      })
-      // location.reload();
+    this.modalService.sendNotify(' ', 0, id, 'FOLLOW', 0);
+    new toast({
+      title: 'Thông báo!',
+      message: 'Đã theo dõi',
+      type: 'success',
+      duration: 3000,
     });
+    let btn_fl = document.getElementById('follow-btn');
+    if(btn_fl){
+      btn_fl.style.display = 'none';
+    }
   }
   /* ============template============= */
   updateActiveMenuItem() {

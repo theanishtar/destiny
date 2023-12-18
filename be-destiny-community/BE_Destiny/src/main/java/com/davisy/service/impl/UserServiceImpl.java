@@ -21,7 +21,6 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRoleDAO userRoleDao;
-	
 
 	@Override
 	public User findByEmailAndPassword(String email, String password) {
@@ -177,7 +176,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User findByEmailOrUsername(String email) {
-		return userDao.findByEmailOrUsername(email);
+		return userDao.findByEmailOrUsername(email.toLowerCase());
 	}
 
 	@Override
@@ -188,5 +187,32 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<Object[]> loadTimeLine(String email) {
 		return userDao.loadTimeLine(email);
+	}
+
+	@Override
+	public List<Object[]> findFullnameUser(int user_id, String fullname) {
+		return userDao.findFullnameUser(user_id, fullname);
+	}
+
+	@Override
+	public List<Object[]> findTop5Post(String keyword) {
+		// TODO Auto-generated method stub
+		return userDao.get5PostByKeyword(keyword);
+	}
+
+	@Override
+	public List<Object[]> findTop5PostByHashtag(String keyword) {
+		// TODO Auto-generated method stub
+		return userDao.get5PostByHashtagKeyword(keyword);
+	}
+
+	@Override
+	public int getSizeUsers() {
+		return userDao.getSizeUsers();
+	}
+	
+	public List<Object[]> getAllByRole(String roleName){
+		System.out.println(roleName);
+		return userDao.getUserByRole(roleName);
 	}
 }

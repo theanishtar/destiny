@@ -43,6 +43,10 @@ export class CreatePostComponent {
   listUser: any[];
   listCount: any;
   dataEditProfile: any
+  isLoading: boolean = false;
+  checkBtn: boolean = false;
+  checkBadWord: boolean = false;
+  submitted: boolean = false;
 
   constructor(
     public modalService: ModalService,
@@ -60,14 +64,13 @@ export class CreatePostComponent {
   }
 
   createFormPost() {
-    const HASHTAG_PATTERN = /^(?=.*[!@#$%^&*]+)[a-z0-9!@#$%^&*]{4,20}$/;
     this.createPostForm = this.formbuilder.group({
-      content: ['', Validators.required],
-      hash_tag: ['', [Validators.required, Validators.pattern(HASHTAG_PATTERN),]],
+      content: [''],
+      hash_tag: ['', [Validators.required, Validators.pattern(/^#[a-zA-Z\d]{2,}$/)]],
       province_name: [''],
       district_name: [''],
       ward_name: [''],
-      post_status: ['', Validators.required],
+      post_status: [''],
       product: ['', Validators.required],
       post_images: [''],
     });
@@ -77,13 +80,17 @@ export class CreatePostComponent {
   }
 
   async createPost(event: any) {
+    this.submitted = true;
+    let body = document.getElementById('body-create-post');
+    this.isLoading = true;
+    if (body && this.isLoading) {
+      body.style.opacity = '0';
+    }
     if (this.file.length > 0) {
       for (let img of this.file) {
         await this.addData(img);
       }
     }
-    console.log("this.listImg.length: " + this.listImg.length)
-    console.log("this.createPostForm.get('content')?.value: " + this.createPostForm.get('content')?.value)
     var data = {
       content: this.createPostForm.get('content')?.value,
       hash_tag: this.createPostForm.get('hash_tag')?.value,
@@ -94,7 +101,13 @@ export class CreatePostComponent {
       product: this.createPostForm.get('product')?.value,
       post_images: this.listImg,
     };
-    if (this.createPostForm.get('content')?.value === '' && this.listImg.length === 0) {
+    
+    if (this.createPostForm.get('content')?.value === '' && this.listImg.length === 0 ||
+        this.createPostForm.get('content')?.value === null && this.listImg.length === 0) {
+      this.isLoading = false;
+      if (body && !this.isLoading) {
+        body.style.opacity = '1';
+      }
       new toast({
         title: 'Thông báo!',
         message: 'Vui lòng không bỏ trống đồng thời nội dung và hình ảnh',
@@ -102,20 +115,37 @@ export class CreatePostComponent {
         duration: 3000,
       });
     }
+    
     if (this.createPostForm.valid) {
+      this.submitted = true;
       this.postService.uploadPost(data).subscribe((res) => {
-        new toast({
-          title: 'Thành công!',
-          message: 'Đăng bài thành công',
-          type: 'success',
-          duration: 1500,
-        });
-        this.listPosts = res;
-        console.warn("this.listPosts: " + JSON.stringify(this.listPosts));
-        this.createPostForm.reset();
-        this.listImg = [];
-        this.file = {};
-        this.closeModalCreatePost();
+        if (res != null) {
+          new toast({
+            title: 'Thành công!',
+            message: 'Đăng bài thành công',
+            type: 'success',
+            duration: 1500,
+          });
+          this.listPosts =res;
+          let id = res[0].post_id;
+          this.modalService.sendNotify(' ', id, 0, 'POST', this.modalService.repCmtId);
+
+          this.createPostForm.reset();
+          this.listImg = [];
+          this.file = {};
+          this.isLoading = false;
+          this.closeModalCreatePost();
+        } else {
+          this.checkBadWord = true;
+          this.isLoading = false;
+          setTimeout(() => {
+            this.checkBadWord = false;
+          }, 4000);
+          if (body && !this.isLoading) {
+            body.style.opacity = '1';
+          }
+          return;
+        }
       });
     }
   }
@@ -148,7 +178,7 @@ export class CreatePostComponent {
           this.districts = [];
           this.districts = this.profileService.getAllDistrict();
 
-          const district = this.createPostForm.get('district_name')?.value;
+          const district = this.dataEditProfile.district_name;
           this.profileService.loadAllWard(district).subscribe(() => {
             this.wards = [];
             this.wards = this.profileService.getAllWard();
@@ -161,9 +191,8 @@ export class CreatePostComponent {
   }
 
   getProvinceName() {
-    const province = this.createPostForm.get('district_name')?.value;
+    const province = this.createPostForm.get('province_name')?.value;
     this.loadAllDistrict(province);
-
   }
 
   loadAllDistrict(province: string) {
@@ -194,58 +223,6 @@ export class CreatePostComponent {
       this.dataEditProfile = this.profileService.getDataEditProfile();
     })
   }
-
-  // loadAllProvince() {
-  //   this.profileService.loadAllProvince().subscribe(() => {
-  //     this.provinces = [];
-  //     this.provinces = this.profileService.getAllProvince();
-
-  //     const province = this.createPostForm.get('province_name')?.value;
-  //     //province này null nên truyền vô tìm tất cả các hiệu sẽ kh ra.
-  //     // this.profileService.loadAllDistrict(province).subscribe(() => {
-  //     //   this.districts = [];
-  //     //   this.districts = this.profileService.getAllDistrict();
-
-  //     //   const district = this.createPostForm.get('district_name')?.value;
-  //     //   this.profileService.loadAllWard(district).subscribe(() => {
-  //     //     this.wards = [];
-  //     //     this.wards = this.profileService.getAllWard();
-
-  //     //   })
-  //     // })
-  //   })
-  // }
-
-  // getProvinceName() {
-  //   const province = this.createPostForm.get('province_name')?.value;
-
-  //   this.loadAllDistrict(province);
-
-  // }
-
-  // loadAllDistrict(province: string) {
-  //   this.profileService.loadAllDistrict(province).subscribe(() => {
-  //     this.districts = [];
-  //     this.districts = this.profileService.getAllDistrict();
-  //     // this.dataEditProfile.district_name = this.districts[0];
-
-  //     // this.loadAllWard(this.dataEditProfile.district_name);
-
-  //   })
-  // }
-
-  // getDistrictName() {
-  //   const district = this.createPostForm.get('district_name')?.value;
-  //   this.loadAllWard(district);
-  // }
-
-  // loadAllWard(district: string) {
-  //   this.profileService.loadAllWard(district).subscribe(() => {
-  //     this.wards = [];
-  //     this.wards = this.profileService.getAllWard();
-  //     // this.dataEditProfile.ward_name = this.wards[0];
-  //   })
-  // }
 
   /* ============upload Images============= */
   imageSources: string[] = [];
@@ -312,12 +289,6 @@ export class CreatePostComponent {
     });
   }
 
-  // chooseFile(event: any) {
-  //   this.file = event.target.files[0];
-  //   console.log(this.file)
-  //   // this.addData();
-  // }
-
   /* ============Template============= */
   // Next/previous controls
   plusSlides(n: number) {
@@ -350,6 +321,10 @@ export class CreatePostComponent {
   }
 
   closeModalCreatePost() {
+    this.submitted = false;
+    this.isLoading  = false;
+    this.createPostForm.reset();
+    this.file = {};
     this.modalService.closeModalCreatePost();
   }
 }

@@ -1,26 +1,250 @@
+body{
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.video-call{
+  position: relative;
+}
+.title{
+  top: 0;
+  width: 100%;
+  max-width: 100%;
+  z-index: 1;
+  display: block;
 
-.btn-circle {
+  position: absolute;
+  background-color: #444444;
+  color: white;
+ margin: 0;
+}
+
+.entry-modal{
+  border: 1px solid #444444;
+  width: 300px;
+  margin: auto;
+  z-index: 9999;
+  position: absolute;
+  left: 50%;
+  top: 10%;
+  margin-left: -150px;
+  padding: 5px;
+  color: #fff;
+  background-color: #444444;
+  text-align: center;
+  /* margin-top: 5rem; */
+}
+
+#notification{
+  position: absolute;
+  z-index: 1;
+  text-align: center;
+  color: #fff;
+  margin: 0;
+  top: 47.33px;
+  font-size: 18pt;
+  width: 100%;
+  background-color: orange;
+}
+
+
+.room-input{
+border: none;
+padding:5px;
+}
+
+div.btn{
+  margin: 3px;
+  padding: 8px 0px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+
+#remote-video{
+  top: 0;
+  height: -webkit-fill-available;
+  width: 100%;
+  left: 0;
+  background-color: #ececed;
+  position: absolute;
+  border-radius: 15px;
+}
+
+/* #local-video{
+  top: 10%;
+  width: 300px;
+  object-fit: cover;
+  height: 150px;
+  z-index: 1;
+  right: 5%;
+  background-color: #444444;
+  position: absolute;
+} */
+
+#local-video{
+  top: 15%;
+    width: 90%;
+    object-fit: cover;
+    height: 70%;
+    z-index: 1;
+    right: 5%;
+    /* background-color: #414143; */
+    position: absolute;
+}
+
+.meet-controls-bar{
+  bottom: 10px;
+    background-color: black;
+    left: 0%;
+    position: absolute;
+    width: 0%;
+    left: 50%;
     display: flex;
-    align-items: center;
     justify-content: center;
-    width: 50px;
-    height: 50px;
-    margin: 5px;
-    border-radius: 50%;
-    border: none;
-    line-height: 1.3px;
+}
+.meet-controls-bar-item{
+  display: flex;
+  justify-content: center;
+}
+
+/* box-icon {
+  fill: white;
+} */
+
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 690px;
+  height: 520px;
+  background-color: #fff;
+  border-radius: 15px;
+  resize: both; /* Cho phép thay đổi kích thước cả chiều ngang và dọc */
+  overflow: auto; /* Cho phép cuộn khi modal quá lớn */
+  min-width: 318px;
+  min-height: 238px;
+  max-width: 690px;
+  max-height: 520px;
+}
+
+.modal-header {
+  background-color: white;
+  color: #3e3f5e;
+  padding: 8px;
+  cursor: move;
+  user-select: none;
+  position: relative;
+  z-index: 1;
+  border-top-left-radius: 13px;
+  border-top-right-radius: 13px;
+}
+
+.modal-title {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.modal-close {
+  float: right;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 16px;
+}
+
+.resize-handle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #3498db;
+  cursor: nwse-resize; /* Change the cursor as a visual cue for resizing */
+  right: 0;
+  bottom: 0;
+}
+
+.move-handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  cursor: move;
+  background-color: transparent; /* Make it transparent to allow dragging from any point on the header */
+}
+
+svg {
+  width: 34px;
+  height: 18px;
+  display: flex
+}
+
+/* #stop-share-screen, */
+#on-camera-calling,
+#on-mic-calling,
+#on-camera-caller,
+#on-mic-caller {
+    display: none;
+}
+
+.nofti-call {
+  position: absolute;
+  z-index: 1;
+  width: max-content;
+  bottom: -20px;
+
+}
+.description img{
+  width: 92px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.wait-timer {
+  position: absolute;
+  z-index: 1;
+  left: 40%;
+}
+
+.wait-timer .item {
+  position: relative;
+  text-align:center;
+  float: left;
+  width: 100px;
+  height: 100px;
+}
+
+.wait-timer .description {
+  display: block;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+}
+.wait-timer .description h2 {
+margin: 0;
+padding: 0;
+}
+.wait-timer .description p {
+margin: 0;
+padding: 0;
+}
+.wait-timer svg {
+ width: 100%;
+  height: 100%;
+ -webkit-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+}
+
+.wait-timer .circle_animation {
+stroke-dasharray: 550; /* this value is the pixel circumference of the circle */
+stroke-dashoffset: 550; transition: all 1s linear;
+}
+@media screen and (max-width: 480px) {
+  .modal{
+    transform: translate(10px, 100px) !important;
+    width: 370px !important;
   }
-  
-  .bi {
-    font-size: 20px;
-    color: white;
-  }
-  
-  .enabled-style {
-    background-color: #008cff;
-  }
-  
-  
-  .disabled-style {
-    background-color: #ff3030;
-  }
+}

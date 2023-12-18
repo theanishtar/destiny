@@ -27,10 +27,10 @@ export class UserDetailComponent implements OnInit {
     this.loadUserDetail();
   }
 
-  actionOnUser(email: string): void {
+  actionOnUser(id: string): void {
 
     if (this.userDetail.ban == false) {
-      this.adminUserdetailService.actionOnUser(email).subscribe(() => { })
+      this.adminUserdetailService.actionOnUser(id).subscribe(() => { })
       new toast({
         title: 'Thành công!',
         message: 'Vô hiệu hóa thành công!',
@@ -39,7 +39,7 @@ export class UserDetailComponent implements OnInit {
       })
       this.userDetail.ban = true;
     } else {
-      this.adminUserdetailService.actionOnUser(email).subscribe(() => { })
+      this.adminUserdetailService.actionOnUser(id).subscribe(() => { })
       new toast({
         title: 'Thành công!',
         message: 'Kích hoạt thành công!',

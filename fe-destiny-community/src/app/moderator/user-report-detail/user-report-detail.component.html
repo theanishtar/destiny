@@ -6,9 +6,8 @@
     <app-navbar-moderator></app-navbar-moderator>
 
     <!-- End of Navbar -->
-
-    <main>
-      <app-loading *ngIf="isLoading"></app-loading>
+    <app-loading *ngIf="isLoading"></app-loading>
+    <main *ngIf="!isLoading">
       <div class="pb-5">
         <div class="name-pad shadow pb-4">
           <div class="page-header min-height-300 border-radius-xl mt-1" style="
@@ -54,7 +53,13 @@
                   data-toggle="modal" data-target="#disableModal">
                   <i class="bx bxs-error mr-1"></i>Gửi đến quản trị viên</a>
               </div>
+              <div class="text-pie mt-2">
+                <a class="btn bg-gradient-endless text-white d-flex align-items-center justify-content-center" href="#"
+                  data-toggle="modal" data-target="#deleteModal">
+                  <i class="bx bxs-error mr-1"></i>Xóa báo cáo</a>
+              </div>
             </div>
+            
           </div>
         </div>
         <!-- disable Modal-->
@@ -80,6 +85,35 @@
                   <i class="fas fa-ban mr-1"></i>Hủy bỏ
                 </button>
                 <a class="btn btn-danger" (click)="sendToAdmin()" type="button" data-dismiss="modal">
+                  <i class=" fas fa-check"></i> Xác nhận</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- disable Modal -->
+        <!-- delete Modal-->
+        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content card-modal">
+              <div class="modal-header ml-3 mr-3">
+                <h5 class="modal-title text-pink font-weight-bold" id="exampleModalLabel">
+                 Xóa báo cáo người dùng {{userDetail.fullname}}?
+                </h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close" style="padding-top: 1.2rem">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+              <div class="modal-body d-flex align-items-center text-modal justify-content-center">
+                <a class="avatar rounded-circle mr-2">
+                  <img class="" alt="" src="{{userDetail.avatar}}" />
+                </a>{{userDetail.fullname}}
+              </div>
+              <div class="modal-footer d-flex justify-content-center">
+                <button class="btn btn-secondary mr-4" type="button" data-dismiss="modal">
+                  <i class="fas fa-ban mr-1"></i>Hủy bỏ
+                </button>
+                <a class="btn btn-danger" (click)="deleteUser()" type="button" data-dismiss="modal">
                   <i class=" fas fa-check"></i> Xác nhận</a>
               </div>
             </div>
@@ -174,7 +208,7 @@
                         </div>
                       </div>
                       <div class="col-lg-10 offset-lg-1 text-center">
-                        <h6>NGƯỜI DÙNG NÀY KHÔNG BỊ BÁO CÁO </h6>
+                        <h6>NGƯỜI DÙNG NÀY CHƯA ĐƯỢC GỬI ĐẾN QUẢN TRỊ VIÊN </h6>
                       </div>
                     </div>
                   </div>

@@ -151,7 +151,27 @@ export class ModProfileService {
   updateProfile(data: any): Observable<any> {
     return this.http.post(this.updateProfileAPI, data).pipe(
 
-      catchError(error => of([]))
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 301) {
+          return throwError(
+            new toast({
+              title: 'Thất bại!',
+              message: 'Tên đăng nhập đã tồn tại vui lòng chọn tên đăng nhập khác!',
+              type: 'error',
+              duration: 1500,
+            }),
+          );
+        } else {
+          return throwError(
+            new toast({
+              title: 'Server hiện không hoạt động!',
+              message: 'Vui lòng quay lại sau, DaviTickets chân thành xin lỗi vì bất tiện này!',
+              type: 'warning',
+              duration: 1500,
+            })
+          );
+        }
+      })
     );
   }
 

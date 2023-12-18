@@ -4,7 +4,8 @@ import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { tap, catchError } from 'rxjs/operators';
-
+import '../../../assets/toast/main.js';
+declare var toast: any;
 @Injectable({
   providedIn: 'root'
 })
@@ -20,6 +21,12 @@ export class InteractPostsService {
   sharePost(idPost, idUser) {
     this.idPost = this.modalService.idPostCmt;
     this.modalService.sendNotify(' ', idPost, idUser, 'SHARE', this.modalService.repCmtId);
+    new toast({
+      title: 'Thành công!',
+      message: 'Chia sẻ thành công',
+      type: 'success',
+      duration: 1500,
+    });
   }
 
   // deleleInterestedApi(post_id: number): Observable<any> {

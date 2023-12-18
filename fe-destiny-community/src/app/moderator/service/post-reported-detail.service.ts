@@ -12,6 +12,7 @@ export class PostReportedDetailService {
 
   private getDetailPostAPI = environment.baseUrl + 'v1/moderator/detailPost';
   private sendPostReportedAPI = environment.baseUrl + 'v1/moderator/sendPostReported';
+  private deletePostReportedAPI = environment.baseUrl + 'v1/moderator/deletePostReported';
 
   private postDetail: any[] = [];
 
@@ -31,6 +32,10 @@ export class PostReportedDetailService {
 
   sendToAdmin(idPost: string, idUserSend: string) {
     return this.http.delete(this.sendPostReportedAPI + "/" + idPost + "/" + idUserSend);
+  }
+
+  deletePost(idPost: string, idUserSend: string) {
+    return this.http.delete(this.deletePostReportedAPI + "/" + idPost + "/" + idUserSend);
   }
 
   //getter

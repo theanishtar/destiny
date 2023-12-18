@@ -6,7 +6,8 @@
     <app-navbar-admin></app-navbar-admin>
     <!-- End of Navbar -->
 
-    <main>
+    <app-loading *ngIf="isLoading"></app-loading>
+    <main *ngIf="!isLoading">
       <div class="header">
         <div class="left">
           <h1>Chi tiết bài đăng</h1>
@@ -18,7 +19,6 @@
           </ul>
         </div>
       </div>
-      <app-loading *ngIf="isLoading"></app-loading>
       <div class="container-postdetail pb-5">
         <div class="card-postdetail shadow">
           <div class="row ml-1 mr-1 pb-4">
@@ -152,7 +152,7 @@
             <div class="col-lg-5 border-left-pink-sm mt-4">
               <div class="avatar-group d-flex text-pie pl-3">
                 <a (click)="selectUser(postDetail.user_email)" type="button" class="avatar rounded-circle">
-                  <img class="" alt="Image placeholder" src="{{postDetail.user_avatar}}" />
+                  <img class="" src="{{postDetail.user_avatar}}" />
                 </a>
                 <div class="ml-3" style="padding-top: 0.1rem !important">
                   <a (click)="selectUser(postDetail.user_email)" type="button">
@@ -244,7 +244,7 @@
                     </div>
                   </div>
                   <div class="col-lg-10 offset-lg-1 text-center">
-                    <h5>Bài viết này chưa có bình luận!</h5>
+                    <h5 class="text-uppercase">Bài viết này chưa có bình luận!</h5>
                   </div>
                 </div>
               </div>
@@ -295,7 +295,7 @@
                           <div class="col-lg-12">
                             <div class="avatar-group row text-pie pl-3 pt-4">
                               <a (click)="selectUser(postDetail.user_email)" class="avatar rounded-circle">
-                                <img class="" alt="Image placeholder" src="{{postDetail.user_avatar}}" />
+                                <img class="" alt="" src="{{postDetail.user_avatar}}" />
                               </a>
                               <div class="ml-3" style="padding-top: 0.1rem !important">
                                 <h5 style="font-weight: 600">{{postDetail.user_fullname}}</h5>
@@ -348,7 +348,7 @@
                   <div class="avatar-group row text-pie pt-3 pb-3">
                     <div class="d-flex col-xl-7 ml-3 col-sm-5">
                       <a (click)="selectUser(user.email)" type="button" class="avatar rounded-circle">
-                        <img class="" alt="Image placeholder" src="{{user.avatar}}" />
+                        <img class="" alt="" src="{{user.avatar}}" />
                       </a>
                       <div class="ml-3" style="padding-top: 0.1rem !important">
                         <a (click)="selectUser(user.email)" type="button">

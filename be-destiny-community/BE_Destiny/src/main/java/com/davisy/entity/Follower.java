@@ -3,6 +3,7 @@ package com.davisy.entity;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EmbeddedId;
@@ -38,7 +39,7 @@ public class Follower{
 		int follower_id;
 		int user_id;
 		@Temporal(TemporalType.TIMESTAMP)
-		Calendar date_follow = GregorianCalendar.getInstance();
+		Calendar date_follow = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT+7"));
 		
 		@Override
 		public String toString() {

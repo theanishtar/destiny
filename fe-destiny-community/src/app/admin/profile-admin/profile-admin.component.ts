@@ -1,5 +1,8 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { AdminProfileService } from '../service/admin-profile.service';
+import { Observable, throwError } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 declare var toast: any;
 
 import {
@@ -259,6 +262,7 @@ export class ProfileAdminComponent implements OnInit {
   }
 
   async updateProfile() {
+    this.isLoading = true;
     try {
       if (this.checkThumb === true) {
         await this.addDataThumb();
@@ -293,13 +297,21 @@ export class ProfileAdminComponent implements OnInit {
         ward_name: this.profileForm.get('ward_nameF')?.value,
         gender_name: this.profileForm.get('gender_nameF')?.value,
       };
-      this.adminProfileService.updateProfile(data).subscribe((res) => {
-        this.createToast("Thành công!", "Cập nhật thành công", "success");
-        window.location.reload();
-      });
+      this.adminProfileService.updateProfile(data).subscribe(
+        (data) => {
+          this.isLoading = false;
+          this.createToast("Thành công!", "Cập nhật thành công", "success");
+          this.loadAdminData();
+        },
+        (error) => {
+          this.isLoading = false;
+          this.loadAdminData();
+        }
+      );
     }
     else {
       this.createToast("Thất bại!", "Cập nhật thất bại", "error");
+      this.isLoading = false;
     }
   }
 
@@ -388,7 +400,8 @@ export class ProfileAdminComponent implements OnInit {
         this.createToast("Thành công!", "Thay đổi mật khẩu thành công!", "success");
         setTimeout(() => {
           changePassModal.style.display = 'none';
-          location.reload();
+          this.isLoading = false;
+          this.loadAdminData();
         }, 600);
       } else {
         reNewPassword.setCustomValidity('Mật khẩu không giống nhau!');

@@ -9,8 +9,8 @@ export interface UserModel {
   lastMessage: string;
   online: string;
   isFriend: boolean;
-  hide: boolean;
-  status: boolean;
+  typeMessage:string;
+  recall:boolean
 }
 
 export enum MessageType {

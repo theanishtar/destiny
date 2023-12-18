@@ -68,6 +68,7 @@ import { APP_INITIALIZER } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from './user/service/message.service';
 import { ProfileService } from './user/service/profile.service';
+import { CustomTimePipe } from './custom-time.pipe';
 
 // import { AngularFireModule } from '@angular/fire/compat';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
@@ -83,15 +84,21 @@ import { DetailPostComponent } from './user/modal/detail-post/detail-post.compon
 import { EditPostComponent } from './user/modal/edit-post/edit-post.component';
 import { ChangeEmailComponent } from './user/modal/change-email/change-email.component';
 import { ChangeConfirmComponent } from './user/modal/change-email/change-confirm/change-confirm.component';
+import { SuggestAfterRegisterComponent } from './user/modal/suggest-after-register/suggest-after-register.component';
+import { ArticleDetailsComponent } from './user/article-details/article-details.component';
+import { ReportComponent } from './user/modal/report/report.component';
+import { ImagesMessageComponent } from './user/modal/images-message/images-message.component';
+import { ModerManagementComponent } from './admin/moder-management/moder-management.component';
+import { AdminManagementComponent } from './owner/admin-management/admin-management.component';
 
-export function appInitializer(cookieService: CookieService, messageService: MessageService, sender: any, modalService: ModalService, profileService: ProfileService, dataProfileTimeline: any) {
+export function appInitializer(cookieService: CookieService, messageService: MessageService, sender: any,modalService:ModalService, profileService: ProfileService, dataProfileTimeline: any) {
   return () => {
-    if (cookieService.get("full_name") != '') {
+    if (localStorage.getItem('token') != null) {
       messageService.loadDataSender().subscribe(() => {
         sender = JSON.parse(JSON.stringify(messageService.getSender()));
         modalService.connectToComment(sender.user_id);
         messageService.connectToChat(sender.user_id);
-
+      
       });
     }
   };
@@ -150,7 +157,14 @@ export function HttpLoaderFactory(http: HttpClient) {
     DetailPostComponent,
     EditPostComponent,
     ChangeEmailComponent,
-    ChangeConfirmComponent
+    ChangeConfirmComponent,
+    SuggestAfterRegisterComponent,
+    ArticleDetailsComponent,
+    ReportComponent,
+    CustomTimePipe,
+    ImagesMessageComponent,
+    ModerManagementComponent,
+    AdminManagementComponent
   ],
   imports: [
     BrowserModule,
@@ -183,10 +197,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     {
       provide: APP_INITIALIZER,
       useFactory: appInitializer,
-      deps: [CookieService, MessageService, ProfileService, ModalService],
+      deps: [CookieService, MessageService, ProfileService,ModalService],
       multi: true,
     },
-    DatePipe
+    DatePipe,
+    CustomTimePipe
   ],
   bootstrap: [AppComponent],
 })

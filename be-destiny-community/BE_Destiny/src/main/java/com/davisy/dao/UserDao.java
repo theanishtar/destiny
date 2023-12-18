@@ -10,11 +10,10 @@ import com.davisy.entity.User;
 
 //@Cacheable("users")//Tạo bộ nhớ đệm
 public interface UserDAO extends JpaRepository<User, Integer> {
-	
 	@Query(value = "SELECT *FROM users WHERE email:=email AND password:=password", nativeQuery = true)
 	public User findByEmailAndPassword(String email, String password);
 
-	@Query(value = "SELECT * FROM users WHERE email=:email ", nativeQuery = true)
+	@Query(value = "SELECT * FROM users u WHERE u.email=:email", nativeQuery = true)
 	public User findByEmail(String email);
 
 	@Query(value = "SELECT * FROM users WHERE email=:email Or username=:email", nativeQuery = true)
@@ -50,6 +49,9 @@ public interface UserDAO extends JpaRepository<User, Integer> {
 	// 1-11-2023 -lấy tổng số người dùng theo năm
 	@Query(value = "SELECT COUNT(user_id) FROM users WHERE EXTRACT(YEAR FROM day_create)=:year", nativeQuery = true)
 	public int getTotalUserByYear(int year);
+	
+	@Query(value = "SELECT COUNT(user_id) FROM users", nativeQuery = true)
+	public int getSizeUsers();
 
 	// 21-9-2023 -Tóng số lượng tương tác của người dùng theo từng tháng
 	// 1-11
@@ -106,5 +108,95 @@ public interface UserDAO extends JpaRepository<User, Integer> {
 			+ "(select count(pi2.post_images_id) as imgcount from post_images pi2  inner join post p on pi2.post_id =p.post_id where p.user_id =u.user_id)as countImg,\r\n"
 			+ "u.username\r\n" + "from users u where u.email =:email", nativeQuery = true)
 	public List<Object[]> loadTimeLine(String email);
+	
+	@Query(value = "select *from find_user(:user_id,:fullname)",nativeQuery = true)
+	public List<Object[]>findFullnameUser(int user_id,String fullname);
+	
+	@Query(value = "SELECT\r\n"
+			+ "        p.post_id,\r\n"
+			+ "        p.content AS post_title,\r\n"
+			+ "        COALESCE(SUM(i.interested_count + s.share_count + c.comment_count), 0) AS total_engagement,\r\n"
+			+"(select pi2.link_image  from post_images pi2 where pi2.post_id =p.post_id limit 1) AS link_image"
+			+ "    FROM\r\n"
+			+ "        post p\r\n"
+			+ "    LEFT JOIN (\r\n"
+			+ "        SELECT post_id, COUNT(*) AS interested_count\r\n"
+			+ "        FROM interested\r\n"
+			+ "        GROUP BY post_id\r\n"
+			+ "    ) i ON p.post_id = i.post_id\r\n"
+			+ "    LEFT JOIN (\r\n"
+			+ "        SELECT post_id, COUNT(*) AS share_count\r\n"
+			+ "        FROM share\r\n"
+			+ "        WHERE share_status = true\r\n"
+			+ "        GROUP BY post_id\r\n"
+			+ "    ) s ON p.post_id = s.post_id\r\n"
+			+ "    LEFT JOIN (\r\n"
+			+ "        SELECT post_id, COUNT(*) AS comment_count\r\n"
+			+ "        FROM comment\r\n"
+			+ "        GROUP BY post_id\r\n"
+			+ "    ) c ON p.post_id = c.post_id\r\n"
+			+ "    WHERE\r\n"
+			+ "        p.post_status = true\r\n"
+			+ "        AND p.ban = false\r\n"
+			+ "        AND p.hash_tag ILIKE '%' || :hashtag || '%'\r\n"
+			+ "    GROUP BY\r\n"
+			+ "        p.post_id, p.content\r\n"
+			+ "    ORDER BY\r\n"
+			+ "        total_engagement DESC\r\n"
+			+ "    LIMIT 5;", nativeQuery = true)
+	public List<Object[]> get5PostByHashtagKeyword(String hashtag);
+	
+	@Query(value = "SELECT\r\n"
+			+ "        p.post_id,\r\n"
+			+ "        p.content AS post_title,\r\n"
+			+ "        COALESCE(SUM(i.interested_count + s.share_count + c.comment_count), 0) AS total_engagement,\r\n"
+			+"(select pi2.link_image  from post_images pi2 where pi2.post_id =p.post_id limit 1) AS link_image"
+			+ "    FROM\r\n"
+			+ "        post p\r\n"
+			+ "    LEFT JOIN (\r\n"
+			+ "        SELECT post_id, COUNT(*) AS interested_count\r\n"
+			+ "        FROM interested\r\n"
+			+ "        GROUP BY post_id\r\n"
+			+ "    ) i ON p.post_id = i.post_id\r\n"
+			+ "    LEFT JOIN (\r\n"
+			+ "        SELECT post_id, COUNT(*) AS share_count\r\n"
+			+ "        FROM share\r\n"
+			+ "        WHERE share_status = true\r\n"
+			+ "        GROUP BY post_id\r\n"
+			+ "    ) s ON p.post_id = s.post_id\r\n"
+			+ "    LEFT JOIN (\r\n"
+			+ "        SELECT post_id, COUNT(*) AS comment_count\r\n"
+			+ "        FROM comment\r\n"
+			+ "        GROUP BY post_id\r\n"
+			+ "    ) c ON p.post_id = c.post_id\r\n"
+			+ "    WHERE\r\n"
+			+ "        p.post_status = true\r\n"
+			+ "        AND p.ban = false\r\n"
+			+ "        AND p.content ILIKE '%' || :keyword || '%'\r\n"
+			+ "    GROUP BY\r\n"
+			+ "        p.post_id, p.content\r\n"
+			+ "    ORDER BY\r\n"
+			+ "        total_engagement DESC\r\n"
+			+ "    LIMIT 5;", nativeQuery = true)
+	public List<Object[]> get5PostByKeyword(String keyword);
+	
+	@Query(value = "SELECT\r\n"
+			+ "  u.user_id AS user_id,\r\n"
+			+ "  u.username AS username,\r\n"
+			+ "  u.email AS email,\r\n"
+			+ "  ur.role_id AS user_role_id,\r\n"
+			+ "  r.name AS role_name\r\n"
+			+ "FROM\r\n"
+			+ "  users u\r\n"
+			+ "JOIN\r\n"
+			+ "  user_role ur ON u.user_id = ur.user_id\r\n"
+			+ "JOIN\r\n"
+			+ "  roles r ON ur.role_id = r.role_id\r\n"
+			+ "WHERE\r\n"
+			+ "  r.name = :roleName\r\n"
+			+ ""
+			+ "",nativeQuery = true)
+	public List<Object[]> getUserByRole(String roleName);
+	
 
 }

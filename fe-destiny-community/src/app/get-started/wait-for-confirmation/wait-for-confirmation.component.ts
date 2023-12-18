@@ -23,7 +23,7 @@ export class WaitForConfirmationComponent {
 
   ngOnInit() {
     // this.checkCodeMail();
-    this.startCountdown();
+    // this.startCountdown();
   }
 
   constructor(
@@ -36,40 +36,40 @@ export class WaitForConfirmationComponent {
   ) {
   }
 
-  startCountdown() {
-    const countdownElement = document.getElementById('countdown') as HTMLDivElement;
+  // startCountdown() {
+  //   const countdownElement = document.getElementById('countdown') as HTMLDivElement;
 
-    let countdownInterval: number;
-    let timeLeft = 300; // 5 phút
+  //   let countdownInterval: number;
+  //   let timeLeft = 300; // 5 phút
 
-    function formatTime(seconds: number): string {
-      const minutes = Math.floor(seconds / 60);
-      const remainingSeconds = seconds % 60;
-      return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
-    }
+  //   function formatTime(seconds: number): string {
+  //     const minutes = Math.floor(seconds / 60);
+  //     const remainingSeconds = seconds % 60;
+  //     return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+  //   }
 
-    function updateCountdown() {
-      countdownElement.innerText = formatTime(timeLeft);
+  //   function updateCountdown() {
+  //     countdownElement.innerText = formatTime(timeLeft);
 
-      if (timeLeft <= 0) {
-        clearInterval(countdownInterval);
-        // countdownElement.innerText = 'Hết giờ!';
-        new toast({
-          title: 'Xác thực thất bại!',
-          message: 'Sẽ chuyển trang sau 3 giây',
-          type: 'error',
-          duration: 3000,
-        });
-        // Chuyển đến trang khác sau khi hết giờ
-        setTimeout(() => {
-          window.location.href = 'home';
-        }, 3000);
-      }
+  //     if (timeLeft <= 0) {
+  //       clearInterval(countdownInterval);
+  //       // countdownElement.innerText = 'Hết giờ!';
+  //       new toast({
+  //         title: 'Xác thực thất bại!',
+  //         message: 'Sẽ chuyển trang sau 3 giây',
+  //         type: 'error',
+  //         duration: 3000,
+  //       });
+  //       // Chuyển đến trang khác sau khi hết giờ
+  //       setTimeout(() => {
+  //         window.location.href = 'home';
+  //       }, 3000);
+  //     }
 
-      timeLeft--;
-    }
+  //     timeLeft--;
+  //   }
 
-    updateCountdown();
-    countdownInterval = window.setInterval(updateCountdown, 1000);
-  }
+  //   updateCountdown();
+  //   countdownInterval = window.setInterval(updateCountdown, 1000);
+  // }
 }

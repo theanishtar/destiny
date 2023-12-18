@@ -1,80 +1,70 @@
 <main class="overlay" *ngIf="profileService.isOpenChangeEmail$ | async">
+  <div *ngIf="profileService.checkSubmit" class="loadingOverlay" id="loadingOverlay">
+    <app-loading></app-loading>
+  </div>
   <div id="favDialog_changeMail" class="modal fade favDialog_changeMail">
     <!-- LANDING FORM -->
     <div class="landing-form">
       <!-- FORM BOX -->
-      <form
-        [formGroup]="ChangeMailForm"
-        (ngSubmit)="changeMail()"
-        action=""
-        novalidate
-        class="form change-mail"
-      >
-        <button
-          (click)="profileService.closeModalChangeMail()"
-          class="btnClose-change-email"
-        >
+
+      <form [formGroup]="ChangeMailForm" (ngSubmit)="changeMail()" action="" novalidate class="form change-mail">
+        <div (click)="profileService.closeModalChangeMail()" class="btnClose-change-email">
           <i class="fa-solid fa-xmark"></i>
-        </button>
-        <h1 class="text-center">Thay đổi email</h1>
+        </div>
+        <h1 class="text-center">{{ "thaydoimail"
+          | translate }}</h1>
         <!-- Progress bar -->
-        <div class="progressbar">
+        <!-- <div class="progressbar">
           <div class="progress" id="progress"></div>
 
           <div class="progress-step progress-step-active" data-title=""></div>
           <div class="progress-step" data-title=""></div>
-          <!-- <div class="progress-step" data-title=""></div> -->
-        </div>
+        </div> -->
 
         <!-- Steps -->
         <div class="form-step form-step-active">
           <div class="input-group">
-            <label style="font-size: large" for="username">Nhập mật khẩu</label>
+            <label style="font-size: large" for="username">{{ "signup_password"
+              | translate }}</label>
             <input type="text" formControlName="password" name="password" id="password" />
-            <span
-            *ngIf="
-            ChangeMailForm.get('password')?.invalid &&
-            ChangeMailForm.get('password')?.touched
-            "
-          >
-            <div style="color: red">Vui lòng nhập mât khẩu!</div>
-          </span>
-          </div>
-
-          <div class="input-group">
-            <label style="font-size: large" for="username"
-              >Nhập email mới</label
+            <span 
+             *ngIf="
+             (ChangeMailForm.get('password')?.invalid &&
+             ChangeMailForm.get('password')?.touched) ||
+             (ChangeMailForm.get('password')?.invalid && submitted)
+           "
             >
-            <input type="email" formControlName="newEmail" name="newEmail" id="newEmail" />
-            <span
-              *ngIf="
-              ChangeMailForm.get('newEmail')?.invalid &&
-              ChangeMailForm.get('newEmail')?.touched
-              "
-            >
-              <div style="color: red">Vui lòng nhập email!</div>
+              <div style="color: red">{{ "vuilongnhapmatkhau"
+                | translate }}!</div>
             </span>
           </div>
 
-          <div>
-            <button
-              style="color: #f3f3f3"
-              class="btn btn-next width-50 ml-auto"
-              type="submit"
-              >Xác nhận</button
-            >
+          <div class="input-group">
+            <label style="font-size: large" for="username">{{ "emailmoi"
+              | translate }}</label>
+            <input type="email" formControlName="newEmail" name="newEmail" id="newEmail" />
+            <span 
+              *ngIf="
+              (ChangeMailForm.get('newEmail')?.invalid && ChangeMailForm.get('email')?.touched) ||
+              (ChangeMailForm.get('newEmail')?.invalid && submitted)
+            "
+              >
+              <div style="color: red">Vui lòng kiểm tra email!</div>
+            </span>
           </div>
-
-          <div class="back-login">
-            Quay lại
-            <a href="/get-started">đăng nhập</a>
+          <!-- <app-loading *ngIf="profileService.checkSendMail"></app-loading> -->
+          <div>
+            <button id="changeMailForm" style="color: #f3f3f3" class="btn btn-next width-50 ml-auto" type="submit">{{
+              "xacnhan"
+              | translate }}</button>
           </div>
         </div>
         <div class="form-step">
           <div class="input-group">
             <!-- <label style="font-size: large" for="phone">Mã xác nhận</label>
           <input type="text" name="phone" id="phone" /> -->
-            <p>Vui lòng kiểm tra Email</p>
+            <p>{{ "vuilongkiemtraemail"
+              | translate }}</p>
           </div>
 
           <!-- <div class="btns-group">
@@ -83,20 +73,6 @@
             >
           </div> -->
         </div>
-        <!-- <div class="form-step">
-        <div class="input-group">
-          <label style="font-size: large" for="dob">Mật khẩu mới</label>
-          <input type="text" name="dob" id="dob" />
-        </div>
-        <div class="input-group">
-          <label style="font-size: large" for="ID">Xác nhận mật khẩu mới</label>
-          <input type="text" name="ID" id="ID" />
-        </div>
-        <div class="btns-group">
-          <a style="color: #f3f3f3" class="btn btn-prev" (click)="prevStep()">Trở về</a>
-          <a style="color: #f3f3f3" class="btn btn-next" (click)="nextStep()">Xác nhận</a>
-        </div>
-      </div> -->
       </form>
       <!-- /FORM BOX -->
     </div>

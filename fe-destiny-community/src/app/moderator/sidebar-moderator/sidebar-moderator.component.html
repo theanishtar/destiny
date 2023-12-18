@@ -35,6 +35,14 @@
       </a>
     </li>
   </ul>
+  <ul class="side-menu mt-5" *ngIf="role == 'ROLE_ADMIN'">
+    <li>
+      <a routerLink="/admin" class="clickSetting analys" style="cursor: pointer;">
+        <i class="bx bxs-chevrons-left" style="margin-right: -12px;"></i> <i class="bx bxs-user-detail"></i>
+        Quản trị
+      </a>
+    </li>
+  </ul>
   <!-- logout Modal-->
 
   <!-- logout Modal -->
@@ -73,7 +81,7 @@
             </div>
           </div>
         </div>
-        <h6 class="text-pie ml-2 mb-4 mt-4">Ngôn ngữ</h6>
+        <!-- <h6 class="text-pie ml-2 mb-4 mt-4">Ngôn ngữ</h6>
         <div class="row ml-1 mr-1">
           <div class="col-lg-6">
             <div class="bg-gradient-endless p-2 border-radius-xl text-center">
@@ -85,7 +93,7 @@
               <a href="" class="text-white">Tiếng anh</a>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

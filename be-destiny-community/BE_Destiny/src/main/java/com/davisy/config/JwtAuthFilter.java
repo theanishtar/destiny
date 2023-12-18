@@ -4,23 +4,25 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -55,6 +57,28 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
+		// Lấy tất cả các header từ yêu cầu
+//        Map<String, String> headers = new HashMap<>();
+//        Enumeration<String> headerNames = request.getHeaderNames();
+//        
+//        while (headerNames.hasMoreElements()) {
+//            String headerName = headerNames.nextElement();
+//            Enumeration<String> headerValues = request.getHeaders(headerName);
+//
+//            StringBuilder concatenatedValues = new StringBuilder();
+//            while (headerValues.hasMoreElements()) {
+//                if (concatenatedValues.length() > 0) {
+//                    concatenatedValues.append(", ");
+//                }
+//                concatenatedValues.append(headerValues.nextElement());
+//            }
+//
+//            headers.put(headerName, concatenatedValues.toString());
+//        }
+//
+//        // In ra console để xem toàn bộ header
+//        headers.forEach((key, value) -> System.out.println(key + ": " + value));
+
 		// return nếu đã xác thực
 //		if (SecurityContextHolder.getContext().getAuthentication().getAuthorities() != null) {
 //			System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
@@ -111,6 +135,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 					chain.doFilter(request, response);
 					return;
 				}
+			} catch (TokenExpiredException e) {
+				// Xử lý khi token hết hạn
+				System.out.println("Token hết hạn. Hãy làm gì đó để xử lý nó.");
+				response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+				return;
 			} catch (Exception e) {
 				System.out.println("Unable to get JWT Token, possibly expired");
 				System.out.println(e);
@@ -119,7 +148,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 			}
 		}
 
-		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(null, null, null);
+		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(null, null,
+				null);
 
 		authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 

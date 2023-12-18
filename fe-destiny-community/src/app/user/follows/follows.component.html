@@ -1,12 +1,13 @@
 <app-navigation></app-navigation>
 
+
 <!-- CONTENT GRID -->
 <div class="content-grid">
 
-  <app-header-profile></app-header-profile>
-
+  <app-header-profile *ngIf="!isLoading"></app-header-profile>
+  <app-loading *ngIf="isLoading"></app-loading>
   <!-- SECTION -->
-  <section class="section">
+  <section class="section" id="body-follow">
     <!-- SECTION HEADER -->
     <div class="section-header">
       <!-- SECTION HEADER INFO -->
@@ -29,10 +30,16 @@
           <!-- FORM INPUT -->
           <div class="form-input small with-button">
             <!-- <label for="friends-search">Tìm kiếm</label> -->
-            <input type="text" [ngClass]="{'hidden': activeContent !== 'following'}" [(ngModel)]="searchQueries.following" (input)="performSearch('following')" placeholder="Tìm kiếm">
-            <input type="text" [ngClass]="{'hidden': activeContent !== 'follower'}" [(ngModel)]="searchQueries.follower" (input)="performSearch('follower')" placeholder="Tìm kiếm">
-            <input type="text" [ngClass]="{'hidden': activeContent !== 'friends'}" [(ngModel)]="searchQueries.friends" (input)="performSearch('friends')" placeholder="Tìm kiếm">
-            
+            <input type="text" [ngClass]="{'hidden': activeContent !== 'following'}"
+              [(ngModel)]="searchQueries.following" (input)="performSearch('following')" placeholder="{{ 'navbar_search'
+              | translate }}">
+            <input type="text" [ngClass]="{'hidden': activeContent !== 'follower'}" [(ngModel)]="searchQueries.follower"
+              (input)="performSearch('follower')" placeholder="{{ 'navbar_search'
+              | translate }}">
+            <input type="text" [ngClass]="{'hidden': activeContent !== 'friends'}" [(ngModel)]="searchQueries.friends"
+              (input)="performSearch('friends')" placeholder="{{ 'navbar_search'
+              | translate }}">
+
             <!-- BUTTON -->
             <button class="button primary">
               <!-- ICON MAGNIFYING GLASS -->
@@ -47,14 +54,18 @@
 
           <!-- FORM SELECT -->
           <div class="form-select">
-            <label for="friends-filter-category">Lọc theo</label>
+            <label for="friends-filter-category">{{ "loctheo"
+              | translate }}</label>
             <select id="friends-filter-category" name="friends_filter_category" (change)="onChange($event)">
-              <option value="following">Đang theo dõi</option>
-              <option value="follower">Người theo dõi</option>
-              <option value="friends">Bạn bè</option>
+              <option value="following">{{ "dangtheodoi"
+                | translate }}</option>
+              <option value="follower">{{ "nguoitheodoi"
+                | translate }}</option>
+              <option value="friends">{{ "banbe"
+                | translate }}</option>
             </select>
-            
-            
+
+
             <!-- FORM SELECT ICON -->
             <svg class="form-select-icon icon-small-arrow">
               <use xlink:href="#svg-small-arrow"></use>
@@ -68,25 +79,31 @@
         <!-- FILTER TABS -->
         <div class="filter-tabs">
           <!-- FILTER TAB -->
-          <div class="filter-tab active" (click)="openTabFollow('following')" [ngClass]="{'active': activeContent === 'following'}">
+          <div class="filter-tab active" (click)="openTabFollow('following')"
+            [ngClass]="{'active': activeContent === 'following'}">
             <!-- FILTER TAB TEXT -->
-            <p class="filter-tab-text">Đang theo dõi</p>
+            <p class="filter-tab-text">{{ "dangtheodoi"
+              | translate }}</p>
             <!-- /FILTER TAB TEXT -->
           </div>
           <!-- /FILTER TAB -->
 
           <!-- FILTER TAB -->
-          <div class="filter-tab" (click)="openTabFollow('follower')" [ngClass]="{'active': activeContent === 'follower'}">
+          <div class="filter-tab" (click)="openTabFollow('follower')"
+            [ngClass]="{'active': activeContent === 'follower'}">
             <!-- FILTER TAB TEXT -->
-            <p class="filter-tab-text">Người theo dõi</p>
+            <p class="filter-tab-text">{{ "nguoitheodoi"
+              | translate }}</p>
             <!-- /FILTER TAB TEXT -->
           </div>
           <!-- /FILTER TAB -->
 
           <!-- FILTER TAB -->
-          <div class="filter-tab" (click)="openTabFollow('friends')" [ngClass]="{'active': activeContent === 'friends'}">
+          <div class="filter-tab" (click)="openTabFollow('friends')"
+            [ngClass]="{'active': activeContent === 'friends'}">
             <!-- FILTER TAB TEXT -->
-            <p class="filter-tab-text">Bạn bè</p>
+            <p class="filter-tab-text">{{ "banbe"
+              | translate }}</p>
             <!-- /FILTER TAB TEXT -->
           </div>
           <!-- /FILTER TAB -->
@@ -97,20 +114,25 @@
     </div>
     <!-- /SECTION FILTERS BAR -->
 
-    <app-loading *ngIf="isLoading"></app-loading>
-    
-    <div id="body-follow">
+    <div>
       <!-- GRID -->
-      <div [ngClass]="{'hidden': activeContent !== 'following'}" >
-        <div *ngIf="checkData1" class="emty-message">Khi bạn theo dõi mọi người, bạn sẽ nhìn thấy họ ở đây</div>
+      <div [ngClass]="{'hidden': activeContent !== 'following'}">
+        <div *ngIf="checkData1" class="emty-message">{{ "khibantheodoimoinguoi"
+          | translate }}</div>
         <div class="grid grid-4-4-4 centered following">
-          <div *ngIf="searchPerformed && !checkFind[activeContent!]" class="emty-message">Không tìm thấy người {{searchQueries[activeContent!]}} trong danh sách</div>
+          <div *ngIf="searchPerformed && !checkFind[activeContent!]" class="emty-message">{{ "khongtimthaynguoi"
+            | translate }}
+            {{searchQueries[activeContent!]}} {{ "trongdanhsach"
+            | translate }}</div>
 
           <!-- USER PREVIEW -->
           <div class="user-preview" *ngFor="let fling of (isSearching ? searchResults : listFollowing)">
             <!-- USER PREVIEW COVER -->
-            <figure class="user-preview-cover liquid">
-              <img src="{{fling.thumb}}" alt="cover-04">
+            <figure class="user-preview-cover liquid" *ngIf="fling.thumb !== 'null'">
+              <img src="{{fling.thumb}}">
+            </figure>
+            <figure class="user-preview-cover liquid" *ngIf="fling.thumb === 'null'">
+              <img src="https://firebasestorage.googleapis.com/v0/b/destiny-davisy.appspot.com/o/08.jpg?alt=media&token=1027fbbb-43ee-4046-8e13-5640153356ea&_gl=1*17e3a7c*_ga*MTcxMDU3NTczOS4xNjc2OTc2NjE1*_ga_CW55HF8NVT*MTY5NjUwMzgxNi44LjEuMTY5NjUwNTg5Ny42MC4wLjA" alt="">
             </figure>
             <!-- /USER PREVIEW COVER -->
             <!-- USER PREVIEW INFO -->
@@ -118,7 +140,7 @@
               <!-- USER SHORT DESCRIPTION -->
               <div class="user-short-description">
                 <!-- USER SHORT DESCRIPTION AVATAR -->
-                <a class="user-short-description-avatar user-avatar medium">
+                <a class="user-short-description-avatar user-avatar medium" href="profile?id={{fling.user_id}}"> 
                   <div class="hexagon-container">
                     <div class="hexagon user-avatar-content">
                       <div class="hexagon-image" style="background-image: url('{{fling.avatar}}')"></div>
@@ -132,17 +154,17 @@
                   </div>
                 </a>
                 <!-- /USER SHORT DESCRIPTION AVATAR -->
-    
+
                 <!-- USER SHORT DESCRIPTION TITLE -->
-                <p class="user-short-description-title"><a (click)="this.profileService.loadDataProfileTimeline(fling.user_id)">{{fling.fullname}}</a></p>
+                <p class="user-short-description-title"><a href="profile?id={{fling.user_id}}">{{fling.fullname}}</a></p>
                 <!-- /USER SHORT DESCRIPTION TITLE -->
-    
+
                 <!-- USER SHORT DESCRIPTION TEXT -->
-                <p class="user-short-description-text"><a>{{fling.intro}}</a></p>
+                <p class="user-short-description-text" *ngIf="fling.intro !== 'null'"><a>{{fling.intro}}</a></p>
                 <!-- /USER SHORT DESCRIPTION TEXT -->
               </div>
               <!-- /USER SHORT DESCRIPTION -->
-    
+
               <!-- USER PREVIEW STATS SLIDES -->
               <div id="user-preview-stats-slides-01" class="user-preview-stats-slides">
                 <!-- USER PREVIEW STATS SLIDE -->
@@ -154,33 +176,36 @@
                       <!-- USER STAT TITLE -->
                       <p class="user-stat-title">{{fling.countPost}}</p>
                       <!-- /USER STAT TITLE -->
-    
+
                       <!-- USER STAT TEXT -->
-                      <p class="user-stat-text">bài đăng</p>
+                      <p class="user-stat-text">{{ "newsfeed_BaiDang"
+                        | translate }}</p>
                       <!-- /USER STAT TEXT -->
                     </div>
                     <!-- /USER STAT -->
-    
+
                     <!-- USER STAT -->
                     <div class="user-stat">
                       <!-- USER STAT TITLE -->
                       <p class="user-stat-title">{{fling.countFollower}}</p>
                       <!-- /USER STAT TITLE -->
-    
+
                       <!-- USER STAT TEXT -->
-                      <p class="user-stat-text">theo dõi</p>
+                      <p class="user-stat-text">{{ "sidebar_follow"
+                        | translate }}</p>
                       <!-- /USER STAT TEXT -->
                     </div>
                     <!-- /USER STAT -->
-    
+
                     <!-- USER STAT -->
                     <div class="user-stat">
                       <!-- USER STAT TITLE -->
                       <p class="user-stat-title">{{fling.countImg}}</p>
                       <!-- /USER STAT TITLE -->
-    
+
                       <!-- USER STAT TEXT -->
-                      <p class="user-stat-text">ảnh</p>
+                      <p class="user-stat-text">{{ "image"
+                        | translate }}</p>
                       <!-- /USER STAT TEXT -->
                     </div>
                     <!-- /USER STAT -->
@@ -190,15 +215,17 @@
                 <!-- /USER PREVIEW STATS SLIDE -->
               </div>
               <!-- /USER PREVIEW STATS SLIDES -->
-    
+
               <!-- USER PREVIEW ACTIONS -->
               <div class="user-preview-actions">
                 <!-- BUTTON -->
-                <p class="button secondary" (click)="deleteFling(fling.user_id)">Hủy</p>
+                <p class="button secondary" id="deleteFriend-{{fling.user_id}}" (click)="deleteFling(fling.user_id)">{{ "cancel"
+                  | translate }}</p>
                 <!-- /BUTTON -->
-    
+
                 <!-- BUTTON -->
-                <p class="button primary" (click)="messageService.createChatWithStrangers(fling.user_id)">Nhắn tin</p>
+                <p class="button primary" (click)="messageService.createChatWithStrangers(fling.user_id)">{{ "Nhantin"
+                  | translate }}</p>
                 <!-- /BUTTON -->
               </div>
               <!-- /USER PREVIEW ACTIONS -->
@@ -209,137 +236,155 @@
         </div>
       </div>
       <!-- /GRID -->
-  
+
       <!-- GRID -->
       <div [ngClass]="{'hidden': activeContent !== 'follower'}">
-        <div *ngIf="checkData2" class="emty-message">Khi mọi người theo dõi bạn, bạn sẽ nhìn thấy họ ở đây</div>
-      <div class="grid grid-4-4-4 centered follower">
-        <div *ngIf="searchPerformed && !checkFind[activeContent!]" class="emty-message">Không tìm thấy người {{searchQueries[activeContent!]}} trong danh sách</div>
-        <!-- USER PREVIEW -->
-        <div class="user-preview" *ngFor="let fler of (isSearching ? searchResults : listFollower)">
-          <!-- USER PREVIEW COVER -->
-          <figure class="user-preview-cover liquid">
-            <img src="{{fler.thumb}}" alt="cover-04">
-          </figure>
-          <!-- /USER PREVIEW COVER -->
-  
-          <!-- USER PREVIEW INFO -->
-          <div class="user-preview-info">
-            <!-- USER SHORT DESCRIPTION -->
-            <div class="user-short-description">
-              <!-- USER SHORT DESCRIPTION AVATAR -->
-              <a class="user-short-description-avatar user-avatar medium" >
-                <div class="hexagon-container">
-                  <div class="hexagon user-avatar-content">
-                    <div class="hexagon-image" style="background-image: url('{{fler.avatar}}')"></div>
-                  </div>
-                  <div class="hexagon user-avatar-border">
-                    <div class="hexagon-border"></div>
-                  </div>
-                  <div class="hexagon user-avatar-progress-border">
-                    <div class="user-avatar-progress"></div>
-                  </div>
-                </div>
-              </a>
-              <!-- /USER SHORT DESCRIPTION AVATAR -->
-  
-              <!-- USER SHORT DESCRIPTION TITLE -->
-              <p class="user-short-description-title"><a (click)="this.profileService.loadDataProfileTimeline(fler.user_id)">{{fler.fullname}}</a></p>
-              <!-- /USER SHORT DESCRIPTION TITLE -->
-  
-              <!-- USER SHORT DESCRIPTION TEXT -->
-              <p class="user-short-description-text"><a>{{fler.intro}}</a></p>
-              <!-- /USER SHORT DESCRIPTION TEXT -->
-            </div>
-            <!-- /USER SHORT DESCRIPTION -->
-  
-            <!-- USER PREVIEW STATS SLIDES -->
-            <div id="user-preview-stats-slides-01" class="user-preview-stats-slides">
-              <!-- USER PREVIEW STATS SLIDE -->
-              <div class="user-preview-stats-slide">
-                <!-- USER STATS -->
-                <div class="user-stats">
-                  <!-- USER STAT -->
-                  <div class="user-stat">
-                    <!-- USER STAT TITLE -->
-                    <p class="user-stat-title">{{fler.countPost}}</p>
-                    <!-- /USER STAT TITLE -->
-  
-                    <!-- USER STAT TEXT -->
-                    <p class="user-stat-text">bài đăng</p>
-                    <!-- /USER STAT TEXT -->
-                  </div>
-                  <!-- /USER STAT -->
-  
-                  <!-- USER STAT -->
-                  <div class="user-stat">
-                    <!-- USER STAT TITLE -->
-                    <p class="user-stat-title">{{fler.countFollower}}</p>
-                    <!-- /USER STAT TITLE -->
-  
-                    <!-- USER STAT TEXT -->
-                    <p class="user-stat-text">theo dõi</p>
-                    <!-- /USER STAT TEXT -->
-                  </div>
-                  <!-- /USER STAT -->
-  
-                  <!-- USER STAT -->
-                  <div class="user-stat">
-                    <!-- USER STAT TITLE -->
-                    <p class="user-stat-title">{{fler.countImg}}</p>
-                    <!-- /USER STAT TITLE -->
-  
-                    <!-- USER STAT TEXT -->
-                    <p class="user-stat-text">ảnh</p>
-                    <!-- /USER STAT TEXT -->
-                  </div>
-                  <!-- /USER STAT -->
-                </div>
-                <!-- /USER STATS -->
-              </div>
-              <!-- /USER PREVIEW STATS SLIDE -->
-            </div>
-            <!-- /USER PREVIEW STATS SLIDES -->
-  
-            <!-- USER PREVIEW ACTIONS -->
-            <div class="user-preview-actions">
-              <!-- BUTTON -->
-              <p class="button secondary" (click)="deleteFler(fler.user_id)">Xóa</p>
-              <!-- /BUTTON -->
-  
-              <!-- BUTTON -->
-              <p class="button primary" (click)="addFollow(fler.user_id)">Theo dõi lại</p>
-              <!-- /BUTTON -->
-            </div>
-            <!-- /USER PREVIEW ACTIONS -->
-          </div>
-          <!-- /USER PREVIEW INFO -->
-        </div>
-        <!-- /USER PREVIEW -->
-      </div>
-      </div>
-      <!-- /GRID -->
-  
-       <!-- GRID -->
-       <div [ngClass]="{'hidden': activeContent !== 'friends'}">
-        <div *ngIf="checkData3" class="emty-message">Theo dõi nhiều người để có thêm bạn bè</div>
-       <div class="grid grid-4-4-4 centered friends">
-        <div *ngIf="searchPerformed && !checkFind[activeContent!]" class="emty-message">Không tìm thấy người {{searchQueries[activeContent!]}} trong danh sách</div>
+        <div *ngIf="checkData2" class="emty-message">{{ "khimoinguoitheodoiban"
+          | translate }}</div>
+        <div class="grid grid-4-4-4 centered follower">
+          <div *ngIf="searchPerformed && !checkFind[activeContent!]" class="emty-message">{{ "khongtimthaynguoi"
+            | translate }}
+            {{searchQueries[activeContent!]}} {{ "trongdanhsach"
+            | translate }}</div>
           <!-- USER PREVIEW -->
-          <div class="user-preview" *ngFor="let friend of (isSearching ? searchResults : listFriend)">
+          <div class="user-preview" *ngFor="let fler of (isSearching ? searchResults : listFollower)">
             <!-- USER PREVIEW COVER -->
-            <figure class="user-preview-cover liquid">
-              <img src="{{friend.thumb}}" alt="cover-04">
-              <!-- {{friend.thumb}} -->
+            <figure class="user-preview-cover liquid" *ngIf="fler.thumb !== 'null'">
+              <img src="{{fler.thumb}}" alt="cover-04">
+            </figure>
+            <figure class="user-preview-cover liquid" *ngIf="fler.thumb === 'null'">
+              <img src="https://firebasestorage.googleapis.com/v0/b/destiny-davisy.appspot.com/o/08.jpg?alt=media&token=1027fbbb-43ee-4046-8e13-5640153356ea&_gl=1*17e3a7c*_ga*MTcxMDU3NTczOS4xNjc2OTc2NjE1*_ga_CW55HF8NVT*MTY5NjUwMzgxNi44LjEuMTY5NjUwNTg5Ny42MC4wLjA" alt="">
             </figure>
             <!-- /USER PREVIEW COVER -->
-    
+
             <!-- USER PREVIEW INFO -->
             <div class="user-preview-info">
               <!-- USER SHORT DESCRIPTION -->
               <div class="user-short-description">
                 <!-- USER SHORT DESCRIPTION AVATAR -->
-                <a class="user-short-description-avatar user-avatar medium">
+                <a class="user-short-description-avatar user-avatar medium" href="profile?id={{fler.user_id}}">
+                  <div class="hexagon-container">
+                    <div class="hexagon user-avatar-content">
+                      <div class="hexagon-image" style="background-image: url('{{fler.avatar}}')"></div>
+                    </div>
+                    <div class="hexagon user-avatar-border">
+                      <div class="hexagon-border"></div>
+                    </div>
+                    <div class="hexagon user-avatar-progress-border">
+                      <div class="user-avatar-progress"></div>
+                    </div>
+                  </div>
+                </a>
+                <!-- /USER SHORT DESCRIPTION AVATAR -->
+
+                <!-- USER SHORT DESCRIPTION TITLE -->
+                <p class="user-short-description-title"><a href="profile?id={{fler.user_id}}">{{fler.fullname}}</a></p>
+                <!-- /USER SHORT DESCRIPTION TITLE -->
+
+                <!-- USER SHORT DESCRIPTION TEXT -->
+                <p class="user-short-description-text" *ngIf="fler.intro !== 'null'"><a>{{fler.intro}}</a></p>
+                <!-- /USER SHORT DESCRIPTION TEXT -->
+              </div>
+              <!-- /USER SHORT DESCRIPTION -->
+
+              <!-- USER PREVIEW STATS SLIDES -->
+              <div id="user-preview-stats-slides-01" class="user-preview-stats-slides">
+                <!-- USER PREVIEW STATS SLIDE -->
+                <div class="user-preview-stats-slide">
+                  <!-- USER STATS -->
+                  <div class="user-stats">
+                    <!-- USER STAT -->
+                    <div class="user-stat">
+                      <!-- USER STAT TITLE -->
+                      <p class="user-stat-title">{{fler.countPost}}</p>
+                      <!-- /USER STAT TITLE -->
+
+                      <!-- USER STAT TEXT -->
+                      <p class="user-stat-text">{{ "newsfeed_BaiDang"
+                        | translate }}</p>
+                      <!-- /USER STAT TEXT -->
+                    </div>
+                    <!-- /USER STAT -->
+
+                    <!-- USER STAT -->
+                    <div class="user-stat">
+                      <!-- USER STAT TITLE -->
+                      <p class="user-stat-title">{{fler.countFollower}}</p>
+                      <!-- /USER STAT TITLE -->
+
+                      <!-- USER STAT TEXT -->
+                      <p class="user-stat-text">{{ "sidebar_follow"
+                        | translate }}</p>
+                      <!-- /USER STAT TEXT -->
+                    </div>
+                    <!-- /USER STAT -->
+
+                    <!-- USER STAT -->
+                    <div class="user-stat">
+                      <!-- USER STAT TITLE -->
+                      <p class="user-stat-title">{{fler.countImg}}</p>
+                      <!-- /USER STAT TITLE -->
+
+                      <!-- USER STAT TEXT -->
+                      <p class="user-stat-text">{{ "image"
+                        | translate }}</p>
+                      <!-- /USER STAT TEXT -->
+                    </div>
+                    <!-- /USER STAT -->
+                  </div>
+                  <!-- /USER STATS -->
+                </div>
+                <!-- /USER PREVIEW STATS SLIDE -->
+              </div>
+              <!-- /USER PREVIEW STATS SLIDES -->
+
+              <!-- USER PREVIEW ACTIONS -->
+              <div class="user-preview-actions">
+                <!-- BUTTON -->
+                <p class="button secondary" id="deleteFler-{{fler.user_id}}" (click)="deleteFler(fler.user_id)">{{ "xoa"
+                  | translate }}</p>
+                <!-- /BUTTON -->
+
+                <!-- BUTTON -->
+                <p class="button primary" id="follow-btn-{{fler.user_id}}" (click)="addFollow(fler.user_id)">{{ "theodoilai"
+                  | translate }}</p>
+                <!-- /BUTTON -->
+              </div>
+              <!-- /USER PREVIEW ACTIONS -->
+            </div>
+            <!-- /USER PREVIEW INFO -->
+          </div>
+          <!-- /USER PREVIEW -->
+        </div>
+      </div>
+      <!-- /GRID -->
+
+      <!-- GRID -->
+      <div [ngClass]="{'hidden': activeContent !== 'friends'}">
+        <div *ngIf="checkData3" class="emty-message">{{ "theodoinhieunguoi"
+          | translate }}</div>
+        <div class="grid grid-4-4-4 centered friends">
+          <div *ngIf="searchPerformed && !checkFind[activeContent!]" class="emty-message">{{ "khongtimthaynguoi"
+            | translate }}
+            {{searchQueries[activeContent!]}} {{ "trongdanhsach"
+            | translate }}</div>
+          <!-- USER PREVIEW -->
+          <div class="user-preview" *ngFor="let friend of (isSearching ? searchResults : listFriend)">
+            <!-- USER PREVIEW COVER -->
+            <figure class="user-preview-cover liquid" *ngIf="friend.thumb !== 'null'">
+              <img src="{{friend.thumb}}">
+            </figure>
+            <figure class="user-preview-cover liquid" *ngIf="friend.thumb === 'null'">
+              <img src="https://firebasestorage.googleapis.com/v0/b/destiny-davisy.appspot.com/o/08.jpg?alt=media&token=1027fbbb-43ee-4046-8e13-5640153356ea&_gl=1*17e3a7c*_ga*MTcxMDU3NTczOS4xNjc2OTc2NjE1*_ga_CW55HF8NVT*MTY5NjUwMzgxNi44LjEuMTY5NjUwNTg5Ny42MC4wLjA" alt="">
+            </figure>
+            <!-- /USER PREVIEW COVER -->
+
+            <!-- USER PREVIEW INFO -->
+            <div class="user-preview-info">
+              <!-- USER SHORT DESCRIPTION -->
+              <div class="user-short-description">
+                <!-- USER SHORT DESCRIPTION AVATAR -->
+                <a class="user-short-description-avatar user-avatar medium" href="profile?id={{friend.user_id}}">
                   <div class="hexagon-container">
                     <div class="hexagon user-avatar-content">
                       <div class="hexagon-image" style="background-image: url('{{friend.avatar}}')"></div>
@@ -353,17 +398,17 @@
                   </div>
                 </a>
                 <!-- /USER SHORT DESCRIPTION AVATAR -->
-    
+
                 <!-- USER SHORT DESCRIPTION TITLE -->
-                <p class="user-short-description-title"><a (click)="this.profileService.loadDataProfileTimeline(friend.user_id)">{{friend.fullname}}</a></p>
+                <p class="user-short-description-title"><a href="profile?id={{friend.user_id}}">{{friend.fullname}}</a></p>
                 <!-- /USER SHORT DESCRIPTION TITLE -->
-    
+
                 <!-- USER SHORT DESCRIPTION TEXT -->
-                <p class="user-short-description-text"><a>{{friend.intro}}</a></p>
+                <p class="user-short-description-text" *ngIf="friend.intro !== 'null'"><a>{{friend.intro}}</a></p>
                 <!-- /USER SHORT DESCRIPTION TEXT -->
               </div>
               <!-- /USER SHORT DESCRIPTION -->
-    
+
               <!-- USER PREVIEW STATS SLIDES -->
               <div id="user-preview-stats-slides-01" class="user-preview-stats-slides">
                 <!-- USER PREVIEW STATS SLIDE -->
@@ -375,33 +420,36 @@
                       <!-- USER STAT TITLE -->
                       <p class="user-stat-title">{{friend.countPost}}</p>
                       <!-- /USER STAT TITLE -->
-    
+
                       <!-- USER STAT TEXT -->
-                      <p class="user-stat-text">bài đăng</p>
+                      <p class="user-stat-text">{{ "newsfeed_BaiDang"
+                        | translate }}</p>
                       <!-- /USER STAT TEXT -->
                     </div>
                     <!-- /USER STAT -->
-    
+
                     <!-- USER STAT -->
                     <div class="user-stat">
                       <!-- USER STAT TITLE -->
                       <p class="user-stat-title">{{friend.countFollower}}</p>
                       <!-- /USER STAT TITLE -->
-    
+
                       <!-- USER STAT TEXT -->
-                      <p class="user-stat-text">theo dõi</p>
+                      <p class="user-stat-text">{{ "sidebar_follow"
+                        | translate }}</p>
                       <!-- /USER STAT TEXT -->
                     </div>
                     <!-- /USER STAT -->
-    
+
                     <!-- USER STAT -->
                     <div class="user-stat">
                       <!-- USER STAT TITLE -->
                       <p class="user-stat-title">{{friend.countImg}}</p>
                       <!-- /USER STAT TITLE -->
-    
+
                       <!-- USER STAT TEXT -->
-                      <p class="user-stat-text">ảnh</p>
+                      <p class="user-stat-text">{{ "image"
+                        | translate }}</p>
                       <!-- /USER STAT TEXT -->
                     </div>
                     <!-- /USER STAT -->
@@ -411,15 +459,17 @@
                 <!-- /USER PREVIEW STATS SLIDE -->
               </div>
               <!-- /USER PREVIEW STATS SLIDES -->
-    
+
               <!-- USER PREVIEW ACTIONS -->
               <div class="user-preview-actions">
                 <!-- BUTTON -->
-                <p class="button secondary" (click)="deleteFling(friend.user_id)">Hủy</p>
+                <p class="button secondary" id="deleteFriend-{{friend.user_id}}" (click)="deleteFling(friend.user_id)">{{ "cancel"
+                  | translate }}</p>
                 <!-- /BUTTON -->
-    
+
                 <!-- BUTTON -->
-                <p class="button primary" (click)="messageService.createChatWithStrangers(friend.user_id)">Nhắn tin</p>
+                <p class="button primary" (click)="messageService.createChatWithStrangers(friend.user_id)">{{ "Nhantin"
+                  | translate }}</p>
                 <!-- /BUTTON -->
               </div>
               <!-- /USER PREVIEW ACTIONS -->
@@ -427,13 +477,13 @@
             <!-- /USER PREVIEW INFO -->
           </div>
           <!-- /USER PREVIEW -->
+        </div>
       </div>
-       </div>
-       
-      <!-- /GRID -->
-</div>
 
-    
+      <!-- /GRID -->
+    </div>
+
+
   </section>
   <!-- /SECTION -->
 </div>

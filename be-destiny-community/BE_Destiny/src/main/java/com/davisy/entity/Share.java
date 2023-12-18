@@ -3,6 +3,7 @@ package com.davisy.entity;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,13 +31,13 @@ public class Share {
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	User user;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "post_id")
 	Post post;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
-	Calendar date_share = GregorianCalendar.getInstance();
-	boolean share_status=true;
-	
+	Calendar date_share = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT+7"));
+	boolean share_status = true;
+
 }

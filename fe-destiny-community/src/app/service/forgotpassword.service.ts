@@ -14,6 +14,7 @@ export class ForgotpasswordService {
   private checkCodelUrl = environment.baseUrl + 'v1/user/sendcode';
   private changePasslUrl = environment.baseUrl + 'v1/user/changepassword';
 
+  checkLoading: boolean = false;
   constructor(
     private http: HttpClient
   ) { }
@@ -24,29 +25,15 @@ export class ForgotpasswordService {
       tap((res) => {
         let data = JSON.stringify(res);
         if (data.substring(2, data.length - 2) == 'success') {
-          let timerInterval;
-          Swal.fire({
+          this.checkLoading = false;
+          new toast({
             title: 'Thông báo!',
-            html: 'Quá trình sẽ diễn ra trong vài giây!',
-            timer: 5000,
-            timerProgressBar: true,
-            didOpen: () => {
-              Swal.showLoading();
-            },
-            willClose: () => {
-              clearInterval(timerInterval);
-            },
-          }).then((result) => {
-            if (result.dismiss === Swal.DismissReason.timer) {
-              new toast({
-                title: 'Thông báo!',
-                message: 'Vui lòng kiểm tra Email',
-                type: 'success',
-                duration: 3000,
-              })
-            }
+            message: 'Vui lòng kiểm tra Email',
+            type: 'success',
+            duration: 3000,
           });
         } else if (data.substring(2, data.length - 2) == 'isExists') {
+          this.checkLoading = false;
           new toast({
             title: 'Thông báo!',
             message: 'Mã đã được gửi',
@@ -54,6 +41,7 @@ export class ForgotpasswordService {
             duration: 3000,
           })
         } else {
+          this.checkLoading = false;
           new toast({
             title: 'Thất bại!',
             message: 'Email không tồn tại',
@@ -73,22 +61,25 @@ export class ForgotpasswordService {
       tap((res) => {
         let data = JSON.stringify(res);
         if (data.substring(2, data.length - 2) == 'timeup') {
+          this.checkLoading = false;
           new toast({
             title: 'Thất bại!',
             message: 'Mã xác đã hết hiệu lực',
             type: 'error',
             duration: 3000,
           })
-        } 
+        }
         if (data.substring(2, data.length - 2) == 'wrongcode') {
+          this.checkLoading = false;
           new toast({
             title: 'Thất bại!',
             message: 'Mã xác nhận không đúng',
             type: 'error',
             duration: 3000,
           })
-        } 
+        }
         if (data.substring(2, data.length - 2) == 'success') {
+          this.checkLoading = false;
           new toast({
             title: 'Thành công',
             message: 'Xác nhận thành công',
@@ -110,6 +101,7 @@ export class ForgotpasswordService {
       tap((res) => {
         let data = JSON.stringify(res);
         if (data.substring(2, data.length - 2) == 'success') {
+          this.checkLoading = false;
           new toast({
             title: 'Thông báo!',
             message: 'Mật khẩu đã được thay đổi',
@@ -117,6 +109,7 @@ export class ForgotpasswordService {
             duration: 3000,
           })
         } else {
+          this.checkLoading = false;
           new toast({
             title: 'Thất bại!',
             message: 'Mật khẩu mới trùng với mật khẩu cũ',

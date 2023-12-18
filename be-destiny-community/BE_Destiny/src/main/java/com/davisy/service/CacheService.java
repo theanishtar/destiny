@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.params.ScanParams;
+import redis.clients.jedis.resps.ScanResult;
 
 @Service
 @RequiredArgsConstructor
@@ -63,5 +65,36 @@ public class CacheService {
 		}
 		return Cache.DONE;
 	}
+	public long getCacheLength(String key) {
+		String type = jedisConnectionFactory.type(key);
+
+		switch (type) {
+		case "list":
+			return jedisConnectionFactory.llen(key);
+		case "set":
+			return jedisConnectionFactory.scard(key);
+		case "hash":
+			return jedisConnectionFactory.hlen(key);
+		default:
+			// Nếu không phải là danh sách, tập hợp, hoặc bảng ánh xạ, bạn có thể xử lý theo
+			// cách khác.
+			return -1;
+		}
+	}
+	
+	public long countAllKeys() {
+        // Sử dụng lệnh SCAN để lặp qua toàn bộ keys
+        String cursor = "0";
+        long count = 0;
+
+        do {
+            ScanResult<String> scanResult = jedisConnectionFactory.scan(cursor, new ScanParams().count(1000));
+            cursor = scanResult.getCursor();
+            count += scanResult.getResult().size();
+        } while (!"0".equals(cursor));
+
+        System.out.println("Total count of keys in Redis: " + count);
+        return count;
+    }
 
 }

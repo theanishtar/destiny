@@ -20,6 +20,7 @@ import { ProfileService } from '../service/profile.service';
   styleUrls: [
     `../../css/vendor/bootstrap.min.css`,
     `../../css/styles.min.css`,
+    `../../css/dark/dark.min.css`,
     `../../css/vendor/simplebar.css`,
     `../../css/vendor/tiny-slider.css`,
     './photos.component.css'
@@ -30,7 +31,7 @@ export class PhotosComponent implements OnInit {
   dataProfileTimeline: any;
   listImg: any
   idLocal: any;
-
+  isLoading = true;
   ngOnInit() {
 
     liquid.liquid();
@@ -40,8 +41,19 @@ export class PhotosComponent implements OnInit {
     popups.picturePopup();
     headers.headers();
     sidebars.sidebars();
-    content.contentTab();
+    // content.contentTab();
     form.formInput();
+
+    let photo_body = document.getElementById('photo-body')!;
+
+    photo_body.style.display = 'none';
+    this.profileService.getCheckData().then((result) => {
+        this.isLoading = false;
+        // if(this.profileService.listPostPr.length === 0){
+        //   this.checkLoadingdata = false;
+        // }
+        photo_body.style.display = 'block';
+    });
   }
 
   constructor(
@@ -49,7 +61,6 @@ export class PhotosComponent implements OnInit {
     public profileService: ProfileService
   ) {
     this.idLocal = parseInt((localStorage.getItem("idSelected") + '')?.trim());
-    // this.profileService.loadDataProfileTimeline(this.idLocal);
-    // this.dataProfileTimeline = this.profileService.getDataHeader();
+    this.profileService.loadDataProfileTimeline(this.idLocal);
    }
 }

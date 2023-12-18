@@ -7,7 +7,7 @@
 
     <!-- End of Navbar -->
     <app-loading *ngIf="isLoading"></app-loading>
-    <main>
+    <main *ngIf="isLoading == false">
       <div class="pb-5">
         <label class="d-block">
           <input type="file" style="display: none;" (change)="chooseFileThumb($event)">
@@ -23,7 +23,7 @@
               <div class="avatar">
                 <label>
                   <input type="file" style="display: none;" (change)="chooseFile($event)">
-                  <img src="{{admin.avatar}}" alt="profile_image" class="border-radius-lg shadow-sm img-fluid"
+                  <img src="{{admin.avatar}}" alt="" class="border-radius-lg shadow-sm img-fluid"
                     #uploadPreviewAvatar />
                 </label>
               </div>

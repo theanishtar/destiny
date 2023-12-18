@@ -6,9 +6,9 @@
     <app-navbar-admin></app-navbar-admin>
 
     <!-- End of Navbar -->
-    <main>
-      <app-loading *ngIf="isLoading"></app-loading>
-      <div class="pb-5">
+    <app-loading *ngIf="isLoading"></app-loading>
+    <main *ngIf="isLoading == false">
+      <div class="pb-3">
         <div class="name-pad shadow pb-4">
           <div class="page-header min-height-300 border-radius-xl mt-1" style="
             background-image: url('{{userDetail.thumb}}');
@@ -86,7 +86,7 @@
                 <button class="btn btn-secondary mr-4" type="button" data-dismiss="modal">
                   <i class="fas fa-ban mr-1"></i>Hủy bỏ
                 </button>
-                <a class="btn btn-danger" (click)="actionOnUser(userDetail.email)" type="button" data-dismiss="modal">
+                <a class="btn btn-danger" (click)="actionOnUser(userDetail.id)" type="button" data-dismiss="modal">
                   <i class=" fas fa-check"></i> Xác nhận</a>
               </div>
             </div>

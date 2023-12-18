@@ -22,8 +22,8 @@ public class UserModel {
 	private String lastMessage;
 	private String online;
 	private boolean isFriend;
-	private boolean hide ;
-	private boolean status;
+	private String typeMessage;
+	private boolean recall;
 	
 
 	public enum MessageType {

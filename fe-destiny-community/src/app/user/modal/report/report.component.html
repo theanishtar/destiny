@@ -1,0 +1,262 @@
+<main class="overlay" *ngIf="reportService.isOpenReportPost$ | async">
+  <div id="favDialog_seemore" class="modal fade favDialog_seemore">
+      <div class="container">
+          <form [formGroup]="reportPostForm" (ngSubmit)="reportPost()" action="" novalidate>
+              <div class="modal">
+                  <div class="modal__header">
+                      <span class="modal__title">{{ "Report" | translate }}</span>
+                      <button class="button button--icon" (click)="reportService.closeReportPost()">
+                          <svg width="24" viewBox="0 0 24 24" height="24" xmlns="http://www.w3.org/2000/svg">
+                              <path fill="none" d="M0 0h24v24H0V0z"></path>
+                              <path
+                                  d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z">
+                              </path>
+                          </svg>
+                      </button>
+                  </div>
+                  <div class="modal__body">
+                      <div class="input">
+                          <!-- <label class="input__label title">Hãy nhập vấn đề</label> -->
+                          <p class="input__description">{{ "motabaocao" | translate }}!</p>
+                      </div>
+                      <div class="input">
+                          <label class="input__label">{{
+                              "noidungbaocao" | translate
+                              }}</label>
+                          <textarea class="input__field input__field--textarea" formControlName="content_report"
+                              required></textarea>
+                          <p class="input__description error" *ngIf="
+                reportPostForm.get('content_report')?.invalid &&
+                reportPostForm.get('content_report')?.touched
+              ">
+                              {{ "vuilongnhapnoidungbaocao" | translate }}!
+                          </p>
+                      </div>
+                  </div>
+                  <div class="modal__footer">
+                      <div *ngIf="isLoadingReportPost">
+                          <div class="loader-bars">
+                              <div class="loader-bar"></div>
+                              <div class="loader-bar"></div>
+                              <div class="loader-bar"></div>
+                              <div class="loader-bar"></div>
+                              <div class="loader-bar"></div>
+                              <div class="loader-bar"></div>
+                              <div class="loader-bar"></div>
+                              <div class="loader-bar"></div>
+                          </div>
+                          <div class="loading">{{ "baocaodangduocxuli" | translate }}</div>
+                      </div>
+<button *ngIf="!isLoadingReportPost" class="button button--primary" type="submit">
+                          {{ "contact_gui" | translate }}
+                      </button>
+                  </div>
+              </div>
+          </form>
+      </div>
+  </div>
+</main>
+
+<main class="overlay" *ngIf="reportService.isOpenReportAccount$ | async">
+  <div id="favDialog_seemore" class="modal fade favDialog_seemore">
+      <div class="container">
+          <form [formGroup]="reportAccountForm" (ngSubmit)="reportAccount()" action="" novalidate>
+              <div class="modal">
+                  <div class="modal__header">
+                      <span class="modal__title">{{ "Report" | translate }}</span>
+                      <button class="button button--icon" (click)="reportService.closeReportAccount()">
+                          <svg width="24" viewBox="0 0 24 24" height="24" xmlns="http://www.w3.org/2000/svg">
+                              <path fill="none" d="M0 0h24v24H0V0z"></path>
+                              <path
+                                  d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z">
+                              </path>
+                          </svg>
+                      </button>
+                  </div>
+                  <div class="modal__body">
+                      <div class="input">
+                          <!-- <label class="input__label title">Hãy nhập vấn đề</label> -->
+                          <p class="input__description">{{ "motabaocao" | translate }}!</p>
+                      </div>
+                      <div class="input">
+                          <label class="input__label">{{
+                              "noidungbaocao" | translate
+                              }}</label>
+                          <textarea class="input__field input__field--textarea" formControlName="content_report"
+                              required></textarea>
+                          <p class="input__description error" *ngIf="
+                reportAccountForm.get('content_report')?.invalid &&
+                reportAccountForm.get('content_report')?.touched
+              ">
+                              {{ "vuilongnhapnoidungbaocao" | translate }}!
+                          </p>
+                      </div>
+                  </div>
+                  <div class="modal__footer">
+                      <div *ngIf="isLoadingReportUser">
+                          <div class="loader-bars">
+                              <div class="loader-bar"></div>
+                              <div class="loader-bar"></div>
+                              <div class="loader-bar"></div>
+                              <div class="loader-bar"></div>
+                              <div class="loader-bar"></div>
+                              <div class="loader-bar"></div>
+<div class="loader-bar"></div>
+                              <div class="loader-bar"></div>
+                          </div>
+                          <div class="loading">{{ "baocaodangduocxuli" | translate }}</div>
+                      </div>
+                      <button *ngIf="!isLoadingReportUser" class="button button--primary" type="submit">
+                          Gửi
+                      </button>
+                  </div>
+              </div>
+          </form>
+      </div>
+  </div>
+</main>
+
+<main class="overlay" *ngIf="reportService.isOpenQR$ | async">
+  <div id="favDialog_seemore" class="modal fade favDialog_seemore">
+      <div class="container qr">
+          <div (click)="reportService.closeQR()" class="btnClose-qr">
+              <i class="fa-solid fa-xmark"></i>
+          </div>
+          <div *ngIf="reportService.checkLoadingdata">
+              <div class="loader-bars">
+                  <div class="loader-bar"></div>
+                  <div class="loader-bar"></div>
+                  <div class="loader-bar"></div>
+                  <div class="loader-bar"></div>
+                  <div class="loader-bar"></div>
+                  <div class="loader-bar"></div>
+                  <div class="loader-bar"></div>
+                  <div class="loader-bar"></div>
+              </div>
+              <div class="loading">{{ "dangtai" | translate }}</div>
+          </div>
+          <div class="qr-code" *ngIf="!reportService.checkLoadingdata && !reportService.checkReQR">
+              <p class="time-qr" id="time-qr">{{ "masehethansau"
+                  | translate }}
+                  {{reportService.minutesRemaining}}:{{reportService.secondsRemaining}}</p>
+              <img class="img-qr" [src]="reportService.imgQR" style="width: 70%;" alt="" />
+              <div class="info">
+                  <h2>{{reportService.full_name}}</h2>
+                  <p style="line-height: 2.5">{{ "quetma" | translate }}</p>
+              </div>
+          </div>
+
+          <div class="qr-code" *ngIf="!reportService.checkLoadingdata && reportService.checkReQR">
+              <svg class="img-qr" width="100px" height="100px" viewBox="0 0 24 24" fill="#adafca"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path
+                      d="M23 4C23 2.34315 21.6569 1 20 1H16C15.4477 1 15 1.44772 15 2C15 2.55228 15.4477 3 16 3H20C20.5523 3 21 3.44772 21 4V8C21 8.55228 21.4477 9 22 9C22.5523 9 23 8.55228 23 8V4Z"
+                      fill="#adafca" />
+                  <path
+                      d="M23 16C23 15.4477 22.5523 15 22 15C21.4477 15 21 15.4477 21 16V20C21 20.5523 20.5523 21 20 21H16C15.4477 21 15 21.4477 15 22C15 22.5523 15.4477 23 16 23H20C21.6569 23 23 21.6569 23 20V16Z"
+                      fill="#adafca" />
+                  <path
+d="M4 21C3.44772 21 3 20.5523 3 20V16C3 15.4477 2.55228 15 2 15C1.44772 15 1 15.4477 1 16V20C1 21.6569 2.34315 23 4 23H8C8.55228 23 9 22.5523 9 22C9 21.4477 8.55228 21 8 21H4Z"
+                      fill="#adafca" />
+                  <path
+                      d="M1 8C1 8.55228 1.44772 9 2 9C2.55228 9 3 8.55228 3 8V4C3 3.44772 3.44772 3 4 3H8C8.55228 3 9 2.55228 9 2C9 1.44772 8.55228 1 8 1H4C2.34315 1 1 2.34315 1 4V8Z"
+                      fill="#adafca" />
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M11 6C11 5.44772 10.5523 5 10 5H6C5.44772 5 5 5.44772 5 6V10C5 10.5523 5.44772 11 6 11H10C10.5523 11 11 10.5523 11 10V6ZM9 7.5C9 7.22386 8.77614 7 8.5 7H7.5C7.22386 7 7 7.22386 7 7.5V8.5C7 8.77614 7.22386 9 7.5 9H8.5C8.77614 9 9 8.77614 9 8.5V7.5Z"
+                      fill="#adafca" />
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M18 13C18.5523 13 19 13.4477 19 14V18C19 18.5523 18.5523 19 18 19H14C13.4477 19 13 18.5523 13 18V14C13 13.4477 13.4477 13 14 13H18ZM15 15.5C15 15.2239 15.2239 15 15.5 15H16.5C16.7761 15 17 15.2239 17 15.5V16.5C17 16.7761 16.7761 17 16.5 17H15.5C15.2239 17 15 16.7761 15 16.5V15.5Z"
+                      fill="#adafca" />
+                  <path
+                      d="M14 5C13.4477 5 13 5.44772 13 6C13 6.55229 13.4477 7 14 7H16.5C16.7761 7 17 7.22386 17 7.5V10C17 10.5523 17.4477 11 18 11C18.5523 11 19 10.5523 19 10V6C19 5.44772 18.5523 5 18 5H14Z"
+                      fill="#adafca" />
+                  <path
+                      d="M14 8C13.4477 8 13 8.44771 13 9V10C13 10.5523 13.4477 11 14 11C14.5523 11 15 10.5523 15 10V9C15 8.44772 14.5523 8 14 8Z"
+                      fill="#adafca" />
+                  <path
+                      d="M6 13C5.44772 13 5 13.4477 5 14V16C5 16.5523 5.44772 17 6 17C6.55229 17 7 16.5523 7 16V15.5C7 15.2239 7.22386 15 7.5 15H10C10.5523 15 11 14.5523 11 14C11 13.4477 10.5523 13 10 13H6Z"
+                      fill="#adafca" />
+                  <path
+                      d="M10 17C9.44771 17 9 17.4477 9 18C9 18.5523 9.44771 19 10 19C10.5523 19 11 18.5523 11 18C11 17.4477 10.5523 17 10 17Z"
+                      fill="#adafca" />
+              </svg>
+              <div class="info">
+                  <p style="line-height: 2.5">{{ "macuabandahethan" | translate }}</p>
+                  <button class="re-create-qr" (click)="reportService.openQR()">{{ "taolaima" | translate }}</button>
+              </div>
+          </div>
+      </div>
+  </div>
+</main>
+
+<main class="overlay" *ngIf="loginService.isOpenQRWeb$ | async">
+  <div id="favDialog_seemore" class="modal fade favDialog_seemore">
+      <div class="container qr">
+          <div (click)="loginService.closeQR()" class="btnClose-qr">
+              <i class="fa-solid fa-xmark"></i>
+          </div>
+          <div *ngIf="loginService.checkLoadingdata">
+<div class="loader-bars">
+                  <div class="loader-bar"></div>
+                  <div class="loader-bar"></div>
+                  <div class="loader-bar"></div>
+                  <div class="loader-bar"></div>
+                  <div class="loader-bar"></div>
+                  <div class="loader-bar"></div>
+                  <div class="loader-bar"></div>
+                  <div class="loader-bar"></div>
+              </div>
+              <div class="loading">{{ "dangtai" | translate }}</div>
+          </div>
+          <div class="qr-code" *ngIf="!loginService.checkLoadingdata && !loginService.checkReQR">
+              <p class="time-qr" id="time-qr">{{ "masehethansau"
+                  | translate }} {{loginService.minutesRemaining}}:{{loginService.secondsRemaining}}</p>
+              <img class="img-qr" [src]="loginService.imgQR" alt="" />
+              <div class="info">
+                  <h2>{{loginService.full_name}}</h2>
+                  <p style="line-height: 2.5">{{ "quetmadedangnhap" | translate }}</p>
+              </div>
+          </div>
+
+          <div class="qr-code" *ngIf="!loginService.checkLoadingdata && loginService.checkReQR">
+              <svg class="img-qr" width="100px" height="100px" viewBox="0 0 24 24" fill="#adafca"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path
+                      d="M23 4C23 2.34315 21.6569 1 20 1H16C15.4477 1 15 1.44772 15 2C15 2.55228 15.4477 3 16 3H20C20.5523 3 21 3.44772 21 4V8C21 8.55228 21.4477 9 22 9C22.5523 9 23 8.55228 23 8V4Z"
+                      fill="#adafca" />
+                  <path
+                      d="M23 16C23 15.4477 22.5523 15 22 15C21.4477 15 21 15.4477 21 16V20C21 20.5523 20.5523 21 20 21H16C15.4477 21 15 21.4477 15 22C15 22.5523 15.4477 23 16 23H20C21.6569 23 23 21.6569 23 20V16Z"
+                      fill="#adafca" />
+                  <path
+                      d="M4 21C3.44772 21 3 20.5523 3 20V16C3 15.4477 2.55228 15 2 15C1.44772 15 1 15.4477 1 16V20C1 21.6569 2.34315 23 4 23H8C8.55228 23 9 22.5523 9 22C9 21.4477 8.55228 21 8 21H4Z"
+                      fill="#adafca" />
+                  <path
+                      d="M1 8C1 8.55228 1.44772 9 2 9C2.55228 9 3 8.55228 3 8V4C3 3.44772 3.44772 3 4 3H8C8.55228 3 9 2.55228 9 2C9 1.44772 8.55228 1 8 1H4C2.34315 1 1 2.34315 1 4V8Z"
+                      fill="#adafca" />
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M11 6C11 5.44772 10.5523 5 10 5H6C5.44772 5 5 5.44772 5 6V10C5 10.5523 5.44772 11 6 11H10C10.5523 11 11 10.5523 11 10V6ZM9 7.5C9 7.22386 8.77614 7 8.5 7H7.5C7.22386 7 7 7.22386 7 7.5V8.5C7 8.77614 7.22386 9 7.5 9H8.5C8.77614 9 9 8.77614 9 8.5V7.5Z"
+                      fill="#adafca" />
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+d="M18 13C18.5523 13 19 13.4477 19 14V18C19 18.5523 18.5523 19 18 19H14C13.4477 19 13 18.5523 13 18V14C13 13.4477 13.4477 13 14 13H18ZM15 15.5C15 15.2239 15.2239 15 15.5 15H16.5C16.7761 15 17 15.2239 17 15.5V16.5C17 16.7761 16.7761 17 16.5 17H15.5C15.2239 17 15 16.7761 15 16.5V15.5Z"
+                      fill="#adafca" />
+                  <path
+                      d="M14 5C13.4477 5 13 5.44772 13 6C13 6.55229 13.4477 7 14 7H16.5C16.7761 7 17 7.22386 17 7.5V10C17 10.5523 17.4477 11 18 11C18.5523 11 19 10.5523 19 10V6C19 5.44772 18.5523 5 18 5H14Z"
+                      fill="#adafca" />
+                  <path
+                      d="M14 8C13.4477 8 13 8.44771 13 9V10C13 10.5523 13.4477 11 14 11C14.5523 11 15 10.5523 15 10V9C15 8.44772 14.5523 8 14 8Z"
+                      fill="#adafca" />
+                  <path
+                      d="M6 13C5.44772 13 5 13.4477 5 14V16C5 16.5523 5.44772 17 6 17C6.55229 17 7 16.5523 7 16V15.5C7 15.2239 7.22386 15 7.5 15H10C10.5523 15 11 14.5523 11 14C11 13.4477 10.5523 13 10 13H6Z"
+                      fill="#adafca" />
+                  <path
+                      d="M10 17C9.44771 17 9 17.4477 9 18C9 18.5523 9.44771 19 10 19C10.5523 19 11 18.5523 11 18C11 17.4477 10.5523 17 10 17Z"
+                      fill="#adafca" />
+              </svg>
+              <div class="info">
+                  <p style="line-height: 2.5">{{ "macuabandahethan" | translate }}</p>
+                  <button class="re-create-qr" (click)="loginService.openQR()">{{ "taolaima" | translate }}</button>
+              </div>
+          </div>
+      </div>
+  </div>
+</main>

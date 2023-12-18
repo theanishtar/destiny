@@ -55,7 +55,7 @@ export class EditPostComponent {
   }
 
   formUpdatePost() {
-    const HASHTAG_PATTERN = /^(?=.*[!@#$%^&*]+)[a-z0-9!@#$%^&*]{4,20}$/;
+    const HASHTAG_PATTERN = /^(?=.*[!@#$%^&*]+)[a-z0-9!@#$%^&*]{2,20}$/;
     this.createUpdatePostForm = this.formbuilder.group({
       content: ['', Validators.required],
       hash_tag: ['', [Validators.required, Validators.pattern(HASHTAG_PATTERN),]],
@@ -72,12 +72,12 @@ export class EditPostComponent {
   get createUpdatePostFormControl() {
     return this.createUpdatePostForm.controls;
   }
-
+  checkEdit: boolean = false;
   async updatePost(event: any) {
-    if (this.file.length !== undefined) {
-      for (let img of this.file) {
-        await this.addData(img);
-      }
+    let body = document.getElementById('body-edit-post');
+    this.checkEdit = true;
+    if (body && this.checkEdit) {
+      body.style.opacity = '0';
     }
 
     var data = {
@@ -88,47 +88,27 @@ export class EditPostComponent {
       ward_name: this.createUpdatePostForm.get('ward_name')?.value,
       post_status: this.createUpdatePostForm.get('post_status')?.value,
       product: this.createUpdatePostForm.get('product')?.value,
-      post_images: this.listImg,
+      post_images: this.postService.listImageSources,
       post_id: this.postService.infoPost.post_id,
       send_status: this.postService.infoPost.send_status,
     };
-    console.warn("data: " + JSON.stringify(data));
-    if(this.createUpdatePostForm.valid){
-      if(this.createUpdatePostForm.get('content')?.value && this.listImg.length === 0){
-        new toast({
-          title: 'Thông báo!',
-          message: 'Vui lòng không bỏ trống đồng thời nội dung và hình ảnh',
-          type: 'warning',
-          duration: 1500,
-        });
-      }else{
-        this.postService.updatePost(data).subscribe(() => {
+    // console.warn("data: " + JSON.stringify(data));
+    if (this.createUpdatePostForm.valid) {
+        this.postService.updatePost(data).subscribe((res) => {
           new toast({
             title: 'Thành công!',
             message: 'Chỉnh sửa thành công',
             type: 'success',
             duration: 1500,
           });
-          this.profileService.loadDataProfileTimeline(this.postService.infoPost.userId)
+          // this.profileService.loadDataProfileTimeline(this.postService.infoPost.userId)
           this.postService.closeModalUpdatePost();
+          this.checkEdit = false;
         })
-      }
+      // }
     }
-    
+
   }
-
-  // listPostUdpate: any;
-
-  // loadPostUpdate(idPost) {
-  //   try {
-  //     this.postService.loadDataUpdate(idPost).subscribe((res) => {
-  //       this.listPostUdpate = res;
-  //       console.log("this.listPostUdpate: " + this.listPostUdpate);
-  //     })
-  //   } catch (error) {
-  //     console.error('Error:', error);
-  //   }
-  // }
 
   /* ============Comboxbox address============= */
 
@@ -144,12 +124,12 @@ export class EditPostComponent {
       this.provinces = [];
       this.provinces = this.profileService.getAllProvince();
 
-      const province = this.createUpdatePostForm.get('province_name')?.value;
+      const province = this.postService.infoPost?.province_fullname;
       this.profileService.loadAllDistrict(province).subscribe(() => {
         this.districts = [];
         this.districts = this.profileService.getAllDistrict();
 
-        const district = this.createUpdatePostForm.get('district_name')?.value;
+        const district = this.postService.infoPost?.district_fullname;
         this.profileService.loadAllWard(district).subscribe(() => {
           this.wards = [];
           this.wards = this.profileService.getAllWard();
@@ -162,17 +142,18 @@ export class EditPostComponent {
   getProvinceName() {
     const province = this.createUpdatePostForm.get('province_name')?.value;
     this.loadAllDistrict(province);
-
+    console.log("province: " + province)
   }
 
   loadAllDistrict(province: string) {
     this.profileService.loadAllDistrict(province).subscribe(() => {
       this.districts = [];
       this.districts = this.profileService.getAllDistrict();
-      this.dataEditProfile.district_name = this.districts[0];
+      this.postService.infoPost.district_fullname = this.districts[0];
 
-      this.loadAllWard(this.postService.postUpdate[1]);
+      this.loadAllWard(this.postService.infoPost.province_fullname);
 
+     
     })
   }
 
@@ -185,7 +166,7 @@ export class EditPostComponent {
     this.profileService.loadAllWard(district).subscribe(() => {
       this.wards = [];
       this.wards = this.profileService.getAllWard();
-      this.postService.postUpdate[3] = this.wards[0];
+      this.postService.infoPost.ward_fullname = this.wards[0];
     })
   }
 
@@ -198,7 +179,7 @@ export class EditPostComponent {
     const blobs = this.toBlob(this.file);
     this.postService.listImageSources = blobs.map(blob => URL.createObjectURL(blob));
     // this.postService.listImageSources.push(this.imageSources);
-    console.log("this.postService.listImageSources: " +  this.postService.listImageSources)
+    console.log("this.postService.listImageSources: " + this.postService.listImageSources)
   }
 
   // 
@@ -219,10 +200,9 @@ export class EditPostComponent {
     }
     return dataTransfer.files;
   }
-listImgTemp:string[] = [];
+  listImgTemp: string[] = [];
   deleteImg(event: any, i) {
-  
-    console.log("this.postService.listImgTemp.length: " + this.postService.listImgTemp.length);
+
     // if(i >= 0 && i < this.postService.listImgTemp.length){
     //   console.log("===================: "+i);
     //     this.postService.listImgTemp.splice(i,1);
@@ -240,9 +220,9 @@ listImgTemp:string[] = [];
     } else {
       console.log("Chỉ mục không hợp lệ.");
     }
-    
+
     // if (i >= 0 && i < this.file.length) {
-      
+
     //   // Tạo một mảng thường
     //   const newArray = Array.from(this.file);
     //   // Xóa phần tử từ mảng thường
@@ -258,7 +238,7 @@ listImgTemp:string[] = [];
 
   async addData(file: any) {
     return new Promise<void>((resolve) => {
-      const storageRef = ref(this.storage, 'postsImg/' +file.name);
+      const storageRef = ref(this.storage, 'postsImg/' + file.name);
       const uploadTask = uploadBytesResumable(storageRef, file);
       uploadTask.on(
         'state_changed',

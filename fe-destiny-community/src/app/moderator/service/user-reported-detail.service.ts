@@ -10,6 +10,7 @@ export class UserReportedDetailService {
 
   private getDetailUserAPI = environment.baseUrl + 'v1/moderator/detailUser';
   private sendUserReportedAPI = environment.baseUrl + 'v1/moderator/sendUserReported';
+  private deleteUserReportedAPI = environment.baseUrl + 'v1/moderator/deleteUserReported';
 
   private userDetail: any[] = [];
 
@@ -29,6 +30,10 @@ export class UserReportedDetailService {
 
   sendToAdmin(idUser: string, idUserSend: string) {
     return this.http.delete(this.sendUserReportedAPI + "/" + idUser + "/" + idUserSend);
+  }
+
+  deleteUser(idUser: string, idUserSend: string) {
+    return this.http.delete(this.deleteUserReportedAPI + "/" + idUser + "/" + idUserSend);
   }
 
   //getter

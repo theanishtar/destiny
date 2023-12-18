@@ -1,3 +1,20 @@
+.loadingOverlay {
+    /* display: none; */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(21, 21, 31, 0.96);
+    z-index: 10003;
+    padding: 5rem
+  }
+  .loading {
+    text-align: center;
+    font-size: 17px;
+    color: #3e3f5e;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
 main.overlay {
     position: fixed;
     top: 0;
@@ -12,36 +29,54 @@ main.overlay {
     padding-top: 0;
 }
 
-button.btnClose-change-email {
+div.btnClose-change-email {
     position: absolute;
     right: 13px;
     top: 8px;
     border: none;
     background: #fff;
     width: auto;
+    cursor: pointer;
 }
+
 form.form.change-mail {
     position: absolute;
     right: 0%;
     transform: translate(-80%, -10%);
 }
+
 @media (max-width:390px) {
     form.form.change-mail {
         transform: translate(13%, 0%) !important;
         width: clamp(392px, 50%, 530px) !important;
     }
+
 }
 
-@media (max-width:  1286px) {
+@media (max-width: 1286px) {
     form.form.change-mail {
         transform: translate(-170%, -15%) !important;
     }
 }
+
 .progressbar {
     margin-bottom: 30px !important;
 }
+
 .input-group {
     margin: 1.5rem 0 !important;
 }
 
+@media screen and (max-width: 480px) {
+    form.form.change-mail {
+        right: 0% !important;
+        transform: translate(0%, -12%) !important;
+    }
 
+    .form {
+        width: clamp(390px, 50%, 530px) !important;
+    }
+}
+.btn{
+    border: none !important;
+}

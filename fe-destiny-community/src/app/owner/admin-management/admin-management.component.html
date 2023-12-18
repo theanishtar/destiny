@@ -1,0 +1,403 @@
+<div class="body">
+  <!-- <app-loading *ngIf="isLoading"></app-loading> -->
+  <div id="owner" >
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top p-0">
+     <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" action="" novalidate>
+      <div class="container flex-lg-column">
+        <div class="navbar-brand ml-3 mt-0 mb-0 ml-lg-0 mr-lg-0 mb-lg-4 mt-lg-n3">
+          <label class="d-block">
+            <input type="file" class="d-none" (change)="chooseFile($event)">
+            <img src="{{infoOwner?.avatar}}" class="d-none d-lg-block rounded-circle avt-owner" alt=""
+              #uploadPreviewAvatar>
+          </label>
+          <span class="h3 font-weight-bold d-block d-lg-none">Trần Văn Nhuộm</span>
+        </div>
+        <button class="navbar-toggler mr-3 mt-2 mb-2" type="button" data-bs-toggle="collapse"
+          data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse mt-n4" id="navbarNav" *ngIf="infoOwner">
+          <ul class="navbar-nav ml-auto pl-3 pl-lg-0 flex-lg-column text-center">
+
+            <div class="col-md-12 text-right">
+              <i class="fas fa-user-edit text-pink text-md" role="button" (click)="editProfile()"></i>
+            </div>
+
+            <div class="editor-field">
+              <div class="editor-field__label-container">
+                <label class="editor-field__label">Tên đăng nhập</label>
+              </div>
+              <div class="editor-field__container">
+                <input type="text" class="editor-field__input" formControlName="username" [(ngModel)]="infoOwner.username" id="username" [disabled]="true" />
+              </div>
+              <span class="editor-field__bottom"></span>
+            </div>
+
+            <div class="editor-field">
+              <div class="editor-field__label-container">
+                <label class="editor-field__label">Họ và tên</label>
+              </div>
+              <div class="editor-field__container">
+                <input type="text" class="editor-field__input" formControlName="fullname" [(ngModel)]="infoOwner.fullname" id="fullname" [disabled]="true" />
+              </div>
+              <span class="editor-field__bottom"></span>
+            </div>
+            <div class="editor-field">
+              <div class="editor-field__label-container">
+                <label class="editor-field__label">Ngày sinh</label>
+              </div>
+
+              <div class="editor-field__container">
+                <input type="date" class="editor-field__input" formControlName="birthday" [(ngModel)]="infoOwner.birthdayYear" id="birthday" [disabled]="true" />
+              </div>
+              <span class="editor-field__bottom"></span>
+            </div>
+            <div class="editor-field">
+              <div class="editor-field__label-container">
+                <label class="editor-field__label">Email</label>
+              </div>
+
+              <div class="editor-field__container">
+                <input type="email" class="editor-field__input" formControlName="email" [(ngModel)]="infoOwner.email" id="email" [disabled]="true" />
+              </div>
+<span class="editor-field__bottom"></span>
+            </div>
+            <div class="editor-field d-none" id="buttonUpdate">
+              <div class="project-btn-update col-auto mt-3">
+                <button type="submit" class="link-new-admin text-light font-weight-bold">
+                  <svg viewBox="0 0 100 100" width="50px"
+                    style="position: absolute;top:0;left:0;transform:rotate(90deg);">
+                    <path d="M2,70 L2,98 L25,98" fill="none" stroke="#17eaed" stroke-width="4" />
+                  </svg>
+                  CẬP NHẬT
+                  <svg viewBox="0 0 100 100" width="50px" style="position: absolute;bottom: 0;right: 0%;">
+                    <path d="M75,98 L98,98 L98,75" fill="none" stroke="#17eaed" stroke-width="4" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </ul>
+        </div>
+      </div>
+     </form>
+    </nav>
+
+
+    <main id="content-wrapper">
+
+      <div class="container-owner owner-bg full-height">
+
+        <div class="row mb-4 owner-bg-stick">
+          <div class="col-lg-12 owner-logo-heart">
+            <img src="../assets/images/owner/logo.png" alt="">
+          </div>
+          <div class="col-lg-12 owner-logo-heart-name">
+            <img src="../assets/images/owner/logo_name.png" alt="">
+          </div>
+        </div>
+
+        <div class="row text-hello">
+          <div class="col-lg-12">
+            <h1 class="font-weight-bold text-light">XIN CHÀO <span class="text-brand font-weight-bold" style="text-transform: uppercase;">{{infoOwner?.fullname}}</span></h1>
+          </div>
+        </div>
+
+        <div class="row card-owner-content p-lg-0 ml-0 m-lg-0 mt-5 mt-sm-3 mt-lg-0">
+          <div class="card-owner col-lg-4 p-sm-0 mt-lg-0">
+            <span class="card-owner-container-top"></span>
+            <div class="card-owner-container">
+              <div class="row no-gutters align-items-center">
+                <div class="col-10 pt-3 pb-3 pl-4">
+                  <div class="h5 font-weight-bold text-uppercase mb-2 text-light">
+                    <div> TỔNG SỐ NGƯỜI DÙNG</div>
+                  </div>
+                  <div class="h4 mb-0 text-info font-weight-bold">
+                    <div>{{totalUser}}
+                      <!-- <span class="h5 text-success text-sm ml-2">+2%</span> -->
+                    </div>
+                  </div>
+                </div>
+                <div class="col-auto pl-0">
+                  <i class="fas fa-users fa-2x"></i>
+                </div>
+              </div>
+            </div>
+            <span class="card-owner-container-bottom"></span>
+          </div>
+          <div class="card-owner col-lg-4 offset-lg-4 p-sm-0 mt-5 mt-sm-3 mt-lg-0">
+            <span class="card-owner-container-top"></span>
+            <div class="card-owner-container">
+              <div class="row no-gutters align-items-center">
+                <div class="col-10 pt-3 pb-3 pl-4">
+                  <div class="h5 font-weight-bold text-uppercase mb-2 text-light">
+                    <div> TỔNG SỐ BÀI ĐĂNG</div>
+                  </div>
+                  <div class="h4 mb-0 text-info mb-0 font-weight-bold">
+                    <div>{{totalPost}}
+                      <!-- <span class="h5 text-success text-sm ml-2">+2%</span> -->
+                    </div>
+                  </div>
+                </div>
+                <div class="col-auto pl-0">
+                  <i class="fas fa-newspaper fa-2x"></i>
+                </div>
+              </div>
+            </div>
+            <span class="card-owner-container-bottom"></span>
+          </div>
+        </div>
+
+        <div class="row pr-0 pl-0 m-0 pt-0 pt-lg-2 owner-content chart-x">
+          <div class="col-lg-12 pr-0 pl-0 mb-5">
+            <div class="card-owner-chart text-light">
+              <div class="editor-field__label-container-owner">
+                <label class="editor-field__label-owner">Biểu đồ bài viết và người dùng theo từng
+                  tháng</label>
+              </div>
+              <div class="card-owner-container-brand p-3">
+                <div class="ml-1 mt-2 mb-3">
+                  <p class="text-sm">
+                    <i class="fa fa-arrow-up text-success"></i>
+                    <span class="font-weight-bold"> Nhiều hơn 4%</span> trong năm 2021
+                  </p>
+                </div>
+                <div class="chart">
+                  <canvas #chartLine class="chart-canvas" height="300"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-owner row pr-0 pl-0 mr-0 ml-0">
+
+          <div class="row mb-4 center">
+            <div class="col-lg-12 logo-heart">
+              <img src="../assets/images/logo-euphoria.png" alt="" />
+            </div>
+            <div class="col-lg-12 justify-content-center text-center mt-3">
+              <div class="project-btn-new-admin col-auto">
+                <a class="link-new-admin text-light font-weight-bold">
+                  <svg viewBox="0 0 100 100" width="50px"
+                    style="position: absolute;top:0;left:0;transform:rotate(90deg);">
+                    <path d="M2,70 L2,98 L25,98" fill="none" stroke="#17eaed" stroke-width="4" />
+                  </svg>
+                  QUẢN LÝ QUẢN TRỊ VIÊN
+                  <svg viewBox="0 0 100 100" width="50px" style="position: absolute;bottom: 0;right: 0%;">
+                    <path d="M75,98 L98,98 L98,75" fill="none" stroke="#17eaed" stroke-width="4" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal fade text-dark" id="disableModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog ml-1" role="document">
+              <div class="modal-content card-modal card-owner-container-modal" >
+                <div class="modal-header ml-3 mr-3">
+                  <h5 *ngIf="infoEdit.ban == false" class="modal-title text-pink font-weight-bold" id="exampleModalLabel">
+                    Vô hiệu hóa {{infoEdit.fullname}}
+                  </h5>
+                  <h5 *ngIf="infoEdit.ban == true" class="modal-title text-pink font-weight-bold" id="exampleModalLabel">
+                    Kích hoạt  {{infoEdit.fullname}}
+                  </h5>
+                  <button class="close" type="button" data-dismiss="modal" aria-label="Close"
+                    style="padding-top: 1.2rem">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <div class="modal-body d-flex align-items-center text-modal justify-content-center">
+                  <!-- <a class="avatar rounded-circle circle-info mr-2">
+                    <img class="rounded-circle" alt="" src="{{infoEdit.avatar}}" />
+                  </a> -->
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                  <button class="btn btn-secondary mr-4" type="button" data-dismiss="modal">
+                    <i class="fas fa-ban mr-1"></i>Hủy bỏ
+                  </button>
+                  <a class="btn btn-danger" type="button" (click)="updateStatus(infoEdit.user_id)" data-dismiss="modal">
+                    <i class=" fas fa-check"></i> Xác nhận</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-8 pl-0 pr-0 mt-2" id="">
+            <div class="shadow mb-5 mt-0">
+              <div class="card-owner-container-table text-light">
+                <div class="row">
+                  <h5 class="pl-4 mt-4 mb-2 font-weight-bold col-11">Danh sách Quản trị viên</h5>
+                  <i class="fas fa-user-plus pt-1 pr-5 mt-4 text-right col-1" role="button" (click)="createAdmin()"></i>
+                </div>
+                <div class="table-responsive p-3">
+                  <table class="table rwd-table" id="dataTable" width="100%" cellspacing="0">
+                    <thead class="text-light">
+                      <tr>
+                        <th class="text-center">Ảnh đại diện</th>
+                        <th>Họ và tên</th>
+                        <th>Email</th>
+                        <th class="text-center">Trạng thái hoạt động</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tfoot class="text-light">
+                      <tr>
+                        <th class="text-center">Ảnh đại diện</th>
+                        <th>Họ và tên</th>
+                        <th>Email</th>
+                        <th class="text-center">Trạng thái hoạt động</th>
+                        <th></th>
+                      </tr>
+                    </tfoot>
+                    <tbody class="text-light">
+                      <tr *ngFor="let u of listUser">
+                        <td data-th="Ảnh đại diện" class="ml-3 h-100 text-center">
+                          <img src="{{u.avatar}}">
+</td>
+                        <td data-th="Người dùng">{{u.fullname}}</td>
+                        <td data-th="Email">{{u.email}}</td>
+                        <td data-th="Trạng thái hoạt động" *ngIf="u.ban == false">
+                          <div class="status completed text-center">Đang hoạt động</div>
+                        </td>
+                        <td data-th="Trạng thái hoạt động" *ngIf="u.ban == true">
+                          <div class="status pending text-center">Bị khóa</div>
+                        </td>
+                        <td data-th="Xem thêm">
+                          <a type="button" class="edit" (click)="loadInfoEdit(u)">
+                            <i class="fas fa-solid fa-arrow-right-to-bracket"></i>
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 pl-5 mt-2" id="">
+            <div class="col-12 mb-4" id="avatar" *ngIf="!checkInput">
+              <div class="circle-info">
+                <img src="{{infoEdit.avatar}}" class="rounded-circle" alt="">
+              </div>
+            </div>
+            <form [formGroup]="createAccountForm" (ngSubmit)="createAccount()" action="" novalidate>
+              <div class="col-lg-12 row pr-0 pl-0 mr-0 ml-0">
+                <div class="editor-field">
+                  <div class="editor-field__label-container">
+                    <label class="editor-field__label">Tên đăng nhập</label>
+                  </div>
+                  <div class="editor-field__container">
+                    <input type="text" class="editor-field__input" formControlName="username" [ngModel]="infoEdit.username" id="admin-username" [disabled]="true" />
+                  </div>
+                  <span class="editor-field__bottom"></span>
+                </div>
+                <div class="editor-field">
+                  <div class="editor-field__label-container">
+                    <label class="editor-field__label">Họ và tên</label>
+                  </div>
+                  <div class="editor-field__container">
+                    <input type="text" class="editor-field__input" formControlName="fullname" [ngModel]="infoEdit.fullname" id="admin-fullname" [disabled]="true" />
+                  </div>
+                  <span class="editor-field__bottom"></span>
+                </div>
+                <div class="editor-field" *ngIf="!checkInput">
+                  <div class="editor-field__label-container">
+                    <label class="editor-field__label">Ngày sinh</label>
+                  </div>
+  
+                  <div class="editor-field__container">
+                    <input type="date" class="editor-field__input" formControlName="birthday" [(ngModel)]="infoEdit.birthDayStringYear" id="admin-birthday" [disabled]="true" />
+                  </div>
+                  <span class="editor-field__bottom"></span>
+                </div>
+                <div class="editor-field">
+                  <div class="editor-field__label-container">
+                    <label class="editor-field__label">Email</label>
+                  </div>
+  
+                  <div class="editor-field__container">
+                    <input type="email" class="editor-field__input" formControlName="email"  [ngModel]="infoEdit.email" id="admin-email" [disabled]="true" />
+                  </div>
+                  <span class="editor-field__bottom"></span>
+                </div>
+  
+                <div class="editor-field" *ngIf="checkInput">
+                  <div class="editor-field__label-container">
+                    <label class="editor-field__label">Mật khẩu</label>
+                  </div>
+  
+                  <div class="editor-field__container">
+                    <input type="text" class="editor-field__input" formControlName="password"  id="admin-password" [disabled]="true" />
+                  </div>
+                  <span class="editor-field__bottom"></span>
+                </div>
+
+                <div class="editor-field" *ngIf="checkInput">
+                  <div class="editor-field__label-container">
+                    <label class="editor-field__label">Xác nhận mật khẩu</label>
+                  </div>
+  
+                  <div class="editor-field__container">
+                    <input type="text" class="editor-field__input" formControlName="re_password"  id="admin-password" [disabled]="true" />
+                  </div>
+                  <span class="editor-field__bottom"></span>
+                </div>
+  
+                <div class="editor-field">
+                  <div class="editor-field__label-container">
+                    <label class="editor-field__label">Vai trò</label>
+                  </div>
+                  
+                  <div class="editor-field__container">
+                    <select class="editor-field__input" id="admin-roles" formControlName="roles" [disabled]="true">
+                      <option [selected]="infoEdit.authorities[0]?.authority === 'ROLE_ADMIN'" value="2">Quản trị viên</option>
+                      <option [selected]="infoEdit.authorities[0]?.authority === 'ROLE_MODERATOR'" value="3">Kiểm duyệt viên</option>
+                      <option [selected]="infoEdit.authorities[0]?.authority === 'ROLE_USER'" value="4">Người dùng</option>
+                    </select>
+                  </div>
+                  <span class="editor-field__bottom"></span>
+                </div>
+              </div>
+            <div class="row mt-5">
+
+              <div class="project-btn col-auto" id="buttonDisabled">
+                <div data-toggle="modal" data-target="#disableModal" class="link font-weight-bold">
+                  <svg viewBox="0 0 100 100" width="50px"
+                    style="position: absolute;top:0;left:0;transform:rotate(90deg);">
+<path d="M2,70 L2,98 L25,98" fill="none" stroke="#17eaed" stroke-width="4" />
+                  </svg>
+                  {{infoEdit.ban ? 'KÍCH HOẠT' : 'VÔ HIỆU HÓA'}}
+                  <svg viewBox="0 0 100 100" width="50px" style="position: absolute;bottom: 0;right: 0%;">
+                    <path d="M75,98 L98,98 L98,75" fill="none" stroke="#17eaed" stroke-width="4" />
+                  </svg>
+                </div>
+              </div>
+
+              <div class="project-btn col-auto d-none" id="buttonCreate">
+                <button type="submit" class="link-new-admin font-weight-bold">
+                  <svg viewBox="0 0 100 100" width="50px"
+                    style="position: absolute;top:0;left:0;transform:rotate(90deg);">
+                    <path d="M2,70 L2,98 L25,98" fill="none" stroke="#17eaed" stroke-width="4" />
+                  </svg>
+                  THÊM
+                  <svg viewBox="0 0 100 100" width="50px" style="position: absolute;bottom: 0;right: 0%;">
+                    <path d="M75,98 L98,98 L98,75" fill="none" stroke="#17eaed" stroke-width="4" />
+                  </svg>
+                </button>
+              </div>
+
+            </div>
+            
+          </form>
+          </div>
+
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+</div>

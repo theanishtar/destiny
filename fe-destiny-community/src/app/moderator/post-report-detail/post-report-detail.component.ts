@@ -58,6 +58,27 @@ export class PostReportDetailModeratorComponent {
     }
   }
 
+  deletePost(): void {
+    this.idPost = localStorage.getItem("postDetailId");
+    this.idUserSend = localStorage.getItem("userSendId");
+
+    if (this.idPost == null || this.idUserSend == null) {
+      this.routers.navigate(['/moderator/post-report']);
+    } else {
+
+      this.postReportedDetailService.deletePost(this.idPost, this.idUserSend).subscribe(() => {
+        new toast({
+          title: 'Thành công!',
+          message: 'Báo cáo đã được xóa thành công!',
+          type: 'success',
+          duration: 3000,
+        })
+        localStorage.removeItem("postDetailId");
+        this.routers.navigate(['/moderator/post-report']);
+      })
+    }
+  }
+
   loadPostDetail() {
 
     this.idPost = localStorage.getItem("postDetailId");

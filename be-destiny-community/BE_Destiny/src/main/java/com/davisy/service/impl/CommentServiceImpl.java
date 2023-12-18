@@ -44,6 +44,11 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
+	public Object[] findCommentId(int id, int check, int commentId) {
+		return commentDao.findCommentId(id, check, commentId);
+	}
+
+	@Override
 	public List<Object[]> findAllComment(int id, int check) {
 		return commentDao.findAllComment(id, check);
 	}
@@ -66,5 +71,30 @@ public class CommentServiceImpl implements CommentService {
 	@Override
 	public Integer findByIdtoUser(int id) {
 		return commentDao.findByIdtoUser(id);
+	}
+
+	@Override
+	public List<Object[]> loadHistoryComment(int id) {
+		return commentDao.loadHistoryComment(id);
+	}
+
+	@Override
+	public Object[] findByIdComment(int id) {
+		return commentDao.findByIdComment(id);
+	}
+
+	@Override
+	public void remove_parent_comment(int id) {
+		commentDao.remove_parent_comment(id);
+	}
+
+	@Override
+	public void removeComment(int id) {
+		commentDao.removeComment(id);
+	}
+
+	@Override
+	public List<Integer> get_parent_id(int id) {
+		return commentDao.get_parent_id(id);
 	}
 }

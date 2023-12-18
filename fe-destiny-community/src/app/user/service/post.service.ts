@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import '../../../assets/toast/main.js';
@@ -16,17 +16,21 @@ export class PostService {
   private loadDataTop5User = environment.baseUrl + 'v1/user/getTop5User';
 
   private loadDataPosts = environment.baseUrl + 'v1/user/load/post';
+  private reloadDataPosts = environment.baseUrl + 'v1/user/reload/post';
   private createPostUrl = environment.baseUrl + 'v1/user/upload/post';
   private loadDataUpdatePostUrl = environment.baseUrl + 'v1/user/load/data/post/update';
   private updatePostUrl = environment.baseUrl + 'v1/user/data/update/post';
+  private loadDetailPostUrl = environment.baseUrl + 'v1/user/detail/post/';
 
   private listTop5User: any[] = [];
   private listTop5Post: any[] = [];
   private listPostsNf: any;
   public postUpdate: any;
+  public listPostsPr: any;
+  public detailPost: any;
   listImageSources: any[] = [];
   infoPost: any
-
+  dataUpdated = new EventEmitter<void>();
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -44,7 +48,7 @@ export class PostService {
       throw error;
     }
   }
-
+  
   async loadTop5Post(): Promise<any[]> {
     try {
       const response = await this.http.get<any>(this.loadDataTop5Post).toPromise();
@@ -57,15 +61,6 @@ export class PostService {
   }
 
   /* ============Posts newsfeed============= */
-  // async loadPostNewsFeed(): Promise<any[]> {
-  //   try {
-  //     const response = await this.http.get<any>(this.loadDataPosts).toPromise();
-  //     this.setDataPostNf(response);
-  //     return response;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
   loadPostNewsFeed(data: any): Observable<any> {
     return this.http.post(this.loadDataPosts, data).pipe(
       tap((response) => {
@@ -73,6 +68,21 @@ export class PostService {
       }),
     )
   }
+  async reloadPostNewsFeed(post_id: number, page: number): Promise<any> {
+    const params = new HttpParams()
+      .set('post_id', post_id.toString()) // Chuyển số nguyên thành chuỗi
+      .set('page', page.toString());
+
+    try {
+      let response = await this.http.get<any>(this.reloadDataPosts, { params }).toPromise();
+      // this.setDataPostNf(response);
+      return response;
+    } catch (error) {
+      console.log("error: " + error);
+      throw error;
+    }
+  }
+
   /* ============upload post============= */
   uploadPost(data: any): Observable<any> {
     return this.http.post(this.createPostUrl, data).pipe(
@@ -85,18 +95,13 @@ export class PostService {
   /* ============update post============= */
   private isOpenUpdatePost = new BehaviorSubject<boolean>(false);
   isOpenUpdatePost$ = this.isOpenUpdatePost.asObservable();
-  listImgTemp:string[] = [];
-  openModalUpdatePost(idPost) {
+  listImgTemp: string[] = [];
+  openModalUpdatePost(post: any) {
     this.isOpenUpdatePost.next(true);
     try {
-      this.loadDataUpdate(idPost).subscribe((res) => {
-        this.postUpdate = res;
-        this.infoPost = this.postUpdate[0];
-        this.listImageSources = this.infoPost.postImages;
-
-        this.listImgTemp = this.listImageSources;
-        console.log("this.listPostUdpate: " + JSON.stringify(this.postUpdate[1]));
-      })
+      this.infoPost = post;
+      console.log("this.infoPost: ", this.infoPost);
+      this.listImageSources = this.infoPost.images;
     } catch (error) {
       console.error('Error:', error);
     }
@@ -118,10 +123,27 @@ export class PostService {
 
   updatePost(data: any): Observable<any> {
     return this.http.post(this.updatePostUrl, data).pipe(
-
-    )
+      tap((response) => {
+        this.setListDataPostUpdate(response);
+        this.updateData();
+      })
+    );
   }
-  
+
+  // Hàm cập nhật dữ liệu
+  updateData() {
+    // Thực hiện cập nhật dữ liệu ở đây.
+    // Sau khi cập nhật xong, thông báo sự kiện.
+    this.dataUpdated.emit();
+  }
+
+  /* ============Detail post============= */
+  getPostDetails(postId: number): Observable<any> {
+    const url = `${this.loadDetailPostUrl}${postId}`;
+    return this.http.get(url);
+  }
+
+
   /* ============Interested============= */
   private likedPosts: Set<string> = new Set<string>();
 
@@ -160,5 +182,12 @@ export class PostService {
   }
   setDataPostUpdate(data: any): void {
     this.postUpdate = data;
+  }
+
+  getListDataPostUpdate(): any {
+    return this.listPostsPr;
+  }
+  setListDataPostUpdate(data: any): void {
+    this.listPostsPr = data;
   }
 }

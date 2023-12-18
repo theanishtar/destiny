@@ -20,9 +20,11 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.FindOneAndReplaceOptions;
 import com.mongodb.client.model.ReturnDocument;
+import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertManyResult;
 import com.mongodb.client.result.InsertOneResult;
+import com.mongodb.client.result.UpdateResult;
 
 @Component
 public class MongoDBUtils {
@@ -56,30 +58,31 @@ public class MongoDBUtils {
 		}
 		return null;
 	}
-	
+
 	// tìm theo 2 trường
-		public <T> T findByTwoColumn(Class<T> documentClass, String collectionName, String column1, String dataColumn1, String column2, String dataColumn2) {
-			MongoDatabase database = client.getDatabase(dbName);
-			// MongoCollection defines a connection to a specific collection of documents in
-			// a specific database
-			MongoCollection<T> collection = database.getCollection(collectionName, documentClass);
+	public <T> T findByTwoColumn(Class<T> documentClass, String collectionName, String column1, String dataColumn1,
+			String column2, String dataColumn2) {
+		MongoDatabase database = client.getDatabase(dbName);
+		// MongoCollection defines a connection to a specific collection of documents in
+		// a specific database
+		MongoCollection<T> collection = database.getCollection(collectionName, documentClass);
 
-			try {
-				Bson filter = Filters.and(Filters.eq(column1, dataColumn1), Filters.eq(column2, dataColumn2));
-		        T firstPotato = collection.find(filter).first();
-				if (firstPotato == null) {
-					System.out
-							.println("Couldn't find any Object containing " + dataColumn1 + "and" + dataColumn2 + " as an ingredient in MongoDB.");
+		try {
+			Bson filter = Filters.and(Filters.eq(column1, dataColumn1), Filters.eq(column2, dataColumn2));
+			T firstPotato = collection.find(filter).first();
+			if (firstPotato == null) {
+				System.out.println("Couldn't find any Object containing " + dataColumn1 + "and" + dataColumn2
+						+ " as an ingredient in MongoDB.");
 
-				} else {
-					System.out.println(firstPotato.toString());
-					return firstPotato;
-				}
-			} catch (MongoException me) {
-				System.err.println("Unable to find a recipe to update in MongoDB due to an error: " + me);
+			} else {
+				System.out.println(firstPotato.toString());
+				return firstPotato;
 			}
-			return null;
+		} catch (MongoException me) {
+			System.err.println("Unable to find a recipe to update in MongoDB due to an error: " + me);
 		}
+		return null;
+	}
 
 	// tìm theo Id
 	public <T> T findById(Class<T> documentClass, String collectionName, ObjectId _id) {
@@ -120,6 +123,7 @@ public class MongoDBUtils {
 
 			if (list.size() == 0) {
 				System.out.println("Couldn't find any recipes containing " + column + " as an ingredient in MongoDB.");
+				return list;
 			} else {
 				return list;
 			}
@@ -224,6 +228,94 @@ public class MongoDBUtils {
 		}
 	}
 
+	public <T> long updateAllByColumn(Class<T> documentClass, String collectionName, String column, String dataColumn,
+			T newDocument) {
+		MongoDatabase database = client.getDatabase(dbName);
+		MongoCollection<T> collection = database.getCollection(collectionName, documentClass);
+
+		Bson filter = Filters.eq(column, dataColumn);
+		UpdateOptions options = new UpdateOptions().upsert(false);
+
+		// Your update fields and values
+		Document updateDocument = new Document("$set", newDocument);
+
+		try {
+			UpdateResult updateResult = collection.updateMany(filter, updateDocument, options);
+			return updateResult.getModifiedCount();
+		} catch (MongoException me) {
+			return 0;
+		}
+	}
+	
+	// update status cho notification
+	public <T> long updateStatusNotification(Class<T> documentClass, String collectionName, Boolean statusUpdate) {
+	    MongoDatabase database = client.getDatabase(dbName);
+	    MongoCollection<T> collection = database.getCollection(collectionName, documentClass);
+
+	    // Filter for documents where the status is false
+	    Document filter = new Document("status", !statusUpdate);
+
+	    // Update fields and values, setting status to true
+	    /*
+	     * upsert(false) (mặc định):
+
+			Khi upsert được đặt thành false, nghĩa là bạn không muốn thực hiện việc thêm mới (insert) bản ghi nếu không tìm thấy bản ghi nào khớp với điều kiện tìm kiếm.
+			Nếu không tìm thấy bản ghi nào khớp với điều kiện, thì không có thay đổi hoặc thêm mới sẽ xảy ra. Có nghĩa là nó chỉ cập nhật các bản ghi đã tồn tại.
+			upsert(true):
+			
+			Khi upsert được đặt thành true, nếu không tìm thấy bản ghi nào khớp với điều kiện tìm kiếm, MongoDB sẽ thêm mới một bản ghi dựa trên điều kiện tìm kiếm và các thông tin cập nhật bạn cung cấp.
+			Nếu không có bản ghi nào khớp, MongoDB sẽ chèn một bản ghi mới thay vì chỉ cập nhật các bản ghi đã tồn tại.
+	     */
+	    Document updateDocument = new Document("$set", new Document("status", statusUpdate));
+
+	    // Update all documents that match the filter
+	    UpdateOptions options = new UpdateOptions().upsert(false);
+	    
+	    try {
+			UpdateResult updateResult = collection.updateMany(filter, updateDocument, options);
+			return updateResult.getModifiedCount();
+		} catch (MongoException me) {
+			return 0;
+		}
+	}
+	
+	
+	// update status cho notification
+		public <T> long updateStatusNotification(Class<T> documentClass, String collectionName, Boolean statusUpdate, String id) {
+		    MongoDatabase database = client.getDatabase(dbName);
+		    MongoCollection<T> collection = database.getCollection(collectionName, documentClass);
+
+		    // Filter for documents where the status is false
+//		    Document filter = new Document("status", !statusUpdate);
+		 // Filter for documents where the status is false and id is equal to the provided id
+		    Document filter = new Document("status", !statusUpdate)
+		                          .append("idUserReceive", id);
+
+		    // Update fields and values, setting status to true
+		    /*
+		     * upsert(false) (mặc định):
+
+				Khi upsert được đặt thành false, nghĩa là bạn không muốn thực hiện việc thêm mới (insert) bản ghi nếu không tìm thấy bản ghi nào khớp với điều kiện tìm kiếm.
+				Nếu không tìm thấy bản ghi nào khớp với điều kiện, thì không có thay đổi hoặc thêm mới sẽ xảy ra. Có nghĩa là nó chỉ cập nhật các bản ghi đã tồn tại.
+				upsert(true):
+				
+				Khi upsert được đặt thành true, nếu không tìm thấy bản ghi nào khớp với điều kiện tìm kiếm, MongoDB sẽ thêm mới một bản ghi dựa trên điều kiện tìm kiếm và các thông tin cập nhật bạn cung cấp.
+				Nếu không có bản ghi nào khớp, MongoDB sẽ chèn một bản ghi mới thay vì chỉ cập nhật các bản ghi đã tồn tại.
+		     */
+		    Document updateDocument = new Document("$set", new Document("status", statusUpdate));
+
+		    // Update all documents that match the filter
+		    UpdateOptions options = new UpdateOptions().upsert(false);
+		    
+		    try {
+				UpdateResult updateResult = collection.updateMany(filter, updateDocument, options);
+				return updateResult.getModifiedCount();
+			} catch (MongoException me) {
+				return 0;
+			}
+		}
+	
+
 	// Cập nhật theo trường "_id" (_id là khóa chính và tự tạo)
 	public <T> T updateBy_Id(T document, Class<T> documentClass, String collectionName, ObjectId _id, T newDocument) {
 
@@ -280,6 +372,14 @@ public class MongoDBUtils {
 		}
 		return -1;
 	}
+	
+	// Lấy độ dài 1 collection
+		public long lengthCollection(String collectionName) {
+			MongoDatabase database = client.getDatabase(dbName);
+			MongoCollection<Document> collection = database.getCollection(collectionName);
+			long collectionSize = collection.estimatedDocumentCount();
+			return collectionSize;
+		}
 
 	// tìm theo trường "post_reported_id"
 //	public <T> T findByPostReportedId(T document, Class<T> documentClass, String collectionName, int post_reported_id) {

@@ -1,6 +1,7 @@
-import { Component, HostListener, Renderer2, ElementRef, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnInit, HostListener, Renderer2, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { LoginService } from '@app/service/login.service';
+import { CookieService } from 'ngx-cookie-service';
 @Component({
   selector: 'app-sidebar-moderator',
   templateUrl: './sidebar-moderator.component.html',
@@ -9,24 +10,38 @@ import { LoginService } from '@app/service/login.service';
     `../../admin/css/home.css`
   ]
 })
-export class SidebarModeratorComponent {
+export class SidebarModeratorComponent implements OnInit {
   activeMenuItem: string = '';
 
   constructor(
     private renderer: Renderer2,
     private router: Router,
-    private loginService: LoginService
-    ) {
-      this.router.events.subscribe((event) => {
-        if (event instanceof NavigationEnd) {
-          // Đã chuyển đến trang mới, thực hiện cập nhật menu active
-          this.updateActiveMenuItem();
-        }
-      });
-    }
+    private loginService: LoginService,
+    private cookieService: CookieService,
+  ) {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        // Đã chuyển đến trang mới, thực hiện cập nhật menu active
+        this.updateActiveMenuItem();
+      }
+    });
+  }
 
   @ViewChildren('mainColorLink')
   mainColorLinks!: QueryList<ElementRef>;
+
+  role: any;
+
+  getUserRole() {
+    // Lấy vai trò của người dùng từ dịch vụ hoặc nơi lưu trữ.
+    // Ví dụ: return this.loginService.getUserRole();
+    return this.cookieService.get('role'); // Đây là ví dụ, bạn cần thay thế bằng cách lấy thực tế.
+  }
+
+  ngOnInit(): void {
+    this.role = this.getUserRole();
+    this.updateActiveMenuItem();
+  }
 
   ngAfterViewInit(): void {
     const bodyElement = document.querySelector('.body-admin');
@@ -87,7 +102,7 @@ export class SidebarModeratorComponent {
   openNav(): void {
     this.open++;
     this.isNavOpen = true;
-    if(this.open > 1){
+    if (this.open > 1) {
       this.closeNav();
       this.open = 0;
     }
@@ -113,11 +128,11 @@ export class SidebarModeratorComponent {
     const contentClose = document.querySelector('.content');
     if (sideBar) {
       if (window.innerWidth < 1300) {
-          this.renderer.addClass(sideBar, 'closeD');
-          this.renderer.addClass(contentClose, 'contentCloseD');
+        this.renderer.addClass(sideBar, 'closeD');
+        this.renderer.addClass(contentClose, 'contentCloseD');
       } else {
-          this.renderer.removeClass(sideBar, 'closeD');
-          this.renderer.removeClass(contentClose, 'contentCloseD');
+        this.renderer.removeClass(sideBar, 'closeD');
+        this.renderer.removeClass(contentClose, 'contentCloseD');
       }
     }
   }
@@ -144,7 +159,7 @@ export class SidebarModeratorComponent {
     }
   }
 
-  logout(){
+  logout() {
     return this.loginService.logout();
   }
 }

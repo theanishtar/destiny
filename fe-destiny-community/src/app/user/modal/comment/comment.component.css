@@ -12,7 +12,7 @@ main.overlay {
   padding-top: 0;
 }
 
-button.btnClose-create-post {
+div.btnClose-create-post {
   position: absolute;
   right: 1%;
   top: 2%;
@@ -129,7 +129,7 @@ button.btnClose-create-post {
     width: 500px !important;
   }
 
-  button.btnClose-create-post {
+  div.btnClose-create-post {
     right: 31% !important;
   }
 
@@ -248,9 +248,25 @@ button.btnClose-create-post {
   -ms-overflow-style: none;
 }
 
-.full-boxer::-webkit-scrollbar {
+/* .full-boxer::-webkit-scrollbar {
   width: 0 !important;
   display: none;
+} */
+
+.full-boxer::-webkit-scrollbar {
+  border-top-right-radius: 15px;
+  width: 10px !important;
+  /* display: none; */
+}
+
+/* Track */
+.full-boxer::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+.full-boxer::-webkit-scrollbar-thumb {
+  background: #D6D6D6;
 }
 
 .comment__card p {
@@ -260,6 +276,7 @@ button.btnClose-create-post {
   font-size: 15px;
   font-family: Helvetica, Arial, sans-serif;
   margin: 0;
+  color: black !important;
 }
 
 .comment__card-footer {
@@ -269,6 +286,7 @@ button.btnClose-create-post {
   gap: 30px;
   justify-content: flex-end;
   align-items: center;
+  margin-top: 10px;
 }
 
 .reply-form {
@@ -321,7 +339,7 @@ button.btnClose-create-post {
 }
 
 .Name strong {
-  color: black;
+  color: black !important;
   font-size: 15px;
   font-family: Helvetica, Arial, sans-serif
 }
@@ -413,7 +431,7 @@ button.btnClose-create-post {
 }
 
 .mySlides.fade img {
-  max-height: 400px;
+  max-height: 466px;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -428,7 +446,39 @@ button.btnClose-create-post {
 }
 
 /*  */
+.form-cmt {
+  position: relative;
+}
+
+.comment-box {
+  position: relative;
+}
+
 .hidden {
+  display: none;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: -200%;
+  left: 20%;
+  transform: translateX(-50%);
+  z-index: 1;
+  padding: 10px 0;
+  border-radius: 12px;
+  background-color: #fff;
+  box-shadow: 0 0 40px 0 rgba(94, 92, 154, 0.12);
+  text-align: center;
+  font-size: 14px;
+  color: #3e3f5e;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  max-height: 130px;
+  min-height: 130px;
+  overflow-y: auto;
+}
+
+.dropdown-menu::-webkit-scrollbar {
+  width: 0 !important;
   display: none;
 }
 
@@ -436,8 +486,6 @@ button.btnClose-create-post {
   list-style: none;
   padding: 0;
   margin: 0;
-  border: 1px solid #ccc;
-  position: absolute;
   z-index: 1;
 }
 
@@ -523,4 +571,110 @@ button.btnClose-create-post {
   height: 39px;
   background: white;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.valid-badword {
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 4px;
+  position: absolute;
+  top: -32px;
+  /* left: 6%; */
+  z-index: 2;
+}
+
+@media screen and (max-width: 480px) {
+  div.btnClose-create-post {
+    right: 39% !important;
+    /* color: white; */
+  }
+}
+
+/*  */
+.dropdown {
+  position: relative;
+  cursor: pointer;
+  color: black !important;
+}
+i.fa-solid.fa-ellipsis {
+  color: black;
+}
+.dropdown-menu-cmt.show {
+  display: block;
+}
+
+.dropdown-menu-cmt {
+  font-size: 1rem;
+  position: absolute;
+  z-index: 1000;
+  top: 100%;
+  left: 0;
+  display: none;
+  float: left;
+  min-width: 10rem;
+  margin: .125rem 0 0;
+  padding: .5rem 0;
+  list-style: none;
+  text-align: left;
+  color: #525f7f;
+  border: 0 solid rgba(0, 0, 0, .15);
+  border-radius: .4375rem;
+  background-color: #fff;
+  background-clip: padding-box;
+  box-shadow: 0 50px 100px rgba(50, 50, 93, .1), 0 15px 35px rgba(50, 50, 93, .15), 0 5px 15px rgba(0, 0, 0, .1);
+}
+
+.dropdown-menu-right {
+  right: 0;
+  left: auto;
+}
+
+.dropdown-item {
+  font-weight: 400;
+  display: block;
+  clear: both;
+  /* width: 100%; */
+  padding: .25rem 1.5rem;
+  text-align: inherit;
+  white-space: nowrap;
+  color: #212529;
+  border: 0;
+  background-color: transparent;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  text-decoration: none;
+  color: #16181b;
+  background-color: #f6f9fc;
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+  text-decoration: none;
+  color: #fff;
+  background-color: #5e72e4;
+}
+
+.dropdown-item.disabled,
+.dropdown-item:disabled {
+  color: #8898aa;
+  background-color: transparent;
+}
+.slideshow-container.no-pic
+{
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+svg.no-pic {
+  width: 80px;
+  height: 80px;
+  fill: gray;
+
 }

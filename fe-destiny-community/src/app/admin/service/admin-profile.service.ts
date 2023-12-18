@@ -6,6 +6,7 @@ import { of } from 'rxjs';
 import Swal from 'sweetalert2';
 declare var toast: any;
 import { Observable, throwError } from 'rxjs';
+import { ProfileAdminComponent } from '../profile-admin/profile-admin.component';
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +37,6 @@ export class AdminProfileService {
 
   constructor(
     private http: HttpClient,
-
   ) { }
 
   changeMail(data: any) {
@@ -153,7 +153,27 @@ export class AdminProfileService {
   updateProfile(data: any): Observable<any> {
     return this.http.post(this.updateProfileAPI, data).pipe(
 
-      catchError(error => of([]))
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 301) {
+          return throwError(
+            new toast({
+              title: 'Thất bại!',
+              message: 'Tên đăng nhập đã tồn tại vui lòng chọn tên đăng nhập khác!',
+              type: 'error',
+              duration: 1500,
+            }),
+          );
+        } else {
+          return throwError(
+            new toast({
+              title: 'Server hiện không hoạt động!',
+              message: 'Vui lòng quay lại sau, DaviTickets chân thành xin lỗi vì bất tiện này!',
+              type: 'warning',
+              duration: 1500,
+            })
+          );
+        }
+      })
     );
   }
 

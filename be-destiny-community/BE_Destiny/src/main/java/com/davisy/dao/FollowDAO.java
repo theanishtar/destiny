@@ -34,7 +34,7 @@ public interface FollowDAO extends JpaRepository<Follower, String> {
 	public List<Follower> findALlFriend(int follower_id, int user_id);
 
 //	@Cacheable("follower")
-	@Query(value = "select  f.user_id from follower f where f.follower_id =:id", nativeQuery = true)
+	@Query(value = "select f.follower_id  from follower f  WHERE f.user_id=:id", nativeQuery = true)
 	public List<Integer> findAllFollowingUser(int id);
 
 //	@Cacheable("follower")
@@ -50,7 +50,10 @@ public interface FollowDAO extends JpaRepository<Follower, String> {
 	@Query(value = "select *from get_friend_follow(:id)", nativeQuery = true)
 	public List<Object[]> findAllFriend(int id);
 
-	@Query(value = "select * from get_suggested(:id)  ORDER BY Random()", nativeQuery = true)
+	@Query(value = "select * from get_suggested(:id)  ORDER BY Random() LIMIT 30", nativeQuery = true)
 	public List<Object[]> loadDataSuggest(int id);
+	
+	@Query(value = "select * from get_suggested(:id)  ORDER BY Random() LIMIT 10", nativeQuery = true)
+	public List<Object[]> loadDataSuggestRegister(int id);
 
 }

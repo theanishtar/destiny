@@ -22,4 +22,5 @@ public interface ChatDAO extends JpaRepository<Chats, Integer> {
 
 	@Query(value = "SELECT *FROM update_name_chat(:id,:chats_name)", nativeQuery = true)
 	public void update_name_chats(int id, String chats_name);
+	
 }

@@ -17,6 +17,7 @@ export class ForbiddenService {
   private updateBadWordAPI = environment.baseUrl + 'v1/moderator/updateBadword';
   private removeBadWordAPI = environment.baseUrl + 'v1/moderator/removeBadword';
   private sendDataRedisAPI = environment.baseUrl + 'v1/moderator/sendDataRedis';
+  private checkRedisAPI = environment.baseUrl + 'v1/moderator/missingredis';
 
   private listBadWord: any[] = [];
 
@@ -131,14 +132,25 @@ export class ForbiddenService {
         })
       }),
       catchError((error: HttpErrorResponse) => {
-        return throwError(
-          new toast({
-            title: 'Server hiện không hoạt động!',
-            message: 'Vui lòng quay lại sau, DaviTickets chân thành xin lỗi vì bất tiện này!',
-            type: 'warning',
-            duration: 1500,
-          })
-        );
+        if (error.status === 301) {
+          return throwError(
+            new toast({
+              title: 'Thất bại!',
+              message: 'Từ ngữ bạn cập nhật đã tồn tại!',
+              type: 'error',
+              duration: 1500,
+            }),
+          );
+        } else {
+          return throwError(
+            new toast({
+              title: 'Server hiện không hoạt động!',
+              message: 'Vui lòng quay lại sau, DaviTickets chân thành xin lỗi vì bất tiện này!',
+              type: 'warning',
+              duration: 1500,
+            })
+          );
+        }
       })
     );
   }
@@ -176,6 +188,17 @@ export class ForbiddenService {
     );
   }
 
+
+  async checkRedis(): Promise<any> {
+    try {
+      const result = await this.http.get(this.checkRedisAPI).toPromise();
+      return result;
+    } catch (error) {
+      // Handle errors here
+      console.error('Error checkRedis:', error);
+      throw error;
+    }
+  }
   /* ============Getter - Setter============= */
   getDataBadWord(): any[] {
     return this.listBadWord;

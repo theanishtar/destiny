@@ -262,6 +262,7 @@ export class ProfileComponent {
   }
 
   async updateProfile() {
+    this.isLoading = true;
     try {
       if (this.checkThumb === true) {
         await this.addDataThumb();
@@ -296,13 +297,21 @@ export class ProfileComponent {
         ward_name: this.profileForm.get('ward_nameF')?.value,
         gender_name: this.profileForm.get('gender_nameF')?.value,
       };
-      this.modProfileService.updateProfile(data).subscribe((res) => {
-        this.createToast("Thành công!", "Cập nhật thành công", "success");
-        window.location.reload();
-      });
+      this.modProfileService.updateProfile(data).subscribe(
+        (data) => {
+          this.isLoading = false;
+          this.createToast("Thành công!", "Cập nhật thành công", "success");
+          this.loadModeratorData();
+        },
+        (error) => {
+          this.isLoading = false;
+          this.loadModeratorData();
+        }
+      );
     }
     else {
       this.createToast("Thất bại!", "Cập nhật thất bại", "error");
+      this.isLoading = false;
     }
   }
 
@@ -382,6 +391,7 @@ export class ProfileComponent {
       });
     }
     if (formStepsNum == Number(1) && this.newPasswordForm.valid) {
+      this.isLoading = true;
       const data = {
         newPassword: this.newPasswordForm.get('newPassword')?.value,
         reNewPassword: this.newPasswordForm.get('reNewPassword')?.value
@@ -391,7 +401,8 @@ export class ProfileComponent {
         this.createToast("Thành công!", "Thay đổi mật khẩu thành công!", "success");
         setTimeout(() => {
           changePassModal.style.display = 'none';
-          location.reload();
+          this.isLoading = false;
+          this.loadModeratorData();
         }, 600);
       } else {
         reNewPassword.setCustomValidity('Mật khẩu không giống nhau!');

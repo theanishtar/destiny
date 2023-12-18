@@ -1,7 +1,8 @@
+import { data } from 'jquery';
 import { Injectable, EventEmitter } from '@angular/core';
 import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, Observable, of } from 'rxjs';
 import '../../../assets/toast/main.js';
@@ -11,6 +12,10 @@ import Stomp from 'stompjs';
 import * as Handlebars from 'handlebars';
 import { UserModel } from '../Model/UserModel.js';
 import { environment } from '../../../environments/environment';
+import { CookieService } from 'ngx-cookie-service';
+import { BehaviorSubject } from 'rxjs';
+import { call } from '../../../assets/js/video-call/script.js';
+// import { ModalService } from './modal.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,16 +24,26 @@ export class MessageService {
   private loadDataChat = environment.baseUrl + 'v1/user/registrationchat';
   private loadDataMess = environment.baseUrl + 'v1/user/chat/load/messages';
   private ChatWithStrangersUrl = environment.baseUrl + 'v1/user/inbox';
+  private blockUrl = environment.baseUrl + 'v1/user/block/chat';
+  private messageRecallUrl = environment.baseUrl + 'v1/user/chat/recall/messages';
+  private loadImages = environment.baseUrl + 'v1/user/messages/load/images';
+  private checkBlockUrl = environment.baseUrl + 'v1/user/messages/check/block';
+  private notifyCallUrl = environment.baseUrl + 'v1/user/video-call/';
+  private userLogout = environment.baseUrl + 'v1/user/logout/chat/';
 
   private sender: any[] = [];
   private listFriends: any[] = [];
   private listMess: any[] = [];
-
+  public listMessages: any[] = [];
+  public listImages: any[] = [];
+  public listImagesSeeAll: any[] = [];
+  listMessagesTemp: any[] = [];
   isLoading = true;
+  public fullname: string | undefined;
 
   socket?: WebSocket;
   stompClient?: Stomp.Client;
-  selectedUser = null;
+  selectedUser = 0;
   $chatHistory: any;
   $tab_message: any;
   $element: any;
@@ -36,6 +51,7 @@ export class MessageService {
   messageTo: string;
   usersTemplateHTML = '';
   dataUpdated = new EventEmitter<void>();
+  dataUpdatedMessages = new EventEmitter<void>();
   mapUser = new Map<string, UserModel>();
   newMapUser = new Map<string, UserModel>();
   mapTime = new Map<string, string>();
@@ -43,34 +59,73 @@ export class MessageService {
   mapNotification = new Map<string, boolean>();
   checkConnected: boolean = false;
   isOriginal: boolean = true;
+  loaddingBall: boolean = false;
   public notif_mess: boolean = false;
+  checkScroll: number = 1;
+  idSelected: number;
+  $audio: any;
+  checkCall: boolean = false;
+  fromUser: number;
+  toUser: number;
+  audio_ring = new Audio();
+  checkReceiveVideoCall: boolean = false;
+  checkShowModal: boolean = true;
+  checkOpenCam: boolean = false;
+  avatarFromUser: any = '';
+  showMessagesTab: boolean = true;
+  showWaitMessagesTab: boolean = false;
+  isConnected: boolean = false;
 
   constructor(
     private http: HttpClient,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cookieService: CookieService,
+    // private modalService: ModalService
   ) { }
 
   /* ============API============= */
+  checkError: boolean = true;
   loadDataSender() {
     return this.http.get<any>(this.loadDataChat).pipe(
       tap((response) => {
         this.sender = JSON.parse(JSON.stringify(response));
         this.setSender(this.sender);
+      }),
+      catchError((err) => {
+        this.checkError = false;
+        return of(err); // You may want to return a value or observable here
       })
     );
   }
 
-  loadMessage(data: string) {
-    return this.http.post<string>(this.loadDataMess, data).pipe(
-      tap((res) => {
-        this.listMess = JSON.parse(JSON.stringify(res));
-        this.setListMess(this.listMess);
-      }),
-      catchError((err) => of([]))
-    );
+  async loadMessageImg(to: number) {
+    const params = new HttpParams()
+      .set('to', to.toString())  // Convert 'to' to a string
+    try {
+      this.listImagesSeeAll = await this.http.post<any>(this.loadImages, null, { params }).toPromise();
+      // this.setDataPostNf(response);
+      return this.listImagesSeeAll;
+    } catch (error) {
+      console.log("error: " + error);
+      throw error;
+    }
   }
-  // ChatWithStrangersUrl
+
+  async loadMessage(to: number, page: number) {
+    const params = new HttpParams()
+      .set('to', to.toString())  // Convert 'to' to a string
+      .set('page', page.toString());
+    try {
+      this.listMess = await this.http.post<any>(this.loadDataMess, null, { params }).toPromise();
+      // this.setDataPostNf(response);
+      return this.listMess;
+    } catch (error) {
+      console.log("error: " + error);
+      throw error;
+    }
+  }
+
   createChatWithStrangersApi(data: string) {
     return this.http.post<string>(this.ChatWithStrangersUrl, data).pipe(
       tap(() => {
@@ -80,8 +135,6 @@ export class MessageService {
       catchError((err) => of([]))
     );
   }
-  showMessagesTab: boolean = true;
-  showWaitMessagesTab: boolean = false;
 
   // Hàm để chuyển giữa tab "Tin nhắn" và tab "Tin nhắn chờ"
   switchToMessagesTab() {
@@ -110,7 +163,43 @@ export class MessageService {
     });
   }
 
+  // checkUserBlock: boolean = false;
+  blockApi(data: number, status: boolean) {
+    const params = new HttpParams()
+      .set('to', data) // Chuyển số nguyên thành chuỗi
+      .set('status', status)
+    return this.http.get<any>(this.blockUrl, { params }).pipe(
+      tap((res) => {
+        this.listMess = JSON.parse(JSON.stringify(res));
+        this.setListMess(this.listMess);
+      })
+    );
+  }
+
+
+  checkBlockApi(from: number, to: number) {
+    const params = new HttpParams()
+      .set('from', from.toString())  // Convert 'to' to a string
+      .set('to', to.toString());
+    try {
+      return this.http.post<any>(this.checkBlockUrl, null, { params }).toPromise();
+    } catch (error) {
+      console.log("error: " + error);
+      throw error;
+    }
+  }
+
   /* ============Connect socket============= */
+  checkConnectionStatus() {
+    if ((this.stompClient && this.stompClient.connected) ) {
+      this.isConnected = true;
+    } else {
+      this.isConnected = false;
+      let id = localStorage.getItem('chatUserId');
+      this.connectToChat(id);
+      // this.modalService.connectToComment(id);
+    }
+  }
   connectToChat(userId) {
     // localStorage.setItem("chatUserId", userId);
     this.socket = new SockJS(environment.baseUrl + 'chat');
@@ -119,37 +208,77 @@ export class MessageService {
       // console.log('connected to: ' + frame);
       this.stompClient!.subscribe('/topic/messages/' + userId, (response) => {
         let data = JSON.parse(response.body);
+
         let type = false; // Thay đổi giá trị "your_type_value" bằng giá trị thực tế của biến "type"
-        let from_user_id = data.fromLogin;
+        let from_user_id = data[0].user_id;
         let to_user_id = localStorage.getItem('chatUserId');
-        if (this.mapTime.has(data.fromLogin)) {
-          this.mapTime.set(data.fromLogin, new Date().toISOString());
+        if (this.mapTime.has(from_user_id)) {
+          this.mapTime.set(from_user_id, new Date().toISOString());
         }
-        if (this.selectedUser == data.fromLogin && this.isOriginal == false) {
-          this.render(data.message, data.fromLogin, data.avatar);
+        if (this.selectedUser == from_user_id && this.isOriginal == false) {
+          this.listMessages.push(data[0]);
+          // this.updateDataMessages();
           type = true;
+
         } else {
           type = false;
           let audio = new Audio();
           audio.src = '../../../assets/js/sound/notify.mp3';
-          audio.play();
+          audio.autoplay = true;
           this.notif_mess = true;
-          this.newMessage.set(data.fromLogin, {
-            message: data.message,
-            avatar: data.avatar,
-          });
         }
         this.stompClient!.send(`/app/reload/messages/${type}/${from_user_id}/${to_user_id}`);
       });
-      this.stompClient!.subscribe('/topic/statusmessages/' + userId, (response) => {
+      this.stompClient!.subscribe('/topic/status/messages/' + userId, (response) => {
+        // let data1 = JSON.parse(JSON.stringify(response));
         let data = JSON.parse(response.body);
-        if (data == true) {
+        this.listMessages = [...this.listMessages, ...JSON.parse('[' + JSON.stringify(response) + ']')];
+        this.loaddingBall = false;
+        if (data != null) {
           let type = false; // Thay đổi giá trị "your_type_value" bằng giá trị thực tế của biến "type"
           let to_user_id = this.selectedUser;
           this.stompClient!.send(`/app/reload/messages/${type}/${to_user_id}/${userId}`);
         }
+        this.$chatHistory = $('.chat-widget-conversation')!;
+        this.$chatHistory.scrollTop(this.$chatHistory[0]!.scrollHeight);
 
       })
+
+      this.stompClient!.subscribe('/topic/status/messages/' + userId, (response) => {
+        let data = JSON.parse('[' + response.body + ']');
+        this.listMessages = [...this.listMessages, ...data];
+        this.loaddingBall = false;
+        if (data != null) {
+          let type = false; // Thay đổi giá trị "your_type_value" bằng giá trị thực tế của biến "type"
+          let to_user_id = this.selectedUser;
+          this.stompClient!.send(`/app/reload/messages/${type}/${to_user_id}/${userId}`);
+        }
+        this.$chatHistory = $('.chat-widget-conversation')!;
+        this.$chatHistory.scrollTop(this.$chatHistory[0]!.scrollHeight);
+
+      })
+
+      this.stompClient!.subscribe('/topic/recall/messages/' + userId, (response) => {
+        let data = JSON.parse(response.body);
+        let type = false;
+        let to_user_id = this.selectedUser;
+        if (to_user_id == data[2]) {
+          // this.listMessages.splice(data[1], 1, ...data[0]);
+          this.listMessages[data[1]] = data[0];
+          type = true;
+        }
+        this.stompClient!.send(`/app/reload/messages/${type}/${to_user_id}/${userId}`);
+      });
+
+      this.stompClient!.subscribe('/topic/block/messages/' + userId, (response) => {
+        let data = JSON.parse(response.body);
+        this.$chatHistory = $('.chat-widget-conversation');
+        this.$chatHistory.append(
+          '<div class="notify-block" style="text-align: center;font-size: 14px;font-family: Helvetica, Arial, sans-serif;color: red;font-weight: 700;">Bạn đã bị chặn!</div>'
+        );
+        this.loaddingBall = false;
+      });
+
       this.stompClient!.subscribe('/topic/public', (response) => {
         let data = JSON.parse(response.body);
         this.setFriend([]);
@@ -172,8 +301,8 @@ export class MessageService {
                 lastMessage: v.lastMessage,
                 online: this.customTime(v.online, 0),
                 isFriend: v.friend,
-                hide: v.hide,
-                status: v.status,
+                typeMessage: v.typeMessage,
+                recall: v.recall
               };
               // Thêm người dùng vào danh sách của key trong map
               this.newMapUser.set(v.user_id, user);
@@ -204,6 +333,92 @@ export class MessageService {
             }
           }, 60000);
         }, 1);
+
+        setInterval(() => {
+          this.checkConnectionStatus();
+        }, 5000);
+      });
+
+      // Kênh nhận thông báo video-call bên người được gọi
+      this.stompClient!.subscribe("/topic/notify/video-call/" + userId, (response) => {
+        let data = JSON.parse(response.body);
+        let toUser = localStorage.getItem('chatUserId');
+        var audio = document.getElementById("audio") as HTMLAudioElement;
+
+        if (data[1] == toUser) {
+          this.checkCall = true;
+          this.fromUser = data[0];
+          this.toUser = data[1];
+          this.avatarFromUser = data[2];
+          if (audio) {
+            audio.play();
+            audio.loop = true;
+          }
+        }
+
+        this.remainingTime = 60;
+        this.updateTimer();
+        this.interval = setInterval(() => {
+          this.updateTimer();
+        }, 1000);
+      });
+
+      // Kênh nhận thông báo từ chối cuộc gọi
+      this.stompClient!.subscribe("/topic/notify/refuse/video-call/" + userId, (response) => {
+
+        // call.offCame();
+        this.setShowModal(false);
+        this.checkShowModal = true;
+        this.checkCall = false;
+        if (this.checkOpenCam)
+          call.offCame();
+        var audio = document.getElementById("audio") as HTMLAudioElement;
+        if (audio) {
+          audio.pause();
+        }
+        if (response.body.toString() == 'refuse') {
+          // call.offCame();
+          new toast({
+            title: 'Thông báo!',
+            message: 'Người nhận đã từ chối cuộc gọi',
+            type: 'info',
+            duration: 3000,
+          });
+        } else if (response.body.toString() == 'cancel') {
+          // call.offCame();
+          new toast({
+            title: 'Thông báo!',
+            message: 'Người nhận không bắt máy',
+            type: 'info',
+            duration: 3000,
+          });
+        }
+        // else {
+        //   new toast({
+        //     title: 'Thông báo!',
+        //     message: 'Cuộc gọi đã kết thúc',
+        //     type: 'info',
+        //     duration: 3000,
+        //   });
+        // }
+      });
+
+      // Kênh nhận thông báo nhận cuộc gọi
+      this.stompClient!.subscribe("/topic/notify/recieve/video-call/" + userId, (response) => {
+        // let data = JSON.parse(response.body);
+        this.checkReceiveVideoCall = true;
+        call.styleCall();
+      });
+
+      // Kênh tự động đăng xuất khi token hết hạn
+      this.stompClient!.subscribe("/topic/notify/token-date/" + userId, (res) => {
+        this.logoutUser(userId);
+        new toast({
+          title: 'Phiên đăng nhập của bạn đã hết hạn!',
+          message: 'Vui lòng đăng nhập để tiếp tục trải nghiệm diễn đàn',
+          type: 'warning',
+          duration: 5000,
+        });
       });
       this.stompClient!.send('/app/fetchAllUsers');
     });
@@ -211,6 +426,80 @@ export class MessageService {
     this.isLoading = false;
   }
 
+  async logoutUser(userId: string): Promise<void> {
+    try {
+      await this.http.get<any>(this.userLogout + userId).toPromise();
+      localStorage.removeItem('token');
+      localStorage.removeItem('refreshToken');
+      this.logout();
+      this.router.navigate(['/home']);
+      // window.location.href = environment.baseUrlFe + 'home';
+      
+
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
+  }
+
+  checkReceiveCall() {
+    this.stompClient!.send('/app/recieve/video-call/' + this.fromUser);
+  }
+
+  // Từ chối nhận cuộc gọi
+  checkRefuseCall(id, type) {
+    this.stompClient!.send(`/app/refuse/video-call/${id}/${type}`);
+    // console.warn("id: " + id);
+    this.checkCall = false;
+    this.checkShowModal = true;
+    this.setShowModal(false);
+    this.checkReceiveVideoCall = false;
+    var audio = document.getElementById("audio") as HTMLAudioElement;
+    if (audio) {
+      audio.pause();
+    }
+    if (type == 'disconnect-call') {
+      call.offCame();
+    }
+  }
+
+  minutesRemaining: any;
+  secondsRemaining: any;
+  remainingTime: number = 0;
+  interval: any;
+  initialOffset: number = 550;
+  updateTimer() {
+    $('.circle_animation').css('stroke-dashoffset', this.initialOffset - (this.remainingTime * (this.initialOffset / 60)));
+    if (this.remainingTime == 0) {
+      // this.checkReQR = true;
+      this.checkRefuseCall(this.fromUser, 'cancel');
+      this.checkCall = false;
+      var audio = document.getElementById("audio") as HTMLAudioElement;
+      if (audio) {
+        audio.pause();
+      }
+      $('#circle').attr('stroke', 'transparent');
+      clearInterval(this.interval);
+    }
+    this.remainingTime--;
+  }
+
+  async messageRecallApi(id: number, position: number, from: number, to: number): Promise<any> {
+    const url = `${this.messageRecallUrl}/${id}/${position}/${from}/${to}`
+    try {
+      let response = await this.http.get<any>(url).toPromise();
+      return response
+    } catch (error) {
+      console.log("error: " + error);
+      throw error;
+    }
+  }
+
+  notifyCallApi(fromUserId: any, toUserId: any): Observable<any> {
+    const url = this.notifyCallUrl + fromUserId + '/' + toUserId;
+    return this.http.post<any>(url, null);
+  }
+
+  // Load lại trạng thái off cho nhắn tin
   logout() {
     this.stompClient!.send('/app/fetchAllUsers');
   }
@@ -222,14 +511,23 @@ export class MessageService {
     this.dataUpdated.emit();
   }
 
-  sendMsg(from, text, img) {
+  updateDataMessages() {
+    // Thực hiện cập nhật dữ liệu ở đây.
+    // Sau khi cập nhật xong, thông báo sự kiện.
+    this.dataUpdatedMessages.emit();
+  }
+
+  sendMsg(from, text, img, typeMessage, images) {
+
     this.stompClient!.send(
       '/app/chat/' + this.selectedUser,
       {},
       JSON.stringify({
         fromLogin: from,
         message: text,
-        avatar: img
+        avatar: img,
+        typeMessage: typeMessage,
+        linkImages: images
       })
     );
     let textLastMess = document.getElementById(
@@ -285,11 +583,6 @@ export class MessageService {
     this.$chatHistory.scrollTop(this.$chatHistory[0].scrollHeight);
   }
 
-  // getCurrentTime() {
-  //   return new Date()
-  //     .toLocaleTimeString()
-  //     .replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, '$1$3');
-  // }
   getCustomTime() {
     let date = new Date();
     let hours = (date.getHours() < 10) ? '0' + (date.getHours()) : (date.getHours());
@@ -307,40 +600,24 @@ export class MessageService {
     let month = date2.getMonth() + 1; // Lấy tháng (0-11), nên cộng thêm 1
     let year = date2.getFullYear();
     let date3 = new Date(year + '-' + month + '-' + day);
-    if (date1 < date3) {
+    let time1 = date2.getTime();
+    let time2 = date1.getTime();
+    let timeDifference = Math.abs(time1 - time2);
+    let milliseconds = timeDifference % 1000;
+    let minutes = Math.floor((timeDifference / (1000 * 60)) % 60);
+    let hours = Math.floor(timeDifference / (1000 * 60 * 60));
+
+    if (date1 < date3 && hours > 24) {
       dateTime = this.getDayOfWeek(time, check);
       return dateTime;
-    } else if (date1 > date2) {
+    } else if (date1 > date2 && hours > 24) {
       return '';
     } else {
-      let date = new Date();
-      let date1 = new Date(time);
-
-      // Lấy thời gian ở dạng milliseconds từ epoch (1/1/1970)
-      let time1 = date.getTime();
-      let time2 = date1.getTime();
-
-      // Tính toán khoảng thời gian (đơn vị milliseconds)
-      let timeDifference = Math.abs(time1 - time2); // Lấy giá trị tuyệt đối để đảm bảo giá trị luôn là dương
-
-      // Chuyển khoảng thời gian thành giờ, phút, giây, và mili giây (tùy ý)
-      let milliseconds = timeDifference % 1000;
-      // let seconds = Math.floor((timeDifference / 1000) % 60);
-      let minutes = Math.floor((timeDifference / (1000 * 60)) % 60);
-      let hours = Math.floor(timeDifference / (1000 * 60 * 60));
       if (hours == 0) {
         return minutes + 'p trước';
       } else {
         return hours + 'h trước';
       }
-      // let regex = /(\d{2}:\d{2})/;
-      // let match = time.match(regex);
-      // if (match) {
-      //   let extractedTime = match[1]; // Extracted "15:43"
-      //   return extractedTime;
-      // } else {
-      //   return null;
-      // }
     }
   }
 
@@ -405,6 +682,15 @@ export class MessageService {
     }
   }
 
+  private showModalCall = new BehaviorSubject<boolean>(false);
+  currentShowModal = this.showModalCall.asObservable();
+
+  setShowModal(value: boolean) {
+    this.showModalCall.next(value);
+  }
+
+
+
   // Getter - Setter
   getSender(): any[] {
     return this.sender;
@@ -432,5 +718,24 @@ export class MessageService {
   }
   setListMess(data: any[]): void {
     this.listMess = data;
+  }
+
+  getIdSelected(): number {
+    return this.idSelected;
+  }
+  setIdSelected(data: number): void {
+    this.idSelected = data;
+  }
+
+  private audioSourceKey: string = 'selectedAudio';
+  private audioSource: string = '';
+
+  setAudioSource(source: string): void {
+    this.audioSource = source;
+    localStorage.setItem(this.audioSourceKey, source);
+  }
+
+  getAudioSource(): string {
+    return this.audioSource || localStorage.getItem(this.audioSourceKey) || '';
   }
 }

@@ -56,11 +56,13 @@ export class ForbiddenWordComponent implements OnInit {
   ExcelData: any[];
   dataCheck: any;
 
+  checkWordCountRedis: any;
+
   ngOnInit() {
 
     this.getTime();
     this.loadBadWord();
-
+    this.checkRedis();
     this.createBadwordForm();
   }
   constructor(
@@ -327,6 +329,10 @@ export class ForbiddenWordComponent implements OnInit {
     }
   }
 
+  async checkRedis(){
+    this.checkWordCountRedis = await this.forbiddenService.checkRedis();
+    console.warn("this.checkWordCountRedis: " + this.checkWordCountRedis)
+  }
 
   openModalCreateWord() {
     this.isOpenCreateWord.next(true);

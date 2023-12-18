@@ -25,18 +25,9 @@ button.btnClose-detail-post {
   z-index: 1;
   width: auto;
 }
+
 /*=======================================================*/
 .favDialog_detailPost {
-  /* position: relative;
-    border: none;
-     border-radius: 15px;
-     width: 55rem;
-     max-height: 730px;
-     background-color: #F1F5F9;
-     top: 50%;
-     left: 50%;
-     transform: translate(-50%, -50%);
-     overflow: hidden !important; */
   position: fixed;
   left: 50%;
   z-index: 100001;
@@ -191,6 +182,7 @@ button.btnClose-detail-post {
     overflow: -moz-scrollbars-none;
     -ms-overflow-style: none;
   }
+
   .post::-webkit-scrollbar {
     width: 0 !important;
     display: none;
@@ -198,8 +190,8 @@ button.btnClose-detail-post {
 
   button.btnClose-detail-post {
     right: 28% !important;
-  color: white;
-  background: none;
+    color: white;
+    background: none;
   }
 
   .post-des-update {
@@ -410,10 +402,11 @@ button.btnClose-detail-post {
   .full-boxer {
     height: 380px;
   }
+
   button.btnClose-detail-post {
     right: 36% !important;
-  color: white;
-  background: none;
+    color: white;
+    background: none;
   }
 }
 
@@ -582,4 +575,21 @@ p.user-status-text.small.post-time {
 
 .info-post {
   border-bottom: 1px solid;
+}
+
+@media screen and (max-width: 480px) {
+  .favDialog_detailPost {
+    margin-left: -662.5px;
+  }
+
+  .container-detai-post {
+    width: 300px !important;
+  }
+
+  .post {
+    width: 350px !important;
+  }
+  button.btnClose-detail-post {
+    right: 33% !important;
+  }
 }

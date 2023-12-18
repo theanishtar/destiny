@@ -31,7 +31,7 @@ export class ChangePasswordComponent {
 
 
 	createFormChangePassword() {
-		const PASSWORD_PATTERN = /^(?=.*[!@#$%^&*]+)[a-z0-9!@#$%^&*]{4,20}$/;
+		const PASSWORD_PATTERN = /^(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\-])[\w!@#$%^&*()_+{}\[\]:;<>,.?~\\-]{4,20}$/;
 		this.changePasswordForm = this.formbuilder.group({
 			oldPassword: ['', Validators.required],
 			newPassword: ['',
@@ -47,17 +47,24 @@ export class ChangePasswordComponent {
 	}
 	updatePass() {
 		this.submitted = true;
-		if (this.changePasswordForm.get("newPassword")!.value == this.changePasswordForm.get("renewPassword")!.value && this.changePasswordForm.valid) {
-			this.profileService.updatePassword(this.changePasswordForm.value).subscribe((res) => {
-				
-			})
-		} else {
-			new toast({
-				title: 'Thất bại!',
-				message: 'Vui lòng kiểm tra lại xác nhận mật khẩu!',
-				type: 'error',
-				duration: 2000,
-			});
+		if(this.changePasswordForm.valid){
+			this.profileService.checkSubmit = true;
+			if (this.changePasswordForm.get("newPassword")!.value == this.changePasswordForm.get("renewPassword")!.value && this.changePasswordForm.valid) {
+				this.profileService.updatePassword(this.changePasswordForm.value).subscribe((res) => {
+					this.changePasswordForm.reset();
+					this.changePasswordForm.clearValidators();
+					this.changePasswordForm.updateValueAndValidity();
+	
+				})
+			} else {
+				this.profileService.checkSubmit = false;
+				new toast({
+					title: 'Thất bại!',
+					message: 'Vui lòng kiểm tra lại xác nhận mật khẩu!',
+					type: 'error',
+					duration: 2000,
+				});
+			}
 		}
 	}
 
@@ -72,5 +79,12 @@ export class ChangePasswordComponent {
 			input.type = "password";
 			icon.className = 'fa-regular fa-eye-slash';
 		}
+	}
+
+	closeModalChangePass(){
+		this.profileService.closeModalChangePass();
+		this.changePasswordForm.reset();
+		this.changePasswordForm.clearValidators();
+		this.changePasswordForm.updateValueAndValidity();
 	}
 }

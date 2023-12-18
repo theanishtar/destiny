@@ -20,12 +20,14 @@ export class FollowsService {
   private deleteFler = environment.baseUrl + 'v1/user/follower/delete';
 
   private loadDataSuggested = environment.baseUrl + 'v1/user/following/load/suggest';
+  private loadDataSuggestedRegis = environment.baseUrl + 'v1/user/following/load/suggestregister';
   private addFollowUrl = environment.baseUrl + 'v1/user/following/addFollow';
 
   private listFollowing: any[] = [];
   private listFollower: any[] = [];
   private listFriend: any[] = [];
   private listSuggested: any[] = [];
+  private listSuggestedRegis: any[] = [];
 
   constructor(
     private http: HttpClient,
@@ -122,6 +124,15 @@ export class FollowsService {
       }),
     );
   }
+
+  loadDataSuggestRegis() {
+    return this.http.get<any>(this.loadDataSuggestedRegis).pipe(
+      tap((response) => {
+        this.listSuggestedRegis = JSON.parse(JSON.stringify(response));
+        this.setDataSuggestedRegis(this.listSuggestedRegis);
+      }),
+    );
+  }
   // async loadDataSuggest() {
   //   try {
   //     const response = await this.http.get<any>(this.loadDataSuggested).toPromise();
@@ -155,6 +166,9 @@ export class FollowsService {
   getDataSuggested(): any[] {
     return this.listSuggested;
   }
+  getDataSuggestedRegis(): any[] {
+    return this.listSuggestedRegis;
+  }
 
   //   Setter
   setDataFling(data: any[]): void {
@@ -168,5 +182,8 @@ export class FollowsService {
   }
   setDataSuggested(data: any[]): void {
     this.listSuggested = data;
+  }
+  setDataSuggestedRegis(data: any[]): void {
+    this.listSuggestedRegis = data;
   }
 }

@@ -26,7 +26,7 @@ public class PostEntity {
 	String content;
 	@JsonIgnore
 	Calendar date_post;
-	@JsonIgnore
+//	@JsonIgnore
 	String hash_tag;
 	boolean send_status;
 	boolean post_status;
@@ -41,6 +41,12 @@ public class PostEntity {
 	PostEntity postEntityProfile;
 	String fullname;
 	String avatar;
+	String province_fullname;
+	String district_fullname;
+	String ward_fullname;
+	String province_fullname_en;
+	String district_fullname_en;
+	String ward_fullname_en;
 
 	public List<String> getList_Hash_Tag() {
 		if (hash_tag != null) {

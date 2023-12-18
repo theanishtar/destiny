@@ -25,6 +25,7 @@ import { ProfileService } from '../service/profile.service';
   styleUrls: [
     `../../css/vendor/bootstrap.min.css`,
     `../../css/styles.min.css`,
+    `../../css/dark/dark.min.css`,
     `../../css/vendor/simplebar.css`,
     `../../css/vendor/tiny-slider.css`,
     './follows.component.css',
@@ -73,22 +74,8 @@ export class FollowsComponent implements OnInit {
   }
 
   /* ============following============= */
-  // loadDataFling() {
-  //   this.followsService.loadDataFollowing().subscribe(() => {
-  //     this.listFollowing = this.followsService.getDataFling();
-  //     this.isLoading = false;
-  //     if (Array.isArray(this.listFollowing) && this.listFollowing.length === 0) {
-  //       this.checkData1 = true;
-  //     }
-  //   });
-
-  // }
-
-  deleteFling(id: number) {
+  async deleteFling(id: number) {
     this.followsService.deleteFollowing(id).subscribe(() => {
-      ;
-      // this.loadDataFling();
-
       new toast({
         title: 'Thông báo!',
         message: 'Hủy thành công',
@@ -96,20 +83,14 @@ export class FollowsComponent implements OnInit {
         duration: 3000,
       })
     });
-    this.loadDataFriend();
+    this.listFollowing = await this.followsService.loadDataFollowing();
+    let btn_fl = document.getElementById('deleteFriend-' + id);
+    if(btn_fl){
+      btn_fl.style.display = 'none';
+    }
   }
 
   /* ============follower============= */
-  // loadDataFler() {
-  //   this.followsService.loadDataFollower().subscribe(() => {
-  //     this.listFollower = this.followsService.getDataFler();
-  //     if (Array.isArray(this.listFollower) && this.listFollower.length === 0) {
-  //       this.checkData2 = true;
-  //     }
-  //   });
-
-  // }
-
   deleteFler(id: number) {
     this.followsService.deleteFollower(id).subscribe(() => {
       // this.loadDataFler();
@@ -119,21 +100,15 @@ export class FollowsComponent implements OnInit {
         message: 'Hủy thành công',
         type: 'success',
         duration: 3000,
-      })
+      });
+      let btn_fl = document.getElementById('deleteFler-' + id);
+      if(btn_fl){
+        btn_fl.style.display = 'none';
+      }
     });
   }
-  // addFollow(id: number) {
-  //   this.followsService.addFollowAPI(id).subscribe(() => {
-  //     new toast({
-  //       title: 'Thông báo!',
-  //       message: 'Đã theo dõi',
-  //       type: 'success',
-  //       duration: 3000,
-  //     })
-  //   });
-  //   this.loadDataFriend();
-  // }
-  addFollow(id: number) {
+
+  async addFollow(id: number) {
     this.modalService.sendNotify(' ', 0, id, 'FOLLOW', this.modalService.repCmtId);
     new toast({
       title: 'Thông báo!',
@@ -141,12 +116,21 @@ export class FollowsComponent implements OnInit {
       type: 'success',
       duration: 3000,
     });
-    this.loadDataFriend();
+    this.listFollower = await this.followsService.loadDataFollower();
+    let btn_fl = document.getElementById('follow-btn-' + id);
+    if(btn_fl){
+      btn_fl.style.display = 'none';
+    }
   }
   /* ============friend============= */
   async loadDataFriend() {
+    const body_content = document.getElementById('body-follow')!;
+    body_content.style.display = 'none';
     this.listFollowing = await this.followsService.loadDataFollowing();
     this.isLoading = false;
+    if(!this.isLoading){
+      body_content.style.display = 'grid';
+    }
     if (Array.isArray(this.listFollowing) && this.listFollowing.length === 0) {
       this.checkData1 = true;
     }

@@ -41,29 +41,34 @@ public class BadWordServiceImpl implements BadWordService{
 	
 	@Override
 	public boolean checkBadword(String badword) {
-		try {
-			if(checkExistBadWord(badword) == true) {
-				System.out.println("tìm thấy từ ngữ vi phạm");
-				//thông báo
-				
-			}
+		if (checkExistBadWord(badword) == true) {
+			System.out.println("tìm thấy từ ngữ vi phạm");
 			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
 		}
+
+		return false;
 	}
 	
 	public boolean checkExistBadWord(String badword) {
 		String[] words = badword.split(" ");
 		boolean result = false;
+		String line = cacheService.getByKey(badword);
+		if (line != null) {
+			if(!line.equals("")) {
+				BadWord badWord = findByName("name", badword);
+				badWord.setSeverityLevel(badWord.getSeverityLevel() + 1);
+				update("name", badword, badWord);
+				return true;
+			}
+		}
 		for (String word : words) {
 			String resultWord = cacheService.getByKey(word);
-			if(resultWord != null) {
+			if (resultWord != null) {
 				result = true;
 				BadWord badWord = findByName("name", word);
 				badWord.setSeverityLevel(badWord.getSeverityLevel() + 1);
 				update("name", word, badWord);
+				return result;
 			}
 		}
 		return result;
@@ -105,5 +110,21 @@ public class BadWordServiceImpl implements BadWordService{
 	public long delete(String name, String data) {
 		return dbUtils.deletesByColumn(BadWord.class, collectionBadWords, name, data);
 	}
+	
+
+	@Override
+	public long missingWordsFromMongoDB() {
+		System.out.println(cacheService.getByKey("xàm"));
+		long sizeMongo = dbUtils.lengthCollection(collectionBadWords);
+		long sizeRedis = cacheService.countAllKeys();
+
+		System.out.println("Mongo SZE: " + sizeMongo);
+		System.out.println("REDIS SZE: " + sizeRedis);
+		if (sizeRedis < sizeMongo) {
+			return sizeMongo - sizeRedis;
+		}
+		return 0;
+	}
+
 	
 }

@@ -30,7 +30,7 @@ import {
   getDownloadURL,
 } from '@angular/fire/storage';
 
-//
+// 
 import { ModalService } from '../service/modal.service';
 import { ProfileService } from '../service/profile.service';
 import { MessageService } from '../service/message.service';
@@ -42,6 +42,7 @@ declare var toast: any;
   styleUrls: [
     `../../css/vendor/bootstrap.min.css`,
     `../../css/styles.min.css`,
+    `../../css/dark/dark.min.css`,
     `../../css/vendor/simplebar.css`,
     './edit-profile.component.css'
   ]
@@ -52,7 +53,6 @@ export class EditProfileComponent implements OnInit {
   @ViewChild('uploadPreviewAvatar') uploadPreviewAvatar: ElementRef;
 
   @ViewChild('fileInput') fileInput: ElementRef;
-
   fileName: string;
   fileItem: File;
   public fileAvatar: any = {};
@@ -74,6 +74,7 @@ export class EditProfileComponent implements OnInit {
   avatar = '';
   pass: any;
   dataEditProfile: any = {};
+  dataEditProfileTemp: any = {};
   initialUsername: string; //Email lúc đầu chưa đổi
   userName: string; //Email sau
   submitted: boolean = false;
@@ -88,6 +89,9 @@ export class EditProfileComponent implements OnInit {
 
 
   ngOnInit() {
+    this.loadDataProfile();
+    this.loadAllGender();
+    this.loadAllProvince();
     liquid.liquid();
     avatarHexagons.avatarHexagons();
     tooltips.tooltips();
@@ -95,16 +99,8 @@ export class EditProfileComponent implements OnInit {
     popups.picturePopup();
     headers.headers();
     sidebars.sidebars();
-    content.contentTab();
+    // content.contentTab();
     form.formInput();
-    this.createFormProfile();
-    this.loadDataProfile();
-    this.loadAllGender();
-    this.loadAllProvince();
-    this.profileForm.get('username')!.valueChanges.subscribe((value) => {
-      this.userName = value;
-    });
-    console.warn("gender_name: " + this.profileForm.get('idWard')!.value);
   }
 
   constructor(
@@ -115,6 +111,10 @@ export class EditProfileComponent implements OnInit {
     public storage: Storage,
     public messageService: MessageService
   ) {
+    this.createFormProfile();
+    this.profileForm.get('username')!.valueChanges.subscribe((value) => {
+      this.userName = value;
+    });
   }
 
 
@@ -146,6 +146,7 @@ export class EditProfileComponent implements OnInit {
   }
 
   async updateProfile(event: any) {
+    this.submitted = true;
     try {
       if (this.checkThumb === true) {
         await this.addDataThumb();
@@ -165,9 +166,9 @@ export class EditProfileComponent implements OnInit {
     } catch (error) {
       console.error('Error uploading avatar:', error);
     }
-
-    this.submitted = true;
+    // console.warn("check: " + this.profileForm.valid)
     if (this.profileForm.valid) {
+      this.profileService.checkLoading = true;
       var data = {
         username: this.profileForm.get('username')!.value,
         email: this.profileForm.get('email')!.value,
@@ -183,6 +184,7 @@ export class EditProfileComponent implements OnInit {
       };
       // console.warn("data: " + JSON.stringify(data))
       this.profileService.updateProfile(data).subscribe(() => {
+        this.profileService.checkLoading = false;
         new toast({
           title: 'Thành công!',
           message: 'Cập nhật thành công',
@@ -190,10 +192,8 @@ export class EditProfileComponent implements OnInit {
           duration: 1500,
         })
         this.cookieService.set('avatar', this.avatarTemp);
+        this.cookieService.set('full_name', this.profileForm.get('fullname')!.value);
         if (this.userName != this.initialUsername) {
-          console.log("this.userName: " + this.userName)
-          console.log("this.userName1: " + this.initialUsername)
-          console.log("=====================================")
           this.messageService.loadDataSender().subscribe(() => {
             this.sender = JSON.parse(JSON.stringify(this.messageService.getSender()));
             this.modalService.connectToComment(this.sender.user_id);
@@ -208,7 +208,19 @@ export class EditProfileComponent implements OnInit {
   }
 
   cancelEdit() {
-    location.reload();
+    Swal.fire({
+      title: 'Bạn chắc chắn muốn hủy thao tác?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.value) {
+        this.dataEditProfile = this.dataEditProfileTemp;
+      }
+    });
   }
 
   loadDataProfile() {
@@ -217,11 +229,15 @@ export class EditProfileComponent implements OnInit {
 
     this.profileService.loadDataEditProfile().subscribe(() => {
       this.dataEditProfile = this.profileService.getDataEditProfile();
+      this.dataEditProfileTemp = this.dataEditProfile;
       this.initialUsername = this.dataEditProfile.username;
       this.initalAvatar = this.dataEditProfile.avatar;
       this.initalThumb = this.dataEditProfile.thumb;
       this.isLoading = false;
       body_edit.style.display = 'grid';
+      setTimeout(() => {
+        body_edit.style.setProperty('transform', 'translate(167.5px, 0px)');
+      }, 1);
     })
   }
 

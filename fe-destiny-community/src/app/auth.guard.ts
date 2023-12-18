@@ -22,12 +22,12 @@ export class authGuard implements CanActivate {
         setTimeout(resolve, ms);
       });
     }
-
     const isModRouteChangeMail = /^\/(chang-email-confirm)/.test(state.url);
     if (isModRouteChangeMail) {
       return true;
     } else {
-      if (!this.isLogin()) {
+      // alert(localStorage.getItem('token') === null);
+      if (!this.loginService.isLogin()) {
         new toast({
           title: 'Thông báo!',
           message: 'Vui lòng đăng nhập!',
@@ -45,7 +45,7 @@ export class authGuard implements CanActivate {
       const isAdminRoute = /^\/(admin)/.test(state.url);
       const isModRoute = /^\/(moderator)/.test(state.url);
       // Kiểm tra xem người dùng có quyền truy cập trang quản trị không.
-      if (userRole === 'ROLE_USER' && (state.url.startsWith('/admin') || state.url.startsWith('/moderator'))) {
+      if (userRole === 'ROLE_USER' && (state.url.startsWith('/admin') || state.url.startsWith('/moderator') || state.url.startsWith('/owner'))) {
         // Người dùng là user và truy cập vào URL bắt đầu bằng '/admin'
         // Xử lý ở đây, có thể chuyển hướng hoặc hiển thị thông báo.
         this.location.back();
@@ -59,14 +59,23 @@ export class authGuard implements CanActivate {
         return false;
       }
 
-      if (userRole === 'ROLE_ADMIN' && !isAdminRoute) {
+      if (userRole === 'ROLE_ADMIN' && !(state.url.startsWith('/admin') || state.url.startsWith('/moderator'))) {
         // Người dùng là admin và truy cập vào URL ko bắt đầu bằng '/admin'
         // Xử lý ở đây, có thể chuyển hướng hoặc hiển thị thông báo.
         this.location.back();
         return false;
       }
+
+      if (userRole === 'ROLE_OWNER' && !(state.url.startsWith('/owner'))) {
+        // Người dùng là admin và truy cập vào URL ko bắt đầu bằng '/admin'
+        // Xử lý ở đây, có thể chuyển hướng hoặc hiển thị thông báo.
+        this.location.back();
+        return false;
+      }
+
+      return true;
     }
-    return true;
+    // return true;
   }
 
   constructor(

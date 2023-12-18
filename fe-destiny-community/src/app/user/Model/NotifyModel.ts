@@ -7,10 +7,11 @@ export interface NotifyModel {
     time: string;
     type: MessageType;
     following_status: boolean;
+    status:boolean
   }
   
   export enum MessageType {
-    COMMENT, REPCOMMENT , INTERESTED, FOLLOW, SHARE
+    COMMENT, REPCOMMENT,MENTION , INTERESTED, FOLLOW, SHARE,POST
   }
   // export enum MessageType {
   //   COMMENT = 'COMMENT', 

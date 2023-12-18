@@ -90,7 +90,7 @@
         <div class="col-lg-12 profile-logo-heart">
           <img src="../assets/images/logo-euphoria.png" alt="" />
         </div>
-        <div class="col-lg-12 profile-title mt-3">
+        <div class="col-lg-12 profile-title mt-3 mb-3">
           <div class="logo" style="height: 0 !important">
             <h2 class="logo-name"><span>DES</span>TINY</h2>
           </div>
@@ -98,9 +98,9 @@
         <div class="col-lg-12 ml-2">
           <app-loading *ngIf="isLoading"></app-loading>
         </div>
-        <div class="col-lg-4 mb-2">
+        <div class="col-lg-4 mb-2" *ngIf="!isLoading">
           <div class="card card-profile pb-2 shadow">
-            <img src="../assets/images/top1user.png" alt="Image placeholder" class="card-img-top" />
+            <img src="../assets/images/top1user.png" class="card-img-top" />
             <div class="row justify-content-center">
               <div class="col-6 col-lg-6 order-lg-2">
                 <div class="mt-n7 mt-lg-n6 mb-4 mb-lg-0">
@@ -111,7 +111,7 @@
                 </div>
               </div>
             </div>
-            <div class="card-body pt-0 mt-4">
+            <div class="card-body pt-0 mt-4" style="min-height: 195px !important;">
               <div class="row">
                 <div class="col">
                   <div class="d-flex justify-content-center">
@@ -133,7 +133,7 @@
               <div class="text-center mt-4">
                 <h5 class="font-weight-bold">
                   <a (click)="selectUser(listTOP4User[0].user_email)" type="button">{{ listTOP4User[0].fullname }}</a>
-                  <span class="font-weight-light">, {{ listTOP4User[0].age }} tuổi</span>
+                  <span class="font-weight-light">, {{ listTOP4User[0].age }} </span>
                 </h5>
                 <div class="h6 font-weight-bold">
                   <i class="ni location_pin mr-2"></i> {{ listTOP4User[0].location }}
@@ -142,7 +142,7 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-8">
+        <div class="col-lg-8" *ngIf="!isLoading">
           <div class="card mb-4 shadow pt-3">
             <div class="card-body">
               <div class="row m-2 mb-0 list-user">
@@ -153,15 +153,14 @@
                   <div class="card card-blog card-plain mt-4">
                     <div class="position-relative">
                       <a (click)="selectUser(listTOP4User[1].email)" type="button" class="d-block user">
-                        <img src="{{ listTOP4User[1].avatar }}" alt="img-blur-shadow"
-                          class="img-fluid border-radius-lg shadow-img border" />
+                        <img src="{{ listTOP4User[1].avatar }}" class="img-fluid border-radius-lg shadow-img border" />
                       </a>
                     </div>
                     <div class="text-center mt-4 text-pie">
                       <a (click)="selectUser(listTOP4User[1].email)" type="button">
                         <h5 class="font-weight-bold"> {{ listTOP4User[1].fullname }} </h5>
                       </a>
-                      <h5 class="font-weight-light"> {{ listTOP4User[1].age }} tuổi</h5>
+                      <h5 class="font-weight-light"> {{ listTOP4User[1].age }} </h5>
                     </div>
                     <div class="row mt-2 mb-4">
                       <div class="col">
@@ -182,15 +181,14 @@
                   <div class="card card-blog card-plain mt-4">
                     <div class="position-relative">
                       <a (click)="selectUser(listTOP4User[2].email)" type="button" class="d-block user">
-                        <img src="{{ listTOP4User[2].avatar }}" alt="img-blur-shadow"
-                          class="img-fluid border-radius-lg shadow-img border" />
+                        <img src="{{ listTOP4User[2].avatar }}" class="img-fluid border-radius-lg shadow-img border" />
                       </a>
                     </div>
                     <div class="text-center mt-4 text-pie">
                       <a (click)="selectUser(listTOP4User[2].email)" type="button">
                         <h5 class="font-weight-bold"> {{ listTOP4User[2].fullname }} </h5>
                       </a>
-                      <h5 class="font-weight-light"> {{ listTOP4User[2].age }} tuổi</h5>
+                      <h5 class="font-weight-light"> {{ listTOP4User[2].age }} </h5>
                     </div>
                     <div class="row mt-2 mb-4">
                       <div class="col">
@@ -211,15 +209,14 @@
                   <div class="card card-blog card-plain mt-4">
                     <div class="position-relative">
                       <a (click)="selectUser(listTOP4User[3].email)" type="button" class="d-block user">
-                        <img src="{{ listTOP4User[3].avatar }}" alt="img-blur-shadow"
-                          class="img-fluid border-radius-lg shadow-img border" />
+                        <img src="{{ listTOP4User[3].avatar }}" class="img-fluid border-radius-lg shadow-img border" />
                       </a>
                     </div>
                     <div class="text-center mt-4 text-pie">
                       <a (click)="selectUser(listTOP4User[3].email)" type="button">
                         <h5 class="font-weight-bold"> {{ listTOP4User[3].fullname }} </h5>
                       </a>
-                      <h5 class="font-weight-light"> {{ listTOP4User[3].age }} tuổi</h5>
+                      <h5 class="font-weight-light"> {{ listTOP4User[3].age }} </h5>
                     </div>
                     <div class="row mt-2 mb-4">
                       <div class="col">

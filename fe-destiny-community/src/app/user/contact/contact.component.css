@@ -174,7 +174,7 @@ th {
 
 label {
   display: inline-block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.5rem !important;
 }
 
 button {
@@ -2323,6 +2323,7 @@ textarea.form-control {
 /* map */
 iframe {
   width: -webkit-fill-available;
+  height: 100%;
 }
 #map {
   width: 100%;

@@ -19,6 +19,7 @@ import { ProfileService } from '../service/profile.service';
   styleUrls: [
     `../../css/vendor/bootstrap.min.css`,
     `../../css/styles.min.css`,
+    `../../css/dark/dark.min.css`,
     `../../css/vendor/simplebar.css`,
     './notifications.component.css',
   ],
@@ -43,7 +44,6 @@ export class NotificationsComponent implements OnInit {
   ) { }
 
   checkType(type: any) {
-
     if (type == 'COMMENT') {
       return 'COMMENT';
     }
@@ -58,6 +58,9 @@ export class NotificationsComponent implements OnInit {
     }
     if (type == 'REPCOMMENT') {
       return 'REPCOMMENT';
+    }
+    if (type == 'MENTION') {
+      return 'MENTION';
     }
     return null;
   }
@@ -86,9 +89,8 @@ export class NotificationsComponent implements OnInit {
   checkScroll() {
     const scrollableDiv = document.getElementById('scrollableDiv')!;
     const scrollButton = document.getElementById('scrollButton')!;
-    console.log("scrollableDiv.scrollTop: " + scrollableDiv.scrollTop)
     scrollableDiv.addEventListener('scroll', () => {
-      console.log("scrollableDiv.scrollTop: " + scrollableDiv.scrollTop)
+      // console.log("scrollableDiv.scrollTop: " + scrollableDiv.scrollTop)
       if (scrollableDiv.scrollTop > 100) {
         scrollButton.style.display = 'block';
       } else {

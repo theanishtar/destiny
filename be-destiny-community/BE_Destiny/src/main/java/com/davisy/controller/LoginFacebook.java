@@ -36,8 +36,6 @@ public class LoginFacebook {
 	@Autowired
 	RolesServiceImpl rolesServiceImpl;
 
-	@Autowired
-	AES aes;
 
 	@Autowired
 	RegisterService registerService;

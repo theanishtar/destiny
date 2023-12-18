@@ -27,10 +27,12 @@ public class ChatParticipants {
 		private static final long serialVersionUID = 1L;
 		int chat_id;
 		int user_id;
+		boolean chat_participants_status = true;
 
 		@Override
 		public String toString() {
-			return "Primary [chat_id = " + chat_id + ", user_id = " + user_id + "]";
+			return "Primary [chat_id = " + chat_id + ", user_id = " + user_id + ", chat_participants_status = "
+					+ chat_participants_status + "]";
 		}
 	}
 

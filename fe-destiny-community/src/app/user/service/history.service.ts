@@ -15,7 +15,7 @@ import { ModalService } from './modal.service';
 export class HistoryService {
   private loadDataInterested = environment.baseUrl + 'v1/user/load/history/interested';
   private loadDataShare = environment.baseUrl + 'v1/user/load/history/share';
-  private loadDataSendreciever = environment.baseUrl + 'v1/user/load/history/sendreciever';
+  private loadDataSendreciever = environment.baseUrl + 'v1/user/load/history/comment';
   private loadDataDetail = environment.baseUrl + 'v1/user/load/post/history';
 
   private listInterested: any[] = [];

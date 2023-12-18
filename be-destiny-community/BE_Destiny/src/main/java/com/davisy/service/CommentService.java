@@ -15,18 +15,30 @@ public interface CommentService {
 
 	// 23-9-2023 -lấy tổng bình luận của người dùng đã bình luận
 	public int totalCommentByUser(int id);
-	
+
 	public Integer findByIdtoUser(int id);
 
+	public List<Object[]> loadHistoryComment(int id);
+
 	public Comment findById(int id);
+
+	public Object[] findByIdComment(int id);
 
 	public List<Comment> findAllByIdComment(int id);
 
 	public List<Object[]> findAllComment(int id, int check);
+
+	public Object[] findCommentId(int id, int check, int commentId);
 
 	public void create(Comment comment);
 
 	public void update(Comment comment);
 
 	public void delete(Comment comment);
+
+	public void remove_parent_comment(int id);
+
+	public void removeComment(int id);
+
+	public List<Integer> get_parent_id(int id);
 }

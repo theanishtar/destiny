@@ -1115,6 +1115,7 @@ a:hover {
 figure>img {
   width: 100%;
   height: 100%;
+  object-fit: cover;
 }
 
 @media screen and (max-width: 480px) {
@@ -6054,4 +6055,8 @@ figure>img {
   .section-filters-bar .section-filters-bar-actions:last-child .form-item.split.medium .button {
     width: 100%;
   }
+}
+
+.__web-inspector-hide-shortcut__{
+  display: none;
 }

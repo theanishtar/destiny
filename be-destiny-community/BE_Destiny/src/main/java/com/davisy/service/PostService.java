@@ -5,6 +5,8 @@ import java.util.List;
 import com.davisy.entity.Post;
 
 public interface PostService {
+	public List<Post> findAll();
+	
 	public int countPost(int id);
 
 	public List<Object[]> getTOP5Post();
@@ -12,7 +14,9 @@ public interface PostService {
 	// Lấy tất cả bài post có quan hệ bạn bè hoặc follow
 	public List<Object[]> findAllPost(int id, int current_page);
 
-	public List<Object[]> findAllPostShare(int id, int current_page);
+	public List<Object[]> findAllPostShare(int id);
+
+	public Object[] findByIdPost(int id, int current_page, int post_id);
 
 	// lấy số lượng comment,interested, share của bài post
 //	public List<Object[]> getCountPost(int id, int provinceId);
@@ -33,6 +37,8 @@ public interface PostService {
 	// 21-9-2023 -lấy tổng số bài đăng theo tháng
 	// lastest update 14-10
 	public int getTotalPostByMonth(int month);
+	
+	public int getSizePosts();
 
 	// 21-9-2023 -lấy phần trăm bài đăng có trạng thái đã gửi
 	public double getPercentPostSendSuccess();
@@ -50,15 +56,19 @@ public interface PostService {
 	public int getTotalPostByUser(int id);
 
 	public Post findById(int id);
+	
+	public Object[] get_posts_id(int post_id);
+	
+	public Object[] get_posts_share_id(int post_id);
 
 	// 23-9-2023 -Danh sách tất cả bài đăng của người dùng theo id
 	public List<Post> getListPostByUserID(int id);
 
 	public List<Object[]> getTop5postProfile(int id);
 
-	public List<Object[]> getPostProfile(int user_id, int page);
+	public List<Object[]> getPostProfile(int user_id, int user_guest_id, int page);
 
-	public List<Object[]> getPostProfileShare(int user_id, int page);
+	public List<Object[]> getPostProfileShare(int user_id, int user_guest_id);
 
 	public void create(Post post);
 

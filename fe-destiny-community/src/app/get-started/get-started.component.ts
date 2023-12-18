@@ -25,7 +25,8 @@ import { LoginService } from '../service/login.service';
 import { RegisterService } from '@app/service/register.service';
 import { FollowsService } from '@app/user/service/follows.service';
 import { MessageService } from '@app/user/service/message.service';
-
+import { UIServiveService } from '@app/user/service/ui-servive.service';
+import { ReportService } from '@app/user/service/report.service';
 import { environment } from 'src/environments/environment';
 @Component({
 	selector: 'app-get-started',
@@ -40,7 +41,8 @@ export class GetStartedComponent implements OnInit {
 	public loginForm!: FormGroup;
 	public registerForm!: FormGroup;
 	private loginAdmin = '';
-	submitted: boolean = false;
+	submittedLog: boolean = false;
+	submittedRegis: boolean = false;
 	checkedRemember: boolean = false;
 	registerFullname: string = '';
 	registerEmail: string = '';
@@ -51,6 +53,7 @@ export class GetStartedComponent implements OnInit {
 	// userLogGG: any[] = [];
 	userGG: any;
 	loggedIn: any;
+	public loginGGUrl = environment.googleLoginUrl
 
 	constructor(
 		private formbuilder: FormBuilder,
@@ -61,7 +64,9 @@ export class GetStartedComponent implements OnInit {
 		private route: ActivatedRoute,
 		public registerService: RegisterService,
 		public followsService: FollowsService,
-		public messageService: MessageService
+		public messageService: MessageService,
+		private uiServiveService: UIServiveService,
+		public reportService: ReportService
 	) {
 		this.createFormLogin();
 		this.createFormRegister();
@@ -73,9 +78,9 @@ export class GetStartedComponent implements OnInit {
 	ngOnInit() {
 		this.loginWithGG();
 		// Giao diện
-		// Lấy giá trị của tham số "token" từ URL
 		tabs.tabs();
 		form.formInput();
+		this.uiServiveService.loadMode();
 	}
 
 	/*===========Login with google===============*/
@@ -84,23 +89,20 @@ export class GetStartedComponent implements OnInit {
 			// this.router.navigate(['newsfeed']);
 			this.loginService.loginWithGG(this.token, this.type).subscribe((res) => {
 				// if (res !== undefined) {
-				if (res.roles[0].authority == 'ROLE_OWNER' || res.roles[0].authority == 'ROLE_ADMIN') {
-					window.location.href = 'http://localhost:4200/admin';
+				if (res.roles[0].authority == 'ROLE_ADMIN') {
+					window.location.href = environment.baseUrlFe + 'admin';
 					this.loginForm.reset();
 				} else if (res.roles[0].authority == 'ROLE_MODERATOR') {
-					window.location.href = 'http://localhost:4200/moderator/forbidden-word';
+					window.location.href = environment.baseUrlFe + 'moderator/forbidden-word';
 					this.loginForm.reset();
-				} else {
+				} else if (res.roles[0].authority == 'ROLE_OWNER') {
+					window.location.href = environment.baseUrlFe + 'owner';
+					this.loginForm.reset();
+				}else {
 					// this.router.navigate(['newsfeed']);
-					window.location.href = 'http://localhost:4200/newsfeed';
-					new toast({
-						title: 'Thành công!',
-						message: 'Đăng nhập thành công!',
-						type: 'success',
-						duration: 2000,
-					});
+					window.location.href = environment.baseUrlFe + 'newsfeed';
+
 				}
-				// }
 			}, (error) => {
 				this.router.navigate(['login']);
 				new toast({
@@ -116,6 +118,7 @@ export class GetStartedComponent implements OnInit {
 	loginFBClick() {
 		window.location.href = environment.baseUrl + 'oauth2/authorization/facebook';
 	}
+
 	/*===========Login with email and password===============*/
 	createFormLogin() {
 		this.loginForm = this.formbuilder.group({
@@ -130,7 +133,8 @@ export class GetStartedComponent implements OnInit {
 
 	loginWithEmailAndPassword() {
 		setTimeout(() => {
-			this.submitted = true;
+			this.loginService.checkLog = true;
+			this.submittedLog = true;
 			this.loginService.loginUser(this.loginForm.value).subscribe((response) => {
 
 				if (response == '') {
@@ -147,26 +151,18 @@ export class GetStartedComponent implements OnInit {
 					) {
 						this.setCookie('sessionID', response.user.sesionId, 2);
 					}
-					if (response.roles[0].authority == 'ROLE_OWNER' || response.roles[0].authority == 'ROLE_ADMIN') {
-						window.location.href = 'http://localhost:4200/admin';
+					if (response.roles[0].authority == 'ROLE_ADMIN') {
+						window.location.href = 'admin';
 						this.loginForm.reset();
 					} else if (response.roles[0].authority == 'ROLE_MODERATOR') {
-						window.location.href = 'http://localhost:4200/moderator/forbidden-word';
+						window.location.href = environment.baseUrlFe + 'moderator/forbidden-word';
 						this.loginForm.reset();
-					} else {
+					} else if (response.roles[0].authority == 'ROLE_OWNER') {
+						window.location.href = environment.baseUrlFe + 'owner';
 						this.loginForm.reset();
-						// this.router.navigate(['newsfeed']);
-						window.location.href = 'http://localhost:4200/newsfeed';
-						new toast({
-							title: 'Thành công!',
-							message: 'Đăng nhập thành công',
-							type: 'success',
-							duration: 1500,
-						});
-
-						// delay(100).then((res) => {
-						// 	location.reload();
-						// });
+					}else {
+						this.loginForm.reset();
+						window.location.href = environment.baseUrlFe + 'newsfeed';
 					}
 				}
 			});
@@ -199,7 +195,7 @@ export class GetStartedComponent implements OnInit {
 	}
 	/*===========Register===============*/
 	createFormRegister() {
-		const PASSWORD_PATTERN = /^(?=.*[!@#$%^&*]+)[a-z0-9!@#$%^&*]{4,20}$/;
+		const PASSWORD_PATTERN = /^(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\-])[\w!@#$%^&*()_+{}\[\]:;<>,.?~\\-]{4,20}$/;
 		const NAME_PATTERN = /^[\p{L}\s]+$/u;
 		this.registerForm = this.formbuilder.group({
 			email: ['', [Validators.required, Validators.email]],
@@ -223,49 +219,38 @@ export class GetStartedComponent implements OnInit {
 		return this.registerForm.controls;
 	}
 	register() {
-		if (this.registerForm.get("password")!.value == this.registerForm.get("rePassword")!.value) {
-			var data = {
-				email: this.registerForm.get("email")!.value,
-				name: this.registerForm.get("name")!.value,
-				password: this.registerForm.get("password")!.value,
-			};
-			this.registerService.registerUser(data).subscribe((response) => {
-				if (response == '') {
-					new toast({
-						title: 'Thất bại!',
-						message: 'Tài khoản đã tồn tại!',
-						type: 'error',
-						duration: 3000,
-					});
-				} else {
-					console.log("Check")
-				}
-			});
-		} else {
-			new toast({
-				title: 'Thất bại!',
-				message: 'Vui lòng kiểm tra lại xác nhận mật khẩu!',
-				type: 'error',
-				duration: 2000,
-			});
-		}
-		let timerInterval;
-		Swal.fire({
-			title: 'Thông báo!',
-			html: 'Quá trình sẽ diễn ra trong vài giây!',
-			timer: 16000,
-			timerProgressBar: true,
-			didOpen: () => {
-				Swal.showLoading();
-			},
-			willClose: () => {
-				clearInterval(timerInterval);
-			},
-		}).then((result) => {
-			if (result.dismiss === Swal.DismissReason.timer) {
-				console.log('I was closed by the timer');
+		this.submittedRegis = true;
+		if (this.registerForm.valid) {
+			this.loginService.checkLog = true;
+			if (this.registerForm.get("password")!.value == this.registerForm.get("rePassword")!.value) {
+				var data = {
+					email: this.registerForm.get("email")!.value,
+					name: this.registerForm.get("name")!.value,
+					password: this.registerForm.get("password")!.value,
+				};
+				this.registerService.registerUser(data).subscribe((response) => {
+					if (response == '') {
+						new toast({
+							title: 'Thất bại!',
+							message: 'Tài khoản đã tồn tại!',
+							type: 'error',
+							duration: 3000,
+						});
+					} else {
+						console.log("Check");
+					}
+				});
+				this.registerService.connected(this.registerForm.get("email")!.value);
+			} else {
+				this.loginService.checkLog = false;
+				new toast({
+					title: 'Thất bại!',
+					message: 'Vui lòng kiểm tra lại xác nhận mật khẩu!',
+					type: 'error',
+					duration: 2000,
+				});
 			}
-		});
+		}
 	}
 
 	/*============Template==============*/

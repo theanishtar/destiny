@@ -1,4 +1,4 @@
-import { Component, HostListener, Renderer2, ElementRef, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnInit, HostListener, Renderer2, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { LoginService } from '@app/service/login.service';
 
@@ -7,7 +7,7 @@ import { LoginService } from '@app/service/login.service';
   templateUrl: './sidebar-admin.component.html',
   styleUrls: [`../css/sb-admin-2.min.css`, `../css/home.css`],
 })
-export class SidebarAdminComponent {
+export class SidebarAdminComponent implements OnInit {
   activeMenuItem: string = '';
 
   constructor(
@@ -26,7 +26,12 @@ export class SidebarAdminComponent {
   @ViewChildren('mainColorLink')
   mainColorLinks!: QueryList<ElementRef>;
 
+  ngOnInit(): void {
+    this.updateActiveMenuItem();
+  }
+
   ngAfterViewInit(): void {
+
     const bodyElement = document.querySelector('.body-admin');
     const sidebarElement = document.querySelector('.sidebarD');
     const colortheme = localStorage.getItem("colortheme");
@@ -44,6 +49,8 @@ export class SidebarAdminComponent {
         li.classList.add('border-active');
       });
     });
+
+
   }
 
   mainColor = ["pink", "blue", "green", "orange", "cyan"];

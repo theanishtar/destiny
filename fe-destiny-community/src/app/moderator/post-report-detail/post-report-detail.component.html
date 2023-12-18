@@ -6,7 +6,8 @@
     <app-navbar-moderator></app-navbar-moderator>
     <!-- End of Navbar -->
 
-    <main>
+    <app-loading *ngIf="isLoading"></app-loading>
+    <main *ngIf="!isLoading">
       <div class="header">
         <div class="left">
           <h1>Chi tiết bài đăng</h1>
@@ -18,7 +19,6 @@
           </ul>
         </div>
       </div>
-      <app-loading *ngIf="isLoading"></app-loading>
       <div class="container-postdetail pb-5">
         <div class="card-postdetail shadow">
           <div class="row ml-1 mr-1 pb-4">
@@ -261,6 +261,12 @@
                     data-toggle="modal" data-target="#disableModal">
                     <i class="bx bxs-error mr-1"></i>Gửi đến quản trị viên</a>
                 </div>
+                <div class="text-pie mt-3">
+                  <a href="#"
+                    class="btn bg-gradient-endless text-white d-flex align-items-center justify-content-center" href="#"
+                    data-toggle="modal" data-target="#deleteModal">
+                    <i class="bx bxs-error mr-1"></i>Xóa báo cáo</a>
+                </div>
               </div>
             </div>
             <!-- disable Modal-->
@@ -332,6 +338,75 @@
               </div>
             </div>
             <!-- disable Modal -->
+            <!-- delete Modal-->
+            <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content card-modal" style="
+                width: 80%;
+                margin: 0 10%;">
+                  <div class="modal-header ml-3 mr-3">
+                    <h5 class="modal-title text-pink font-weight-bold" id="exampleModalLabel">
+                      Xóa báo cáo về người dùng {{postDetail.user_fullname}}?
+                    </h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"
+                      style="padding-top: 1.2rem">
+                      <span aria-hidden="true">×</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="col-lg-12 pt-2 mb-3">
+                      <div class="shadow card mb-4">
+                        <div class="row ml-0 mr-0 col-lg-12 pb-0 pb-4" style="flex-direction: unset">
+                          <div class="col-lg-12">
+                            <div class="avatar-group row text-pie pl-3 pt-4">
+                              <a class="avatar rounded-circle">
+                                <img class="" alt="Image placeholder" src="{{postDetail.user_avatar}}" />
+                              </a>
+                              <div class="ml-3" style="padding-top: 0.1rem !important">
+                                <h5 style="font-weight: 600">{{postDetail.user_fullname}}</h5>
+                                <div class="row ml-0">
+                                  <div class="mt-n2">{{postDetail.date_Post}}</div>
+                                  <i class="bx bx-world mt-n1 ml-3" style="font-size: 1rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="pl-3 pt-3 text-pie" style="min-height: 60px">
+                              {{postDetail.content}}
+                            </div>
+                            <hr class="border-primaryx mt-3 mb-2 p-0" />
+                            <div class="pl-4 pr-4 text-pie" style="
+                              display: flex;
+                              justify-content: space-between;
+                            ">
+                              <div class="row">
+                                <i class="bx bxs-heart text-pink"></i>
+                                <h6 class="mt-1 ml-1">{{postDetail.totalInterested}}</h6>
+                              </div>
+                              <div class="row">
+                                <h6 class="mt-1 mr-1">{{postDetail.totalComment}}</h6>
+                                <i class="bx bx-comment"></i>
+                                <h6 class="mt-1 ml-3 mr-1">{{postDetail.totalShare}}</h6>
+                                <i class="bx bx-share"></i>
+                              </div>
+                            </div>
+                            <hr class="border-primaryx mt-1 mb-3 p-0" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-center">
+                      <button class="btn btn-secondary mr-4" type="button" data-dismiss="modal">
+                        <i class="fas fa-ban mr-1"></i>Hủy bỏ
+                      </button>
+                      <a class="btn btn-danger" (click)="deletePost()" type="button" data-dismiss="modal">
+                        <i class="fas fa-check"></i> Xác nhận</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- delete Modal -->
             <div class="card shadow report-left m-3 border-primaryx-xl">
               <div class="card-body p-2" *ngIf="totalReport > 0">
                 <div *ngFor="let user of postDetail.listUserSendReports; index as i">

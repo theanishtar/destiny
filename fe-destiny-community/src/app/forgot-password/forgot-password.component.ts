@@ -27,9 +27,9 @@ export class ForgotPasswordComponent implements OnInit {
   public changePassForm!: FormGroup;
   email: any;
 
-  public checkForm1 = true;
-  public checkForm2 = false;
-  public checkForm3 = false;
+  public checkForm1:boolean = false;
+  public checkForm2:boolean = false;
+  public checkForm3:boolean = false;
 
   ngOnInit(): void {
 
@@ -112,7 +112,7 @@ export class ForgotPasswordComponent implements OnInit {
 
   constructor(
     private formbuilder: FormBuilder,
-    private forgotpasswordService: ForgotpasswordService
+    public forgotpasswordService: ForgotpasswordService
   ) {
     this.createFormEmail();
     this.createFormValidCode();
@@ -129,14 +129,18 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   checkMailForgotPass(): Observable<string | null> {
+    this.checkForm1 = true;
     if (this.emailForm.valid) {
+      this.forgotpasswordService.checkLoading = true;
       return this.forgotpasswordService.sendMail(this.emailForm.get('email')?.value).pipe(
         map((res) => {
           let data = JSON.stringify(res);
           let formattedData = data.substring(2, data.length - 2);
           this.email = this.emailForm.get('email')?.value;
+          
+          this.emailForm.reset()
           return formattedData;
-        })
+        }),
       );
     }
     return of(null);
@@ -152,7 +156,9 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   checkValidCode(): Observable<string | null> {
+    this.checkForm2 = true;
     if (this.validCodeForm.valid) {
+      this.forgotpasswordService.checkLoading = true;
       var data = {
         email: this.email,
         code: this.validCodeForm.get('code')?.value,
@@ -187,8 +193,9 @@ export class ForgotPasswordComponent implements OnInit {
 
 
   changePass(): Observable<string | null> {
-
+    this.checkForm3 = true;
     if (this.changePassForm.valid) {
+      this.forgotpasswordService.checkLoading = true;
       var data = {
         email: this.email,
         code: '',

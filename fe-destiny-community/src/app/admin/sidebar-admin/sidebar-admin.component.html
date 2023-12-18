@@ -9,6 +9,9 @@
     <li [class.active]="activeMenuItem === 'admin'">
       <a routerLink="/admin" class="1"><i class="bx bxs-dashboard"></i>Tổng Quan</a>
     </li>
+    <li [class.active]="activeMenuItem === 'modermanagement'">
+      <a routerLink="/admin/modermanagement" class="1"><i class="bx bxs-shapes"></i>Kiểm duyệt viên</a>
+    </li>
     <li>
       <div class="analys"><i class="bx bx-window-alt"></i>Bài đăng</div>
     </li>
@@ -36,6 +39,14 @@
       <a (click)="logout()" class="clickSetting logout">
         <i class="bx bx-log-out-circle"></i>
         Đăng xuất
+      </a>
+    </li>
+  </ul>
+  <ul class="side-menu mt-5">
+    <li>
+      <a routerLink="/moderator/forbidden-word" class="clickSetting analys" type="button">
+        <i class="bx bxs-chevrons-left" style="margin-right: -12px;"></i> <i class="bx bxs-shapes"></i>
+        Kiểm duyệt
       </a>
     </li>
   </ul>
@@ -110,7 +121,7 @@
             </div>
           </div>
         </div>
-        <h6 class="text-pie ml-2 mb-4 mt-4">Ngôn ngữ</h6>
+        <!-- <h6 class="text-pie ml-2 mb-4 mt-4">Ngôn ngữ</h6>
         <div class="row ml-1 mr-1">
           <div class="col-lg-6">
             <div class="bg-gradient-endless p-2 border-radius-xl text-center">
@@ -122,7 +133,7 @@
               <a href="" class="text-white">Tiếng anh</a>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

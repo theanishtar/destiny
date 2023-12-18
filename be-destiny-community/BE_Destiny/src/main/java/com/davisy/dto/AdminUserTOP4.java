@@ -14,7 +14,7 @@ public class AdminUserTOP4 {
 	String fullname;
 	String avatar;
 	String location;
-	int age;
+	String age;
 	
 	int totalPost;
 	int totalComment;

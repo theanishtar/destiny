@@ -16,11 +16,11 @@ export class UserReportModeratorDetailComponent {
 
   userDetail: any = {};
 
-  emailUser: string | null;
+  iDUser: string | null;
 
   totalReport: number;
 
-  userMail: string | null;
+  userId: string | null;
 
   idUserSend: string | null;
 
@@ -36,21 +36,42 @@ export class UserReportModeratorDetailComponent {
   }
 
   sendToAdmin(): void {
-    this.userMail = localStorage.getItem("userDetailEmail");
+    this.userId = localStorage.getItem("userDetailId");
     this.idUserSend = localStorage.getItem("userSendId");
 
-    if (this.userMail == null || this.idUserSend == null) {
+    if (this.userId == null || this.idUserSend == null) {
       this.routers.navigate(['/moderator/user-report']);
     } else {
 
-      this.userReportedDetailService.sendToAdmin(this.userMail, this.idUserSend).subscribe(() => {
+      this.userReportedDetailService.sendToAdmin(this.userId, this.idUserSend).subscribe(() => {
         new toast({
           title: 'Thành công!',
           message: 'Báo cáo đã được gửi đến quản trị viên!',
           type: 'success',
           duration: 1500,
         })
-        localStorage.removeItem("userDetailEmail");
+        localStorage.removeItem("userDetailId");
+        this.routers.navigate(['/moderator/user-report']);
+      })
+    }
+  }
+
+  deleteUser(): void {
+    this.userId = localStorage.getItem("userDetailId");
+    this.idUserSend = localStorage.getItem("userSendId");
+
+    if (this.userId == null || this.idUserSend == null) {
+      this.routers.navigate(['/moderator/user-report']);
+    } else {
+
+      this.userReportedDetailService.deleteUser(this.userId, this.idUserSend).subscribe(() => {
+        new toast({
+          title: 'Thành công!',
+          message: 'Báo cáo đã được xóa!',
+          type: 'success',
+          duration: 3000,
+        })
+        localStorage.removeItem("userDetailId");
         this.routers.navigate(['/moderator/user-report']);
       })
     }
@@ -58,12 +79,12 @@ export class UserReportModeratorDetailComponent {
 
   loadUserDetail() {
 
-    this.emailUser = localStorage.getItem("userDetailEmail");
+    this.iDUser = localStorage.getItem("userDetailId");
 
-    if (this.emailUser == null) {
+    if (this.iDUser == null) {
       this.routers.navigate(['/moderator/user-report']);
     } else {
-      this.userReportedDetailService.loadUserDetail(this.emailUser).subscribe(() => {
+      this.userReportedDetailService.loadUserDetail(this.iDUser).subscribe(() => {
         this.userDetail = this.userReportedDetailService.getUserDetail();
         this.totalReport = 0;
         this.totalReport = this.userDetail.listUserSendReports.length;

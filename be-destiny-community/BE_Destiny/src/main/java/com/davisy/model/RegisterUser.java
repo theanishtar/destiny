@@ -18,6 +18,7 @@ public class RegisterUser {
     int mark = 0;
     boolean user_status= true ;
     boolean ban = false ;
+    String code;
     
     private String ranDomUsername() {
 		// Get the current time as an Instant

@@ -3,6 +3,7 @@ package com.davisy.entity;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -44,7 +45,7 @@ public class Comment {
 	Post post;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	Calendar date_comment = GregorianCalendar.getInstance();
+	Calendar date_comment= GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT+7"));
 	
 	String content;
 	

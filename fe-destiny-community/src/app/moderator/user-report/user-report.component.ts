@@ -61,8 +61,8 @@ export class UserReportComponent {
 
   }
 
-  selectUser(email: string, userSendId: string): void {
-    localStorage.setItem("userDetailEmail", email);
+  selectUser(id: string, userSendId: string): void {
+    localStorage.setItem("userDetailId", id);
     localStorage.setItem("userSendId", userSendId);
     this.routers.navigate(['/moderator/user-report-detail']);
   }
