@@ -72,9 +72,4 @@ public class MessagesServiceImpl implements MessagesService {
 		return messagesDAO.findStatus(id);
 	}
 
-	@Override
-	public List<Object[]> loadNotification(int user_id) {
-		return messagesDAO.loadNotification(user_id);
-	}
-
 }

@@ -67,9 +67,4 @@ public class ChatsServiceImpl implements ChatsService {
 		return chatDAO.loadAllChatRoom(id);
 	}
 
-	@Override
-	public void update_name_chats(int id, String chats_name) {
-		chatDAO.update_name_chats(id, chats_name);
-	}
-
 }

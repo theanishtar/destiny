@@ -30,7 +30,4 @@ public interface InterestedDAO extends JpaRepository<Interested, Integer> {
 	@Query(value = "select p.post_id,(select pi2.link_image  from post_images pi2 where pi2.post_id =p.post_id limit 1) AS link_image,u.fullname,p.\"content\",TO_CHAR(i.date_interested, 'DD-MM-YYYY'),p.user_id\r\n"
 			+ "			from post p  inner join interested i on p.post_id =i.post_id inner join users u on p.user_id =u.user_id  where i.user_id =:id order by  i.date_interested desc", nativeQuery = true)
 	public List<Object[]> findAllHistoryInterested(int id);
-
-	@Query(value = "select *from interested i where i.user_id =:user_id and i.post_id =:post_id", nativeQuery = true)
-	public Interested findInterested(int user_id, int post_id);
 }

@@ -36,24 +36,13 @@ export class FollowsService {
   ) { }
 
   /* ============following============= */
-  // loadDataFollowing() {
-  //   return this.http.get<any>(this.loadDataFling).pipe(
-  //     tap((response) => {
-  //       this.listFollowing = JSON.parse(JSON.stringify(response));
-  //       this.setDataFling(this.listFollowing);
-  //     }),
-  //   );
-  // }
-
-  async loadDataFollowing(): Promise<any[]> {
-    try {
-      const response = await this.http.get<any>(this.loadDataFling).toPromise();
-      this.listFollowing = JSON.parse(JSON.stringify(response));
-      this.setDataFling(this.listFollowing);
-      return this.listFollowing;
-    } catch (error) {
-      throw error;
-    }
+  loadDataFollowing() {
+    return this.http.get<any>(this.loadDataFling).pipe(
+      tap((response) => {
+        this.listFollowing = JSON.parse(JSON.stringify(response));
+        this.setDataFling(this.listFollowing);
+      }),
+    );
   }
 
   deleteFollowing(data: any) {
@@ -66,24 +55,13 @@ export class FollowsService {
   }
 
   /* ============follower============= */
-  // loadDataFollower() {
-  //   return this.http.get<any>(this.loadDataFler).pipe(
-  //     tap((response) => {
-  //       this.listFollower = JSON.parse(JSON.stringify(response));
-  //       this.setDataFler(this.listFollower);
-  //     }),
-  //   );
-  // }
-
-  async loadDataFollower(): Promise<any[]> {
-    try {
-      const response = await this.http.get<any>(this.loadDataFler).toPromise();
-      this.listFollower = JSON.parse(JSON.stringify(response));
-      this.setDataFler(this.listFollower);
-      return this.listFollower;
-    } catch (error) {
-      throw error;
-    }
+  loadDataFollower() {
+    return this.http.get<any>(this.loadDataFler).pipe(
+      tap((response) => {
+        this.listFollower = JSON.parse(JSON.stringify(response));
+        this.setDataFler(this.listFollower);
+      }),
+    );
   }
 
   deleteFollower(data: any) {
@@ -94,25 +72,15 @@ export class FollowsService {
       }),
     );
   }
- 
+
   /* ============friend============= */
-  // loadDataFriends() {
-  //   return this.http.get<any>(this.loadDataFriend).pipe(
-  //     tap((response) => {
-  //       this.listFriend = JSON.parse(JSON.stringify(response));
-  //       this.setDataFriend(this.listFriend);
-  //     }),
-  //   );
-  // }
-  async loadDataFriends(): Promise<any[]> {
-    try {
-      const response = await this.http.get<any>(this.loadDataFriend).toPromise();
-      this.listFriend = JSON.parse(JSON.stringify(response));
-      this.setDataFriend(this.listFriend);
-      return this.listFriend;
-    } catch (error) {
-      throw error;
-    }
+  loadDataFriends() {
+    return this.http.get<any>(this.loadDataFriend).pipe(
+      tap((response) => {
+        this.listFriend = JSON.parse(JSON.stringify(response));
+        this.setDataFriend(this.listFriend);
+      }),
+    );
   }
 
   /* ============Suggested============= */
@@ -145,7 +113,7 @@ export class FollowsService {
   // }
   
 
-  addFollowAPI(data: any) {
+  addFollow(data: any) {
     return this.http.post<any[]>(this.addFollowUrl, data).pipe(
       tap((response) => {
         console.log("Follow thành công");

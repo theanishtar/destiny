@@ -38,7 +38,7 @@ export class HistoryComponent implements OnInit {
   isSearching: boolean = false;
 
   ngOnInit() {
-    // this.historyService.openModalDetailPost(49);
+    // this.modalService.openModalDetailPost(49);
     this.loadInterested();
     liquid.liquid();
     avatarHexagons.avatarHexagons();

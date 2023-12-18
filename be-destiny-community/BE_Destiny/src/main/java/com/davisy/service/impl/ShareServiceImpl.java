@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.davisy.dao.ShareDAO;
-import com.davisy.entity.Share;
 import com.davisy.service.ShareService;
 
 @Service
@@ -30,25 +29,5 @@ public class ShareServiceImpl implements ShareService {
 	@Override
 	public List<Object[]> findAllHistoryShare(int id) {
 		return shareDao.findAllHistoryShare(id);
-	}
-
-	@Override
-	public void create(Share share) {
-		shareDao.save(share);
-	}
-
-	@Override
-	public void update(Share share) {
-		shareDao.saveAndFlush(share);
-	}
-
-	@Override
-	public void delete(Share share) {
-		shareDao.delete(share);
-	}
-
-	@Override
-	public Share findById(int id) {
-		return shareDao.findById(id).get();
 	}
 }

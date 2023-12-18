@@ -12,8 +12,6 @@ public interface ChatsService {
 	public Chats findById(int id);
 
 	public List<Object[]> loadAllChatRoom(int id);
-	
-	public void update_name_chats(int id, String chats_name);
 
 	public boolean isFriend(int id);
 

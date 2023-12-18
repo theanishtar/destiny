@@ -183,14 +183,14 @@
                 <div class="form-item">
                   <!-- FORM INPUT -->
                   <div class="form-input small active">
-                    <label for="profile-tagline">Tên người dùng</label>
+                    <label for="profile-tagline">Biệt danh</label>
                     <input
                       type="text"
                       id="profile-tagline"
                       name="profile_tagline"
                       [(ngModel)]="dataEditProfile.username"
                       formControlName="username"
-                      required
+                      readonly
                     />
                   </div>
                   <!-- /FORM INPUT -->

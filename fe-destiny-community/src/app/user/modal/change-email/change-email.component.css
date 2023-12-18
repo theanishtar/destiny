@@ -25,7 +25,7 @@ div.btnClose-change-email {
 form.form.change-mail {
     position: absolute;
     right: 0%;
-    transform: translate(-80%, -10%);
+    transform: translate(-80%, 0%);
 }
 
 @media (max-width:390px) {
@@ -38,7 +38,7 @@ form.form.change-mail {
 
 @media (max-width: 1286px) {
     form.form.change-mail {
-        transform: translate(-170%, -15%) !important;
+        transform: translate(-170%, 0%) !important;
     }
 }
 
