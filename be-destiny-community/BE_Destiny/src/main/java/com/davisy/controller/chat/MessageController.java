@@ -25,6 +25,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
 
 import com.davisy.config.JwtTokenUtil;
+import com.davisy.encrypt.AES;
+import com.davisy.encrypt.DiffieHellman;
 import com.davisy.entity.Chats;
 import com.davisy.entity.MessageImages;
 import com.davisy.entity.Messages;
@@ -66,12 +68,22 @@ public class MessageController {
 	@Async
 	@MessageMapping("/chat/{to}")
 	public void sendMessage(@DestinationVariable int to, MessageModel message) {
-		User user = userService.findById(message.getFromLogin());
+		int from = message.getFromLogin();
+		User user = userService.findById(from);
 		User toUser = userService.findById(to);
 		Chats chats = chatsService.findChatNames(user.getUsername(), toUser.getUsername());
 		List<String> images = new ArrayList<>();
 		Messages messages = new Messages();
-		messages.setContent(message.getMessage());
+		
+		// mã hóa nội dung tin nhắn
+		
+		// Step1. Get SecretKey from u1, u2
+    	int key = DiffieHellman.genSecretKey(from, to);
+    	
+    	// Step2. encode message
+    	String rarMess = AES.encrypt(message.getMessage(), key);
+    	
+		messages.setContent(rarMess);
 		messages.setUser(user);
 		messages.setChats(chats);
 		messages.setSend_Status(false);
@@ -89,7 +101,7 @@ public class MessageController {
 		}
 		Object[] messageOb = messagesService.findByIdMessage(message.getFromLogin(), to, messages.getId());
 		MessagesEntity entity = new MessagesEntity();
-		entity = entity(messageOb);
+		entity = entity(messageOb, to);
 		simpMessagingTemplate.convertAndSend("/topic/status/messages/" + message.getFromLogin(), entity);
 		boolean isExists = UserChatStorage.getInstance().getUsers().containsKey(to);
 		if (isExists) {
@@ -104,10 +116,11 @@ public class MessageController {
 		try {
 			String email = jwtTokenUtil.getEmailFromHeader(request);
 			User user = userService.findByEmail(email);
+			int from = user.getUser_id();
 			List<Object[]> list = messagesService.findListMessage(user.getUser_id(), to, page);
 			List<MessagesEntity> lisMessagesEntities = new ArrayList<>();
 			for (Object[] l : list) {
-				lisMessagesEntities.add(listEntity(l));
+				lisMessagesEntities.add(listEntity(l, to, from));
 			}
 			return ResponseEntity.ok().body(lisMessagesEntities);
 		} catch (Exception e) {
@@ -122,7 +135,7 @@ public class MessageController {
 		messagesService.updateRecallMessages(true, id);
 		Object[] message = messagesService.findByIdMessage(from, to, id);
 		MessagesEntity entity = new MessagesEntity();
-		entity = entity(message);
+		entity = entity(message, to);
 		Object[] recall = new Object[] { entity, position, from };
 		simpMessagingTemplate.convertAndSend("/topic/recall/messages/" + to, recall);
 		return ResponseEntity.ok().body(entity);
@@ -136,10 +149,27 @@ public class MessageController {
 		return ResponseEntity.ok().body(images);
 	}
 
-	public MessagesEntity listEntity(Object[] l) {
+	public MessagesEntity listEntity(Object[] l, int to, int from) {
 		MessagesEntity entity = new MessagesEntity();
+		// nội dung tin nhắn
+		String contentStr = l[1] + "";
+		int fromTemp = Integer.valueOf(l[3].toString());
+		
+		if(from != fromTemp)
+			fromTemp = to;
+
+		// giải mã nội dung tin nhắn
+		
+		// Step1. Get SecretKey from u1, u2
+    	int key = DiffieHellman.genSecretKey(from, to);
+    	
+    	System.out.printf("GOC: %s - FROM: %d - TO: %d",contentStr, from, to);
+    	
+    	// Step2. encode message
+    	String originMess = AES.decrypt(contentStr, key);
+		
 		entity.setId(Integer.valueOf(l[0].toString()));
-		entity.setContent(l[1] + "");
+		entity.setContent(originMess);
 		entity.setSend_time(l[2] + "");
 		entity.setUser_id(Integer.valueOf(l[3].toString()));
 		entity.setAvatar(l[4] + "");
@@ -156,10 +186,26 @@ public class MessageController {
 		return entity;
 	}
 
-	public MessagesEntity entity(Object[] o) {
+	public MessagesEntity entity(Object[] o, int to) {
 		MessagesEntity entity = new MessagesEntity();
+		int from = Integer.valueOf(((Object[]) o[0])[3].toString());
 		entity.setId(Integer.valueOf(((Object[]) o[0])[0].toString()));
-		entity.setContent(((Object[]) o[0])[1] + "");
+		
+		// nội dung tin nhắn
+		String contentStr = ((Object[]) o[0])[1] + "";
+		
+		// giải mã nội dung tin nhắn
+		
+		// Step1. Get SecretKey from u1, u2
+    	int key = DiffieHellman.genSecretKey(from, to);
+    	
+    	// Step2. encode message
+    	String originMess = AES.decrypt(contentStr, key);
+    	
+    	System.out.println(originMess +"ORIGIN");
+		
+		
+		entity.setContent(originMess);
 		entity.setSend_time(((Object[]) o[0])[2] + "");
 		entity.setUser_id(Integer.valueOf(((Object[]) o[0])[3].toString()));
 		entity.setAvatar(((Object[]) o[0])[4] + "");

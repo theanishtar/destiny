@@ -37,9 +37,6 @@ public class LoginFacebook {
 	RolesServiceImpl rolesServiceImpl;
 
 	@Autowired
-	AES aes;
-
-	@Autowired
 	RegisterService registerService;
 
 	@GetMapping("/user-home")

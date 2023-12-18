@@ -1,98 +1,74 @@
 package com.davisy.encrypt;
 
-import java.nio.charset.StandardCharsets;
+import java.security.spec.KeySpec;
 import java.util.Base64;
-
 import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.springframework.context.annotation.Configuration;
-
-import com.davisy.constant.SecretDavisy;
-
-import lombok.RequiredArgsConstructor;
-@Configuration
-@RequiredArgsConstructor
 public class AES {
-	
-	static String secretKeyString = SecretDavisy.AES_KEY;
-    private static SecretKey secretKey = generateAesKey(secretKeyString);
-	
-	public static String bytesToBase64UrlSafe(byte[] bytes) {
-        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
-    }
+	public static String encrypt(String plaintext, int secretKey){
+		// Chuyển đổi số nguyên thành byte array
+		byte[] keyBytes = Integer.toString(secretKey).getBytes();
 
-    public static byte[] base64UrlSafeToBytes(String base64UrlSafe) {
-        return Base64.getUrlDecoder().decode(base64UrlSafe);
-    }
+		try {
+			// Tạo một khóa bí mật từ byte array sử dụng PBEKeySpec
+			SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+			KeySpec spec = new PBEKeySpec(new String(keyBytes, "UTF-8").toCharArray(), keyBytes, 65536, 256);
+			SecretKey secret = factory.generateSecret(spec);
+			SecretKeySpec secretKeySpec = new SecretKeySpec(secret.getEncoded(), "AES");
 
-    public static String EncryptAESfinal(String data) {
-    	try {
-			byte[] encryptedData = encryptData(data, secretKey);
-			String encryptedDataUrlSafe = bytesToBase64UrlSafe(encryptedData);
-        
-			return encryptedDataUrlSafe;
+			// Mã hóa văn bản
+			Cipher cipher = Cipher.getInstance("AES");
+			cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+			byte[] encryptedBytes = cipher.doFinal(plaintext.getBytes());
+
+			// Chuyển đổi byte array thành chuỗi Base64
+			return Base64.getEncoder().encodeToString(encryptedBytes);
 		} catch (Exception e) {
+			System.err.println(e);
 			return null;
 		}
-    	
-    }
-    
-    public static String DecryptAESfinal(String encryptedDataUrlSafe) {
-    	try {
-    		byte[] encryptedDataOriginal = base64UrlSafeToBytes(encryptedDataUrlSafe);
-            String decryptedData = decryptData(encryptedDataOriginal, secretKey);
-            
-            return decryptedData;
+	}
+
+	public static String decrypt(String ciphertext, int secretKey) {
+		// Chuyển đổi số nguyên thành byte array
+		byte[] keyBytes = Integer.toString(secretKey).getBytes();
+
+		try {
+			// Tạo một khóa bí mật từ byte array sử dụng PBEKeySpec
+			SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+			KeySpec spec = new PBEKeySpec(new String(keyBytes, "UTF-8").toCharArray(), keyBytes, 65536, 256);
+			SecretKey secret = factory.generateSecret(spec);
+			SecretKeySpec secretKeySpec = new SecretKeySpec(secret.getEncoded(), "AES");
+
+			// Giải mã chuỗi Base64
+			byte[] encryptedBytes = Base64.getDecoder().decode(ciphertext);
+
+			// Giải mã văn bản
+			Cipher cipher = Cipher.getInstance("AES");
+			cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
+			byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
+			return new String(decryptedBytes);
 		} catch (Exception e) {
+			System.err.println(e);
 			return null;
 		}
-    	
-    }
-    
-    public static void main(String[] args) throws Exception {
-        // ...
-    	String data = "dangthpc04349@fpt.edu.vn:dangth";
-        // Mã hóa dữ liệu
-        byte[] encryptedData = encryptData(data, secretKey);
-        String encryptedDataUrlSafe = bytesToBase64UrlSafe(encryptedData);
 
-        // Giải mã dữ liệu
-        byte[] encryptedDataOriginal = base64UrlSafeToBytes(encryptedDataUrlSafe);
-        String decryptedData = decryptData(encryptedDataOriginal, secretKey);
+	}
 
-        // ...
-        System.out.println(encryptedDataUrlSafe);
-        System.out.println(DecryptAESfinal("jLDrvN8pJJwtYZHg5fkRD4Cv8Q7okUSA04ZXyQJLfvM"));
-    }
+	public static void main(String[] args) throws Exception {
+		int secretKey = 26;
+		String originalText = "Hello, World!";
 
-    public static SecretKey generateAesKey() throws Exception {
-        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
-        keyGenerator.init(128); // Độ dài khóa AES là 128 bit
-        return keyGenerator.generateKey();
-    }
-    
-    public static SecretKey generateAesKey(String secretKeyString) {
-        byte[] keyData = secretKeyString.getBytes(StandardCharsets.UTF_8);
-        return new SecretKeySpec(keyData, "AES");
-    }
+		// Mã hóa
+		String encryptedText = encrypt(originalText, secretKey);
+		System.out.println("Encrypted Text: " + encryptedText);
 
-    public static byte[] encryptData(String data, SecretKey secretKey) throws Exception {
-        Cipher cipher = Cipher.getInstance("AES");
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-        return cipher.doFinal(data.getBytes(StandardCharsets.UTF_8));
-    }
-
-    public static String decryptData(byte[] encryptedData, SecretKey secretKey) throws Exception {
-        Cipher cipher = Cipher.getInstance("AES");
-        cipher.init(Cipher.DECRYPT_MODE, secretKey);
-        byte[] decryptedBytes = cipher.doFinal(encryptedData);
-        return new String(decryptedBytes, StandardCharsets.UTF_8);
-    }
-
-    public static String bytesToBase64(byte[] bytes) {
-        return Base64.getEncoder().encodeToString(bytes);
-    }
+		// Giải mã
+		String decryptedText = decrypt(encryptedText, secretKey);
+		System.out.println("Decrypted Text: " + decryptedText);
+	}
 }
