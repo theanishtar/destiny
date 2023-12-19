@@ -2,7 +2,6 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Chart } from '../../../assets/js/admin/chart.js/chartjs.min.js';
 import { AdminIndexService } from '../service/admin-index.service';
 
-
 @Component({
   selector: 'app-index-admin',
   templateUrl: './index-admin.component.html',
@@ -32,7 +31,7 @@ export class IndexAdminComponent {
   percentUserInteractionIncrease: number;
 
   constructor(
-    private adminIndexService: AdminIndexService
+    private adminIndexService: AdminIndexService,
   ) { }
 
   ngOnInit(): void {

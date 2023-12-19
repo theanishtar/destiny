@@ -224,11 +224,18 @@ export class MessageComponent implements OnInit {
     this.checkBlock = await this.messageService.checkBlockApi(from, this.idSelected);
     // this.messageService.loadMessage(this.id, this.currentPage).subscribe((res) => {
     const res = await this.messageService.loadMessage(this.idSelected, this.currentPage);
+    document.querySelectorAll(".notify-block").forEach((e) => {
+      e.remove();
+    });
     if (res != null) {
       if (this.count > 0 && this.checkClick == false) {
-        document.querySelectorAll(".chat-widget-speaker, .time-date, .br, .notify-block,.review-img").forEach((e) => {
-          e.remove();
-        });
+        // document.querySelectorAll(".notify-block").forEach((e) => {
+        //   console.warn("notify-block: " + e);
+        // })
+        // document.querySelectorAll(".chat-widget-speaker, .time-date, .br, .notify-block, .review-img").forEach((e) => {
+        //   e.remove();
+        // });
+       
         this.count = 0;
         this.checkClick = false;
       }

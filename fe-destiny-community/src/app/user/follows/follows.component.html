@@ -160,7 +160,7 @@
                 <!-- /USER SHORT DESCRIPTION TITLE -->
 
                 <!-- USER SHORT DESCRIPTION TEXT -->
-                <p class="user-short-description-text" *ngIf="fling.intro !== 'null'"><a>{{fling.intro}}</a></p>
+                <p class="user-short-description-text"><a>{{ fling.intro !== 'null' ? fling.intro : 'Xin chào' }}</a></p>
                 <!-- /USER SHORT DESCRIPTION TEXT -->
               </div>
               <!-- /USER SHORT DESCRIPTION -->
@@ -219,7 +219,7 @@
               <!-- USER PREVIEW ACTIONS -->
               <div class="user-preview-actions">
                 <!-- BUTTON -->
-                <p class="button secondary" id="deleteFriend-{{fling.user_id}}" (click)="deleteFling(fling.user_id)">{{ "cancel"
+                <p class="button secondary" id="deleteFling-{{fling.user_id}}" (click)="deleteFling(fling.user_id)">{{ "cancel"
                   | translate }}</p>
                 <!-- /BUTTON -->
 
@@ -282,7 +282,7 @@
                 <!-- /USER SHORT DESCRIPTION TITLE -->
 
                 <!-- USER SHORT DESCRIPTION TEXT -->
-                <p class="user-short-description-text" *ngIf="fler.intro !== 'null'"><a>{{fler.intro}}</a></p>
+                <p class="user-short-description-text"><a>{{fler.intro !== 'null'?fler.intro:'Xin chào'}}</a></p>
                 <!-- /USER SHORT DESCRIPTION TEXT -->
               </div>
               <!-- /USER SHORT DESCRIPTION -->
@@ -404,7 +404,7 @@
                 <!-- /USER SHORT DESCRIPTION TITLE -->
 
                 <!-- USER SHORT DESCRIPTION TEXT -->
-                <p class="user-short-description-text" *ngIf="friend.intro !== 'null'"><a>{{friend.intro}}</a></p>
+                <p class="user-short-description-text"><a>{{friend.intro !== 'null'?friend.intro:'Xin chào'}}</a></p>
                 <!-- /USER SHORT DESCRIPTION TEXT -->
               </div>
               <!-- /USER SHORT DESCRIPTION -->
@@ -463,7 +463,7 @@
               <!-- USER PREVIEW ACTIONS -->
               <div class="user-preview-actions">
                 <!-- BUTTON -->
-                <p class="button secondary" id="deleteFriend-{{friend.user_id}}" (click)="deleteFling(friend.user_id)">{{ "cancel"
+                <p class="button secondary" id="deleteFriend-{{friend.user_id}}" (click)="deleteFriend(friend.user_id)">{{ "cancel"
                   | translate }}</p>
                 <!-- /BUTTON -->
 

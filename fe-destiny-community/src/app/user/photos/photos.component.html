@@ -25,10 +25,10 @@
     <!-- /SECTION HEADER -->
 
     <!-- GRID -->
-    <div class="grid grid-2-2-2-2-2-2 centered">
+    <div class="grid grid-2-2-2-2-2-2 centered" (click)="modalService.openModalSeeAllImg(profileService.dataProfileTimeline?.images)">
       <!-- PHOTO PREVIEW -->
       <div class="photo-preview small popup-picture-trigger"
-        *ngFor="let img of profileService.dataProfileTimeline?.images">
+        *ngFor="let img of profileService.dataProfileTimeline?.images; let i = index">
         <!-- PHOTO PREVIEW IMAGE -->
         <figure class="photo-preview-image liquid">
           <img [src]="img" alt="photo-preview-01">
@@ -52,3 +52,4 @@
   <!-- /SECTION -->
 </div>
 <!-- /CONTENT GRID -->
+<app-images-message></app-images-message>

@@ -37,13 +37,13 @@ export class HomeComponent implements OnInit{
   autoLogin(){
     let token = localStorage.getItem('token');
     // console.warn("this.messageService.checkError: " + this.messageService.checkError);
-    if(token !== null && this.messageService.checkError && this.cookieService.get('role') === 'ROLE_USER'){
+    if(token !== null && this.messageService.checkError && localStorage.getItem('role') === 'ROLE_USER'){
       window.location.href = environment.baseUrlFe + 'newsfeed';
-    }else if(token !== null && this.messageService.checkError && this.cookieService.get('role') === 'ROLE_ADMIN'){
+    }else if(token !== null && this.messageService.checkError && localStorage.getItem('role') === 'ROLE_ADMIN'){
       window.location.href = environment.baseUrlFe + 'admin';
-    }else if(token !== null && this.messageService.checkError && this.cookieService.get('role') === 'ROLE_MODERATOR'){
+    }else if(token !== null && this.messageService.checkError && localStorage.getItem('role') === 'ROLE_MODERATOR'){
       window.location.href = environment.baseUrlFe + 'moderator/forbidden-word';
-    }else if(token !== null && this.messageService.checkError && this.cookieService.get('role') === 'ROLE_OWNER'){
+    }else if(token !== null && this.messageService.checkError && localStorage.getItem('role') === 'ROLE_OWNER'){
       window.location.href = environment.baseUrlFe + 'owner';
     }else if(token !== null && !this.messageService.checkError){
       this.router.navigate(['login']);

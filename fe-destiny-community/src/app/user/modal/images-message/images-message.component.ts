@@ -15,7 +15,7 @@ export class ImagesMessageComponent {
   constructor(
     public modalService: ModalService,
     public postService: PostService
-  ) { 
+  ) {
   }
 
   ngOnInit() {
@@ -54,8 +54,8 @@ export class ImagesMessageComponent {
   }
 
   // Trong component.ts
-goToSlide(index: number) {
-  this.slideIndex = index+1; // Biến currentSlide là biến trong component để theo dõi slide hiện tại
-  this.showSlides(this.slideIndex);
-}
+  goToSlide(index: number) {
+    this.slideIndex = index + 1; // Biến currentSlide là biến trong component để theo dõi slide hiện tại
+    this.showSlides(this.slideIndex);
+  }
 }

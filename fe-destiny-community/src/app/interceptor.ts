@@ -20,7 +20,7 @@ import '../assets/toast/main.js';
 declare var toast: any;
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
-    idUser: any = this.cookieService.get('id');
+    idUser: any = localStorage.getItem('id');
 
     constructor(
         private loginService: LoginService,

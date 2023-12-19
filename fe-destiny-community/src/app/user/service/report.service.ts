@@ -21,8 +21,7 @@ export class ReportService {
 
   constructor(
     private http: HttpClient,
-    private router: Router,
-    private cookieService: CookieService,
+    // private cookieService: CookieService,
     private _sanitizer: DomSanitizer,
   ) {
   }
@@ -80,7 +79,7 @@ export class ReportService {
   /* ============Login QR============= */
   imgQR: any = '';
   checkLoadingdata: boolean = true;
-  full_name = this.cookieService.get('full_name');
+  full_name = localStorage.getItem('full_name');
   $time_qr: any;
   private isOpenQR = new BehaviorSubject<boolean>(false);
   isOpenQR$ = this.isOpenQR.asObservable();

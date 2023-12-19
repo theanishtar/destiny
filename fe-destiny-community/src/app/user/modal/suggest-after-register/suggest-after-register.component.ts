@@ -62,12 +62,7 @@ export class SuggestAfterRegisterComponent implements OnInit {
   addFollow() {
     this.modalService.checkAddFollow = true;
     this.modalService.sendNotifyFollow(this.idUserSelected);
-    // new toast({
-    //   title: 'Thông báo!',
-    //   message: 'Đã theo dõi',
-    //   type: 'success',
-    //   duration: 3000,
-    // });
+    this.followsService.reLoadDataFriends();
   }
 
   checkCheckBox() {
@@ -128,7 +123,7 @@ export class SuggestAfterRegisterComponent implements OnInit {
   updateStatus(){
     this.isLoadingStatus = true;
     var data = {
-      user_id: this.cookieService.get("id"),
+      user_id: localStorage.getItem("id"),
       gender: this.updateStatusForm.get('gender')!.value,
       location: this.updateStatusForm.get('location')!.value,
       birthday: this.updateStatusForm.get('birthday')!.value

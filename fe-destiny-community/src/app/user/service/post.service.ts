@@ -30,11 +30,10 @@ export class PostService {
   public detailPost: any;
   listImageSources: any[] = [];
   infoPost: any
+  listPosts: any;
   dataUpdated = new EventEmitter<void>();
   constructor(
     private http: HttpClient,
-    private router: Router,
-    private route: ActivatedRoute,
   ) { }
 
   /* ============Top 5============= */

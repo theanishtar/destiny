@@ -191,8 +191,8 @@ export class EditProfileComponent implements OnInit {
           type: 'success',
           duration: 1500,
         })
-        this.cookieService.set('avatar', this.avatarTemp);
-        this.cookieService.set('full_name', this.profileForm.get('fullname')!.value);
+        localStorage.setItem('avatar', this.avatarTemp);
+        localStorage.setItem('full_name', this.profileForm.get('fullname')!.value);
         if (this.userName != this.initialUsername) {
           this.messageService.loadDataSender().subscribe(() => {
             this.sender = JSON.parse(JSON.stringify(this.messageService.getSender()));

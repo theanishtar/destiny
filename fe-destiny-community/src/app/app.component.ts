@@ -29,9 +29,6 @@ export class AppComponent {
   constructor(
     private translateService: TranslateService,
     public messageService: MessageService,
-    private cookieService: CookieService,
-    private loginService: LoginService,
-    private renderer: Renderer2,
     private UIService: UIServiveService,
     private localService: LocalService
   ) {

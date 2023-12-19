@@ -42,7 +42,7 @@ export class ArticleDetailsComponent {
   check: boolean = true
   listPost: any;
   listPosts: any;
-  currentUserId = this.cookieService.get("id");
+  currentUserId = localStorage.getItem("id");
   isLoading = true;
   id_post: any | null = '';
   public detailPost: any;

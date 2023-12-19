@@ -46,11 +46,14 @@ export class ProfileTimelineComponent implements OnInit {
   chatUserId: any;
   mapIntersted = new Map<number, boolean>();
   checkRequest: boolean = true;
-  currentUserId = this.cookieService.get("id");
+  currentUserId = localStorage.getItem("id");
   checkCountPosts: boolean = true;
   checkListPost: any;
   id_user: any | null = '';
-
+  dataFollows: any
+  listPostPr: any;
+  listUserPr: any[];
+  listCountPr: any;
 
   ngOnInit() {
     this.linkProfile();
@@ -88,10 +91,7 @@ export class ProfileTimelineComponent implements OnInit {
 
 
   }
-  dataFollows: any
-  listPostPr: any;
-  listUserPr: any[];
-  listCountPr: any;
+ 
   constructor(
     public modalService: ModalService,
     public interactPostsService: InteractPostsService,
@@ -99,7 +99,7 @@ export class ProfileTimelineComponent implements OnInit {
     private datePipe: DatePipe, //Định dạng ngày
     public followsService: FollowsService,
     public postService: PostService,
-    private cookieService: CookieService,
+    // private cookieService: CookieService,
     private el: ElementRef,
     private renderer: Renderer2,
     private route: ActivatedRoute,
@@ -135,6 +135,7 @@ export class ProfileTimelineComponent implements OnInit {
     }
   }
   addFollow(id: number) {
+    let btn = document.getElementById('add-fl-' + id);
     this.followsService.addFollowAPI(id).subscribe((res) => {
       new toast({
         title: 'Thông báo!',
@@ -143,6 +144,10 @@ export class ProfileTimelineComponent implements OnInit {
         duration: 3000,
       })
     });
+    this.followsService.reLoadDataFriends();
+    if(btn){
+      btn.style.display = 'none';
+    }
   }
 
   loadDataSuggest() {
@@ -191,8 +196,8 @@ export class ProfileTimelineComponent implements OnInit {
       let checkType = true;
       let check = this.mapIntersted.get(post_id);
       let element = this.el.nativeElement.querySelector('#interest-' + post_id);
-      let id_user: any = this.cookieService.get('id');
-      let fullname: any = this.cookieService.get('full_name');
+      let id_user: any = localStorage.getItem('id');
+      let fullname: any = localStorage.getItem('full_name');
       const data:any = [{ user_id: id_user, fullname: fullname }];
 
 

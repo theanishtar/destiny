@@ -155,8 +155,7 @@
   <!-- /NAVIGATION WIDGET COVER -->
 
   <!-- USER SHORT DESCRIPTION -->
-  <a class="user-short-description big" href="profile"
-    (click)="this.profileService.loadDataProfileTimeline(this.cookieService.get('id'))">
+  <a class="user-short-description big" href="profile?id={{chatUserId}}">
     <!-- USER SHORT DESCRIPTION AVATAR -->
     <a class="user-short-description-avatar user-avatar big">
       <div class="hexagon-container">

@@ -13,6 +13,7 @@ import '../../../assets/toast/main.js';
 declare var toast: any;
 import { ModalService } from '../service/modal.service';
 import { ProfileService } from '../service/profile.service';
+import { FollowsService } from '../service/follows.service';
 @Component({
   selector: 'app-notifications',
   templateUrl: './notifications.component.html',
@@ -40,7 +41,8 @@ export class NotificationsComponent implements OnInit {
 
   constructor(
     public modalService: ModalService,
-    public profileService: ProfileService
+    public profileService: ProfileService,
+    public followsService: FollowsService
   ) { }
 
   checkType(type: any) {
@@ -73,6 +75,7 @@ export class NotificationsComponent implements OnInit {
       type: 'success',
       duration: 3000,
     });
+    this.followsService.reLoadDataFriends();
   }
 
   @ViewChild('elementToScroll', { static: false }) elementToScroll: ElementRef;

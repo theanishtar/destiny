@@ -65,14 +65,11 @@ export class ModalService {
   public darkMode: any;
   dataUpdatedPost = new EventEmitter<void>();
   isConnected: boolean = false;
-
+  
   constructor(
     private http: HttpClient,
-    private postService: PostService,
-    private cookieService: CookieService,
+    // private cookieService: CookieService,
     private messageService: MessageService,
-    private profileService: ProfileService,
-    private followsService: FollowsService
   ) {
 
   }
@@ -343,8 +340,8 @@ export class ModalService {
 
   sendNotify(content, post_id, toUser, type, idCmt) {
     let toUserId = toUser;
-    let avatar = this.cookieService.get("avatar");
-    let fullname = this.cookieService.get("full_name");
+    let avatar = localStorage.getItem("avatar");
+    let fullname = localStorage.getItem("full_name");
     let fromUserId = localStorage.getItem("chatUserId");
     this.stompClient?.send("/app/notify/" + toUserId, {}, JSON.stringify({
       avatar: avatar,
@@ -376,8 +373,8 @@ export class ModalService {
   }
 
   sendNotifyFollow(idUser: any[]) {
-    let avatar = this.cookieService.get("avatar");
-    let fullname = this.cookieService.get("full_name");
+    let avatar = localStorage.getItem("avatar");
+    let fullname = localStorage.getItem("full_name");
     let fromUserId = localStorage.getItem("chatUserId");
     this.stompClient?.send("/app/notifyfollowregister", {}, JSON.stringify({
       avatar: avatar,

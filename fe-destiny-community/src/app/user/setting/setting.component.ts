@@ -47,11 +47,6 @@ export class SettingComponent implements OnInit {
     form.formInput();
 
     this.mode();
-    // if(this.messageService.getAudioSource() != ''){
-    //   this.selectedAudio = localStorage.getItem('selectedAudio');  
-    // }else{
-    //   this.selectedAudio = '../../../assets/js/sound/toy_phone.mp3';
-    // }
     
   }
 

@@ -46,9 +46,9 @@ export class ProfileService {
     private wards: any[];
     private userLogined: any[] = [];
     isLoading = true;
+    
     constructor(
         private http: HttpClient,
-        private router: Router,
         private datePipe: DatePipe, //Định dạng ngày
     ) {
     }

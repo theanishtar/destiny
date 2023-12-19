@@ -126,7 +126,7 @@ export class CreatePostComponent {
             type: 'success',
             duration: 1500,
           });
-          this.listPosts =res;
+          this.postService.listPosts =res;
           let id = res[0].post_id;
           this.modalService.sendNotify(' ', id, 0, 'POST', this.modalService.repCmtId);
 

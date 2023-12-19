@@ -25,8 +25,6 @@ export class HistoryService {
 
   constructor(
     private http: HttpClient,
-    private router: Router,
-    private route: ActivatedRoute,
     public modalService: ModalService
   ) { }
 
@@ -94,14 +92,11 @@ export class HistoryService {
       this.listUser = this.detailPost[2];
       this.listCmt = this.detailPost[3];
       this.isLoading = false;
-      // console.log("this.detailPost: " + this.detailPost[0].post_id)
-      // this.modalService.loadComment(idPost, userId)
     })
   }
 
   closeModalDetailPost() {
     this.isOpenDetailPost.next(false);
-    // this.detailPost = [];
   }
 
   /* ============Getter - Setter============= */

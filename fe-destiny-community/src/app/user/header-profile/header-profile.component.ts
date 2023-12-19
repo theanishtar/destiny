@@ -69,6 +69,7 @@ export class HeaderProfileComponent implements OnInit {
     if(btn_fl){
       btn_fl.style.display = 'none';
     }
+    this.followsService.reLoadDataFriends();
   }
   /* ============template============= */
   updateActiveMenuItem() {

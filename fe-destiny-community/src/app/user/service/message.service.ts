@@ -79,9 +79,6 @@ export class MessageService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private route: ActivatedRoute,
-    private cookieService: CookieService,
-    // private modalService: ModalService
   ) { }
 
   /* ============API============= */
@@ -255,6 +252,9 @@ export class MessageService {
         }
         this.$chatHistory = $('.chat-widget-conversation')!;
         this.$chatHistory.scrollTop(this.$chatHistory[0]!.scrollHeight);
+        document.querySelectorAll(".notify-block").forEach((e) => {
+          e.remove();
+        });
 
       })
 

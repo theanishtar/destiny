@@ -53,7 +53,7 @@ export class GetStartedComponent implements OnInit {
 	// userLogGG: any[] = [];
 	userGG: any;
 	loggedIn: any;
-	public loginGGUrl = environment.googleLoginUrl
+	public loginGGUrl = environment.googleLoginUrl;
 
 	constructor(
 		private formbuilder: FormBuilder,

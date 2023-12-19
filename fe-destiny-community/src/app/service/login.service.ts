@@ -29,7 +29,7 @@ export class LoginService {
 
     private userLogined: any[] = [];
     userLogGG: any[] = [];
-    idUser: any = this.cookieService.get('id');
+    idUser: any = localStorage.getItem('id');
     checkLog: boolean = false;
 
     socket?: WebSocket;
@@ -49,10 +49,14 @@ export class LoginService {
                         'refreshToken',
                         response.refreshToken
                     );
-                    this.cookieService.set('full_name', response.name);
-                    this.cookieService.set('avatar', response.avatar);
-                    this.cookieService.set('id', response.id);
-                    this.cookieService.set('role', response.roles[0].authority);
+                    localStorage.setItem('full_name', response.name);
+                    localStorage.setItem('avatar', response.avatar);
+                    localStorage.setItem('id', response.id);
+                    localStorage.setItem('role', response.roles[0].authority);
+                    // this.cookieService.set('full_name', response.name);
+                    // this.cookieService.set('avatar', response.avatar);
+                    // this.cookieService.set('id', response.id);
+                    // this.cookieService.set('role', response.roles[0].authority);
                     // this.cookieService.set('role', JSON.parse(JSON.stringify(this.getUserLog())).roles[0].authority);
                 }),
                 catchError((error: HttpErrorResponse) => {
@@ -129,10 +133,15 @@ message: 'Tài khoản không tồn tại',
                     'refreshToken',
                     res.refreshToken
                 );
-                this.cookieService.set('full_name', res.name);
-                this.cookieService.set('avatar', res.avatar);
-                this.cookieService.set('id', res.id);
-                this.cookieService.set('role', res.roles[0].authority);
+                // this.cookieService.set('full_name', res.name);
+                // this.cookieService.set('avatar', res.avatar);
+                // this.cookieService.set('id', res.id);
+                // this.cookieService.set('role', res.roles[0].authority);
+
+                localStorage.setItem('full_name', res.name);
+                localStorage.setItem('avatar', res.avatar);
+                localStorage.setItem('id', res.id);
+                localStorage.setItem('role', res.roles[0].authority);
 
             })
         );
@@ -251,10 +260,15 @@ message: 'Tài khoản không tồn tại',
                         'refreshToken',
                         res.refreshToken
                     );
-                    this.cookieService.set('full_name', res.name);
-                    this.cookieService.set('avatar', res.avatar);
-                    this.cookieService.set('id', res.id);
-                    this.cookieService.set('role', res.roles[0].authority);
+                    // this.cookieService.set('full_name', res.name);
+                    // this.cookieService.set('avatar', res.avatar);
+                    // this.cookieService.set('id', res.id);
+                    // this.cookieService.set('role', res.roles[0].authority);
+
+                    localStorage.setItem('full_name', res.name);
+                    localStorage.setItem('avatar', res.avatar);
+                    localStorage.setItem('id', res.id);
+                    localStorage.setItem('role', res.roles[0].authority);
                 }),
                 catchError((error) => {
                     console.error('Error refreshing token:', error);
@@ -266,7 +280,8 @@ message: 'Tài khoản không tồn tại',
     /* ============Login QR============= */
     imgQR: any = '';
     checkLoadingdata: boolean = true;
-    full_name = this.cookieService.get('full_name');
+    // full_name = this.cookieService.get('full_name');
+    full_name = localStorage.getItem('full_name');
     $time_qr: any;
     private isOpenQRWeb = new BehaviorSubject<boolean>(false);
     isOpenQRWeb$ = this.isOpenQRWeb.asObservable();
@@ -329,10 +344,15 @@ this.stompClient?.subscribe('/topic/login/qr-code/' + id, (res) => {
                         'refreshToken',
                         data.data.refreshToken
                     );
-                    this.cookieService.set('full_name', data.data.name);
-                    this.cookieService.set('avatar', data.data.avatar);
-                    this.cookieService.set('id', data.data.id);
-                    this.cookieService.set('role', data.data.roles[0].authority);
+                    // this.cookieService.set('full_name', data.data.name);
+                    // this.cookieService.set('avatar', data.data.avatar);
+                    // this.cookieService.set('id', data.data.id);
+                    // this.cookieService.set('role', data.data.roles[0].authority);
+
+                    localStorage.setItem('full_name', data.data.name);
+                    localStorage.setItem('avatar', data.data.avatar);
+                    localStorage.setItem('id', data.data.id);
+                    localStorage.setItem('role', data.data.roles[0].authority);
 
                     if (data.data.roles[0].authority == 'ROLE_ADMIN') {
                         window.location.href = environment.baseUrlFe + 'admin';

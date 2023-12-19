@@ -93,7 +93,7 @@ export class authGuard implements CanActivate {
   getUserRole() {
     // Lấy vai trò của người dùng từ dịch vụ hoặc nơi lưu trữ.
     // Ví dụ: return this.loginService.getUserRole();
-    return this.cookieService.get('role'); // Đây là ví dụ, bạn cần thay thế bằng cách lấy thực tế.
+    return localStorage.getItem('role'); // Đây là ví dụ, bạn cần thay thế bằng cách lấy thực tế.
   }
 }
 

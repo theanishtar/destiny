@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from '@angular/core';
 
-import { CookieService } from 'ngx-cookie-service';
+// import { CookieService } from 'ngx-cookie-service';
 import { Router, NavigationEnd } from '@angular/router';
 import { GetStartedComponent } from '@app/get-started/get-started.component';
 import { LoginService } from '@app/service/login.service';
@@ -10,6 +10,7 @@ import { ModalService } from '../service/modal.service';
 import { MessageType } from '../Model/NotifyModel';
 import { UIServiveService } from '../service/ui-servive.service';
 import { ReportService } from '../service/report.service';
+import { FollowsService } from '../service/follows.service';
 import '../../../assets/toast/main.js';
 declare var toast: any;
 @Component({
@@ -26,8 +27,8 @@ declare var toast: any;
 })
 
 export class NavigationComponent implements OnInit {
-  userDisplayName = '';
-  avatar = '';
+  userDisplayName: any;
+  avatar: any;
   activeMenuItem: string = '';
   chatUserId: any;
   searchTerm: string = '';
@@ -36,8 +37,8 @@ export class NavigationComponent implements OnInit {
   listSearchPost: any[] = [];
   listSearchHashTag: any[] = [];
   ngOnInit() {
-    this.userDisplayName = this.cookieService.get('full_name');
-    this.avatar = this.cookieService.get("avatar");
+    this.userDisplayName = localStorage.getItem('full_name');
+    this.avatar = localStorage.getItem("avatar");
     this.chatUserId = parseInt((localStorage.getItem("chatUserId") + '')?.trim());
     this.uiServiveService.loadMode();
     this.updateActiveMenuItem();
@@ -45,7 +46,7 @@ export class NavigationComponent implements OnInit {
   }
 
   constructor(
-    public cookieService: CookieService,
+    // public cookieService: CookieService,
     private loginService: LoginService,
     private router: Router,
     public messageService: MessageService,
@@ -54,29 +55,20 @@ export class NavigationComponent implements OnInit {
     private el: ElementRef,
     private renderer: Renderer2,
     private uiServiveService: UIServiveService,
-    public reportService: ReportService
+    public reportService: ReportService,
+    private followsService: FollowsService
   ) {
     this.router.events.subscribe((event) => {
+    //   this.userDisplayName = localStorage.getItem('full_name');
+    // this.avatar = localStorage.getItem("avatar");
       this.chatUserId = parseInt((localStorage.getItem("chatUserId") + '')?.trim());
-      this.userDisplayName = this.cookieService.get('full_name');
+      this.userDisplayName = localStorage.getItem('full_name')!;
       if (event instanceof NavigationEnd) {
         // Đã chuyển đến trang mới, thực hiện cập nhật menu active
         this.updateActiveMenuItem();
       }
     });
   }
-
-  // async searchMobile() {
-  //   let user_id: number | null = null;
-  
-  //   const storedUserId = localStorage.getItem('chatUserId');
-  //   if (storedUserId !== null) {
-  //     user_id = parseInt(storedUserId, 10);
-  //     this.listSearch = await this.modalService.searchApi(user_id, this.searchTermMobile);
-  //     this.listSearchPost = await this.modalService.searchPostApi(this.searchTermMobile, 'content');
-  //     this.listSearchHashTag = await this.modalService.searchPostApi(this.searchTermMobile, 'hashtag');
-  //   }
-  // }
 
   async search(value) {
     let user_id: number | null = null;
@@ -89,7 +81,6 @@ export class NavigationComponent implements OnInit {
       this.listSearchHashTag = await this.modalService.searchPostApi(value, 'hashtag');
     }
   }
-
 
   isLogin() {
     return this.loginService.isLogin();
@@ -131,6 +122,7 @@ export class NavigationComponent implements OnInit {
       type: 'success',
       duration: 3000,
     });
+    this.followsService.reLoadDataFriends();
   }
   updateActiveMenuItem() {
     // console.warn("this.activeMenuItem: " + this.activeMenuItem)

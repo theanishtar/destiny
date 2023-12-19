@@ -98,8 +98,22 @@
         </div>
 
         <div class="row text-hello">
-          <div class="col-lg-12">
+          <div class="col-lg-9">
             <h1 class="font-weight-bold text-light">XIN CHÀO <span class="text-brand font-weight-bold" style="text-transform: uppercase;">{{infoOwner?.fullname}}</span></h1>
+          </div>
+          <div class="col-lg-3">
+            <div class="project-btn-new-admin col-auto mt-4">
+              <a (click)="loginService.logout()" class="link-new-admin text-light font-weight-bold">
+                <svg viewBox="0 0 100 100" width="50px"
+                  style="position: absolute;top:0;left:0;transform:rotate(90deg);">
+                  <path d="M2,70 L2,98 L25,98" fill="none" stroke="#17eaed" stroke-width="4" />
+                </svg>
+                ĐĂNG XUẤT
+                <svg viewBox="0 0 100 100" width="50px" style="position: absolute;bottom: 0;right: 0%;">
+                  <path d="M75,98 L98,98 L98,75" fill="none" stroke="#17eaed" stroke-width="4" />
+                </svg>
+              </a>
+            </div>
           </div>
         </div>
 
@@ -169,8 +183,8 @@
             </div>
           </div>
         </div>
-
-        <div class="table-owner row pr-0 pl-0 mr-0 ml-0">
+        <div class="table-owner row pr-0 pl-0 mr-0 ml-0"><app-loading *ngIf="isLoading"></app-loading></div>
+        <div class="table-owner row pr-0 pl-0 mr-0 ml-0" *ngIf="!isLoading">
 
           <div class="row mb-4 center">
             <div class="col-lg-12 logo-heart">
@@ -209,9 +223,7 @@
                   </button>
                 </div>
                 <div class="modal-body d-flex align-items-center text-modal justify-content-center">
-                  <!-- <a class="avatar rounded-circle circle-info mr-2">
-                    <img class="rounded-circle" alt="" src="{{infoEdit.avatar}}" />
-                  </a> -->
+                  
                 </div>
                 <div class="modal-footer d-flex justify-content-center">
                   <button class="btn btn-secondary mr-4" type="button" data-dismiss="modal">
@@ -223,8 +235,7 @@
               </div>
             </div>
           </div>
-
-          <div class="col-lg-8 pl-0 pr-0 mt-2" id="">
+          <div class="col-lg-8 pl-0 pr-0 mt-2" id="" >
             <div class="shadow mb-5 mt-0">
               <div class="card-owner-container-table text-light">
                 <div class="row">
@@ -364,7 +375,7 @@
             <div class="row mt-5">
 
               <div class="project-btn col-auto" id="buttonDisabled">
-                <div data-toggle="modal" data-target="#disableModal" class="link font-weight-bold">
+                <div style="cursor: pointer;" data-toggle="modal" data-target="#disableModal" class="link font-weight-bold">
                   <svg viewBox="0 0 100 100" width="50px"
                     style="position: absolute;top:0;left:0;transform:rotate(90deg);">
 <path d="M2,70 L2,98 L25,98" fill="none" stroke="#17eaed" stroke-width="4" />

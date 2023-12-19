@@ -45,13 +45,13 @@ export class VideoCallComponent {
 
   constructor(
     private formbuilder: FormBuilder,
-    private cookieService: CookieService,
+    // private cookieService: CookieService,
     private el: ElementRef,
     private renderer: Renderer2,
     public messageService: MessageService,
     private elementRef: ElementRef
   ) {
-    this.avatar = this.cookieService.get('avatar');
+    this.avatar = localStorage.getItem('avatar');
     
 
   }

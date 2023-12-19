@@ -23,7 +23,7 @@
   background-color: var(--color-base2);
   color: var(--color-body);
   font-family: var(--font-base), sans-serif;
-  height: 3000px;
+  height: 4000px;
 }
 
 a {
@@ -81,7 +81,7 @@ img {
 
 
 .text-hello {
-  margin-top: -500px !important;
+  margin-top: 0px !important;
   text-align: center;
 }
 
@@ -607,8 +607,13 @@ table tr td .status.pending {
   margin: 0 10%;
 }
 
-.circle-info img {
-  border: 5px solid var(--color-brand);
+.circle-info-small {
+  width: 20%;
+}
+
+
+.circle-info-small img {
+  border: 1px solid var(--color-brand);
 }
 
 
@@ -631,7 +636,7 @@ table tr td .status.pending {
   }
 
   .text-hello {
-    margin-top: -650px !important;
+    margin-top: -620px !important;
     text-align: left;
   }
 

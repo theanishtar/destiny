@@ -30,8 +30,6 @@ export class UIServiveService {
     }
   }
 
-
-
   toggleDarkStyle(action: boolean): void {// Lấy phần head của trang
 
     if (action === false) {

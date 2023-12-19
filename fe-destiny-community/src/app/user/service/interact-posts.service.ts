@@ -29,15 +29,6 @@ export class InteractPostsService {
     });
   }
 
-  // deleleInterestedApi(post_id: number): Observable<any> {
-  //   return this.http.post(this.deleleInterestedUrl, post_id).pipe(
-  //     catchError(error => {
-  //       console.log("Error:", error);
-  //       throw error; // Re-throw the error to propagate it further if needed
-  //     })
-  //   );
-  // }
-
   async deleleInterestedApi(post_id: number): Promise<any> {
     try {
       const response = await this.http.post(this.deleleInterestedUrl, post_id).toPromise();
@@ -52,18 +43,4 @@ export class InteractPostsService {
     this.idPost = this.modalService.idPostCmt;
     this.modalService.sendNotify(' ', idPost, idUser, 'INTERESTED', this.modalService.repCmtId);
   }
-
-  // private likedPosts: Set<string> = new Set<string>();
-
-  // toggleLike(postId: string): void {
-  //   if (this.likedPosts.has(postId)) {
-  //     this.likedPosts.delete(postId);
-  //   } else {
-  //     this.likedPosts.add(postId);
-  //   }
-  // }
-
-  // isLiked(postId: string): boolean {
-  //   return this.likedPosts.has(postId);
-  // }
 }

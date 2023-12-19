@@ -5,6 +5,7 @@ import '../../../assets/js/admin/database/datatables/dataTables.bootstrap4.js'
 import $e from 'jquery';
 import { Chart } from '../../../assets/js/admin/chart.js/chartjs.min.js';
 
+import { LoginService } from '@app/service/login.service';
 
 import {
   FormGroup,
@@ -91,6 +92,7 @@ export class AdminManagementComponent {
     private formbuilder: FormBuilder,
     public storage: Storage,
     private adminManagementService: AdminManagementService,
+    public loginService: LoginService
   ){}
 
   ngOnInit() {

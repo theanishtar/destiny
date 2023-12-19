@@ -123,14 +123,20 @@ export class RegisterService {
               setTimeout(resolve, ms);
             });
           }
-          this.cookieService.set('full_name', res.name);
+          
           localStorage.setItem(
             'token',
             res.token
           );
-          this.cookieService.set('avatar', res.avatar);
-          this.cookieService.set('id', res.id);
-          this.cookieService.set('role', res.roles[0].authority);
+          // this.cookieService.set('avatar', res.avatar);
+          // this.cookieService.set('id', res.id);
+          // this.cookieService.set('role', res.roles[0].authority);
+          // this.cookieService.set('full_name', res.name);
+
+          localStorage.setItem('full_name', res.name);
+          localStorage.setItem('avatar', res.avatar);
+          localStorage.setItem('id', res.id);
+          localStorage.setItem('role', res.roles[0].authority);
           delay(500).then((res) => {
             window.location.href = environment.baseUrlFe + 'newsfeed';
           });

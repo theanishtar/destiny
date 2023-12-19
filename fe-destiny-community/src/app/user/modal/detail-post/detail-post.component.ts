@@ -15,7 +15,10 @@ import { HistoryService } from '@app/user/service/history.service';
 export class DetailPostComponent {
   slideIndex: number = 1;
   slidesLength: string;
- 
+  $contentCommnet: any;
+  idPost: any
+  idUser: any
+  comment_input: string = '';
 
   constructor(
     public modalService: ModalService,
@@ -26,25 +29,6 @@ export class DetailPostComponent {
     this.showSlides(1);
   }
 
- 
-
-  $contentCommnet: any;
-  idPost: any
-  idUser: any
-  comment_input: string = '';
-  // addComment(){
-  //   this.$contentCommnet = $('#comment-input');
-  //   this.idPost = this.modalService.idPostCmt;
-  //   this.idUser = this.modalService.idUser;
-  //   if (this.$contentCommnet.val() != null) {
-  //     console.log("this.$contentCommnet.val(): " + this.$contentCommnet.val());
-  //     console.log("this.idPost: " + this.idPost);
-  //     console.log("this.idUser: " + this.idUser);
-  //     this.modalService.sendNotify(this.$contentCommnet.val(), 'COMMENT');
-  //   }
-  //   this.comment_input = '';
-
-  // }
   addComment(){
     this.$contentCommnet = $('#comment-input');
     this.idPost = this.modalService.idPostCmt;

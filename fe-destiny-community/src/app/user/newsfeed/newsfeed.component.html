@@ -58,7 +58,7 @@
                   <a class="bold top-user">{{ item[1] }}</a>
                 </p>
               </a>
-              <p class="intro-top5" (click)="addFollow(item[3])">
+              <p class="intro-top5">
                 {{ item[2] }}
               </p>
               <div class="action-request-list" [attr.data-title]="item[5] + ' bài đăng'">
@@ -77,7 +77,7 @@
 
       <!-- WIDGET BOX -->
       <div class="widget-box">
-        <p class="widget-box-title">{{ "newsfeed_top5" | translate }}</p>
+        <p class="widget-box-title">{{ "newsfeed_dexuatchoban" | translate }}</p>
         <div *ngIf="checkData1" class="emty-message">Không có đề xuất</div>
         <div class="lds-dual-ring" *ngIf="check"></div>
         <!-- [appDataSrc]="imageUrlSuggested" -->
@@ -105,7 +105,7 @@
               </a>
 
               <!-- <a class="user-status-text small" (click)="addFollow(item.user_id)">Theo dõi</a> -->
-              <a class="user-status-text small suggested" (click)="addFollow(item.user_id)">
+              <a class="user-status-text small suggested" id="add-fl-{{item.user_id}}" (click)="addFollow(item.user_id)">
                 {{ "sidebar_follow" | translate }}
               </a>
             </div>
@@ -233,7 +233,7 @@
 
       <!-- /WIDGET BOX -->
       <!-- WIDGET BOX -->
-      <div *ngFor="let p of listPosts; let i = index">
+      <div *ngFor="let p of postService.listPosts; let i = index">
         <div class="widget-box no-padding">
           <!-- WIDGET BOX SETTINGS -->
           <div class="widget-box-settings">

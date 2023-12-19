@@ -54,12 +54,12 @@ declare var toast: any;
 })
 export class NewsfeedComponent implements OnInit {
   userDisplayName = '';
-  currentUserId = this.cookieService.get('id');
+  currentUserId = localStorage.getItem('id');
   postId: string; // Mã số của bài viết (có thể là mã số duy nhất của mỗi bài viết)
   listSuggested: any[] = [];
   listTop5User: any[] = [];
   listTop5Post: any[] = [];
-  listPosts: any;
+  // listPosts: any;
   listPost: any;
   listUser: any[];
   listCount: any;
@@ -77,7 +77,7 @@ export class NewsfeedComponent implements OnInit {
 
   ngOnInit() {
     // this.reportService.openReportPost();
-    this.userDisplayName = this.cookieService.get('full_name');
+    this.userDisplayName = localStorage.getItem('full_name')!;
     // this.loadPosts();
     this.checkLoad();
     // this.modalService.openModalSuggest();
@@ -107,7 +107,7 @@ export class NewsfeedComponent implements OnInit {
   constructor(
     public modalService: ModalService,
     public interactPostsService: InteractPostsService,
-    private cookieService: CookieService,
+    // private cookieService: CookieService,
     private loginService: LoginService,
     private router: Router,
     public followsService: FollowsService,
@@ -123,6 +123,7 @@ export class NewsfeedComponent implements OnInit {
     public translateService: TranslateService,
     public customTimePipe: CustomTimePipe
   ) { }
+
   checkLoad() {
     let body_news = document.getElementById('body-news')!;
     body_news.style.display = 'none';
@@ -160,6 +161,7 @@ export class NewsfeedComponent implements OnInit {
   }
 
   addFollow(id: number) {
+    let btn = document.getElementById('add-fl-' + id);
     this.modalService.sendNotify(' ', 0, id, 'FOLLOW', 0);
     this.loadDataSuggest();
     new toast({
@@ -168,6 +170,10 @@ export class NewsfeedComponent implements OnInit {
       type: 'success',
       duration: 3000,
     });
+    this.followsService.reLoadDataFriends();
+    if(btn){
+      btn.style.display = 'none';
+    }
   }
 
   /* ============Top 5============= */
@@ -199,7 +205,7 @@ export class NewsfeedComponent implements OnInit {
       this.postService
         .loadPostNewsFeed(this.currentPage)
         .subscribe((data: any) => {
-          this.listPosts = data; // Lưu dữ liệu ban đầu vào mảng
+          this.postService.listPosts = data; // Lưu dữ liệu ban đầu vào mảng
           setTimeout(() => {
             this.isLoading = false;
             body_news.style.display = 'grid';
@@ -233,8 +239,8 @@ export class NewsfeedComponent implements OnInit {
       let checkType = true;
       let check = this.mapIntersted.get(post_id);
       let element = this.el.nativeElement.querySelector('#interest-' + post_id);
-      let id_user: any = this.cookieService.get('id');
-      let fullname: any = this.cookieService.get('full_name');
+      let id_user: any = localStorage.getItem('id');
+      let fullname: any = localStorage.getItem('full_name');
       const data:any = [{ user_id: id_user, fullname: fullname }];
 
       if (check && this.checkRequest) {
@@ -246,9 +252,9 @@ export class NewsfeedComponent implements OnInit {
           let num = parseInt(count) - 1;
           interested!.innerText = num + '';
           let i= 0;
-          this.listPosts[positon].userInterested.forEach((k)=>{
+          this.postService.listPosts[positon].userInterested.forEach((k)=>{
             if(k.user_id==id_user){
-              this.listPosts[positon].userInterested.splice(i,1);
+              this.postService.listPosts[positon].userInterested.splice(i,1);
             }
             i++;
           });
@@ -274,7 +280,7 @@ export class NewsfeedComponent implements OnInit {
         this.renderer.addClass(element, 'active');
         this.interactPostsService.interestedPost(post_id, toUser);
         // Load dữ liệu người vừa quan tâm
-        this.listPosts[positon].userInterested = [...this.listPosts[positon].userInterested, ...JSON.parse(JSON.stringify(data))];
+        this.postService.listPosts[positon].userInterested = [...this.postService.listPosts[positon].userInterested, ...JSON.parse(JSON.stringify(data))];
         this.mapIntersted.set(post_id, true);
         this.checkRequest = true;
         checkType = true;
@@ -365,7 +371,7 @@ export class NewsfeedComponent implements OnInit {
         let data: any = await this.postService
           .loadPostNewsFeed(this.currentPage)
           .toPromise();
-        this.listPosts = [...this.listPosts, ...data];
+          this.postService.listPosts = [...this.postService.listPosts, ...data];
         this.checkLoadingdata = false;
         this.currentPage++;
 
