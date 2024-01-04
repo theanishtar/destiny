@@ -128,6 +128,10 @@
                 "sidebar_follow"
                 | translate }}
               </a>
+              <a class="user-status-text small suggested" id="delete-fl-{{item.user_id}}" (click)="deleteFling(item.user_id)" style="display: none;">
+                {{ "cancel"
+                  | translate }}
+              </a>
             </div>
           </div>
         </div>

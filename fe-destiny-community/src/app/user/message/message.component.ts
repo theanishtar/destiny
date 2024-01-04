@@ -282,9 +282,10 @@ export class MessageComponent implements OnInit {
     let avatar = this.sender.avatar;
     this.$chatHistory = $('.chat-widget-conversation');
     this.$textarea = $('#chat-widget-message-text-2');
-
-
+    
     if (message.trim() !== '' || this.file.length > 0) {
+      let messageTemp = message;
+      message = '';
       let type = '';
       let images: string[] = [];
       this.messageService.loaddingBall = true;
@@ -299,7 +300,7 @@ export class MessageComponent implements OnInit {
         this.listImg = [];
       }
       // if (this.checkBlock === true) {
-      this.messageService.sendMsg(username, message, avatar, type, images);
+      this.messageService.sendMsg(username, messageTemp, avatar, type, images);
       this.file = {};
       this.scrollToBottom();
       // } else {
@@ -308,21 +309,25 @@ export class MessageComponent implements OnInit {
       //   );
       //   this.messageService.loaddingBall = false;
       // }
-      message = '';
+     
       this.scrollToBottom();
       this.$textarea.val('');
     }
   }
 
   /* ===================Thu hồi tin nhắn================================= */
+  $last_mess: any;
   async messageRecall(id: number, position) {
     let from = parseInt(localStorage.getItem("chatUserId") + '');
     let to = parseInt(this.messageService.selectedUser + '');
     const newListMessage = await this.messageService.messageRecallApi(id, position, from, to);
     // console.log('newListMessage: ' + JSON.stringify(newListMessage));
     this.messageService.listMessages.splice(position, 1, ...JSON.parse('[' + JSON.stringify(newListMessage) + ']'));
-    let textLastMess = document.getElementById('last-message-' + this.selectedUser);
-    if (textLastMess) textLastMess!.innerText = 'Bạn đã thu hồi tin nhắn';
+    this.$last_mess = $('#last-message-' + to);
+    console.warn("this.$last_mess: " + JSON.stringify(this.$last_mess));
+    if (this.$last_mess) 
+    this.$last_mess!.innerText = 'Bạn đã thu hồi tin nhắn';
+    // this.messageService.recall(from, to);
     this.cdr.markForCheck();
     this.hideAllDropdowns();
   }

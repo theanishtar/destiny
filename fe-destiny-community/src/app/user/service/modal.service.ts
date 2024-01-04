@@ -29,6 +29,8 @@ export class ModalService {
   private searchPostUrl = environment.baseUrl + 'v1/user/frind/post';
   private checkNotifyUrl = environment.baseUrl + 'v1/user/update/notify/';
 
+  private searchHistoryUrl = environment.baseUrl + 'v1/oauth/user/search';
+
   public listComment: any;
   public images: string[];
   public imagesTemp: string[] = [];
@@ -571,6 +573,29 @@ export class ModalService {
     }
   }
 
+  async loadDataSearch(): Promise<any[]> {
+    try {
+      const response = await this.http.get<any>(this.searchHistoryUrl).toPromise();
+      // console.warn("response: " + JSON.stringify(response))
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async saveHistory(content: any): Promise<any> {
+    const params = new HttpParams().set('content', content.toString())
+
+    try {
+      const response = await this.http.post(this.searchHistoryUrl, params).toPromise();
+      // this.setSearchData(response);
+      console.warn("response: " + JSON.stringify(response))
+      return response;
+    } catch (error) {
+      console.error('Error in saveHistory:', error);
+      throw error; // Rethrow the error for the calling code to handle
+    }
+  }
 
   private selectedHashtag: string = '';
 

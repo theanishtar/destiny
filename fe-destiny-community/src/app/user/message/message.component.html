@@ -483,6 +483,14 @@
                       ">
                       {{ m.content }}
                     </p>
+                    <p *ngIf="m.recall === true" class="chat-widget-speaker-message" style="
+                        border-top-right-radius: 0 !important;
+                        background-color: #615dfa !important;
+                        cursor: no-drop;
+                        color: #babcbe;
+                      ">
+                      {{ "tinnhandabithuhoi" | translate }}
+                    </p>
                     <p class="chat-widget-speaker-timestamp">
                       {{ m.send_time | customDateTime : "time" }}
                     </p>
@@ -496,6 +504,17 @@
                       <!-- /SIMPLE DROPDOWN LINK -->
                     </div>
                     <!-- /SIMPLE DROPDOWN -->
+                    <!-- <p *ngIf="m.recall === true" class="chat-widget-speaker-message" style="
+                        border-top-right-radius: 0 !important;
+                        background-color: #615dfa !important;
+                        cursor: no-drop;
+                        color: #babcbe;
+                      ">
+                      {{ "tinnhandabithuhoi" | translate }}
+                    </p>
+                    <p class="chat-widget-speaker-timestamp">
+                      {{ m.send_time | customDateTime : "time" }}
+                    </p> -->
                   </div>
                   <!-- end right mess -->
                 </div>

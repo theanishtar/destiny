@@ -161,21 +161,42 @@ export class NewsfeedComponent implements OnInit {
   }
 
   addFollow(id: number) {
-    let btn = document.getElementById('add-fl-' + id);
+    let btn_add = document.getElementById('add-fl-' + id);
+    let btn_delete = document.getElementById('delete-fl-' + id);
     this.modalService.sendNotify(' ', 0, id, 'FOLLOW', 0);
     this.loadDataSuggest();
-    new toast({
-      title: 'Thông báo!',
-      message: 'Đã theo dõi',
-      type: 'success',
-      duration: 3000,
-    });
+    // new toast({
+    //   title: 'Thông báo!',
+    //   message: 'Đã theo dõi',
+    //   type: 'success',
+    //   duration: 3000,
+    // });
     this.followsService.reLoadDataFriends();
-    if(btn){
-      btn.style.display = 'none';
+    if(btn_add && btn_delete){
+      btn_add.style.display = 'none';
+      btn_delete.style.display = 'block';
     }
   }
 
+
+  deleteFling(id: number) {
+    let btn_add = document.getElementById('add-fl-' + id);
+    let btn_delete = document.getElementById('delete-fl-' + id);
+    this.followsService.deleteFollowing(id).subscribe(() => {
+      // new toast({
+      //   title: 'Thông báo!',
+      //   message: 'Hủy thành công',
+      //   type: 'success',
+      //   duration: 3000,
+      // })
+      if(btn_add && btn_delete){
+        btn_add.style.display = 'block';
+        btn_delete.style.display = 'none';
+      }
+    });
+    
+    // this.listFollowing = await this.followsService.loadDataFollowing();
+  }
   /* ============Top 5============= */
   listCupPost = [
     'https://odindesignthemes.com/vikinger-theme/wp-content/uploads/2020/09/Credits-Tycoon.png',

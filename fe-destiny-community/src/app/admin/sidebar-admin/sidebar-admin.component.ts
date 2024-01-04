@@ -134,9 +134,13 @@ export class SidebarAdminComponent implements OnInit {
     if (currentUrl.includes('/admin/userreportdetail')) {
       this.activeMenuItem = 'userreportdetail';
     }
+    if (currentUrl.includes('/admin/modermanagement')) {
+      this.activeMenuItem = 'modermanagement';
+    }
     if (currentUrl.includes('/admin/profileadmin')) {
       this.activeMenuItem = '';
     }
+    
   }
 
   logout() {

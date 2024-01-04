@@ -17,7 +17,7 @@ export class SidebarModeratorComponent implements OnInit {
     private renderer: Renderer2,
     private router: Router,
     private loginService: LoginService,
-    private cookieService: CookieService,
+    // private cookieService: CookieService,
   ) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -35,7 +35,7 @@ export class SidebarModeratorComponent implements OnInit {
   getUserRole() {
     // Lấy vai trò của người dùng từ dịch vụ hoặc nơi lưu trữ.
     // Ví dụ: return this.loginService.getUserRole();
-    return this.cookieService.get('role'); // Đây là ví dụ, bạn cần thay thế bằng cách lấy thực tế.
+    return localStorage.getItem('role'); // Đây là ví dụ, bạn cần thay thế bằng cách lấy thực tế.
   }
 
   ngOnInit(): void {

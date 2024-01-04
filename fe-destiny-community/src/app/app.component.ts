@@ -45,21 +45,21 @@ export class AppComponent {
 
 
     // // Chặn mở dev tool bằng click chuột phải hoặc tổ hợp phím
-    // document.addEventListener("keydown", function (e) {
-    //   // Chặn F12, Ctrl+Shift+I, và Ctrl+Shift+C trên Windows/Linux
-    //   if ((e.key === "F12" || (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "C"))) ||
-    //     // Chặn Cmd+Opt+I trên Mac
-    //     (e.metaKey && e.altKey && e.key === "I")) {
-    //     e.preventDefault();
-    //   }
-    // });
+    document.addEventListener("keydown", function (e) {
+      // Chặn F12, Ctrl+Shift+I, và Ctrl+Shift+C trên Windows/Linux
+      if ((e.key === "F12" || (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "C"))) ||
+        // Chặn Cmd+Opt+I trên Mac
+        (e.metaKey && e.altKey && e.key === "I")) {
+        e.preventDefault();
+      }
+    });
 
-    // document.addEventListener("contextmenu", function (e) {
-    //   e.preventDefault();
-    // });
+    document.addEventListener("contextmenu", function (e) {
+      e.preventDefault();
+    });
 
-    // // Kiểm tra sự kiện khi người dùng thay đổi kích thước cửa sổ
-    // window.addEventListener("resize", this.checkDevTools);
+    // Kiểm tra sự kiện khi người dùng thay đổi kích thước cửa sổ
+    window.addEventListener("resize", this.checkDevTools);
   }
 
   checkDevTools() {

@@ -221,7 +221,8 @@ export class MessageService {
           type = false;
           let audio = new Audio();
           audio.src = '../../../assets/js/sound/notify.mp3';
-          audio.autoplay = true;
+          // audio.autoplay = true;
+          audio.play();
           this.notif_mess = true;
         }
         this.stompClient!.send(`/app/reload/messages/${type}/${from_user_id}/${to_user_id}`);
@@ -245,10 +246,13 @@ export class MessageService {
         let data = JSON.parse('[' + response.body + ']');
         this.listMessages = [...this.listMessages, ...data];
         this.loaddingBall = false;
+        // console.warn("data1: " + JSON.stringify(data));
+        // console.warn("data2: " + data != null);
         if (data != null) {
           let type = false; // Thay đổi giá trị "your_type_value" bằng giá trị thực tế của biến "type"
           let to_user_id = this.selectedUser;
           this.stompClient!.send(`/app/reload/messages/${type}/${to_user_id}/${userId}`);
+          
         }
         this.$chatHistory = $('.chat-widget-conversation')!;
         this.$chatHistory.scrollTop(this.$chatHistory[0]!.scrollHeight);
@@ -440,7 +444,10 @@ export class MessageService {
       console.error('Error during logout:', error);
     }
   }
-
+  recall(to_user_id,userId){
+    let type =true;
+    this.stompClient!.send(`/app/reload/messages/${type}/${to_user_id}/${userId}`);
+  }
   checkReceiveCall() {
     this.stompClient!.send('/app/recieve/video-call/' + this.fromUser);
   }
@@ -461,6 +468,8 @@ export class MessageService {
       call.offCame();
     }
   }
+
+  
 
   minutesRemaining: any;
   secondsRemaining: any;

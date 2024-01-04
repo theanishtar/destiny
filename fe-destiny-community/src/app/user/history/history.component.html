@@ -144,15 +144,15 @@
                   <div class="forum-category">
                     <!-- FORUM CATEGORY IMAGE -->
                     <a>
-                      <img class="forum-category-image" src="{{interested[1]}}" alt="category-01">
+                      <img class="forum-category-image" *ngIf="interested[1] !== null" src="{{interested[1]}}">
+                      <img class="forum-category-image" *ngIf="interested[1] === null" src="../../../assets/images/posts/no-img.jpg">
                     </a>
                     <!-- /FORUM CATEGORY IMAGE -->
 
                     <!-- FORUM CATEGORY INFO -->
                     <div class="forum-category-info">
                       <!-- FORUM CATEGORY TITLE -->
-                      <p class="forum-category-title"><a href="profile"
-                          (click)="this.profileService.loadDataProfileTimeline(interested[5])">{{interested[2]}}</a></p>
+                      <p class="forum-category-title"><a href="profile?id={{interested[5]}}">{{interested[2]}}</a></p>
                       <!-- /FORUM CATEGORY TITLE -->
 
                       <!-- FORUM CATEGORY TEXT -->
@@ -230,15 +230,15 @@
                   <div class="forum-category">
                     <!-- FORUM CATEGORY IMAGE -->
                     <a>
-                      <img class="forum-category-image" src="{{share[1]}}" alt="category-01">
+                      <img class="forum-category-image" *ngIf="share[1] !== null" src="{{share[1]}}">
+                      <img class="forum-category-image" *ngIf="share[1] === null" src="../../../assets/images/posts/no-img.jpg">
                     </a>
                     <!-- /FORUM CATEGORY IMAGE -->
 
                     <!-- FORUM CATEGORY INFO -->
                     <div class="forum-category-info">
                       <!-- FORUM CATEGORY TITLE -->
-                      <p class="forum-category-title"><a href="profile"
-                          (click)="this.profileService.loadDataProfileTimeline(share[5])">{{share[2]}}</a></p>
+                      <p class="forum-category-title"><a href="profile?id={{share[5]}}">{{share[2]}}</a></p>
                       <!-- /FORUM CATEGORY TITLE -->
 
                       <!-- FORUM CATEGORY TEXT -->
@@ -316,15 +316,15 @@
                   <div class="forum-category">
                     <!-- FORUM CATEGORY IMAGE -->
                     <a>
-                      <img class="forum-category-image" src="{{sendreciever[1]}}" alt="category-01">
+                      <img class="forum-category-image" *ngIf="sendreciever[1] !== null" src="{{sendreciever[1]}}">
+                      <img class="forum-category-image" *ngIf="sendreciever[1] === null" src="../../../assets/images/posts/no-img.jpg">
                     </a>
                     <!-- /FORUM CATEGORY IMAGE -->
 
                     <!-- FORUM CATEGORY INFO -->
                     <div class="forum-category-info">
                       <!-- FORUM CATEGORY TITLE -->
-                      <p class="forum-category-title"><a href="profile"
-                          (click)="this.profileService.loadDataProfileTimeline(sendreciever[5])">{{sendreciever[2]}}</a>
+                      <p class="forum-category-title"><a href="profile?id={{sendreciever[5]}}">{{sendreciever[2]}}</a>
                       </p>
                       <!-- /FORUM CATEGORY TITLE -->
 

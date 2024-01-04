@@ -596,7 +596,7 @@
 <div class="header-actions search-bar">
   <!-- INTERACTIVE INPUT -->
   <div class="interactive-input dark">
-    <input type="text" id="search-main-mobile" name="search_main" [(ngModel)]="searchTermMobile" [value]="modalService.getSelectedHashtag()" (input)="search(searchTermMobile)"
+    <input type="text" id="search-main-mobile" name="search_main" (focus)="searchHis()" [(ngModel)]="searchTermMobile" [value]="modalService.getSelectedHashtag()" (input)="search(searchTermMobile)"
       placeholder="{{ 'navbar_search' | translate }}" />
     <!-- INTERACTIVE INPUT ICON WRAP -->
     <div class="interactive-input-icon-wrap">
@@ -619,7 +619,25 @@
     <!-- /INTERACTIVE INPUT ACTION -->
   </div>
   <!-- /INTERACTIVE INPUT -->
-
+  <div class="dropdown-box padding-bottom-small search-history" *ngIf="checkFocus">
+    <div class="dropdown-box-list small no-scroll">
+      <div *ngIf="listSearchHistory?.length === 0" class="no-find">Không có lịch sử</div>
+      <div *ngFor="let u of listSearchHistory">
+        <div class="dropdown-box-list-item" (click)="handleSearchHistoryClick(u)">
+          <div class="user-status notification" style="padding-left: 0;">
+            <p class="user-status-title">
+              <span class="bold">{{u.content}}</span>
+            </p>
+            <div class="user-status-icon">
+              <svg class="icon-friend">
+                <use xlink:href="#svg-status"></use>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- DROPDOWN BOX -->
   <div class="dropdown-box padding-bottom-small header-search-dropdown" *ngIf="this.searchTermMobile != ''">
     <!-- DROPDOWN BOX CATEGORY -->
@@ -633,7 +651,7 @@
       <!-- DROPDOWN BOX LIST ITEM -->
       <div *ngIf="listSearch.length === 0" class="no-find">Không tìm thầy người dùng</div>
       <div *ngFor="let u of listSearch">
-        <a class="dropdown-box-list-item" href="profile" (click)="this.profileService.loadDataProfileTimeline(u[0])">
+        <a class="dropdown-box-list-item" (click)="clickDetail(searchTermMobile)" href="profile?id={{u[0]}}">
           <!-- USER STATUS -->
           <div class="user-status notification">
             <!-- USER STATUS AVATAR -->
@@ -690,8 +708,7 @@
       <!-- DROPDOWN BOX LIST ITEM -->
       <div *ngIf="listSearchPost.length === 0" class="no-find">Không tìm thầy bài đăng</div>
       <div *ngFor="let u of listSearchPost">
-        <a class="dropdown-box-list-item" href="detail-post?id={{u[0]}}"
-          (click)="this.profileService.loadDataProfileTimeline(u[0])">
+        <a class="dropdown-box-list-item" (click)="clickDetail(searchTermMobile)" href="detail-post?id={{u[0]}}">
           <!-- USER STATUS -->
           <div class="user-status notification">
             <div class="user-status-avatar">
@@ -739,8 +756,7 @@
       <!-- DROPDOWN BOX LIST ITEM -->
       <div *ngIf="listSearchHashTag.length === 0" class="no-find">Không tìm thầy hashtag</div>
       <div *ngFor="let u of listSearchHashTag">
-        <a class="dropdown-box-list-item" href="detail-post?id={{u[0]}}"
-          (click)="this.profileService.loadDataProfileTimeline(u[0])">
+        <a class="dropdown-box-list-item" (click)="clickDetail(searchTermMobile)" href="detail-post?id={{u[0]}}">
           <!-- USER STATUS -->
           <div class="user-status notification">
             <div class="user-status-avatar">
@@ -857,7 +873,7 @@
   <div class="header-actions search-bar">
     <!-- INTERACTIVE INPUT -->
     <div class="interactive-input dark">
-      <input type="text" id="search-main" name="search_main" [(ngModel)]="searchTerm" [value]="modalService.getSelectedHashtag()" (input)="search(searchTerm)"
+      <input type="text" id="search-main" name="search_main" (click)="searchHis()" [(ngModel)]="searchTerm" [value]="modalService.getSelectedHashtag()" (input)="search(searchTerm)"
         placeholder="{{ 'navbar_search' | translate }}" />
       <!-- INTERACTIVE INPUT ICON WRAP -->
       <div class="interactive-input-icon-wrap">
@@ -880,9 +896,29 @@
       <!-- /INTERACTIVE INPUT ACTION -->
     </div>
     <!-- /INTERACTIVE INPUT -->
-
+    <div class="dropdown-box padding-bottom-small search-history" *ngIf="checkFocus">
+      <div class="dropdown-box-list small no-scroll">
+        <!-- <div *ngIf="listSearchHistory?.length === 0" class="no-find">Không có lịch sử</div> -->
+        <div *ngFor="let u of listSearchHistory">
+          <div class="dropdown-box-list-item" (click)="handleSearchHistoryClick(u)">
+            <div class="user-status notification" style="padding-left: 0;">
+              <p class="user-status-title">
+                <span class="bold">{{u.content}}</span>
+              </p>
+              <div class="user-status-icon">
+                <svg class="icon-friend">
+                  <use xlink:href="#svg-status"></use>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- DROPDOWN BOX -->
-    <div class="dropdown-box padding-bottom-small header-search-dropdown">
+    <!-- <ng-container *ngIf="searchTerm !== null"> -->
+<div class="dropdown-box padding-bottom-small header-search-dropdown">
+
       <!-- DROPDOWN BOX CATEGORY -->
       <div class="dropdown-box-category">
         <p class="dropdown-box-category-title">Người dùng</p>
@@ -894,7 +930,7 @@
         <!-- DROPDOWN BOX LIST ITEM -->
         <div *ngIf="listSearch.length === 0" class="no-find">Không tìm thầy người dùng</div>
         <div *ngFor="let u of listSearch">
-          <a class="dropdown-box-list-item" href="profile" (click)="this.profileService.loadDataProfileTimeline(u[0])">
+          <a class="dropdown-box-list-item" (click)="clickDetail(searchTerm)" href="profile?id={{u[0]}}">
             <!-- USER STATUS -->
             <div class="user-status notification">
               <!-- USER STATUS AVATAR -->
@@ -951,8 +987,7 @@
         <!-- DROPDOWN BOX LIST ITEM -->
         <div *ngIf="listSearchPost.length === 0" class="no-find">Không tìm thầy bài đăng</div>
         <div *ngFor="let u of listSearchPost">
-          <a class="dropdown-box-list-item" href="detail-post?id={{u[0]}}"
-            (click)="this.profileService.loadDataProfileTimeline(u[0])">
+          <a class="dropdown-box-list-item" (click)="clickDetail(searchTerm)" href="detail-post?id={{u[0]}}">
             <!-- USER STATUS -->
             <div class="user-status notification">
               <div class="user-status-avatar">
@@ -1000,8 +1035,7 @@
         <!-- DROPDOWN BOX LIST ITEM -->
         <div *ngIf="listSearchHashTag.length === 0" class="no-find">Không tìm thầy hashtag</div>
         <div *ngFor="let u of listSearchHashTag">
-          <a class="dropdown-box-list-item" href="detail-post?id={{u[0]}}"
-            (click)="this.profileService.loadDataProfileTimeline(u[0])">
+          <a class="dropdown-box-list-item" (click)="clickDetail(searchTerm)" href="detail-post?id={{u[0]}}">
             <!-- USER STATUS -->
             <div class="user-status notification">
               <div class="user-status-avatar">
@@ -1040,6 +1074,8 @@
       </div>
       <!-- /DROPDOWN BOX LIST -->
     </div>
+    <!-- </ng-container> -->
+    
     <!-- /DROPDOWN BOX -->
   </div>
   <!-- /HEADER ACTIONS -->

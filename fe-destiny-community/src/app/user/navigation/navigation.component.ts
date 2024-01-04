@@ -36,6 +36,7 @@ export class NavigationComponent implements OnInit {
   listSearch: any[] = [];
   listSearchPost: any[] = [];
   listSearchHashTag: any[] = [];
+  listSearchHistory: any;
   ngOnInit() {
     this.userDisplayName = localStorage.getItem('full_name');
     this.avatar = localStorage.getItem("avatar");
@@ -70,17 +71,52 @@ export class NavigationComponent implements OnInit {
     });
   }
 
+  checkFocus: boolean = false;
+  async searchHis() {
+    this.listSearchHistory = await this.modalService.loadDataSearch();
+    this.checkFocus = true;
+    // console.warn("this.listSearchHistory: " + JSON.stringify(this.listSearchHistory));
+  
+    setTimeout(() => {
+      let search_main = document.getElementById('search-main');
+      if (search_main) {
+        search_main.focus();
+      }
+    }, 0);
+  }
+  handleInputBlur() {
+    // Xử lý khi input mất focus
+    this.checkFocus = false;
+  }
   async search(value) {
     let user_id: number | null = null;
-  
     const storedUserId = localStorage.getItem('chatUserId');
     if (storedUserId !== null) {
+      this.checkFocus = false;
       user_id = parseInt(storedUserId, 10);
       this.listSearch = await this.modalService.searchApi(user_id, value);
       this.listSearchPost = await this.modalService.searchPostApi(value, 'content');
       this.listSearchHashTag = await this.modalService.searchPostApi(value, 'hashtag');
+      // this.modalService.saveHistory(value);
     }
   }
+
+  async clickDetail(value){
+    await this.modalService.saveHistory(value);
+  }
+
+  handleSearchHistoryClick(item: any) {
+    let search_main = document.getElementById('search-main')
+    // Xử lý khi người dùng click vào một phần tử trong danh sách
+    this.searchTerm = item.content;
+    // Gọi phương thức search() hoặc thực hiện các hành động khác tương ứng
+    this.search(this.searchTerm);
+    
+    if(search_main){
+      search_main.focus();
+    }
+  }
+
 
   isLogin() {
     return this.loginService.isLogin();

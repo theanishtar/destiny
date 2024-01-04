@@ -14,12 +14,13 @@ export const environment = {
     baseUrlFe: 'http://localhost:4200/',
     // baseUrl: 'https://davisybe.hop.sh/',
     // baseUrlFe: 'https://destiny-davisy.web.app/',
+    // baseUrl: 'https://dvisycompay.hop.sh/',
 
     // deploy
-    googleLoginUrl: "https://accounts.google.com/gsi/select?client_id=821464923759-1832r00tc7c2mbppnt9s03lgk12fn6mr&ux_mode=redirect&login_uri=https%3A%2F%2Fdavisybe.hop.sh%2Foauth%2FloginGG&ui_mode=card&as=mig56yC6Hyn%2FVT0lmRBqSQ&g_csrf_token=79ca3e2147569fe&origin=http%3A%2F%2Flocalhost%3A52643",
+    // googleLoginUrl: "https://accounts.google.com/gsi/select?client_id=821464923759-1832r00tc7c2mbppnt9s03lgk12fn6mr&ux_mode=redirect&login_uri=https%3A%2F%2Fdavisybe.hop.sh%2Foauth%2FloginGG&ui_mode=card&as=mig56yC6Hyn%2FVT0lmRBqSQ&g_csrf_token=79ca3e2147569fe&origin=http%3A%2F%2Flocalhost%3A52643",
     
     // local
-    // googleLoginUrl: "https://accounts.google.com/gsi/select?client_id=829042615252-9cgbgmdc55famceanr15b20dq3kns76m&ux_mode=redirect&login_uri=http%3A%2F%2Flocalhost%3A8080%2Foauth%2FloginGG&ui_mode=card&as=QAjAdohsdVGioHnu7UQhHA&g_csrf_token=97f115633e89a9e0&origin=http%3A%2F%2Flocalhost%3A52993"
+    googleLoginUrl: "https://accounts.google.com/gsi/select?client_id=821464923759-1832r00tc7c2mbppnt9s03lgk12fn6mr&ux_mode=redirect&login_uri=https%3A%2F%2Fdvisycompay.hop.sh%2Foauth%2FloginGG&ui_mode=card&as=VN0A6vvj93vC9Mf0nNZ2DA&g_csrf_token=eecca0e26f1c957c&origin=http%3A%2F%2Flocalhost%3A4200"
     
     // Mở chặn dev tool bên app.component khi deploy
 };
