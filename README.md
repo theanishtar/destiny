@@ -2,7 +2,7 @@
 
 Our project is a Destiny social media!
 
-Public url: [desity-davisy.web.app](destiny-davisy.web.app) or [destiny-poly.web.app](destiny-poly.web.app)
+Public url: [desity-davisy.web.app](https://destiny-davisy.web.app) or [destiny-poly.web.app](https://destiny-poly.web.app)
 
 The project is guided by Mr.[Tran Van Nhuom](https://github.com/tvnhuom/) and uses technologies such as: Java Spring Boot, Socket.io, Thymeleaf template engine, bootstrap 5, ...
 
