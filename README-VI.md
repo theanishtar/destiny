@@ -55,4 +55,67 @@ Trang web mạng xã hội để chia sẻ tình yêu và lòng nhân ái nhằm
 - Tự động đăng nhập bằng cơ chế Interceptor của Angular và Refresh Token của JWT
 
 #### Back-end (SpringBoot)
-- Bảo vệ Đăng nhập với [Các APIs Firebase](https://console.firebase
+- Bảo vệ Đăng nhập bằng [Các APIs Firebase](https://console.firebase.google.com/u/1/project/davitickets-2e627/database/davitickets-2e627-default-rtdb/data/~2Flogin~2Fshield)
+- Đăng nhập bằng GG [Clouds APIs]()
+- Xác thực Json Web Token
+- Bộ lọc ủy quyền Spring Security
+- Máy tạo mã QR
+- Xử lý lỗi nhãn trắng (401, 402, 404, 500, ...)
+
+#### Front-end (Angular)
+- Intercepter
+- Bảo vệ
+- Định tuyến
+- Tin nhắn Toast
+- Xác thực Form
+
+#### Ứng dụng Di động (Flutter)
+
+#### Cơ sở dữ liệu (PostgreSQL, MongoDB, Redis, Firebase)
+
+
+## Kỹ thuật sử dụng
+
+Spring Boot, Angular, Socket.io, JQuery, Bootstrap v5, Thymeleaf template angine.
+
+
+
+<!-- ## Mục lục (tuỳ chọn)
+
+- Yêu cầu
+- Các module được đề xuất
+- Cài đặt
+- Cấu hình
+- Xử lý sự cố
+- Câu hỏi thường gặp
+- Người duy trì -->
+
+## Cài đặt và chạy dự án
+
+- Sao chép repo
+```bash
+$ git clone https://github.com/Theanishtar/destiny
+```
+### Back-end: SpringBoot
+
+- Cài đặt Spring Tools Suite 4 IDE [tại đây](https://spring.io/tools)
+
+- Mở dự án 
+
+- Chuột phải và Chạy dưới dạng Máy chủ
+
+- Truy cập [http://localhost:8080/](http://localhost:8080/)
+
+  
+### Front-end: Angular
+
+- Cài đặt VSCode
+- Mở Dự án
+- Kiểm soát bằng CMD hoặc GitBash
+  
+  ``` bash
+  npm i
+  ng serve
+   ```
+  
+- Truy cập [http://localhost:4200/](http://localhost:4200/)
