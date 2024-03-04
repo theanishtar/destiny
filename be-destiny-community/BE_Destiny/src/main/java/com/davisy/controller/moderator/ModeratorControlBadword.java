@@ -38,6 +38,10 @@ public class ModeratorControlBadword {
 	@Autowired
 	private CacheService cacheService;
 	
+	@GetMapping("/v1/moderator/missingredis")
+	public long missingRedis() {
+		return badWordService.missingWordsFromMongoDB();
+	}
 	
 	@GetMapping("/v1/moderator/sendDataRedis")
 	public List<BadWord> sendToRedis() {
@@ -143,10 +147,19 @@ public class ModeratorControlBadword {
 	public ResponseEntity<String> updateBadWord(@PathVariable String oldName, @RequestBody BadWord badWord) {
 		try { 
 			
-			badWordService.update("name", oldName, badWord);
-			cacheService.writeCache(oldName, badWord);
-			
-			return ResponseEntity.status(200).body(null);
+			BadWord find = badWordService.findByName("name", badWord.getName());
+			if(find != null) {
+//				System.out.println("đã tồn tại khứa này");
+				return ResponseEntity.status(301).body(null);
+				
+			}else {
+				badWordService.update("name", oldName, badWord);
+				cacheService.writeCache(oldName, badWord);
+				
+//				System.out.println("thêm thành công");
+				return ResponseEntity.status(200).body(null);
+			}
+
 			
 		} catch (Exception e) {
 			e.printStackTrace();

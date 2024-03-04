@@ -43,4 +43,19 @@ public class ChatParticipantsServiceImpl implements ChatParticipantsService {
 		}
 	}
 
+	@Override
+	public void block(boolean status,int chat_id, int user_id) {
+		participantsDAO.block(status,chat_id, user_id);
+	}
+
+	@Override
+	public int chat_id(int id1, int id2) {
+		return participantsDAO.chat_id(id1, id2);
+	}
+	
+	@Override
+	public boolean checkBlock(int from, int to) {
+		return participantsDAO.block(from, to);
+	}
+
 }

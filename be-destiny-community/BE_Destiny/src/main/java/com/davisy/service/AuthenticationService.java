@@ -308,6 +308,94 @@ public class AuthenticationService {
 		return new LoginResponse(401, null, null);
 	}
 	
+	public LoginResponse loginWithEmail(String email) {
+		/*
+		 * Status code: 
+		 * 200: Đăng nhập thành công 
+		 * 404: Không thể tìm thấy tài khoản trong DB 
+		 * 403: Tài khoản bị khóa, liên hệ admin để được mở 
+		 * 401: Đăng nhập thất bại hoặc lỗi server
+		 */
+		try {
+			User user = userService.findByEmailOrUsername(email);
+			if (user == null) 
+				return new LoginResponse(404, null, "Dont find your account");
+			
+			System.out.println(user.getFullname());
+			if (user.isBan())
+				return new LoginResponse(403, null, "Your account is blocked");
+
+			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+					email, user.getEmail());
+
+			List<Roles> role = roleCustomRepo.getRole(user);
+
+			Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
+			Set<Roles> set = new HashSet<>();
+			role.stream().forEach(c -> set.add(new Roles(c.getName())));
+			user.setRoles(set);
+
+			set.stream().forEach(i -> authorities.add(new SimpleGrantedAuthority(i.getName())));
+
+			authenticationManager.authenticate(token);
+
+			var jwtToken = jwtService.generateToken(user, authorities);
+			var jwtRefreshToken = jwtService.generateRefreshToken(user, authorities);
+
+			AuthenticationResponse authRes = AuthenticationResponse.builder().token(jwtToken)
+					.refreshToken(jwtRefreshToken).name(user.getFullname()).roles(authorities).avatar(user.getAvatar()).id(user.getUser_id()).build();
+			return new LoginResponse(200, authRes, "Login successfully!");
+		} catch (Exception e) {
+			System.out.println("error: " + e);
+		}
+		return new LoginResponse(401, null, null);
+	}
+	
+	
+	public LoginResponse loginWithTokenApp(int idUser) {
+		/*
+		 * Status code: 
+		 * 200: Đăng nhập thành công 
+		 * 404: Không thể tìm thấy tài khoản trong DB 
+		 * 403: Tài khoản bị khóa, liên hệ admin để được mở 
+		 * 401: Đăng nhập thất bại hoặc lỗi server
+		 */
+		try {
+			User user = userService.findById(idUser);
+			if (user == null) 
+				return new LoginResponse(404, null, "Dont find your account");
+			
+			if (user.isBan())
+				return new LoginResponse(403, null, "Your account is blocked");
+
+			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+					user.getEmail(), user.getPassword());
+
+			List<Roles> role = roleCustomRepo.getRole(user);
+
+			Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
+			Set<Roles> set = new HashSet<>();
+			role.stream().forEach(c -> set.add(new Roles(c.getName())));
+			user.setRoles(set);
+
+			set.stream().forEach(i -> authorities.add(new SimpleGrantedAuthority(i.getName())));
+
+			authenticationManager.authenticate(token);
+
+			var jwtToken = jwtService.generateToken(user, authorities);
+			var jwtRefreshToken = jwtService.generateRefreshToken(user, authorities);
+
+			AuthenticationResponse authRes = AuthenticationResponse.builder().token(jwtToken)
+					.refreshToken(jwtRefreshToken).name(user.getFullname()).roles(authorities).avatar(user.getAvatar()).id(user.getUser_id()).build();
+			return new LoginResponse(200, authRes, "Login successfully!");
+		} catch (Exception e) {
+			System.out.println("error: " + e);
+		}
+		return new LoginResponse(401, null, null);
+	}
+	
 	/*
 	 * public AuthenticationResponse authenticationResponse(OAuthenticationRequest
 	 * oAuthenticationRequest) {

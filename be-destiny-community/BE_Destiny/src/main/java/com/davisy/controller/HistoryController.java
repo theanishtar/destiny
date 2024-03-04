@@ -24,7 +24,7 @@ import com.davisy.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
-@CrossOrigin
+@CrossOrigin("*")
 public class HistoryController {
 	@Autowired
 	JwtTokenUtil jwtTokenUtil;
@@ -81,6 +81,20 @@ public class HistoryController {
 			return ResponseEntity.ok().body(list);
 		} catch (Exception e) {
 			System.out.println("Error loadAllHistoryInterested in HistoryController: " + e);
+			return ResponseEntity.badRequest().build();
+		}
+	}
+	
+	@GetMapping("/v1/user/load/history/comment")
+	public ResponseEntity<List<Object[]>> loadAllHistoryComment(HttpServletRequest request) {
+		try {
+			String email = jwtTokenUtil.getEmailFromHeader(request);
+			User user = userService.findByEmail(email);
+			int id = user.getUser_id();
+			List<Object[]> list = commentService.loadHistoryComment(id);
+			return ResponseEntity.ok().body(list);
+		} catch (Exception e) {
+			System.out.println("Error loadAllHistoryComment in HistoryController: " + e);
 			return ResponseEntity.badRequest().build();
 		}
 	}

@@ -16,5 +16,7 @@ public class ProfileEnitity {
 	Calendar dateJoin;
 	String address_fullname;
 	String address_fullname_en;
+	String birthday;
+	String gender;
 	List<Object[]> listPostInterested;
 }

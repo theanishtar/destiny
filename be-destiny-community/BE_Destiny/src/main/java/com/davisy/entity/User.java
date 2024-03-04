@@ -1,6 +1,7 @@
 package com.davisy.entity;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -155,6 +156,27 @@ public class User implements UserDetails {
 		return wards.full_name + ". " + districts.full_name + ". " + provinces.full_name;
 	}
 	
+	
+	public String getBirthDayString() {
+		if (birthday == null)
+			return null;
+		return birthday.get(Calendar.DAY_OF_MONTH) + "-" + (birthday.get(Calendar.MONTH)+1) +"-"+ birthday.get(Calendar.YEAR);
+	}
+	
+	public String getBirthDayStringYear() {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+		String formatted = format.format(birthday.getTime());
+
+		return formatted;
+	}
+	
+	public String getDayCreateString() {
+		if (day_create == null)
+			return null;
+		return day_create.get(Calendar.DAY_OF_MONTH) + "-" + (day_create.get(Calendar.MONTH)+1) +"-"+ day_create.get(Calendar.YEAR);
+	}
+	
 	public String getIdProvince() {
 		if(provinces==null)
 			return null;
@@ -212,5 +234,6 @@ public class User implements UserDetails {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
 
 }

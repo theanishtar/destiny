@@ -27,12 +27,12 @@ import com.davisy.dto.UserProfile;
 import com.davisy.entity.DataFollows;
 import com.davisy.entity.Districts;
 import com.davisy.entity.Gender;
-import com.davisy.entity.Post;
 import com.davisy.entity.PostEntity;
 import com.davisy.entity.ProfileEnitity;
 import com.davisy.entity.Provinces;
 import com.davisy.entity.User;
 import com.davisy.entity.Wards;
+import com.davisy.mongodb.documents.UserInfoStatus;
 import com.davisy.service.AuthenticationService;
 import com.davisy.service.CacheService;
 import com.davisy.service.ChatsService;
@@ -44,6 +44,7 @@ import com.davisy.service.InterestedService;
 import com.davisy.service.PostImagesService;
 import com.davisy.service.PostService;
 import com.davisy.service.ProvinceService;
+import com.davisy.service.UserInfoStatusService;
 import com.davisy.service.UserService;
 import com.davisy.service.WardService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -55,7 +56,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @RestController
-@CrossOrigin
+@CrossOrigin("*")
 public class ProfileContronller {
 	@Autowired
 	JwtTokenUtil jwtTokenUtil;
@@ -87,7 +88,6 @@ public class ProfileContronller {
 	CacheService cacheService;
 	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-
 	@Autowired
 	SimpMessagingTemplate simpMessagingTemplate;
 
@@ -97,12 +97,16 @@ public class ProfileContronller {
 	@Autowired
 	EmailService emailService;
 
+	@Autowired
+	private UserInfoStatusService infoStatusService;
+
 	String provinceCode;
 	String districtCode;
 
 	String randCodeAuth = "";
-	@Value("${davisy.client.change-email.confirm}")
-	String confirmEmail;
+	@Value("${davis.client.uri}")
+	String client;
+	// http://localhost:4200/chang-email-confirm
 
 	public static String random() {
 		String code = "";
@@ -169,17 +173,34 @@ public class ProfileContronller {
 
 		Calendar birthday = user.getBirthday();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		String formatted = format.format(birthday.getTime());
-
+		String formatted = "";
+		if (birthday != null) {
+			formatted = format.format(birthday.getTime());
+		}
 		userP.setBirthday(formatted);
 
 		Calendar daycreate = user.getDay_create();
 		String formattedDC = format.format(daycreate.getTime());
 		userP.setDay_create(formattedDC);
 
-		userP.setProvince_name(user.getProvinces().getFull_name());
-		userP.setDistrict_name(user.getDistricts().getFull_name());
-		userP.setWard_name(user.getWards().getFull_name());
+		Provinces provinces = user.getProvinces();
+		Districts districts = user.getDistricts();
+		Wards wards = user.getWards();
+		if (provinces == null) {
+			userP.setProvince_name("");
+		} else {
+			userP.setProvince_name(provinces.getFull_name());
+		}
+		if (districts == null) {
+			userP.setDistrict_name("");
+		} else {
+			userP.setDistrict_name(districts.getFull_name());
+		}
+		if (wards == null) {
+			userP.setWard_name("");
+		} else {
+			userP.setWard_name(wards.getFull_name());
+		}
 
 		userP.setGender_name(user.getGender().getGender_name());
 		userP.setAvatar(user.getAvatar());
@@ -194,9 +215,14 @@ public class ProfileContronller {
 			// lấy email
 			String email = jwtTokenUtil.getEmailFromHeader(request);
 			User userUpdate = userService.findByEmail(email);
+			User us = userService.findByEmailOrUsername(userRequestUpdate.getUsername());
+			if (!userUpdate.getUsername().equalsIgnoreCase(userRequestUpdate.getUsername()) && us != null) {
+				return ResponseEntity.status(301).build();
+			}
 			userUpdate.setUsername(userRequestUpdate.getUsername());
-			if (!userUpdate.getUsername().equals(userRequestUpdate.getUsername())) {
+			if (!userUpdate.getUsername().equalsIgnoreCase(userRequestUpdate.getUsername())) {
 				chatsService.update_name_chats(userUpdate.getUser_id(), userRequestUpdate.getUsername());
+
 			}
 			userUpdate.setFullname(userRequestUpdate.getFullname());
 			userUpdate.setIntro(userRequestUpdate.getIntro());
@@ -251,25 +277,78 @@ public class ProfileContronller {
 	public ResponseEntity<ProfileEnitity> loadTimeLine(HttpServletRequest request, @RequestBody int toProfileUser) {
 		try {
 			String email = jwtTokenUtil.getEmailFromHeader(request);
-			User user1 = userService.findByEmail(email);
+			User currentUser = userService.findByEmail(email);
 			User user = new User();
+			String birthday = "";
+			String gender = "";
+			String location_vi = "";
+			String location_en = "";
+			UserInfoStatus infoStatus = infoStatusService.getStatusInfor(toProfileUser + "");
+			System.out.println("Ìnor is: " + infoStatus != null);
 			boolean check = false;
-			if (user1.getUser_id() == toProfileUser || toProfileUser == 0) {
-				user = user1;
+			if (currentUser.getUser_id() == toProfileUser || toProfileUser == 0) {
+				user = currentUser;
 			} else {
 				user = userService.findById(toProfileUser);
 				check = true;
 			}
 			int id = user.getUser_id();
-			int provinceId = Integer.valueOf(user.getIdProvince());
 			ProfileEnitity profileEnitity = new ProfileEnitity();
 			profileEnitity.setIntro(user.getIntro());
 			profileEnitity.setImages(postImagesService.findAllImagesUser(id));
 			profileEnitity.setDateJoin(user.getDay_create());
-			profileEnitity
-					.setAddress_fullname(user.getDistricts().getFull_name() + " " + user.getProvinces().getFull_name());
-			profileEnitity.setAddress_fullname_en(
-					user.getDistricts().getFull_name_en() + " " + user.getProvinces().getFull_name_en());
+
+			Provinces provinces = user.getProvinces();
+			Districts districts = user.getDistricts();
+			Wards wards = user.getWards();
+			String provinces_fullname = "";
+			String district_fullname = "";
+			String ward_fullname = "";
+
+			String provinces_fullname_en = "";
+			String district_fullname_en = "";
+			String ward_fullname_en = "";
+
+			if (provinces != null) {
+				provinces_fullname = provinces.getFull_name();
+				provinces_fullname_en = provinces.getFull_name_en();
+			}
+			if (districts != null) {
+				district_fullname = districts.getFull_name();
+				district_fullname_en = districts.getFull_name_en();
+			}
+			if (wards != null) {
+				ward_fullname = wards.getFull_name();
+				ward_fullname_en = wards.getFull_name_en();
+			}
+
+			if (infoStatus != null) {
+				// check birthday status
+//				System.out.println("infoStatus.isBirthday()"+infoStatus.getBirthday());
+//				System.out.println("infoStatus.isGender()"+infoStatus.getGender());
+//				System.out.println("infoStatus.isLocation())"+infoStatus.getLocation());
+				if (infoStatus.getBirthday()) {
+					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+					birthday = sdf.format(user.getBirthday().getTime());
+
+				}
+				// check gender
+				if (infoStatus.getGender()) {
+					gender = user.getGender().getGender_name();
+				}
+
+				// check location
+				if (infoStatus.getLocation()) {
+					location_vi = district_fullname + " " + provinces_fullname;
+					location_en = district_fullname_en + " " + provinces_fullname_en;
+				}
+
+			}
+
+			profileEnitity.setBirthday(birthday);
+			profileEnitity.setGender(gender);
+			profileEnitity.setAddress_fullname(location_vi);
+			profileEnitity.setAddress_fullname_en(location_en);
 			profileEnitity.setListPostInterested(postService.getTop5postProfile(id));
 			return ResponseEntity.ok().body(profileEnitity);
 		} catch (Exception e) {
@@ -279,40 +358,51 @@ public class ProfileContronller {
 
 	}
 
+	@PostMapping("/v1/user/profile/update/status")
+	public boolean updateStatus(HttpServletRequest request, @RequestBody UserInfoStatus infoStatus) {
+		try {
+			String email = jwtTokenUtil.getEmailFromHeader(request);
+			User user = userService.findByEmail(email);
+			infoStatus.setUser_id(user.getUser_id() + "");
+			infoStatusService.updateStatusProfile(infoStatus);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
 	@PostMapping("/v1/user/profile/post/timeline")
 	public ResponseEntity<List<PostEntity>> loadPostTimeLine(HttpServletRequest request,
 			@RequestBody Profile entityProfile) {
-		String email = jwtTokenUtil.getEmailFromHeader(request);
-		User user1 = userService.findByEmail(email);
-		User user = new User();
-		boolean check = false;
-		if (user1.getUser_id() == entityProfile.getToProfile() || entityProfile.getToProfile() == 0) {
-			user = user1;
-		} else {
-			user = userService.findById(entityProfile.getToProfile());
-			check = true;
-		}
-		int id = user.getUser_id();
-		List<Object[]> postProfile = postService.getPostProfile(id, entityProfile.getPage());
-		List<Object[]> postProfileShare = postService.getPostProfileShare(id, entityProfile.getPage());
-		List<PostEntity> postEntityProfile = new ArrayList<>();
+		try {
+			String email = jwtTokenUtil.getEmailFromHeader(request);
+			User user = userService.findByEmail(email);
+			int user_id = user.getUser_id();
+			List<Object[]> postProfile = postService.getPostProfile(entityProfile.getToProfile(), user_id,
+					entityProfile.getPage());
+			List<Object[]> postProfileShare = postService.getPostProfileShare(entityProfile.getToProfile(), user_id);
+			List<PostEntity> postEntityProfile = new ArrayList<>();
 
-		for (Object[] ob : postProfile) {
-			if (null != ob[2]) {
-				int idPostShare = Integer.valueOf(ob[2].toString());
-				PostEntity profileTemp = new PostEntity();
-				for (Object[] ps : postProfileShare) {
-					if (Integer.valueOf(ps[0].toString()) == idPostShare) {
-						profileTemp = postEntityProfile(ps, null, 1);
-						postEntityProfile.add(postEntityProfile(ob, profileTemp, 0));
-						break;
+			for (Object[] ob : postProfile) {
+				if (null != ob[2]) {
+					int idPostShare = Integer.valueOf(ob[2].toString());
+					PostEntity profileTemp = new PostEntity();
+					for (Object[] ps : postProfileShare) {
+						if (Integer.valueOf(ps[0].toString()) == idPostShare) {
+							profileTemp = postEntityProfile(ps, null, 1);
+							postEntityProfile.add(postEntityProfile(ob, profileTemp, 0));
+							break;
+						}
 					}
+				} else {
+					postEntityProfile.add(postEntityProfile(ob, null, 0));
 				}
-			} else {
-				postEntityProfile.add(postEntityProfile(ob, null, 0));
 			}
+			return ResponseEntity.ok().body(postEntityProfile);
+		} catch (Exception e) {
+			System.out.println("post/timeline " + e);
+			return ResponseEntity.ok().body(null);
 		}
-		return ResponseEntity.ok().body(postEntityProfile);
 	}
 
 	public PostEntity postEntityProfile(Object[] ob, PostEntity entityProfile, int check) {
@@ -356,6 +446,12 @@ public class ProfileContronller {
 			profile.setFullname(ob[13] + "");
 			profile.setAvatar(ob[14] + "");
 
+			profile.setProvince_fullname(ob[15] + "");
+			profile.setDistrict_fullname(ob[16] + "");
+			profile.setWard_fullname(ob[17] + "");
+			profile.setProvince_fullname_en(ob[18] + "");
+			profile.setDistrict_fullname_en(ob[19] + "");
+			profile.setWard_fullname_en(ob[20] + "");
 			if (entityProfile != null) {
 				profile.setPostEntityProfile(entityProfile);
 			}
@@ -507,7 +603,7 @@ public class ProfileContronller {
 		 * GET: /v1/user/profile/change/email?code=this.randCodeAuth
 		 * 
 		 */
-		emailService.sendHtmlEmail(confirmEmail + "?code=" + this.randCodeAuth, change.newEmail);
+		emailService.sendHtmlEmail(client + "/chang-email-confirm" + "?code=" + this.randCodeAuth, change.newEmail);
 		return ResponseEntity.status(200).body(this.randCodeAuth); // "OK"
 	}
 
@@ -521,7 +617,7 @@ public class ProfileContronller {
 		try {
 			EmailConfirm eConfirm = mapper.readValue(dataCache, EmailConfirm.class);
 			User user = userService.findByEmail(eConfirm.getOldEmail());
-			
+
 			user.setEmail(eConfirm.getNewEmail());
 			userService.update(user);
 

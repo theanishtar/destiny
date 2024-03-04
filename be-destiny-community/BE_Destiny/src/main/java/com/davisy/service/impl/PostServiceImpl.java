@@ -22,6 +22,12 @@ public class PostServiceImpl implements PostService {
 	int year = now.get(Calendar.YEAR);
 
 	@Override
+	public List<Post> findAll() {
+		
+		return postDao.findAll();
+	}
+	
+	@Override
 	public int countPost(int id) {
 		return postDao.countPost(id);
 	}
@@ -48,6 +54,10 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public int getTotalPostByYear(int year) {
 		return postDao.getTotalPostByYear(year);
+	}
+	
+	public int getSizePosts() {
+		return postDao.getSizePosts();
 	}
 
 	// 21-9-2023 -lấy phần trăm bài đăng có trạng thái đã gửi
@@ -118,7 +128,7 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public List<Object[]> getTop5postProfile(int id) {
-		List<Object[]> list = postDao.getTop5postProfile(id, year);
+		List<Object[]> list = postDao.getTop5postProfile(id);
 		if (list == null)
 			return null;
 		return list;
@@ -128,12 +138,12 @@ public class PostServiceImpl implements PostService {
 	@Override
 //	@Cacheable("postFindAll")
 	public List<Object[]> findAllPost(int id, int current_page) {
-		return postDao.findAllPost(id, current_page);
+		return postDao.findAllPost(id, (current_page - 1) * 5);
 	}
 
 	@Override
-	public List<Object[]> findAllPostShare(int user_id, int page) {
-		return postDao.findAllPostShare(user_id, page);
+	public List<Object[]> findAllPostShare(int user_id) {
+		return postDao.findAllPostShare(user_id);
 	}
 
 	@Override
@@ -158,12 +168,26 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public List<Object[]> getPostProfile(int user_id, int page) {
-		return postDao.getPostProfile(user_id, page);
+	public List<Object[]> getPostProfile(int user_id, int user_guest_id, int page) {
+		return postDao.getPostProfile(user_id,user_guest_id, (page - 1) * 5);
 	}
 
 	@Override
-	public List<Object[]> getPostProfileShare(int user_id, int page) {
-		return postDao.getPostProfileShare(user_id, page);
+	public List<Object[]> getPostProfileShare(int user_id, int user_guest_id) {
+		return postDao.getPostProfileShare(user_id,user_guest_id);
+	}
+	@Override
+	public Object[] findByIdPost(int id, int current_page, int post_id) {
+		return postDao.findByIdPost(id,  (current_page - 1) * 5, post_id);
+	}
+
+	@Override
+	public Object[] get_posts_id(int post_id) {
+		return postDao.get_posts_id(post_id);
+	}
+
+	@Override
+	public Object[] get_posts_share_id(int post_id) {
+		return postDao.get_posts_share_id(post_id);
 	}
 }

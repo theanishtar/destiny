@@ -23,7 +23,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @RestController
-@CrossOrigin
+@CrossOrigin("*")
 public class ShareController {
 	@Autowired
 	JwtTokenUtil jwtTokenUtil;

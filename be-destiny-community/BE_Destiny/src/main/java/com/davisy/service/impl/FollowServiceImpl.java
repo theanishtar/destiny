@@ -98,4 +98,9 @@ public class FollowServiceImpl implements FollowService {
 		return followDAO.loadDataSuggest(id);
 	}
 
+	@Override
+	public List<Object[]> loadDataSuggestRegister(int id) {
+		return followDAO.loadDataSuggestRegister(id);
+	}
+
 }

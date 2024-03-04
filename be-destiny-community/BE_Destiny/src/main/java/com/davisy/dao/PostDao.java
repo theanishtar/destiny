@@ -16,10 +16,8 @@ public interface PostDAO extends JpaRepository<Post, Integer> {
 	public int countPost(int id);
 
 	// 22-9-2023 -Top 5 bài đăng có lượt yêu thích nhiều nhất
-	@Query(value = "	SELECT p.post_id,u.fullname , p.content, COUNT(i.post_id) FROM post p INNER JOIN interested i\r\n"
-			+ "			ON p.post_id = i.post_id INNER JOIN users u \r\n" + "			ON p.user_id = u.user_id \r\n"
-			+ "			GROUP BY p.post_id, u.fullname\r\n" + "			ORDER BY COUNT(i.post_id) DESC\r\n"
-			+ "			LIMIT 5;", nativeQuery = true)
+	@Query(value = "SELECT p.post_id,u.fullname , p.content, COUNT(i.post_id),p.user_id  FROM post p INNER JOIN interested i ON p.post_id = i.post_id INNER JOIN users u ON  p.user_id = u.user_id GROUP BY p.post_id, u.fullname ORDER BY COUNT(i.post_id) DESC	LIMIT 5;\r\n"
+			+ "\r\n" + "", nativeQuery = true)
 	public List<Object[]> getTOP5Post();
 
 	// 21-9-2023 -tìm post theo id
@@ -27,20 +25,20 @@ public interface PostDAO extends JpaRepository<Post, Integer> {
 	public Post findPostByID(int id);
 
 	// 1-11-2023 -lấy tổng số bài đăng theo ngày
-	// 8-11
-	@Query(value = "SELECT COUNT(post_id) FROM post WHERE parent_post_id IS NULL AND EXTRACT(DAY FROM date_post)=:day AND EXTRACT(MONTH FROM date_post)=:month AND EXTRACT(YEAR FROM date_post)=:year", nativeQuery = true)
+	@Query(value = "SELECT COUNT(post_id) FROM post WHERE EXTRACT(DAY FROM date_post)=:day AND EXTRACT(MONTH FROM date_post)=:month AND EXTRACT(YEAR FROM date_post)=:year", nativeQuery = true)
 	public int getTotalPostByDay(int day, int month, int year);
 
 	// 21-9-2023 -lấy tổng số bài đăng theo tháng
 	// lastest update 14-10
-	// 8-11
-	@Query(value = "SELECT COUNT(post_id) FROM post WHERE parent_post_id IS NULL AND EXTRACT(MONTH FROM date_post)=:month AND EXTRACT(YEAR FROM date_post)=:year", nativeQuery = true)
+	@Query(value = "SELECT COUNT(post_id) FROM post WHERE EXTRACT(MONTH FROM date_post)=:month AND EXTRACT(YEAR FROM date_post)=:year", nativeQuery = true)
 	public int getTotalPostByMonth(int month, int year);
 
 	// 1-11-2023 -lấy tổng số bài đăng theo năm
-	// 8-11
-	@Query(value = "SELECT COUNT(post_id) FROM post WHERE parent_post_id IS NULL AND EXTRACT(YEAR FROM date_post)=:year", nativeQuery = true)
+	@Query(value = "SELECT COUNT(post_id) FROM post WHERE EXTRACT(YEAR FROM date_post)=:year", nativeQuery = true)
 	public int getTotalPostByYear(int year);
+	
+	@Query(value = "SELECT COUNT(post_id) FROM post", nativeQuery = true)
+	public int getSizePosts();
 
 	// 21-9-2023 -Tổng phần trăm bài đăng có trạng thái là đã gửi
 	// 1-11
@@ -56,9 +54,8 @@ public interface PostDAO extends JpaRepository<Post, Integer> {
 
 	// 22-9-2023 -Tổng số bài đăng theo từng tháng
 	// 1-11
-	// 8-11
 	@Query(value = "SELECT EXTRACT(MONTH FROM date_post) AS MONTH, COUNT(*) \r\n"
-			+ "FROM post WHERE parent_post_id IS NULL AND EXTRACT(YEAR FROM date_post)=:year\r\n" + "GROUP BY EXTRACT(MONTH FROM date_post) \r\n"
+			+ "FROM post WHERE EXTRACT(YEAR FROM date_post)=:year\r\n" + "GROUP BY EXTRACT(MONTH FROM date_post) \r\n"
 			+ "ORDER BY EXTRACT(MONTH FROM date_post) ASC;", nativeQuery = true)
 	public List<Object[]> getTotalPostEveryMonth(int year);
 
@@ -67,30 +64,33 @@ public interface PostDAO extends JpaRepository<Post, Integer> {
 	public List<Object[]> getTOP3Product();
 
 	// 23-9-2023 -Tổng bài đăng của người dùng đã dăng
-	// 8-11
-	@Query(value = "SELECT COUNT(post_id) FROM post WHERE parent_post_id IS NULL AND user_id=:id", nativeQuery = true)
+	@Query(value = "SELECT COUNT(post_id) FROM post WHERE user_id=:id", nativeQuery = true)
 	public int getTotalPostByUser(int id);
 
 	// 23-9-2023 -Danh sách tất cả bài đăng của người dùng theo id
 	@Query(value = "SELECT * FROM post p WHERE p.user_id=:id order by p.date_post desc", nativeQuery = true)
 	public List<Post> getListPostByUserID(int id);
 
-	// 8-11
 	// Top 5 bài viết có nhiều lượt quan tâm của trang profile
 	@Query(value = "SELECT u.user_id, u.avatar,p.post_id, p.content, COUNT(i.interested_id) AS interest_count\n"
 			+ "FROM post p\n" + "LEFT JOIN interested i ON p.post_id = i.post_id\n"
-			+ "LEFT JOIN users u ON p.user_id = u.user_id where EXTRACT(YEAR FROM date_post)=:year AND u.user_id =:id\n"
+			+ "LEFT JOIN users u ON p.user_id = u.user_id where u.user_id =:id\n"
 			+ "GROUP BY p.post_id, p.content, u.user_id, u.avatar\n" + "ORDER BY interest_count DESC\n" + "LIMIT 5;\n"
 			+ "", nativeQuery = true)
-	public List<Object[]> getTop5postProfile(int id, int year);
+	public List<Object[]> getTop5postProfile(int id);
 
 	// Lấy tất cả bài post có quan hệ bạn bè hoặc follow
-	@Query(value = "SELECT * FROM get_friend_posts(:id,:current_page)", nativeQuery = true)
+	@Query(value = "SELECT * FROM get_friend_posts(:id) LIMIT 5 OFFSET :current_page", nativeQuery = true)
 	public List<Object[]> findAllPost(int id, int current_page);
 
-	@Query(value = "select *from get_friend_posts_share(:id,:current_page)", nativeQuery = true)
-	public List<Object[]> findAllPostShare(int id, int current_page);
+//	@Query(value = "select *from get_friend_posts_share(:id) LIMIT 5 OFFSET :current_page", nativeQuery = true)
+//	public List<Object[]> findAllPostShare(int id, int current_page);
+	
+	@Query(value = "select *from get_friend_posts_share(:id)", nativeQuery = true)
+	public List<Object[]> findAllPostShare(int id);
 
+	@Query(value = "SELECT * FROM get_friend_posts(:id) where post_id =:post_id LIMIT 5 OFFSET :current_page", nativeQuery = true)
+	public Object[] findByIdPost(int id,int current_page , int post_id);
 //	// lấy số lượng comment,interested, share của bài post
 //	@Query(value = "WITH friend_posts AS (\n" + "    SELECT post_id  FROM get_friend_posts(:id,:provinceId)\n" + ")\n"
 //			+ "SELECT\n" + "    fp.*,\n"
@@ -116,10 +116,16 @@ public interface PostDAO extends JpaRepository<Post, Integer> {
 			+ "FROM friend_posts fp;", nativeQuery = true)
 	public Object[] getCountPostHistory(int id);
 
-	@Query(value = "select *from get_profile_posts(:user_id,:page)", nativeQuery = true)
-	public List<Object[]> getPostProfile(int user_id,int page);
+	@Query(value = "select *from get_profile_posts(:user_id,:user_guest_id)  LIMIT 5 OFFSET :page", nativeQuery = true)
+	public List<Object[]> getPostProfile(int user_id,int user_guest_id, int page);
+
+	@Query(value = "select *from get_profile_posts_shares(:user_id,:user_guest_id)", nativeQuery = true)
+	public List<Object[]> getPostProfileShare(int user_id,int user_guest_id);
 	
-	@Query(value = "select *from get_profile_posts_shares(:user_id,:page)", nativeQuery = true)
-	public List<Object[]> getPostProfileShare(int user_id,int page);
+	@Query(value = "select *from get_posts_id(:post_id)",nativeQuery = true)
+	public Object[] get_posts_id(int post_id);
+	
+	@Query(value = "select *from get_posts_share_id(:post_id)",nativeQuery = true)
+	public Object[] get_posts_share_id(int post_id);
 
 }

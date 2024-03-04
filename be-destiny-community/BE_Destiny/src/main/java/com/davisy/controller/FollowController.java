@@ -29,6 +29,7 @@ import com.davisy.service.JwtService;
 import com.davisy.service.PostImagesService;
 import com.davisy.service.PostService;
 import com.davisy.service.UserService;
+import com.davisy.storage.chat.UserFollowerStorage;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -75,11 +76,25 @@ public class FollowController {
 			User user = userService.findByEmail(email);
 			int id = user.getUser_id();
 			List<Object[]> list = followService.findAllFollowerUser(id);
+			setMapUser(id, list);
 			return ResponseEntity.status(200).body(data(list));
 		} catch (Exception e) {
 			System.out.println("Error loadDataFollowing in followController: " + e);
 			return ResponseEntity.badRequest().build();
 		}
+	}
+
+	public void setMapUser(int id, List<Object[]> list) {
+		try {
+			List<Integer> listId = new ArrayList<>();
+			for (Object[] o : list) {
+				listId.add(Integer.valueOf(o[0].toString()));
+			}
+			UserFollowerStorage.getInstance().setUser(id, listId);
+		} catch (Exception e) {
+			System.out.println("Error storage follower: " + e);
+		}
+
 	}
 
 	// Tải dữ liệu friends
@@ -105,7 +120,7 @@ public class FollowController {
 			data.setCountPost(Integer.valueOf(ob[6].toString()));
 			data.setCountFollower(Integer.valueOf(ob[7].toString()));
 			data.setCountImg(Integer.valueOf(ob[8].toString()));
-			data.setUsername(ob[9]+"");
+			data.setUsername(ob[9] + "");
 			listData.add(data);
 		}
 		return listData;
@@ -129,13 +144,30 @@ public class FollowController {
 		return ResponseEntity.status(200).body(data);
 	}
 
+	@GetMapping("/v1/user/following/load/suggestregister")
+	public ResponseEntity<List<DataFollows>> loadDataFollowSuggestRegister(HttpServletRequest request) {
+		String email = jwtTokenUtil.getEmailFromHeader(request);
+		User user = userService.findByEmail(email);
+		List<DataFollows> data = new ArrayList<>();
+		List<Object[]> list = followService.loadDataSuggestRegister(user.getUser_id());
+		for (Object[] ob : list) {
+			DataFollows follows = new DataFollows();
+			follows.setUser_id(Integer.valueOf(ob[0].toString()));
+			follows.setAvatar(ob[1] + "");
+			follows.setFullname(ob[2] + "");
+			follows.setUsername(ob[3] + "");
+			data.add(follows);
+		}
+		return ResponseEntity.status(200).body(data);
+	}
+
 	// Hủy following
 	@PostMapping("/v1/user/following/delete")
 	public ResponseEntity<List<DataFollows>> deleteFollow(HttpServletRequest request, @RequestBody int id) {
 		try {
 			String email = jwtTokenUtil.getEmailFromHeader(request);
 			User user = userService.findByEmail(email);
-			followService.delete(id,user.getUser_id());
+			followService.delete(id, user.getUser_id());
 			User toUser = userService.findById(id);
 			String fromUserId = user.getUsername();
 			String toUserId = toUser.getUsername();
@@ -144,7 +176,7 @@ public class FollowController {
 			}
 			return ResponseEntity.status(200).body(reloadData(email));
 		} catch (Exception e) {
-			System.out.println("Error addfollowing: "+e);
+			System.out.println("Error addfollowing: " + e);
 			return ResponseEntity.badRequest().build();
 		}
 	}
@@ -178,15 +210,15 @@ public class FollowController {
 	// Hủy follower
 	@PostMapping("/v1/user/follower/delete")
 	public ResponseEntity<List<DataFollows>> deleteFollower(HttpServletRequest request, @RequestBody int id) {
-		
+
 		try {
 			String email = jwtTokenUtil.getEmailFromHeader(request);
-		User user = userService.findByEmail(email);
-		User toUser = userService.findById(id);
-		followService.delete(id, user.getUser_id());
-		return ResponseEntity.status(200).body(reloadData(email));
+			User user = userService.findByEmail(email);
+			User toUser = userService.findById(id);
+			followService.delete(user.getUser_id(), id);
+			return ResponseEntity.status(200).body(reloadData(email));
 		} catch (Exception e) {
-			System.out.println("Error addfollow: "+e);
+			System.out.println("Error addfollow: " + e);
 			return ResponseEntity.badRequest().build();
 		}
 //		String fromUserId = user.getUsername();
@@ -195,7 +227,7 @@ public class FollowController {
 //				&& chatsService.findChatNames(fromUserId, toUserId) != null) {
 //			updateChatsUnfollow(fromUserId, toUserId);
 //		}
-		
+
 	}
 
 //	@PostMapping("/v1/user/inbox")
@@ -315,7 +347,5 @@ public class FollowController {
 		}
 		return dataFollows;
 	}
-
-	
 
 }

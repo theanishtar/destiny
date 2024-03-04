@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserReportedDTO {
 	private ObjectId id;
+	String user_id;
 	String fullname;
 	String avatar;
 	String content_report;

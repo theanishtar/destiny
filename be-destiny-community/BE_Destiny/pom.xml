@@ -196,13 +196,23 @@
 			<version>2.0</version> <!-- Phiên bản vá mới nhất -->
 		</dependency>
 
+
 		<!-- https://mvnrepository.com/artifact/io.netty/netty-handler -->
-		<!--<dependency>
+		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty-handler</artifactId>
-			<version>5.0.0.Alpha1</version>
-		</dependency>-->
-		
+			<version>4.1.94.Final</version>
+		</dependency>
+
+
+		<!-- https://mvnrepository.com/artifact/org.json/json -->
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20231013</version>
+		</dependency>
+
+
 		<!--	MONGODB-->
 		<!-- Java MongoDB Driver dependency -->
 
@@ -225,10 +235,23 @@
 			<version>4.9.1</version> <!-- Use the same version as above -->
 		</dependency>
 		<dependency>
-		    <groupId>org.springframework.data</groupId>
-		    <artifactId>spring-data-mongodb</artifactId>
-		    <version>4.1.2</version>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-mongodb</artifactId>
+			<version>4.1.2</version>
 		</dependency>
+		
+		 <!-- QR code -->
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>core</artifactId>
+			<version>3.3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>javase</artifactId>
+			<version>3.3.0</version>
+		</dependency>
+		<!-- QR code-->
 
 	</dependencies>
 
@@ -246,8 +269,8 @@
 						</exclude>
 					</excludes>
 					<exclusion>
-							<groupId>org.mongodb</groupId>
-							<artifactId>mongodb-driver-core</artifactId>
+						<groupId>org.mongodb</groupId>
+						<artifactId>mongodb-driver-core</artifactId>
 					</exclusion>
 
 					<!--<bean id="cacheManager"
