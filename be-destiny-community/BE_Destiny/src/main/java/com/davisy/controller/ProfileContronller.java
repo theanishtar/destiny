@@ -215,8 +215,7 @@ public class ProfileContronller {
 			// lấy email
 			String email = jwtTokenUtil.getEmailFromHeader(request);
 			User userUpdate = userService.findByEmail(email);
-			User us = userService.findByEmailOrUsername(userRequestUpdate.getUsername());
-			if (!userUpdate.getUsername().equalsIgnoreCase(userRequestUpdate.getUsername()) && us != null) {
+			if (userService.findByEmailOrUsername(userRequestUpdate.getUsername()) != null) {
 				return ResponseEntity.status(301).build();
 			}
 			userUpdate.setUsername(userRequestUpdate.getUsername());
@@ -283,8 +282,8 @@ public class ProfileContronller {
 			String gender = "";
 			String location_vi = "";
 			String location_en = "";
-			UserInfoStatus infoStatus = infoStatusService.getStatusInfor(toProfileUser + "");
-			System.out.println("Ìnor is: " + infoStatus != null);
+			UserInfoStatus infoStatus = infoStatusService.getStatusInfor(toProfileUser+"");
+			System.out.println("Ìnor is: "+infoStatus != null);
 			boolean check = false;
 			if (currentUser.getUser_id() == toProfileUser || toProfileUser == 0) {
 				user = currentUser;
@@ -297,7 +296,7 @@ public class ProfileContronller {
 			profileEnitity.setIntro(user.getIntro());
 			profileEnitity.setImages(postImagesService.findAllImagesUser(id));
 			profileEnitity.setDateJoin(user.getDay_create());
-
+			
 			Provinces provinces = user.getProvinces();
 			Districts districts = user.getDistricts();
 			Wards wards = user.getWards();
@@ -322,11 +321,12 @@ public class ProfileContronller {
 				ward_fullname_en = wards.getFull_name_en();
 			}
 
-			if (infoStatus != null) {
+			
+			if(infoStatus != null) {
 				// check birthday status
-//				System.out.println("infoStatus.isBirthday()"+infoStatus.getBirthday());
-//				System.out.println("infoStatus.isGender()"+infoStatus.getGender());
-//				System.out.println("infoStatus.isLocation())"+infoStatus.getLocation());
+				System.out.println("infoStatus.isBirthday()"+infoStatus.getBirthday());
+				System.out.println("infoStatus.isGender()"+infoStatus.getGender());
+				System.out.println("infoStatus.isLocation())"+infoStatus.getLocation());
 				if (infoStatus.getBirthday()) {
 					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 					birthday = sdf.format(user.getBirthday().getTime());
@@ -336,13 +336,13 @@ public class ProfileContronller {
 				if (infoStatus.getGender()) {
 					gender = user.getGender().getGender_name();
 				}
-
+				
 				// check location
-				if (infoStatus.getLocation()) {
+				if(infoStatus.getLocation()) {
 					location_vi = district_fullname + " " + provinces_fullname;
 					location_en = district_fullname_en + " " + provinces_fullname_en;
 				}
-
+				
 			}
 
 			profileEnitity.setBirthday(birthday);
@@ -357,13 +357,13 @@ public class ProfileContronller {
 		}
 
 	}
-
+	
 	@PostMapping("/v1/user/profile/update/status")
 	public boolean updateStatus(HttpServletRequest request, @RequestBody UserInfoStatus infoStatus) {
 		try {
 			String email = jwtTokenUtil.getEmailFromHeader(request);
 			User user = userService.findByEmail(email);
-			infoStatus.setUser_id(user.getUser_id() + "");
+			infoStatus.setUser_id(user.getUser_id()+"");
 			infoStatusService.updateStatusProfile(infoStatus);
 			return true;
 		} catch (Exception e) {

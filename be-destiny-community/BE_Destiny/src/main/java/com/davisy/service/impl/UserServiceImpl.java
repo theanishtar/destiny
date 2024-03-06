@@ -176,7 +176,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User findByEmailOrUsername(String email) {
-		return userDao.findByEmailOrUsername(email.toLowerCase());
+		return userDao.findByEmailOrUsername(email);
 	}
 
 	@Override
@@ -193,26 +193,16 @@ public class UserServiceImpl implements UserService {
 	public List<Object[]> findFullnameUser(int user_id, String fullname) {
 		return userDao.findFullnameUser(user_id, fullname);
 	}
-
+	
 	@Override
 	public List<Object[]> findTop5Post(String keyword) {
 		// TODO Auto-generated method stub
 		return userDao.get5PostByKeyword(keyword);
 	}
-
+	
 	@Override
 	public List<Object[]> findTop5PostByHashtag(String keyword) {
 		// TODO Auto-generated method stub
 		return userDao.get5PostByHashtagKeyword(keyword);
-	}
-
-	@Override
-	public int getSizeUsers() {
-		return userDao.getSizeUsers();
-	}
-	
-	public List<Object[]> getAllByRole(String roleName){
-		System.out.println(roleName);
-		return userDao.getUserByRole(roleName);
 	}
 }

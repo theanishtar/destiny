@@ -22,12 +22,6 @@ public class PostServiceImpl implements PostService {
 	int year = now.get(Calendar.YEAR);
 
 	@Override
-	public List<Post> findAll() {
-		
-		return postDao.findAll();
-	}
-	
-	@Override
 	public int countPost(int id) {
 		return postDao.countPost(id);
 	}
@@ -54,10 +48,6 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public int getTotalPostByYear(int year) {
 		return postDao.getTotalPostByYear(year);
-	}
-	
-	public int getSizePosts() {
-		return postDao.getSizePosts();
 	}
 
 	// 21-9-2023 -lấy phần trăm bài đăng có trạng thái đã gửi

@@ -458,7 +458,7 @@ public class EmailService {
 		// Set email properties
 		helper.setFrom(fromEmail);
 		helper.setTo(email);
-		helper.setSubject("Thông báo khóa tài khoản");
+		helper.setSubject("Subject");
 
 		// Add the HTML body with the image attachment (embedded)
 		helper.setText(body, true);
@@ -903,7 +903,7 @@ public class EmailService {
 		// Set email properties
 		helper.setFrom(fromEmail);
 		helper.setTo(email);
-		helper.setSubject("Thông báo mở khóa tài khoản");
+		helper.setSubject("Subject");
 
 		// Add the HTML body with the image attachment (embedded)
 		helper.setText(body, true);
@@ -1382,7 +1382,7 @@ public class EmailService {
 		// Set email properties
 		helper.setFrom(fromEmail);
 		helper.setTo(email);
-		helper.setSubject("Mail xác nhận");
+		helper.setSubject("Subject");
 
 		// Add the HTML body with the image attachment (embedded)
 		helper.setText(body, true);
@@ -1867,7 +1867,7 @@ public class EmailService {
 		// Set email properties
 		helper.setFrom(fromEmail);
 		helper.setTo(email);
-		helper.setSubject("Mã xác nhận");
+		helper.setSubject("Subject");
 
 		// Add the HTML body with the image attachment (embedded)
 		helper.setText(body, true);

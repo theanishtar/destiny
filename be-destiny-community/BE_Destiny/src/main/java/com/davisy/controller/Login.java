@@ -5,10 +5,20 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.Instant;
 import java.util.Base64;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.TimeZone;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.davisy.Application;
 import com.davisy.SpamRrequestCheck;
 import com.davisy.auth.AuthenticationRequest;
 import com.davisy.auth.AuthenticationResponse;
@@ -32,6 +43,8 @@ import com.davisy.service.CacheService;
 import com.davisy.service.JwtService;
 import com.davisy.service.QrCodeGeneratorService;
 import com.davisy.service.UserService;
+import com.davisy.storage.chat.UserLoginStorage;
+
 import org.springframework.http.MediaType;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -105,6 +118,13 @@ public class Login {
 	@PostMapping("/v1/oauth/login")
 	public ResponseEntity<AuthenticationResponse> authLog(@RequestBody AuthenticationRequest authenticationRequest) {
 		LoginResponse resLog = authenticationService.loginResponseService(authenticationRequest);
+		try {
+			Calendar date = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT+7"));
+			UserLoginStorage.getInstance().setUser(resLog.getData().getId(), date);
+			time();
+		} catch (Exception e) {
+			System.out.println("Error userLoginStorage: " + e);
+		}
 		return ResponseEntity.status(resLog.getStatusResponse()).body(resLog.getData());
 		/*
 		 * Status code: 200: Đăng nhập thành công 404: Không thể tìm thấy tài khoản
@@ -175,21 +195,20 @@ public class Login {
 	public ResponseEntity<Object[]> loginWithQRToWeb() {
 		try {
 			String token = genToken(); // id.code_confirm
-			System.err.println("token: " + token);
 			byte[] qr = generatorService.generateQrCodeImage(token, 200, 200);
-			return ResponseEntity.status(200).body(new Object[] { qr,token});
+			return ResponseEntity.status(200).body(new Object[] { qr, token });
 		} catch (Exception e) {
 			return null;
 		}
 	}
 
 	@PostMapping("/v1/oauth/login/byweb")
-	public ResponseEntity<Void> loginWithQRByWeb(@RequestBody String token,HttpServletRequest request) {
+	public ResponseEntity<Void> loginWithQRByWeb(@RequestBody String token, HttpServletRequest request) {
 		try {
 			String email = jwtTokenUtil.getEmailFromHeader(request);
 			User user = userService.findByEmail(email);
 			int check = readToken(token);
-			int idUser =user.getUser_id();
+			int idUser = user.getUser_id();
 			if (check == -1) {
 				simpMessagingTemplate.convertAndSend("/topic/login/qr-code/" + token, false);
 //				return;
@@ -199,10 +218,10 @@ public class Login {
 			simpMessagingTemplate.convertAndSend("/topic/login/qr-code/" + token, loginResponse);
 			return ResponseEntity.status(200).build();
 		} catch (Exception e) {
-		System.err.println("error create qr code: "+e);
-		return ResponseEntity.badRequest().build();
+			System.err.println("error create qr code: " + e);
+			return ResponseEntity.badRequest().build();
 		}
-		
+
 	}
 
 	private static int readToken(String token) {
@@ -212,10 +231,10 @@ public class Login {
 		try {
 			String deB64 = base64Decode(token);
 			String get = AES.decrypt(deB64, secretKey);
-			String time =get;
+			String time = get;
 			if (get.contains("|")) {
 				id = Integer.valueOf(get.substring(0, get.lastIndexOf("|")));
-				 time = get.substring(get.lastIndexOf("|") + 1);
+				time = get.substring(get.lastIndexOf("|") + 1);
 			}
 			Instant timeFromToken = Instant.parse(time);
 
@@ -277,4 +296,42 @@ public class Login {
 		System.out.println("ID DE: " + readToken(
 				"KzhHbTlQendTaUtXdmRxSTFjaEdZemY2eXBqT0tzNWh6dDdMa2ZjTStBVFZHUVVvSXppd2dMR1RKNGFDR2xkNQ=="));
 	}
+
+	Timer timer = new Timer();
+
+	@Async
+	public void time() {
+		timer = new Timer();
+		TimerTask task = new TimerTask() {
+			@Override
+			public void run() {
+				HashMap<Integer, Calendar> map = UserLoginStorage.getInstance().getUsers();
+				if (map.isEmpty()) {
+					stopClock();
+				}
+				Iterator<Integer> id = map.keySet().iterator();
+				while (id.hasNext()) {
+					int key = id.next();
+					Calendar calendar1 = map.get(key);
+					Calendar calendar2 = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT+7"));
+					long differenceInMillis = Math.abs(calendar2.getTimeInMillis() - calendar1.getTimeInMillis());
+					long time = differenceInMillis / 3600000 * 6;
+					if (time >= 156) {
+//					if (differenceInMillis >= 30000) {
+						simpMessagingTemplate.convertAndSend("/topic/notify/token-date/" + key, "logout");
+						UserLoginStorage.getInstance().remove(key);
+					}
+				}
+			}
+//			}
+		};
+		timer.schedule(task, 0, 1000);
+	}
+
+	public void stopClock() {
+		if (timer != null) {
+			timer.cancel();
+		}
+	}
+
 }

@@ -66,7 +66,7 @@ public class ModeratorControlUser {
 			for (ModeratorUserReported UserReported : UserReporteds) {
 				Calendar calendar = new GregorianCalendar();
 				calendar.setTime(UserReported.getDate_report());
-				if (calendar.get(Calendar.DAY_OF_MONTH) == time && (calendar.get(Calendar.MONTH)+1) == month && calendar.get(Calendar.YEAR) == year) {
+				if (calendar.get(Calendar.DAY_OF_MONTH) == time && calendar.get(Calendar.MONTH) == month && calendar.get(Calendar.YEAR) == year) {
 					totalUser++;
 				}
 			}
@@ -77,7 +77,7 @@ public class ModeratorControlUser {
 			for (ModeratorUserReported UserReported : UserReporteds) {
 				Calendar calendar = new GregorianCalendar();
 				calendar.setTime(UserReported.getDate_report());
-				if ((calendar.get(Calendar.MONTH)+1) == time && calendar.get(Calendar.YEAR) == year) {
+				if (calendar.get(Calendar.MONTH) == time && calendar.get(Calendar.YEAR) == year) {
 					totalUser++;
 				}
 			}
@@ -193,7 +193,6 @@ public class ModeratorControlUser {
 		UserReportedDTO userReportedDTO = new UserReportedDTO();
 		userReportedDTO.setId(reported.getId());
 		User user = userService.findById(Integer.valueOf(reported.getUser_reported_id()));
-		userReportedDTO.setUser_id(user.getUser_id().toString());
 		userReportedDTO.setFullname(user.getFullname());
 		userReportedDTO.setAvatar(user.getAvatar());
 		userReportedDTO.setContent_report(reported.getContent_report());
@@ -257,25 +256,26 @@ public class ModeratorControlUser {
 	}
 	
 
-	@DeleteMapping("/v1/moderator/deleteUserReported/{userId}/{userSendId}")
-	public ResponseEntity<String> delete(@PathVariable String userId, @PathVariable String userSendId) {
+	@DeleteMapping("/v1/moderator/deleteUserReported")
+	public String delete() {
 		try {
 			String user_reported_id = "26";
 			String user_send_report_id = "7";
-			ModeratorUserReported moderatorUserReported = moderatorUserReportedService.findByTwoColumn("user_reported_id", userId, "user_send_report_id", userSendId);;
-			moderatorUserReportedService.delete(moderatorUserReported.getId());
-			return ResponseEntity.status(200).body(null);
+			ModeratorUserReported UserReported = moderatorUserReportedService.findByTwoColumn("user_reported_id", user_reported_id, "user_send_report_id", user_send_report_id);
+			moderatorUserReportedService.delete(UserReported.getId());
+			return "Successfully";
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.status(403).body(null);
-			
+			return "ERROR" + e;
 		}
 	}
 	
-	@DeleteMapping("/v1/moderator/sendUserReported/{userId}/{userSendId}")
-	public ResponseEntity<String> sendUserToAdmin(@PathVariable String userId, @PathVariable String userSendId) {
+	@DeleteMapping("/v1/moderator/sendUserReported/{email}/{userSendId}")
+	public ResponseEntity<String> sendUserToAdmin(@PathVariable String email, @PathVariable String userSendId) {
 		try {
 //			ObjectId id = new ObjectId("653214546912a178bfcc9bca");
+			User userMail = userService.findByEmail(email);
+			String userId = userMail.getUser_id().toString();
 			ModeratorUserReported moderatorUserReported = moderatorUserReportedService.findByTwoColumn("user_reported_id", userId, "user_send_report_id", userSendId);
 			UserReported UserReported = new UserReported();
 			

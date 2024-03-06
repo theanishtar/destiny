@@ -121,6 +121,7 @@ public class AdminPostStatistics {
 	public ResponseEntity<List<AdminPostTOP4>> getTOP4User() {
 		try {
 			List<Object[]> listTOP4Post = postService.getTOP4Post();
+			;
 			List<AdminPostTOP4> newList = new ArrayList<>();
 			for (Object[] oj : listTOP4Post) {
 				Post post = postService.findPostByID(Integer.valueOf(String.valueOf(oj[0])));
@@ -163,7 +164,7 @@ public class AdminPostStatistics {
 	// 22-9-2023 -Tổng số bài đăng theo từng tháng
 	// update lastest 4-10
 	@GetMapping("/v1/admin/getTotalPostEveryMonth")
-	public ResponseEntity<int[]> getTotalPostEveryMonth() {
+	public ResponseEntity<int[]> getTotalUserEveryMonth() {
 		try {
 			List<Object[]> list = postService.getTotalPostEveryMonth();
 			int[] listMonth = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };

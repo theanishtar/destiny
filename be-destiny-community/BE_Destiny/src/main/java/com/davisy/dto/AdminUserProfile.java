@@ -13,8 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AdminUserProfile {
 	
-	int id;
-	
 	String fullname;
 	String email;
 	String intro;

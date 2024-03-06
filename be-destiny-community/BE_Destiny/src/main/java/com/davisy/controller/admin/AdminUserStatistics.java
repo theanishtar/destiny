@@ -70,8 +70,7 @@ public class AdminUserStatistics {
 	@GetMapping("/v1/admin/getTotalUserByDay")
 	public int getTotalUserByDay() {
 		int day = now.get(Calendar.DAY_OF_MONTH);
-		int month = now.get(Calendar.MONTH)+1;
-		System.out.println(userService.getTotalUserByDay(day, month));
+		int month = now.get(Calendar.MONTH);
 		return userService.getTotalUserByDay(day, month);
 	}
 	
@@ -102,7 +101,6 @@ public class AdminUserStatistics {
 		int currentDay = now.get(Calendar.DAY_OF_MONTH);
 		int month = now.get(Calendar.MONTH) + 1;
 		int previousMonthValue = userService.getTotalUserByDay(previousDay, month);
-		System.out.println(previousMonthValue+"concac");
 		int currentMonthValue = userService.getTotalUserByDay(currentDay, month);
 
 		return caculatePercentIncrease(previousMonthValue, currentMonthValue);
@@ -175,26 +173,27 @@ public class AdminUserStatistics {
 				AdminUserTOP4 adminUserTOP4 = new AdminUserTOP4();
 				
 				//check status
-				adminUserTOP4.setLocation(user.getLocation());
-				int birthdayYear = user.getBirthday().get(Calendar.YEAR);
-				Calendar calendar = GregorianCalendar.getInstance();
-				int thisYear = calendar.get(Calendar.YEAR);
 				
-				int age = thisYear - birthdayYear;
-				adminUserTOP4.setAge(age+" tuổi");
 				UserInfoStatus infoStatus = infoStatusService.getStatusInfor(user.getUser_id().toString());
-				if(infoStatus != null) {
-					if (!infoStatus.getBirthday()) {
-						adminUserTOP4.setAge("");
-					} 
-					
-					// check status
-					if (!infoStatus.getLocation()) {
-						adminUserTOP4.setLocation("");
-					}
-				}
-				// check status
 				
+				// check status
+				if (infoStatus.getBirthday()) {
+					int birthdayYear = user.getBirthday().get(Calendar.YEAR);
+					Calendar calendar = GregorianCalendar.getInstance();
+					int thisYear = calendar.get(Calendar.YEAR);
+					
+					int age = thisYear - birthdayYear;
+					adminUserTOP4.setAge(age+" tuổi");
+				} else {
+					adminUserTOP4.setAge("");
+				}
+				
+				// check status
+				if (infoStatus.getLocation()) {
+					adminUserTOP4.setLocation(user.getLocation());
+				} else {
+					adminUserTOP4.setLocation("");
+				}
 				
 				adminUserTOP4.setEmail(user.getEmail());
 				adminUserTOP4.setFullname(user.getFullname());

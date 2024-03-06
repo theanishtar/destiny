@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
@@ -542,27 +541,27 @@ public class PostController {
 			return profile;
 		} catch (NumberFormatException e) {
 			System.out.println("Error postEntityProfile2: " + e);
-//			System.out.println("post_id: " + (ob[0].toString()));
-//			System.out.println("User_id: " + (ob[1].toString()));
-//			System.out.println("content: " + (ob[3] + ""));
-//			System.out.println("date: " + (ob[4]));
-//			System.out.println("hash_tag: " + (ob[5] + ""));
-//			System.out.println("send_status: " + (ob[6] + ""));
-//			System.out.println("post_status: " + (ob[7] + ""));
-//			System.out.println("product: " + (ob[8] + ""));
-//			System.out.println("ban: " + (ob[9] + ""));
-//			System.out.println("count_interested: " + (ob[10].toString()));
-//			System.out.println("count_cmt: " + (ob[11].toString()));
-//			System.out.println("count_share: " + (ob[12].toString()));
-//			System.out.println("fullname: " + (ob[13] + ""));
-//			System.out.println("avatar: " + (ob[14] + ""));
-//			System.out.println("provinces_fullname: " + (ob[15] + ""));
-//			System.out.println("district_fullname: " + (ob[16] + ""));
-//			System.out.println("ward_fullname: " + (ob[17] + ""));
-//			System.out.println("provinces_fullname_en: " + (ob[18] + ""));
-//			System.out.println("district_fullname_en: " + (ob[19] + ""));
-//			System.out.println("ward_fullname_en: " + (ob[20] + ""));
-//			System.err.println("check2: " + check);
+			System.out.println("post_id: " + (ob[0].toString()));
+			System.out.println("User_id: " + (ob[1].toString()));
+			System.out.println("content: " + (ob[3] + ""));
+			System.out.println("date: " + (ob[4]));
+			System.out.println("hash_tag: " + (ob[5] + ""));
+			System.out.println("send_status: " + (ob[6] + ""));
+			System.out.println("post_status: " + (ob[7] + ""));
+			System.out.println("product: " + (ob[8] + ""));
+			System.out.println("ban: " + (ob[9] + ""));
+			System.out.println("count_interested: " + (ob[10].toString()));
+			System.out.println("count_cmt: " + (ob[11].toString()));
+			System.out.println("count_share: " + (ob[12].toString()));
+			System.out.println("fullname: " + (ob[13] + ""));
+			System.out.println("avatar: " + (ob[14] + ""));
+			System.out.println("provinces_fullname: " + (ob[15] + ""));
+			System.out.println("district_fullname: " + (ob[16] + ""));
+			System.out.println("ward_fullname: " + (ob[17] + ""));
+			System.out.println("provinces_fullname_en: " + (ob[18] + ""));
+			System.out.println("district_fullname_en: " + (ob[19] + ""));
+			System.out.println("ward_fullname_en: " + (ob[20] + ""));
+			System.err.println("check2: " + check);
 			return null;
 		} catch (Exception e) {
 			System.out.println("Error postEntityProfile3: " + e);
@@ -573,7 +572,7 @@ public class PostController {
 
 	public static String getTime(Calendar datePost) {
 		String timeCaculate = "";
-		Calendar calendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT+7"));;
+		Calendar calendar = GregorianCalendar.getInstance();
 
 		long currentTimeMillis = calendar.getTimeInMillis();
 		long postTimeMillis = datePost.getTimeInMillis();
@@ -585,9 +584,9 @@ public class PostController {
 		long hours = minutes / 60;
 		long days = hours / 24;
 
-		if (hours > 0 ) {
+		if (hours > 0) {
 			timeCaculate = hours + " giờ trước";
-		} else if (minutes > 0 ) {
+		} else if (minutes > 0) {
 			timeCaculate = minutes + " phút trước";
 		} else {
 			timeCaculate = seconds + " giây trước";
@@ -597,10 +596,10 @@ public class PostController {
 	}
 
 	// cach sai
-//	public void time() {
-//		Calendar calendar = GregorianCalendar.getInstance();
-//		int day = calendar.get(Calendar.DAY_OF_MONTH);
-//		int month = calendar.get(Calendar.MONTH) + 1;
-//		int year = calendar.get(Calendar.YEAR);
-//	}
+	public void time() {
+		Calendar calendar = GregorianCalendar.getInstance();
+		int day = calendar.get(Calendar.DAY_OF_MONTH);
+		int month = calendar.get(Calendar.MONTH) + 1;
+		int year = calendar.get(Calendar.YEAR);
+	}
 }

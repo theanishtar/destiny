@@ -5,8 +5,6 @@ import java.util.List;
 import com.davisy.entity.Post;
 
 public interface PostService {
-	public List<Post> findAll();
-	
 	public int countPost(int id);
 
 	public List<Object[]> getTOP5Post();
@@ -37,8 +35,6 @@ public interface PostService {
 	// 21-9-2023 -lấy tổng số bài đăng theo tháng
 	// lastest update 14-10
 	public int getTotalPostByMonth(int month);
-	
-	public int getSizePosts();
 
 	// 21-9-2023 -lấy phần trăm bài đăng có trạng thái đã gửi
 	public double getPercentPostSendSuccess();

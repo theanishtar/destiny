@@ -13,7 +13,7 @@ public interface UserDAO extends JpaRepository<User, Integer> {
 	@Query(value = "SELECT *FROM users WHERE email:=email AND password:=password", nativeQuery = true)
 	public User findByEmailAndPassword(String email, String password);
 
-	@Query(value = "SELECT * FROM users u WHERE u.email=:email", nativeQuery = true)
+	@Query(value = "SELECT * FROM users WHERE email=:email ", nativeQuery = true)
 	public User findByEmail(String email);
 
 	@Query(value = "SELECT * FROM users WHERE email=:email Or username=:email", nativeQuery = true)
@@ -49,9 +49,6 @@ public interface UserDAO extends JpaRepository<User, Integer> {
 	// 1-11-2023 -lấy tổng số người dùng theo năm
 	@Query(value = "SELECT COUNT(user_id) FROM users WHERE EXTRACT(YEAR FROM day_create)=:year", nativeQuery = true)
 	public int getTotalUserByYear(int year);
-	
-	@Query(value = "SELECT COUNT(user_id) FROM users", nativeQuery = true)
-	public int getSizeUsers();
 
 	// 21-9-2023 -Tóng số lượng tương tác của người dùng theo từng tháng
 	// 1-11
@@ -180,23 +177,7 @@ public interface UserDAO extends JpaRepository<User, Integer> {
 			+ "    LIMIT 5;", nativeQuery = true)
 	public List<Object[]> get5PostByKeyword(String keyword);
 	
-	@Query(value = "SELECT\r\n"
-			+ "  u.user_id AS user_id,\r\n"
-			+ "  u.username AS username,\r\n"
-			+ "  u.email AS email,\r\n"
-			+ "  ur.role_id AS user_role_id,\r\n"
-			+ "  r.name AS role_name\r\n"
-			+ "FROM\r\n"
-			+ "  users u\r\n"
-			+ "JOIN\r\n"
-			+ "  user_role ur ON u.user_id = ur.user_id\r\n"
-			+ "JOIN\r\n"
-			+ "  roles r ON ur.role_id = r.role_id\r\n"
-			+ "WHERE\r\n"
-			+ "  r.name = :roleName\r\n"
-			+ ""
-			+ "",nativeQuery = true)
-	public List<Object[]> getUserByRole(String roleName);
+	
 	
 
 }
