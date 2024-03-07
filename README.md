@@ -6,6 +6,8 @@ URL công cộng: [desity-davisy.web.app](https://destiny-davisy.web.app) hoặc
 
 <!-- Dự án được hướng dẫn bởi thầy [Trần Văn Nhuôm](https://github.com/tvnhuom/) và sử dụng các công nghệ như: Java Spring Boot, Socket.io, Thymeleaf template engine, bootstrap 5, ... -->
 
+![](./images/aff1e46df533596d0022.jpg)
+
 ## Người đóng góp
 | Họ và Tên | Vai trò | Dự án nổi bật |
 |-----------|------|--------------------|
@@ -47,11 +49,22 @@ Trang web mạng xã hội để chia sẻ tình yêu và lòng nhân ái nhằm
 
 ### Chức năng Nâng cao
 - Gọi video (WebRTC, PeerJS) - <i>[đọc](https://github.com/theanishtar/video-call-webrtc)</i>
+![](./images/call-video.gif)
+
 - Chặn yêu cầu spam (Redis) - <i>[đọc](https://github.com/theanishtar/spam-request-filter)</i>
+![](./images/spam-request.gif)
+
 - Chặn từ vi phạm trong bình luận (Redis & MongoDB) - <i>[đọc](https://github.com/theanishtar/vetonary)</i>
+![](./images/ssaaz.png)
+
 - Gửi tin nhắn (Văn bản và hình ảnh)
 - Đăng nhập bằng mã QR (ứng dụng->web hoặc web->ứng dụng)
+![](./images/login-qr-to-app.gif)
+![](./images/login-qr-to-web.gif.gif)
+
 - Mã hoá tin nhắn đầu cuối bằng thuật toán Diffine Hellman và thuật toán mã hóa AES
+![](./images/18854512544cf812a15d.jpg)
+
 - Tự động đăng nhập bằng cơ chế Interceptor của Angular và Refresh Token của JWT
 
 #### Back-end (SpringBoot)
