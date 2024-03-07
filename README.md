@@ -4,7 +4,7 @@ Dự án của chúng tôi là một mạng xã hội Destiny!
 
 URL công cộng: [desity-davisy.web.app](https://destiny-davisy.web.app) hoặc [destiny-poly.web.app](https://destiny-poly.web.app)
 
-Dự án được hướng dẫn bởi thầy [Trần Văn Nhuôm](https://github.com/tvnhuom/) và sử dụng các công nghệ như: Java Spring Boot, Socket.io, Thymeleaf template engine, bootstrap 5, ...
+<!-- Dự án được hướng dẫn bởi thầy [Trần Văn Nhuôm](https://github.com/tvnhuom/) và sử dụng các công nghệ như: Java Spring Boot, Socket.io, Thymeleaf template engine, bootstrap 5, ... -->
 
 ## Người đóng góp
 | Họ và Tên | Vai trò | Dự án nổi bật |
