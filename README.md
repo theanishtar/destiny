@@ -17,6 +17,9 @@ URL công cộng: [desity-davisy.web.app](https://destiny-davisy.web.app) hoặc
 |[Phùng Quốc Vinh]() | Phát triển Fullstack | [Trò chơi Dodge](https://github.com/Dinhisme/DodgeGame)  
 |[Lê Bích Vi]() | Phát triển FrontEnd | [Quản lí Kí túc xá](https://github.com/TheBank0911/Quanlikitucxa)
 
+## Điểm số đạt được
+
+![](./images/DATN-marks.png)
 
 
 ## Về trang web 
@@ -46,6 +49,41 @@ Trang web mạng xã hội để chia sẻ tình yêu và lòng nhân ái nhằm
 - Chat tin nhắn: Socket.io, StockJS
 - Quản lý tài khoản: Spring Boot
 - Vị trí cho bài đăng: [Cơ sở dữ liệu các tỉnh thành Việt Nam](https://github.com/dangtranhuu/vietnamese-provinces-database)
+
+### Một số giao diện
+
+<details>
+  <summary>Giao diện chính (Lightmode)</summary>
+  
+  ![](./images/ui-home-lightmode.jpg)
+</details>
+
+<details>
+  <summary>Giao diện chính (Darkmode)</summary>
+  
+  ![](./images/ui-home-darkmode.jpg)
+</details>
+
+<details>
+  <summary>Giao diện chính (Admin & moderator)</summary>
+  
+  ![](./images/ui-home-admin.jpg)
+</details>
+
+<details>
+  <summary>Giao diện đăng nhập</summary>
+
+  ![](./images/ui-login.jpg)
+</details>
+
+<details>
+  <summary>Giao diện đăng bài</summary>
+
+  ![](./images/ui-upload-post.jpg)
+</details>
+
+
+
 
 ### Chức năng Nâng cao
 - Gọi video (WebRTC, PeerJS) - <i>[đọc](https://github.com/theanishtar/video-call-webrtc)</i>
