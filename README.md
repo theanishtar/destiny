@@ -87,7 +87,7 @@ Trang web mạng xã hội để chia sẻ tình yêu và lòng nhân ái nhằm
 
 ### Chức năng Nâng cao
 - Gọi video (WebRTC, PeerJS) - <i>[đọc](https://github.com/theanishtar/video-call-webrtc)</i>
-![](./images/call-video.gif)
+![](./images/video-call.gif)
 
 - Chặn yêu cầu spam (Redis) - <i>[đọc](https://github.com/theanishtar/spam-request-filter)</i>
 ![](./images/spam-request.gif)
