@@ -4,6 +4,8 @@ Dự án của chúng tôi là một mạng xã hội Destiny!
 
 URL công cộng: [desity-davisy.web.app](https://destiny-davisy.web.app) hoặc [destiny-poly.web.app](https://destiny-poly.web.app)
 
+Dự án xuất hiện trên báo điện tử của trường như một dự án xuất sắc xem thêm tại: [fpt.edu.vn/tin-tuc-poly/can-tho/dien-dan-destiny-lan-gio-mang-xa-hoi-moi-me-d...](https://caodang.fpt.edu.vn/tin-tuc-poly/can-tho/dien-dan-destiny-lan-gio-mang-xa-hoi-moi-me-do-sinh-vien-fpt-polytechnic-can-tho-thuc-hien.html)
+
 <!-- Dự án được hướng dẫn bởi thầy [Trần Văn Nhuôm](https://github.com/tvnhuom/) và sử dụng các công nghệ như: Java Spring Boot, Socket.io, Thymeleaf template engine, bootstrap 5, ... -->
 
 ![](./images/aff1e46df533596d0022.jpg)
